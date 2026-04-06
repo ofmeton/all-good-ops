@@ -1,0 +1,64 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls:*)",
+      "Bash(cat:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
+      "Bash(wc:*)",
+      "Bash(date:*)",
+      "Bash(echo:*)",
+      "Bash(python3:*)",
+      "Bash(grep:*)",
+      "Bash(find:*)",
+      "Bash(jq:*)",
+      "Read(/Users/rikukudo/Projects/private-agents/all-good-ops/**)",
+      "WebSearch",
+      "WebFetch(domain:*)",
+      "mcp__5bb35bd9-1595-439b-b417-0dfe62708165__asana_list_workspaces",
+      "mcp__5bb35bd9-1595-439b-b417-0dfe62708165__asana_get_projects_for_workspace",
+      "mcp__5bb35bd9-1595-439b-b417-0dfe62708165__asana_get_project_sections",
+      "mcp__5bb35bd9-1595-439b-b417-0dfe62708165__asana_get_tasks",
+      "mcp__5bb35bd9-1595-439b-b417-0dfe62708165__asana_search_tasks",
+      "mcp__5bb35bd9-1595-439b-b417-0dfe62708165__asana_create_task",
+      "mcp__5bb35bd9-1595-439b-b417-0dfe62708165__asana_update_task",
+      "mcp__5bb35bd9-1595-439b-b417-0dfe62708165__asana_create_project",
+      "mcp__5bb35bd9-1595-439b-b417-0dfe62708165__asana_delete_task",
+      "mcp__ca5cd5bf-5892-4a8f-b1ad-4bfffce450c3__gmail_search_messages",
+      "mcp__ca5cd5bf-5892-4a8f-b1ad-4bfffce450c3__gmail_read_message",
+      "mcp__ca5cd5bf-5892-4a8f-b1ad-4bfffce450c3__gmail_read_thread",
+      "mcp__ca5cd5bf-5892-4a8f-b1ad-4bfffce450c3__gmail_create_draft",
+      "mcp__84085310-a54d-4b7d-b50d-2f1719ceddf1__gcal_list_events",
+      "mcp__84085310-a54d-4b7d-b50d-2f1719ceddf1__gcal_find_my_free_time",
+      "mcp__84085310-a54d-4b7d-b50d-2f1719ceddf1__gcal_create_event",
+      "mcp__84085310-a54d-4b7d-b50d-2f1719ceddf1__gcal_list_calendars"
+    ],
+    "additionalDirectories": [
+      "/Users/rikukudo/Library/LaunchAgents"
+    ]
+  },
+  "hooks": {
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "osascript -e 'display notification \"確認が必要です\" with title \"all-good-ops\" sound name \"Glass\"'"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "osascript -e 'display notification \"応答が完了しました\" with title \"all-good-ops\" sound name \"Ping\"'"
+          }
+        ]
+      }
+    ]
+  }
+}

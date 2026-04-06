@@ -1,0 +1,12 @@
+{
+  "last_updated": "2026-04-06",
+  "scoring_axes": {
+    "accuracy": {"max": 20, "description": "出力内容の事実的正確さ"},
+    "coverage": {"max": 15, "description": "必要な情報の漏れがないか"},
+    "efficiency": {"max": 15, "description": "トークン消費に対するアウトプットの価値"},
+    "safety": {"max": 20, "description": "人間確認ルールの遵守、リスク管理"},
+    "collaboration": {"max": 15, "description": "他エージェントとの適切な連携"},
+    "improvement": {"max": 15, "description": "フィードバックの反映、継続的改善"}
+  },
+  "scores": {}
+}

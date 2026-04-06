@@ -1,0 +1,42 @@
+{
+  "last_updated": "2026-04-06",
+  "rank_definitions": {
+    "N": "新規（初期ランク。実績なし）",
+    "N-C": "安定稼働。基本品質を満たす",
+    "N-B": "高品質。安定した成果",
+    "N-A": "優秀。チームに不可欠",
+    "N-S": "卓越。ベストプラクティスの模範"
+  },
+  "agents": {
+    "secretary": "N",
+    "org-designer": "N",
+    "knowledge-curator": "N",
+    "strategic-advisor": "N",
+    "bookkeeper": "N",
+    "tax-advisor": "N",
+    "cashflow-tracker": "N",
+    "invoice-manager": "N",
+    "career-strategist": "N",
+    "goal-tracker": "N",
+    "safety-net-advisor": "N",
+    "ibasho-designer": "N",
+    "nonprofit-advisor": "N",
+    "shopify-operator": "N",
+    "icecream-ops": "N",
+    "freelance-scout": "N",
+    "client-manager": "N",
+    "brand-publisher": "N",
+    "schedule-coordinator": "N",
+    "admin-handler": "N",
+    "health-tracker": "N",
+    "message-crafter": "N",
+    "network-manager": "N",
+    "researcher": "N",
+    "writer": "N",
+    "info-organizer": "N",
+    "system-engineer": "N",
+    "mcp-architect": "N",
+    "quality-auditor": "N",
+    "usage-analyst": "N"
+  }
+}
