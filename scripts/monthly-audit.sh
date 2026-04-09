@@ -50,9 +50,20 @@ claude --print \
    - カバーされていない業務領域がないか確認
    - 統合・新設の候補を提案
 
-5. 月次レポートの作成:
+5. 改善サイクル評価（AutoAgent方式 keep/discard）:
+   - data/improvement-log.jsonl を読む
+   - status が 'applied' または 'evaluating' のエントリがあれば:
+     a. 対象エージェントの今回スコア（after_score）と before_score を比較
+     b. スコア向上 → kept=true、スコア同等+簡素化 → kept=true、それ以外 → kept=false
+     c. improvement-log.jsonl の該当エントリを更新（after_score, kept, evaluated_date, discard_reason）
+   - エントリがなければスキップ
+
+6. 月次レポートの作成:
    - 上記の結果を統合
    - 改善アクションアイテムを含む
+   - 改善サイクルの振り返りセクションを含む（keep/discard結果）
+
+重要: data/quality-scores.json は必ず更新すること。レポートにだけ書いてJSONを更新し忘れないこと。
 
 結果をoutputs/reports/monthly-${MONTH}.mdに保存してください。" \
   >> "$LOG_FILE" 2>&1

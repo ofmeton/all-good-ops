@@ -70,6 +70,35 @@
 - 改善勧告が抽象的で行動に繋がらない
 - データ不足で正確な評価ができない
 
+## 改善評価モード（AutoAgent方式 keep/discard）
+
+月次監査時、または手動トリガーで実行。`data/improvement-log.jsonl` 内の `status: "evaluating"` エントリを評価する。
+
+### 評価手順
+1. 対象エントリの `target_file` を読み、変更内容を把握
+2. 変更されたエージェントを6軸でスコアリング（通常の監査と同一基準）
+3. `before_score` と比較し、以下のルールで判定:
+
+### keep/discard 判定ロジック（AutoAgent準拠）
+| 条件 | 判定 |
+|------|------|
+| passed（総合スコア）が向上 | **keep** |
+| passed が同等かつハーネスが簡素化されている | **keep** |
+| 上記以外（スコア低下、または変化なし＋複雑化） | **discard** |
+
+### 出力
+- `data/improvement-log.jsonl` の該当エントリに `after_score`, `kept`（true/false）, `evaluated_date` を記入
+- discardの場合: 「なぜスコアが下がったか」の分析を1-2行で `discard_reason` に記入
+- 月次監査レポートの「改善サイクル振り返り」セクションにも結果を記載
+
+### data/quality-scores.json への永続化ルール
+- 月次監査時は**必ず**全エージェントのスコアを `data/quality-scores.json` に書き込む
+- 既存スキーマの `scores` オブジェクト内に、エージェント名をキーとして6軸スコアを記録
+- 前月のスコアは `previous_scores` に退避して比較可能にする
+- **スコアを計算したら即座に書き込む。レポートにだけ書いてJSONを更新し忘れない**
+
+---
+
 ## 引き継ぎフォーマット
 ```
 【担当】品質監査官

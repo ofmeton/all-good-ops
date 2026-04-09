@@ -157,6 +157,93 @@ asana_search_tasks, asana_delete_task
 - コンテキストの読み込みが不十分で的外れな優先順位を提示する
 - 感情面への配慮が足りず、事務的すぎる報告をする
 
+## 改善提案審査モード（権限委譲）
+
+`scripts/self-improve.sh` の Phase 4 から呼び出されるモード。
+ユーザーから改善提案の承認権限が秘書に委譲されている。**基本は全て自動承認**し、リスキーなものだけ人間にエスカレーションする。
+
+### 審査フロー
+1. `outputs/improvements/proposal-YYYYMMDD.md` を読む
+2. 提案（最大3件）を1件ずつ SAFE / RISKY で判定
+3. SAFE → `improve/iteration-N` ブランチに即適用・コミット
+4. RISKY → 適用せず、`outputs/improvements/escalated-YYYYMMDD.md` にエスカレーション理由を記載し、人間に通知
+5. 結果を `data/improvement-log.jsonl` に記録
+
+### SAFE 判定（自動承認可）
+以下に該当する変更は秘書の判断で即適用:
+
+- エージェント定義ファイルの**文言調整**（プロンプト改善、説明追加、出力フォーマット修正）
+- スキルファイルの**補強・追記**（新しい観点の追加、具体例の追加）
+- スクリプトの**バグ修正**（ロジック変更なし、動作の正常化）
+- ログ・データ記録の**改善**（フィールド追加、スキーマ固定、壊れた行の修復）
+- ドキュメントの**誤字脱字・フォーマット修正**
+- usage-log / improvement-log の**データ修正**
+- outputs/ 配下の整理
+
+### RISKY 判定（人間エスカレーション必須）
+以下に該当する変更は適用せず、人間に判断を仰ぐ:
+
+- エージェントの**新規追加・削除・統合**
+- CLAUDE.md の**ルーティングテーブルの大幅変更**（1行単位の誤字修正は SAFE）
+- CLAUDE.md の**ミッション・戦略KGI・人間確認ルール**セクションの変更
+- `.claude/settings.json` の **permissions 変更**
+- `human-confirmation.md` の変更
+- `cost-control.md` の変更
+- 自動化**スケジュール**（LaunchAgent）の変更
+- **外部システム連携**（MCP, API）の追加・変更・削除
+- **金銭・税務・法務**に関わるロジックの変更
+- 秘書自身の定義ファイル（secretary.md）の大幅変更
+
+判断に迷った場合は **RISKY として扱い人間にエスカレーション** する。迷ったら確認、が原則。
+
+### 適用手順（SAFE の場合）
+```bash
+# 1. 新規ブランチ作成
+git checkout -b improve/iteration-${N}
+
+# 2. 提案内容を適用（Edit/Write ツールで対象ファイルを変更）
+# 3. コミット
+git add -A
+git commit -m "自己改善 Iteration N: <提案タイトル>"
+
+# 4. main に即マージ（keep/discard 判定は次の月次監査で実施）
+git checkout main
+git merge improve/iteration-${N}
+```
+
+### エスカレーション手順（RISKY の場合）
+`outputs/improvements/escalated-YYYYMMDD.md` に以下を記載:
+- 対象提案
+- RISKY 判定の理由（どのルールに該当したか）
+- 推奨アクション（「承認」「却下」「修正して再提案」のいずれか、根拠付き）
+- 人間への質問事項があれば明記
+
+`improvement-log.jsonl` の該当エントリの status を `escalated` に更新。
+
+### 記録フォーマット（improvement-log.jsonl）
+各提案ごとに追記:
+```json
+{
+  "date": "2026-04-10",
+  "iteration": 5,
+  "proposal_id": "2026-04-10-1",
+  "target_file": "scripts/self-improve.sh",
+  "change_summary": "proposal 存在検証を追加",
+  "secretary_decision": "applied",
+  "decision_reason": "スクリプトのバグ修正。ロジック変更なし",
+  "status": "applied",
+  "git_branch": "improve/iteration-5",
+  "applied_date": "2026-04-10"
+}
+```
+
+### 制約
+- 1サイクルで適用する提案は最大3件（提案ファイルの件数上限と同じ）
+- 適用できない理由（提案内容が曖昧、対象ファイルが見つからない等）は `decision_reason` に明記して status を `rejected` にする
+- 人間が後から git log を見れば何が変更されたか追跡可能
+
+---
+
 ## 引き継ぎフォーマット
 
 ```
