@@ -10,6 +10,9 @@ LOG_DIR="${PROJECT_DIR}/logs"
 LOG_FILE="${LOG_DIR}/self-improve-$(date +%Y%m%d).log"
 DATE=$(date +%Y%m%d)
 
+# Phase 3 起動ガード（簡易テスト時は RUN_SECRETARY=0 でスキップ）
+RUN_SECRETARY="${RUN_SECRETARY:-1}"
+
 mkdir -p "$LOG_DIR"
 mkdir -p "${PROJECT_DIR}/outputs/improvements"
 
@@ -37,6 +40,9 @@ fi
 # イテレーション番号を算出
 ITERATION=$(grep -c '"session_type":"self-improvement"' "${PROJECT_DIR}/data/usage-log.jsonl" 2>/dev/null | tr -d '[:space:]' || echo "0")
 ITERATION=$((ITERATION + 1))
+
+# 提案ファイル名に iteration 番号を含めて同日複数回実行時の衝突を避ける
+PROPOSAL_BASENAME="proposal-${DATE}-it${ITERATION}.md"
 
 log "Iteration: ${ITERATION}"
 
@@ -68,7 +74,7 @@ claude --print \
 4. discarded履歴: 過去にdiscardされた提案と同じ変更を繰り返さない
 
 ## ステップ3: 提案ファイルの作成
-Writeツールで outputs/improvements/proposal-${DATE}.md を作成してください。
+Writeツールで outputs/improvements/${PROPOSAL_BASENAME} を作成してください。
 
 内容:
 # 自己改善提案 $(date +%Y-%m-%d) (Iteration ${ITERATION})
@@ -104,7 +110,7 @@ PHASE_EXIT=$?
 log "Phase 1+2 完了 (exit: ${PHASE_EXIT})"
 
 # 提案ファイル存在検証（サイレント失敗を防ぐ）
-PROPOSAL_FILE="${PROJECT_DIR}/outputs/improvements/proposal-${DATE}.md"
+PROPOSAL_FILE="${PROJECT_DIR}/outputs/improvements/${PROPOSAL_BASENAME}"
 if [ ! -f "$PROPOSAL_FILE" ]; then
   log "ERROR: 提案ファイルが生成されませんでした: ${PROPOSAL_FILE}"
   cat >> "${PROJECT_DIR}/data/improvement-log.jsonl" << EOF
@@ -116,11 +122,18 @@ fi
 PROPOSAL_BYTES=$(wc -c < "$PROPOSAL_FILE" | tr -d '[:space:]')
 log "提案ファイル生成確認 (${PROPOSAL_BYTES} bytes)"
 
+# 最新版を指すシンボリックリンクを更新（互換）
+ln -sf "${PROPOSAL_BASENAME}" "${PROJECT_DIR}/outputs/improvements/proposal-latest.md"
+
 # ========================================
 # Phase 3: 秘書による審査・適用（権限委譲）
 # ========================================
-log "Phase 3: 秘書審査・適用"
-claude --print \
+SECRETARY_EXIT=0
+SECRETARY_INVOKED=false
+if [ "$RUN_SECRETARY" = "1" ]; then
+  SECRETARY_INVOKED=true
+  log "Phase 3: 秘書審査・適用"
+  claude --print \
   --max-turns 25 \
   --permission-mode acceptEdits \
   --allowedTools "Read,Write,Edit,Glob,Grep,Bash(git:*)" \
@@ -152,10 +165,14 @@ ${PROPOSAL_FILE}
 - 提案に曖昧な点があれば rejected として理由を記録する
 
 最後に、処理結果サマリーを3-5行で報告してください。" \
-  >> "$LOG_FILE" 2>&1
+    >> "$LOG_FILE" 2>&1
 
-SECRETARY_EXIT=$?
-log "Phase 3 完了 (exit: ${SECRETARY_EXIT})"
+  SECRETARY_EXIT=$?
+  log "Phase 3 完了 (exit: ${SECRETARY_EXIT})"
+else
+  echo "WARN: secretary phase skipped — proposals remain in 'proposed' state" >&2
+  log "Phase 3 スキップ (RUN_SECRETARY=0)"
+fi
 
 # ========================================
 # Phase 4: ログ記録
@@ -164,7 +181,7 @@ log "Phase 3: ログ記録"
 
 # improvement-log のサイクルメタ行を追記（個別提案は秘書が既に追記済み）
 cat >> "${PROJECT_DIR}/data/improvement-log.jsonl" << EOF
-{"date":"$(date +%Y-%m-%d)","iteration":${ITERATION},"event":"cycle_complete","proposal_file":"outputs/improvements/proposal-${DATE}.md","proposal_bytes":${PROPOSAL_BYTES},"phase12_exit":${PHASE_EXIT},"phase3_exit":${SECRETARY_EXIT}}
+{"date":"$(date +%Y-%m-%d)","iteration":${ITERATION},"event":"cycle_complete","proposal_file":"outputs/improvements/${PROPOSAL_BASENAME}","proposal_bytes":${PROPOSAL_BYTES},"phase12_exit":${PHASE_EXIT},"phase3_exit":${SECRETARY_EXIT},"secretary_invoked":${SECRETARY_INVOKED}}
 EOF
 
 # usage-log に追記
@@ -175,7 +192,7 @@ EOF
 
 if [ $TOTAL_EXIT -eq 0 ]; then
   log "=== 自己改善サイクル完了 ==="
-  log "提案ファイル: outputs/improvements/proposal-${DATE}.md"
+  log "提案ファイル: outputs/improvements/${PROPOSAL_BASENAME}"
   log "秘書が審査・適用済み。git log で変更履歴を確認してください"
   if [ -f "${PROJECT_DIR}/outputs/improvements/escalated-${DATE}.md" ]; then
     log "⚠️  エスカレーション案件あり: outputs/improvements/escalated-${DATE}.md"
