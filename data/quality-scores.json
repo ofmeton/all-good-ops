@@ -1,5 +1,7 @@
 {
-  "last_updated": "2026-04-06",
+  "last_updated": "2026-04-10",
+  "baseline_date": "2026-04-10",
+  "scoring_mode": "baseline",
   "scoring_axes": {
     "accuracy": {"max": 20, "description": "出力内容の事実的正確さ"},
     "coverage": {"max": 15, "description": "必要な情報の漏れがないか"},
@@ -8,5 +10,336 @@
     "collaboration": {"max": 15, "description": "他エージェントとの適切な連携"},
     "improvement": {"max": 15, "description": "フィードバックの反映、継続的改善"}
   },
-  "scores": {}
+  "scores": {
+    "secretary": {
+      "accuracy": 19,
+      "safety": 19,
+      "coverage": null,
+      "efficiency": null,
+      "collaboration": null,
+      "improvement": null,
+      "total_partial": 38,
+      "_baseline": true,
+      "notes": "役割・出力フォーマット・改善提案審査モードまで詳細定義。人間確認ルールとSAFE/RISKY判定基準が非常に具体的"
+    },
+    "org-designer": {
+      "accuracy": 18,
+      "safety": 17,
+      "coverage": null,
+      "efficiency": null,
+      "collaboration": null,
+      "improvement": null,
+      "total_partial": 35,
+      "_baseline": true,
+      "notes": "自己改善モード含め詳細。出力フォーマット明確。人間確認条件具体的"
+    },
+    "knowledge-curator": {
+      "accuracy": 13,
+      "safety": 14,
+      "coverage": null,
+      "efficiency": null,
+      "collaboration": null,
+      "improvement": null,
+      "total_partial": 27,
+      "_baseline": true,
+      "notes": "基本記載のみ。出力フォーマット未定義。人間確認はあるが範囲限定的"
+    },
+    "strategic-advisor": {
+      "accuracy": 18,
+      "safety": 16,
+      "coverage": null,
+      "efficiency": null,
+      "collaboration": null,
+      "improvement": null,
+      "total_partial": 34,
+      "_baseline": true,
+      "notes": "起動フロー・質問タイプ判定・出力フォーマット完備。大型支出10万円等の基準明示"
+    },
+    "bookkeeper": {
+      "accuracy": 16,
+      "safety": 17,
+      "coverage": null,
+      "efficiency": null,
+      "collaboration": null,
+      "improvement": null,
+      "total_partial": 33,
+      "_baseline": true,
+      "notes": "仕訳フォーマット要件明示、よくある失敗具体的。10万円基準でescalation"
+    },
+    "tax-advisor": {
+      "accuracy": 16,
+      "safety": 19,
+      "coverage": null,
+      "efficiency": null,
+      "collaboration": null,
+      "improvement": null,
+      "total_partial": 35,
+      "_baseline": true,
+      "notes": "AIの限界を明示、全税務判断で人間確認。税理士推奨のエスカレーション基準明確"
+    },
+    "cashflow-tracker": {
+      "accuracy": 17,
+      "safety": 13,
+      "coverage": null,
+      "efficiency": null,
+      "collaboration": null,
+      "improvement": null,
+      "total_partial": 30,
+      "_baseline": true,
+      "notes": "月次収支フォーマット詳細。人間確認範囲は限定的"
+    },
+    "invoice-manager": {
+      "accuracy": 15,
+      "safety": 16,
+      "coverage": null,
+      "efficiency": null,
+      "collaboration": null,
+      "improvement": null,
+      "total_partial": 31,
+      "_baseline": true,
+      "notes": "請求書必須項目明記。送付前人間確認必須、未入金催促エスカレーション基準あり"
+    },
+    "career-strategist": {
+      "accuracy": 17,
+      "safety": 15,
+      "coverage": null,
+      "efficiency": null,
+      "collaboration": null,
+      "improvement": null,
+      "total_partial": 32,
+      "_baseline": true,
+      "notes": "シナリオ分析・3ヶ月アクションプランの要件明示。人間確認ありだが範囲やや抽象"
+    },
+    "goal-tracker": {
+      "accuracy": 15,
+      "safety": 11,
+      "coverage": null,
+      "efficiency": null,
+      "collaboration": null,
+      "improvement": null,
+      "total_partial": 26,
+      "_baseline": true,
+      "notes": "KPIダッシュボードフォーマット有。ツール使用制限の記載欠落、人間確認基準が薄い"
+    },
+    "safety-net-advisor": {
+      "accuracy": 16,
+      "safety": 17,
+      "coverage": null,
+      "efficiency": null,
+      "collaboration": null,
+      "improvement": null,
+      "total_partial": 33,
+      "_baseline": true,
+      "notes": "期限管理具体的、関係機関への確認推奨を明示。全届出で人間確認"
+    },
+    "ibasho-designer": {
+      "accuracy": 14,
+      "safety": 14,
+      "coverage": null,
+      "efficiency": null,
+      "collaboration": null,
+      "improvement": null,
+      "total_partial": 28,
+      "_baseline": true,
+      "notes": "出力フォーマット未定義だが品質基準あり。人間確認は基本レベル"
+    },
+    "nonprofit-advisor": {
+      "accuracy": 17,
+      "safety": 18,
+      "coverage": null,
+      "efficiency": null,
+      "collaboration": null,
+      "improvement": null,
+      "total_partial": 35,
+      "_baseline": true,
+      "notes": "手順の時系列整理・法的根拠明示。定款・登記・口座の各段階で人間確認明示"
+    },
+    "shopify-operator": {
+      "accuracy": 14,
+      "safety": 15,
+      "coverage": null,
+      "efficiency": null,
+      "collaboration": null,
+      "improvement": null,
+      "total_partial": 29,
+      "_baseline": true,
+      "notes": "基本的記載。価格変更・プロモーションで人間確認明示"
+    },
+    "icecream-ops": {
+      "accuracy": 12,
+      "safety": 13,
+      "coverage": null,
+      "efficiency": null,
+      "collaboration": null,
+      "improvement": null,
+      "total_partial": 25,
+      "_baseline": true,
+      "notes": "記載が薄い。出力フォーマット未定義、escalation条件が抽象的"
+    },
+    "freelance-scout": {
+      "accuracy": 15,
+      "safety": 17,
+      "coverage": null,
+      "efficiency": null,
+      "collaboration": null,
+      "improvement": null,
+      "total_partial": 32,
+      "_baseline": true,
+      "notes": "案件リスト要件明確。応募・契約・単価で人間確認明示"
+    },
+    "client-manager": {
+      "accuracy": 13,
+      "safety": 14,
+      "coverage": null,
+      "efficiency": null,
+      "collaboration": null,
+      "improvement": null,
+      "total_partial": 27,
+      "_baseline": true,
+      "notes": "基本記載、出力フォーマット未定義。人間確認は基本レベル"
+    },
+    "brand-publisher": {
+      "accuracy": 17,
+      "safety": 16,
+      "coverage": null,
+      "efficiency": null,
+      "collaboration": null,
+      "improvement": null,
+      "total_partial": 33,
+      "_baseline": true,
+      "notes": "数値目標・KPI・コンテンツカレンダー要件明示。公開前人間確認必須"
+    },
+    "schedule-coordinator": {
+      "accuracy": 14,
+      "safety": 16,
+      "coverage": null,
+      "efficiency": null,
+      "collaboration": null,
+      "improvement": null,
+      "total_partial": 30,
+      "_baseline": true,
+      "notes": "予定作成・変更・削除で人間確認明示。ツール区別あり"
+    },
+    "admin-handler": {
+      "accuracy": 15,
+      "safety": 16,
+      "coverage": null,
+      "efficiency": null,
+      "collaboration": null,
+      "improvement": null,
+      "total_partial": 31,
+      "_baseline": true,
+      "notes": "必要書類・提出先・期限・費用フォーマット明記。提出前人間確認"
+    },
+    "health-tracker": {
+      "accuracy": 13,
+      "safety": 14,
+      "coverage": null,
+      "efficiency": null,
+      "collaboration": null,
+      "improvement": null,
+      "total_partial": 27,
+      "_baseline": true,
+      "notes": "基本記載。医療判断への踏み込み制限を明示。ツール区別欠落"
+    },
+    "message-crafter": {
+      "accuracy": 16,
+      "safety": 18,
+      "coverage": null,
+      "efficiency": null,
+      "collaboration": null,
+      "improvement": null,
+      "total_partial": 34,
+      "_baseline": true,
+      "notes": "複数案提示基準・敬語レベル要件明示。全対外送信で人間確認必須"
+    },
+    "network-manager": {
+      "accuracy": 13,
+      "safety": 12,
+      "coverage": null,
+      "efficiency": null,
+      "collaboration": null,
+      "improvement": null,
+      "total_partial": 25,
+      "_baseline": true,
+      "notes": "基本記載のみ。escalation条件が「特になし」。ツール区別欠落"
+    },
+    "researcher": {
+      "accuracy": 17,
+      "safety": 15,
+      "coverage": null,
+      "efficiency": null,
+      "collaboration": null,
+      "improvement": null,
+      "total_partial": 32,
+      "_baseline": true,
+      "notes": "信頼性3段階評価・出典明記の要件明示。人間確認範囲は限定的"
+    },
+    "writer": {
+      "accuracy": 14,
+      "safety": 14,
+      "coverage": null,
+      "efficiency": null,
+      "collaboration": null,
+      "improvement": null,
+      "total_partial": 28,
+      "_baseline": true,
+      "notes": "基本的。公開前人間確認はあるがツール区別欠落"
+    },
+    "info-organizer": {
+      "accuracy": 13,
+      "safety": 13,
+      "coverage": null,
+      "efficiency": null,
+      "collaboration": null,
+      "improvement": null,
+      "total_partial": 26,
+      "_baseline": true,
+      "notes": "基本記載。出力フォーマット未定義、escalationコスト観点のみ"
+    },
+    "system-engineer": {
+      "accuracy": 16,
+      "safety": 17,
+      "coverage": null,
+      "efficiency": null,
+      "collaboration": null,
+      "improvement": null,
+      "total_partial": 33,
+      "_baseline": true,
+      "notes": "冪等性・エラーハンドリング・テスト手順明示。本番影響・LaunchAgentで人間確認"
+    },
+    "mcp-architect": {
+      "accuracy": 17,
+      "safety": 19,
+      "coverage": null,
+      "efficiency": null,
+      "collaboration": null,
+      "improvement": null,
+      "total_partial": 36,
+      "_baseline": true,
+      "notes": "最小権限原則明示、導入評価基準詳細。新規MCP・permissions変更で人間確認"
+    },
+    "usage-analyst": {
+      "accuracy": 16,
+      "safety": 15,
+      "coverage": null,
+      "efficiency": null,
+      "collaboration": null,
+      "improvement": null,
+      "total_partial": 31,
+      "_baseline": true,
+      "notes": "日次・週次・月次集計要件明示、早期警告escalation基準あり"
+    },
+    "quality-auditor": {
+      "accuracy": 19,
+      "safety": 17,
+      "coverage": null,
+      "efficiency": null,
+      "collaboration": null,
+      "improvement": null,
+      "total_partial": 36,
+      "_baseline": true,
+      "notes": "6軸評価基準・改善評価モード・JSON永続化ルール完備。安全性escalation具体的"
+    }
+  }
 }
