@@ -72,8 +72,21 @@
 | MCP、連携、API、Codex | dev-automation | mcp-architect |
 | 品質、スコア、監査 | dev-automation | quality-auditor |
 | 使用量、コスト、トークン | dev-automation | usage-analyst |
+| 分析、データ分析、トレンド、比較、集計 | 横断 | data-analyst |
 | 整理して、どうしたらいい、戦略 | 横断 | strategic-advisor |
 | エージェント追加、チーム改善 | 横断 | org-designer |
+| パワポ、プレゼン、スライド、レビュー | 横断 | presentation-reviewer |
+| AI動向、AI業界、新モデル、Anthropic動向、機会発見、ビジネスチャンス（AI）、Skills事業防衛、競合動向（AI）、ai-radar、ダッシュボード | **外部スポーク: ai-radar** | ai-radar |
+| はぐりん、persona、Threads 投稿、note 記事、有料記事、メンバーシップ、収益化コンテンツ、topic-seeds、competitor-watch、90日計画（発信系） | **外部スポーク: monetize-os** | monetize-os/growth-lead |
+| 公開前チェック、規約確認、アフィリエイト開示、景表法、薬機法、ステマ | **外部スポーク: monetize-os** | monetize-os/compliance |
+| 工務店、HP 制作、クライアントサイト、Vercel、サンプルサイト、ポートフォリオサイト | **外部スポーク: portfolio** | (秘書が business-ops/client-manager 起動 + portfolio/ 作業ディレクトリへ移動) |
+
+### 外部スポークへの委譲ルール
+
+- **monetize-os**（`/Users/rikukudo/Projects/monetize-os/`）: 収益化特化の運用 OS。秘書は growth-lead に委譲し、実行結果を受け取って統合する。persona 配下エージェント（hagurin/hook-writer 等）を秘書が直接呼ばない。詳細は `monetize-os/CLAUDE.md` 参照
+- **portfolio**（`/Users/rikukudo/Projects/portfolio/`）: HP 受注事業の制作物リポジトリ。秘書は client-manager / freelance-scout を起動しつつ、作業ディレクトリを portfolio に切り替える
+- **ai-radar**（`/Users/rikukudo/Projects/ai-radar/`）: AIエコシステム機会発見 + Skills事業防衛シグナル検知のダッシュボード。Next.js/Supabase/Vercel で常時稼働。秘書は ai-radar エージェントに委譲し、ダッシュボードのヒット確認・ソース精査・深掘り依頼を任せる。実装コード改修は system-engineer に委譲。詳細は `outputs/documents/ai-radar/01-implementation-plan.md` 参照
+- **brand-publisher（business-ops）と monetize-os/growth-lead の境界**: brand-publisher は **ユーザー本人（ofmeton）名義の発信**、growth-lead は **persona（はぐりん等）名義の発信**。名義が違うものは絶対に混ぜない
 
 ### Step 3: エージェントを起動
 
@@ -83,9 +96,16 @@
 - 参照すべきスキル
 - 人間確認が必要なポイント
 
+### PPTX納品ルール（必須）
+
+**PPTXファイルを生成した場合、ユーザーへの提出前に必ず `presentation-reviewer` を通すこと。**
+- 作成担当エージェントがPPTXを生成 → presentation-reviewerにレビュー依頼 → レビュー通過後にユーザーへ提出
+- レビュアーがC評価（大幅修正必要）を出した場合は、修正後に再レビュー
+- レビュアーが自動修正可能な軽微な問題は、レビュー時にその場で修正してよい
+
 ---
 
-## 部門一覧（8部門 + 横断チーム = 30エージェント）
+## 部門一覧（8部門 + 横断チーム = 33エージェント）
 
 ### 横断チーム
 | エージェント | ファイル | 役割 |
@@ -94,6 +114,9 @@
 | 組織設計者 | `org-designer.md` | エージェント体制の評価・改善 |
 | ナレッジキュレーター | `knowledge-curator.md` | knowledge/の整理・更新 |
 | 戦略参謀 | `strategic-advisor.md` | 仮説思考、ブレスト、次の一手 |
+| データアナリスト | `data-analyst.md` | データ分析専門。他エージェントからの分析依頼を受ける |
+| プレゼンレビュアー | `presentation-reviewer.md` | PPTX品質チェック。全パワポの納品前レビュー必須 |
+| AIレーダー | `ai-radar.md` | AIエコシステム機会発見 + Skills事業防衛シグナル検知。`/Users/rikukudo/Projects/ai-radar/` の独立プロジェクトを運用 |
 
 ### finance（財務・経理）
 | エージェント | ファイル | 役割 |
