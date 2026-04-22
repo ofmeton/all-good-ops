@@ -233,7 +233,7 @@
 
 ---
 
-## スキル一覧（16冊）
+## スキル一覧（18冊）
 
 | # | スキル | ファイル | 用途 |
 |---|--------|---------|------|
@@ -253,6 +253,8 @@
 | 14 | 熟議プロセス | `deliberation.md` | 3回会議の手順 |
 | 15 | MCP連携ガイド | `mcp-integration.md` | MCP導入・設定手順 |
 | 16 | 発信プレイブック | `publishing-playbook.md` | SNS・ブログ発信戦略 |
+| 17 | CLAUDE.md 健全性レビュー | `claude-md-health-check.md` | CLAUDE.md と実態の乖離検出手順 |
+| 18 | エージェント新設プロトコル | `agent-onboarding.md` | 既存確認→定義→CLAUDE.md 3点同期の手順 |
 
 ---
 
