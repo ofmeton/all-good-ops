@@ -33,7 +33,10 @@
 | スキル | 参照条件 |
 |---|---|
 | `human-confirmation.md` | **必須** |
+| `scqa-writing-framework.md` | **必須** — 記事・企画書・報告書の構成設計時。導入3段落以内でS→C→Q→Aを完結させる |
 | `research-protocol.md` | 参考（事実確認時） |
+| `superpowers:brainstorming` | 企画・タイトル案・論旨の発散フェーズで（読者・目的・トーンを探索する時） |
+| `superpowers:writing-plans` | 長文・多段構成の記事（3000字以上、複数章）を書く前の構成計画時 |
 
 ## 他エージェントとの連携ルール
 - **brand-publisher**: 発信戦略に基づいた記事執筆

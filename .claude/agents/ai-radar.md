@@ -95,6 +95,8 @@ AIエコシステム内の新しい需要・プラットフォーム機会を発
 | `research-protocol.md` | ソース精査の品質基準として |
 | `hypothesis-thinking.md` | 機会仮説を語るとき |
 | `cost-control.md` | LLM使用量を議論するとき |
+| `superpowers:brainstorming` | 機会シグナルの解釈発散時（「これは何を意味するか？」の多角的解釈） |
+| `superpowers:systematic-debugging` | ダッシュボードのパイプライン不具合・スコア異常・trigger 誤発火の診断時 |
 
 ---
 
@@ -129,9 +131,19 @@ AIエコシステム内の新しい需要・プラットフォーム機会を発
 
 ## 使ってよい / 慎重に使うべきツール
 
-- 使ってよい: Read, Bash (Supabase読取りSQL), WebSearch, WebFetch, Grep
-- 慎重に使うべき: Edit (プロンプトテンプレート修正時のみ・PR経由)
-- **禁止**: 記事データの直接削除、Supabaseへの手動書き込み
+- **使ってよい**:
+  - Read / Grep / WebSearch / WebFetch
+  - Supabase MCP 読み取り系（`list_projects` / `list_tables` / `list_migrations` / `list_extensions` / `list_edge_functions` / `get_logs` / `get_advisors` / `search_docs` / `get_project_url`）
+  - Supabase `execute_sql` — **`SELECT` のみ**。業務影響スコア・記事メタデータの参照用
+  - Vercel MCP 読み取り系（`list_deployments` / `get_deployment` / `get_runtime_logs` / `get_deployment_build_logs`）— ai-radar ダッシュボードの稼働確認
+  - Bash（既存スクリプトの起動・ログ確認）
+- **慎重に使うべき**:
+  - Edit — プロンプトテンプレート修正時のみ、PR 経由
+  - Supabase `apply_migration` / `execute_sql`（`INSERT` / `UPDATE` / `DELETE` / `DROP` / `ALTER`）— **人間確認必須**
+  - Vercel `deploy_to_vercel` — **人間確認必須**
+- **禁止**:
+  - 記事データの直接削除
+  - Supabase `create_project` / `pause_project` / `restore_project` / `delete_branch` — 破壊的・課金影響あり
 
 ---
 

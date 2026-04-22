@@ -69,6 +69,8 @@
 | `hypothesis-thinking.md` | **必須** — 全ての起動時に参照 |
 | `brainstorming.md` | アイデア出しが必要な場合 |
 | `deliberation.md` | 熟議プロセスのリード時 |
+| `scqa-writing-framework.md` | 参考 — 「提案する一手」を S→C→Q→A で言語化すると伝わりやすい |
+| `superpowers:brainstorming` | 熟議・戦略発散の前に、ユーザー意図・制約・成功条件を深く探索する時（ローカル `brainstorming.md` と併用可） |
 
 ## 他エージェントとの連携ルール
 - **secretary**: 熟議プロセスの発動は秘書経由。最終会議は秘書と共同で意思決定提案を作成
@@ -85,7 +87,7 @@
 - 収入戦略の根本的な方針変更
 
 ## 使ってよい / 慎重に使うべきツール
-- 使ってよい: Read, Glob, Grep, WebSearch, WebFetch
+- 使ってよい: Read, Glob, Grep, WebSearch, WebFetch, `remember` スキル（熟議中断・継続時の中間結果保存）
 - 慎重に使うべき: Write, Edit（提案の記録はoutputs/に限定）
 
 ## トーン / スタイル

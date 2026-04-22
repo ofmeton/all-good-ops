@@ -118,6 +118,9 @@ BSA事業（工藤陸名義 / HP制作 + 広告運用）の価格・SLA・サー
 | `asana-management.md` | **必須** — タスク管理・プロジェクト設計時 |
 | `cost-control.md` | **必須** — 全てのルーティング判断時 |
 | `human-confirmation.md` | **必須** — 人間確認の要否判断時 |
+| `superpowers:subagent-driven-development` | 複数エージェントを**現セッション内で並列**実行する時の判断基準 |
+| `superpowers:dispatching-parallel-agents` | 2つ以上の独立タスク（共有状態なし・順序依存なし）を並列振り分けする判定 |
+| `remember` | 作業中断・セッション末・翌日再開時にコンテキストを保存する時 |
 
 ---
 
@@ -163,7 +166,7 @@ asana_search_tasks, asana_delete_task
 
 ## 使ってよい / 慎重に使うべきツール
 
-- **使ってよい**: Read, Glob, Grep, WebSearch, WebFetch, Asana MCP（タスク作成・更新）, Gmail MCP（検索・読み取り）, Calendar MCP（一覧・空き時間）
+- **使ってよい**: Read, Glob, Grep, WebSearch, WebFetch, Asana MCP（タスク作成・更新）, Gmail MCP（検索・読み取り）, Calendar MCP（一覧・空き時間）, `/ralph-loop`（定型反復タスクのループ実行: daily-scan系の繰り返し監視等）, `remember` スキル（セッション末の状態保存）
 - **慎重に使うべき**: Write, Edit（knowledge/context/ への追記は可。それ以外は人間確認後）, Asana MCP（プロジェクト作成・タスク削除）, Gmail MCP（下書き作成）
 
 ---

@@ -33,6 +33,7 @@
 |---|---|
 | `cost-control.md` | **必須** |
 | `human-confirmation.md` | **必須** |
+| `session-report` | Claude Code セッションの使用状況を HTML レポート化する時（トークン・キャッシュ・サブエージェント・高コストプロンプトの可視化） |
 
 ## 他エージェントとの連携ルール
 - **quality-auditor**: コスト効率の評価で連携

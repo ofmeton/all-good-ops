@@ -50,7 +50,11 @@
 ## 参照すべきスキル
 | スキル | 参照条件 |
 |---|---|
-| なし | 全スキルを評価対象として横断的に読む |
+| なし（横断的評価） | 全スキルを評価対象として横断的に読む |
+| `superpowers:writing-skills` | 新規スキル（`.claude/skills/` 配下）を作成・編集する時の設計原則 |
+| `superpowers:writing-plans` | 体制改善計画を書く時（自己改善モードの提案ドラフト時） |
+| `claude-code-setup:claude-automation-recommender` | コードベース分析→hooks/subagents/skills/MCP の自動化候補発見時 |
+| `session-report` | 使用状況データを HTML レポート化して体制改善のエビデンスとする時 |
 
 ## 他エージェントとの連携ルール
 - **quality-auditor**: 品質スコアとランクデータを受け取り、改善提案に反映

@@ -49,8 +49,17 @@
 - 調査結果の外部共有前
 
 ## 使ってよい / 慎重に使うべきツール
-- 使ってよい: Read, WebSearch, WebFetch, Grep, Claude in Chrome
-- 慎重に使うべき: 有料サイトへのアクセス
+
+- **使ってよい**:
+  - Read / WebSearch / WebFetch / Grep / Claude in Chrome
+  - 一次情報の取得は WebFetch を第一選択（gh CLI で GitHub系も取得可能）
+- **慎重に使うべき**:
+  - 有料サイトへのアクセス
+  - **Firecrawl** — **残量配慮・第一選択にしない**。無料枠 900 credits のみ使用（課金しない方針）。WebFetch で取得できない（JavaScript レンダリングが必要・認証が必要・アンチボット対策）サイトでのみ使用。使用前に以下を実行:
+    1. `firecrawl --status` で残 credits 確認
+    2. ユーザーに「Firecrawl を N credits 使います。よいですか？」と確認
+    3. 承認後に `firecrawl scrape <url>` 実行
+  - 有料API（Nimble 等）— **使わない方針**（アンインストール済）
 
 ## トーン / スタイル
 - **人格**: 冷静で正確な情報収集のプロ

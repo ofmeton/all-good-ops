@@ -119,7 +119,10 @@
 | 調べて、リサーチ、比較 | learning-creative | researcher |
 | 記事、執筆、ブログ記事、企画書 | learning-creative | writer |
 | 整理、メモ、ノート、ブックマーク | learning-creative | info-organizer |
-| スクリプト、開発、バグ、デプロイ | dev-automation | system-engineer |
+| スクリプト、開発、バグ、デプロイ、Vercel、ビルドログ、ランタイムログ、プレビューURL | dev-automation | system-engineer（BSA案件は rapid-hp-operator、ai-radar は ai-radar 本体） |
+| DB、Supabase、マイグレーション、SQL、RLS、スキーマ、Edge Function | dev-automation | system-engineer（ai-radar DB は ai-radar 本体へ） |
+| E2E、ブラウザ自動化、Playwright、スクショ、動作確認、リグレッション | dev-automation | system-engineer |
+| Liquid、Polaris、Hydrogen、Shopify GraphQL、Shopify CLI、theme、Admin API | business-ops | shopify-operator（実装は system-engineer） |
 | MCP、連携、API、Codex | dev-automation | mcp-architect |
 | 品質、スコア、監査 | dev-automation | quality-auditor |
 | 使用量、コスト、トークン | dev-automation | usage-analyst |
@@ -233,7 +236,7 @@
 
 ---
 
-## スキル一覧（18冊）
+## スキル一覧（19冊）
 
 | # | スキル | ファイル | 用途 |
 |---|--------|---------|------|
@@ -255,6 +258,50 @@
 | 16 | 発信プレイブック | `publishing-playbook.md` | SNS・ブログ発信戦略 |
 | 17 | CLAUDE.md 健全性レビュー | `claude-md-health-check.md` | CLAUDE.md と実態の乖離検出手順 |
 | 18 | エージェント新設プロトコル | `agent-onboarding.md` | 既存確認→定義→CLAUDE.md 3点同期の手順 |
+| 19 | SCQAライティングフレームワーク | `scqa-writing-framework.md` | 記事・スレッド・提案文の構造化（Situation→Complication→Question→Answer） |
+
+---
+
+## プラグイン提供スキル（外部スキル）
+
+プラグイン経由で `Skill` ツールから呼び出せる追加スキル群。各エージェント定義の「参照すべきスキル」テーブルで紐付けしている。**ローカルスキル（`.claude/skills/` 配下の19冊）を優先し、プラグインスキルは補助として使う**のが原則。
+
+### `superpowers`（開発・戦略支援）
+| スキル | 主な用途 | 主な利用エージェント |
+|---|---|---|
+| `superpowers:brainstorming` | 創造作業前のユーザー意図・要件・デザイン探索 | strategic-advisor / rapid-hp-operator / writer / ai-radar |
+| `superpowers:writing-plans` | スペックから実装・作業計画を書く | rapid-hp-operator / system-engineer / org-designer / writer |
+| `superpowers:executing-plans` | 書いた計画を別セッションで実行 | system-engineer |
+| `superpowers:test-driven-development` | TDD の実践 | system-engineer |
+| `superpowers:systematic-debugging` | バグ・テスト失敗の体系的な診断 | system-engineer / ai-radar |
+| `superpowers:verification-before-completion` | 完了宣言・コミット・PR作成前の検証 | system-engineer / rapid-hp-operator / presentation-reviewer |
+| `superpowers:requesting-code-review` / `receiving-code-review` | コードレビューの依頼・受領 | system-engineer |
+| `superpowers:using-git-worktrees` | 並行作業の隔離 | system-engineer |
+| `superpowers:finishing-a-development-branch` | 実装完了時の merge/PR 判断 | system-engineer |
+| `superpowers:subagent-driven-development` / `dispatching-parallel-agents` | 複数エージェントの並列実行判断 | secretary |
+| `superpowers:writing-skills` | スキル新設・編集 | org-designer |
+
+### `frontend-design`
+| スキル | 主な用途 | 主な利用エージェント |
+|---|---|---|
+| `frontend-design:frontend-design` | 高品質なフロントエンドUI生成 | system-engineer / rapid-hp-operator |
+
+### `claude-code-setup`
+| スキル | 主な用途 | 主な利用エージェント |
+|---|---|---|
+| `claude-code-setup:claude-automation-recommender` | コードベース分析→hooks/subagents/skills/MCP 自動化候補推奨 | org-designer / mcp-architect |
+
+### `ralph-loop`
+- `/ralph-loop` スラッシュコマンドで定型反復作業のループ実行。ビルド待ち監視・テスト繰り返し等で利用。主な利用: secretary / system-engineer
+
+### `remember`
+- セッション間での作業状態保存。熟議中断時・案件進行中・作業の一時保留時に利用。主な利用: secretary / strategic-advisor / rapid-hp-operator
+
+### `session-report`
+- Claude Code 使用状況の HTML レポート生成。コスト分析・体制改善エビデンス取得に利用。主な利用: usage-analyst / org-designer
+
+### 開発補助プラグイン（エージェント紐付けなし・必要時に手動利用）
+- `figma` / `vercel` / `supabase` / `stripe` / `shopify-ai-toolkit` / `playwright` / `firecrawl` / `asana` — MCP サーバー系は上記「## MCP連携」セクション参照
 
 ---
 
@@ -323,16 +370,24 @@
 
 ## MCP連携
 
-### 現在稼働中
-- **Asana**: タスク管理（秘書がプロジェクト・セクション設計まで担当）
+### 現在稼働中（基盤）
+- **Asana**（プラグイン`mcp__plugin_asana_asana__*`）: タスク管理。秘書がプロジェクト・セクション設計まで担当
 - **Gmail**: メール取得・下書き作成
 - **Google Calendar**: 予定取得・イベント作成
 - **Slack**: チャンネル読み取り・メッセージ送信
 - **Claude in Chrome**: ブラウザ操作
 
+### 現在稼働中（開発・運用）
+- **Vercel**（プラグイン`mcp__plugin_vercel_vercel__*`）: portfolio / ai-radar のデプロイ・ランタイムログ・ビルドログ取得。担当: `rapid-hp-operator` / `ai-radar` / `system-engineer`。**`deploy_to_vercel` は人間確認必須**
+- **Supabase**（プラグイン`mcp__plugin_supabase_supabase__*`）: ai-radar の DB 操作（読み取りSQL・マイグレーション・ログ・Advisors）。担当: `ai-radar` / `system-engineer`。**`apply_migration` / `execute_sql`（書き込み系）/ `create_project` / `deploy_edge_function` は人間確認必須**
+- **Playwright**（プラグイン）: 競合サイト・クライアント納品物の動作確認、スクショ、E2E。担当: `system-engineer` / `rapid-hp-operator`
+- **Firecrawl**（CLI `firecrawl`）: Web スクレイプ。**無料枠のみ使用・課金しない方針**。WebFetch/gh CLI を第一選択とし、JS 重いサイトで WebFetch が使えない時だけ使用。使う前に `firecrawl --status` で残 credits 確認
+- **Shopify AI Toolkit**（プラグイン・MCP 無し）+ **Shopify CLI**（`shopify`）: Shopify ストア運営・アプリ開発（GraphQL / Liquid / Polaris / Admin API）。担当: `shopify-operator` / `system-engineer`
+
 ### 将来検討
 - **LINE**: 個人的なメッセージング連携（優先度低）
 - **Codex (OpenAI)**: ChatGPT/Codex との連携（優先度低）
+- **Stripe / Figma / adspirer-ads-agent**: プラグイン導入済だが**未認証**。必要になった時点で認証（課金発生・有料プラン前提のため慎重に）
 
 ---
 
