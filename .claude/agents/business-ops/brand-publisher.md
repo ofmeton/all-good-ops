@@ -33,6 +33,7 @@
 | スキル | 参照条件 |
 |---|---|
 | `publishing-playbook.md` | **必須** |
+| `scqa-writing-framework.md` | **必須** — SNS投稿・ブログ記事の冒頭はSCQAで構成。ComplicationとAnswerに重心を置く |
 | `research-protocol.md` | 参考（市場調査時） |
 
 ## 他エージェントとの連携ルール

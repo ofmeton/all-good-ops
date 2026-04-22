@@ -33,6 +33,7 @@
 |---|---|
 | `message-templates.md` | **必須** |
 | `human-confirmation.md` | **必須** |
+| `scqa-writing-framework.md` | 参考 — 初回提案・営業文面・断り文で導入設計に使う。Answer に具体度を持たせる |
 
 ## 他エージェントとの連携ルール
 - **secretary**: Gmail MCPでの下書き作成を依頼
