@@ -8,10 +8,46 @@
 月収26万円を安定確保しつつ、事務・意思決定の負荷を30%削減し、社会的ミッション（子どもの居場所づくり）を2026年上半期以内に具体化する。
 
 ### 戦略KGI
-1. 月収26万円の安定達成（業務委託+Shopify+フリーランス+失業手当）
-2. 子どもの居場所の具体化（2026年上半期以内）＋社団法人設立（2026年内）
-3. AIコスト効率の維持（月5,000円以内）
+1. **BSA戦略（2026-04-22〜08-22）の完走**：Week1-16 KPI達成、認定ランサー / Coconalaプラチナ到達
+2. 月収26万円の安定達成（BSA期間中は Week KPI を優先、月収目標は凍結）
+3. 子どもの居場所の具体化（2026年以内）＋社団法人設立（2026年内）
 4. 生活の安定と精神的余裕
+
+※ AIコスト上限は KGI から外した（実態に合わないため）。コスト管理は継続するが戦略KGI枠外。
+※ 失業手当は現時点で制約条件から外す（BSA期間中は気にしない方針）。
+
+---
+
+## BSA戦略（2026-04-22〜2026-08-22）
+
+現在最重要プロジェクト。4ヶ月タイムボックス型HP制作ブートストラップ戦略。
+
+### 核ルール
+- **名義**: 提案文・契約書・請求書は必ず **工藤陸**（本名）
+- **AI表記**: 外部露出物では「**AI活用**」のみ使用。「Claude」「Opus」「Anthropic」等の固有名詞は一切出さない
+- **価格 SSOT**: `knowledge/context/pricing-catalog.md` が唯一の正本。商品ライン L1/L2/L3/L4 の価格・納期・オプションはここを参照
+- **SLA**: 納期超過時は料金の20%返金 または 翌日以内に無料修正
+- **作業ディレクトリ**: `outputs/bsa/` 配下
+
+### 商品ライン（詳細は pricing-catalog.md）
+- L1: Rapid Single LP / 30,000円 / 72時間
+- L2: Rapid Corporate 5P / 80,000円 / 7日
+- L3: Rapid LP + 広告運用初月 / 100,000円 / 96時間
+- L4: Express 修正・改修 / 10,000〜30,000円 / 24時間対応
+
+### 担当エージェント
+- **rapid-hp-operator**（business-ops）: BSA運用統括（提案投下・KPI・SLA）
+- 実制作: portfolio / system-engineer
+- 案件スキャン: freelance-scout
+- 文面推敲: message-crafter
+
+### 名義3ラインの切り分け（混在厳禁）
+
+| 名義 | 用途 | 担当エージェント | URL・ドメイン |
+|---|---|---|---|
+| **工藤陸**（本名） | BSA提案・受注・請求・契約 | rapid-hp-operator | portfolio のVercel URL を実績として露出 |
+| **ofmeton** | 個人ブランド発信（技術・仕事） | brand-publisher（business-ops） | portfolio-fawn-eight-63.vercel.app 他 |
+| **はぐりん**（persona） | 収益化コンテンツ（Threads/note 有料記事等） | monetize-os/growth-lead | persona側のアカウント |
 
 ---
 
@@ -20,12 +56,27 @@
 **全ての依頼は秘書（secretary）を通す。** 他のエージェントに直接依頼してはならない。
 秘書が依頼内容を判断し、最適なエージェントを選定・起動する。
 
+### 秘書経由 / メインセッション直接対話 の使い分け
+
+原則「秘書経由」だが、以下の場合はメインセッション（Claude本体）と直接対話する方が効率的：
+
+| 秘書経由が合う | メインセッション直接が合う |
+|---|---|
+| daily-scan / task-sync / Asana操作などの定型処理 | 現在セッションの続き議論・メタ判断 |
+| 複数エージェント横断のルーティング | CLAUDE.md / 体制そのものの見直し |
+| 新規セッションで状況把握から始めたい時 | 直前に調査した結果を踏まえた即決が必要な時 |
+| 人間確認ルールのエスカレーション判定 | Auto memory の最新情報を活用したい時 |
+
+※ 秘書は**新規サブエージェント呼び出し**なので、本セッション直前の判断履歴や Auto memory の細かい差分は伝達ロスが発生する。
+
 ### セッション開始時の秘書の動作
 
-1. `knowledge/INDEX.md` を読む（最新の状況把握）
-2. `knowledge/context/` の関連ファイルを軽くスキャン（変更日時を確認し、直近更新があるものだけ読む）
-3. `data/usage-log.jsonl` の直近5件を読む（前回何をしたか把握）
-4. ユーザーに状況報告と「今日は何をしますか？」を提示
+1. `knowledge/context/` のうち依頼キーワードに関連するファイルだけ読む（全読みは不要）
+   - 迷ったら context-business.md（BSA進捗が入る）と context-goals.md だけ読む
+2. `data/usage-log.jsonl` の直近5件を読む（前回何をしたか把握）
+3. ユーザーに状況報告と「今日は何をしますか？」を提示
+
+※ `knowledge/INDEX.md` は廃止（メンテコストに対して効果が薄かったため）。
 
 ---
 
@@ -76,6 +127,7 @@
 | 整理して、どうしたらいい、戦略 | 横断 | strategic-advisor |
 | エージェント追加、チーム改善 | 横断 | org-designer |
 | パワポ、プレゼン、スライド、レビュー | 横断 | presentation-reviewer |
+| BSA、工藤陸、Lancers、Coconala、認定ランサー、提案投下、Week KPI | business-ops | rapid-hp-operator |
 | AI動向、AI業界、新モデル、Anthropic動向、機会発見、ビジネスチャンス（AI）、Skills事業防衛、競合動向（AI）、ai-radar、ダッシュボード | **外部スポーク: ai-radar** | ai-radar |
 | はぐりん、persona、Threads 投稿、note 記事、有料記事、メンバーシップ、収益化コンテンツ、topic-seeds、competitor-watch、90日計画（発信系） | **外部スポーク: monetize-os** | monetize-os/growth-lead |
 | 公開前チェック、規約確認、アフィリエイト開示、景表法、薬機法、ステマ | **外部スポーク: monetize-os** | monetize-os/compliance |
@@ -86,7 +138,7 @@
 - **monetize-os**（`/Users/rikukudo/Projects/monetize-os/`）: 収益化特化の運用 OS。秘書は growth-lead に委譲し、実行結果を受け取って統合する。persona 配下エージェント（hagurin/hook-writer 等）を秘書が直接呼ばない。詳細は `monetize-os/CLAUDE.md` 参照
 - **portfolio**（`/Users/rikukudo/Projects/portfolio/`）: HP 受注事業の制作物リポジトリ。秘書は client-manager / freelance-scout を起動しつつ、作業ディレクトリを portfolio に切り替える
 - **ai-radar**（`/Users/rikukudo/Projects/ai-radar/`）: AIエコシステム機会発見 + Skills事業防衛シグナル検知のダッシュボード。Next.js/Supabase/Vercel で常時稼働。秘書は ai-radar エージェントに委譲し、ダッシュボードのヒット確認・ソース精査・深掘り依頼を任せる。実装コード改修は system-engineer に委譲。詳細は `outputs/documents/ai-radar/01-implementation-plan.md` 参照
-- **brand-publisher（business-ops）と monetize-os/growth-lead の境界**: brand-publisher は **ユーザー本人（ofmeton）名義の発信**、growth-lead は **persona（はぐりん等）名義の発信**。名義が違うものは絶対に混ぜない
+- **brand-publisher（business-ops）と monetize-os/growth-lead の境界**: brand-publisher は **ユーザー本人（ofmeton）名義の発信**、growth-lead は **persona（はぐりん等）名義の発信**。名義が違うものは絶対に混ぜない（BSA=工藤陸名義は rapid-hp-operator が担当）
 
 ### Step 3: エージェントを起動
 
@@ -96,7 +148,9 @@
 - 参照すべきスキル
 - 人間確認が必要なポイント
 
-### PPTX納品ルール（必須）
+### PPTX納品ルール（該当時のみ）
+
+※ BSA期間中はPPTX納品の発生頻度は低い想定。該当する依頼が入った時のみ適用。
 
 **PPTXファイルを生成した場合、ユーザーへの提出前に必ず `presentation-reviewer` を通すこと。**
 - 作成担当エージェントがPPTXを生成 → presentation-reviewerにレビュー依頼 → レビュー通過後にユーザーへ提出
@@ -105,7 +159,7 @@
 
 ---
 
-## 部門一覧（8部門 + 横断チーム = 33エージェント）
+## 部門一覧（8部門 + 横断チーム = 34エージェント）
 
 ### 横断チーム
 | エージェント | ファイル | 役割 |
@@ -147,6 +201,7 @@
 | 案件スカウト | `business-ops/freelance-scout.md` | 案件探し、提案書 |
 | クライアントマネージャー | `business-ops/client-manager.md` | 顧客関係、納品管理 |
 | 発信ストラテジスト | `business-ops/brand-publisher.md` | 個人ブランド、SNS・ブログ運用 |
+| Rapid HP Operator | `business-ops/rapid-hp-operator.md` | BSA事業オペレーター（提案→受注→ヒアリング→納品→継続運用を一貫担当） |
 
 ### life-admin（生活管理）
 | エージェント | ファイル | 役割 |
@@ -168,7 +223,7 @@
 | ライター | `learning-creative/writer.md` | 記事、企画書、報告書 |
 | 情報整理人 | `learning-creative/info-organizer.md` | メモ、ノートの構造化 |
 
-### dev-automation（開発・MCP・品質）
+### dev-automation(開発・MCP・品質)
 | エージェント | ファイル | 役割 |
 |---|---|---|
 | システムエンジニア | `dev-automation/system-engineer.md` | スクリプト開発・保守 |
@@ -231,12 +286,12 @@
 
 ---
 
-## コスト最適化原則（月5,000円以内）
+## コスト最適化原則
 
 1. **秘書の自己処理範囲を最大化**: 軽量処理はサブエージェント不要
-2. **INDEX先読み → 必要分だけ本文展開**: 全文を読まない
+2. **context 関連ファイルだけ読む → 必要分だけ本文展開**: 全文を読まない
 3. **スキル参照の最小化**: 「必須」と「参考」を区別。参考スキルは必要な場合のみ
-4. **熟議は月2-3回に制限**: 開始前に人間確認
+4. **熟議は必要時のみ発動**: 開始前に人間確認
 5. **自動スクリプトの --max-turns を制限**: 朝20、週次15
 6. **応答フォーマットの切替**: 軽量=箇条書き500文字以内、標準=構造化、熟議=詳細
 
@@ -252,10 +307,10 @@
 
 ---
 
-## エージェント管理パイプライン（6段階）
+## エージェント管理パイプライン（7段階）
 
 1. **発見** — usage-log分析で新規エージェント候補を検出（月次）
-2. **取り込み** — 定義ファイル作成、品質チェック、ルーティング追加（人間承認後）
+2. **取り込み** — **既存エージェント確認（`ls .claude/agents/**/*.md` で重複チェック）→** 定義ファイル作成、品質チェック、ルーティング追加（人間承認後）
 3. **品質監視** — 6軸100点満点で全エージェントをスコアリング（月次）
 4. **使用追跡** — data/usage-log.jsonl にJSONL形式で記録（毎セッション）
 5. **ランク管理** — N/N-C/N-B/N-A/N-Sの5段階（月次更新）
@@ -273,18 +328,17 @@
 - **Slack**: チャンネル読み取り・メッセージ送信
 - **Claude in Chrome**: ブラウザ操作
 
-### 導入予定
-- **LINE**: 個人的なメッセージング連携
-- **Codex (OpenAI)**: ChatGPT/Codex との連携
+### 将来検討
+- **LINE**: 個人的なメッセージング連携（優先度低）
+- **Codex (OpenAI)**: ChatGPT/Codex との連携（優先度低）
 
 ---
 
 ## GitHub運用ルール
 
 - `main` ブランチは常に動作する状態を維持
-- エージェント新設・大幅改修は `develop` ブランチ経由
-- 日常の小さな変更（usage-log, context更新, ranks更新）は main に直接コミット
-- PRテンプレートに従い、変更の影響範囲を明記
+- 大規模変更は `improve/` ブランチ経由（自己改善ループが使用）
+- 日常の変更は main に直接コミット
 - CLAUDE.md のルーティングテーブルとの整合性を必ず確認
 
 ---
