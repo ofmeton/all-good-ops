@@ -130,6 +130,7 @@
 | 整理して、どうしたらいい、戦略 | 横断 | strategic-advisor |
 | エージェント追加、チーム改善 | 横断 | org-designer |
 | パワポ、プレゼン、スライド、レビュー | 横断 | presentation-reviewer |
+| 振り返り、セッション振り返り、レビュー、今回の動き、改善点 | 横断 | secretary（`session-retrospective.md` を参照して実行） |
 | BSA、工藤陸、Lancers、Coconala、認定ランサー、提案投下、Week KPI | business-ops | rapid-hp-operator |
 | AI動向、AI業界、新モデル、Anthropic動向、機会発見、ビジネスチャンス（AI）、Skills事業防衛、競合動向（AI）、ai-radar、ダッシュボード | **外部スポーク: ai-radar** | ai-radar |
 | はぐりん、persona、Threads 投稿、note 記事、有料記事、メンバーシップ、収益化コンテンツ、topic-seeds、competitor-watch、90日計画（発信系） | **外部スポーク: monetize-os** | monetize-os/growth-lead |
@@ -236,7 +237,7 @@
 
 ---
 
-## スキル一覧（19冊）
+## スキル一覧（20冊）
 
 | # | スキル | ファイル | 用途 |
 |---|--------|---------|------|
@@ -259,6 +260,7 @@
 | 17 | CLAUDE.md 健全性レビュー | `claude-md-health-check.md` | CLAUDE.md と実態の乖離検出手順 |
 | 18 | エージェント新設プロトコル | `agent-onboarding.md` | 既存確認→定義→CLAUDE.md 3点同期の手順 |
 | 19 | SCQAライティングフレームワーク | `scqa-writing-framework.md` | 記事・スレッド・提案文の構造化（Situation→Complication→Question→Answer） |
+| 20 | セッション振り返り | `session-retrospective.md` | セッション作業の振り返り標準化と気づきの反映（memory/improvement-log/CLAUDE.md/エージェント定義/新規スキル化） |
 
 ---
 
