@@ -114,24 +114,41 @@ UPDATE sources SET in_opportunity       = true, in_business_defense = true WHERE
 ALTER TABLE sources DROP COLUMN pipeline;
 ```
 
-- [ ] **Step 2: ローカル検証（Supabase CLI）**
+- [ ] **Step 2: SQL構文の自己検証**
 
-```bash
-cd /Users/rikukudo/Projects/ai-radar
-npx supabase db diff --schema public  # 既存スキーマとの差分を確認
-npx supabase db reset                  # ローカル DB をリセットしてマイグレーション全適用
+ai-radar はローカル Supabase CLI 未導入のため、SQLの構文・記述ミスのみセルフチェックする：
+
+- enum CHECK 制約値が `'opportunity', 'business_defense', 'both', 'ad_ops', 'opp_ad', 'biz_ad', 'all', 'noise'` の8値であること
+- 列追加文の CHECK 範囲（0-100）と型（smallint / boolean / text / jsonb）に typo がないこと
+- インデックスの WHERE 句の pipeline IN リストが上記enum値と整合していること
+- sources テーブル `pipeline` カラムの DROP 前に boolean 3列の UPDATE が完了していること
+
+該当SQLを目視で再確認し、誤りがあれば修正してから次へ。
+
+- [ ] **Step 3: Supabase MCP で本番スキーマ適用（人間確認必須）**
+
+`mcp__plugin_supabase_supabase__apply_migration` を呼び、SQL本体をユーザーに提示。承認ダイアログが出るので、必ずユーザー承認後に適用する。
+
+適用後 `mcp__plugin_supabase_supabase__list_migrations` で `0002_ad_ops` が登録されていることを確認。さらに `mcp__plugin_supabase_supabase__execute_sql` で：
+
+```sql
+SELECT column_name FROM information_schema.columns
+WHERE table_name = 'articles' AND column_name LIKE 'ad_ops_%';
 ```
 
-Expected: エラーなく完了。`0002_ad_ops.sql` が適用されること。
+Expected: 8列 (`ad_ops_change_score` / `ad_ops_sales_angle_score` / `ad_ops_ai_usage_score` / `ad_ops_practical_score` / `ad_ops_total_score` / `ad_ops_trigger_flag` / `ad_ops_trigger_reason` / `ad_ops_tags`) がリストされる。
 
-- [ ] **Step 3: Supabase MCP で本番スキーマ適用前の dry-run**
+```sql
+SELECT column_name FROM information_schema.columns
+WHERE table_name = 'sources' AND column_name LIKE 'in_%';
+```
 
-人間確認必須。`mcp__plugin_supabase_supabase__apply_migration` で dry-run 相当の計画を出し、ユーザー承認後に適用。
+Expected: `in_opportunity` / `in_business_defense` / `in_ad_ops` の3列。
 
 - [ ] **Step 4: Commit**
 
 ```bash
-git checkout -b feat/ad-ops-tab
+cd /Users/rikukudo/Projects/ai-radar/.worktrees/ad-ops-tab
 git add supabase/migrations/0002_ad_ops.sql
 git commit -m "feat(db): add ad_ops pipeline schema (migration 0002)"
 ```
