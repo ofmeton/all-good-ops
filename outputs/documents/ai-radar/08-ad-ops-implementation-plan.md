@@ -528,74 +528,10 @@ git commit -m "feat(prompts): add score-ad-ops 4-subscore prompt"
 
 **Files:**
 - Modify: `src/lib/scoring.ts`
-- Create: `tests/lib/scoring-ad-ops.test.ts`
 
-- [ ] **Step 1: テストを先に書く**
+**注**: 既存 ai-radar にはテスト基盤（vitest/jest）が未導入のため TDD ではなく型安全＋手動確認方式で進める。
 
-`tests/lib/scoring-ad-ops.test.ts`:
-
-```typescript
-import { describe, it, expect } from 'vitest'; // 既存テスト基盤に合わせる
-import { adOpsScore } from '@/lib/scoring';
-import type { ScoreAdOpsOutput } from '@/lib/prompts/score-ad-ops';
-
-describe('adOpsScore', () => {
-  it('均等重み 0.25 × 4 で合成', () => {
-    const input: ScoreAdOpsOutput = {
-      change_score: 100,
-      sales_angle_score: 0,
-      ai_usage_score: 100,
-      practical_score: 0,
-      reasoning: 'test',
-    };
-    expect(adOpsScore(input)).toBe(50);
-  });
-
-  it('全軸100で100', () => {
-    const input: ScoreAdOpsOutput = {
-      change_score: 100,
-      sales_angle_score: 100,
-      ai_usage_score: 100,
-      practical_score: 100,
-      reasoning: 'test',
-    };
-    expect(adOpsScore(input)).toBe(100);
-  });
-
-  it('全軸0で0', () => {
-    const input: ScoreAdOpsOutput = {
-      change_score: 0,
-      sales_angle_score: 0,
-      ai_usage_score: 0,
-      practical_score: 0,
-      reasoning: 'test',
-    };
-    expect(adOpsScore(input)).toBe(0);
-  });
-
-  it('丸めは四捨五入', () => {
-    const input: ScoreAdOpsOutput = {
-      change_score: 83,
-      sales_angle_score: 67,
-      ai_usage_score: 55,
-      practical_score: 42,
-      reasoning: 'test',
-    };
-    // (83 + 67 + 55 + 42) / 4 = 61.75 → 62
-    expect(adOpsScore(input)).toBe(62);
-  });
-});
-```
-
-- [ ] **Step 2: テストを実行して失敗確認**
-
-```bash
-cd /Users/rikukudo/Projects/ai-radar && npx vitest run tests/lib/scoring-ad-ops.test.ts
-```
-
-Expected: `adOpsScore is not a function` でFAIL
-
-- [ ] **Step 3: `src/lib/scoring.ts` に `adOpsScore()` 追加**
+- [ ] **Step 1: `src/lib/scoring.ts` に `adOpsScore()` 追加**
 
 ファイル末尾に追記：
 
@@ -616,18 +552,38 @@ export function adOpsScore(x: ScoreAdOpsOutput): number {
 }
 ```
 
-- [ ] **Step 4: テスト通過確認**
+- [ ] **Step 2: 型チェック**
 
 ```bash
-npx vitest run tests/lib/scoring-ad-ops.test.ts
+cd /Users/rikukudo/Projects/ai-radar && npx tsc --noEmit
 ```
 
-Expected: 4/4 PASS
+Expected: エラーなし。
 
-- [ ] **Step 5: Commit**
+- [ ] **Step 3: 動作確認（手動検証）**
+
+`tsx` で直接実行して検証：
 
 ```bash
-git add src/lib/scoring.ts tests/lib/scoring-ad-ops.test.ts
+npx tsx -e "
+import { adOpsScore } from './src/lib/scoring';
+// Case 1: 均等重み 0.25 × 4 で合成
+console.log('case1:', adOpsScore({ change_score: 100, sales_angle_score: 0, ai_usage_score: 100, practical_score: 0, reasoning: 'test' }), '== 50');
+// Case 2: 全軸100で100
+console.log('case2:', adOpsScore({ change_score: 100, sales_angle_score: 100, ai_usage_score: 100, practical_score: 100, reasoning: 'test' }), '== 100');
+// Case 3: 全軸0で0
+console.log('case3:', adOpsScore({ change_score: 0, sales_angle_score: 0, ai_usage_score: 0, practical_score: 0, reasoning: 'test' }), '== 0');
+// Case 4: 丸めは四捨五入 (83+67+55+42)/4 = 61.75 → 62
+console.log('case4:', adOpsScore({ change_score: 83, sales_angle_score: 67, ai_usage_score: 55, practical_score: 42, reasoning: 'test' }), '== 62');
+"
+```
+
+Expected: case1=50, case2=100, case3=0, case4=62
+
+- [ ] **Step 4: Commit**
+
+```bash
+git add src/lib/scoring.ts
 git commit -m "feat(scoring): add adOpsScore() with equal weight composition"
 ```
 
@@ -637,55 +593,10 @@ git commit -m "feat(scoring): add adOpsScore() with equal weight composition"
 
 **Files:**
 - Create: `src/lib/ad-ops-trigger.ts`
-- Create: `tests/lib/ad-ops-trigger.test.ts`
 
-- [ ] **Step 1: テストを先に書く**
+**注**: テスト基盤未導入のため、Task 7 同様に型チェック＋手動検証で進める。
 
-`tests/lib/ad-ops-trigger.test.ts`:
-
-```typescript
-import { describe, it, expect } from 'vitest';
-import { detectAdOpsTrigger } from '@/lib/ad-ops-trigger';
-
-describe('detectAdOpsTrigger', () => {
-  it('商品設計直撃キーワード検出（日本語）', () => {
-    const text = 'Google Ads が運用代行 認定 制度を変更する';
-    const r = detectAdOpsTrigger(text);
-    expect(r.flag).toBe(true);
-    expect(r.reason).toContain('運用代行 認定');
-  });
-
-  it('競合ポジション直撃キーワード検出（英語）', () => {
-    const text = 'New AI ad ops agency launches autonomous bidding';
-    const r = detectAdOpsTrigger(text);
-    expect(r.flag).toBe(true);
-    expect(r.reason).toContain('AI ad ops agency');
-  });
-
-  it('複数ヒットは全部理由に列挙', () => {
-    const text = '代理店手数料 と 月次運用費 の両方が変更';
-    const r = detectAdOpsTrigger(text);
-    expect(r.flag).toBe(true);
-    expect(r.reason).toContain('代理店手数料');
-    expect(r.reason).toContain('月次運用費');
-  });
-
-  it('ノーヒットで false', () => {
-    const text = '普通の広告業界ニュース';
-    const r = detectAdOpsTrigger(text);
-    expect(r.flag).toBe(false);
-    expect(r.reason).toBeNull();
-  });
-});
-```
-
-- [ ] **Step 2: テスト実行して FAIL 確認**
-
-```bash
-npx vitest run tests/lib/ad-ops-trigger.test.ts
-```
-
-- [ ] **Step 3: 実装**
+- [ ] **Step 1: 実装**
 
 `src/lib/ad-ops-trigger.ts`:
 
@@ -732,18 +643,40 @@ export function detectAdOpsTrigger(text: string): AdOpsTriggerResult {
 }
 ```
 
-- [ ] **Step 4: テスト通過確認**
+- [ ] **Step 2: 型チェック**
 
 ```bash
-npx vitest run tests/lib/ad-ops-trigger.test.ts
+cd /Users/rikukudo/Projects/ai-radar && npx tsc --noEmit
 ```
 
-Expected: 4/4 PASS
+Expected: エラーなし。
 
-- [ ] **Step 5: Commit**
+- [ ] **Step 3: 動作確認（手動検証）**
 
 ```bash
-git add src/lib/ad-ops-trigger.ts tests/lib/ad-ops-trigger.test.ts
+npx tsx -e "
+import { detectAdOpsTrigger } from './src/lib/ad-ops-trigger';
+// Case 1: 商品設計直撃キーワード検出（日本語）
+const r1 = detectAdOpsTrigger('Google Ads が運用代行 認定 制度を変更する');
+console.log('case1:', r1.flag === true && r1.reason?.includes('運用代行 認定') ? 'OK' : 'NG', r1);
+// Case 2: 競合ポジション直撃キーワード検出（英語）
+const r2 = detectAdOpsTrigger('New AI ad ops agency launches autonomous bidding');
+console.log('case2:', r2.flag === true && r2.reason?.includes('AI ad ops agency') ? 'OK' : 'NG', r2);
+// Case 3: 複数ヒット
+const r3 = detectAdOpsTrigger('代理店手数料 と 月次運用費 の両方が変更');
+console.log('case3:', r3.flag === true && r3.reason?.includes('代理店手数料') && r3.reason?.includes('月次運用費') ? 'OK' : 'NG', r3);
+// Case 4: ノーヒット
+const r4 = detectAdOpsTrigger('普通の広告業界ニュース');
+console.log('case4:', r4.flag === false && r4.reason === null ? 'OK' : 'NG', r4);
+"
+```
+
+Expected: case1-4 全て OK
+
+- [ ] **Step 4: Commit**
+
+```bash
+git add src/lib/ad-ops-trigger.ts
 git commit -m "feat(pipeline): add ad-ops trigger keyword detection"
 ```
 
@@ -1785,16 +1718,17 @@ npx next dev
 
 **Files:** なし（デプロイのみ）
 
-- [ ] **Step 1: 最終QA（型・lint・test 全通過確認）**
+- [ ] **Step 1: 最終QA（型・lint 全通過確認）**
 
 ```bash
 cd /Users/rikukudo/Projects/ai-radar
 npx tsc --noEmit                    # 型エラーなし
-npx next lint                        # lint エラーなし
-npx vitest run                       # 全テスト PASS
+npm run lint                         # lint エラーなし
 ```
 
 Expected: 全コマンドが exit 0。1つでも失敗したらデプロイ不可。
+
+※ ai-radar はテスト基盤未導入のため自動テスト工程はなし（ユニット相当は Task 7/8 の手動検証で代替済み）。
 
 - [ ] **Step 2: feat ブランチ push**
 
@@ -1871,7 +1805,7 @@ Expected: 広告運用ソース全てが最近クロールされている。
    Task 10 の30ソースは実装時に curl で疎通確認必要。反応しないソースはコメントアウトして「Phase 2 で差し替え」のTODOコメント付きで残す。
 
 3. **テスト基盤**:
-   vitest 前提で書いているが、既存ai-radarが別基盤（jest等）なら先頭 `import` を差し替え。
+   ai-radar はテスト基盤（vitest/jest）未導入のため TDD ではなく型チェック＋`npx tsx -e` での手動検証で代替。Task 7/8 にその手順を記載。
 
 4. **rollback 手順**:
    - DBマイグレーションロールバックは `0003_rollback_ad_ops.sql` を別途用意することを推奨（既存 pipeline enum 復帰 + 広告運用列の DROP）
