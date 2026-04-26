@@ -103,7 +103,6 @@
 | キャッシュフロー、予算、予実、月収、収入目標 | finance | cashflow-tracker |
 | キャリア、収入戦略、ロードマップ、将来 | life-planning | career-strategist |
 | 目標、KPI、進捗、達成率 | life-planning | goal-tracker |
-| 失業手当、ハローワーク、健康保険、年金 | life-planning | safety-net-advisor |
 | 子ども、居場所、放課後、見守り | kodomo-ibasho | ibasho-designer |
 | 社団法人、定款、登記、設立 | kodomo-ibasho | nonprofit-advisor |
 | Shopify、商品、注文、ECサイト | business-ops | shopify-operator |
@@ -111,27 +110,27 @@
 | 案件、フリーランス、提案書、営業 | business-ops | freelance-scout |
 | クライアント、納品、顧客 | business-ops | client-manager |
 | 発信、ブログ、SNS、ブランド、フォロワー | business-ops | brand-publisher |
-| 予定、カレンダー、スケジュール、リマインド | life-admin | schedule-coordinator |
-| 届出、申請、役所、手続き、開業届 | life-admin | admin-handler |
-| 健康、運動、食事、睡眠 | life-admin | health-tracker |
+| 予定、カレンダー、スケジュール、リマインド、届出、申請、開業届、健康、運動、食事、人脈、紹介、フォローアップ、整理、メモ | 横断 | secretary（軽量処理として直接捌く。Google Calendar / メモは秘書が直接扱う） |
 | メール、LINE、文面、返信、挨拶文 | communication | message-crafter |
-| 人脈、紹介、フォローアップ | communication | network-manager |
 | 調べて、リサーチ、比較 | learning-creative | researcher |
 | 記事、執筆、ブログ記事、企画書 | learning-creative | writer |
-| 整理、メモ、ノート、ブックマーク | learning-creative | info-organizer |
 | スクリプト、開発、バグ、デプロイ、Vercel、ビルドログ、ランタイムログ、プレビューURL | dev-automation | system-engineer（BSA案件は rapid-hp-operator、ai-radar は ai-radar 本体） |
 | DB、Supabase、マイグレーション、SQL、RLS、スキーマ、Edge Function | dev-automation | system-engineer（ai-radar DB は ai-radar 本体へ） |
 | E2E、ブラウザ自動化、Playwright、スクショ、動作確認、リグレッション | dev-automation | system-engineer |
 | Liquid、Polaris、Hydrogen、Shopify GraphQL、Shopify CLI、theme、Admin API | business-ops | shopify-operator（実装は system-engineer） |
-| MCP、連携、API、Codex | dev-automation | mcp-architect |
-| 品質、スコア、監査 | dev-automation | quality-auditor |
+| MCP、連携、API、Codex | dev-automation | system-engineer（`mcp-integration.md` skill 参照） |
+| 品質、スコア、監査 | 横断 | org-designer（月次は `monthly-audit.sh` で代替） |
 | 使用量、コスト、トークン | dev-automation | usage-analyst |
 | 分析、データ分析、トレンド、比較、集計 | 横断 | data-analyst |
 | 整理して、どうしたらいい、戦略 | 横断 | strategic-advisor |
 | エージェント追加、チーム改善 | 横断 | org-designer |
 | パワポ、プレゼン、スライド、レビュー | 横断 | presentation-reviewer |
+| 大型PPTX生成（50p以上、python-pptx）、複数Part分割ビルド、PPTX結合 | dev-automation | system-engineer（`large-pptx-generation` 必須参照） |
 | 振り返り、セッション振り返り、レビュー、今回の動き、改善点 | 横断 | secretary（`session-retrospective.md` を参照して実行） |
 | BSA、工藤陸、Lancers、Coconala、認定ランサー、提案投下、Week KPI | business-ops | rapid-hp-operator |
+| デザイン方向性、DESIGN.md、OUTLINE.md、トンマナ、AIっぽい、毎回同じデザイン、個性的、デザインテンプレ、デザイン統括 | 横断 | design-director（守り） |
+| LP 訴求、ファーストビュー、FV、CVR、LP潮流、ユーザー心理、コピー訴求、視線誘導、オファー強度、LPレビュー | 横断 | conversion-designer（攻め。design-director とペア起動） |
+| 広告運用、Google広告、Meta広告、リスティング、P-MAX、CPA、ROAS、CV、GTM、GA4、配信レポート、LPO、広告運用代行 | business-ops | ad-ops-specialist |
 | AI動向、AI業界、新モデル、Anthropic動向、機会発見、ビジネスチャンス（AI）、Skills事業防衛、競合動向（AI）、ai-radar、ダッシュボード | **外部スポーク: ai-radar** | ai-radar |
 | はぐりん、persona、Threads 投稿、note 記事、有料記事、メンバーシップ、収益化コンテンツ、topic-seeds、competitor-watch、90日計画（発信系） | **外部スポーク: monetize-os** | monetize-os/growth-lead |
 | 公開前チェック、規約確認、アフィリエイト開示、景表法、薬機法、ステマ | **外部スポーク: monetize-os** | monetize-os/compliance |
@@ -163,18 +162,19 @@
 
 ---
 
-## 部門一覧（8部門 + 横断チーム = 34エージェント）
+## 部門一覧（7部門 + 横断チーム = 28エージェント）
 
 ### 横断チーム
 | エージェント | ファイル | 役割 |
 |---|---|---|
-| 秘書 | `secretary.md` | 唯一の一次窓口、ルーティング、Asana管理 |
-| 組織設計者 | `org-designer.md` | エージェント体制の評価・改善 |
-| ナレッジキュレーター | `knowledge-curator.md` | knowledge/の整理・更新 |
+| 秘書 | `secretary.md` | 唯一の一次窓口、ルーティング、Asana管理、Calendar/メモ等の軽量処理直接対応 |
+| 組織設計者 | `org-designer.md` | エージェント体制の評価・改善、品質監査統括 |
 | 戦略参謀 | `strategic-advisor.md` | 仮説思考、ブレスト、次の一手 |
 | データアナリスト | `data-analyst.md` | データ分析専門。他エージェントからの分析依頼を受ける |
 | プレゼンレビュアー | `presentation-reviewer.md` | PPTX品質チェック。全パワポの納品前レビュー必須 |
 | AIレーダー | `ai-radar.md` | AIエコシステム機会発見 + Skills事業防衛シグナル検知。`/Users/rikukudo/Projects/ai-radar/` の独立プロジェクトを運用 |
+| デザインディレクター | `design-director.md` | LP/HP制作のデザイン方向性統括。DESIGN.md/OUTLINE.md 確定、Do's & Don'ts 判断、AIっぽさチェック（**守り**） |
+| コンバージョンデザイナー | `conversion-designer.md` | LP の訴求力・CVR・ファーストビュー・最新潮流採用・ユーザー心理。design-director と対の**攻め**役 |
 
 ### finance（財務・経理）
 | エージェント | ファイル | 役割 |
@@ -189,7 +189,6 @@
 |---|---|---|
 | キャリア戦略家 | `life-planning/career-strategist.md` | 収入源戦略、ロードマップ |
 | 目標トラッカー | `life-planning/goal-tracker.md` | KGI/KPI進捗追跡 |
-| セーフティネット顧問 | `life-planning/safety-net-advisor.md` | 失業手当、社会保険 |
 
 ### kodomo-ibasho（子どもの居場所）
 | エージェント | ファイル | 役割 |
@@ -206,38 +205,28 @@
 | クライアントマネージャー | `business-ops/client-manager.md` | 顧客関係、納品管理 |
 | 発信ストラテジスト | `business-ops/brand-publisher.md` | 個人ブランド、SNS・ブログ運用 |
 | Rapid HP Operator | `business-ops/rapid-hp-operator.md` | BSA事業オペレーター（提案→受注→ヒアリング→納品→継続運用を一貫担当） |
-
-### life-admin（生活管理）
-| エージェント | ファイル | 役割 |
-|---|---|---|
-| スケジュール調整役 | `life-admin/schedule-coordinator.md` | 日程管理、Calendar連携 |
-| 行政手続き担当 | `life-admin/admin-handler.md` | 届出、申請 |
-| 健康トラッカー | `life-admin/health-tracker.md` | 体調管理 |
+| 広告運用スペシャリスト | `business-ops/ad-ops-specialist.md` | Google広告/Meta広告の運用プロ。L3（LP+広告運用初月）の運用責任者、LPOループ、広告運用代行案件の提案 |
 
 ### communication（コミュニケーション）
 | エージェント | ファイル | 役割 |
 |---|---|---|
 | 文面クラフター | `communication/message-crafter.md` | メール、LINE、公式文面 |
-| 人脈マネージャー | `communication/network-manager.md` | 関係者DB、フォローアップ |
 
 ### learning-creative（学習・創作）
 | エージェント | ファイル | 役割 |
 |---|---|---|
 | リサーチャー | `learning-creative/researcher.md` | 調査、情報収集 |
 | ライター | `learning-creative/writer.md` | 記事、企画書、報告書 |
-| 情報整理人 | `learning-creative/info-organizer.md` | メモ、ノートの構造化 |
 
-### dev-automation(開発・MCP・品質)
+### dev-automation（開発・運用）
 | エージェント | ファイル | 役割 |
 |---|---|---|
-| システムエンジニア | `dev-automation/system-engineer.md` | スクリプト開発・保守 |
-| MCP設計者 | `dev-automation/mcp-architect.md` | MCP導入・設定・最適化 |
-| 品質監査官 | `dev-automation/quality-auditor.md` | 品質スコアリング |
+| システムエンジニア | `dev-automation/system-engineer.md` | スクリプト開発・保守、MCP導入・設定（`mcp-integration.md` skill 参照） |
 | 使用分析アナリスト | `dev-automation/usage-analyst.md` | ログ集計、コスト分析 |
 
 ---
 
-## スキル一覧（20冊）
+## スキル一覧（22冊）
 
 | # | スキル | ファイル | 用途 |
 |---|--------|---------|------|
@@ -261,6 +250,8 @@
 | 18 | エージェント新設プロトコル | `agent-onboarding.md` | 既存確認→定義→CLAUDE.md 3点同期の手順 |
 | 19 | SCQAライティングフレームワーク | `scqa-writing-framework.md` | 記事・スレッド・提案文の構造化（Situation→Complication→Question→Answer） |
 | 20 | セッション振り返り | `session-retrospective.md` | セッション作業の振り返り標準化と気づきの反映（memory/improvement-log/CLAUDE.md/エージェント定義/新規スキル化） |
+| 21 | Rapid HP Playbook | `rapid-hp-playbook.md` | BSA事業の受注〜納品〜継続運用の標準運用手順 |
+| 22 | DESIGN.md/OUTLINE.md 運用 | `design-md-workflow.md` | LP/HP制作のデザインシステム運用。毎回同じAIっぽいデザイン問題と実装後修正の重さを構造解決 |
 
 ---
 
@@ -271,7 +262,7 @@
 ### `superpowers`（開発・戦略支援）
 | スキル | 主な用途 | 主な利用エージェント |
 |---|---|---|
-| `superpowers:brainstorming` | 創造作業前のユーザー意図・要件・デザイン探索 | strategic-advisor / rapid-hp-operator / writer / ai-radar |
+| `superpowers:brainstorming` | 創造作業前のユーザー意図・要件・デザイン探索 | strategic-advisor / rapid-hp-operator / writer / ai-radar / conversion-designer / ad-ops-specialist |
 | `superpowers:writing-plans` | スペックから実装・作業計画を書く | rapid-hp-operator / system-engineer / org-designer / writer |
 | `superpowers:executing-plans` | 書いた計画を別セッションで実行 | system-engineer |
 | `superpowers:test-driven-development` | TDD の実践 | system-engineer |
@@ -286,12 +277,19 @@
 ### `frontend-design`
 | スキル | 主な用途 | 主な利用エージェント |
 |---|---|---|
-| `frontend-design:frontend-design` | 高品質なフロントエンドUI生成 | system-engineer / rapid-hp-operator |
+| `frontend-design:frontend-design` | 高品質なフロントエンドUI生成 | system-engineer / rapid-hp-operator / conversion-designer |
 
 ### `claude-code-setup`
 | スキル | 主な用途 | 主な利用エージェント |
 |---|---|---|
-| `claude-code-setup:claude-automation-recommender` | コードベース分析→hooks/subagents/skills/MCP 自動化候補推奨 | org-designer / mcp-architect |
+| `claude-code-setup:claude-automation-recommender` | コードベース分析→hooks/subagents/skills/MCP 自動化候補推奨 | org-designer |
+
+### `adspirer-ads-agent`（広告運用ベスプラ参照・実接続は未認証）
+| スキル | 主な用途 | 主な利用エージェント |
+|---|---|---|
+| `adspirer-ads-agent:ad-campaign-best-practices` | キャンペーン設計の業界ベスプラ参照 | ad-ops-specialist |
+| `adspirer-ads-agent:keyword-research` | Google Ads キーワードリサーチ | ad-ops-specialist |
+| `adspirer-ads-agent:campaign-performance` | 運用中キャンペーンのパフォーマンス分析 | ad-ops-specialist |
 
 ### `ralph-loop`
 - `/ralph-loop` スラッシュコマンドで定型反復作業のループ実行。ビルド待ち監視・テスト繰り返し等で利用。主な利用: secretary / system-engineer
