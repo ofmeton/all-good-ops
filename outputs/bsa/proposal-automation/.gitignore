@@ -1,0 +1,23 @@
+# Data realfiles live in ~/Library/Application Support/bsa-pa/
+data/*.db
+data/*.db-journal
+data/*.db-wal
+data/*.db-shm
+
+# Python
+src/collector/__pycache__/
+src/collector/.pytest_cache/
+src/collector/.venv/
+src/collector/**/__pycache__/
+*.pyc
+
+# Node
+src/generator/node_modules/
+src/dashboard/node_modules/
+src/notifier/node_modules/
+src/generator/dist/
+src/dashboard/.next/
+src/dashboard/out/
+
+# OS
+.DS_Store
