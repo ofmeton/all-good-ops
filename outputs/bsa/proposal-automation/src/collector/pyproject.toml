@@ -19,3 +19,8 @@ dev = [
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 testpaths = ["tests"]
+pythonpath = ["."]
+# pythonpath = ["."] で src/collector/ 直下を import path に追加。
+# adapters/ パッケージ（editable install 済）に加えて、top-level の
+# scorer.py / session.py / stealth.py / db.py / main.py を後の Task で
+# `from scorer import ...` 形式で import できるようにする。
