@@ -16,6 +16,7 @@ src/generator/node_modules/
 src/dashboard/node_modules/
 src/notifier/node_modules/
 src/generator/dist/
+src/notifier/dist/
 src/dashboard/.next/
 src/dashboard/out/
 
