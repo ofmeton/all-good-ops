@@ -22,3 +22,6 @@ src/dashboard/out/
 
 # OS
 .DS_Store
+
+# Dev fixture capture (cookies are local, fixtures are committed)
+scripts/dev/.dev-cookies.json
