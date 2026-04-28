@@ -10,12 +10,11 @@ mkdir -p "$APPDATA"
 chmod 700 "$APPDATA"
 
 if [ -f "$DB_PATH" ]; then
-  echo "DB already exists at $DB_PATH"
-  echo "Run with --force to recreate"
   if [ "${1:-}" = "--force" ]; then
     rm -f "$DB_PATH"
-    echo "Removed existing DB"
+    echo "Removed existing DB at $DB_PATH"
   else
+    echo "DB already exists at $DB_PATH. Use --force to recreate."
     exit 0
   fi
 fi

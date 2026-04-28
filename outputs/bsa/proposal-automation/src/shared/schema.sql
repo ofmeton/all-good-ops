@@ -1,6 +1,11 @@
 -- ============================================================
 -- BSA Proposal Automation - SQLite Schema
 -- ============================================================
+-- NOTE: Phase 1 では CREATE TABLE IF NOT EXISTS で初回作成のみ対応。
+-- カラム追加・型変更は ALTER TABLE で手動マイグレーション、または
+-- init-db.sh --force で再作成（既存データは消える）が必要。
+-- 本格的なマイグレーション機構は Phase 2 で導入予定。
+-- ============================================================
 PRAGMA journal_mode = WAL;
 PRAGMA foreign_keys = ON;
 
@@ -16,7 +21,7 @@ CREATE TABLE IF NOT EXISTS platforms (
 -- 案件マスタ
 CREATE TABLE IF NOT EXISTS jobs (
   job_id                   TEXT PRIMARY KEY,
-  platform_prefix          TEXT NOT NULL REFERENCES platforms(prefix),
+  platform_prefix          TEXT NOT NULL REFERENCES platforms(prefix) ON DELETE RESTRICT,
   source_url               TEXT NOT NULL,
   detail_url               TEXT NOT NULL UNIQUE,
   title                    TEXT NOT NULL,
@@ -113,7 +118,7 @@ CREATE TABLE IF NOT EXISTS runs (
 
 -- セッション (クッキー管理)
 CREATE TABLE IF NOT EXISTS sessions (
-  platform_prefix    TEXT PRIMARY KEY REFERENCES platforms(prefix),
+  platform_prefix    TEXT PRIMARY KEY REFERENCES platforms(prefix) ON DELETE RESTRICT,
   cookie_path        TEXT NOT NULL,
   logged_in_at       TEXT,
   last_validated_at  TEXT,
