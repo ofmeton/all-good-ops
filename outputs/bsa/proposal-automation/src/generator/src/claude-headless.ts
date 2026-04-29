@@ -107,12 +107,23 @@ export async function callClaudeHeadless<T = unknown>(
         // result フィールドが本体
         const body = (parsed as { result?: unknown }).result ?? parsed;
         if (typeof body === 'string') {
-          // schema 指定時でも文字列で返ることがある → さらにパース試行
-          try {
-            resolve(JSON.parse(body) as T);
-          } catch {
-            resolve(body as unknown as T);
+          // schema 指定時でも文字列で返ることがあるので JSON 抽出を試みる
+          // 1) markdown fence (```json ... ```) を除去
+          // 2) 最初の '{' から最後の '}' を切り出して JSON.parse
+          let cleaned = body.trim();
+          cleaned = cleaned.replace(/^```(?:json)?\s*/, '').replace(/\s*```$/, '');
+          const start = cleaned.indexOf('{');
+          const end = cleaned.lastIndexOf('}');
+          if (start >= 0 && end > start) {
+            try {
+              resolve(JSON.parse(cleaned.slice(start, end + 1)) as T);
+              return;
+            } catch {
+              /* fall through */
+            }
           }
+          // それでもダメなら元の string をそのまま返す（呼び出し側で typeof 判定）
+          resolve(body as unknown as T);
         } else {
           resolve(body as T);
         }
