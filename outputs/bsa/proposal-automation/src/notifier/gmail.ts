@@ -34,10 +34,11 @@ interface DailySummary {
 function buildSummary(db: Database.Database): DailySummary {
   const today = new Date().toISOString().slice(0, 10);
 
+  // 直近24時間で集計（JST/UTC 日付境界のズレ回避）
   const collected = (
     db
       .prepare(
-        `SELECT COUNT(*) as c FROM jobs WHERE date(collected_at) = date('now', 'localtime')`
+        `SELECT COUNT(*) as c FROM jobs WHERE collected_at >= datetime('now', '-24 hours')`
       )
       .get() as { c: number }
   ).c;
@@ -46,7 +47,7 @@ function buildSummary(db: Database.Database): DailySummary {
     .prepare(
       `SELECT j.job_id, j.title, j.fit_score, j.estimated_product_line, j.budget_text, j.detail_url
        FROM jobs j JOIN proposals p ON p.job_id = j.job_id
-       WHERE date(p.generated_at) = date('now', 'localtime')
+       WHERE p.generated_at >= datetime('now', '-24 hours')
        ORDER BY j.fit_score DESC LIMIT 10`
     )
     .all() as ProposalRow[];

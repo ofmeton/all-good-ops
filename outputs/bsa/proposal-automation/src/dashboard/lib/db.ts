@@ -47,6 +47,9 @@ export interface JobWithProposal {
 }
 
 export function getTodaysSummary(): JobWithProposal[] {
+  // collected_at は UTC で保存されているため、JST の「本日」判定だと
+  // 日付境界（UTC 15時 = JST 0時）でズレる。
+  // 「直近 24 時間に収集された案件」という実用的なフィルタに変更。
   const db = getDb();
   return db
     .prepare(
@@ -54,7 +57,7 @@ export function getTodaysSummary(): JobWithProposal[] {
               p.body_md, p.research_notes, p.generated_at
        FROM jobs j
        LEFT JOIN proposals p ON p.job_id = j.job_id
-       WHERE date(j.collected_at) = date('now', 'localtime')
+       WHERE j.collected_at >= datetime('now', '-24 hours')
        ORDER BY (j.fit_score IS NULL), j.fit_score DESC, j.collected_at DESC`
     )
     .all() as JobWithProposal[];
