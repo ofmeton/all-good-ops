@@ -10,7 +10,8 @@ else
   _BSA_SELF="${BASH_SOURCE[0]:-$0}"
 fi
 
-export BSA_PA_BASE="$(cd "$(dirname "$_BSA_SELF")/.." && pwd)"
+# env.sh は scripts/lib/ 配下なので、proposal-automation/ までは2階層上
+export BSA_PA_BASE="$(cd "$(dirname "$_BSA_SELF")/../.." && pwd)"
 export BSA_PA_APPDATA="$HOME/Library/Application Support/bsa-pa"
 export BSA_PA_DB="$BSA_PA_APPDATA/data.db"
 export BSA_PA_VENV="$HOME/.venvs/bsa-pa"
