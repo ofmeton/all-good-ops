@@ -75,7 +75,7 @@ async function generateForJob(
 
   // 5. Claude 呼び出し
   // --bare + --mcp-config は env 未解決でエラーになるため、user-scope の Claude Code 設定に任せる。
-  const result = await callClaudeHeadless<GenerationOutput>({
+  const result = await callClaudeHeadless<Partial<GenerationOutput>>({
     prompt,
     schema: PROPOSAL_SCHEMA,
     allowedTools: ['WebFetch'],
@@ -84,19 +84,38 @@ async function generateForJob(
     timeoutMs: 180_000,
   });
 
-  // 6. SQLite に保存
+  // 6. レスポンスの形を確認 + fallback 適用
+  // Claude が JSON Schema を完全には強制しないことがあるので、
+  // 不足項目は推奨初期値（estimated / suggestedPrice / suggestedDays）で埋める。
+  if (!result || typeof result !== 'object') {
+    console.error(`  ⚠️ [${job.job_id}] Claude が想定外の形式を返した:`, result);
+    return;
+  }
+  const body_md = (result.body_md ?? '').toString().trim();
+  if (!body_md) {
+    console.error(
+      `  ⚠️ [${job.job_id}] Claude が body_md を返さなかった。skip。response keys:`,
+      Object.keys(result)
+    );
+    return;
+  }
+  const finalLine = (result.product_line ?? estimated) as 'L1' | 'L2' | 'L3' | 'L4';
+  const finalPrice = typeof result.price === 'number' ? result.price : suggestedPrice;
+  const finalDays = typeof result.delivery_days === 'number' ? result.delivery_days : suggestedDays;
+
+  // 7. SQLite に保存
   upsertProposal(db, {
     job_id: job.job_id,
-    product_line: result.product_line,
-    price: result.price,
-    delivery_days: result.delivery_days,
-    body_md: result.body_md,
+    product_line: finalLine,
+    price: finalPrice,
+    delivery_days: finalDays,
+    body_md,
     research_notes: result.research_notes ?? researchNotes,
     generated_by: 'claude-code-cli',
   });
 
   console.log(
-    `  ✅ ${result.product_line} / ${result.price.toLocaleString()}円 / ${result.delivery_days}日`
+    `  ✅ ${finalLine} / ${finalPrice.toLocaleString()}円 / ${finalDays}日`
   );
 }
 
