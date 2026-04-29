@@ -57,17 +57,26 @@ class LancersAdapter(PlatformAdapter):
     # ------------------------------------------------------------------
 
     async def is_logged_in(self, page: Page) -> bool:
-        await page.goto("https://www.lancers.jp/mypage", wait_until="domcontentloaded")
+        """ログイン状態を URL ベースで判定する。
+
+        /mypage を開いて、結果として /user/login にリダイレクトされなければ
+        ログイン済み。Lancers の DOM は class 名がよく変わるので、セレクタ
+        マッチングではなく URL のみで判定する。
+        """
         try:
-            if "/login" in page.url or "/user/login" in page.url:
-                return False
-            await page.wait_for_selector(
-                ".header__user, .nav-globalHeader__userIcon, .p-mypage, [data-user-menu]",
-                timeout=5000,
+            await page.goto(
+                "https://www.lancers.jp/mypage",
+                wait_until="domcontentloaded",
+                timeout=15000,
             )
-            return True
         except Exception:
             return False
+        url = page.url
+        # /user/login（ログイン画面）または /login（汎用ログイン経路）にリダイレクト
+        # された場合のみ False。/mypage に到達できれば True。
+        if "/user/login" in url or "/login" in url:
+            return False
+        return True
 
     # ------------------------------------------------------------------
     # Core HTML parser (pure function — testable without Playwright)
