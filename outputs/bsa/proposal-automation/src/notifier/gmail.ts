@@ -97,12 +97,12 @@ ${body}
 `;
 
   return new Promise((resolve, reject) => {
+    // --bare を外して user-scope の Gmail MCP を使う。
     const child = spawn(
       'claude',
       [
         '--print',
         '--output-format', 'text',
-        '--bare',
         '--allowedTools', 'mcp__gmail__send_message',
         '--effort', 'low',
         '--no-session-persistence',
@@ -110,7 +110,11 @@ ${body}
       { stdio: ['pipe', 'pipe', 'pipe'] }
     );
 
+    let stdout = '';
     let stderr = '';
+    child.stdout.on('data', (d: Buffer) => {
+      stdout += d.toString();
+    });
     child.stderr.on('data', (d: Buffer) => {
       stderr += d.toString();
     });
@@ -118,8 +122,12 @@ ${body}
       reject(new Error(`spawn failed: ${err.message}`));
     });
     child.on('close', (code) => {
-      if (code === 0) resolve();
-      else reject(new Error(`claude exited ${code}: ${stderr}`));
+      if (code === 0) {
+        resolve();
+      } else {
+        const detail = stderr.trim() || stdout.trim() || '(no output)';
+        reject(new Error(`claude exited ${code}: ${detail.slice(0, 800)}`));
+      }
     });
 
     child.stdin.write(prompt);

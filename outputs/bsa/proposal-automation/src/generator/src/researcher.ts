@@ -62,10 +62,9 @@ export async function researchJob(
   try {
     const result = await callClaudeHeadless<string | { result?: string }>({
       prompt,
-      bare: true,
-      // mcpConfig は本番では省略して user-scope の MCP に任せる選択肢もあるが
-      // ここでは限定読み込みで起動高速化
-      mcpConfig: 'config/exa-mcp.json',
+      // --bare + --mcp-config の組み合わせは EXA_API_KEY env 未解決でエラーになる。
+      // user-scope の Claude Code MCP 設定（既に Exa MCP 認証済）を使う方が安定。
+      // bare: false / mcpConfig: undefined にすることで user-scope MCP がそのまま使える。
       allowedTools: ['WebFetch', 'mcp__exa__web_search_exa'],
       effort: 'low',
       fallbackModel: 'sonnet',

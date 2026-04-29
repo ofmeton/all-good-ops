@@ -74,11 +74,10 @@ async function generateForJob(
   const prompt = `${basePrompt}\n\n推奨初期値: 商品ライン=${estimated} / 金額=${suggestedPrice}円 / 納期=${suggestedDays}日`;
 
   // 5. Claude 呼び出し
+  // --bare + --mcp-config は env 未解決でエラーになるため、user-scope の Claude Code 設定に任せる。
   const result = await callClaudeHeadless<GenerationOutput>({
     prompt,
     schema: PROPOSAL_SCHEMA,
-    bare: true,
-    mcpConfig: 'config/exa-mcp.json',
     allowedTools: ['WebFetch'],
     effort: 'medium',
     fallbackModel: 'sonnet',

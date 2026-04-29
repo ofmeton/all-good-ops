@@ -90,8 +90,14 @@ export async function callClaudeHeadless<T = unknown>(
     child.on('close', (code) => {
       clearTimeout(timeout);
       if (code !== 0) {
+        // stderr が空なら stdout にエラーが出ている可能性あり
+        const detail = stderr.trim() || stdout.trim() || '(no output)';
         reject(
-          new ClaudeHeadlessError(`claude exited ${code}`, stderr, code)
+          new ClaudeHeadlessError(
+            `claude exited ${code}: ${detail.slice(0, 800)}`,
+            stderr,
+            code
+          )
         );
         return;
       }
