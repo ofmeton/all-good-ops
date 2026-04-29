@@ -1,26 +1,284 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ======================================================================
+   BSA 受注台帳 — Design Tokens
+   Editorial Japanese × Operations Console
+   ====================================================================== */
+
+@theme {
+  /* ─── Palette ─────────────────────────────────────────────────────── */
+  /* 紙と墨。差し色は朱・苔・紺。 */
+  --color-paper: #f7f1e1;          /* 和紙 base */
+  --color-paper-soft: #f1ead6;     /* 中央色（カード用、副階層） */
+  --color-paper-warm: #ede5cc;     /* 強めの淡背景 */
+  --color-ink: #181410;            /* 墨 (sumi) */
+  --color-ink-soft: #3a3530;       /* 薄墨 */
+  --color-slate: #76716a;          /* 鉛 (warm gray) */
+  --color-hairline: #c9c0a8;       /* 罫線 */
+  --color-hairline-soft: #ddd5be;  /* 細い罫 */
+
+  --color-vermilion: #b94633;      /* 朱 — 最優先 */
+  --color-vermilion-soft: #e9c5be; /* 朱の淡 */
+  --color-moss: #5e7d50;           /* 苔 — 受注/成功 */
+  --color-moss-soft: #d2dccd;      /* 苔の淡 */
+  --color-azure: #2a4d6e;          /* 紺 — リンク/中優先 */
+  --color-azure-soft: #cbd6e1;     /* 紺の淡 */
+  --color-amber: #b8893d;          /* 黄土 — 進行中 */
+  --color-amber-soft: #ead7b1;     /* 黄土の淡 */
+
+  /* ─── Fonts ───────────────────────────────────────────────────────── */
+  --font-display: var(--font-mincho), "Shippori Mincho B1", "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --font-sans: var(--font-sans), "Noto Sans JP", "Hiragino Sans", "Yu Gothic UI", system-ui, sans-serif;
+  --font-mono: var(--font-mono), "JetBrains Mono", "SF Mono", Menlo, monospace;
+
+  /* ─── Background defaults (Tailwind の bg-background 用) ─────────── */
+  --color-background: var(--color-paper);
+  --color-foreground: var(--color-ink);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ======================================================================
+   Base
+   ====================================================================== */
+
+html, body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-feature-settings: "palt" 1, "ss01" 1;
+  letter-spacing: 0.01em;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* 紙のテクスチャ：かすかなノイズと罫の重なり */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-image:
+    radial-gradient(rgba(24, 20, 16, 0.025) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(247, 241, 225, 0) 0%, rgba(237, 229, 204, 0.4) 100%);
+  background-size: 4px 4px, 100% 100%;
+  background-attachment: fixed;
+}
+
+/* セレクション */
+::selection {
+  background: var(--color-vermilion);
+  color: var(--color-paper);
+}
+
+/* スクロールバー（macOS/Webkit） */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--color-hairline);
+  border-radius: 0;
+  border: 2px solid var(--color-paper);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--color-slate); }
+
+/* ======================================================================
+   Typography utilities (専用クラス。Tailwind との併用想定)
+   ====================================================================== */
+
+.font-display { font-family: var(--font-display); }
+.font-sans-jp { font-family: var(--font-sans); }
+.font-mono-id { font-family: var(--font-mono); }
+
+/* マストヘッド見出し */
+.masthead {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 0.95;
+}
+
+/* 本文見出し（記事タイトル相当） */
+.headline {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: 0.02em;
+}
+
+/* 段落見出し（小見出し） */
+.kicker {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-slate);
+}
+
+/* キー数字（大きく見せる） */
+.bignum {
+  font-family: var(--font-display);
+  font-weight: 800;
+  line-height: 1;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+}
+
+/* メタ情報のラベル */
+.meta-label {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  color: var(--color-slate);
+}
+
+/* ID 等の monospace */
+.mono-tag {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+/* ======================================================================
+   Decorative
+   ====================================================================== */
+
+/* 太い罫線（記事区切り） */
+.rule-thick {
+  border-top: 2px solid var(--color-ink);
+  border-bottom: 1px solid var(--color-ink);
+  height: 5px;
+}
+
+/* 細罫 */
+.rule-thin {
+  height: 1px;
+  background: var(--color-hairline);
+}
+
+/* ─── 朱の左ボーダー（最優先案件の符牒） ─────────────────────────── */
+.priority-bar {
+  position: relative;
+}
+.priority-bar::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+  background: var(--color-vermilion);
+}
+
+/* ─── ボタン基底 ───────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.9rem;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  border: 1px solid var(--color-ink);
+  background: var(--color-paper);
+  color: var(--color-ink);
+  transition: transform 120ms ease, background 120ms ease, color 120ms ease;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.btn:hover { background: var(--color-ink); color: var(--color-paper); }
+.btn:active { transform: translateY(1px); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.btn-primary {
+  background: var(--color-ink);
+  color: var(--color-paper);
+  border-color: var(--color-ink);
+}
+.btn-primary:hover {
+  background: var(--color-vermilion);
+  border-color: var(--color-vermilion);
+  color: var(--color-paper);
+}
+
+.btn-vermilion {
+  background: var(--color-vermilion);
+  color: var(--color-paper);
+  border-color: var(--color-vermilion);
+}
+.btn-vermilion:hover { background: var(--color-ink); border-color: var(--color-ink); }
+
+.btn-moss {
+  background: var(--color-moss);
+  color: var(--color-paper);
+  border-color: var(--color-moss);
+}
+.btn-moss:hover { background: var(--color-ink); border-color: var(--color-ink); }
+
+.btn-ghost {
+  border-color: var(--color-hairline);
+  background: transparent;
+}
+.btn-ghost:hover {
+  background: var(--color-paper-soft);
+  color: var(--color-ink);
+  border-color: var(--color-ink);
+}
+
+/* ─── タグ／バッジ ─────────────────────────────────────────────────── */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.15rem 0.55rem;
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  border: 1px solid var(--color-ink);
+  background: var(--color-paper);
+}
+.tag-vermilion { background: var(--color-vermilion); color: var(--color-paper); border-color: var(--color-vermilion); }
+.tag-moss      { background: var(--color-moss);      color: var(--color-paper); border-color: var(--color-moss); }
+.tag-azure     { background: var(--color-azure);     color: var(--color-paper); border-color: var(--color-azure); }
+.tag-amber     { background: var(--color-amber);     color: var(--color-paper); border-color: var(--color-amber); }
+.tag-outline   { background: transparent; }
+
+/* ─── 入力 ────────────────────────────────────────────────────────── */
+.field {
+  width: 100%;
+  background: var(--color-paper);
+  border: 1px solid var(--color-hairline);
+  padding: 0.55rem 0.75rem;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  color: var(--color-ink);
+  transition: border 120ms ease;
+}
+.field:focus {
+  outline: none;
+  border-color: var(--color-ink);
+}
+.field-mono { font-family: var(--font-mono); }
+
+textarea.field { resize: vertical; line-height: 1.7; }
+
+/* ─── アニメーション ───────────────────────────────────────────────── */
+@keyframes paper-fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-in { animation: paper-fade-in 480ms ease both; }
+.fade-in-d1 { animation: paper-fade-in 480ms ease 80ms both; }
+.fade-in-d2 { animation: paper-fade-in 480ms ease 160ms both; }
+.fade-in-d3 { animation: paper-fade-in 480ms ease 240ms both; }
+
+/* ─── ホバーで持ち上がるカード ──────────────────────────────────── */
+.card {
+  background: var(--color-paper-soft);
+  border: 1px solid var(--color-hairline);
+  transition: border 160ms ease, transform 200ms ease, box-shadow 200ms ease;
+}
+.card:hover {
+  border-color: var(--color-ink);
+  transform: translateY(-2px);
+  box-shadow: 4px 4px 0 var(--color-ink);
+}
+.card.is-priority {
+  background: var(--color-paper);
+  border-color: var(--color-ink);
+}
+.card.is-priority:hover {
+  box-shadow: 4px 4px 0 var(--color-vermilion);
 }
