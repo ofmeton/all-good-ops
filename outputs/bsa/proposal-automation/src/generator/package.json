@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "start": "node dist/main.js",
+    "start": "node dist/generator/src/main.js",
     "dev": "tsx src/main.ts",
     "test": "vitest run",
     "test:watch": "vitest"
