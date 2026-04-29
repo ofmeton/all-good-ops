@@ -1,65 +1,65 @@
-import Image from "next/image";
+// app/page.tsx
+import { getTodaysSummary } from '@/lib/db';
+import { JobCard } from '@/components/JobCard';
 
-export default function Home() {
+export const dynamic = 'force-dynamic';
+
+export default async function Home() {
+  const jobs = getTodaysSummary();
+  const withProposal = jobs.filter((j) => j.proposal_id != null);
+  const withoutProposal = jobs.filter((j) => j.proposal_id == null);
+  const today = new Date().toISOString().slice(0, 10);
+
+  const buckets = {
+    high: withProposal.filter((j) => (j.fit_score ?? 0) >= 80),
+    mid: withProposal.filter((j) => (j.fit_score ?? 0) >= 60 && (j.fit_score ?? 0) < 80),
+    low: withProposal.filter((j) => (j.fit_score ?? 0) < 60),
+  };
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className="container mx-auto px-4 py-6">
+      <header className="mb-8">
+        <h1 className="text-2xl font-bold">BSA Proposal Automation</h1>
+        <p className="text-sm text-gray-500">{today}</p>
+      </header>
+
+      <section className="mb-8 rounded-lg border bg-white p-4">
+        <div className="flex flex-wrap gap-6 text-sm">
+          <div><span className="font-semibold">{jobs.length}</span> 件収集</div>
+          <div><span className="font-semibold">{withProposal.length}</span> 件提案準備済み</div>
+          <div className="text-orange-600">🔥 最優先 <span className="font-semibold">{buckets.high.length}</span> 件</div>
+          <div className="text-blue-600">🎯 推奨 <span className="font-semibold">{buckets.mid.length}</span> 件</div>
+          <div className="text-gray-600">📋 余裕 <span className="font-semibold">{buckets.low.length}</span> 件</div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        <div className="mt-3 flex gap-3 text-xs">
+          <a href="/history" className="text-blue-600 hover:underline">📅 履歴を見る</a>
+          <a href="/settings" className="text-blue-600 hover:underline">⚙️ 設定</a>
         </div>
-      </main>
-    </div>
+      </section>
+
+      <section className="mb-10">
+        <h2 className="mb-4 text-lg font-semibold">提案文準備済み ({withProposal.length}件)</h2>
+        <div className="space-y-3">
+          {withProposal.map((j) => (
+            <JobCard key={j.job_id} job={j} kind="proposal" />
+          ))}
+          {withProposal.length === 0 && (
+            <p className="text-sm text-gray-500">本日の提案文はまだ生成されていません。</p>
+          )}
+        </div>
+      </section>
+
+      <section>
+        <h2 className="mb-4 text-lg font-semibold">その他の案件 ({withoutProposal.length}件・未生成)</h2>
+        <div className="space-y-2">
+          {withoutProposal.map((j) => (
+            <JobCard key={j.job_id} job={j} kind="candidate" />
+          ))}
+          {withoutProposal.length === 0 && (
+            <p className="text-sm text-gray-500">未生成の案件はありません。</p>
+          )}
+        </div>
+      </section>
+    </main>
   );
 }
