@@ -60,45 +60,8 @@ echo "   ログイン完了後（2FA も含む）、ターミナルで Enter を
 read -r "_?Press Enter to start login..."
 
 source "$BSA_PA_VENV/bin/activate"
-cd "$BSA_PA_BASE/src/collector"
-
-python <<'PYEOF'
-import asyncio
-import sys
-from pathlib import Path
-from playwright.async_api import async_playwright
-
-# pythonpath 不在で直接 import できるよう sys.path を補正
-COLLECTOR_DIR = Path("__file__").resolve()
-sys.path.insert(0, str(Path.cwd()))
-
-from session import CookieManager
-from stealth import create_stealth_context
-from db import get_connection, update_session
-
-
-async def main():
-    async with async_playwright() as p:
-        ctx, browser = await create_stealth_context(p)
-        page = await ctx.new_page()
-        await page.goto("https://www.lancers.jp/user/login", wait_until="domcontentloaded")
-        print("ブラウザでログインを完了したら Enter を押してください")
-        input()
-        await page.goto("https://www.lancers.jp/mypage", wait_until="domcontentloaded")
-        cookie_path = CookieManager.default_path("LAN")
-        state = await ctx.storage_state()
-        CookieManager(cookie_path).save(state)
-        conn = get_connection()
-        update_session(conn, "LAN", str(cookie_path), valid=True)
-        conn.commit()
-        conn.close()
-        print(f"✅ Cookie saved to {cookie_path}")
-        await browser.close()
-
-
-asyncio.run(main())
-PYEOF
-
+# heredoc 経由だと stdin が input() で読めないため、独立スクリプトを呼ぶ
+python "$SCRIPT_DIR/lib/_lancers_login.py"
 deactivate
 
 # 7. デスクトップアイコン
