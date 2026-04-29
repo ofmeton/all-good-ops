@@ -106,6 +106,10 @@ export async function callClaudeHeadless<T = unknown>(
         // claude --output-format json は { type, subtype, result, ... } 形式
         // result フィールドが本体
         const body = (parsed as { result?: unknown }).result ?? parsed;
+        // デバッグ: result の生内容を stderr に出す（呼び出し側 stderr 経由で見える）
+        if (process.env.BSA_DEBUG_CLAUDE === '1') {
+          console.error(`[claude-headless] raw result:`, JSON.stringify(body).slice(0, 500));
+        }
         if (typeof body === 'string') {
           // schema 指定時でも文字列で返ることがあるので JSON 抽出を試みる
           // 1) markdown fence (```json ... ```) を除去

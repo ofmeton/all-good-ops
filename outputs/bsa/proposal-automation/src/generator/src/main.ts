@@ -74,10 +74,11 @@ async function generateForJob(
   const prompt = `${basePrompt}\n\n推奨初期値: 商品ライン=${estimated} / 金額=${suggestedPrice}円 / 納期=${suggestedDays}日`;
 
   // 5. Claude 呼び出し
-  // --bare + --mcp-config は env 未解決でエラーになるため、user-scope の Claude Code 設定に任せる。
+  // 注: --json-schema は Claude を厳しい thinking モードに入れて最終応答を空にする
+  // 事象が確認されたため、schema 強制を外してプロンプトだけで JSON を求める。
+  // claude-headless が応答中の {...} 部分を抽出してくれる。
   const result = await callClaudeHeadless<Partial<GenerationOutput>>({
     prompt,
-    schema: PROPOSAL_SCHEMA,
     allowedTools: ['WebFetch'],
     effort: 'medium',
     fallbackModel: 'sonnet',
@@ -88,7 +89,12 @@ async function generateForJob(
   // Claude が JSON Schema を完全には強制しないことがあるので、
   // 不足項目は推奨初期値（estimated / suggestedPrice / suggestedDays）で埋める。
   if (!result || typeof result !== 'object') {
-    console.error(`  ⚠️ [${job.job_id}] Claude が想定外の形式を返した:`, result);
+    // result の中身を full で出して原因特定できるようにする
+    const r = result as unknown;
+    const preview = typeof r === 'string'
+      ? `string(len=${(r as string).length}): ${(r as string).slice(0, 300)}`
+      : JSON.stringify(r).slice(0, 300);
+    console.error(`  ⚠️ [${job.job_id}] Claude が想定外の形式を返した: ${preview}`);
     return;
   }
   const body_md = (result.body_md ?? '').toString().trim();
