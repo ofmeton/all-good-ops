@@ -76,7 +76,28 @@ ${bodyMd}`;
           <p className="mono-tag text-(--color-slate)">{data.job_id}</p>
         </div>
         <p className="kicker mt-2">案件レビュー / 提案文編集</p>
-        <h1 className="headline mt-1 text-2xl text-(--color-ink) lg:text-3xl">{data.title}</h1>
+        <div className="mt-1 flex flex-wrap items-start justify-between gap-3">
+          <h1 className="headline text-2xl text-(--color-ink) lg:text-3xl">{data.title}</h1>
+          <a
+            href={data.detail_url}
+            target="_blank"
+            rel="noreferrer"
+            className="btn btn-vermilion shrink-0"
+          >
+            🔗 Lancers で募集を開く ↗
+          </a>
+        </div>
+        <p className="mt-2 truncate text-[11px] text-(--color-slate)">
+          <span className="meta-label mr-2">URL</span>
+          <a
+            href={data.detail_url}
+            target="_blank"
+            rel="noreferrer"
+            className="font-mono-id text-(--color-azure) hover:underline"
+          >
+            {data.detail_url}
+          </a>
+        </p>
         <div className="mt-3 flex flex-wrap items-center gap-3 text-xs">
           <span className="tag tag-outline">FIT {fitScore}</span>
           {data.estimated_product_line && (
