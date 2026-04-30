@@ -66,7 +66,7 @@ ${bodyMd}`;
   const fitScore = data.fit_score ?? 0;
 
   return (
-    <main className="mx-auto max-w-7xl px-6 py-8 lg:px-10 lg:py-12">
+    <main className="mx-auto max-w-[1600px] px-6 py-8 lg:px-10 lg:py-12">
       {/* ── マストヘッド ── */}
       <header className="fade-in border-b-2 border-(--color-ink) pb-4">
         <div className="flex items-baseline justify-between gap-4">
@@ -93,7 +93,7 @@ ${bodyMd}`;
       </header>
 
       {/* ── 2カラム ── */}
-      <div className="mt-8 grid gap-8 lg:grid-cols-[5fr_7fr]">
+      <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(280px,360px)_minmax(0,1fr)]">
         {/* ─ 左: 案件情報 ─ */}
         <aside className="space-y-6">
           <Panel kicker="案件 情報" title="募集要項">
@@ -176,7 +176,7 @@ ${bodyMd}`;
             <textarea
               value={bodyMd}
               onChange={(e) => setBodyMd(e.target.value)}
-              className="field h-[28rem] font-mono-id text-[13px] leading-7"
+              className="field block h-[34rem] w-full font-mono-id text-sm leading-7"
               placeholder="〇〇様&#10;&#10;ご依頼拝見しました。..."
             />
           </Panel>
