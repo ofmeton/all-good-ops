@@ -6,7 +6,7 @@
 ## business
 
 ### bsa
-（Phase 1 で追加）
+- [pricing-catalog](business/bsa/pricing-catalog.md) — 商品ライン L1/L2/L3/L4 価格・納期・オプション SSOT
 
 ## domain
 

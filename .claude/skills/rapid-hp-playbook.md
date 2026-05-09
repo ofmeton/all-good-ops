@@ -1,7 +1,7 @@
 # Rapid HP Playbook（BSA事業 標準運用手順）
 
 > **ステータス: 承認済（2026-04-23）**
-> 起案日: 2026-04-22 / SSOT: `knowledge/context/pricing-catalog.md`
+> 起案日: 2026-04-22 / SSOT: `wiki/business/bsa/pricing-catalog.md`
 
 ## 概要
 
@@ -352,7 +352,7 @@ https://portfolio-fawn-eight-63.vercel.app/
 
 ## 10. 参照ドキュメント
 
-- **SSOT**: `knowledge/context/pricing-catalog.md`
+- **SSOT**: `wiki/business/bsa/pricing-catalog.md`
 - **戦略**: `outputs/bsa/market-positioning-analysis.md` / `outputs/bsa/lp-demand-supply-analysis.md`
 - **計画**: `outputs/bsa/90day-action-plan.md` / `outputs/bsa/wk1-action-plan.md`
 - **提案文**: `outputs/bsa/proposal-templates.md`

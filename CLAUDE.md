@@ -25,7 +25,7 @@
 ### 核ルール
 - **名義**: 提案文・契約書・請求書は必ず **工藤陸**（本名）
 - **AI表記**: 外部露出物では「**AI活用**」のみ使用。「Claude」「Opus」「Anthropic」等の固有名詞は一切出さない
-- **価格 SSOT**: `knowledge/context/pricing-catalog.md` が唯一の正本。商品ライン L1/L2/L3/L4 の価格・納期・オプションはここを参照
+- **価格 SSOT**: `wiki/business/bsa/pricing-catalog.md` が唯一の正本。商品ライン L1/L2/L3/L4 の価格・納期・オプションはここを参照
 - **SLA**: 納期超過時は料金の20%返金 または 翌日以内に無料修正
 - **作業ディレクトリ**: `outputs/bsa/` 配下
 

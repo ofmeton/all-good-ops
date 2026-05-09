@@ -35,7 +35,7 @@
 - **終了目安**: 2026-08-22（4ヶ月タイムボックス）
 - **担当エージェント**: bsa-operator（business-ops）
 - **名義**: 工藤陸（本名）
-- **価格 SSOT**: `knowledge/context/pricing-catalog.md`
+- **価格 SSOT**: `wiki/business/bsa/pricing-catalog.md`
 
 ### Week1 KPI（2026-04-22〜04-28）
 - 提案投下: 20件（5件×4日）

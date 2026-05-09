@@ -2,7 +2,7 @@
 
 > 作成日: 2026-04-23
 > 目的: Lancers / Coconala / CrowdWorks / portfolio（Vercel）への手動反映作業を1本化
-> 正本: `knowledge/context/pricing-catalog.md`（SSOT）/ `outputs/bsa/` 配下のドラフト
+> 正本: `wiki/business/bsa/pricing-catalog.md`（SSOT）/ `outputs/bsa/` 配下のドラフト
 > 備考: ユーザーのWeb画面操作が必須。秘書は反映状況のチェックと文言整合の確認のみ担当
 
 ---

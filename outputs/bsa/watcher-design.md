@@ -2,7 +2,7 @@
 
 > 作成日: 2026-04-22
 > 対象: BSA 戦略 Week1 日次チェックリスト「朝8:00の新着スキャン」を自動化
-> SSOT 参照: `knowledge/context/pricing-catalog.md` / `outputs/bsa/wk1-action-plan.md`
+> SSOT 参照: `wiki/business/bsa/pricing-catalog.md` / `outputs/bsa/wk1-action-plan.md`
 > 関連タスク: #10
 
 ---

@@ -1,3 +1,14 @@
+---
+type: source
+created: 2026-04-22
+updated: 2026-05-09
+sources: []
+related: [[overview]]
+tags: [bsa, pricing, ssot]
+status: active
+identity: 工藤陸
+---
+
 # 価格・サービス表記 正本（Single Source of Truth）
 
 > 最終更新日: 2026-04-22

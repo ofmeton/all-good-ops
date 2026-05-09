@@ -35,7 +35,7 @@
 - 過去請求書テンプレ参照: `mcp__freee__list_invoices` で同顧客の最新 1 件を取得して項目構成を流用
 - 取引先解決: `mcp__freee__list_partners` → 該当なしの場合のみ `create_partner`（事前に金額・メールをユーザー確認）
 - 事業所スコープ: 全事業統合の単一事業所 (`currentCompanyId=12426988`) を使用
-- 価格情報の出所: `knowledge/context/pricing-catalog.md`（BSA は SSOT）
+- 価格情報の出所: `wiki/business/bsa/pricing-catalog.md`（BSA は SSOT）
 - MCP の認証管理・障害対応は system-engineer に委譲
 
 ## 他エージェントとの連携ルール

@@ -2,7 +2,7 @@
 
 > 作成日: 2026-04-22
 > 前提: `outputs/bsa/market-positioning-analysis.md` の戦略C（広告運用主軸＋HP/LPフック）採択
-> SSOT: `knowledge/context/pricing-catalog.md`
+> SSOT: `wiki/business/bsa/pricing-catalog.md`
 > 関連: `outputs/bsa/wk1-action-plan.md`（Week1詳細）/ `outputs/bsa/proposal-templates.md`（T3改修済）
 
 ---

@@ -4,7 +4,7 @@
 > 対象: 工藤陸（個人・BSA戦略起点）
 > 問い: HP制作・LP制作はレッドオーシャンだが、「低単価・短納期・広告運用まで一気通貫」という差別化で、日本の中小企業/個人事業主向け市場でどこまで戦えるか
 > フレーム: Porter 5 Forces / Strategy Canvas + ERRC / JTBD / Unit Economics
-> SSOT: `knowledge/context/pricing-catalog.md`
+> SSOT: `wiki/business/bsa/pricing-catalog.md`
 
 ---
 

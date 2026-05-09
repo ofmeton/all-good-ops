@@ -59,7 +59,7 @@ ls -la knowledge/context/ knowledge/INDEX.md 2>/dev/null
 ### 6. 命名・名義ルールの一貫性
 - [ ] 名義3ライン（工藤陸 / ofmeton / はぐりん）の切り分け表が存在し混在禁止が明記されているか
 - [ ] AI表記ルール: 外部露出物に「Claude」「Opus」「Anthropic」等の固有名詞混入なし
-- [ ] 価格記述が `knowledge/context/pricing-catalog.md`（SSOT）と一致
+- [ ] 価格記述が `wiki/business/bsa/pricing-catalog.md`（SSOT）と一致
 
 ### 7. メモリとの整合
 - [ ] MEMORY.md の project / reference 系記述と CLAUDE.md の現状が合うか

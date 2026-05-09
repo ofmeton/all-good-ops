@@ -59,12 +59,12 @@
 ## 価格・サービス記述の整合管理（2026-04-22 追加）
 
 BSA事業（工藤陸名義 / HP制作 + 広告運用）の価格・SLA・サービス範囲は
-**`knowledge/context/pricing-catalog.md` を唯一の正本（SSOT）** として管理する。
+**`wiki/business/bsa/pricing-catalog.md` を唯一の正本（SSOT）** として管理する。
 
 ### 秘書が守るべきルール
 
 1. **価格・サービス記述を含む成果物を生成する前**:
-   - `knowledge/context/pricing-catalog.md` を必ず先読み
+   - `wiki/business/bsa/pricing-catalog.md` を必ず先読み
    - 数値・表現・オプション金額・SLA条項・AI表記ルール・名義を本ファイルに合わせる
 
 2. **ユーザーから価格・SLA・サービス範囲の変更要請を受けた時**:

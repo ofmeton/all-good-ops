@@ -4,7 +4,7 @@
 > 対象: 工藤陸（個人・BSA戦略起点）
 > 位置づけ: `market-positioning-analysis.md`（ポジショニング戦略編）の続編。需要サイド（募集案件の業種・規模・サービス内容）と供給サイド（実応募者層の実態）を両面から分析し、今作るべきポートフォリオサンプルLPを絞り込む
 > 前提: Month 1-2 広告運用主軸 → Month 3以降 LP本格投入という順序感を崩さない
-> SSOT: `knowledge/context/pricing-catalog.md`
+> SSOT: `wiki/business/bsa/pricing-catalog.md`
 
 ---
 
