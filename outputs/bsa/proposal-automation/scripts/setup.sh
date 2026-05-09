@@ -51,17 +51,25 @@ if ! command -v terminal-notifier >/dev/null 2>&1; then
   echo "   通知を有効にするには: brew install terminal-notifier"
 fi
 
-# 6. Lancers 初回ログイン
+# 6a. Lancers 初回ログイン
 echo ""
 echo "📣 Lancers に手動でログインします。"
 echo "   Playwright がブラウザを開きます。Google ログインだと弾かれるので"
 echo "   メールアドレス + パスワードでログインしてください。"
 echo "   ログイン完了後（2FA も含む）、ターミナルで Enter を押してください。"
-read -r "_?Press Enter to start login..."
+read -r "_?Press Enter to start LANCERS login..."
 
 source "$BSA_PA_VENV/bin/activate"
 # heredoc 経由だと stdin が input() で読めないため、独立スクリプトを呼ぶ
 python "$SCRIPT_DIR/lib/_lancers_login.py"
+
+# 6b. CrowdWorks 初回ログイン
+echo ""
+echo "📣 CrowdWorks に手動でログインします。"
+echo "   Playwright がブラウザを開きます。"
+echo "   ログイン完了後、ターミナルで Enter を押してください。"
+read -r "_?Press Enter to start CROWDWORKS login..."
+python "$SCRIPT_DIR/lib/_crowdworks_login.py"
 deactivate
 
 # 7. デスクトップアイコン

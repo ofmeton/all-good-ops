@@ -100,6 +100,14 @@ def test_constraint_baseline():
     assert score_constraints("特に制約なし") == 10
 
 
+def test_constraint_excludes_studio():
+    assert score_constraints("既存STUDIOサイトのブラッシュアップ") == -30
+
+
+def test_constraint_excludes_studio_lowercase():
+    assert score_constraints("studio制作のご依頼") == -30
+
+
 # === score_speed ===
 def test_speed_one_week():
     """1週間以内"""
@@ -176,6 +184,20 @@ def test_calculate_fit_certified_lancer_excluded():
     total, breakdown = calculate_fit_score(job)
     assert total == 0
     assert breakdown.get("excluded") == "認定ランサー限定"
+
+
+def test_calculate_fit_studio_excluded():
+    job = {
+        "budget_min": 50000, "budget_max": 100000,
+        "service_category": "website",
+        "title": "既存STUDIOサイトのブラッシュアップ",
+        "description": "STUDIOエディタ上での共同制作",
+        "deadline": "2026-06-05",
+        "client_verified": True, "client_history_count": 5,
+    }
+    total, breakdown = calculate_fit_score(job)
+    assert total == 0
+    assert breakdown.get("excluded") == "STUDIO案件"
 
 
 def test_calculate_fit_no_negative():

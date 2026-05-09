@@ -55,9 +55,11 @@ def score_service(category: Optional[str], title: str, description: str) -> int:
 
 def score_constraints(description: str) -> int:
     """制約条件スコア (max 15、ベース 10)。
-    認定ランサー限定なら即 -30 (除外マーカー)。
+    認定ランサー限定・STUDIO案件なら即 -30 (除外マーカー)。
     """
     if "認定ランサー" in description and "限定" in description:
+        return -30
+    if "studio" in description.lower():
         return -30
 
     score = 10  # ベース
@@ -105,11 +107,12 @@ def calculate_fit_score(job: dict) -> tuple[int, dict]:
         job.get("title", ""),
         job.get("description", ""),
     )
-    constraint = score_constraints(job.get("description", ""))
+    desc_with_title = job.get("description", "") + " " + job.get("title", "")
+    constraint = score_constraints(desc_with_title)
     if constraint <= -30:
-        # 認定ランサー限定 → 即除外
+        reason = "STUDIO案件" if "studio" in desc_with_title.lower() else "認定ランサー限定"
         return 0, {
-            "excluded": "認定ランサー限定",
+            "excluded": reason,
             "price": price, "service": service, "constraint": -30,
             "speed": 0, "client": 0, "total": 0,
         }

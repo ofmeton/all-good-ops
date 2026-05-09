@@ -12,6 +12,7 @@ from typing import Optional
 from playwright.async_api import async_playwright
 
 from adapters.lancers import LancersAdapter
+from adapters.crowdworks import CrowdWorksAdapter
 from session import CookieManager
 from stealth import create_stealth_context
 from scorer import calculate_fit_score
@@ -47,10 +48,28 @@ async def collect_for_adapter(adapter, max_per_url: int = 17) -> tuple[int, Opti
             conn = get_connection()
             try:
                 for source_url in adapter.search_urls:
-                    try:
-                        listings = await adapter.fetch_listings(page, source_url)
-                    except Exception as e:
-                        print(f"❌ fetch_listings failed for {source_url}: {e}", file=sys.stderr)
+                    # bot 検知や混雑による一時的な失敗に備え 1回リトライ。
+                    listings: list = []
+                    last_err: Exception | None = None
+                    for attempt in (1, 2):
+                        try:
+                            listings = await adapter.fetch_listings(page, source_url)
+                            last_err = None
+                            break
+                        except Exception as e:
+                            last_err = e
+                            if attempt == 1:
+                                print(
+                                    f"⚠️  fetch_listings retry for {source_url}: {e}",
+                                    file=sys.stderr,
+                                )
+                                # リトライ前に少し待つ（5-8秒のランダム）
+                                await asyncio.sleep(random.uniform(5, 8))
+                    if last_err is not None:
+                        print(
+                            f"❌ fetch_listings failed for {source_url}: {last_err}",
+                            file=sys.stderr,
+                        )
                         continue
                     listings = listings[:max_per_url]
 
@@ -98,15 +117,18 @@ async def collect_for_adapter(adapter, max_per_url: int = 17) -> tuple[int, Opti
 
 
 async def main() -> int:
-    adapters = [LancersAdapter()]
+    # 媒体ごとの adapter。1つがエラーでも他は継続するため break しない。
+    adapters = [LancersAdapter(), CrowdWorksAdapter()]
     total = 0
     error: Optional[str] = None
+    errors: list[str] = []
     for adapter in adapters:
         n, err = await collect_for_adapter(adapter)
         total += n
         if err:
-            error = err
-            break
+            errors.append(f"[{adapter.prefix}] {err}")
+    if errors:
+        error = " / ".join(errors)
 
     conn = get_connection()
     try:

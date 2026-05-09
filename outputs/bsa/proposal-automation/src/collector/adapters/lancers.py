@@ -34,22 +34,34 @@ def _parse_budget(price_text: str) -> tuple[Optional[int], Optional[int]]:
 
 
 def _detect_service_category(source_url: str) -> Optional[str]:
+    # 既存3カテゴリ
     if "/web/lp" in source_url:
         return "lp"
     if "/web/website" in source_url:
         return "website"
     if "/ad" in source_url:
         return "ad"
+    # 2026-05-05 追加した3カテゴリ（B 標準セット）
+    if "/web/modification_customization" in source_url:
+        return "modification"  # L4 Express 直撃
+    if "/web/responsive" in source_url:
+        return "responsive"    # LP/website 系の取りこぼし防止
+    if "/web/smartphonesite" in source_url:
+        return "smartphonesite"  # L2 隣接（モバイル特化）
     return None
 
 
 class LancersAdapter(PlatformAdapter):
     prefix = "LAN"
     name = "Lancers"
+    # BSA 商品ライン（L1/L2/L3/L4）の供給源として巡回する 6 カテゴリ
     search_urls = [
-        "https://www.lancers.jp/work/search/web/lp",
-        "https://www.lancers.jp/work/search/web/website",
-        "https://www.lancers.jp/work/search/ad",
+        "https://www.lancers.jp/work/search/web/lp",                       # L1 直撃
+        "https://www.lancers.jp/work/search/web/website",                  # L2 直撃
+        "https://www.lancers.jp/work/search/ad",                           # L3 直撃
+        "https://www.lancers.jp/work/search/web/modification_customization",  # L4 直撃
+        "https://www.lancers.jp/work/search/web/responsive",               # L1/L2 取りこぼし防止
+        "https://www.lancers.jp/work/search/web/smartphonesite",           # L2 隣接
     ]
 
     # ------------------------------------------------------------------
@@ -165,7 +177,8 @@ class LancersAdapter(PlatformAdapter):
 
     async def fetch_listings(self, page: Page, source_url: str) -> list[ListingItem]:
         await page.goto(source_url, wait_until="domcontentloaded")
-        await page.wait_for_selector('a[href^="/work/detail/"]', timeout=15000)
+        # 朝・昼の混雑時間帯では 15秒では足りないことがあったため 30秒に延長
+        await page.wait_for_selector('a[href^="/work/detail/"]', timeout=30000)
         html = await page.content()
         return self.parse_listings_from_html(html, source_url)
 
