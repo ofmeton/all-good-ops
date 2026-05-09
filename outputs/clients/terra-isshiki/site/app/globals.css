@@ -1,0 +1,74 @@
+@import "tailwindcss";
+
+:root {
+  --color-base-light: #F5F1EA;
+  --color-base-dark: #1A1410;
+  --color-mist: #6B7484;
+  --color-soil: #8B5A3C;
+  --color-pine: #2F4538;
+  --color-sand: #D4C4A8;
+  --color-paper: #ECE5D8;
+}
+
+@theme inline {
+  --color-base-light: var(--color-base-light);
+  --color-base-dark: var(--color-base-dark);
+  --color-mist: var(--color-mist);
+  --color-soil: var(--color-soil);
+  --color-pine: var(--color-pine);
+  --color-sand: var(--color-sand);
+  --color-paper: var(--color-paper);
+  --font-serif: var(--font-noto-serif-jp);
+  --font-mincho: var(--font-zen-old-mincho);
+  --font-garamond: var(--font-eb-garamond);
+}
+
+html, body {
+  background: var(--color-base-light);
+  color: var(--color-base-dark);
+  font-family: var(--font-zen-old-mincho), "Hiragino Mincho ProN", "YuMincho", serif;
+  font-feature-settings: "palt" 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@keyframes heroSlide {
+  0%    { opacity: 0; transform: scale(1.0); }
+  4.7%  { opacity: 1; transform: scale(1.0); }
+  29.7% { opacity: 0; transform: scale(1.08); }
+  100%  { opacity: 0; transform: scale(1.0); }
+}
+
+.hero-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  animation: heroSlide 32s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  will-change: opacity, transform;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); filter: blur(4px); }
+  to   { opacity: 1; transform: translateY(0);    filter: blur(0); }
+}
+.fade-up {
+  opacity: 0;
+  animation: fadeUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+/* Vertical writing mode helper */
+.vrl {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+
+/* Subtle paper noise (data URI SVG) */
+.paper-noise::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.06;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
