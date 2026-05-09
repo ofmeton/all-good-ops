@@ -25,3 +25,16 @@ logs/*.log
 # Tool generated
 .playwright-mcp/
 *.egg-info/
+
+# Build / dependency artifacts (どのサブプロジェクトでも除外)
+node_modules/
+.next/
+.turbo/
+.vercel/
+dist/
+build/
+
+# Per-project scratch directories (作業中の一時ファイル)
+outputs/**/tmp/
+outputs/**/_local-check/
+outputs/**/_check/
