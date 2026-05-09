@@ -41,7 +41,7 @@ identity: 工藤陸
 - [[pricing-catalog]] — 価格 SSOT
 - [[proven-track-record]] — 提案文に書ける実績 SSOT
 - [[lessons-proposal-patterns]] — 提案文の学び（lint で育てる）
-- `clients/` — クライアント像（`[[テラ一色民泊HP]]` 等、Phase 1 ingest で増える）
+- `clients/` — BSA クライアント像（Phase 2 以降の ingest で増える。BSA 枠外個人案件は [[terra-hayama]] のように `wiki/people/clients/` 側）
 - `deals/` — 案件ごとの記録（提案 → 反応 → 結果）
 - `proposals/templates.md` — 提案文テンプレ
 

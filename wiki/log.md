@@ -15,6 +15,20 @@ Plan: `docs/superpowers/plans/2026-05-09-llm-wiki-phase0-1.md`
 `knowledge/context/pricing-catalog.md` → `wiki/business/bsa/pricing-catalog.md` 移動。
 14 ファイルのリンク張替え済み（残存ゼロ確認）。frontmatter 追加（type=source, identity=工藤陸）。
 
+## [2026-05-10] lint | MVP 動作確認 (Task 18)
+
+軽量 lint（orphan / 名義3ライン混在 / wikilink 整合）実行:
+
+検出:
+1. **motion-techniques.md (orphan)**: wiki 内部から `[[motion-techniques]]` 参照なし。外部 (`.claude/agents/`) からは参照あり。MVP 段階では許容、Phase 2 で BSA overview から参照追加検討
+2. **overview.md:44 broken wikilink**: `[[テラ一色民泊HP]]` → `[[terra-hayama]]` に修正済み
+
+合格:
+- 名義3ライン混在なし（identity: 工藤陸 = 8 ページ全て BSA + personal + clients 配下、ofmeton = SCHEMA 例示のみ、n/a = motion-techniques のみ）
+- proposals/templates.md は `[[proposals/templates]]` 形式で参照されているため non-orphan
+
+lint script 学び: basename フィルタ正規表現に `/` プレフィクス必要（`(log)\.md$` だと `pricing-catalog.md` を誤除外）。
+
 ## [2026-05-10] ingest | TERRA HAYAMA HP 制作（パイロット ingest）
 
 raw/deals/2026-04-terra-isshiki/ から 4 素材を取り込み:
