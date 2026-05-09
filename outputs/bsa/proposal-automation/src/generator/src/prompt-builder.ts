@@ -22,7 +22,8 @@ function loadTrackRecord(): string {
     'wiki', 'business', 'bsa', 'proven-track-record.md'
   );
   try {
-    cachedTrackRecord = readFileSync(path, 'utf8');
+    const raw = readFileSync(path, 'utf8');
+    cachedTrackRecord = raw.replace(/^---\n[\s\S]*?\n---\n+/, '');
   } catch {
     cachedTrackRecord = '(proven-track-record.md が読み込めませんでした。実績欄は空欄で出力すること)';
   }
