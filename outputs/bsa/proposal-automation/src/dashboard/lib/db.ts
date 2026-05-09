@@ -20,6 +20,7 @@ export function getDb(): Database.Database {
 
 export interface JobWithProposal {
   job_id: string;
+  platform_prefix: string;
   title: string;
   description: string | null;
   budget_text: string | null;
@@ -40,8 +41,13 @@ export interface JobWithProposal {
   proposal_id: string | null;
   product_line: string | null;
   price: number | null;
+  price_exclude_tax: number | null;
   delivery_days: number | null;
   body_md: string | null;
+  description_md: string | null;
+  estimate_md: string | null;
+  milestones_json: string | null;
+  options_json: string | null;
   research_notes: string | null;
   generated_at: string | null;
 }
@@ -50,14 +56,18 @@ export function getTodaysSummary(): JobWithProposal[] {
   // collected_at は UTC で保存されているため、JST の「本日」判定だと
   // 日付境界（UTC 15時 = JST 0時）でズレる。
   // 「直近 24 時間に収集された案件」という実用的なフィルタに変更。
+  // 投下済み(submitted) / 投下不可(unable_to_submit) / 辞退(declined) は履歴ページに退避し
+  // 一覧からは除外する（アーカイブ扱い）。
   const db = getDb();
   return db
     .prepare(
-      `SELECT j.*, p.proposal_id, p.product_line, p.price, p.delivery_days,
-              p.body_md, p.research_notes, p.generated_at
+      `SELECT j.*, p.proposal_id, p.product_line, p.price, p.price_exclude_tax, p.delivery_days,
+              p.body_md, p.description_md, p.estimate_md, p.milestones_json, p.options_json,
+              p.research_notes, p.generated_at
        FROM jobs j
        LEFT JOIN proposals p ON p.job_id = j.job_id
        WHERE j.collected_at >= datetime('now', '-24 hours')
+         AND j.status IN ('collected', 'proposing')
        ORDER BY (j.fit_score IS NULL), j.fit_score DESC, j.collected_at DESC`
     )
     .all() as JobWithProposal[];
@@ -68,8 +78,9 @@ export function getJobWithProposal(job_id: string): JobWithProposal | null {
   return (
     (db
       .prepare(
-        `SELECT j.*, p.proposal_id, p.product_line, p.price, p.delivery_days,
-                p.body_md, p.research_notes, p.generated_at
+        `SELECT j.*, p.proposal_id, p.product_line, p.price, p.price_exclude_tax, p.delivery_days,
+                p.body_md, p.description_md, p.estimate_md, p.milestones_json, p.options_json,
+                p.research_notes, p.generated_at
          FROM jobs j
          LEFT JOIN proposals p ON p.job_id = j.job_id
          WHERE j.job_id = ?`
@@ -78,12 +89,21 @@ export function getJobWithProposal(job_id: string): JobWithProposal | null {
   );
 }
 
+export interface ProposalUpdate {
+  body_md: string;
+  product_line: string;
+  price: number; // 税込み総額（互換用）
+  price_exclude_tax: number | null;
+  delivery_days: number;
+  description_md?: string | null;
+  estimate_md?: string | null;
+  milestones_json?: string | null;
+  options_json?: string | null;
+}
+
 export function updateProposal(
   job_id: string,
-  body_md: string,
-  product_line: string,
-  price: number,
-  delivery_days: number,
+  patch: ProposalUpdate,
   changed_by: 'human' | 'claude' = 'human'
 ): void {
   const db = getDb();
@@ -113,16 +133,26 @@ export function updateProposal(
     changed_by
   );
 
+  // 既存値を保持しつつ patch で上書き
+  const description_md = patch.description_md ?? patch.body_md;
   db.prepare(
     `UPDATE proposals SET
-       body_md = ?, product_line = ?, price = ?, delivery_days = ?,
+       body_md = ?, product_line = ?, price = ?, price_exclude_tax = ?, delivery_days = ?,
+       description_md = ?, estimate_md = COALESCE(?, estimate_md),
+       milestones_json = COALESCE(?, milestones_json),
+       options_json = COALESCE(?, options_json),
        edited_at = datetime('now')
      WHERE proposal_id = ?`
   ).run(
-    body_md,
-    product_line,
-    price,
-    delivery_days,
+    patch.body_md,
+    patch.product_line,
+    patch.price,
+    patch.price_exclude_tax,
+    patch.delivery_days,
+    description_md,
+    patch.estimate_md ?? null,
+    patch.milestones_json ?? null,
+    patch.options_json ?? null,
     proposal.proposal_id
   );
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import type { JobWithProposal } from '@/lib/db';
 
@@ -11,7 +11,8 @@ export function JobCard({
   job: JobWithProposal;
   kind: 'proposal' | 'candidate';
 }) {
-  const [copied, setCopied] = useState<null | 'id' | 'body'>(null);
+  const router = useRouter();
+  const [copied, setCopied] = useState<null | 'id'>(null);
 
   const fitScore = job.fit_score ?? 0;
   const fitTone =
@@ -21,13 +22,18 @@ export function JobCard({
       ? { tone: 'azure' as const, label: '🎯 推奨' }
       : { tone: 'amber' as const, label: '📋 余裕' };
 
-  async function copyId() {
+  const isCW = job.platform_prefix === 'CW';
+  const platformLabel = isCW ? 'CrowdWorks ↗' : 'Lancers ↗';
+
+  async function copyId(e: React.MouseEvent) {
+    e.stopPropagation();
     await navigator.clipboard.writeText(job.job_id);
     setCopied('id');
     setTimeout(() => setCopied(null), 1500);
   }
 
-  async function copyRegenerationPrompt() {
+  async function copyRegenerationPrompt(e: React.MouseEvent) {
+    e.stopPropagation();
     const prompt = `BSA-PA: 案件 ${job.job_id} の提案文を生成してください。
 
 案件タイトル: ${job.title}
@@ -42,14 +48,8 @@ export function JobCard({
     alert('プロンプトをクリップボードにコピー & キューに追加しました。Claude Code に貼って依頼してください。');
   }
 
-  async function copyProposal() {
-    if (!job.body_md) return;
-    await navigator.clipboard.writeText(job.body_md);
-    setCopied('body');
-    setTimeout(() => setCopied(null), 1500);
-  }
-
-  async function markSubmitted() {
+  async function markSubmitted(e: React.MouseEvent) {
+    e.stopPropagation();
     if (!confirm('「入力済み」にしますか？')) return;
     await fetch(`/api/jobs/${job.job_id}/status`, {
       method: 'PATCH',
@@ -59,10 +59,25 @@ export function JobCard({
     location.reload();
   }
 
+  async function markUnable(e: React.MouseEvent) {
+    e.stopPropagation();
+    const note = window.prompt('提案不可の理由を入力してください');
+    if (!note) return;
+    await fetch(`/api/jobs/${job.job_id}/status`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status: 'unable_to_submit', note }),
+    });
+    location.reload();
+  }
+
   /* ── 候補（未生成）カード ─────────────────────────────────────── */
   if (kind === 'candidate') {
     return (
-      <article className="card relative grid grid-cols-[auto_1fr_auto] items-center gap-4 px-4 py-3">
+      <article
+        className="card relative grid cursor-pointer grid-cols-[auto_1fr_auto] items-center gap-4 px-4 py-3 hover:bg-(--color-paper-soft)"
+        onClick={() => router.push(`/proposals/${job.job_id}`)}
+      >
         <span className="mono-tag bg-(--color-paper) px-2 py-1 text-(--color-ink) ring-1 ring-(--color-hairline)">
           {job.job_id}
         </span>
@@ -81,8 +96,9 @@ export function JobCard({
             target="_blank"
             rel="noreferrer"
             className="btn btn-ghost text-xs"
+            onClick={(e) => e.stopPropagation()}
           >
-            Lancers ↗
+            {platformLabel}
           </a>
           <button onClick={copyId} className="btn btn-ghost text-xs">
             {copied === 'id' ? '✓' : '📋 ID'}
@@ -100,6 +116,8 @@ export function JobCard({
     job.status === 'lost';
 
   const isPriority = fitScore >= 80;
+
+  const previewText = job.description_md ?? job.body_md;
 
   const statusBadge = submitted ? (
     <span className="tag tag-moss">投下済 · {job.status}</span>
@@ -122,7 +140,10 @@ export function JobCard({
   );
 
   return (
-    <article className={`card relative ${isPriority ? 'is-priority priority-bar' : ''} px-6 py-5`}>
+    <article
+      className={`card relative cursor-pointer ${isPriority ? 'is-priority priority-bar' : ''} px-6 py-5 hover:bg-(--color-paper-soft)`}
+      onClick={() => router.push(`/proposals/${job.job_id}`)}
+    >
       {/* ── 上段: メタ情報 ── */}
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
@@ -145,9 +166,9 @@ export function JobCard({
       </h3>
 
       {/* ── 本文プレビュー ── */}
-      {job.body_md && (
+      {previewText && (
         <p className="mt-3 line-clamp-2 max-w-3xl text-sm leading-relaxed text-(--color-ink-soft)">
-          {job.body_md.slice(0, 160)}…
+          {previewText.slice(0, 160)}…
         </p>
       )}
 
@@ -166,23 +187,28 @@ export function JobCard({
 
       {/* ── アクション ── */}
       <div className="mt-5 flex flex-wrap items-center gap-2 border-t border-(--color-hairline) pt-4">
-        <Link href={`/proposals/${job.job_id}`} className="btn btn-primary">
-          📝 提案文を編集
-        </Link>
-        <button onClick={copyProposal} className="btn btn-ghost">
-          {copied === 'body' ? '✓ コピー済' : '📋 提案文をコピー'}
-        </button>
-        <a href={job.detail_url} target="_blank" rel="noreferrer" className="btn btn-ghost">
-          Lancers ↗
+        <a
+          href={job.detail_url}
+          target="_blank"
+          rel="noreferrer"
+          className="btn btn-ghost"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {platformLabel}
         </a>
         <button onClick={copyId} className="btn btn-ghost">
           {copied === 'id' ? '✓' : '📋 ID'}
         </button>
         <span className="ml-auto" />
         {!submitted && (
-          <button onClick={markSubmitted} className="btn btn-moss">
-            ✅ 入力済みにする
-          </button>
+          <>
+            <button onClick={markUnable} className="btn btn-ghost">
+              ⛔ 提案不可
+            </button>
+            <button onClick={markSubmitted} className="btn btn-moss">
+              ✅ 入力済みにする
+            </button>
+          </>
         )}
       </div>
     </article>

@@ -22,14 +22,23 @@ export async function PATCH(
     body_md: string;
     product_line: string;
     price: number;
+    price_exclude_tax?: number | null;
     delivery_days: number;
+    description_md?: string | null;
+    estimate_md?: string | null;
+    milestones_json?: string | null;
+    options_json?: string | null;
   };
-  updateProposal(
-    jobId,
-    body.body_md,
-    body.product_line,
-    body.price,
-    body.delivery_days
-  );
+  updateProposal(jobId, {
+    body_md: body.body_md,
+    product_line: body.product_line,
+    price: body.price,
+    price_exclude_tax: body.price_exclude_tax ?? Math.ceil(body.price / 1.1),
+    delivery_days: body.delivery_days,
+    description_md: body.description_md ?? null,
+    estimate_md: body.estimate_md ?? null,
+    milestones_json: body.milestones_json ?? null,
+    options_json: body.options_json ?? null,
+  });
   return NextResponse.json({ ok: true });
 }

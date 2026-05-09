@@ -50,18 +50,30 @@ CREATE INDEX IF NOT EXISTS idx_jobs_fit_score ON jobs(fit_score DESC);
 CREATE INDEX IF NOT EXISTS idx_jobs_platform ON jobs(platform_prefix);
 
 -- 提案文（最新版）
+-- ランサーズ提案画面に対応する5フィールド構造:
+-- 1. body_md (legacy 単一テキスト互換用、description_md と同期)
+-- 2. description_md (自己PR・実績欄)
+-- 3. estimate_md (見積もりの詳細欄)
+-- 4. milestones_json (計画/マイルストーン JSON 配列: [{title, schedule_date, amount_exclude_tax, description}])
+-- 5. options_json (追加オプション JSON 配列: [{title, description, contract_amount_exclude_tax}], 最大10)
+-- price は税込み総額（互換用）。price_exclude_tax がランサーズ入力用の税抜き総額。
 CREATE TABLE IF NOT EXISTS proposals (
-  proposal_id      TEXT PRIMARY KEY,           -- ULID 等
-  job_id           TEXT NOT NULL UNIQUE REFERENCES jobs(job_id) ON DELETE CASCADE,
-  product_line     TEXT NOT NULL,              -- L1/L2/L3/L4
-  price            INTEGER NOT NULL,
-  delivery_days    INTEGER NOT NULL,
-  body_md          TEXT NOT NULL,
-  research_notes   TEXT,                       -- JSON: WebFetch / Exa の結果サマリ
-  generated_at     TEXT NOT NULL,
-  generated_by     TEXT NOT NULL,              -- claude-code-cli / human
-  edited_at        TEXT,
-  submitted_at     TEXT
+  proposal_id        TEXT PRIMARY KEY,           -- ULID 等
+  job_id             TEXT NOT NULL UNIQUE REFERENCES jobs(job_id) ON DELETE CASCADE,
+  product_line       TEXT NOT NULL,              -- L1/L2/L3/L4
+  price              INTEGER NOT NULL,           -- 税込み総額（互換用）
+  price_exclude_tax  INTEGER,                    -- 税抜き総額（ランサーズ入力用）
+  delivery_days      INTEGER NOT NULL,
+  body_md            TEXT NOT NULL,              -- 従来の一体型 markdown（description_md と同期）
+  description_md     TEXT,                       -- 自己PR・実績欄
+  estimate_md        TEXT,                       -- 見積もりの詳細欄
+  milestones_json    TEXT,                       -- マイルストーン JSON 配列
+  options_json       TEXT,                       -- 追加オプション JSON 配列
+  research_notes     TEXT,                       -- JSON: WebFetch / Exa の結果サマリ
+  generated_at       TEXT NOT NULL,
+  generated_by       TEXT NOT NULL,              -- claude-code-cli / human
+  edited_at          TEXT,
+  submitted_at       TEXT
 );
 CREATE INDEX IF NOT EXISTS idx_proposals_generated_at ON proposals(generated_at);
 
@@ -139,6 +151,16 @@ INSERT OR IGNORE INTO platforms(prefix, name, search_urls, enabled)
 VALUES (
   'LAN',
   'Lancers',
-  '["https://www.lancers.jp/work/search/web/lp","https://www.lancers.jp/work/search/web/website","https://www.lancers.jp/work/search/ad"]',
+  -- 6 カテゴリ: LP / website / ad / modification_customization / responsive / smartphonesite
+  '["https://www.lancers.jp/work/search/web/lp","https://www.lancers.jp/work/search/web/website","https://www.lancers.jp/work/search/ad","https://www.lancers.jp/work/search/web/modification_customization","https://www.lancers.jp/work/search/web/responsive","https://www.lancers.jp/work/search/web/smartphonesite"]',
+  1
+);
+
+INSERT OR IGNORE INTO platforms(prefix, name, search_urls, enabled)
+VALUES (
+  'CW',
+  'CrowdWorks',
+  -- 3 カテゴリ: LP制作(17) / HP作成(14) / Webサイト修正(285)
+  '["https://crowdworks.jp/public/jobs/category/17","https://crowdworks.jp/public/jobs/category/14","https://crowdworks.jp/public/jobs/category/285"]',
   1
 );
