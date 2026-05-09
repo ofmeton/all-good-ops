@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
 import {
-  getTopJobs,
+  getJobsAboveFitScore,
   upsertProposal,
   getProposal,
   getPendingGenerationRequests,
@@ -27,8 +27,8 @@ beforeEach(() => {
   db.exec(schema);
 });
 
-describe('getTopJobs', () => {
-  it('returns top N jobs by fit_score desc, status=collected only', () => {
+describe('getJobsAboveFitScore', () => {
+  it('returns all jobs >= threshold, sorted by fit_score desc, status=collected only', () => {
     db.prepare(
       `INSERT INTO jobs (job_id, platform_prefix, source_url, detail_url, title, collected_at, fit_score, status)
        VALUES (?, 'LAN', 'x', 'y1', 't1', datetime('now'), 88, 'collected')`
@@ -41,21 +41,23 @@ describe('getTopJobs', () => {
       `INSERT INTO jobs (job_id, platform_prefix, source_url, detail_url, title, collected_at, fit_score, status)
        VALUES (?, 'LAN', 'x', 'y3', 't3', datetime('now'), 70, 'collected')`
     ).run('LAN-20260428-003');
+    db.prepare(
+      `INSERT INTO jobs (job_id, platform_prefix, source_url, detail_url, title, collected_at, fit_score, status)
+       VALUES (?, 'LAN', 'x', 'y4', 't4', datetime('now'), 92, 'collected')`
+    ).run('LAN-20260428-004');
 
-    const jobs = getTopJobs(db, 10);
-    expect(jobs.length).toBe(2);  // submitted は除外
-    expect(jobs[0].job_id).toBe('LAN-20260428-001');  // 高スコア順
-    expect(jobs[1].job_id).toBe('LAN-20260428-003');
+    const jobs = getJobsAboveFitScore(db, 80);
+    expect(jobs.length).toBe(2);  // submitted は除外、70 はしきい値未満
+    expect(jobs[0].job_id).toBe('LAN-20260428-004');  // 高スコア順
+    expect(jobs[1].job_id).toBe('LAN-20260428-001');
   });
 
-  it('respects limit', () => {
-    for (let i = 1; i <= 5; i++) {
-      db.prepare(
-        `INSERT INTO jobs (job_id, platform_prefix, source_url, detail_url, title, collected_at, fit_score, status)
-         VALUES (?, 'LAN', 'x', ?, ?, datetime('now'), ?, 'collected')`
-      ).run(`LAN-20260428-00${i}`, `url${i}`, `t${i}`, 100 - i);
-    }
-    expect(getTopJobs(db, 3)).toHaveLength(3);
+  it('returns empty when no job meets threshold', () => {
+    db.prepare(
+      `INSERT INTO jobs (job_id, platform_prefix, source_url, detail_url, title, collected_at, fit_score, status)
+       VALUES (?, 'LAN', 'x', 'y1', 't1', datetime('now'), 75, 'collected')`
+    ).run('LAN-20260428-001');
+    expect(getJobsAboveFitScore(db, 80)).toHaveLength(0);
   });
 });
 

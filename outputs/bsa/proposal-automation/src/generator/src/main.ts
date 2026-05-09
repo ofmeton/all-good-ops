@@ -1,4 +1,4 @@
-import { openDb, getTopJobs, upsertProposal, getPendingGenerationRequests, markGenerationRequest } from './db.js';
+import { openDb, getJobsAboveFitScore, upsertProposal, getPendingGenerationRequests, markGenerationRequest } from './db.js';
 import type { JobRow } from './db.js';
 import { researchJob, ExaQuotaExceededError } from './researcher.js';
 import { buildProposalPrompt } from './prompt-builder.js';
@@ -6,25 +6,31 @@ import { estimateProductLine } from './product-line-mapper.js';
 import { customizePricing } from './pricing.js';
 import { callClaudeHeadless, ClaudeHeadlessError } from './claude-headless.js';
 
-// claude --output-format json --json-schema 用のスキーマ
-const PROPOSAL_SCHEMA = {
-  type: 'object',
-  properties: {
-    body_md: { type: 'string' },
-    product_line: { type: 'string', enum: ['L1', 'L2', 'L3', 'L4'] },
-    price: { type: 'integer' },
-    delivery_days: { type: 'integer' },
-    research_notes: { type: 'string' },
-  },
-  required: ['body_md', 'product_line', 'price', 'delivery_days'],
-} as const;
+interface MilestoneOut {
+  title: string;
+  schedule_date: string;
+  amount_exclude_tax: number;
+  description: string;
+}
+
+interface ProposalOptionOut {
+  title: string;
+  description: string;
+  contract_amount_exclude_tax: number;
+}
 
 interface GenerationOutput {
-  body_md: string;
+  description_md: string;
+  estimate_md: string;
+  milestones: MilestoneOut[];
+  options: ProposalOptionOut[];
   product_line: 'L1' | 'L2' | 'L3' | 'L4';
-  price: number;
+  price_include_tax: number;
+  price_exclude_tax: number;
   delivery_days: number;
   research_notes?: string;
+  decline_recommended?: boolean;
+  decline_reason?: string;
 }
 
 async function generateForJob(
@@ -68,7 +74,8 @@ async function generateForJob(
       service_category: job.service_category,
     },
     estimated,
-    researchNotes
+    researchNotes,
+    job.platform_prefix
   );
 
   const prompt = `${basePrompt}\n\n推奨初期値: 商品ライン=${estimated} / 金額=${suggestedPrice}円 / 納期=${suggestedDays}日`;
@@ -80,9 +87,10 @@ async function generateForJob(
   const result = await callClaudeHeadless<Partial<GenerationOutput>>({
     prompt,
     allowedTools: ['WebFetch'],
-    effort: 'medium',
+    // テンプレが詳細なため拡張思考（medium）は不要。low にすることで生成時間を 60s 以内に抑える
+    effort: 'low',
     fallbackModel: 'sonnet',
-    timeoutMs: 180_000,
+    timeoutMs: 360_000,
   });
 
   // 6. レスポンスの形を確認 + fallback 適用
@@ -97,31 +105,65 @@ async function generateForJob(
     console.error(`  ⚠️ [${job.job_id}] Claude が想定外の形式を返した: ${preview}`);
     return;
   }
-  const body_md = (result.body_md ?? '').toString().trim();
-  if (!body_md) {
+
+  // 辞退推奨ハンドリング (スタック適合外/価格レンジ違反/捏造実績なしで提案不可な場合)
+  if (result.decline_recommended === true) {
+    const reason = (result.decline_reason ?? '理由未記載').toString().trim();
+    console.warn(`  ⚠️ [${job.job_id}] 辞退推奨: ${reason}`);
+    db.prepare(
+      `UPDATE jobs SET status = 'declined', updated_at = datetime('now') WHERE job_id = ?`
+    ).run(job.job_id);
+    db.prepare(
+      `INSERT INTO status_history (job_id, from_status, to_status, changed_by, note)
+       VALUES (?, ?, 'declined', 'auto', ?)`
+    ).run(job.job_id, job.status, `decline_recommended: ${reason}`);
+    return;
+  }
+
+  const description_md = (result.description_md ?? '').toString().trim();
+  if (!description_md) {
     console.error(
-      `  ⚠️ [${job.job_id}] Claude が body_md を返さなかった。skip。response keys:`,
+      `  ⚠️ [${job.job_id}] Claude が description_md を返さなかった。skip。response keys:`,
       Object.keys(result)
     );
     return;
   }
+  const estimate_md = (result.estimate_md ?? '').toString().trim();
+  const milestones = Array.isArray(result.milestones) ? result.milestones : [];
+  const options = Array.isArray(result.options) ? result.options : [];
+
   const finalLine = (result.product_line ?? estimated) as 'L1' | 'L2' | 'L3' | 'L4';
-  const finalPrice = typeof result.price === 'number' ? result.price : suggestedPrice;
-  const finalDays = typeof result.delivery_days === 'number' ? result.delivery_days : suggestedDays;
+  const finalPriceIncTax =
+    typeof result.price_include_tax === 'number' ? result.price_include_tax : suggestedPrice;
+  // 税抜き換算は ceil（端数切り上げ）。floor だと税込再計算で 1円欠ける（"149,999円" 問題回避）
+  const finalPriceExTax =
+    typeof result.price_exclude_tax === 'number'
+      ? result.price_exclude_tax
+      : Math.ceil(finalPriceIncTax / 1.1);
+  const finalDays =
+    typeof result.delivery_days === 'number' ? result.delivery_days : suggestedDays;
+
+  // 互換用 body_md は description_md と同期
+  const body_md = description_md;
 
   // 7. SQLite に保存
   upsertProposal(db, {
     job_id: job.job_id,
     product_line: finalLine,
-    price: finalPrice,
+    price: finalPriceIncTax,
+    price_exclude_tax: finalPriceExTax,
     delivery_days: finalDays,
     body_md,
+    description_md,
+    estimate_md: estimate_md || null,
+    milestones_json: milestones.length ? JSON.stringify(milestones) : null,
+    options_json: options.length ? JSON.stringify(options) : null,
     research_notes: result.research_notes ?? researchNotes,
     generated_by: 'claude-code-cli',
   });
 
   console.log(
-    `  ✅ ${finalLine} / ${finalPrice.toLocaleString()}円 / ${finalDays}日`
+    `  ✅ ${finalLine} / 税抜${finalPriceExTax.toLocaleString()}円 (税込${finalPriceIncTax.toLocaleString()}円) / ${finalDays}日 / ms=${milestones.length} opt=${options.length}`
   );
 }
 
@@ -130,10 +172,11 @@ async function main(): Promise<number> {
   let generatedCount = 0;
   let errorMessage: string | null = null;
 
+  const FIT_SCORE_THRESHOLD = 80;
+
   try {
-    // 上位10件
-    const topJobs = getTopJobs(db, 10);
-    console.log(`📊 上位 ${topJobs.length} 件の提案文を生成します`);
+    const topJobs = getJobsAboveFitScore(db, FIT_SCORE_THRESHOLD);
+    console.log(`📊 fit_score >= ${FIT_SCORE_THRESHOLD} の ${topJobs.length} 件の提案文を生成します`);
 
     for (const job of topJobs) {
       try {

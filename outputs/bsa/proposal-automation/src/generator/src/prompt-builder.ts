@@ -5,12 +5,28 @@ import { dirname, join } from 'node:path';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 let cachedTemplate: string | null = null;
+let cachedTrackRecord: string | null = null;
 
 function loadTemplate(): string {
   if (cachedTemplate) return cachedTemplate;
   const path = join(__dirname, '..', 'prompts', 'proposal.txt');
   cachedTemplate = readFileSync(path, 'utf8');
   return cachedTemplate;
+}
+
+function loadTrackRecord(): string {
+  if (cachedTrackRecord) return cachedTrackRecord;
+  const path = join(
+    __dirname,
+    '..', '..', '..', '..', '..', '..',
+    'knowledge', 'context', 'proven-track-record.md'
+  );
+  try {
+    cachedTrackRecord = readFileSync(path, 'utf8');
+  } catch {
+    cachedTrackRecord = '(proven-track-record.md が読み込めませんでした。実績欄は空欄で出力すること)';
+  }
+  return cachedTrackRecord;
 }
 
 export interface JobInfo {
@@ -28,7 +44,8 @@ export interface JobInfo {
 export function buildProposalPrompt(
   job: JobInfo,
   estimatedLine: string,
-  researchNotes: string
+  researchNotes: string,
+  platform: string = 'LAN'
 ): string {
   const template = loadTemplate();
   const jobInfo = [
@@ -46,5 +63,7 @@ export function buildProposalPrompt(
 
   return template
     .replace('{JOB_INFO}', jobInfo)
-    .replace('{RESEARCH_NOTES}', researchNotes || '(リサーチなし)');
+    .replace('{RESEARCH_NOTES}', researchNotes || '(リサーチなし)')
+    .replace('{TRACK_RECORD}', loadTrackRecord())
+    .replace(/\{PLATFORM\}/g, platform);
 }

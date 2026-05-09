@@ -38,23 +38,30 @@ export interface JobRow {
   status: string;
 }
 
-export function getTopJobs(db: Database.Database, limit: number): JobRow[] {
+export function getJobsAboveFitScore(
+  db: Database.Database,
+  minScore: number
+): JobRow[] {
   return db
     .prepare(
       `SELECT * FROM jobs
-       WHERE status = 'collected'
-       ORDER BY fit_score DESC, collected_at DESC
-       LIMIT ?`
+       WHERE status = 'collected' AND fit_score >= ?
+       ORDER BY fit_score DESC, collected_at DESC`
     )
-    .all(limit) as JobRow[];
+    .all(minScore) as JobRow[];
 }
 
 export interface ProposalInsert {
   job_id: string;
   product_line: string;
-  price: number;
+  price: number; // 税込み総額（互換用）
+  price_exclude_tax: number | null;
   delivery_days: number;
-  body_md: string;
+  body_md: string; // description_md と同期される互換フィールド
+  description_md: string | null;
+  estimate_md: string | null;
+  milestones_json: string | null;
+  options_json: string | null;
   research_notes: string | null;
   generated_by: string;
 }
@@ -90,15 +97,22 @@ export function upsertProposal(
 
     db.prepare(
       `UPDATE proposals SET
-         product_line = ?, price = ?, delivery_days = ?,
-         body_md = ?, research_notes = ?,
+         product_line = ?, price = ?, price_exclude_tax = ?, delivery_days = ?,
+         body_md = ?, description_md = ?, estimate_md = ?,
+         milestones_json = ?, options_json = ?,
+         research_notes = ?,
          generated_at = datetime('now'), generated_by = ?
        WHERE proposal_id = ?`
     ).run(
       p.product_line,
       p.price,
+      p.price_exclude_tax,
       p.delivery_days,
       p.body_md,
+      p.description_md,
+      p.estimate_md,
+      p.milestones_json,
+      p.options_json,
       p.research_notes,
       p.generated_by,
       existing.proposal_id
@@ -108,15 +122,22 @@ export function upsertProposal(
 
   const proposal_id = ulid();
   db.prepare(
-    `INSERT INTO proposals (proposal_id, job_id, product_line, price, delivery_days, body_md, research_notes, generated_at, generated_by)
-     VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now'), ?)`
+    `INSERT INTO proposals (proposal_id, job_id, product_line, price, price_exclude_tax, delivery_days,
+                            body_md, description_md, estimate_md, milestones_json, options_json,
+                            research_notes, generated_at, generated_by)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'), ?)`
   ).run(
     proposal_id,
     p.job_id,
     p.product_line,
     p.price,
+    p.price_exclude_tax,
     p.delivery_days,
     p.body_md,
+    p.description_md,
+    p.estimate_md,
+    p.milestones_json,
+    p.options_json,
     p.research_notes,
     p.generated_by
   );

@@ -43,4 +43,33 @@ describe('estimateProductLine', () => {
       budget_min: 50000, budget_max: 80000,
     })).toBe('L1');
   });
+
+  // 新カテゴリ（B 標準セット）
+  it('modification カテゴリ + 低予算 → L4', () => {
+    expect(estimateProductLine({
+      service_category: 'modification', title: 'LP の CTA 修正', description: 'ボタン色変更',
+      budget_min: 10000, budget_max: 30000,
+    })).toBe('L4');
+  });
+
+  it('modification カテゴリ + 5万以上 → L2 改修扱い', () => {
+    expect(estimateProductLine({
+      service_category: 'modification', title: 'コーポレートサイト全面改修', description: '5P',
+      budget_min: 80000, budget_max: 150000,
+    })).toBe('L2');
+  });
+
+  it('responsive カテゴリ → L2', () => {
+    expect(estimateProductLine({
+      service_category: 'responsive', title: 'レスポンシブ HP 制作', description: '5P',
+      budget_min: 80000, budget_max: 120000,
+    })).toBe('L2');
+  });
+
+  it('smartphonesite カテゴリ → L2', () => {
+    expect(estimateProductLine({
+      service_category: 'smartphonesite', title: 'スマホサイト制作', description: '',
+      budget_min: 80000, budget_max: 100000,
+    })).toBe('L2');
+  });
 });
