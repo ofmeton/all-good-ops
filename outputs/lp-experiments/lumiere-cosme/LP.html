@@ -1,0 +1,2250 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>LUMIÈRE Moist Glow Serum｜肌が変わると、自分が好きになる。</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Shippori+Mincho:wght@400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  /* ============================================================
+     Tokens
+     ============================================================ */
+  :root{
+    --bg:        #fffaf8;
+    --bg-tint:   #fff3ee;
+    --pink-50:  #fdeaea;
+    --pink-100: #fad7d7;
+    --pink-200: #f5b9bd;
+    --pink-300: #ec8e98;
+    --pink-400: #d96978;
+    --pink-500: #b94a5b;
+    --gold-100: #f3e6cf;
+    --gold-300: #c9a877;
+    --ink:       #4a3a36;
+    --ink-soft:  #7a6660;
+    --ink-faint: #b4a39d;
+    --line:      #f1d9d9;
+
+    --shadow-card: 0 18px 40px -22px rgba(185,74,91,.18), 0 2px 6px rgba(185,74,91,.06);
+    --shadow-soft: 0 30px 60px -30px rgba(185,74,91,.22);
+    --shadow-deep: 0 48px 80px -40px rgba(185,74,91,.35);
+
+    --serif-en: "Cormorant Garamond", "Shippori Mincho", serif;
+    --serif-jp: "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;
+    --sans-jp:  "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+
+    --radius-card: 22px;
+    --radius-pill: 999px;
+
+    --container: 1280px;
+
+    --ease-out-quint: cubic-bezier(.22,1,.36,1);
+    --ease-in-out-quint: cubic-bezier(.83,0,.17,1);
+  }
+
+  *,*::before,*::after{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  html{ -webkit-text-size-adjust:100%; scroll-behavior: smooth; }
+  body{
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans-jp);
+    font-weight: 400;
+    line-height: 1.8;
+    font-feature-settings: "palt" 1;
+    letter-spacing: .02em;
+    overflow-x: hidden;
+  }
+  img,video{ max-width:100%; display:block; }
+  a{ color:inherit; }
+  button{ font:inherit; color:inherit; cursor:pointer; }
+  ::selection{ background: var(--pink-200); color: var(--ink); }
+
+  /* ============================================================
+     Layout helpers
+     ============================================================ */
+  .wrap{ max-width: var(--container); margin: 0 auto; padding: 0 24px; }
+  @media (max-width: 720px){ .wrap{ padding: 0 20px; } }
+
+  .eyebrow{
+    font-family: var(--serif-en);
+    font-style: italic;
+    font-weight: 400;
+    color: var(--pink-400);
+    letter-spacing: .14em;
+    font-size: 14px;
+    display:inline-flex; align-items:center;
+  }
+  .eyebrow .dot{
+    display:inline-block; width:6px; height:6px; border-radius:50%;
+    background:var(--pink-300); margin: 0 10px; vertical-align: middle;
+    animation: dotPulse 2.4s ease-in-out infinite;
+  }
+  @keyframes dotPulse{
+    0%,100%{ transform: scale(1); opacity:1; box-shadow: 0 0 0 0 rgba(236,142,152,.5); }
+    50%{ transform: scale(1.2); opacity:.8; box-shadow: 0 0 0 8px rgba(236,142,152,0); }
+  }
+
+  .h-section{
+    font-family: var(--serif-jp);
+    font-weight: 500;
+    font-size: clamp(26px, 4.4vw, 42px);
+    line-height: 1.45;
+    letter-spacing: .04em;
+    color: var(--ink);
+    margin: 14px 0 18px;
+    text-wrap: pretty;
+  }
+  .h-section em{
+    font-style: normal;
+    color: var(--pink-400);
+    background: linear-gradient(120deg, var(--pink-400) 0%, var(--pink-500) 50%, var(--pink-400) 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradientShift 6s ease-in-out infinite;
+  }
+  @keyframes gradientShift{
+    0%,100%{ background-position: 0% center; }
+    50%{ background-position: 100% center; }
+  }
+  .lede{
+    font-size: clamp(14px, 1.6vw, 16px);
+    color: var(--ink-soft);
+    line-height: 2;
+    text-wrap: pretty;
+  }
+
+  /* ============================================================
+     Decorative atmosphere (animated mesh)
+     ============================================================ */
+  .atmosphere{
+    position: fixed; inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background:
+      radial-gradient(60% 50% at 85% 0%, #ffe4e6 0%, rgba(255,228,230,0) 60%),
+      radial-gradient(50% 40% at 0% 30%, #fff1ec 0%, rgba(255,241,236,0) 65%),
+      radial-gradient(45% 35% at 100% 80%, #ffe9ec 0%, rgba(255,233,236,0) 70%);
+    animation: meshDrift 18s ease-in-out infinite alternate;
+  }
+  @keyframes meshDrift{
+    0%{ transform: translate3d(0,0,0) scale(1); filter: hue-rotate(0deg); }
+    100%{ transform: translate3d(-2%, 2%, 0) scale(1.05); filter: hue-rotate(8deg); }
+  }
+  .page{ position: relative; z-index: 1; }
+
+  /* Grain texture overlay (subtle) */
+  .grain{
+    position: fixed; inset: 0;
+    pointer-events: none; z-index: 60;
+    opacity: .04; mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ============================================================
+     CTA
+     ============================================================ */
+  .cta{
+    display:inline-flex; align-items:center; gap: 14px;
+    padding: 18px 28px;
+    border-radius: var(--radius-pill);
+    background: linear-gradient(95deg, #f5b6bd 0%, #ea8b96 50%, #de6c7d 100%);
+    color: #fff;
+    font-family: var(--serif-jp);
+    font-weight: 600;
+    font-size: clamp(15px, 1.7vw, 18px);
+    letter-spacing: .08em;
+    text-decoration: none;
+    border: 0;
+    box-shadow:
+      0 14px 30px -10px rgba(217,105,120,.55),
+      inset 0 1px 0 rgba(255,255,255,.55);
+    transition: transform .25s var(--ease-out-quint), box-shadow .25s ease, filter .25s ease;
+    position: relative;
+  }
+  .cta:hover{ transform: translateY(-2px); box-shadow: 0 22px 40px -12px rgba(217,105,120,.6), inset 0 1px 0 rgba(255,255,255,.55); filter: brightness(1.02); }
+  .cta .arrow{
+    width: 36px; height: 36px; border-radius: 50%;
+    background: rgba(255,255,255,.95);
+    color: var(--pink-400);
+    display:inline-flex; align-items:center; justify-content:center;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.5);
+  }
+  .cta .arrow svg{ width: 14px; height: 14px; }
+
+  /* ============================================================
+     FV CTA bar with shimmer
+     ============================================================ */
+  .fv-cta-bar{
+    display: inline-flex; align-items: stretch;
+    background: linear-gradient(95deg, #f5b6bd 0%, #ea8b96 60%, #de6c7d 100%);
+    border-radius: var(--radius-pill);
+    box-shadow: 0 18px 36px -14px rgba(217,105,120,.55), inset 0 1px 0 rgba(255,255,255,.55);
+    padding: 8px;
+    text-decoration: none;
+    color: #fff;
+    max-width: 100%;
+    position: relative;
+    overflow: hidden;
+    transition: transform .3s var(--ease-out-quint), box-shadow .3s ease;
+  }
+  .fv-cta-bar::before{
+    content: ""; position: absolute; inset: 0; pointer-events:none;
+    background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,.5) 50%, transparent 70%);
+    transform: translateX(-100%);
+    animation: shimmer 3.6s ease-in-out infinite;
+    animation-delay: 1.6s;
+  }
+  @keyframes shimmer{
+    0%{ transform: translateX(-100%); }
+    50%, 100%{ transform: translateX(120%); }
+  }
+  .fv-cta-bar:hover{ transform: translateY(-2px); box-shadow: 0 26px 48px -14px rgba(217,105,120,.65), inset 0 1px 0 rgba(255,255,255,.55); }
+  .fv-cta-bar > *{ position: relative; z-index: 1; }
+  .fv-cta-bar .tag-block{
+    display:flex; flex-direction: column; align-items: center; justify-content: center;
+    background: rgba(255,255,255,.18);
+    border-radius: var(--radius-pill);
+    padding: 6px 18px;
+    line-height: 1.2;
+    min-width: 96px;
+  }
+  .fv-cta-bar .tag-block .small{ font-size: 11px; letter-spacing: .14em; opacity:.95; }
+  .fv-cta-bar .tag-block .big{ font-family: var(--serif-jp); font-weight:700; font-size: 18px; letter-spacing: .04em; }
+  .fv-cta-bar .label-block{
+    display:flex; flex-direction: column; align-items: flex-start; justify-content: center;
+    padding: 4px 18px;
+  }
+  .fv-cta-bar .ship{
+    background: #fff; color: var(--pink-400);
+    font-size: 11px; font-weight: 700; letter-spacing: .14em;
+    padding: 2px 10px; border-radius: var(--radius-pill);
+    margin-bottom: 2px;
+  }
+  .fv-cta-bar .main-text{
+    font-family: var(--serif-jp); font-weight:600; font-size: clamp(16px, 2.2vw, 22px); letter-spacing: .08em;
+    white-space: nowrap;
+  }
+  .fv-cta-bar .arrow{
+    align-self:center; margin-left: 12px; margin-right: 6px;
+    width: 40px; height: 40px; border-radius:50%;
+    background:#fff; color: var(--pink-400);
+    display:inline-flex; align-items:center; justify-content:center;
+    transition: transform .3s var(--ease-out-quint);
+  }
+  .fv-cta-bar:hover .arrow{ transform: translateX(4px); }
+  .fv-cta-bar .arrow svg{ width: 14px; height: 14px; }
+  @media (max-width: 540px){
+    .fv-cta-bar{ width:100%; }
+    .fv-cta-bar .label-block{ padding: 4px 8px; flex: 1; }
+    .fv-cta-bar .main-text{ font-size: 15px; }
+    .fv-cta-bar .tag-block{ min-width: 78px; padding: 6px 10px; }
+    .fv-cta-bar .tag-block .big{ font-size: 14px; }
+  }
+
+  /* ============================================================
+     Topbar (with marquee)
+     ============================================================ */
+  .topbar{
+    position: sticky; top: 0; z-index: 40;
+    background: rgba(255,250,248,.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(241,217,217,.5);
+    transition: padding .3s ease, background .3s ease;
+  }
+  .topbar.scrolled{ background: rgba(255,250,248,.96); box-shadow: 0 6px 20px -16px rgba(185,74,91,.3); }
+  .topbar .wrap{ display:flex; align-items:center; justify-content: space-between; padding: 14px 24px; }
+  .topbar .links{ display:flex; gap: 22px; font-size: 13px; }
+  .topbar .links a{
+    color: var(--ink-soft); text-decoration: none; letter-spacing: .08em;
+    position: relative;
+    transition: color .25s ease;
+  }
+  .topbar .links a::after{
+    content:""; position:absolute; left:0; right:0; bottom:-6px;
+    height: 1px; background: var(--pink-400);
+    transform: scaleX(0); transform-origin: right center;
+    transition: transform .35s var(--ease-out-quint);
+  }
+  .topbar .links a:hover{ color: var(--pink-400); }
+  .topbar .links a:hover::after{ transform: scaleX(1); transform-origin: left center; }
+  .topbar .top-cta{
+    background: linear-gradient(95deg, #f5b6bd, #de6c7d);
+    color:#fff; padding: 8px 18px; border-radius: var(--radius-pill);
+    font-size: 12px; letter-spacing: .12em; text-decoration: none;
+    box-shadow: 0 8px 18px -8px rgba(217,105,120,.6);
+    transition: transform .25s var(--ease-out-quint);
+  }
+  .topbar .top-cta:hover{ transform: translateY(-2px); }
+  .brand-mark{
+    font-family: var(--serif-en);
+    font-weight: 500;
+    letter-spacing: .35em;
+    font-size: 18px;
+    color: var(--ink);
+  }
+  .brand-mark span{ color: var(--pink-400); }
+  @media (max-width: 720px){ .topbar .links{ display:none; } }
+
+  /* Marquee under topbar */
+  .marquee{
+    background: linear-gradient(90deg, var(--pink-400) 0%, var(--pink-500) 50%, var(--pink-400) 100%);
+    color: #fff;
+    overflow: hidden;
+    border-bottom: 1px solid rgba(255,255,255,.2);
+  }
+  .marquee-track{
+    display: flex; gap: 48px;
+    white-space: nowrap;
+    animation: marqueeSlide 38s linear infinite;
+    padding: 8px 0;
+    width: max-content;
+  }
+  .marquee-track span{
+    font-family: var(--serif-en); font-style: italic;
+    letter-spacing: .28em; font-size: 12px;
+    display:inline-flex; align-items:center; gap: 48px;
+  }
+  .marquee-track span::after{
+    content: "✦"; color: rgba(255,255,255,.5);
+  }
+  @keyframes marqueeSlide{
+    0%{ transform: translate3d(0,0,0); }
+    100%{ transform: translate3d(-50%,0,0); }
+  }
+
+  /* ============================================================
+     FV — enhanced
+     ============================================================ */
+  .fv{
+    position: relative;
+    padding: 28px 0 80px;
+    overflow: hidden;
+    background-color: #fff5f3;
+    background-image:
+      radial-gradient(70% 80% at 0% 50%, #fff8f6 0%, rgba(255,248,246,.6) 40%, rgba(255,248,246,0) 70%),
+      linear-gradient(180deg, #fff8f6 0%, #ffeef0 100%);
+    min-height: clamp(620px, 78vh, 820px);
+    display: flex; align-items: center;
+  }
+  .fv .wrap{ position: relative; }
+
+  /* Background video — full-bleed, fills the entire FV section */
+  .fv-bg{
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 62% center;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* Strong left fade — keeps copy area solid for headline readability */
+  .fv::before{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg,
+      #fff5f3 0%,
+      #fff5f3 36%,
+      rgba(255,245,243,.92) 48%,
+      rgba(255,245,243,.55) 60%,
+      rgba(255,245,243,.18) 72%,
+      rgba(255,245,243,0) 88%);
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  /* Floating petals layer */
+  .petals{
+    position: absolute; inset: 0;
+    pointer-events: none; z-index: 2;
+    overflow: hidden;
+  }
+  .petal{
+    position: absolute;
+    width: var(--s, 22px); height: var(--s, 22px);
+    background: radial-gradient(circle at 30% 30%, #fff 0%, var(--c, #f6b9c0) 70%, transparent 100%);
+    border-radius: 60% 40% 60% 40% / 50% 60% 40% 50%;
+    opacity: var(--o, .8);
+    filter: blur(.5px);
+    animation: petalFloat var(--d, 14s) ease-in-out infinite;
+    animation-delay: var(--de, 0s);
+  }
+  @keyframes petalFloat{
+    0%{ transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
+    50%{ transform: translate3d(20px, -40px, 0) rotate(180deg) scale(1.05); }
+    100%{ transform: translate3d(-10px, 20px, 0) rotate(360deg) scale(.95); }
+  }
+
+  /* Light orbs */
+  .orb{
+    position: absolute; border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,.9) 0%, rgba(255,255,255,0) 60%);
+    pointer-events: none;
+    animation: orbDrift 20s ease-in-out infinite alternate;
+    z-index: 2;
+    filter: blur(2px);
+  }
+  @keyframes orbDrift{
+    0%{ transform: translate3d(0,0,0); opacity: .4; }
+    50%{ opacity: .8; }
+    100%{ transform: translate3d(40px, -30px, 0); opacity: .5; }
+  }
+
+  .fv-grid{ display: block; width: 100%; position: relative; z-index: 4; }
+
+  .fv-copy{
+    max-width: 560px;
+    position: relative;
+    z-index: 4;
+  }
+  /* Push copy hard-left — copy starts at viewport x=24 across all desktop widths */
+  @media (min-width: 1101px){
+    .fv-copy{
+      margin-left: calc(-1 * (100vw - var(--container)) / 2);
+      max-width: 660px;
+    }
+    /* Match FV height to 16:9 video aspect — eliminates vertical crop */
+    .fv{ min-height: clamp(720px, 56.25vw, 1080px); }
+  }
+  @media (min-width: 1440px){
+    .fv-copy{ max-width: 880px; }
+    .fv-headline{ font-size: clamp(52px, 5vw, 76px); }
+    /* Keep .fv-actions vertical at this width — horizontal would overlap bottle */
+  }
+  @media (min-width: 1700px){
+    .fv-copy{ max-width: 1100px; }
+    .fv-headline{
+      font-size: clamp(58px, 4.1vw, 78px);
+      letter-spacing: .02em;
+    }
+    /* Single-line headline at this width — reveal-lines side by side */
+    .fv-headline .reveal-line{ display: inline-block; vertical-align: top; }
+    .fv-sub{ font-size: clamp(18px, 1.4vw, 24px); margin-bottom: 32px; }
+    .fv-copy .ribbon{ font-size: clamp(14px, 1.1vw, 18px); margin-bottom: 22px; }
+    /* Badges + CTA in horizontal row only at 1700+ where there's enough space */
+    .fv-actions{
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 44px;
+      margin: 36px 0 22px;
+    }
+    .fv-actions .badges{ margin: 0; flex: 1 1 auto; max-width: 580px; gap: 18px; }
+    .fv-actions .fv-cta-wrap{ flex: 0 0 auto; }
+    .fv-actions .badge{ padding: 18px 14px 16px; }
+    .fv-actions .badge .ico{ width: 40px; height: 40px; margin-bottom: 8px; }
+    .fv-actions .badge .label{ font-size: 18px; }
+    .fv-actions .badge .desc{ font-size: 12px; margin-top: 4px; }
+    .fv-actions .fv-cta-bar .main-text{ font-size: 22px; }
+    .fv-actions .fv-cta-bar .tag-block{ min-width: 116px; padding: 8px 22px; }
+    .fv-actions .fv-cta-bar .tag-block .big{ font-size: 22px; }
+  }
+  /* Below 1101px: stack video on top, copy on bottom (no overlap risk) */
+  @media (max-width: 1100px){
+    .fv{ min-height: auto; padding: 20px 0 56px; }
+    .fv-bg{
+      width: 100%;
+      height: clamp(280px, 38vw, 380px);
+      top: 0; bottom: auto;
+      object-position: 70% center;
+    }
+    .fv::before{
+      width: 100%;
+      height: clamp(280px, 38vw, 380px);
+      bottom: auto;
+      background: linear-gradient(180deg, rgba(255,245,243,0) 50%, rgba(255,245,243,.7) 80%, #fff5f3 100%);
+    }
+    .fv-copy{
+      max-width: 100%;
+      padding-top: calc(clamp(280px, 38vw, 380px) + 16px);
+      margin-left: 0;
+    }
+    .fv-headline{ font-size: clamp(34px, 4.8vw, 56px); }
+    .badges{ max-width: 540px; }
+  }
+  /* Phone (≤720): enlarge video while preserving aspect, right-aligned so bottle (source 62%) lands at viewport center */
+  @media (max-width: 720px){
+    .fv-bg{
+      width: 132%;
+      max-width: none;
+      height: auto;
+      aspect-ratio: 16 / 9;
+      inset: 0 0 auto auto;
+      object-fit: cover;
+      object-position: center center;
+    }
+    .fv::before{
+      width: 100%;
+      height: 74.25vw;
+      bottom: auto;
+      background: linear-gradient(180deg, rgba(255,245,243,0) 60%, rgba(255,245,243,.85) 85%, #fff5f3 100%);
+    }
+    .fv-copy{
+      padding-top: calc(74.25vw + 24px);
+    }
+  }
+
+  .fv-copy .ribbon{
+    display:inline-flex; align-items:center; gap: 14px;
+    color: var(--ink-soft);
+    font-family: var(--serif-jp);
+    font-size: clamp(13px, 1.6vw, 16px);
+    letter-spacing: .14em;
+    margin-bottom: 18px;
+    opacity: 0; transform: translateY(8px);
+    animation: revealUp 1s var(--ease-out-quint) .2s forwards;
+  }
+  .fv-copy .ribbon::before,
+  .fv-copy .ribbon::after{
+    content:""; width: 1px; height: 22px; background: var(--ink-soft);
+    transform: rotate(20deg); opacity:.7;
+  }
+  .fv-copy .ribbon::after{ transform: rotate(-20deg); }
+
+  .fv-headline{
+    font-family: var(--serif-jp);
+    font-weight: 500;
+    font-size: clamp(34px, 5.2vw, 60px);
+    line-height: 1.25;
+    letter-spacing: .04em;
+    color: var(--ink);
+    margin: 0 0 18px;
+    text-shadow: 0 1px 2px rgba(255,250,248,.7), 0 0 18px rgba(255,250,248,.5);
+  }
+  .fv-headline .reveal-line{
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .fv-headline .reveal-line > span{
+    display: inline-block;
+    transform: translateY(110%);
+    animation: lineRise 1.05s var(--ease-out-quint) forwards;
+    will-change: transform;
+  }
+  .fv-headline .reveal-line:nth-child(1) > span{ animation-delay: .35s; }
+  .fv-headline .reveal-line:nth-child(2) > span{ animation-delay: .55s; }
+  /* Wide desktop: collapse to single line — must come after base .reveal-line rule */
+  @media (min-width: 1700px){
+    .fv-headline .reveal-line{ display: inline-block; vertical-align: top; }
+  }
+  /* Fallback: if animation hasn't run (e.g. headless / reduced motion), show text */
+  @media (prefers-reduced-motion: reduce){
+    .fv-headline .reveal-line > span{ transform: none; animation: none; }
+  }
+  .fv-headline .accent{
+    color: var(--pink-400);
+    position: relative;
+  }
+  .fv-headline .accent::after{
+    content: "";
+    position: absolute; left: 0; right: 0; bottom: -4px;
+    height: 6px;
+    background: linear-gradient(90deg, transparent, var(--pink-300), transparent);
+    transform: scaleX(0); transform-origin: left center;
+    animation: underline 1s var(--ease-out-quint) 1.4s forwards;
+  }
+  @media (max-width: 1100px){
+    .fv-headline .reveal-line{ white-space: normal; }
+  }
+  @keyframes underline{ to{ transform: scaleX(1); } }
+  @keyframes lineRise{
+    to{ transform: translateY(0); }
+  }
+  @keyframes revealUp{
+    to{ opacity: 1; transform: translateY(0); }
+  }
+
+  .fv-sub{
+    font-family: var(--serif-jp);
+    color: var(--pink-400);
+    font-size: clamp(14px, 1.7vw, 18px);
+    letter-spacing: .12em;
+    margin-bottom: 26px;
+    opacity: 0; transform: translateY(8px);
+    animation: revealUp .9s var(--ease-out-quint) 1.2s forwards;
+  }
+
+  .badges{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin: 22px 0 28px;
+    max-width: 540px;
+  }
+  @media (max-width: 480px){ .badges{ gap: 8px; } }
+
+  .badge{
+    background: rgba(255,255,255,.86);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border-radius: 18px;
+    padding: 14px 10px 12px;
+    text-align: center;
+    border: 1px solid rgba(255,255,255,.9);
+    box-shadow: 0 10px 24px -16px rgba(185,74,91,.35);
+    position: relative;
+    opacity: 0; transform: translateY(14px);
+    animation: revealUp .8s var(--ease-out-quint) forwards;
+    transition: transform .35s var(--ease-out-quint), box-shadow .35s ease;
+  }
+  .badge:nth-child(1){ animation-delay: 1.5s; }
+  .badge:nth-child(2){ animation-delay: 1.65s; }
+  .badge:nth-child(3){ animation-delay: 1.8s; }
+  .badge:hover{ transform: translateY(-4px); box-shadow: 0 18px 30px -16px rgba(185,74,91,.45); }
+  .badge::before, .badge::after{
+    content:""; position:absolute; top:50%; width:8px; height:1px; background: var(--ink-faint);
+  }
+  .badge::before{ left:-4px; }
+  .badge::after{ right:-4px; }
+  .badge:first-child::before, .badge:last-child::after{ display:none; }
+
+  .badge .ico{
+    width: 34px; height: 34px; margin: 0 auto 6px;
+    color: var(--pink-400);
+    transition: transform .5s var(--ease-out-quint);
+  }
+  .badge:hover .ico{ transform: rotate(-12deg) scale(1.1); }
+  .badge .ico svg{ width:100%; height:100%; }
+  .badge .label{
+    font-family: var(--serif-jp);
+    font-weight: 600;
+    font-size: clamp(13px, 1.6vw, 16px);
+    color: var(--ink);
+    letter-spacing: .08em;
+  }
+  .badge .desc{
+    font-size: 11px; color: var(--ink-soft);
+    margin-top: 2px;
+    letter-spacing: .04em;
+  }
+  .badge .desc sup{ color: var(--ink-faint); margin-left: 2px; font-size: 9px; }
+
+  /* CTA wrapper for FV (enter animation) */
+  .fv-cta-wrap{
+    opacity: 0; transform: translateY(12px);
+    animation: revealUp .9s var(--ease-out-quint) 2s forwards;
+  }
+
+  .fv-footnote{
+    margin-top: 16px;
+    font-size: 11px; color: var(--ink-faint);
+    letter-spacing: .06em;
+    opacity: 0;
+    animation: revealUp .8s var(--ease-out-quint) 2.4s forwards;
+  }
+
+  /* 98% badge with orbiting rings — anchored to FV section edge to avoid copy overlap */
+  .fv-percent{
+    position:absolute;
+    top: clamp(28px, 5vw, 64px);
+    right: clamp(28px, 5vw, 80px);
+    width: clamp(108px, 11vw, 148px);
+    height: clamp(108px, 11vw, 148px);
+    display:flex; align-items:center; justify-content:center;
+    z-index: 5;
+    opacity: 0; transform: scale(.6);
+    animation: badgeIn 1.1s var(--ease-out-quint) 1s forwards;
+  }
+  @keyframes badgeIn{
+    to{ opacity: 1; transform: scale(1); }
+  }
+  .fv-percent::before, .fv-percent::after{
+    content:""; position:absolute; inset: -6px;
+    border-radius: 50%; border: 1px dashed rgba(217,105,120,.4);
+    animation: rotate 22s linear infinite;
+  }
+  .fv-percent::after{
+    inset: 6px; border: 1px solid rgba(217,105,120,.25);
+    animation: rotate 14s linear infinite reverse;
+  }
+  @keyframes rotate{ to{ transform: rotate(360deg); } }
+  .fv-percent .core{
+    position: absolute; inset: 12px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #fff, #ffd9dc 60%, #f6b9c0);
+    box-shadow: 0 18px 30px -14px rgba(185,74,91,.4), inset 0 0 0 1px rgba(255,255,255,.7);
+    display:flex; align-items:center; justify-content:center; flex-direction: column;
+    color: var(--pink-500);
+    text-align:center;
+    font-family: var(--serif-jp);
+    animation: corePulse 3.6s ease-in-out infinite;
+  }
+  @keyframes corePulse{
+    0%,100%{ box-shadow: 0 18px 30px -14px rgba(185,74,91,.4), inset 0 0 0 1px rgba(255,255,255,.7); }
+    50%{ box-shadow: 0 22px 40px -16px rgba(185,74,91,.55), inset 0 0 0 1px rgba(255,255,255,.85); }
+  }
+  .fv-percent .s{ font-size: 11px; letter-spacing: .12em; color: var(--pink-400); }
+  .fv-percent .b{ font-size: 30px; font-weight: 700; letter-spacing: .02em; line-height: 1; margin-top: 2px; }
+  .fv-percent .t{ font-size: 11px; letter-spacing: .12em; color: var(--pink-400); margin-top: 4px; }
+  @media (max-width: 880px){
+    .fv-percent{ width: 92px; height: 92px; top: 8px; right: 8px; }
+    .fv-percent .b{ font-size: 22px; }
+    .fv-percent .s, .fv-percent .t{ font-size: 9px; }
+  }
+
+  /* Scroll indicator (bottom of FV) */
+  .scroll-cue{
+    position: absolute;
+    left: 50%; bottom: 32px;
+    transform: translateX(-50%);
+    z-index: 6;
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    color: var(--ink-soft);
+    font-family: var(--serif-en); font-style: italic;
+    font-size: 12px; letter-spacing: .35em;
+    opacity: .85;
+  }
+  .scroll-cue::before{
+    content:""; width: 1px; height: 36px;
+    background: linear-gradient(180deg, var(--pink-300), transparent);
+    animation: scrollLine 1.8s ease-in-out infinite;
+    transform-origin: top center;
+  }
+  @keyframes scrollLine{
+    0%{ transform: scaleY(0); transform-origin: top; }
+    50%{ transform: scaleY(1); transform-origin: top; }
+    51%{ transform: scaleY(1); transform-origin: bottom; }
+    100%{ transform: scaleY(0); transform-origin: bottom; }
+  }
+  @media (max-width: 880px){ .scroll-cue{ display:none; } }
+
+  /* ============================================================
+     Section frame
+     ============================================================ */
+  section{ position: relative; padding: clamp(72px, 10vw, 120px) 0; }
+  .sec-head{ text-align: center; margin: 0 auto 56px; max-width: 760px; }
+  .sec-head .lede{ margin-top: 12px; }
+
+  /* ============================================================
+     2. Empathy
+     ============================================================ */
+  .empathy{ background: linear-gradient(180deg, var(--bg) 0%, var(--bg-tint) 100%); }
+  .empathy-grid{
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+    margin-top: 40px;
+  }
+  @media (max-width: 880px){ .empathy-grid{ grid-template-columns: repeat(2, 1fr); } }
+  .empathy-card{
+    background:#fff;
+    border-radius: var(--radius-card);
+    padding: 26px 22px;
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow-card);
+    position: relative;
+    overflow: hidden;
+    transition: transform .4s var(--ease-out-quint), box-shadow .4s ease;
+  }
+  .empathy-card::before{
+    content:""; position:absolute; inset:0;
+    background: linear-gradient(135deg, transparent 60%, rgba(245,182,189,.18));
+    opacity: 0; transition: opacity .4s ease;
+  }
+  .empathy-card:hover{ transform: translateY(-6px); box-shadow: var(--shadow-soft); }
+  .empathy-card:hover::before{ opacity: 1; }
+  .empathy-card .num{
+    font-family: var(--serif-en);
+    font-style: italic;
+    font-size: 22px;
+    color: var(--pink-300);
+    letter-spacing: .04em;
+    position: relative;
+    z-index: 1;
+  }
+  .empathy-card h3{
+    font-family: var(--serif-jp);
+    font-weight: 600;
+    font-size: 17px;
+    margin: 6px 0 10px;
+    color: var(--ink);
+    line-height: 1.6;
+    position: relative;
+    z-index: 1;
+  }
+  .empathy-card p{
+    font-size: 13px; color: var(--ink-soft); line-height: 1.9; margin: 0;
+    position: relative;
+    z-index: 1;
+  }
+  .empathy-quote{
+    margin: 56px auto 0; max-width: 720px; text-align: center;
+    font-family: var(--serif-jp); font-size: clamp(18px, 2.4vw, 24px); color: var(--ink);
+    line-height: 1.9; letter-spacing: .06em;
+  }
+  .empathy-quote em{ font-style: normal; color: var(--pink-400); }
+
+  /* ============================================================
+     3. Benefit
+     ============================================================ */
+  .benefit{ background: var(--bg); }
+  .benefit-row{
+    display:grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center;
+    margin-bottom: 80px;
+  }
+  .benefit-row:last-child{ margin-bottom: 0; }
+  .benefit-row.flip > .benefit-img{ order: 2; }
+  @media (max-width: 880px){
+    .benefit-row{ grid-template-columns: 1fr; gap: 28px; margin-bottom: 56px; }
+    .benefit-row.flip > .benefit-img{ order: 0; }
+  }
+  .benefit-img{
+    aspect-ratio: 4/3;
+    border-radius: 28px;
+    background: linear-gradient(135deg, #ffe9ec 0%, #fff3ed 100%);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow-soft);
+    overflow: hidden; position: relative;
+    display:flex; align-items:center; justify-content:center;
+    transition: transform .6s var(--ease-out-quint);
+  }
+  .benefit-row:hover .benefit-img{ transform: scale(1.02); }
+  .benefit-img .placeholder{
+    color: var(--ink-faint); font-size: 12px; letter-spacing: .14em;
+    font-family: var(--serif-en); font-style: italic;
+    z-index: 2;
+  }
+  .benefit-img svg.deco{
+    position:absolute; inset:0; width:100%; height:100%;
+    animation: decoFloat 12s ease-in-out infinite alternate;
+  }
+  @keyframes decoFloat{
+    0%{ transform: translate(0,0) scale(1); }
+    100%{ transform: translate(2%, -2%) scale(1.04); }
+  }
+  /* Image-mask reveal */
+  .benefit-img::after{
+    content:""; position:absolute; inset:0;
+    background: var(--bg);
+    transform-origin: right center;
+    transition: transform 1.1s var(--ease-out-quint);
+    z-index: 3;
+  }
+  .benefit-img.in::after{ transform: scaleX(0); }
+  .benefit-tag{
+    display:inline-block; font-family: var(--serif-en); font-style: italic;
+    color: var(--pink-400); letter-spacing: .14em; font-size: 13px;
+    margin-bottom: 10px;
+  }
+  .benefit h3{
+    font-family: var(--serif-jp); font-weight: 500;
+    font-size: clamp(22px, 3vw, 32px); line-height: 1.5;
+    margin: 0 0 16px; color: var(--ink); letter-spacing: .04em;
+  }
+  .benefit p{ color: var(--ink-soft); line-height: 2; margin: 0 0 12px; font-size: 14px; }
+
+  /* ============================================================
+     4. Features (animated icons)
+     ============================================================ */
+  .features{
+    background:
+      radial-gradient(50% 60% at 100% 0%, #ffe3e6 0%, rgba(255,227,230,0) 60%),
+      radial-gradient(50% 60% at 0% 100%, #fff0e8 0%, rgba(255,240,232,0) 60%),
+      var(--bg);
+  }
+  .feat-grid{
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+    margin-top: 40px;
+  }
+  @media (max-width: 880px){ .feat-grid{ grid-template-columns: repeat(2, 1fr); } }
+  .feat-card{
+    background:#fff; border-radius: 26px; padding: 30px 22px 26px;
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow-card);
+    text-align:center;
+    position: relative;
+    overflow: hidden;
+    transition: transform .35s var(--ease-out-quint), box-shadow .35s ease;
+  }
+  .feat-card:hover{ transform: translateY(-6px); box-shadow: var(--shadow-soft); }
+  .feat-card::before{
+    content:""; position:absolute; inset: -50% -50% auto auto;
+    width: 200px; height: 200px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(245,182,189,.4), transparent 70%);
+    opacity: 0; transition: opacity .5s ease;
+  }
+  .feat-card:hover::before{ opacity: 1; }
+  .feat-circle{
+    width: 96px; height: 96px; margin: 0 auto 16px;
+    border-radius:50%;
+    background: radial-gradient(circle at 35% 35%, #fff, #ffe5e8 65%, #fac4cb);
+    display:flex; align-items:center; justify-content:center;
+    color: var(--pink-400);
+    box-shadow: 0 12px 26px -14px rgba(185,74,91,.45), inset 0 0 0 1px rgba(255,255,255,.8);
+    position: relative;
+    transition: transform .4s var(--ease-out-quint);
+  }
+  .feat-card:hover .feat-circle{ transform: scale(1.08) rotate(-6deg); }
+  .feat-circle::after{
+    content:""; position: absolute; inset: -8px;
+    border-radius: 50%;
+    border: 1px dashed rgba(217,105,120,.3);
+    animation: rotate 18s linear infinite;
+  }
+  .feat-circle svg{ width: 38px; height: 38px; transition: transform .4s ease; }
+  .feat-card:hover .feat-circle svg{ transform: scale(1.1); }
+  .feat-card h4{
+    font-family: var(--serif-jp); font-weight:600; font-size: 17px;
+    color: var(--ink); margin: 0 0 8px; letter-spacing: .06em;
+    position: relative; z-index: 1;
+  }
+  .feat-card p{ font-size: 13px; color: var(--ink-soft); line-height: 1.9; margin: 0; position: relative; z-index: 1; }
+  .feat-card .pct{
+    font-family: var(--serif-en); font-size: 28px; color: var(--pink-400);
+    font-weight: 500; letter-spacing: .04em;
+  }
+
+  /* ============================================================
+     5. Formula (orbits)
+     ============================================================ */
+  .formula{ background: linear-gradient(180deg, #fff 0%, #fff5f3 100%); }
+  .formula-board{
+    margin-top: 40px;
+    background:#fff;
+    border-radius: 32px;
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow-soft);
+    padding: clamp(28px, 4vw, 56px);
+    display:grid; grid-template-columns: 1fr 1.1fr; gap: 48px; align-items:center;
+  }
+  @media (max-width: 880px){ .formula-board{ grid-template-columns: 1fr; gap: 28px; } }
+  .formula-vis{
+    aspect-ratio: 1/1; position: relative;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .formula-vis .core{
+    width: 60%; aspect-ratio: 1; border-radius:50%;
+    background: radial-gradient(circle at 35% 35%, #fff 0%, #ffd9de 50%, #f5a3ad 100%);
+    box-shadow: 0 30px 60px -20px rgba(217,105,120,.5), inset 0 0 30px rgba(255,255,255,.6);
+    display:flex; align-items:center; justify-content:center;
+    color:#fff;
+    font-family: var(--serif-jp); font-weight:600; letter-spacing: .12em;
+    font-size: clamp(13px, 1.6vw, 16px);
+    text-align:center; line-height: 1.6;
+    animation: corePulse 4.5s ease-in-out infinite;
+    position: relative;
+    z-index: 2;
+  }
+  .formula-vis .ring{
+    position:absolute; border-radius:50%;
+  }
+  .formula-vis .ring.r1{ inset: 8%; border: 1px dashed var(--pink-200); animation: rotate 32s linear infinite; }
+  .formula-vis .ring.r2{ inset: -2%; border: 1px solid var(--pink-100); animation: rotate 50s linear infinite reverse; }
+  .formula-vis .ring.r3{
+    inset: -10%; border: 1px solid rgba(245,182,189,.4);
+    animation: rotate 70s linear infinite;
+  }
+  .formula-vis .ring.r3::before, .formula-vis .ring.r3::after{
+    content:""; position: absolute; width: 8px; height: 8px;
+    border-radius: 50%; background: var(--pink-300);
+    box-shadow: 0 0 12px rgba(217,105,120,.6);
+  }
+  .formula-vis .ring.r3::before{ top: -4px; left: 50%; }
+  .formula-vis .ring.r3::after{ bottom: -4px; left: 50%; }
+  .formula-vis .chip{
+    position: absolute;
+    background: #fff; border: 1px solid var(--line);
+    padding: 8px 14px; border-radius: var(--radius-pill);
+    font-size: 12px; color: var(--ink); letter-spacing: .08em;
+    box-shadow: var(--shadow-card);
+    font-family: var(--serif-jp); font-weight: 600;
+    z-index: 3;
+    animation: chipFloat 6s ease-in-out infinite;
+  }
+  .formula-vis .chip .d{ display:block; font-size: 10px; color: var(--ink-faint); font-weight: 400; letter-spacing: .04em; }
+  .formula-vis .chip.c1{ top: 4%; left: -2%; animation-delay: 0s; }
+  .formula-vis .chip.c2{ top: 18%; right: -4%; animation-delay: 1.2s; }
+  .formula-vis .chip.c3{ bottom: 12%; left: -6%; animation-delay: 2.4s; }
+  .formula-vis .chip.c4{ bottom: 0%; right: 0%; animation-delay: 3.6s; }
+  @keyframes chipFloat{
+    0%,100%{ transform: translateY(0); }
+    50%{ transform: translateY(-8px); }
+  }
+
+  .formula-list{ display:flex; flex-direction:column; gap: 18px; }
+  .formula-item{
+    display:grid; grid-template-columns: 56px 1fr; gap: 16px; align-items:flex-start;
+  }
+  .formula-item .num{
+    width:56px; height: 56px; border-radius: 50%;
+    background: var(--pink-50); color: var(--pink-400);
+    display:flex; align-items:center; justify-content:center;
+    font-family: var(--serif-en); font-style: italic; font-size: 22px;
+    border: 1px solid var(--pink-100);
+    transition: transform .3s var(--ease-out-quint), background .3s ease, color .3s ease;
+  }
+  .formula-item:hover .num{ background: linear-gradient(135deg, var(--pink-300), var(--pink-400)); color: #fff; transform: scale(1.08); }
+  .formula-item h4{
+    font-family: var(--serif-jp); font-weight:600; font-size: 16px;
+    margin: 4px 0 6px; color: var(--ink); letter-spacing: .06em;
+  }
+  .formula-item p{ font-size: 13px; color: var(--ink-soft); line-height: 1.9; margin:0; }
+
+  /* ============================================================
+     6. Texture (drops + ripple)
+     ============================================================ */
+  .texture{ background: var(--bg); }
+  .texture-grid{
+    margin-top: 40px;
+    display:grid; grid-template-columns: 1.05fr 1fr; gap: 48px; align-items: center;
+  }
+  @media (max-width: 880px){ .texture-grid{ grid-template-columns: 1fr; gap: 28px; } }
+  .texture-vis{
+    aspect-ratio: 5/4; border-radius: 28px;
+    background:
+      radial-gradient(60% 60% at 30% 30%, #fff 0%, rgba(255,255,255,0) 60%),
+      linear-gradient(135deg, #ffe1e4, #ffd0d6 60%, #f4a8b1);
+    box-shadow: var(--shadow-soft);
+    border: 1px solid rgba(255,255,255,.7);
+    overflow: hidden; position: relative;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .texture-vis::before{
+    content:""; position: absolute; inset: 0;
+    background: radial-gradient(circle at 50% 60%, rgba(255,255,255,.5) 0%, transparent 30%);
+    animation: ripple 5s ease-in-out infinite;
+  }
+  @keyframes ripple{
+    0%{ transform: scale(.9); opacity: .8; }
+    100%{ transform: scale(1.6); opacity: 0; }
+  }
+  .texture-vis .drop{
+    position:absolute; border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, rgba(255,255,255,.95), rgba(255,255,255,.2) 70%);
+    border: 1px solid rgba(255,255,255,.5);
+    animation: dropDrift 8s ease-in-out infinite;
+  }
+  @keyframes dropDrift{
+    0%,100%{ transform: translate(0,0); }
+    50%{ transform: translate(8px, -12px); }
+  }
+  .texture-vis .drop.d1{ width: 60px; height:60px; top: 20%; left: 18%; animation-delay: 0s; }
+  .texture-vis .drop.d2{ width: 110px; height:110px; top: 40%; left: 50%; animation-delay: 1.5s; }
+  .texture-vis .drop.d3{ width: 36px; height:36px; bottom: 18%; left: 28%; animation-delay: 3s; }
+  .texture-vis .drop.d4{ width: 70px; height:70px; bottom: 14%; right: 14%; animation-delay: 4.5s; }
+  .texture-vis .placeholder{
+    z-index: 2; color: rgba(255,255,255,.85);
+    font-family: var(--serif-en); font-style: italic; letter-spacing: .14em; font-size: 13px;
+  }
+  .texture-features{ display:flex; flex-direction:column; gap: 18px; margin-top: 22px; }
+  .tex-pill{
+    display:inline-flex; align-items:center; gap: 12px;
+    padding: 10px 16px; border-radius: var(--radius-pill);
+    background:#fff; border: 1px solid var(--line); box-shadow: var(--shadow-card);
+    font-size: 13px; color: var(--ink); letter-spacing: .06em;
+    align-self: flex-start;
+    transition: transform .3s var(--ease-out-quint), box-shadow .3s ease;
+  }
+  .tex-pill:hover{ transform: translateX(6px); box-shadow: var(--shadow-soft); }
+  .tex-pill .dot{
+    width: 8px; height: 8px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--pink-300), var(--pink-400));
+    animation: dotPulse 2.4s ease-in-out infinite;
+  }
+
+  /* ============================================================
+     7. Steps (with connector line)
+     ============================================================ */
+  .steps{ background: linear-gradient(180deg, #fff5f3 0%, var(--bg) 100%); }
+  .step-grid{
+    margin-top: 40px;
+    display:grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+    position: relative;
+  }
+  .step-grid::before{
+    content:""; position: absolute;
+    top: 90px; left: 12%; right: 12%; height: 2px;
+    background: linear-gradient(90deg, var(--pink-200), var(--pink-300), var(--pink-200));
+    transform: scaleX(0); transform-origin: left center;
+    transition: transform 1.2s var(--ease-out-quint);
+    border-radius: 2px;
+  }
+  .step-grid.in::before{ transform: scaleX(1); }
+  @media (max-width: 720px){
+    .step-grid{ grid-template-columns: 1fr; }
+    .step-grid::before{ display:none; }
+  }
+  .step{
+    background:#fff; border: 1px solid var(--line);
+    border-radius: 24px; padding: 28px 24px; text-align: center;
+    box-shadow: var(--shadow-card); position: relative;
+    transition: transform .35s var(--ease-out-quint), box-shadow .35s ease;
+  }
+  .step:hover{ transform: translateY(-6px); box-shadow: var(--shadow-soft); }
+  .step.highlight{
+    background: linear-gradient(180deg, #fff 0%, #fff0f1 100%);
+    border-color: var(--pink-100);
+  }
+  .step .step-num{
+    font-family: var(--serif-en); font-style: italic; font-size: 13px;
+    color: var(--pink-400); letter-spacing: .2em; margin-bottom: 6px;
+  }
+  .step h4{
+    font-family: var(--serif-jp); font-weight: 600; font-size: 18px;
+    margin: 6px 0 10px; color: var(--ink); letter-spacing: .06em;
+  }
+  .step p{ font-size: 13px; color: var(--ink-soft); margin: 0; line-height: 1.9; }
+  .step .ico{
+    width: 64px; height: 64px; margin: 0 auto 12px;
+    border-radius: 50%;
+    background: var(--pink-50);
+    display:flex; align-items:center; justify-content:center;
+    color: var(--pink-400);
+    border: 1px solid var(--pink-100);
+    transition: transform .4s var(--ease-out-quint);
+  }
+  .step:hover .ico{ transform: rotate(-8deg) scale(1.06); }
+  .step .ico svg{ width: 28px; height: 28px; }
+  .step .badge-here{
+    position:absolute; top: -12px; left: 50%; transform: translateX(-50%);
+    background: linear-gradient(95deg, var(--pink-300), var(--pink-400));
+    color:#fff; font-size: 11px; padding: 4px 12px; border-radius: var(--radius-pill);
+    letter-spacing: .12em;
+    animation: badgePulse 2.4s ease-in-out infinite;
+  }
+  @keyframes badgePulse{
+    0%,100%{ box-shadow: 0 0 0 0 rgba(217,105,120,.4); transform: translateX(-50%) translateY(0); }
+    50%{ box-shadow: 0 0 0 10px rgba(217,105,120,0); transform: translateX(-50%) translateY(-2px); }
+  }
+
+  /* ============================================================
+     8. Reasons / stats with count-up
+     ============================================================ */
+  .reasons{ background: var(--bg); }
+  .stats{
+    margin-top: 40px;
+    display:grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+  }
+  @media (max-width: 720px){ .stats{ grid-template-columns: 1fr; } }
+  .stat-card{
+    background: linear-gradient(180deg, #fff 0%, #fff5f3 100%);
+    border: 1px solid var(--line);
+    border-radius: 28px; padding: 36px 24px; text-align:center;
+    box-shadow: var(--shadow-card);
+    position: relative; overflow: hidden;
+    transition: transform .35s var(--ease-out-quint);
+  }
+  .stat-card:hover{ transform: translateY(-6px); }
+  .stat-card::before{
+    content:""; position:absolute; top:-40%; left:-40%; width: 80%; height: 80%;
+    background: radial-gradient(circle, rgba(245,182,189,.4), transparent 70%);
+    border-radius: 50%; pointer-events: none;
+  }
+  .stat-card .label{
+    font-family: var(--serif-jp); font-size: 13px; color: var(--ink-soft);
+    letter-spacing: .14em; margin-bottom: 10px;
+    position: relative; z-index: 1;
+  }
+  .stat-card .num{
+    font-family: var(--serif-en); font-weight: 500;
+    font-size: clamp(48px, 7vw, 72px); color: var(--pink-400);
+    line-height: 1; letter-spacing: .02em;
+    position: relative; z-index: 1;
+  }
+  .stat-card .num small{ font-size: .42em; color: var(--pink-300); margin-left: 4px; letter-spacing: .04em; }
+  .stat-card .desc{ margin-top: 12px; font-size: 12px; color: var(--ink-soft); position: relative; z-index: 1; }
+  .stat-note{
+    margin-top: 16px; text-align: center;
+    font-size: 11px; color: var(--ink-faint); letter-spacing: .08em;
+  }
+  .reasons-list{
+    margin-top: 56px;
+    display:grid; grid-template-columns: repeat(2, 1fr); gap: 16px 36px;
+    max-width: 880px; margin-left:auto; margin-right:auto;
+    padding: 0;
+  }
+  @media (max-width: 720px){ .reasons-list{ grid-template-columns: 1fr; } }
+  .reasons-list li{
+    display:flex; gap: 14px; align-items:flex-start;
+    list-style: none; padding: 0;
+    border-bottom: 1px dashed var(--line); padding-bottom: 14px;
+    font-size: 14px; color: var(--ink); line-height: 1.8;
+    transition: padding-left .3s var(--ease-out-quint);
+  }
+  .reasons-list li:hover{ padding-left: 8px; }
+  .reasons-list .check{
+    flex: 0 0 auto; width: 22px; height: 22px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--pink-300), var(--pink-400));
+    color:#fff; display:inline-flex; align-items:center; justify-content:center;
+    margin-top: 4px;
+    transition: transform .3s ease;
+  }
+  .reasons-list li:hover .check{ transform: rotate(360deg); }
+  .reasons-list .check svg{ width: 12px; height: 12px; }
+
+  /* ============================================================
+     9. Reviews
+     ============================================================ */
+  .reviews{
+    background:
+      radial-gradient(60% 60% at 0% 0%, #ffe9ec 0%, rgba(255,233,236,0) 60%),
+      radial-gradient(60% 60% at 100% 100%, #fff1e9 0%, rgba(255,241,233,0) 60%),
+      var(--bg);
+  }
+  .review-grid{
+    margin-top: 40px;
+    display:grid; grid-template-columns: repeat(3, 1fr); gap: 22px;
+  }
+  @media (max-width: 880px){ .review-grid{ grid-template-columns: 1fr; } }
+  .review-card{
+    background:#fff; border-radius: 24px; padding: 28px 24px;
+    border: 1px solid var(--line); box-shadow: var(--shadow-card);
+    display:flex; flex-direction:column; gap: 14px;
+    transition: transform .35s var(--ease-out-quint), box-shadow .35s ease;
+    position: relative;
+  }
+  .review-card:hover{ transform: translateY(-6px) rotate(-.4deg); box-shadow: var(--shadow-soft); }
+  .review-card .stars{
+    color: var(--pink-400); letter-spacing: .15em; font-size: 14px;
+    background: linear-gradient(90deg, var(--pink-400) 0%, var(--pink-500) 50%, var(--pink-400) 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradientShift 4s ease-in-out infinite;
+  }
+  .review-card h5{
+    font-family: var(--serif-jp); font-weight: 600;
+    font-size: 16px; line-height: 1.6; margin: 0; color: var(--ink); letter-spacing: .04em;
+  }
+  .review-card p{ font-size: 13px; color: var(--ink-soft); line-height: 1.9; margin: 0; }
+  .review-meta{
+    display:flex; align-items:center; gap: 12px; margin-top: auto; padding-top: 14px;
+    border-top: 1px dashed var(--line);
+  }
+  .review-meta .av{
+    width: 36px; height: 36px; border-radius: 50%;
+    background: linear-gradient(135deg, #ffd9de, #f5b8c0);
+  }
+  .review-meta .who{ font-size: 12px; color: var(--ink-soft); line-height: 1.5; }
+  .review-meta .who strong{ color: var(--ink); font-weight: 600; display: block; font-size: 13px; }
+  .review-tag{
+    display:inline-block; font-size: 11px; color: var(--pink-400);
+    background: var(--pink-50); padding: 3px 10px; border-radius: var(--radius-pill);
+    letter-spacing: .1em; align-self: flex-start;
+  }
+  .review-disclaim{
+    text-align:center; margin-top: 20px;
+    font-size: 11px; color: var(--ink-faint); letter-spacing: .08em;
+  }
+
+  /* ============================================================
+     10. Offer (rotating seal)
+     ============================================================ */
+  .offer{
+    background:
+      radial-gradient(40% 60% at 0% 50%, #ffd9dc 0%, rgba(255,217,220,0) 70%),
+      radial-gradient(40% 60% at 100% 50%, #ffe7d8 0%, rgba(255,231,216,0) 70%),
+      #fff5f3;
+  }
+  .offer-card{
+    margin-top: 40px;
+    background:#fff;
+    border-radius: 32px;
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow-soft);
+    padding: clamp(28px, 4vw, 56px);
+    display:grid; grid-template-columns: 1fr 1.2fr; gap: 48px; align-items:center;
+    position: relative;
+    overflow: hidden;
+  }
+  @media (max-width: 880px){ .offer-card{ grid-template-columns: 1fr; gap: 28px; } }
+
+  .offer-vis{
+    aspect-ratio: 1/1; border-radius: 24px;
+    background: linear-gradient(135deg, #ffe1e4 0%, #ffd0d6 50%, #f6b2bb 100%);
+    position: relative; overflow:hidden;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .offer-vis::before{
+    content:""; position:absolute; inset: 0;
+    background: radial-gradient(circle at 50% 80%, rgba(255,255,255,.5), transparent 50%);
+    animation: ripple 6s ease-in-out infinite;
+  }
+  .offer-vis .placeholder{
+    color:#fff; font-family: var(--serif-en); font-style: italic; letter-spacing: .2em;
+    font-size: 14px;
+    z-index: 2;
+  }
+  /* Rotating circular text seal */
+  .offer-vis .seal{
+    position:absolute; top: 16px; left: 16px;
+    width: 100px; height: 100px; border-radius:50%;
+    background: radial-gradient(circle at 35% 35%, #fff, #ffd0d6 70%);
+    display:flex; align-items:center; justify-content:center; flex-direction:column;
+    color: var(--pink-500); text-align:center; font-family: var(--serif-jp);
+    box-shadow: 0 14px 24px -14px rgba(185,74,91,.5);
+    z-index: 3;
+  }
+  .offer-vis .seal::before{
+    content:""; position:absolute; inset: -8px;
+    border-radius: 50%; border: 1px dashed rgba(217,105,120,.5);
+    animation: rotate 12s linear infinite;
+  }
+  .offer-vis .seal .b{ font-weight: 700; font-size: 26px; line-height: 1; }
+  .offer-vis .seal .s{ font-size: 10px; letter-spacing: .14em; margin-top: 4px; }
+
+  .offer-info .price-row{
+    display:flex; align-items:flex-end; gap: 18px; flex-wrap: wrap; margin: 18px 0 8px;
+  }
+  .offer-info .normal{
+    color: var(--ink-faint); font-size: 14px; text-decoration: line-through;
+  }
+  .offer-info .first{
+    font-family: var(--serif-jp); color: var(--pink-400);
+    font-size: 14px; letter-spacing: .14em;
+  }
+  .offer-info .price{
+    font-family: var(--serif-en); font-weight: 500;
+    font-size: clamp(48px, 6.4vw, 72px); color: var(--pink-500);
+    line-height: 1;
+  }
+  .offer-info .price small{ font-size: .35em; color: var(--ink); margin-left: 4px; letter-spacing: .04em; }
+  .offer-info .yen-sub{ font-size: 13px; color: var(--ink-soft); }
+  .offer-pills{ display:flex; flex-wrap:wrap; gap: 8px; margin-top: 14px; }
+  .offer-pill{
+    background: var(--pink-50); color: var(--pink-400);
+    padding: 6px 14px; border-radius: var(--radius-pill);
+    font-size: 12px; letter-spacing: .1em; font-weight: 600;
+    border: 1px solid var(--pink-100);
+    transition: transform .25s ease;
+  }
+  .offer-pill:hover{ transform: translateY(-2px); }
+  .offer-cta-wrap{ margin-top: 24px; }
+  .offer-fineprint{
+    margin-top: 18px; font-size: 11px; color: var(--ink-faint);
+    line-height: 1.8; letter-spacing: .04em;
+  }
+
+  /* ============================================================
+     11. FAQ
+     ============================================================ */
+  .faq{ background: var(--bg); }
+  .faq-list{ margin-top: 40px; max-width: 820px; margin-left:auto; margin-right:auto; }
+  details.q{
+    background:#fff; border: 1px solid var(--line);
+    border-radius: 18px; margin-bottom: 12px;
+    box-shadow: 0 6px 16px -10px rgba(185,74,91,.18);
+    overflow: hidden;
+    transition: border-color .3s ease;
+  }
+  details.q[open]{ border-color: var(--pink-100); }
+  details.q summary{
+    list-style: none; cursor: pointer;
+    display:flex; align-items:flex-start; gap: 16px;
+    padding: 20px 24px;
+    font-family: var(--serif-jp); font-weight:600; font-size: 15px;
+    color: var(--ink); letter-spacing: .04em; line-height: 1.6;
+    transition: background .25s ease;
+  }
+  details.q summary:hover{ background: rgba(245,182,189,.06); }
+  details.q summary::-webkit-details-marker{ display:none; }
+  details.q summary .qmark{
+    flex: 0 0 auto;
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--pink-50); color: var(--pink-400);
+    display:inline-flex; align-items:center; justify-content:center;
+    font-family: var(--serif-en); font-style: italic; font-size: 14px;
+    transition: background .3s ease, color .3s ease;
+  }
+  details.q[open] summary .qmark{ background: linear-gradient(135deg, var(--pink-300), var(--pink-400)); color: #fff; }
+  details.q summary .chev{
+    margin-left: auto; flex: 0 0 auto;
+    width: 24px; height: 24px; color: var(--pink-300);
+    transition: transform .35s var(--ease-out-quint);
+  }
+  details.q[open] summary .chev{ transform: rotate(180deg); }
+  details.q .a{
+    padding: 0 24px 22px 68px;
+    font-size: 13px; color: var(--ink-soft); line-height: 2;
+  }
+
+  /* ============================================================
+     12. Final CTA (floating bottle)
+     ============================================================ */
+  .final{
+    background:
+      radial-gradient(60% 70% at 50% 0%, #ffd7da 0%, rgba(255,215,218,0) 60%),
+      linear-gradient(180deg, #fff5f3 0%, #ffe6ea 100%);
+    text-align: center; overflow: hidden; position: relative;
+  }
+  .final::before, .final::after{
+    content:""; position:absolute; pointer-events:none; border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, rgba(255,255,255,.95), rgba(255,255,255,.2) 70%);
+    border: 1px solid rgba(255,255,255,.5);
+  }
+  .final::before{
+    width: 180px; height: 180px; top: 8%; left: 6%;
+    animation: floatBlob 10s ease-in-out infinite alternate;
+  }
+  .final::after{
+    width: 120px; height: 120px; bottom: 12%; right: 8%;
+    animation: floatBlob 12s ease-in-out infinite alternate-reverse;
+  }
+  @keyframes floatBlob{
+    0%{ transform: translate(0,0) scale(1); }
+    100%{ transform: translate(20px, -20px) scale(1.1); }
+  }
+  .final .h-section{ font-size: clamp(28px, 5vw, 52px); }
+  .final .lede{ max-width: 580px; margin: 0 auto; }
+  .final .cta{ margin-top: 36px; padding: 22px 36px; font-size: clamp(16px, 1.9vw, 20px); }
+  .final-bottle{
+    margin: 32px auto 0; width: clamp(160px, 22vw, 240px); aspect-ratio: 3/5;
+    border-radius: 80px;
+    background: linear-gradient(180deg, #fff 0%, #ffd9de 50%, #f6b2bb 100%);
+    box-shadow: var(--shadow-soft); position: relative;
+    animation: bottleFloat 5s ease-in-out infinite;
+  }
+  @keyframes bottleFloat{
+    0%,100%{ transform: translateY(0) rotate(-1deg); box-shadow: var(--shadow-soft); }
+    50%{ transform: translateY(-12px) rotate(1deg); box-shadow: var(--shadow-deep); }
+  }
+  .final-bottle::before{
+    content:"LUMIÈRE"; position:absolute; left:50%; top: 38%; transform: translateX(-50%);
+    font-family: var(--serif-en); font-size: 13px; letter-spacing: .35em; color: var(--ink);
+  }
+  .final-bottle::after{
+    content:"MOIST GLOW SERUM"; position:absolute; left:50%; top: 50%; transform: translateX(-50%);
+    font-family: var(--serif-en); font-size: 8px; letter-spacing: .35em; color: var(--ink-soft);
+  }
+  .final-foot{
+    margin-top: 28px;
+    font-size: 11px; color: var(--ink-faint); line-height: 1.9; letter-spacing: .04em;
+  }
+
+  /* ============================================================
+     Footer
+     ============================================================ */
+  footer{
+    background:#fff; border-top: 1px solid var(--line);
+    padding: 48px 0 96px;
+    color: var(--ink-soft); font-size: 12px; line-height: 1.9;
+    position: relative;
+  }
+  footer .wrap{ display:flex; flex-wrap: wrap; gap: 24px; justify-content: space-between; }
+  footer .brand-mark{ font-size: 16px; }
+  footer .links{ display:flex; gap: 16px; flex-wrap: wrap; }
+  footer .links a{ color: var(--ink-soft); text-decoration: none; transition: color .25s ease; }
+  footer .links a:hover{ color: var(--pink-400); }
+  footer .legal{ width: 100%; margin-top: 12px; font-size: 11px; color: var(--ink-faint); border-top: 1px dashed var(--line); padding-top: 16px; }
+
+  /* ============================================================
+     Sticky mobile bottom CTA
+     ============================================================ */
+  .sticky-cta{
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
+    padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
+    background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,250,248,.95) 60%);
+    display:none;
+  }
+  .sticky-cta .fv-cta-bar{ width: 100%; }
+  .sticky-cta .fv-cta-bar .main-text{ font-size: 14px; }
+  @media (max-width: 720px){
+    .sticky-cta{ display:block; }
+    body{ padding-bottom: 90px; }
+  }
+
+  /* ============================================================
+     Generic fade-in (scroll-triggered)
+     ============================================================ */
+  svg{ display:block; }
+  .fade{ opacity: 0; transform: translateY(20px); transition: opacity .9s var(--ease-out-quint), transform .9s var(--ease-out-quint); }
+  .fade.in{ opacity: 1; transform: none; }
+  .fade-stagger > *{ opacity: 0; transform: translateY(20px); transition: opacity .8s var(--ease-out-quint), transform .8s var(--ease-out-quint); }
+  .fade-stagger.in > *{ opacity: 1; transform: none; }
+  .fade-stagger.in > *:nth-child(1){ transition-delay: .05s; }
+  .fade-stagger.in > *:nth-child(2){ transition-delay: .15s; }
+  .fade-stagger.in > *:nth-child(3){ transition-delay: .25s; }
+  .fade-stagger.in > *:nth-child(4){ transition-delay: .35s; }
+  .fade-stagger.in > *:nth-child(5){ transition-delay: .45s; }
+  .fade-stagger.in > *:nth-child(6){ transition-delay: .55s; }
+
+  /* Reduce motion support */
+  @media (prefers-reduced-motion: reduce){
+    *, *::before, *::after{
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+    /* Force visible end-state for reveal animations */
+    .fv-copy .ribbon,
+    .fv-sub,
+    .badge,
+    .fv-cta-wrap,
+    .fv-footnote,
+    .fv-percent,
+    .scroll-cue,
+    .fade,
+    .fade-stagger > * {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+    .fv-headline .reveal-line > span{ transform: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="atmosphere" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+
+<div class="page">
+
+  <!-- Topbar -->
+  <header class="topbar" id="topbar">
+    <div class="wrap">
+      <div class="brand-mark">LUMI<span>È</span>RE</div>
+      <nav class="links">
+        <a href="#feature">特徴</a>
+        <a href="#formula">処方</a>
+        <a href="#reviews">声</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+      <a href="#offer" class="top-cta">初回67%OFFで試す</a>
+    </div>
+  </header>
+
+  <!-- Marquee with English ingredient names -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span>HYALURONIC ACID</span><span>CERAMIDE COMPLEX</span><span>NIACINAMIDE</span><span>BOTANICAL OIL BLEND</span><span>BEAUTY ESSENCE 98%</span><span>FRAGRANCE FREE</span><span>ALCOHOL FREE</span><span>PARABEN FREE</span>
+      <span>HYALURONIC ACID</span><span>CERAMIDE COMPLEX</span><span>NIACINAMIDE</span><span>BOTANICAL OIL BLEND</span><span>BEAUTY ESSENCE 98%</span><span>FRAGRANCE FREE</span><span>ALCOHOL FREE</span><span>PARABEN FREE</span>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       1. FV
+       ============================================================ -->
+  <section class="fv" id="fv">
+    <video class="fv-bg" src="assets/fv-bg.mp4" autoplay loop muted playsinline preload="auto" aria-hidden="true"></video>
+
+    <!-- Floating decorative layers -->
+    <div class="petals" aria-hidden="true">
+      <span class="petal" style="--s:18px; --c:#f6b9c0; --o:.7; --d:16s; --de:0s;  top:12%; left:8%;"></span>
+      <span class="petal" style="--s:28px; --c:#ec8e98; --o:.55; --d:20s; --de:1s;  top:30%; left:18%;"></span>
+      <span class="petal" style="--s:14px; --c:#fad7d7; --o:.85; --d:13s; --de:2s;  top:60%; left:6%;"></span>
+      <span class="petal" style="--s:22px; --c:#f5b6bd; --o:.6;  --d:18s; --de:3s;  top:78%; left:22%;"></span>
+      <span class="petal" style="--s:16px; --c:#f6b9c0; --o:.75; --d:14s; --de:4s;  top:20%; left:46%;"></span>
+      <span class="petal" style="--s:24px; --c:#ec8e98; --o:.5;  --d:22s; --de:.5s; top:48%; left:38%;"></span>
+      <span class="petal" style="--s:12px; --c:#fad7d7; --o:.85; --d:15s; --de:2.5s;top:84%; left:48%;"></span>
+      <span class="orb" style="width:160px; height:160px; top:18%; left:30%; animation-delay: 2s;"></span>
+      <span class="orb" style="width:90px; height:90px; top:60%; left:15%; animation-delay: 5s;"></span>
+      <span class="orb" style="width:110px; height:110px; bottom:10%; right:35%; animation-delay: 8s;"></span>
+    </div>
+
+    <div class="wrap">
+      <div class="fv-grid">
+        <div class="fv-copy">
+          <div class="ribbon">うるおい満ちる、透明感のある素肌へ</div>
+
+          <h1 class="fv-headline">
+            <span class="reveal-line"><span>肌が変わると、</span></span><span class="reveal-line"><span><em class="accent">自分</em>が好きになる。</span></span>
+          </h1>
+          <div class="fv-sub">毎日のスキンケアで、輝く素肌へ導く美容液</div>
+
+          <div class="fv-actions">
+            <div class="badges" aria-label="商品の特徴">
+              <div class="badge">
+                <div class="ico" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s6 7 6 11a6 6 0 1 1-12 0c0-4 6-11 6-11Z"/><path d="M9 14a3 3 0 0 0 3 3" opacity=".5"/></svg>
+                </div>
+                <div class="label">高保湿</div>
+                <div class="desc">うるおい続く<sup>※2</sup></div>
+              </div>
+              <div class="badge">
+                <div class="ico" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.5 5.5l2.8 2.8M15.7 15.7l2.8 2.8M5.5 18.5l2.8-2.8M15.7 8.3l2.8-2.8"/></svg>
+                </div>
+                <div class="label">透明感</div>
+                <div class="desc">明るい素肌へ<sup>※4</sup></div>
+              </div>
+              <div class="badge">
+                <div class="ico" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c8 0 14-6 14-14-7 0-14 4-14 11v3Z"/><path d="M5 19c4-4 7-6 12-9" opacity=".5"/></svg>
+                </div>
+                <div class="label">低刺激処方</div>
+                <div class="desc">敏感肌にも<sup>※3</sup></div>
+              </div>
+            </div>
+
+            <div class="fv-cta-wrap">
+              <a class="fv-cta-bar" href="#offer" aria-label="初回限定 約67%OFF・送料無料 特別価格で試してみる">
+                <div class="tag-block">
+                  <div class="small">初回限定</div>
+                  <div class="big">約67<small style="font-size:.6em">%</small>OFF</div>
+                </div>
+                <div class="label-block">
+                  <div class="ship">送料無料</div>
+                  <div class="main-text">特別価格で試してみる</div>
+                </div>
+                <span class="arrow" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+                </span>
+              </a>
+            </div>
+          </div>
+
+          <div class="fv-footnote">
+            ※1 精製水を含む　※2 うるおいによる　※3 すべての方に刺激が起こらないということではありません
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Scroll cue — anchored to FV section bottom (outside .wrap) -->
+    <div class="scroll-cue" aria-hidden="true">SCROLL</div>
+
+    <!-- 98% badge — anchored to FV section edge (outside .wrap) so right offset is from viewport -->
+    <div class="fv-percent" aria-hidden="true">
+      <div class="core">
+        <div class="s">美容成分</div>
+        <div class="b" data-count-to="98">0</div>
+        <div class="t">配合<sup style="font-size:.6em">※1</sup></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       2. Empathy
+       ============================================================ -->
+  <section class="empathy">
+    <div class="wrap">
+      <div class="sec-head fade">
+        <div class="eyebrow">Concerns<span class="dot"></span>こんな悩みはありませんか</div>
+        <h2 class="h-section">うるおい不足は、<br /><em>肌の印象</em>に出やすいから。</h2>
+        <p class="lede">乾燥が続くと、肌のごわつきやくすみ感、メイクのり…<br />ちいさな違和感が、毎朝の気分にそっと影響していく。</p>
+      </div>
+
+      <div class="empathy-grid fade-stagger">
+        <div class="empathy-card">
+          <div class="num">01</div>
+          <h3>夕方になると、頬が乾いてつっぱる。</h3>
+          <p>朝はしっとりしていたのに、午後にはなんだかパサつく。日中のうるおいが続かないと感じる日が増えてきた。</p>
+        </div>
+        <div class="empathy-card">
+          <div class="num">02</div>
+          <h3>くすみ感が気になり、表情まで沈んで見える。</h3>
+          <p>肌の透明感がなくなると、メイクをしても明るさが出にくい。鏡を見るのが少しおっくうな朝もある。</p>
+        </div>
+        <div class="empathy-card">
+          <div class="num">03</div>
+          <h3>メイクのりが、前より悪くなってきた。</h3>
+          <p>ファンデが粉っぽく浮いたり、ヨレやすくなったり。土台のうるおいが足りないサインかもしれません。</p>
+        </div>
+        <div class="empathy-card">
+          <div class="num">04</div>
+          <h3>敏感に揺らぐ日も、安心して使いたい。</h3>
+          <p>季節の変わり目や疲れた日は、肌もデリケート。やさしくケアできる、毎日続けやすい一本を探している。</p>
+        </div>
+      </div>
+
+      <p class="empathy-quote fade">
+        肌のうるおいが満ちると、<br />
+        <em>自分の表情</em>まで、少しやわらかくなっていく。
+      </p>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       3. Benefit
+       ============================================================ -->
+  <section class="benefit">
+    <div class="wrap">
+      <div class="sec-head fade">
+        <div class="eyebrow">Benefits<span class="dot"></span>うるおいが満ちると</div>
+        <h2 class="h-section">朝の鏡が、<em>少し楽しみ</em>になる。</h2>
+        <p class="lede">肌が整うことで、自分への気持ちまで変わっていく。<br />毎日のひと滴が、明日の自分をやさしく支えてくれる。</p>
+      </div>
+
+      <div class="benefit-row fade">
+        <div class="benefit-img">
+          <svg class="deco" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <defs>
+              <radialGradient id="g1" cx="30%" cy="30%"><stop offset="0%" stop-color="#fff"/><stop offset="100%" stop-color="#f8c8cf"/></radialGradient>
+            </defs>
+            <rect width="400" height="300" fill="url(#g1)"/>
+            <circle cx="80" cy="80" r="42" fill="#fff" opacity=".7"/>
+            <circle cx="320" cy="220" r="58" fill="#fff" opacity=".55"/>
+            <circle cx="240" cy="100" r="22" fill="#fff" opacity=".7"/>
+          </svg>
+          <span class="placeholder">Image — 朝の洗面台</span>
+        </div>
+        <div>
+          <div class="benefit-tag">— Morning</div>
+          <h3>みずみずしい一滴が、<br />一日のはじまりを整える。</h3>
+          <p>洗顔後のお肌にすっとなじむ、軽やかなテクスチャー。化粧水のあとに重ねるだけで、しっとりとしたうるおいが続く感覚へ。</p>
+          <p>朝のスキンケアに自然と組み込みやすく、メイク前のベースもなめらかに整います。</p>
+        </div>
+      </div>
+
+      <div class="benefit-row flip fade">
+        <div class="benefit-img">
+          <svg class="deco" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <defs>
+              <linearGradient id="g2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#fff5f3"/><stop offset="100%" stop-color="#f5b6bd"/></linearGradient>
+            </defs>
+            <rect width="400" height="300" fill="url(#g2)"/>
+            <circle cx="120" cy="200" r="60" fill="#fff" opacity=".5"/>
+            <circle cx="280" cy="120" r="80" fill="#fff" opacity=".4"/>
+          </svg>
+          <span class="placeholder">Image — 手のひらに一滴</span>
+        </div>
+        <div>
+          <div class="benefit-tag">— Texture</div>
+          <h3>とろみのある質感が、<br />素肌にすっと溶けていく。</h3>
+          <p>とろりと濃密なのに、肌にのせるとふっと軽くなじむ感触。べたつきにくく、後に続く乳液やクリームともなじみやすい設計です。</p>
+          <p>毎日のケアに気持ちよく続けられる使用感を目指しました。</p>
+        </div>
+      </div>
+
+      <div class="benefit-row fade">
+        <div class="benefit-img">
+          <svg class="deco" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <defs>
+              <radialGradient id="g3" cx="50%" cy="50%"><stop offset="0%" stop-color="#fff"/><stop offset="100%" stop-color="#fad7d7"/></radialGradient>
+            </defs>
+            <rect width="400" height="300" fill="url(#g3)"/>
+            <circle cx="200" cy="150" r="100" fill="#fff" opacity=".4"/>
+            <circle cx="80" cy="60" r="20" fill="#fff" opacity=".7"/>
+            <circle cx="320" cy="240" r="34" fill="#fff" opacity=".6"/>
+          </svg>
+          <span class="placeholder">Image — 透明感のある肌</span>
+        </div>
+        <div>
+          <div class="benefit-tag">— Confidence</div>
+          <h3>素肌に自信が持てると、<br />毎日が少し前向きになる。</h3>
+          <p>肌が整っていると、ふとした瞬間に気分まで軽くなる。「肌が変わると、自分が好きになる。」その感覚を毎日のケアで。</p>
+          <p>はじめての方にも続けやすい一本として設計しました。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       4. Features
+       ============================================================ -->
+  <section class="features" id="feature">
+    <div class="wrap">
+      <div class="sec-head fade">
+        <div class="eyebrow">Features<span class="dot"></span>商品の特徴</div>
+        <h2 class="h-section">毎日の一滴で、<em>素肌に光</em>を。</h2>
+        <p class="lede">うるおい・透明感・低刺激。<br />毎日続けやすい設計のもと、4つの特徴を持つ美容液です。</p>
+      </div>
+
+      <div class="feat-grid fade-stagger">
+        <div class="feat-card">
+          <div class="feat-circle">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3s6 7 6 11a6 6 0 1 1-12 0c0-4 6-11 6-11Z"/><path d="M9 14a3 3 0 0 0 3 3" opacity=".5"/></svg>
+          </div>
+          <h4>高保湿設計</h4>
+          <p>うるおいを抱え込み、乾燥しがちな肌を満たす設計。日中もしっとり感が続きやすく。</p>
+        </div>
+        <div class="feat-card">
+          <div class="feat-circle">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.5 5.5l2.8 2.8M15.7 15.7l2.8 2.8M5.5 18.5l2.8-2.8M15.7 8.3l2.8-2.8"/></svg>
+          </div>
+          <h4>透明感ケア<sup style="color:var(--ink-faint); font-size:.7em">※4</sup></h4>
+          <p>乾燥によるくすみ感をやわらげ、明るい印象の素肌へ整える。</p>
+        </div>
+        <div class="feat-card">
+          <div class="feat-circle">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19c8 0 14-6 14-14-7 0-14 4-14 11v3Z"/></svg>
+          </div>
+          <h4>低刺激処方<sup style="color:var(--ink-faint); font-size:.7em">※3</sup></h4>
+          <p>パラベン・アルコール・合成香料・着色料 無添加。敏感に揺らぐ日にも。</p>
+        </div>
+        <div class="feat-card">
+          <div class="feat-circle">
+            <span class="pct" aria-hidden="true">98%</span>
+          </div>
+          <h4>美容成分98%配合<sup style="color:var(--ink-faint); font-size:.7em">※1</sup></h4>
+          <p>うるおいと透明感を支える美容成分をたっぷりと。毎日の一滴を心地よく。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       5. Formula
+       ============================================================ -->
+  <section class="formula" id="formula">
+    <div class="wrap">
+      <div class="sec-head fade">
+        <div class="eyebrow">Formula<span class="dot"></span>こだわりの処方</div>
+        <h2 class="h-section">みずみずしさが続く、<br /><em>こだわりの保湿設計</em>。</h2>
+        <p class="lede">水分を抱え込み、肌をやさしく整える成分を厳選。<br />毎日使えるやさしさにもこだわりました。</p>
+      </div>
+
+      <div class="formula-board fade">
+        <div class="formula-vis" aria-hidden="true">
+          <div class="ring r3"></div>
+          <div class="ring r2"></div>
+          <div class="ring r1"></div>
+          <div class="core">うるおい<br />チャージ<br />処方</div>
+          <div class="chip c1">5種のヒアルロン酸<span class="d">うるおいキープ</span></div>
+          <div class="chip c2">3種のセラミド<span class="d">肌バリアを整える</span></div>
+          <div class="chip c3">ナイアシンアミド<span class="d">透明感ケア<sup>※4</sup></span></div>
+          <div class="chip c4">植物オイルブレンド<span class="d">やわらかな質感</span></div>
+        </div>
+        <div class="formula-list">
+          <div class="formula-item">
+            <div class="num">01</div>
+            <div>
+              <h4>うるおいを抱え込む保湿成分</h4>
+              <p>5種のヒアルロン酸が、肌の表面と角層をうるおいで満たす。みずみずしさが続く感触へ。</p>
+            </div>
+          </div>
+          <div class="formula-item">
+            <div class="num">02</div>
+            <div>
+              <h4>肌のバリア感を整える美容成分</h4>
+              <p>3種のセラミドと植物由来の整肌成分が、ゆらぎがちな肌をやさしくサポート。</p>
+            </div>
+          </div>
+          <div class="formula-item">
+            <div class="num">03</div>
+            <div>
+              <h4>毎日使いやすい低刺激設計</h4>
+              <p>パラベン・アルコール・合成香料・着色料 無添加。デリケートな日も気持ちよく続けられる処方に。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="stat-note">※ 効果には個人差があります。化粧品の役割の範囲内での表現です。</p>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       6. Texture
+       ============================================================ -->
+  <section class="texture">
+    <div class="wrap">
+      <div class="sec-head fade">
+        <div class="eyebrow">Texture<span class="dot"></span>使用感</div>
+        <h2 class="h-section">とろみ、みずみずしさ、<br /><em>肌に溶けていく</em>感触。</h2>
+      </div>
+
+      <div class="texture-grid fade">
+        <div class="texture-vis">
+          <span class="drop d1"></span>
+          <span class="drop d2"></span>
+          <span class="drop d3"></span>
+          <span class="drop d4"></span>
+          <span class="placeholder">Image — 美容液の一滴</span>
+        </div>
+        <div>
+          <div class="benefit-tag">— Sensation</div>
+          <h3 style="font-family: var(--serif-jp); font-weight:500; font-size: clamp(22px, 3vw, 32px); line-height: 1.5; margin: 0 0 16px;">
+            濃密なのに、軽やか。<br />毎日続けたくなるテクスチャー。
+          </h3>
+          <p style="color: var(--ink-soft); line-height: 2; margin: 0; font-size: 14px;">
+            手のひらにとると、とろりと厚みのある感触。肌にのせると、すっと体温になじむように軽くなじみます。<br />
+            べたつきにくいので、メイク前にも気持ちよく使えます。
+          </p>
+          <div class="texture-features">
+            <span class="tex-pill"><span class="dot"></span>とろみのあるリッチな感触</span>
+            <span class="tex-pill"><span class="dot"></span>すっと肌になじむ軽やかさ</span>
+            <span class="tex-pill"><span class="dot"></span>べたつきにくく、続けやすい</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       7. Steps
+       ============================================================ -->
+  <section class="steps">
+    <div class="wrap">
+      <div class="sec-head fade">
+        <div class="eyebrow">How to use<span class="dot"></span>使い方</div>
+        <h2 class="h-section">毎日のスキンケアに、<br /><em>そっと一滴</em>。</h2>
+        <p class="lede">化粧水のあと、いつものケアに重ねるだけ。<br />シンプルだから、続けやすい。</p>
+      </div>
+
+      <div class="step-grid fade-stagger">
+        <div class="step">
+          <div class="step-num">STEP 01</div>
+          <div class="ico">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M8 13s1.2 2 4 2 4-2 4-2"/></svg>
+          </div>
+          <h4>洗顔・化粧水で整える</h4>
+          <p>洗顔後、いつもの化粧水で肌をやさしく整えます。</p>
+        </div>
+        <div class="step highlight">
+          <span class="badge-here">ここで使用</span>
+          <div class="step-num">STEP 02</div>
+          <div class="ico">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3s6 7 6 11a6 6 0 1 1-12 0c0-4 6-11 6-11Z"/></svg>
+          </div>
+          <h4>美容液を2〜3滴</h4>
+          <p>手のひらにとり、顔全体にやさしくなじませます。気になる部分には重ねづけを。</p>
+        </div>
+        <div class="step">
+          <div class="step-num">STEP 03</div>
+          <div class="ico">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12c4-6 12-6 16 0M4 12c4 6 12 6 16 0" /><circle cx="12" cy="12" r="2"/></svg>
+          </div>
+          <h4>乳液・クリームで仕上げ</h4>
+          <p>うるおいを閉じ込めるように、乳液やクリームを重ねます。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       8. Reasons / stats
+       ============================================================ -->
+  <section class="reasons">
+    <div class="wrap">
+      <div class="sec-head fade">
+        <div class="eyebrow">Why chosen<span class="dot"></span>選ばれる理由</div>
+        <h2 class="h-section">続けたくなる理由が、<br /><em>たしかにある</em>。</h2>
+      </div>
+
+      <div class="stats fade-stagger">
+        <div class="stat-card">
+          <div class="label">使用後の満足度</div>
+          <div class="num"><span data-count-to="94">0</span><small>%</small></div>
+          <div class="desc">「肌がしっとりした」と回答<br /><span style="color:var(--ink-faint); font-size:11px;">※自社アンケート n=126（仮）</span></div>
+        </div>
+        <div class="stat-card">
+          <div class="label">継続使用率</div>
+          <div class="num"><span data-count-to="87">0</span><small>%</small></div>
+          <div class="desc">3ヶ月以上継続して使用<br /><span style="color:var(--ink-faint); font-size:11px;">※定期会員の継続率（仮）</span></div>
+        </div>
+        <div class="stat-card">
+          <div class="label">敏感肌の方の使用</div>
+          <div class="num"><span data-count-to="92">0</span><small>%</small></div>
+          <div class="desc">「やさしい使い心地」と回答<br /><span style="color:var(--ink-faint); font-size:11px;">※自社アンケート n=64（仮）</span></div>
+        </div>
+      </div>
+      <p class="stat-note">※ 数値はLP制作用のサンプル表記です。実装時は実データに差し替えてください。</p>
+
+      <ul class="reasons-list fade-stagger">
+        <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-11"/></svg></span><span>初回限定 約67%OFF・送料無料で気軽に始められる</span></li>
+        <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-11"/></svg></span><span>4種無添加の低刺激処方<sup style="color:var(--ink-faint); font-size:.7em">※3</sup>、敏感に揺らぐ日にも</span></li>
+        <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-11"/></svg></span><span>5種のヒアルロン酸 × 3種のセラミドの保湿設計</span></li>
+        <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-11"/></svg></span><span>とろみのある質感、すっと肌になじむ使い心地</span></li>
+        <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-11"/></svg></span><span>定期便はいつでもお休み・解約OK（回数縛りなし）</span></li>
+        <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-11"/></svg></span><span>国内製造、品質管理にもこだわった設計</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       9. Reviews
+       ============================================================ -->
+  <section class="reviews" id="reviews">
+    <div class="wrap">
+      <div class="sec-head fade">
+        <div class="eyebrow">Voice<span class="dot"></span>使ってくださった方の声</div>
+        <h2 class="h-section">毎日のケアが、<br /><em>少し楽しみ</em>になりました。</h2>
+      </div>
+
+      <div class="review-grid fade-stagger">
+        <div class="review-card">
+          <span class="review-tag">乾燥肌</span>
+          <div class="stars">★★★★★</div>
+          <h5>朝までしっとりする感じが続いて、メイクのりが変わりました。</h5>
+          <p>これまで色々試してきましたが、とろみのある質感が肌に溶けていく感覚が気に入っています。香りもほのかで上品。</p>
+          <div class="review-meta">
+            <div class="av"></div>
+            <div class="who"><strong>M.K. さん</strong>30代後半／会社員</div>
+          </div>
+        </div>
+        <div class="review-card">
+          <span class="review-tag">敏感肌</span>
+          <div class="stars">★★★★★</div>
+          <h5>揺らぎがちな日にも、安心して使えています。</h5>
+          <p>季節の変わり目に肌が不安定になりやすかったのですが、低刺激処方で続けやすい。鏡を見るのが楽しみになりました。</p>
+          <div class="review-meta">
+            <div class="av"></div>
+            <div class="who"><strong>Y.S. さん</strong>20代後半／専門職</div>
+          </div>
+        </div>
+        <div class="review-card">
+          <span class="review-tag">くすみ感が気になる</span>
+          <div class="stars">★★★★☆</div>
+          <h5>朝の素肌が、なんとなく明るく見える気がします。</h5>
+          <p>使用感がべたつかず、メイク前にも使いやすいです。続けるほど肌のコンディションが整ってきた感覚があります。</p>
+          <div class="review-meta">
+            <div class="av"></div>
+            <div class="who"><strong>A.T. さん</strong>40代前半／主婦</div>
+          </div>
+        </div>
+      </div>
+      <p class="review-disclaim">※ お客様の個人的な感想であり、効果効能を示すものではありません。掲載コメントはLP制作用のサンプルです。</p>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       10. Offer
+       ============================================================ -->
+  <section class="offer" id="offer">
+    <div class="wrap">
+      <div class="sec-head fade">
+        <div class="eyebrow">Special offer<span class="dot"></span>初回限定キャンペーン</div>
+        <h2 class="h-section">まずは初回限定価格で、<br /><em>うるおい美容液</em>を試してみる。</h2>
+        <p class="lede">はじめての方限定で、特別なご案内をご用意しました。<br />気軽に、毎日の一滴をはじめてみませんか。</p>
+      </div>
+
+      <div class="offer-card fade">
+        <div class="offer-vis">
+          <div class="seal">
+            <div class="b">67%</div>
+            <div class="s">OFF</div>
+          </div>
+          <span class="placeholder">Product Image</span>
+        </div>
+        <div class="offer-info">
+          <div style="font-family: var(--serif-jp); font-weight:600; color: var(--ink); letter-spacing: .08em;">LUMIÈRE Moist Glow Serum 30mL</div>
+          <div class="price-row">
+            <div>
+              <div class="first">初回限定価格</div>
+              <div class="price">¥1,980<small>（税込）</small></div>
+            </div>
+            <div class="normal">通常価格 ¥5,980</div>
+          </div>
+          <div class="yen-sub">送料無料・1家族1回限り</div>
+
+          <div class="offer-pills">
+            <span class="offer-pill">初回 約67%OFF</span>
+            <span class="offer-pill">送料無料</span>
+            <span class="offer-pill">いつでも解約OK</span>
+            <span class="offer-pill">回数縛りなし</span>
+          </div>
+
+          <div class="offer-cta-wrap">
+            <a class="fv-cta-bar" href="#" aria-label="特別価格で試してみる">
+              <div class="tag-block">
+                <div class="small">初回限定</div>
+                <div class="big">約67<small style="font-size:.6em">%</small>OFF</div>
+              </div>
+              <div class="label-block">
+                <div class="ship">送料無料</div>
+                <div class="main-text">特別価格で試してみる</div>
+              </div>
+              <span class="arrow" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+              </span>
+            </a>
+          </div>
+
+          <div class="offer-fineprint">
+            ※ 表記の価格・キャンペーン内容はLP制作用のサンプルです。実装時は実際の販売条件に差し替えてください。<br />
+            ※ 定期コースをご利用の場合、2回目以降の価格・お届け間隔・解約条件等はこちらに記載します。
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       11. FAQ
+       ============================================================ -->
+  <section class="faq" id="faq">
+    <div class="wrap">
+      <div class="sec-head fade">
+        <div class="eyebrow">FAQ<span class="dot"></span>よくあるご質問</div>
+        <h2 class="h-section">はじめての方へ、<em>安心のために</em>。</h2>
+      </div>
+
+      <div class="faq-list fade-stagger">
+        <details class="q" open>
+          <summary><span class="qmark">Q</span>敏感肌でも使えますか？<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></summary>
+          <div class="a">パラベン・アルコール・合成香料・着色料 無添加の低刺激処方です。ただし、すべての方に刺激が起こらないわけではありません。心配な方は、目立たない部分でパッチテストを行ってからご使用ください。</div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">Q</span>朝・夜どちらに使うのが良いですか？<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></summary>
+          <div class="a">朝・夜どちらでもお使いいただけます。化粧水のあとに、2〜3滴を顔全体になじませてください。乾燥が気になる部分には重ねづけがおすすめです。</div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">Q</span>1本でどのくらい使えますか？<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></summary>
+          <div class="a">朝・夜2回・2〜3滴のご使用で、約1ヶ月を目安にお使いいただけます。使用量により個人差があります。</div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">Q</span>定期便の解約はできますか？<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></summary>
+          <div class="a">回数縛りはございません。次回お届けの10日前までに、マイページまたはお電話にてご連絡ください。お休み・お届け間隔の変更も可能です。</div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">Q</span>送料・返品について教えてください。<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></summary>
+          <div class="a">初回限定キャンペーンは送料無料でお届けします。商品到着後、未開封の場合は◯日以内に限り返品対応いたします（お客様都合の場合は送料ご負担）。</div>
+        </details>
+        <details class="q">
+          <summary><span class="qmark">Q</span>妊娠中・授乳中でも使えますか？<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></summary>
+          <div class="a">化粧品としてお使いいただけますが、肌の状態が変化しやすい時期です。ご不安な場合は、かかりつけの医師にご相談のうえご使用ください。</div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       12. Final CTA
+       ============================================================ -->
+  <section class="final">
+    <div class="wrap">
+      <div class="eyebrow">For your skin<span class="dot"></span>最後に</div>
+      <h2 class="h-section fade">肌が変わると、<em>自分</em>が好きになる。</h2>
+      <p class="lede fade">
+        毎日のひと滴で、うるおいと透明感を、毎日の自分へ。<br />
+        まずは初回限定価格で、気軽にはじめてみませんか。
+      </p>
+
+      <div class="final-bottle fade" aria-label="商品ボトル"></div>
+
+      <a class="fv-cta-bar fade" href="#offer" style="margin-top: 28px;" aria-label="特別価格で試してみる">
+        <div class="tag-block">
+          <div class="small">初回限定</div>
+          <div class="big">約67<small style="font-size:.6em">%</small>OFF</div>
+        </div>
+        <div class="label-block">
+          <div class="ship">送料無料</div>
+          <div class="main-text">特別価格で試してみる</div>
+        </div>
+        <span class="arrow" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+        </span>
+      </a>
+
+      <p class="final-foot">
+        ※1 精製水を含む　※2 うるおいによる　※3 すべての方に刺激が起こらないということではありません　※4 乾燥によるくすみ感をやわらげる
+      </p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <div>
+        <div class="brand-mark">LUMI<span style="color: var(--pink-400);">È</span>RE</div>
+        <p style="margin: 8px 0 0;">うるおいと透明感の、毎日のためのスキンケア。</p>
+      </div>
+      <div class="links">
+        <a href="#">特定商取引法</a>
+        <a href="#">プライバシーポリシー</a>
+        <a href="#">利用規約</a>
+        <a href="#">お問い合わせ</a>
+      </div>
+      <div class="legal">
+        © LUMIÈRE Cosmetics. All rights reserved.　/　本ページは制作用サンプルです。
+      </div>
+    </div>
+  </footer>
+
+  <!-- Sticky mobile CTA -->
+  <div class="sticky-cta" aria-hidden="false">
+    <a class="fv-cta-bar" href="#offer" aria-label="特別価格で試してみる">
+      <div class="tag-block">
+        <div class="small">初回限定</div>
+        <div class="big">67<small style="font-size:.6em">%</small>OFF</div>
+      </div>
+      <div class="label-block">
+        <div class="ship">送料無料</div>
+        <div class="main-text">特別価格で試してみる</div>
+      </div>
+      <span class="arrow" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+      </span>
+    </a>
+  </div>
+
+</div>
+
+<script>
+  // ============================================================
+  // Reveal-on-scroll
+  // ============================================================
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: "0px 0px -10% 0px" });
+  document.querySelectorAll('.fade, .fade-stagger, .benefit-img, .step-grid')
+    .forEach(el => io.observe(el));
+
+  // ============================================================
+  // Topbar shadow on scroll
+  // ============================================================
+  const topbar = document.getElementById('topbar');
+  let lastScroll = 0;
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    if (y > 24) topbar.classList.add('scrolled');
+    else topbar.classList.remove('scrolled');
+    lastScroll = y;
+  }, { passive: true });
+
+  // ============================================================
+  // Count-up numbers
+  // ============================================================
+  const easeOutCubic = t => 1 - Math.pow(1 - t, 3);
+  const countUp = (el, target, duration = 1800) => {
+    const start = performance.now();
+    const tick = (now) => {
+      const elapsed = now - start;
+      const t = Math.min(elapsed / duration, 1);
+      const v = Math.round(easeOutCubic(t) * target);
+      el.textContent = v;
+      if (t < 1) requestAnimationFrame(tick);
+      else el.textContent = target;
+    };
+    requestAnimationFrame(tick);
+  };
+  const countObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const target = parseInt(e.target.getAttribute('data-count-to'), 10);
+        countUp(e.target, target);
+        countObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('[data-count-to]').forEach(el => countObserver.observe(el));
+
+  // ============================================================
+  // FV mouse parallax (petals & 98% badge)
+  // ============================================================
+  const fv = document.getElementById('fv');
+  const petals = fv.querySelectorAll('.petal');
+  const orbs = fv.querySelectorAll('.orb');
+  const percent = fv.querySelector('.fv-percent');
+  let mx = 0, my = 0, tx = 0, ty = 0;
+
+  fv.addEventListener('mousemove', (e) => {
+    const r = fv.getBoundingClientRect();
+    mx = (e.clientX - r.left) / r.width - .5;
+    my = (e.clientY - r.top) / r.height - .5;
+  });
+  fv.addEventListener('mouseleave', () => { mx = 0; my = 0; });
+
+  function loop() {
+    tx += (mx - tx) * .06;
+    ty += (my - ty) * .06;
+    petals.forEach((p, i) => {
+      const k = (i % 3 + 1) * 8;
+      p.style.translate = `${tx * k}px ${ty * k}px`;
+    });
+    orbs.forEach((o, i) => {
+      const k = (i + 1) * 14;
+      o.style.translate = `${tx * k}px ${ty * k}px`;
+    });
+    if (percent) percent.style.translate = `${tx * -10}px ${ty * -10}px`;
+    requestAnimationFrame(loop);
+  }
+  if (matchMedia('(min-width: 881px)').matches && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    requestAnimationFrame(loop);
+  }
+</script>
+</body>
+</html>

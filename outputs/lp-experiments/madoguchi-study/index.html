@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="ja" class="lenis lenis-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Hidamari Lab. ─ ひだまりのある暮らしを、設計する。</title>
+  <meta name="description" content="madoguchi.inc の表現技法を解析・再構築したサンプルLP（Hidamari Lab. 架空ブランド）" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Akshar:wght@300..700&family=Noto+Serif+JP:wght@300;500;700&family=Noto+Sans+JP:wght@300;500;700&family=Fraunces:opsz,wght,SOFT@9..144,300..700,0..100&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+
+  <!-- ============== Header ============== -->
+  <header class="hd js-header" id="l-header" data-color="dark">
+    <div class="hd__inner">
+      <a class="hd__logo" href="#top" aria-label="Hidamari Lab. ホーム">
+        <span class="hd__logoMark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" width="28" height="28">
+            <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+              <circle cx="16" cy="16" r="5.5"></circle>
+              <line x1="16" y1="2" x2="16" y2="7"></line>
+              <line x1="16" y1="25" x2="16" y2="30"></line>
+              <line x1="2" y1="16" x2="7" y2="16"></line>
+              <line x1="25" y1="16" x2="30" y2="16"></line>
+              <line x1="6" y1="6" x2="9.5" y2="9.5"></line>
+              <line x1="22.5" y1="22.5" x2="26" y2="26"></line>
+              <line x1="6" y1="26" x2="9.5" y2="22.5"></line>
+              <line x1="22.5" y1="9.5" x2="26" y2="6"></line>
+            </g>
+          </svg>
+        </span>
+        <span class="hd__logoTxt">Hidamari Lab.</span>
+      </a>
+      <nav class="hd__nav" aria-label="グローバル">
+        <ul class="hd__navList">
+          <li><a href="#service" class="hd__navA"><span data-lab="Service">Service</span></a></li>
+          <li><a href="#strength" class="hd__navA"><span data-lab="Strength">Strength</span></a></li>
+          <li><a href="#works" class="hd__navA"><span data-lab="Works">Works</span></a></li>
+          <li><a href="#member" class="hd__navA"><span data-lab="Member">Member</span></a></li>
+          <li><a href="#news" class="hd__navA"><span data-lab="News">News</span></a></li>
+        </ul>
+      </nav>
+      <div class="hd__cta">
+        <a href="#contact" class="hd__ctaBtn is-ghost">資料請求</a>
+        <a href="#contact" class="hd__ctaBtn is-solid">お問い合わせ</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============== Main ============== -->
+  <main id="l-main">
+
+    <!-- ============== HERO (pin + 3 scenes) ============== -->
+    <section class="hero js-hero" id="top" data-color="dark">
+
+      <div class="hero__pin js-heroPin">
+
+        <!-- decorative noise / grain -->
+        <div class="hero__grain" aria-hidden="true"></div>
+
+        <!-- Scene 1: 工房の写真 + 書き起こし日本語コピー -->
+        <div class="hero__scene hero__scene--1 js-scene" data-scene="1">
+          <div class="hero__scene-bg" style="background-image:url('https://picsum.photos/seed/hidamari-craft-01/1800/1200')"></div>
+          <div class="hero__scene-overlay"></div>
+
+          <p class="hero__codeStream is-left" aria-hidden="true">
+            <span>const morning = await sun.rise();</span>
+            <span class="is-indent">if (room.warmth &lt; 0.4) curtain.open();</span>
+            <span>kitchen.scent = ['toast', 'coffee'];</span>
+            <span>const visible = lives.filter(l =&gt; l.glow &gt; 0.5);</span>
+            <span>render(visible);</span>
+            <span>let result = 0;</span>
+            <span>for (let day of weeks) {</span>
+            <span class="is-indent">result += anaA8ze(day.tasks);</span>
+            <span>}</span>
+          </p>
+
+          <h1 class="hero__copy">
+            <span class="hero__copyLine js-strokeLine">ひだまりのある</span>
+            <span class="hero__copyLine js-strokeLine">暮らしを、</span>
+            <span class="hero__copyLine hero__copyLine--accent js-strokeLine">設計する。</span>
+            <span class="hero__copySub js-fade-up">— a quiet manifesto for the daily craft —</span>
+          </h1>
+        </div>
+
+        <!-- Scene 2: コラージュ写真 + 弧の SVG ライン + サブコピー -->
+        <div class="hero__scene hero__scene--2 js-scene" data-scene="2">
+          <div class="hero__sceneInner">
+            <div class="hero__collage" aria-hidden="true">
+              <div class="hero__photo hero__photo--a" style="background-image:url('https://picsum.photos/seed/hidamari-cup-02/640/640')"></div>
+              <div class="hero__photo hero__photo--b" style="background-image:url('https://picsum.photos/seed/hidamari-paper-03/640/480')"></div>
+              <div class="hero__photo hero__photo--c" style="background-image:url('https://picsum.photos/seed/hidamari-tools-04/600/780')"></div>
+              <svg class="hero__arc" viewBox="-100 -100 200 200" aria-hidden="true">
+                <circle cx="0" cy="0" r="92" fill="none" stroke="rgba(255,255,255,.18)" stroke-width=".5"></circle>
+                <circle cx="0" cy="0" r="60" fill="none" stroke="rgba(255,255,255,.12)" stroke-width=".5" stroke-dasharray="2 4"></circle>
+              </svg>
+            </div>
+            <p class="hero__codeStream is-right" aria-hidden="true">
+              <span>function inhabit(space) {</span>
+              <span class="is-indent">return space.filter(s =&gt; s.warm)</span>
+              <span class="is-indent">  .map(s =&gt; refine(s));</span>
+              <span>}</span>
+              <span>const peaceful = inhabit(home);</span>
+              <span>peaceful.forEach(p =&gt; p.share());</span>
+            </p>
+            <h2 class="hero__copy hero__copy--right">
+              <span class="hero__copyLine js-strokeLine">どんな美しさも、</span>
+              <span class="hero__copyLine js-strokeLine">繰り返せなければ、</span>
+              <span class="hero__copyLine hero__copyLine--accent js-strokeLine">習慣にならない。</span>
+            </h2>
+          </div>
+        </div>
+
+        <!-- Scene 3: スポットライト + メイン display タイトル -->
+        <div class="hero__scene hero__scene--3 js-scene" data-scene="3">
+          <div class="hero__spot" aria-hidden="true"></div>
+          <div class="hero__scene3Bg" style="background-image:url('https://picsum.photos/seed/hidamari-night-house-05/1800/1200')"></div>
+          <p class="hero__codeStream is-right is-deep" aria-hidden="true">
+            <span>async function light(room) {</span>
+            <span class="is-indent">const w = await room.warmth();</span>
+            <span class="is-indent">if (w &lt; 0.5) lamp.on();</span>
+            <span>}</span>
+            <span>const evening = leads.map(l =&gt; evaluate(l));</span>
+            <span>dispatch(evening);</span>
+            <span>function ronoaJ4d() {</span>
+            <span class="is-indent">return list.map(u =&gt; (user.id === userId ? { ...user, ...newData } : user));</span>
+            <span>}</span>
+          </p>
+          <h2 class="hero__title js-mainTitle">
+            <span class="hero__titleLine">
+              <span class="char">日</span><span class="char">々</span><span class="char">の</span><span class="char">暮</span><span class="char">ら</span><span class="char">し</span><span class="char">に</span><span class="char">、</span>
+            </span>
+            <span class="hero__titleLine hero__titleLine--accent">
+              <span class="char">ひ</span><span class="char">だ</span><span class="char">ま</span><span class="char">り</span><span class="char">を</span>
+            </span>
+            <span class="hero__titleLine hero__titleLine--accent">
+              <span class="char">設</span><span class="char">計</span><span class="char">す</span><span class="char">る</span><span class="char">。</span>
+            </span>
+          </h2>
+          <p class="hero__lead js-fade-up">
+            Hidamari Lab. は、暮らしの「ちょうどいい温度」を<br>
+            プロダクト・空間・コミュニティから再設計する独立スタジオです。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============== Service ============== -->
+    <section class="sv u-section js-headerToggle" id="service" data-color="light">
+      <div class="sv__head">
+        <p class="u-sectionLabel js-fade-up">[ Service ]</p>
+        <h2 class="u-sectionTitle u-bleed js-bleedTitle"><span>サービス紹介</span></h2>
+        <p class="u-sectionLead js-fade-up">
+          ユーザーの「ちょうどいい温度」を保つことに最も適した形を。<br>
+          プロダクト・空間・コミュニティの 3 領域で運営している事業です。
+        </p>
+        <svg class="sv__bgCurve" viewBox="0 0 1440 600" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M-50 480 C 360 250, 720 580, 1500 280" fill="none" stroke="#1816140d" stroke-width="1"/>
+          <path d="M-80 540 C 320 320, 800 640, 1500 360" fill="none" stroke="#18161410" stroke-width="1"/>
+          <path d="M-120 590 C 280 380, 880 700, 1520 440" fill="none" stroke="#1816140a" stroke-width="1"/>
+        </svg>
+      </div>
+
+      <ul class="sv__grid">
+        <li class="sv__card js-fade-up">
+          <p class="sv__card-tag">暮らしのプロダクト</p>
+          <h3 class="sv__card-title">Hidamari Coffee</h3>
+          <p class="sv__card-sub">朝の 0.7 杯のための、一人前焙煎のサブスクリプション。</p>
+        </li>
+        <li class="sv__card js-fade-up">
+          <p class="sv__card-tag">家具・道具</p>
+          <h3 class="sv__card-title">日々の道具店</h3>
+          <p class="sv__card-sub">10 年使える家具と道具の、コンパクトなセレクトショップ。</p>
+        </li>
+        <li class="sv__card js-fade-up">
+          <p class="sv__card-tag">紙メディア</p>
+          <h3 class="sv__card-title">温度のある暮らし</h3>
+          <p class="sv__card-sub">年 4 回発行のリトルプレス。35,000 部。</p>
+        </li>
+        <li class="sv__card js-fade-up">
+          <p class="sv__card-tag">空間設計</p>
+          <h3 class="sv__card-title">SUMU&#x002B;</h3>
+          <p class="sv__card-sub">小さな住まいのリノベーションを、定額で。</p>
+        </li>
+        <li class="sv__card js-fade-up">
+          <p class="sv__card-tag">コミュニティ</p>
+          <h3 class="sv__card-title">tomoshibi</h3>
+          <p class="sv__card-sub">夜の読書会と、平日の朝散歩。会員制、月 2 回。</p>
+        </li>
+        <li class="sv__card js-fade-up">
+          <p class="sv__card-tag">展示・パブリック</p>
+          <h3 class="sv__card-title">HINATA</h3>
+          <p class="sv__card-sub">巡回展示と、子どもの学びの場づくり。</p>
+        </li>
+      </ul>
+    </section>
+
+    <!-- ============== Strength (with particle canvas) ============== -->
+    <section class="st js-headerToggle" id="strength" data-color="dark">
+      <a class="st__target js-stalker" data-stalker-text="ひだまりの設計を見る" href="#works">
+        <div class="st__particle is-left"><canvas data-particle="left"></canvas></div>
+        <div class="st__particle is-right"><canvas data-particle="right"></canvas></div>
+        <div class="st__bg" style="background-image:url('https://picsum.photos/seed/hidamari-studio-night-09/1800/1100')"></div>
+        <div class="st__inner u-section">
+          <h2 class="st__title u-bleed js-bleedTitle">
+            <span class="u-chunk">暮らしの専門家の</span><br><span class="u-chunk">勝ち筋のつくり方</span>
+          </h2>
+          <p class="st__lead js-fade-up">
+            なぜ Hidamari Lab. は、競合の多い暮らし領域でブランドを育てられるのか。<br>
+            10 年運営してきた中で見つけた 3 つのノウハウをご紹介します。
+          </p>
+          <p class="st__more js-fade-up"><span>詳しく見る</span><span class="u-arrow" aria-hidden="true">
+            <svg viewBox="0 0 13 13"><path d="M1 6.5h11M7 1.5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
+          </span></p>
+        </div>
+      </a>
+    </section>
+
+    <!-- ============== Achievement (works) ============== -->
+    <section class="wk u-section js-headerToggle" id="works" data-color="light">
+      <div class="wk__head">
+        <p class="u-sectionLabel js-fade-up">[ Works ]</p>
+        <h2 class="u-sectionTitle u-bleed js-bleedTitle"><span>成果事例</span></h2>
+        <p class="u-sectionLead js-fade-up">
+          実際にプロダクト・空間設計で関わったブランドの事例から、<br>
+          数字とプロセスがはっきりしているものを 3 件ご紹介します。
+        </p>
+      </div>
+
+      <ol class="wk__list">
+        <li class="wk__item js-fade-up">
+          <div class="wk__img" style="background-image:url('https://picsum.photos/seed/hidamari-case-coffee-10/1100/700')"></div>
+          <div class="wk__meta">
+            <div class="wk__no">(01)</div>
+            <span class="wk__cat">小さな焙煎所 / Owner Brand</span>
+            <h3 class="wk__title">創業 2 年で月商 380 万円。<br>「焙煎を毎朝説明する」EC とは？</h3>
+            <p class="wk__more"><span>詳しく見る</span><span class="u-arrow" aria-hidden="true">
+              <svg viewBox="0 0 13 13"><path d="M1 6.5h11M7 1.5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
+            </span></p>
+          </div>
+        </li>
+        <li class="wk__item js-fade-up is-rev">
+          <div class="wk__img" style="background-image:url('https://picsum.photos/seed/hidamari-case-furniture-11/1100/700')"></div>
+          <div class="wk__meta">
+            <div class="wk__no">(02)</div>
+            <span class="wk__cat">家具メーカー / 自社EC立ち上げ</span>
+            <h3 class="wk__title">広告費 0 円のまま、<br>定価販売で年商 1.2 倍へ。</h3>
+            <p class="wk__more"><span>詳しく見る</span><span class="u-arrow" aria-hidden="true">
+              <svg viewBox="0 0 13 13"><path d="M1 6.5h11M7 1.5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
+            </span></p>
+          </div>
+        </li>
+        <li class="wk__item js-fade-up">
+          <div class="wk__img" style="background-image:url('https://picsum.photos/seed/hidamari-case-community-12/1100/700')"></div>
+          <div class="wk__meta">
+            <div class="wk__no">(03)</div>
+            <span class="wk__cat">地域コミュニティ / 月額会員制</span>
+            <h3 class="wk__title">読書会 12 名から、<br>年 1,400 人が訪れる場所へ。</h3>
+            <p class="wk__more"><span>詳しく見る</span><span class="u-arrow" aria-hidden="true">
+              <svg viewBox="0 0 13 13"><path d="M1 6.5h11M7 1.5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
+            </span></p>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- ============== Member ============== -->
+    <section class="mb js-headerToggle" id="member" data-color="darker">
+      <div class="mb__head">
+        <p class="u-sectionLabel js-fade-up is-light">[ Member ]</p>
+        <h2 class="mb__title u-bleed js-bleedTitle"><span>社員紹介</span></h2>
+        <p class="mb__lead js-fade-up">
+          プロダクトを作る人、空間を設計する人、場を運営する人。<br>
+          それぞれの領域で力を発揮するメンバーをご紹介します。
+        </p>
+      </div>
+      <div class="mb__grid">
+        <a class="mb__cell js-stalker" data-stalker-text="メンバーを見る" href="#" style="background-image:url('https://picsum.photos/seed/hidamari-member-craft-13/900/600')">
+          <p class="mb__cellTag">CRAFT / DESIGN</p>
+          <h3 class="mb__cellTitle">設計</h3>
+          <p class="mb__cellMore">設計のメンバーを見る<span class="u-arrow" aria-hidden="true">
+            <svg viewBox="0 0 13 13"><path d="M1 6.5h11M7 1.5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
+          </span></p>
+        </a>
+        <a class="mb__cell js-stalker" data-stalker-text="メンバーを見る" href="#" style="background-image:url('https://picsum.photos/seed/hidamari-member-ops-14/900/600')">
+          <p class="mb__cellTag">OPS / EDITORIAL</p>
+          <h3 class="mb__cellTitle">編集・運営</h3>
+          <p class="mb__cellMore">運営のメンバーを見る<span class="u-arrow" aria-hidden="true">
+            <svg viewBox="0 0 13 13"><path d="M1 6.5h11M7 1.5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
+          </span></p>
+        </a>
+      </div>
+    </section>
+
+    <!-- ============== About ============== -->
+    <section class="ab u-section js-headerToggle" id="about" data-color="light">
+      <p class="u-sectionLabel js-fade-up">[ About ]</p>
+      <h2 class="u-sectionTitle u-bleed js-bleedTitle"><span>会社情報</span></h2>
+      <dl class="ab__dl">
+        <div class="ab__row js-fade-up"><dt>会社名</dt><dd>Hidamari Lab. 株式会社</dd></div>
+        <div class="ab__row js-fade-up"><dt>設立</dt><dd>2018 年 4 月</dd></div>
+        <div class="ab__row js-fade-up"><dt>代表</dt><dd>架空 太郎</dd></div>
+        <div class="ab__row js-fade-up"><dt>所在地</dt><dd>東京都・京都府</dd></div>
+        <div class="ab__row js-fade-up"><dt>事業内容</dt><dd>プロダクトブランド運営／空間設計／コミュニティ事業</dd></div>
+        <div class="ab__row js-fade-up"><dt>社員数</dt><dd>34 名（2026 年 4 月時点）</dd></div>
+      </dl>
+    </section>
+
+    <!-- ============== News ============== -->
+    <section class="nw u-section js-headerToggle" id="news" data-color="light">
+      <p class="u-sectionLabel js-fade-up">[ News ]</p>
+      <h2 class="u-sectionTitle u-bleed js-bleedTitle"><span>お知らせ</span></h2>
+      <ul class="nw__list">
+        <li class="nw__item js-fade-up">
+          <time datetime="2026-04-12">2026.04.12</time>
+          <span class="nw__cat">お知らせ</span>
+          <p class="nw__txt">京都・西陣にラボの 2 店舗目「Hidamari Atelier 西陣」をオープンしました。</p>
+        </li>
+        <li class="nw__item js-fade-up">
+          <time datetime="2026-03-08">2026.03.08</time>
+          <span class="nw__cat">プレスリリース</span>
+          <p class="nw__txt">家具メーカー 3 社との共同企画「ちょうどいい家具展」を 5 月に開催。</p>
+        </li>
+        <li class="nw__item js-fade-up">
+          <time datetime="2026-02-20">2026.02.20</time>
+          <span class="nw__cat">採用</span>
+          <p class="nw__txt">2027 年新卒・中途の通年採用がスタートしました。</p>
+        </li>
+      </ul>
+    </section>
+
+    <!-- ============== Recruit (with image+text marquee) ============== -->
+    <section class="rc js-headerToggle" id="recruit" data-color="light">
+      <div class="rc__inner">
+        <div class="rc__bg" style="background-image:url('https://picsum.photos/seed/hidamari-recruit-15/1700/1100')"></div>
+        <div class="rc__body">
+          <p class="u-sectionLabel js-fade-up">[ Recruit ]</p>
+          <h2 class="rc__title u-bleed js-bleedTitle"><span>採用情報</span></h2>
+          <p class="rc__lead js-fade-up">「ちょうどいい温度」を、<br>仕事として設計する人を募集しています。</p>
+          <p class="rc__more js-fade-up"><a href="#"><span>採用情報を見る</span><span class="u-arrow" aria-hidden="true">
+            <svg viewBox="0 0 13 13"><path d="M1 6.5h11M7 1.5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
+          </span></a></p>
+        </div>
+      </div>
+
+      <div class="rc__marquee" aria-hidden="true">
+        <div class="rc__marqueeTrack">
+          <!-- 同じシーケンスを2回連結して seamless loop -->
+          <div class="rc__marqueeSeq">
+            <span class="rc__marqueeTxt">Designing daily warmth</span>
+            <span class="rc__marqueeImg" style="background-image:url('https://picsum.photos/seed/hidamari-mq-16/220/220')"></span>
+            <span class="rc__marqueeTxt">勝ち筋を、ちょうどいい温度で</span>
+            <span class="rc__marqueeImg" style="background-image:url('https://picsum.photos/seed/hidamari-mq-17/220/220')"></span>
+            <span class="rc__marqueeTxt">Hidamari Lab. is hiring</span>
+            <span class="rc__marqueeImg" style="background-image:url('https://picsum.photos/seed/hidamari-mq-18/220/220')"></span>
+            <span class="rc__marqueeTxt">設計、編集、運営</span>
+            <span class="rc__marqueeImg" style="background-image:url('https://picsum.photos/seed/hidamari-mq-19/220/220')"></span>
+          </div>
+          <div class="rc__marqueeSeq" aria-hidden="true">
+            <span class="rc__marqueeTxt">Designing daily warmth</span>
+            <span class="rc__marqueeImg" style="background-image:url('https://picsum.photos/seed/hidamari-mq-16/220/220')"></span>
+            <span class="rc__marqueeTxt">勝ち筋を、ちょうどいい温度で</span>
+            <span class="rc__marqueeImg" style="background-image:url('https://picsum.photos/seed/hidamari-mq-17/220/220')"></span>
+            <span class="rc__marqueeTxt">Hidamari Lab. is hiring</span>
+            <span class="rc__marqueeImg" style="background-image:url('https://picsum.photos/seed/hidamari-mq-18/220/220')"></span>
+            <span class="rc__marqueeTxt">設計、編集、運営</span>
+            <span class="rc__marqueeImg" style="background-image:url('https://picsum.photos/seed/hidamari-mq-19/220/220')"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============== Contact ============== -->
+    <section class="ct js-headerToggle js-contactarea" id="contact" data-color="darker">
+      <p class="u-sectionLabel js-fade-up is-light">[ Contact ]</p>
+      <h2 class="ct__title js-bleedTitle"><span><span class="u-chunk">暮らしの設計を、</span><br><span class="u-chunk">一緒に始めませんか。</span></span></h2>
+      <div class="ct__btns">
+        <a class="ct__btn is-solid js-stalker" data-stalker-text="お問い合わせフォームへ" href="#">
+          <span class="ct__btnLab"><span>お問い合わせ</span></span>
+          <span class="u-arrow" aria-hidden="true">
+            <svg viewBox="0 0 13 13"><path d="M1 6.5h11M7 1.5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
+          </span>
+        </a>
+        <a class="ct__btn is-ghost js-stalker" data-stalker-text="ダウンロードのご案内" href="#">
+          <span class="ct__btnLab"><span>資料請求</span></span>
+          <span class="u-arrow" aria-hidden="true">
+            <svg viewBox="0 0 13 13"><path d="M1 6.5h11M7 1.5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
+          </span>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============== Mouse stalker ============== -->
+  <div class="cursor js-cursor" aria-hidden="true">
+    <div class="cursor__dot"></div>
+    <div class="cursor__ring"></div>
+    <div class="cursor__lab"><span class="cursor__labTxt"></span></div>
+  </div>
+
+  <!-- ============== Footer ============== -->
+  <footer class="ft" id="l-footer">
+    <div class="ft__inner">
+      <p class="ft__logo">Hidamari Lab.</p>
+      <p class="ft__copy">ⓒ 2026 Hidamari Lab. — sample built upon the techniques of madoguchi.inc</p>
+    </div>
+  </footer>
+
+  <!-- ============== Libraries ============== -->
+  <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="./app.js" defer></script>
+</body>
+</html>

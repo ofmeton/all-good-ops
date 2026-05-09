@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>MERIDIAN — 動きのあるWebデザインの研究室</title>
+  <meta name="description" content="スクロール、ホバー、WebGL。Webサイトに動きをつける表現の習作サイト。spade-co.jp の技法を題材にしています。" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=IBM+Plex+Mono:wght@300;400;500&family=Noto+Serif+JP:wght@300;400;500;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+
+  <!-- ============== Sample bar (← INDEX) ============== -->
+  <a class="sb" href="/" aria-label="ポートフォリオTOPに戻る">
+    <span class="sb__arrow" aria-hidden="true">
+      <svg viewBox="0 0 12 12"><path d="M7.5 2.5 4 6l3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </span>
+    <span class="sb__lab">INDEX</span>
+    <span class="sb__sep" aria-hidden="true">/</span>
+    <span class="sb__crumb">SAMPLE · MERIDIAN</span>
+  </a>
+
+  <!-- SVG defs (clip-paths / symbols) -->
+  <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+    <defs>
+      <symbol id="arrow" viewBox="0 0 48 12">
+        <path d="M0 6 L40 6 M34 1 L42 6 L34 11" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="square" stroke-linejoin="miter" />
+      </symbol>
+      <symbol id="arrowLg" viewBox="0 0 96 24">
+        <path d="M0 12 L82 12 M70 2 L86 12 L70 22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="square" stroke-linejoin="miter" />
+      </symbol>
+    </defs>
+  </svg>
+
+  <!-- Fixed top header -->
+  <header class="hd">
+    <a class="hd__brand" href="#top">
+      <span class="hd__brand-mark">⊕</span>
+      <span class="hd__brand-name">MERIDIAN</span>
+    </a>
+    <div class="hd__lat">N&nbsp;36°&nbsp;12′&nbsp;04″ · E&nbsp;139°&nbsp;47′&nbsp;31″</div>
+    <nav class="hd__nav">
+      <a class="hd__a js-hv" href="#index" data-label="Index"><span class="hd__a-lab">Index</span></a>
+      <a class="hd__a js-hv" href="#capabilities" data-label="Studio"><span class="hd__a-lab">Studio</span></a>
+      <a class="hd__a js-hv" href="#work" data-label="Work"><span class="hd__a-lab">Work</span></a>
+      <a class="hd__a hd__a--cta js-hv" href="#contact" data-label="Begin">
+        <span class="hd__a-lab">Begin</span>
+        <svg class="hd__a-arrow" aria-hidden="true"><use href="#arrow" /></svg>
+      </a>
+    </nav>
+  </header>
+
+  <!-- Smooth-scroll wrapper (translated by JS) -->
+  <main class="wrap" id="js-wrap" data-scrollbar="virtual">
+
+    <!-- §00 HERO -->
+    <section class="hero" id="top">
+      <canvas class="hero__canvas" id="js-engine" data-engine="three.js"></canvas>
+      <div class="hero__veil"></div>
+
+      <div class="hero__inner">
+        <p class="hero__kicker js-fade" data-fade-delay="0.05">№&nbsp;00 — 動きのあるWebデザイン</p>
+
+        <h1 class="hero__title f-display js-split" data-split="char">
+          <span class="line">Webサイトに、</span>
+          <span class="line"><em>動きを。</em></span>
+        </h1>
+
+        <p class="hero__sub js-pos js-fade" data-pos-speed="0.12" data-fade-delay="0.6">
+          スクロールで文字が現れる、ホバーでボタンが反応する、背景で WebGL が動く。Webサイトに動きをつけて表現するスタジオです。
+        </p>
+
+        <div class="hero__meta">
+          <div class="hero__meta-block js-fade" data-fade-delay="0.85">
+            <span class="hero__meta-lab">設立</span>
+            <span class="hero__meta-val">MMXXII</span>
+          </div>
+          <div class="hero__meta-block js-fade" data-fade-delay="0.92">
+            <span class="hero__meta-lab">拠点</span>
+            <span class="hero__meta-val">Tokyo · Berlin</span>
+          </div>
+          <div class="hero__meta-block js-fade" data-fade-delay="0.99">
+            <span class="hero__meta-lab">領域</span>
+            <span class="hero__meta-val">Web / Motion / Code</span>
+          </div>
+        </div>
+
+        <div class="hero__marker js-fade" data-fade-delay="1.1">
+          <span class="hero__marker-lab">[ scroll ]</span>
+          <span class="hero__marker-line" aria-hidden="true"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- §01 INDEX -->
+    <section class="idx" id="index">
+      <div class="idx__num js-pos" data-pos-speed="-0.08">§&nbsp;01</div>
+
+      <h2 class="idx__title f-display js-slide">
+        <span class="line">動きの、</span>
+        <span class="line"><em>目次。</em></span>
+      </h2>
+
+      <div class="idx__body">
+        <p class="idx__lead js-fade">
+          Webサイトに動きをつけると、伝えたいことが届きやすくなる。スクロール、ホバー、ロード ── ページの中で起きる動きを、<em>内容に合わせて</em>使い分けます。
+        </p>
+
+        <dl class="idx__defs">
+          <div class="idx__def js-fade" data-fade-delay="0.1">
+            <dt>01.&nbsp;スクロールで、文字を出す</dt>
+            <dd>スクロールに合わせて、文字や画像が順番に現れる。読み手のペースで、<em>情報を一つずつ</em>見せていく。</dd>
+          </div>
+          <div class="idx__def js-fade" data-fade-delay="0.2">
+            <dt>02.&nbsp;1文字ずつ、出す</dt>
+            <dd>タイトルや見出しを、1文字ずつタイミングをずらして表示する。文字が立ち上がる動きそのものが、見どころになる。</dd>
+          </div>
+          <div class="idx__def js-fade" data-fade-delay="0.3">
+            <dt>03.&nbsp;触ると、反応する</dt>
+            <dd>ボタンに下線が伸びる、画像にカーソルを乗せると拡大する、リンクの色が変わる。要素ごとに、<em>触ったときの反応</em>をつける。</dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- §02 CAPABILITIES -->
+    <section class="cap" id="capabilities">
+      <header class="cap__hd">
+        <div class="cap__num js-pos" data-pos-speed="0.06">§&nbsp;02 — Capabilities</div>
+        <h2 class="cap__title f-display js-slide">
+          <span class="line">つけられる動き、</span>
+          <span class="line"><em>4つの種類。</em></span>
+        </h2>
+      </header>
+
+      <div class="cap__grid">
+        <article class="cap__card js-curtain" style="--curtain-delay:0s">
+          <div class="cap__card-head">
+            <span class="cap__card-no">i.</span>
+            <span class="cap__card-tag">Scroll Motion</span>
+          </div>
+          <h3 class="cap__card-name f-display">スクロールで、見せる。</h3>
+          <p class="cap__card-de">
+            スクロールに合わせて、文字や画像が順番に現れる。読みながら、ページが動き続ける構成にします。
+          </p>
+          <ul class="cap__card-bull">
+            <li>文字単位フェード</li>
+            <li>クリップパス・カーテン</li>
+            <li>視差（パララックス）スクロール</li>
+          </ul>
+        </article>
+
+        <article class="cap__card js-curtain" style="--curtain-delay:0.08s">
+          <div class="cap__card-head">
+            <span class="cap__card-no">ii.</span>
+            <span class="cap__card-tag">Hover &amp; Cursor</span>
+          </div>
+          <h3 class="cap__card-name f-display">触れたら、応える。</h3>
+          <p class="cap__card-de">
+            カーソルを乗せると、ボタンが沈む、文字に下線が伸びる、画像が少し動く。要素ごとに、触ったときの反応を細かくつけます。
+          </p>
+          <ul class="cap__card-bull">
+            <li>ホバー・マイクロモーション</li>
+            <li>カスタムカーソル</li>
+            <li>ボタンの状態遷移</li>
+          </ul>
+        </article>
+
+        <article class="cap__card js-curtain" style="--curtain-delay:0.16s">
+          <div class="cap__card-head">
+            <span class="cap__card-no">iii.</span>
+            <span class="cap__card-tag">WebGL / Canvas</span>
+          </div>
+          <h3 class="cap__card-name f-display">奥行きを、つくる。</h3>
+          <p class="cap__card-de">
+            three.js や GLSL を使った背景。波、光、粒子の動きを、ページが重くならない範囲で組み込みます。
+          </p>
+          <ul class="cap__card-bull">
+            <li>WebGLヒーロー</li>
+            <li>シェーダー背景</li>
+            <li>3Dパララックス</li>
+          </ul>
+        </article>
+
+        <article class="cap__card js-curtain" style="--curtain-delay:0.24s">
+          <div class="cap__card-head">
+            <span class="cap__card-no">iv.</span>
+            <span class="cap__card-tag">Smooth Scroll</span>
+          </div>
+          <h3 class="cap__card-name f-display">滑らかに、流す。</h3>
+          <p class="cap__card-de">
+            仮想スクロールを使って、ページのスクロールをなめらかにする。セクションが切り替わるときも、ぎこちなさを出しません。
+          </p>
+          <ul class="cap__card-bull">
+            <li>仮想スムーススクロール</li>
+            <li>セクション間のリズム設計</li>
+            <li>ページ遷移演出</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <!-- §03 SELECTED WORK -->
+    <section class="work" id="work">
+      <header class="work__hd">
+        <div class="work__num js-pos" data-pos-speed="-0.05">§&nbsp;03 — Selected Work</div>
+        <h2 class="work__title f-display js-slide">
+          <span class="line">近年の、</span>
+          <span class="line"><em>仕事から。</em></span>
+        </h2>
+        <p class="work__lead js-fade">
+          動きをつけたことで伝わり方が変わった、5つのWebサイト。コーポレート、出版、レーベル、季刊誌、地域財団。
+        </p>
+      </header>
+
+      <ol class="work__list">
+        <li class="work__item js-row">
+          <a class="work__link js-hv" href="#" data-label="View">
+            <span class="work__no">01</span>
+            <span class="work__name f-display">Astrolabe Foundation</span>
+            <span class="work__yr">2026</span>
+            <span class="work__tag">WebGL ／ スクロール演出</span>
+            <svg class="work__arrow" aria-hidden="true"><use href="#arrowLg" /></svg>
+          </a>
+        </li>
+        <li class="work__item js-row">
+          <a class="work__link js-hv" href="#" data-label="View">
+            <span class="work__no">02</span>
+            <span class="work__name f-display">Sextant Press</span>
+            <span class="work__yr">2025</span>
+            <span class="work__tag">文字単位アニメーション</span>
+            <svg class="work__arrow" aria-hidden="true"><use href="#arrowLg" /></svg>
+          </a>
+        </li>
+        <li class="work__item js-row">
+          <a class="work__link js-hv" href="#" data-label="View">
+            <span class="work__no">03</span>
+            <span class="work__name f-display">Plumb-Line Records</span>
+            <span class="work__yr">2025</span>
+            <span class="work__tag">ホバー演出 ／ カスタムカーソル</span>
+            <svg class="work__arrow" aria-hidden="true"><use href="#arrowLg" /></svg>
+          </a>
+        </li>
+        <li class="work__item js-row">
+          <a class="work__link js-hv" href="#" data-label="View">
+            <span class="work__no">04</span>
+            <span class="work__name f-display">Theodolite Quarterly</span>
+            <span class="work__yr">2024</span>
+            <span class="work__tag">スムーススクロール</span>
+            <svg class="work__arrow" aria-hidden="true"><use href="#arrowLg" /></svg>
+          </a>
+        </li>
+        <li class="work__item js-row">
+          <a class="work__link js-hv" href="#" data-label="View">
+            <span class="work__no">05</span>
+            <span class="work__name f-display">Compass Dossier</span>
+            <span class="work__yr">2024</span>
+            <span class="work__tag">パララックス ／ 視差演出</span>
+            <svg class="work__arrow" aria-hidden="true"><use href="#arrowLg" /></svg>
+          </a>
+        </li>
+      </ol>
+    </section>
+
+    <!-- §04 CTA / CONTACT -->
+    <section class="cta" id="contact">
+      <div class="cta__num js-pos" data-pos-speed="0.04">§&nbsp;04 — Begin</div>
+      <h2 class="cta__title f-display js-split" data-split="char">
+        <span class="line">プロジェクトを、</span>
+        <span class="line"><em>はじめる。</em></span>
+      </h2>
+
+      <a class="cta__btn js-hv" href="mailto:hello@meridian.studio" data-label="相談からはじめる">
+        <span class="cta__btn-lab">
+          <span class="cta__btn-lab-line"><span class="cta__btn-lab-row">相談からはじめる</span></span>
+          <span class="cta__btn-lab-line"><span class="cta__btn-lab-row">相談からはじめる</span></span>
+        </span>
+        <span class="cta__btn-arrow">
+          <svg class="cta__btn-arrow-svg" aria-hidden="true"><use href="#arrowLg" /></svg>
+          <svg class="cta__btn-arrow-svg cta__btn-arrow-svg--ghost" aria-hidden="true"><use href="#arrowLg" /></svg>
+        </span>
+      </a>
+
+      <footer class="ft">
+        <div class="ft__col">
+          <span class="ft__lab">Studio</span>
+          <p>葉山アトリエ 3F<br/>神奈川県・葉山</p>
+        </div>
+        <div class="ft__col">
+          <span class="ft__lab">Hours</span>
+          <p>月曜 — 金曜<br/>10:00 — 18:00 JST</p>
+        </div>
+        <div class="ft__col">
+          <span class="ft__lab">Contact</span>
+          <p>hello@meridian.studio<br/>+81 (0)3 0000 0000</p>
+        </div>
+        <div class="ft__col ft__col--colophon">
+          <span class="ft__lab">Colophon</span>
+          <p>本文は Fraunces ／ Noto Serif JP ／ IBM&nbsp;Plex&nbsp;Mono を使用。WebGL は three.js&nbsp;r144。spade-co.jp の表現技法を題材にした、架空スタジオによる習作です。</p>
+        </div>
+      </footer>
+    </section>
+
+  </main>
+
+  <!-- Page grain overlay -->
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- Custom scrollbar (decorative; native scroll still works) -->
+  <div class="vbar" aria-hidden="true"><div class="vbar__thumb" id="js-vbar"></div></div>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

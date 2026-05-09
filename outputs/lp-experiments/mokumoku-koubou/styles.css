@@ -1,0 +1,1200 @@
+/* ========== ←INDEX ボタン（ポートフォリオに戻る） ========== */
+.back-to-index{
+  position:fixed;
+  top:12px;left:12px;
+  z-index:200;
+  display:inline-flex;align-items:center;gap:6px;
+  padding:7px 14px 7px 12px;
+  background:rgba(255,255,255,.94);
+  -webkit-backdrop-filter:blur(8px);
+  backdrop-filter:blur(8px);
+  border:1.5px solid #6F8556;
+  border-radius:999px;
+  font-family:"Zen Maru Gothic","Yu Gothic",serif;
+  font-weight:700;
+  font-size:12.5px;
+  letter-spacing:.08em;
+  color:#4F6440;
+  text-decoration:none;
+  box-shadow:0 4px 12px rgba(79,100,64,.14);
+  transition:transform .2s ease, box-shadow .2s ease, background .2s ease;
+}
+.back-to-index:hover{
+  transform:translateY(-2px);
+  box-shadow:0 6px 16px rgba(79,100,64,.20);
+  background:#fff;
+}
+.back-to-index__arrow{
+  display:inline-flex;align-items:center;justify-content:center;
+  font-size:14px;line-height:1;
+  transition:transform .25s ease;
+}
+.back-to-index:hover .back-to-index__arrow{transform:translateX(-2px)}
+@media(max-width:520px){
+  .back-to-index{top:8px;left:8px;padding:6px 12px 6px 10px;font-size:11.5px}
+  .back-to-index__arrow{font-size:12px}
+}
+
+/* ========== トークン ========== */
+:root{
+  --green-1:#6F8556;     /* くすみ抹茶 */
+  --green-2:#4F6440;     /* 森グリーン */
+  --green-3:#8FA372;     /* 中間 */
+  --green-4:#B8C597;     /* 淡 */
+  --brown-1:#A8784A;     /* 木のブラウン */
+  --orange-1:#D99A4E;    /* やさしいオレンジ */
+  --orange-2:#E8B16B;
+  --yellow-1:#F3D98B;    /* 生成りイエロー */
+  --yellow-2:#F7E6A8;
+  --base-1:#F8F1DD;      /* クリームホワイト */
+  --base-2:#EFE3C6;      /* やわらかベージュ */
+  --base-3:#FBF6E6;
+  --ink-1:#3F3A32;       /* メインテキスト */
+  --ink-2:#6E675B;       /* サブテキスト */
+  --line:#E2D7B5;
+  --shadow-soft: 0 8px 24px rgba(79,100,64,.10), 0 2px 4px rgba(79,100,64,.06);
+  --shadow-card: 0 14px 36px rgba(79,100,64,.12), 0 2px 6px rgba(79,100,64,.06);
+  --radius-card: 24px;
+  --radius-pill: 999px;
+  --radius-md: 16px;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:96px;scroll-snap-type:none}
+/* スマホでも scroll-snap を完全に無効化（過去に追加した snap が万一どこかに残っても効かないように） */
+html,body,main,section{scroll-snap-type:none;scroll-snap-align:none}
+body{
+  font-family:"Noto Sans JP","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+  font-weight:400;
+  color:var(--ink-1);
+  background:var(--base-1);
+  -webkit-font-smoothing:antialiased;
+  line-height:1.8;
+  font-feature-settings:"palt";
+  overflow-x:hidden;
+}
+img{max-width:100%;display:block}
+button{font-family:inherit;cursor:pointer;border:0;background:none;padding:0;color:inherit}
+a{color:inherit;text-decoration:none}
+input,textarea,select{font-family:inherit;font-size:inherit;color:inherit}
+
+.serif{font-family:"Zen Maru Gothic","Yu Gothic",serif;font-weight:500}
+.heading{font-family:"Zen Maru Gothic","Yu Gothic",serif;font-weight:700;letter-spacing:.02em;line-height:1.4}
+
+/* ========== レイアウト ========== */
+.container{
+  width:100%;
+  max-width:1200px;
+  margin:0 auto;
+  padding:0 24px;
+}
+@media(max-width:720px){
+  .container{padding:0 18px}
+}
+
+/* セクション共通 */
+section{position:relative;overflow:hidden}
+.section-pad{padding:96px 0}
+@media(max-width:720px){
+  .section-pad{padding:64px 0}
+}
+
+/* セクションヘッダー */
+.sec-head{
+  text-align:center;
+  margin-bottom:56px;
+  position:relative;
+  isolation:isolate;
+}
+/* タイトル背景の楕円ラジアルグラデ（背景の木装飾と被っても文字が浮き上がる）
+   ::before で広い楕円ハロー。セクション背景色は次のセレクタで上書きする */
+.sec-head::before{
+  content:"";
+  position:absolute;
+  left:50%;top:50%;
+  transform:translate(-50%,-50%);
+  width:min(820px, 95%);
+  height:140%;
+  background:radial-gradient(ellipse 60% 70% at center,
+    var(--base-1) 0%,
+    rgba(248,241,221,.92) 35%,
+    rgba(248,241,221,.55) 60%,
+    transparent 100%);
+  z-index:-1;
+  pointer-events:none;
+}
+.sec-head > *{position:relative;z-index:1}
+.sec-head .label{
+  display:inline-block;
+  font-family:"Zen Maru Gothic",serif;
+  color:var(--green-2);
+  font-size:13px;
+  letter-spacing:.3em;
+  margin-bottom:14px;
+  font-weight:700;
+}
+.sec-head h2{
+  font-family:"Zen Maru Gothic",serif;
+  font-weight:700;
+  font-size:clamp(26px,3.6vw,40px);
+  margin:0 0 16px;
+  color:var(--ink-1);
+  line-height:1.5;
+  letter-spacing:.04em;
+  position:relative;
+  /* 背景の木装飾と被ったとき可読性を確保するため、ベース色を広く滲ませる */
+  text-shadow:
+    0 0 32px var(--base-1),
+    0 0 32px var(--base-1),
+    0 0 24px var(--base-1),
+    0 0 24px var(--base-1),
+    0 0 16px var(--base-1),
+    0 0 16px var(--base-1);
+}
+.sec-head h2 .accent{color:var(--green-2);white-space:nowrap}
+.sec-head .lead{
+  color:var(--ink-2);
+  font-size:15px;
+  max-width:560px;
+  margin:0 auto;
+  line-height:2;
+  position:relative;
+  text-shadow:
+    0 0 24px var(--base-1),
+    0 0 24px var(--base-1),
+    0 0 16px var(--base-1),
+    0 0 16px var(--base-1);
+}
+/* セクション背景色に応じた sec-head::before のハロー色 */
+.features .sec-head::before,
+.voices .sec-head::before,
+.staff .sec-head::before{
+  background:radial-gradient(ellipse 60% 70% at center,
+    var(--base-3) 0%,
+    rgba(251,246,230,.92) 35%,
+    rgba(251,246,230,.55) 60%,
+    transparent 100%);
+}
+.works .sec-head::before,
+.contact .sec-head::before{
+  background:radial-gradient(ellipse 60% 70% at center,
+    var(--base-2) 0%,
+    rgba(239,227,198,.92) 35%,
+    rgba(239,227,198,.55) 60%,
+    transparent 100%);
+}
+/* features/voices/staff の text-shadow は base-3 寄りに */
+.features .sec-head h2,
+.voices .sec-head h2,
+.staff .sec-head h2{
+  text-shadow:
+    0 0 32px var(--base-3),
+    0 0 32px var(--base-3),
+    0 0 24px var(--base-3),
+    0 0 24px var(--base-3),
+    0 0 16px var(--base-3),
+    0 0 16px var(--base-3);
+}
+.features .sec-head .lead,
+.voices .sec-head .lead,
+.staff .sec-head .lead{
+  text-shadow:
+    0 0 24px var(--base-3),
+    0 0 24px var(--base-3),
+    0 0 16px var(--base-3),
+    0 0 16px var(--base-3);
+}
+/* works/contact は base-2 */
+.works .sec-head h2,
+.contact .sec-head h2{
+  text-shadow:
+    0 0 32px var(--base-2),
+    0 0 32px var(--base-2),
+    0 0 24px var(--base-2),
+    0 0 24px var(--base-2),
+    0 0 16px var(--base-2),
+    0 0 16px var(--base-2);
+}
+.works .sec-head .lead,
+.contact .sec-head .lead{
+  text-shadow:
+    0 0 24px var(--base-2),
+    0 0 24px var(--base-2),
+    0 0 16px var(--base-2),
+    0 0 16px var(--base-2);
+}
+.sec-head .deco-leaf{
+  position:absolute;
+  width:48px;
+  pointer-events:none;
+}
+
+/* ========== ボタン ========== */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  padding:18px 32px;
+  border-radius:var(--radius-pill);
+  font-family:"Zen Maru Gothic",serif;
+  font-weight:700;
+  font-size:16px;
+  letter-spacing:.05em;
+  transition:transform .25s ease, box-shadow .25s ease, background .25s ease;
+  white-space:nowrap;
+  position:relative;
+  text-align:center;
+}
+.btn .arrow{
+  display:inline-flex;width:18px;height:18px;align-items:center;justify-content:center;
+  transition:transform .3s ease;
+}
+.btn:hover .arrow{transform:translateX(4px)}
+.btn:hover{transform:translateY(-2px)}
+.btn-primary{
+  background:var(--green-1);
+  color:#fff;
+  box-shadow:0 6px 0 var(--green-2), 0 12px 24px rgba(79,100,64,.25);
+}
+.btn-primary:hover{box-shadow:0 4px 0 var(--green-2), 0 10px 20px rgba(79,100,64,.3);background:#7a9160}
+.btn-orange{
+  background:var(--orange-1);
+  color:#fff;
+  box-shadow:0 6px 0 #B87E36, 0 12px 24px rgba(217,154,78,.3);
+}
+.btn-orange:hover{box-shadow:0 4px 0 #B87E36, 0 10px 20px rgba(217,154,78,.35);background:#e0a55c}
+.btn-outline{
+  background:#fff;
+  color:var(--green-2);
+  border:2px solid var(--green-2);
+  box-shadow:0 4px 0 rgba(79,100,64,.15);
+}
+.btn-outline:hover{background:var(--base-3)}
+.btn-text{
+  display:inline-flex;align-items:center;gap:6px;
+  color:var(--green-2);
+  font-family:"Zen Maru Gothic",serif;
+  font-weight:700;
+  font-size:14px;
+  padding:6px 0;
+  border-bottom:1px solid currentColor;
+}
+.btn-text:hover{color:var(--green-1)}
+.btn-sm{padding:12px 22px;font-size:14px}
+.btn-lg{padding:22px 40px;font-size:18px}
+
+/* ========== バッジ・ピル ========== */
+.pill{
+  display:inline-flex;align-items:center;
+  padding:6px 14px;
+  border-radius:var(--radius-pill);
+  font-size:12px;
+  font-family:"Zen Maru Gothic",serif;
+  font-weight:700;
+  border:1.5px dashed var(--green-1);
+  color:var(--green-2);
+  background:#fff;
+  letter-spacing:.05em;
+}
+.pill-yellow{background:var(--yellow-1);color:#7d5c1a;border-color:#e0c66f;border-style:solid}
+.pill-green{background:var(--green-1);color:#fff;border-color:var(--green-2);border-style:solid}
+.pill-must{
+  display:inline-block;
+  padding:2px 9px;
+  background:#fff;
+  color:#D14B3D;
+  border:1.5px solid #D14B3D;
+  border-radius:4px;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.05em;
+}
+
+/* ========== カード共通 ========== */
+.card{
+  background:#fff;
+  border-radius:var(--radius-card);
+  box-shadow:var(--shadow-card);
+  border:1px solid rgba(226,215,181,.6);
+  position:relative;
+  overflow:hidden;
+}
+
+/* ========== 装飾 ========== */
+.decor{position:absolute;pointer-events:none;user-select:none}
+.cloud{opacity:.85}
+
+/* ========== fade-in ========== */
+.fade-in{
+  opacity:0;
+  transform:translateY(20px);
+  transition:opacity .8s ease, transform .8s ease;
+}
+.fade-in.visible{opacity:1;transform:translateY(0)}
+
+/* ========== ヘッダー ========== */
+.site-header{
+  position:fixed;top:0;left:0;right:0;
+  z-index:100;
+  background:rgba(248,241,221,.85);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(226,215,181,.5);
+  transition:padding .3s ease;
+}
+.site-header.scrolled{background:rgba(248,241,221,.95)}
+.header-inner{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 28px;
+  max-width:1280px;
+  margin:0 auto;
+}
+.logo{display:flex;align-items:center;gap:12px}
+.logo-img{width:44px;height:44px}
+.logo-text .lt-1{font-family:"Zen Maru Gothic",serif;font-weight:700;font-size:18px;color:var(--green-2);line-height:1.1;letter-spacing:.04em;white-space:nowrap}
+.logo-text .lt-2{font-size:10.5px;color:var(--ink-2);line-height:1.3;letter-spacing:.08em;white-space:nowrap}
+.gnav{display:flex;align-items:center;gap:32px}
+.gnav a{
+  font-family:"Zen Maru Gothic",serif;
+  font-weight:500;
+  font-size:14.5px;
+  color:var(--ink-1);
+  position:relative;
+  padding:6px 0;
+  transition:color .2s;
+}
+.gnav a:hover{color:var(--green-2)}
+.gnav a.active::after{
+  content:"";position:absolute;left:0;right:0;bottom:-4px;height:2px;
+  background:var(--green-2);border-radius:2px;
+}
+.header-cta{display:flex;gap:10px;align-items:center}
+.hamburger{
+  display:none;width:44px;height:44px;border-radius:12px;
+  background:var(--green-1);color:#fff;
+  align-items:center;justify-content:center;
+}
+.hamburger span{display:block;width:20px;height:2px;background:#fff;position:relative;transition:.25s}
+.hamburger span::before,.hamburger span::after{content:"";position:absolute;left:0;width:20px;height:2px;background:#fff;transition:.25s}
+.hamburger span::before{top:-7px}
+.hamburger span::after{top:7px}
+.hamburger.open span{background:transparent}
+.hamburger.open span::before{top:0;transform:rotate(45deg)}
+.hamburger.open span::after{top:0;transform:rotate(-45deg)}
+
+@media(max-width:980px){
+  .gnav,.header-cta .btn{display:none}
+  .hamburger{display:inline-flex}
+  .header-inner{padding:10px 18px 10px 88px} /* 左に ←INDEX 分の余白（モバイルではナビ非表示なので余裕） */
+  .logo-img{width:38px;height:38px}
+  .logo-text .lt-1{font-size:16px}
+}
+
+/* ハンバーガーメニュー */
+.mobile-menu{
+  position:fixed;top:0;left:0;right:0;bottom:0;
+  background:var(--base-1);
+  z-index:99;
+  padding:88px 28px 40px;
+  transform:translateX(100%);
+  transition:transform .35s ease;
+  overflow-y:auto;
+  display:flex;flex-direction:column;
+}
+.mobile-menu.open{transform:translateX(0)}
+.mobile-menu .mm-link{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 8px;
+  font-family:"Zen Maru Gothic",serif;font-weight:500;font-size:18px;
+  border-bottom:1px dashed var(--line);
+  color:var(--ink-1);
+}
+.mobile-menu .mm-cta{margin-top:32px;display:flex;flex-direction:column;gap:12px}
+
+/* ========== Hero ========== */
+.hero{
+  position:relative;
+  padding:104px 0 80px;
+  background:var(--base-1);
+  overflow:hidden;
+  min-height:980px;
+}
+.hero::before{
+  content:"";position:absolute;inset:0;
+  background:url('assets/bg-desktop.webp') no-repeat center bottom/cover;
+  opacity:.95;
+  z-index:0;
+}
+/* スマホ: bg-sp.png 上部の雲を base-1 グラデで隠す（背景画像はいじらず CSS のみで処理） */
+.hero::after{
+  content:"";position:absolute;left:0;right:0;top:0;
+  height:0;
+  pointer-events:none;
+  z-index:1;
+}
+.hero-inner{position:relative;z-index:2}
+.hero-content{
+  display:block;
+  min-height:740px;
+  position:relative;
+}
+.hero-text{
+  max-width:620px;
+  position:relative;
+  z-index:2;
+}
+.hero-text .eyebrow-row{
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  margin-bottom:18px;
+}
+.hero-text .eyebrow{
+  display:inline-flex;align-items:center;gap:10px;
+  background:#fff;
+  padding:8px 18px 8px 10px;
+  border-radius:var(--radius-pill);
+  font-size:12.5px;
+  font-family:"Zen Maru Gothic",serif;
+  font-weight:700;
+  color:var(--green-2);
+  border:1.5px solid var(--green-1);
+  box-shadow:0 4px 12px rgba(79,100,64,.08);
+}
+.hero-text .eyebrow img{width:24px;height:24px}
+.hero-text .eyebrow-row .hero-trust{
+  display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+}
+.hero-text .eyebrow-row .hero-trust img{
+  height:42px;width:auto;
+  filter:drop-shadow(0 4px 10px rgba(79,100,64,.14));
+}
+.hero h1{
+  font-family:"Zen Maru Gothic",serif;
+  font-weight:700;
+  font-size:clamp(32px,4.6vw,54px);
+  line-height:1.32;
+  letter-spacing:.02em;
+  color:var(--ink-1);
+  margin:0 0 18px;
+  max-width:none;
+  text-shadow:0 1px 0 rgba(255,255,255,.6);
+}
+.hero h1 .row{display:block;white-space:nowrap}
+.hero h1 .accent{color:var(--green-2)}
+.hero-sub{
+  display:inline-block;
+  font-size:15px;
+  color:var(--ink-1);
+  line-height:1.75;
+  margin:0 0 22px;
+  max-width:540px;
+  background:rgba(255,255,255,.78);
+  -webkit-backdrop-filter:blur(6px);
+  backdrop-filter:blur(6px);
+  border:1px solid rgba(226,215,181,.7);
+  border-radius:18px;
+  padding:11px 18px;
+  box-shadow:0 6px 18px rgba(79,100,64,.10);
+}
+.hero-cta{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:0}
+.hero-illust{
+  position:relative;
+  align-self:end;
+}
+.hero-illust img.fv{
+  width:100%;max-width:560px;
+  margin-left:auto;
+  filter:drop-shadow(0 18px 30px rgba(79,100,64,.18));
+}
+.hero-bunting{position:absolute;top:-10px;right:8%;width:160px;z-index:3;animation:sway 5s ease-in-out infinite}
+@keyframes sway{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg)}}
+.hero-cloud-1{top:8%;right:35%;width:80px;animation:float 14s ease-in-out infinite}
+.hero-cloud-2{top:18%;right:6%;width:64px;animation:float 18s ease-in-out infinite reverse}
+@keyframes float{0%,100%{transform:translateX(0)}50%{transform:translateX(-20px)}}
+
+@media(max-width:980px){
+  /* FV はスマホで viewport 高さいっぱい使い、次セクションが見えないように */
+  .hero{padding:88px 0 28px;min-height:100svh}
+  .hero::before{background-image:url('assets/bg-sp.webp');background-size:cover;background-position:center bottom}
+  /* bg-sp.png 上部の雲・空を base-1 グラデで完全に隠す（FV 内部のスマホ専用） */
+  .hero::after{
+    height:38vh;
+    background:linear-gradient(to bottom,
+      var(--base-1) 0%,
+      var(--base-1) 50%,
+      rgba(248,241,221,.85) 75%,
+      transparent 100%);
+  }
+  .hero-content{min-height:auto}
+  .hero-text{padding-bottom:32vw}
+  .hero h1{font-size:clamp(28px,7vw,40px)}
+  .hero h1 .row{white-space:normal}
+  .hero-sub{font-size:14.5px;padding:12px 16px;line-height:1.7;margin-bottom:18px}
+  .hero-text .eyebrow-row{margin-bottom:14px;gap:10px}
+  .hero-text .eyebrow{font-size:11.5px;padding:6px 14px 6px 8px}
+  .hero-text .eyebrow img{width:20px;height:20px}
+  .hero-text .eyebrow-row .hero-trust img{height:32px}
+  /* スマホでは雲・旗の装飾を非表示（FVパーツに被るため） */
+  .hero-bunting,.hero-cloud-1,.hero-cloud-2{display:none}
+  /* スマホでは FV 内のボタンを非表示（下部追従 CTA に集約） */
+  .hero-cta{display:none}
+}
+
+/* ========== セクション: 特長 ========== */
+.features{
+  background:var(--base-3);
+  position:relative;
+}
+.features::before{
+  content:"";position:absolute;inset:0;
+  background-image:radial-gradient(rgba(168,120,74,.08) 1px, transparent 1px);
+  background-size:20px 20px;
+  opacity:.5;
+}
+.feature-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:24px;
+  position:relative;
+}
+.feature-card{
+  background:#fff;
+  border-radius:var(--radius-card);
+  padding:32px 24px;
+  text-align:center;
+  border:1px solid var(--line);
+  box-shadow:var(--shadow-soft);
+  position:relative;
+  transition:transform .3s ease, box-shadow .3s ease;
+}
+.feature-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-card)}
+.feature-card .icon-wrap{
+  width:96px;height:96px;
+  margin:0 auto 20px;
+  background:var(--base-2);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+}
+.feature-card .icon-wrap img{width:64px;height:64px;object-fit:contain}
+.feature-card .num{
+  position:absolute;top:-10px;right:-6px;
+  background:var(--orange-1);color:#fff;
+  width:36px;height:36px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:"Zen Maru Gothic",serif;font-weight:700;font-size:14px;
+  box-shadow:0 4px 0 #B87E36;
+}
+.feature-card h3{
+  font-family:"Zen Maru Gothic",serif;font-weight:700;
+  font-size:19px;margin:0 0 12px;color:var(--ink-1);
+  text-wrap:balance;
+  line-height:1.55;
+}
+.feature-card p{font-size:14px;color:var(--ink-2);line-height:1.9;margin:0}
+@media(max-width:980px){.feature-grid{grid-template-columns:repeat(2,1fr);gap:18px}}
+@media(max-width:520px){.feature-grid{grid-template-columns:1fr}}
+
+/* ========== サービス3本柱 ========== */
+.services{
+  background:var(--base-1);
+  position:relative;
+}
+.service-row{
+  display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;
+  margin-bottom:80px;
+}
+.service-row.reverse{direction:rtl}
+.service-row.reverse>*{direction:ltr}
+.service-row:last-child{margin-bottom:0}
+.service-img{
+  position:relative;
+  border-radius:var(--radius-card);
+  overflow:hidden;
+  aspect-ratio:4/3;
+  background:var(--base-2);
+  box-shadow:var(--shadow-card);
+}
+.service-img .service-photo{
+  position:absolute;inset:0;
+  width:100%;height:100%;object-fit:cover;
+  z-index:1;
+}
+.service-img .ph{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--ink-2);font-size:13px;
+  background:linear-gradient(135deg, var(--base-2), var(--yellow-2));
+  background-size:200% 200%;
+  background-position:0 0;
+}
+.service-img .ph-content{
+  display:flex;flex-direction:column;align-items:center;gap:14px;
+  text-align:center;padding:20px;
+}
+.service-img .ph-content img{width:120px;height:120px;object-fit:contain;filter:drop-shadow(0 8px 14px rgba(0,0,0,.1))}
+.service-text .num-tag{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:"Zen Maru Gothic",serif;font-weight:700;color:var(--green-2);
+  font-size:14px;letter-spacing:.2em;margin-bottom:14px;
+}
+.service-text .num-tag .num{
+  font-size:24px;color:var(--orange-1);font-weight:900;
+}
+.service-text h3{
+  font-family:"Zen Maru Gothic",serif;font-weight:700;
+  font-size:clamp(22px,2.6vw,30px);margin:0 0 18px;line-height:1.5;
+}
+.service-text p{font-size:15px;color:var(--ink-2);line-height:2;margin:0 0 22px}
+.service-text .feat-list{
+  list-style:none;padding:0;margin:0 0 24px;
+  display:flex;flex-wrap:wrap;gap:8px;
+}
+.service-text .feat-list li{
+  background:var(--base-3);color:var(--green-2);
+  padding:6px 14px;border-radius:var(--radius-pill);
+  font-size:12.5px;font-family:"Zen Maru Gothic",serif;font-weight:700;
+  border:1px dashed var(--green-3);
+}
+@media(max-width:980px){
+  .service-row{grid-template-columns:1fr;gap:24px;margin-bottom:48px}
+  .service-row.reverse{direction:ltr}
+}
+
+/* ========== 施工事例 ========== */
+.works{
+  background:var(--base-2);
+  position:relative;
+}
+.works::before{
+  content:"";position:absolute;inset:0;
+  background-image:url('assets/sectionbg/01.png');
+  background-size:cover;background-position:center;
+  opacity:.4;
+}
+.filter-bar{
+  display:flex;flex-wrap:wrap;gap:10px;justify-content:center;
+  margin-bottom:40px;
+}
+.filter-btn{
+  padding:10px 20px;
+  background:#fff;border-radius:var(--radius-pill);
+  font-family:"Zen Maru Gothic",serif;font-weight:700;font-size:13.5px;
+  border:1.5px solid var(--line);
+  color:var(--ink-2);
+  transition:all .2s;
+}
+.filter-btn.active{background:var(--green-1);color:#fff;border-color:var(--green-2)}
+.filter-btn:hover:not(.active){background:var(--base-3);color:var(--green-2)}
+.works-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:28px;
+}
+.work-card{
+  background:#fff;border-radius:var(--radius-card);
+  overflow:hidden;border:1px solid var(--line);
+  box-shadow:var(--shadow-soft);
+  transition:transform .3s, box-shadow .3s;
+  cursor:pointer;
+}
+.work-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-card)}
+.work-card .thumb{
+  aspect-ratio:4/3;
+  background:linear-gradient(135deg,#d8c8a0,#bfa97a);
+  position:relative;overflow:hidden;
+}
+.work-card .thumb-photo{
+  position:absolute;inset:0;
+  width:100%;height:100%;object-fit:cover;
+  z-index:1;
+  transition:transform .5s ease;
+}
+.work-card:hover .thumb-photo{transform:scale(1.05)}
+.work-card .thumb-decor{
+  position:absolute;inset:0;
+  display:flex;align-items:flex-end;justify-content:center;
+  padding:24px;
+}
+.work-card .thumb-decor img{width:60%;max-width:240px;filter:drop-shadow(0 6px 12px rgba(0,0,0,.18))}
+.work-card .thumb-tag{
+  position:absolute;top:14px;left:14px;
+  background:#fff;color:var(--green-2);
+  padding:5px 12px;border-radius:var(--radius-pill);
+  font-size:11.5px;font-family:"Zen Maru Gothic",serif;font-weight:700;
+  border:1.5px solid var(--green-3);
+  z-index:2;
+  box-shadow:0 2px 8px rgba(0,0,0,.12);
+}
+.work-card .body{padding:22px}
+.work-card .body h4{
+  font-family:"Zen Maru Gothic",serif;font-weight:700;font-size:18px;
+  margin:0 0 10px;line-height:1.55;
+}
+.work-card .body p{font-size:13px;color:var(--ink-2);margin:0 0 14px;line-height:1.8}
+.work-card .meta{
+  display:flex;flex-wrap:wrap;gap:6px;
+  padding-top:14px;border-top:1px dashed var(--line);
+}
+.work-card .meta .pill{font-size:11px;padding:4px 10px}
+@media(max-width:980px){.works-grid{grid-template-columns:repeat(2,1fr);gap:20px}}
+@media(max-width:520px){.works-grid{grid-template-columns:1fr}}
+
+/* ========== お客様の声 ========== */
+.voices{
+  background:var(--base-3);
+  position:relative;
+}
+.voices-stage{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:24px;
+  position:relative;
+}
+.voice-track{
+  display:flex;
+  gap:20px;
+  overflow-x:auto;
+  scroll-snap-type:x mandatory;
+  scrollbar-width:none;
+  padding:8px 4px 24px;
+  margin:0 -8px;
+}
+.voice-track::-webkit-scrollbar{display:none}
+.voice-card{
+  flex:0 0 calc(33.333% - 14px);
+  scroll-snap-align:start;
+  background:#fff;
+  border-radius:var(--radius-card);
+  padding:28px 26px 26px;
+  border:1px solid var(--line);
+  box-shadow:var(--shadow-soft);
+  position:relative;
+  display:flex;flex-direction:column;
+}
+.voice-card .speech{
+  background:var(--base-3);
+  border-radius:18px;
+  padding:18px 20px;
+  margin-bottom:18px;
+  position:relative;
+  font-size:14.5px;line-height:1.95;
+}
+.voice-card .speech::after{
+  content:"";position:absolute;bottom:-10px;left:36px;
+  width:18px;height:18px;
+  background:var(--base-3);
+  transform:rotate(45deg);
+}
+.voice-card .author{
+  display:flex;align-items:center;gap:14px;
+  margin-top:auto;
+}
+.voice-card .author img{
+  width:64px;height:64px;border-radius:50%;
+  background:var(--base-2);object-fit:cover;
+  border:2px solid #fff;
+  box-shadow:0 4px 10px rgba(0,0,0,.06);
+}
+.voice-card .author-info .name{
+  font-family:"Zen Maru Gothic",serif;font-weight:700;font-size:14.5px;
+}
+.voice-card .author-info .meta{font-size:12px;color:var(--ink-2)}
+.voice-card .stars{color:var(--orange-1);font-size:14px;margin-bottom:8px;letter-spacing:2px}
+.voice-controls{
+  display:flex;justify-content:center;gap:14px;margin-top:24px;
+}
+.voice-arrow{
+  width:48px;height:48px;border-radius:50%;
+  background:#fff;border:1.5px solid var(--green-3);
+  color:var(--green-2);font-size:18px;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:var(--shadow-soft);transition:all .2s;
+}
+.voice-arrow:hover{background:var(--green-1);color:#fff;border-color:var(--green-1)}
+.voice-arrow:disabled{opacity:.4;cursor:not-allowed}
+@media(max-width:980px){.voice-card{flex:0 0 calc(80% - 10px)}}
+@media(max-width:520px){.voice-card{flex:0 0 calc(90% - 10px);padding:22px 20px}}
+
+/* ---- お客様の声 マーキー ---- */
+/* hover でも止まらず常時動き続ける（カクッと感を完全になくすため） */
+.voices-marquee{
+  position:relative;
+  margin-top:24px;
+  overflow:hidden;
+  /* 端でフェードアウト */
+  -webkit-mask-image:linear-gradient(90deg, transparent 0, #000 8%, #000 92%, transparent 100%);
+  mask-image:linear-gradient(90deg, transparent 0, #000 8%, #000 92%, transparent 100%);
+}
+.voice-track-marquee{
+  display:flex;
+  gap:20px;
+  width:max-content;
+  padding:8px 10px 24px;
+  animation:voice-marquee 60s linear infinite;
+  will-change:transform;
+}
+.voice-track-marquee .voice-card{
+  flex:0 0 360px;
+  scroll-snap-align:none;
+}
+@keyframes voice-marquee{
+  from{transform:translateX(0)}
+  to{transform:translateX(-50%)}
+}
+@media(max-width:720px){
+  .voice-track-marquee{animation-duration:50s;gap:14px}
+  .voice-track-marquee .voice-card{flex:0 0 280px;padding:22px 20px}
+}
+@media (prefers-reduced-motion: reduce){
+  .voice-track-marquee{animation:none}
+}
+
+/* ========== ステップ ========== */
+.steps{
+  background:var(--base-1);
+  position:relative;
+}
+.steps-track{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:10px;
+  position:relative;
+  margin-top:32px;
+}
+.step-item{
+  background:#fff;
+  border:1.5px solid var(--line);
+  border-radius:18px 18px 110px 110px / 18px 18px 24px 24px;
+  padding:18px 10px 36px;
+  text-align:center;
+  position:relative;
+}
+.step-item .step-num{
+  display:inline-block;
+  font-family:"Zen Maru Gothic",serif;font-weight:700;
+  font-size:13px;letter-spacing:.1em;
+  color:var(--orange-1);
+  margin-bottom:8px;
+}
+.step-item .step-icon{
+  width:54px;height:54px;margin:0 auto 10px;
+  display:flex;align-items:center;justify-content:center;
+}
+.step-item .step-icon img{width:100%;height:100%;object-fit:contain}
+.step-item h4{
+  font-family:"Zen Maru Gothic",serif;font-weight:700;font-size:13.5px;
+  margin:0;line-height:1.5;
+  color:var(--ink-1);
+}
+.steps-track::after{
+  content:"";position:absolute;bottom:-20px;left:5%;right:5%;height:36px;
+  background:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 6"><path d="M0 3 Q 25 0 50 3 T 100 3" stroke="%23A8784A" fill="none" stroke-dasharray="2 5" stroke-width=".6"/></svg>') repeat-x;
+  background-size:30px 6px;
+  opacity:.4;
+}
+@media(max-width:980px){
+  .steps-track{grid-template-columns:repeat(2,1fr);gap:14px}
+  .step-item{border-radius:18px;padding:18px 14px}
+}
+@media(max-width:520px){.steps-track{grid-template-columns:1fr}}
+
+/* ========== スタッフ ========== */
+.staff{
+  background:var(--base-3);
+  position:relative;
+}
+.staff-grid{
+  display:grid;grid-template-columns:repeat(5,1fr);gap:20px;
+}
+.staff-card{
+  background:#fff;border-radius:var(--radius-card);
+  padding:28px 18px 22px;
+  text-align:center;
+  border:1px solid var(--line);
+  box-shadow:var(--shadow-soft);
+  transition:transform .25s;
+}
+.staff-card:hover{transform:translateY(-4px)}
+.staff-card .avatar{
+  width:130px;height:130px;
+  border-radius:50%;
+  background:var(--base-2);
+  margin:0 auto 14px;
+  overflow:hidden;
+  border:3px solid #fff;
+  box-shadow:0 6px 14px rgba(79,100,64,.12);
+}
+.staff-card .avatar img{width:100%;height:100%;object-fit:cover}
+.staff-card .role{
+  display:inline-block;
+  font-size:11.5px;font-family:"Zen Maru Gothic",serif;font-weight:700;
+  color:var(--green-2);
+  background:var(--base-3);
+  padding:3px 12px;border-radius:var(--radius-pill);
+  margin-bottom:8px;
+}
+.staff-card .name{
+  font-family:"Zen Maru Gothic",serif;font-weight:700;font-size:16px;
+  margin:0 0 6px;
+}
+.staff-card .name small{font-size:11px;color:var(--ink-2);font-weight:400;display:block;margin-top:2px}
+.staff-card .bio{font-size:12px;color:var(--ink-2);line-height:1.7;margin:8px 0 0}
+@media(max-width:980px){.staff-grid{grid-template-columns:repeat(3,1fr);gap:14px}}
+@media(max-width:520px){.staff-grid{grid-template-columns:repeat(2,1fr)}}
+
+/* ========== FAQ ========== */
+.faq{background:var(--base-1)}
+.faq-wrap{max-width:780px;margin:0 auto}
+.faq-item{
+  background:#fff;border:1px solid var(--line);
+  border-radius:18px;
+  margin-bottom:14px;
+  overflow:hidden;
+  box-shadow:0 2px 8px rgba(79,100,64,.05);
+}
+.faq-q{
+  display:flex;align-items:center;gap:14px;
+  padding:20px 22px;
+  width:100%;text-align:left;
+  font-family:"Zen Maru Gothic",serif;font-weight:700;font-size:15.5px;
+  color:var(--ink-1);
+}
+.faq-q .qmark{
+  flex:0 0 32px;height:32px;border-radius:50%;
+  background:var(--green-1);color:#fff;
+  display:inline-flex;align-items:center;justify-content:center;
+  font-family:"Zen Maru Gothic",serif;font-weight:900;font-size:15px;
+}
+.faq-q .qtxt{flex:1}
+.faq-q .toggle{
+  width:32px;height:32px;border-radius:50%;
+  background:var(--base-3);color:var(--green-2);
+  display:inline-flex;align-items:center;justify-content:center;
+  transition:transform .3s, background .25s;
+  font-size:16px;font-weight:700;
+}
+.faq-item.open .toggle{transform:rotate(45deg);background:var(--orange-1);color:#fff}
+.faq-a{
+  max-height:0;
+  overflow:hidden;
+  transition:max-height .4s ease;
+}
+.faq-item.open .faq-a{max-height:800px}
+.faq-a > div{}
+.faq-a .ainner{
+  padding:0 22px 22px 68px;
+  font-size:14.5px;color:var(--ink-2);line-height:2;
+  display:flex;gap:14px;align-items:flex-start;
+}
+.faq-a .amark{
+  flex:0 0 32px;height:32px;border-radius:50%;
+  background:var(--orange-1);color:#fff;
+  display:inline-flex;align-items:center;justify-content:center;
+  font-family:"Zen Maru Gothic",serif;font-weight:900;font-size:15px;
+  margin-left:-54px;
+}
+
+/* ========== お問い合わせ ========== */
+.contact{
+  background:var(--base-2);
+  position:relative;
+  overflow:hidden;
+}
+.contact::before{
+  content:"";position:absolute;inset:0;
+  background:url('assets/sectionbg/03.png') repeat-x bottom/auto 60%;
+  opacity:.45;
+}
+.contact-grid{
+  display:grid;grid-template-columns:1fr 1.1fr;gap:48px;align-items:start;
+  position:relative;z-index:2;
+}
+.contact-side{padding:8px 0}
+.contact-side .lead-block{
+  background:#fff;border-radius:var(--radius-card);
+  padding:28px;border:1px solid var(--line);
+  box-shadow:var(--shadow-soft);
+  margin-bottom:18px;
+}
+.contact-side h3{
+  font-family:"Zen Maru Gothic",serif;font-weight:700;font-size:20px;margin:0 0 10px;
+}
+.contact-side p{font-size:14px;color:var(--ink-2);line-height:2;margin:0 0 14px}
+.contact-side .tel-block{
+  background:var(--base-1);
+  border-radius:18px;
+  padding:18px 20px;
+  text-align:center;
+  border:1.5px dashed var(--green-3);
+}
+.contact-side .tel-block .label{font-size:12px;color:var(--ink-2);margin-bottom:4px}
+.contact-side .tel-block .num{
+  font-family:"Zen Maru Gothic",serif;font-weight:900;
+  font-size:28px;color:var(--green-2);letter-spacing:.04em;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  white-space:nowrap;
+}
+.contact-side .tel-block .num .icon{width:24px;height:24px}
+.contact-side .tel-block .hours{font-size:12px;color:var(--ink-2);margin-top:6px}
+.form-card{
+  background:#fff;border-radius:var(--radius-card);
+  padding:36px 36px 32px;
+  border:1px solid var(--line);
+  box-shadow:var(--shadow-card);
+  position:relative;
+}
+.form-card .field{margin-bottom:18px}
+.form-card label{
+  display:flex;align-items:center;gap:8px;
+  font-family:"Zen Maru Gothic",serif;font-weight:700;font-size:13.5px;
+  margin-bottom:8px;color:var(--ink-1);
+}
+.form-card .input,.form-card .textarea,.form-card .select{
+  width:100%;
+  padding:13px 16px;
+  background:var(--base-3);
+  border:1.5px solid var(--line);
+  border-radius:14px;
+  font-size:14.5px;
+  transition:border-color .2s, background .2s;
+  outline:none;
+}
+.form-card .input:focus,.form-card .textarea:focus{
+  border-color:var(--green-1);background:#fff;
+  box-shadow:0 0 0 4px rgba(111,133,86,.12);
+}
+.form-card .textarea{resize:vertical;min-height:120px;line-height:1.7}
+.form-card .check-row{
+  display:flex;flex-wrap:wrap;gap:10px;
+}
+.check-pill{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:10px 18px;
+  background:var(--base-3);
+  border:1.5px solid var(--line);
+  border-radius:var(--radius-pill);
+  font-size:13.5px;font-family:"Zen Maru Gothic",serif;font-weight:700;
+  cursor:pointer;transition:all .2s;
+}
+.check-pill input{display:none}
+.check-pill .box{
+  width:18px;height:18px;border-radius:5px;
+  background:#fff;border:1.5px solid var(--green-3);
+  display:inline-flex;align-items:center;justify-content:center;
+  transition:.2s;
+}
+.check-pill input:checked + .box{background:var(--green-1);border-color:var(--green-1)}
+.check-pill input:checked + .box::after{content:"✓";color:#fff;font-size:12px;font-weight:700}
+.check-pill:has(input:checked){background:#fff;border-color:var(--green-1);color:var(--green-2)}
+.form-card .err{color:#D14B3D;font-size:12px;margin-top:6px}
+.form-card .submit-row{display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:24px}
+.form-card .privacy-note{font-size:12px;color:var(--ink-2);text-align:center;line-height:1.7}
+.form-card .privacy-note a{text-decoration:underline;color:var(--green-2)}
+.form-success{
+  text-align:center;padding:40px 20px;
+}
+.form-success .icon{width:80px;height:80px;margin:0 auto 18px}
+.form-success h3{font-family:"Zen Maru Gothic",serif;font-weight:700;font-size:22px;margin:0 0 12px}
+.form-success p{color:var(--ink-2);font-size:14px;line-height:2;margin:0}
+
+@media(max-width:980px){
+  .contact-grid{grid-template-columns:1fr;gap:24px}
+  .form-card{padding:26px 22px 24px}
+}
+
+/* ========== フッター ========== */
+.site-footer{
+  background:var(--base-3);
+  border-top:2px solid var(--line);
+  padding:64px 0 24px;
+  position:relative;
+}
+.footer-grid{
+  display:grid;
+  grid-template-columns:1.4fr 1fr 1fr 1.2fr;
+  gap:40px;
+  margin-bottom:48px;
+}
+.footer-brand .logo{margin-bottom:16px}
+.footer-brand p{font-size:13px;color:var(--ink-2);line-height:1.9;margin:0 0 18px}
+.footer-sns{display:flex;gap:10px}
+.footer-sns a{
+  width:40px;height:40px;border-radius:50%;
+  background:#fff;border:1.5px solid var(--line);
+  display:inline-flex;align-items:center;justify-content:center;
+  color:var(--green-2);font-size:16px;
+  transition:.2s;
+}
+.footer-sns a:hover{background:var(--green-1);color:#fff;border-color:var(--green-1)}
+.footer-col h4{
+  font-family:"Zen Maru Gothic",serif;font-weight:700;font-size:14px;
+  margin:0 0 16px;color:var(--green-2);letter-spacing:.1em;
+}
+.footer-col ul{list-style:none;padding:0;margin:0}
+.footer-col li{margin-bottom:10px}
+.footer-col a{font-size:13.5px;color:var(--ink-2);transition:color .2s}
+.footer-col a:hover{color:var(--green-2)}
+.footer-tel-card{
+  background:#fff;border-radius:var(--radius-card);
+  padding:20px 22px;
+  text-align:center;
+  border:1px solid var(--line);
+}
+.footer-tel-card .label{font-size:11.5px;color:var(--ink-2);margin-bottom:4px}
+.footer-tel-card .num{
+  font-family:"Zen Maru Gothic",serif;font-weight:900;
+  font-size:22px;color:var(--green-2);letter-spacing:.04em;
+  white-space:nowrap;
+}
+.footer-tel-card .hours{font-size:11.5px;color:var(--ink-2);margin-top:4px}
+.footer-bottom{
+  display:flex;justify-content:space-between;align-items:center;
+  padding-top:20px;border-top:1px solid var(--line);
+  font-size:11.5px;color:var(--ink-2);
+}
+.footer-bottom .legal{display:flex;gap:18px}
+@media(max-width:980px){
+  .footer-grid{grid-template-columns:1fr 1fr;gap:28px}
+  /* スマホではフッター上部の木装飾はロゴと被るため非表示 */
+  .site-footer > .decor{display:none}
+}
+@media(max-width:520px){
+  .footer-grid{grid-template-columns:1fr}
+  .footer-bottom{flex-direction:column;gap:10px;text-align:center}
+}
+
+/* ========== SP固定CTA ========== */
+.sp-cta{
+  position:fixed;left:0;right:0;bottom:0;
+  background:rgba(255,255,255,.92);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  border-top:1px solid var(--line);
+  display:none;
+  padding:10px 14px calc(10px + env(safe-area-inset-bottom));
+  gap:10px;
+  z-index:90;
+  box-shadow:0 -8px 24px rgba(79,100,64,.08);
+  transition:transform .35s ease, opacity .25s ease;
+}
+.sp-cta .btn{flex:1;padding:14px 12px;font-size:14px;box-shadow:0 4px 0 rgba(0,0,0,.15)}
+@media(max-width:980px){.sp-cta{display:flex}}
+
+/* ========== セクション仕切り波 ========== */
+.section-wave{
+  position:absolute;left:0;right:0;
+  height:40px;pointer-events:none;
+  background-repeat:repeat-x;background-size:120px 40px;
+}
+.section-wave.top{top:0;background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 40"><path d="M0 0 Q 30 40 60 20 T 120 20 V 0 Z" fill="%23F8F1DD"/></svg>')}
+.section-wave.bottom{bottom:0;background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 40"><path d="M0 40 Q 30 0 60 20 T 120 20 V 40 Z" fill="%23F8F1DD"/></svg>')}
+
+/* ========== 装飾物の動き ========== */
+.deco-bob{animation:bob 4s ease-in-out infinite}
+.deco-bob.delay-1{animation-delay:-1s}
+.deco-bob.delay-2{animation-delay:-2s}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+
+/* ========== 共通: 数字表示 ========== */
+.num-display{
+  font-family:"Zen Maru Gothic",serif;font-weight:900;
+  color:var(--orange-1);
+}
+

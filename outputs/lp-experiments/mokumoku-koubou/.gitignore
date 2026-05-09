@@ -1,0 +1,11 @@
+# 確認用スクショ・素材原本（公開不要）
+_local-check/
+screenshots/
+uploads/
+
+# OS / Editor
+.DS_Store
+.vscode/
+.idea/
+*.swp
+node_modules/
