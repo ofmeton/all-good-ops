@@ -19,7 +19,7 @@ function loadTrackRecord(): string {
   const path = join(
     __dirname,
     '..', '..', '..', '..', '..', '..',
-    'knowledge', 'context', 'proven-track-record.md'
+    'wiki', 'business', 'bsa', 'proven-track-record.md'
   );
   try {
     cachedTrackRecord = readFileSync(path, 'utf8');

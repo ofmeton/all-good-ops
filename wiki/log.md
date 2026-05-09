@@ -14,3 +14,11 @@ Plan: `docs/superpowers/plans/2026-05-09-llm-wiki-phase0-1.md`
 
 `knowledge/context/pricing-catalog.md` → `wiki/business/bsa/pricing-catalog.md` 移動。
 14 ファイルのリンク張替え済み（残存ゼロ確認）。frontmatter 追加（type=source, identity=工藤陸）。
+
+## [2026-05-09] phase | proven-track-record 移行
+
+`knowledge/context/proven-track-record.md` → `wiki/business/bsa/proven-track-record.md` 移動。
+- prompt-builder.ts の readFileSync パス更新（実行時に新パスを参照）
+- rapid-hp-operator.md のリンク更新
+- frontmatter 追加（type=source, identity=工藤陸）
+- パス解決動作確認済み（node -e existsSync=true）

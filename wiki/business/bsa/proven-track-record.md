@@ -1,3 +1,14 @@
+---
+type: source
+created: 2026-04-22
+updated: 2026-05-09
+sources: []
+related: [[overview]]
+tags: [bsa, track-record]
+status: active
+identity: 工藤陸
+---
+
 # 工藤陸 検証済み実績 SSOT（提案文に書ける実績の唯一の正本）
 
 このファイルは BSA / Lancers / Coconala / Coconala 等で**外部に出す提案文・プロフィール文に書く実績の唯一の正本**です。

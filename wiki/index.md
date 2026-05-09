@@ -7,6 +7,7 @@
 
 ### bsa
 - [pricing-catalog](business/bsa/pricing-catalog.md) — 商品ライン L1/L2/L3/L4 価格・納期・オプション SSOT
+- [proven-track-record](business/bsa/proven-track-record.md) — 提案文に書ける実績 SSOT（Phase 2 で業種別分解検討）
 
 ## domain
 
