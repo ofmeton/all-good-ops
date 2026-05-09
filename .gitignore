@@ -16,3 +16,12 @@ logs/*.log
 # Temporary
 *.tmp
 *.bak
+
+# Root-level scratch images (作業中スクショ。保管は outputs/screenshots/ 配下へ)
+/*.png
+/*.jpg
+/*.jpeg
+
+# Tool generated
+.playwright-mcp/
+*.egg-info/

@@ -1,0 +1,586 @@
+- generic [ref=e2]:
+  - main [ref=e3]:
+    - generic [ref=e7]:
+      - paragraph [ref=e9]:
+        - generic [ref=e10]:
+          - img [ref=e11]
+          - img [ref=e21]
+        - img "The passion of people known as 'lifestyle specialists.'" [ref=e28]
+      - generic [ref=e30]:
+        - paragraph [ref=e31]:
+          - generic [ref=e32]:
+            - generic [ref=e33]:
+              - img [ref=e34]
+              - img [ref=e42]
+              - img [ref=e51]
+            - img "The passion of people known as 'lifestyle specialists.'" [ref=e58]
+        - list [ref=e59]
+        - list:
+          - listitem [ref=e65]
+          - listitem [ref=e66]
+      - img [ref=e72]
+      - img [ref=e77]
+    - generic [ref=e82]:
+      - heading "[ service ] サービス紹介" [level=2] [ref=e83]:
+        - generic [ref=e84]:
+          - text: "["
+          - generic [ref=e85]: service
+          - text: "]"
+        - img "サービス紹介" [ref=e87]
+      - paragraph [ref=e88]:
+        - generic [ref=e89]: ユーザーのくらしの困りごとを解決するのに最も適した
+        - generic [ref=e90]: 専門業者様を24時間ご紹介する、WEBメディアやアプリを運営しています。
+      - generic [ref=e91]:
+        - link "ハウスクリーニングメディア おそうじ合衆国" [ref=e92] [cursor=pointer]:
+          - /url: https://madoguchi.inc/services/osouji_support/
+          - generic [ref=e94]:
+            - paragraph [ref=e95]: ハウスクリーニングメディア
+            - paragraph [ref=e96]: おそうじ合衆国
+        - link "不用品回収・遺品整理メディア 不用品回収の窓口" [ref=e97] [cursor=pointer]:
+          - /url: https://madoguchi.inc/services/fuyouhin_support/
+          - generic [ref=e99]:
+            - paragraph [ref=e100]: 不用品回収・遺品整理メディア
+            - paragraph [ref=e101]: 不用品回収の窓口
+        - link "リユース支援メディア みんなの買取" [ref=e102] [cursor=pointer]:
+          - /url: https://madoguchi.inc/services/reuse/
+          - generic [ref=e104]:
+            - paragraph [ref=e105]: リユース支援メディア
+            - paragraph [ref=e106]: みんなの買取
+        - link "外壁塗装メディア gaiheki＋" [ref=e107] [cursor=pointer]:
+          - /url: https://madoguchi.inc/services/gaiheki/
+          - generic [ref=e109]:
+            - paragraph [ref=e110]: 外壁塗装メディア
+            - paragraph [ref=e111]: gaiheki＋
+        - link "お庭仕事メディア SENBATSU" [ref=e112] [cursor=pointer]:
+          - /url: https://madoguchi.inc/services/senbatsu/
+          - generic [ref=e114]:
+            - paragraph [ref=e115]: お庭仕事メディア
+            - paragraph [ref=e116]: SENBATSU
+        - link "害虫駆除メディア GEKITAI" [ref=e117] [cursor=pointer]:
+          - /url: https://madoguchi.inc/services/gekitai/
+          - generic [ref=e119]:
+            - paragraph [ref=e120]: 害虫駆除メディア
+            - paragraph [ref=e121]: GEKITAI
+        - link "業者呼び出しアプリ オヨビー" [ref=e122] [cursor=pointer]:
+          - /url: https://madoguchi.inc/services/oyobee/
+          - generic [ref=e124]:
+            - paragraph [ref=e125]: 業者呼び出しアプリ
+            - paragraph [ref=e126]: オヨビー
+    - link "[ strength ] くらしの専門業者の 勝ち筋のつくり方 なぜmadoguchiは、競争の激しい専門領域で業者様の売上を上げられるのか。WEBサービスを運営する中で手にしてきたノウハウをご紹介します。 詳しく見る" [ref=e137] [cursor=pointer]:
+      - /url: https://madoguchi.inc/strengths/
+      - generic [ref=e138]:
+        - heading "[ strength ] くらしの専門業者の 勝ち筋のつくり方" [level=2] [ref=e139]:
+          - generic [ref=e140]:
+            - text: "["
+            - generic [ref=e141]: strength
+            - text: "]"
+          - generic [ref=e142]:
+            - img "くらしの専門業者の" [ref=e144]
+            - img "勝ち筋のつくり方" [ref=e146]
+        - paragraph [ref=e147]: なぜmadoguchiは、競争の激しい専門領域で業者様の売上を上げられるのか。WEBサービスを運営する中で手にしてきたノウハウをご紹介します。
+        - generic [ref=e149]:
+          - generic [ref=e150]: 詳しく見る
+          - img [ref=e152]
+    - generic [ref=e159]:
+      - heading "[ achievement ] 成果事例" [level=2] [ref=e160]:
+        - generic [ref=e161]:
+          - text: "["
+          - generic [ref=e162]: achievement
+          - text: "]"
+        - img "成果事例" [ref=e164]
+      - paragraph [ref=e166]:
+        - generic [ref=e167]: 専門業者様の頭脳となり試行錯誤し続けたmadoguchiが見出した
+        - generic [ref=e168]: 勝ちパターンをご紹介いたします。
+      - generic [ref=e169]:
+        - article [ref=e170]:
+          - generic [ref=e171]:
+            - heading "創業1年で年商2億7千万円に。「買うべきブランドだけを買う」戦略とは？" [level=3] [ref=e172]:
+              - link "創業1年で年商2億7千万円に。「買うべきブランドだけを買う」戦略とは？" [ref=e173] [cursor=pointer]:
+                - /url: https://madoguchi.inc/achievement/174/
+            - list [ref=e174]:
+              - listitem [ref=e175]: ( 01 )
+              - listitem [ref=e176]: ブランド買取 専門業者
+            - link [ref=e177] [cursor=pointer]:
+              - /url: https://madoguchi.inc/achievement/174/
+            - link "詳しく見る" [ref=e180] [cursor=pointer]:
+              - /url: https://madoguchi.inc/achievement/174/
+              - generic [ref=e181]: 詳しく見る
+              - img [ref=e183]
+        - article [ref=e185]:
+          - generic [ref=e186]:
+            - heading "SEO集客に苦戦していた状況からGEKITAI利用で集客1.5倍増を実現" [level=3] [ref=e187]:
+              - link "SEO集客に苦戦していた状況からGEKITAI利用で集客1.5倍増を実現" [ref=e188] [cursor=pointer]:
+                - /url: https://madoguchi.inc/achievement/227/
+            - list [ref=e189]:
+              - listitem [ref=e190]: ( 02 )
+              - listitem [ref=e191]: 害虫駆除 専門業者
+            - link [ref=e192] [cursor=pointer]:
+              - /url: https://madoguchi.inc/achievement/227/
+            - link "詳しく見る" [ref=e195] [cursor=pointer]:
+              - /url: https://madoguchi.inc/achievement/227/
+              - generic [ref=e196]: 詳しく見る
+              - img [ref=e198]
+        - article [ref=e200]:
+          - generic [ref=e201]:
+            - heading "導入2ヶ月で黒字化を達成。案件の安定供給がもたらした効果とは？" [level=3] [ref=e202]:
+              - link "導入2ヶ月で黒字化を達成。案件の安定供給がもたらした効果とは？" [ref=e203] [cursor=pointer]:
+                - /url: https://madoguchi.inc/achievement/336/
+            - list [ref=e204]:
+              - listitem [ref=e205]: ( 03 )
+              - listitem [ref=e206]: 不用品回収 専門業者
+            - link [ref=e207] [cursor=pointer]:
+              - /url: https://madoguchi.inc/achievement/336/
+            - link "詳しく見る" [ref=e210] [cursor=pointer]:
+              - /url: https://madoguchi.inc/achievement/336/
+              - generic [ref=e211]: 詳しく見る
+              - img [ref=e213]
+        - article [ref=e215]:
+          - generic [ref=e216]:
+            - heading "総合買取から不用品回収に挑戦。導入3ヶ月で受注率9割・紹介案件の連鎖を生んだ「信頼営業」の全貌。" [level=3] [ref=e217]:
+              - link "総合買取から不用品回収に挑戦。導入3ヶ月で受注率9割・紹介案件の連鎖を生んだ「信頼営業」の全貌。" [ref=e218] [cursor=pointer]:
+                - /url: https://madoguchi.inc/achievement/382/
+            - list [ref=e219]:
+              - listitem [ref=e220]: ( 04 )
+              - listitem [ref=e221]: 不用品回収・買取 専門業者
+            - link [ref=e222] [cursor=pointer]:
+              - /url: https://madoguchi.inc/achievement/382/
+            - link "詳しく見る" [ref=e225] [cursor=pointer]:
+              - /url: https://madoguchi.inc/achievement/382/
+              - generic [ref=e226]: 詳しく見る
+              - img [ref=e228]
+        - article [ref=e230]:
+          - generic [ref=e231]:
+            - heading "自力集客の限界をネットの仕組みで突破。『gaiheki+』加盟で掴んだ、挨拶から始まる外壁塗装の元請け受注とは？" [level=3] [ref=e232]:
+              - link "自力集客の限界をネットの仕組みで突破。『gaiheki+』加盟で掴んだ、挨拶から始まる外壁塗装の元請け受注とは？" [ref=e233] [cursor=pointer]:
+                - /url: https://madoguchi.inc/achievement/397/
+            - list [ref=e234]:
+              - listitem [ref=e235]: ( 05 )
+              - listitem [ref=e236]: 外壁塗装 専門業者
+            - link [ref=e237] [cursor=pointer]:
+              - /url: https://madoguchi.inc/achievement/397/
+            - link "詳しく見る" [ref=e240] [cursor=pointer]:
+              - /url: https://madoguchi.inc/achievement/397/
+              - generic [ref=e241]: 詳しく見る
+              - img [ref=e243]
+        - article [ref=e245]:
+          - generic [ref=e246]:
+            - heading "独立初年度に約2,500万円。『おそうじ合衆国』が変えた、ハウスクリーニング業の集客戦略とは。" [level=3] [ref=e247]:
+              - link "独立初年度に約2,500万円。『おそうじ合衆国』が変えた、ハウスクリーニング業の集客戦略とは。" [ref=e248] [cursor=pointer]:
+                - /url: https://madoguchi.inc/achievement/411/
+            - list [ref=e249]:
+              - listitem [ref=e250]: ( 06 )
+              - listitem [ref=e251]: ハウスクリーニング 専門業者
+            - link [ref=e252] [cursor=pointer]:
+              - /url: https://madoguchi.inc/achievement/411/
+            - link "詳しく見る" [ref=e255] [cursor=pointer]:
+              - /url: https://madoguchi.inc/achievement/411/
+              - generic [ref=e256]: 詳しく見る
+              - img [ref=e258]
+        - article [ref=e260]:
+          - generic [ref=e261]:
+            - heading "加盟1週間で軌道に乗り、月間売上目標を達成。自力では届かなかった一般顧客の受注を「おそうじ合衆国」で安定させた営業術とは。" [level=3] [ref=e262]:
+              - link "加盟1週間で軌道に乗り、月間売上目標を達成。自力では届かなかった一般顧客の受注を「おそうじ合衆国」で安定させた営業術とは。" [ref=e263] [cursor=pointer]:
+                - /url: https://madoguchi.inc/achievement/444/
+            - list [ref=e264]:
+              - listitem [ref=e265]: ( 07 )
+              - listitem [ref=e266]: ハウスクリーニング 専門業者
+            - link [ref=e267] [cursor=pointer]:
+              - /url: https://madoguchi.inc/achievement/444/
+            - link "詳しく見る" [ref=e270] [cursor=pointer]:
+              - /url: https://madoguchi.inc/achievement/444/
+              - generic [ref=e271]: 詳しく見る
+              - img [ref=e273]
+      - link "成果事例を見る" [ref=e276] [cursor=pointer]:
+        - /url: https://madoguchi.inc/achievement/
+        - paragraph [ref=e278]: 成果事例を見る
+        - img [ref=e280]
+    - generic [ref=e282]:
+      - heading "[ member ] 社員紹介" [level=2] [ref=e283]:
+        - generic [ref=e284]:
+          - text: "["
+          - generic [ref=e285]: member
+          - text: "]"
+        - img "社員紹介" [ref=e287]
+      - paragraph [ref=e288]:
+        - generic [ref=e289]: 専門業者様と向き合い仕事を支える営業担当やサービスの運営に尽力する
+        - generic [ref=e290]: バックオフィスまで、それぞれの領域で
+        - generic [ref=e291]: 力を発揮するプロフェッショナルをご紹介します。
+      - generic [ref=e292]:
+        - link "営業 Sales 営業のメンバーを見る" [ref=e293] [cursor=pointer]:
+          - /url: https://madoguchi.inc/member/#sales
+          - generic [ref=e295]:
+            - paragraph [ref=e296]:
+              - generic [ref=e297]: 営業
+              - generic [ref=e298]: Sales
+            - generic [ref=e299]:
+              - generic [ref=e300]: 営業のメンバーを見る
+              - img [ref=e302]
+        - link "開発・デザイナー Development／Designer 開発・デザイナーのメンバーを見る" [ref=e304] [cursor=pointer]:
+          - /url: https://madoguchi.inc/member/#dev_design
+          - generic [ref=e306]:
+            - paragraph [ref=e307]:
+              - generic [ref=e308]: 開発・デザイナー
+              - generic [ref=e309]: Development／Designer
+            - generic [ref=e310]:
+              - generic [ref=e311]: 開発・デザイナーのメンバーを見る
+              - img [ref=e313]
+        - link "WEBマーケター・人事 Marketing／Human Resources WEBマーケター・人事のメンバーを見る" [ref=e315] [cursor=pointer]:
+          - /url: https://madoguchi.inc/member/#hr_marketing
+          - generic [ref=e317]:
+            - paragraph [ref=e318]:
+              - generic [ref=e319]: WEBマーケター・人事
+              - generic [ref=e320]: Marketing／Human Resources
+            - generic [ref=e321]:
+              - generic [ref=e322]: WEBマーケター・人事のメンバーを見る
+              - img [ref=e324]
+        - link "経理・総務 Accounting 経理・総務のメンバーを見る" [ref=e326] [cursor=pointer]:
+          - /url: https://madoguchi.inc/member/#accounting
+          - generic [ref=e328]:
+            - paragraph [ref=e329]:
+              - generic [ref=e330]: 経理・総務
+              - generic [ref=e331]: Accounting
+            - generic [ref=e332]:
+              - generic [ref=e333]: 経理・総務のメンバーを見る
+              - img [ref=e335]
+      - link "社員紹介を見る" [ref=e342] [cursor=pointer]:
+        - /url: https://madoguchi.inc/member/
+        - paragraph [ref=e344]: 社員紹介を見る
+        - img [ref=e346]
+    - generic [ref=e348]:
+      - heading "[ company ] 会社情報" [level=2] [ref=e349]:
+        - generic [ref=e350]:
+          - text: "["
+          - generic [ref=e351]: company
+          - text: "]"
+        - img "会社情報" [ref=e353]
+      - generic [ref=e354]:
+        - link "【 philosophy 】 経営理念 詳しく見る" [ref=e355] [cursor=pointer]:
+          - /url: https://madoguchi.inc/philosophy/
+          - generic [ref=e356]:
+            - heading "【 philosophy 】 経営理念" [level=3] [ref=e357]:
+              - generic [ref=e358]:
+                - text: 【
+                - generic [ref=e359]: philosophy
+                - text: 】
+              - img "経営理念" [ref=e361]
+            - figure [ref=e362]
+            - generic [ref=e363]:
+              - generic [ref=e364]: 詳しく見る
+              - img [ref=e366]
+        - link "【 about 】 madoguchiについて 詳しく見る" [ref=e368] [cursor=pointer]:
+          - /url: https://madoguchi.inc/about/
+          - generic [ref=e369]:
+            - heading "【 about 】 madoguchiについて" [level=3] [ref=e370]:
+              - generic [ref=e371]:
+                - text: 【
+                - generic [ref=e372]: about
+                - text: 】
+              - img "madoguchiについて" [ref=e374]
+            - figure [ref=e375]
+            - generic [ref=e376]:
+              - generic [ref=e377]: 詳しく見る
+              - img [ref=e379]
+        - link "【 top message 】 代表挨拶 詳しく見る" [ref=e381] [cursor=pointer]:
+          - /url: https://madoguchi.inc/message/
+          - generic [ref=e382]:
+            - heading "【 top message 】 代表挨拶" [level=3] [ref=e383]:
+              - generic [ref=e384]:
+                - text: 【
+                - generic [ref=e385]: top message
+                - text: 】
+              - img "代表挨拶" [ref=e387]
+            - figure [ref=e388]
+            - generic [ref=e389]:
+              - generic [ref=e390]: 詳しく見る
+              - img [ref=e392]
+    - generic [ref=e397]:
+      - heading "[ news ] お知らせ" [level=2] [ref=e398]:
+        - generic [ref=e399]:
+          - text: "["
+          - generic [ref=e400]: news
+          - text: "]"
+        - img "お知らせ" [ref=e402]
+      - paragraph [ref=e403]: サービスのリリースや受賞実績、メディア掲載など当社の最新情報をお届けしています。
+      - generic [ref=e404]:
+        - link "創業10周年を迎えました。 お知らせ 2026.02.07" [ref=e405] [cursor=pointer]:
+          - /url: https://madoguchi.inc/news/375/
+          - paragraph [ref=e406]: 創業10周年を迎えました。
+          - list [ref=e407]:
+            - listitem [ref=e408]: お知らせ
+            - listitem [ref=e409]:
+              - time [ref=e410]: 2026.02.07
+          - figure [ref=e411]
+          - img [ref=e413]
+        - link "コーポレートページをリニューアルしました！ お知らせ 2026.02.05" [ref=e415] [cursor=pointer]:
+          - /url: https://madoguchi.inc/news/366/
+          - paragraph [ref=e416]: コーポレートページをリニューアルしました！
+          - list [ref=e417]:
+            - listitem [ref=e418]: お知らせ
+            - listitem [ref=e419]:
+              - time [ref=e420]: 2026.02.05
+          - figure [ref=e421]
+          - img [ref=e423]
+        - link "コーポレートロゴをリニューアルしました！ お知らせ 2026.02.03" [ref=e425] [cursor=pointer]:
+          - /url: https://madoguchi.inc/news/372/
+          - paragraph [ref=e426]: コーポレートロゴをリニューアルしました！
+          - list [ref=e427]:
+            - listitem [ref=e428]: お知らせ
+            - listitem [ref=e429]:
+              - time [ref=e430]: 2026.02.03
+          - figure [ref=e431]
+          - img [ref=e433]
+      - link "すべてのお知らせを見る" [ref=e436] [cursor=pointer]:
+        - /url: https://madoguchi.inc/news/
+        - paragraph [ref=e438]: すべてのお知らせを見る
+        - img [ref=e440]
+    - generic [ref=e442]:
+      - link "[ recruit ] お知らせ ビジネスの「勝ち筋」を見出す 仕事がここにある。 採用情報を見る" [ref=e443] [cursor=pointer]:
+        - /url: https://madoguchi.inc/recruit/
+        - generic [ref=e444]:
+          - heading "[ recruit ] お知らせ" [level=2] [ref=e445]:
+            - generic [ref=e446]:
+              - text: "["
+              - generic [ref=e447]: recruit
+              - text: "]"
+            - img "お知らせ" [ref=e449]
+          - paragraph [ref=e450]:
+            - generic [ref=e451]: ビジネスの「勝ち筋」を見出す
+            - generic [ref=e452]: 仕事がここにある。
+          - generic [ref=e453]:
+            - generic [ref=e454]: 採用情報を見る
+            - img [ref=e456]
+      - generic [ref=e459]:
+        - region "採用文字スライダー1" [ref=e460]:
+          - generic [ref=e461]:
+            - group [ref=e462]:
+              - paragraph [ref=e464]: Winning Path Together
+            - group [ref=e466]:
+              - paragraph [ref=e468]: Winning Path Together
+            - group [ref=e470]:
+              - paragraph [ref=e472]: Winning Path Together
+            - group "2 of 2" [ref=e474]:
+              - paragraph [ref=e476]: Winning Path Together
+            - group [ref=e478]:
+              - paragraph [ref=e480]: Winning Path Together
+            - group [ref=e482]:
+              - paragraph [ref=e484]: Winning Path Together
+        - region "採用文字スライダー2" [ref=e486]:
+          - generic [ref=e487]:
+            - group [ref=e488]:
+              - paragraph [ref=e490]: Winning Path Together
+            - group [ref=e492]:
+              - paragraph [ref=e494]: Winning Path Together
+            - group [ref=e496]:
+              - paragraph [ref=e498]: Winning Path Together
+            - group "2 of 2" [ref=e500]:
+              - paragraph [ref=e502]: Winning Path Together
+            - group [ref=e504]:
+              - paragraph [ref=e506]: Winning Path Together
+            - group [ref=e508]:
+              - paragraph [ref=e510]: Winning Path Together
+    - link "お問い合わせ [ Contact ] 売り上げ・集客力向上に関するご相談や、 各種サービスに関するご質問までお気軽にご相談ください。 お急ぎの方はこちら Tel 03-5989-0919" [ref=e513] [cursor=pointer]:
+      - /url: https://madoguchi.inc/contact/
+      - generic [ref=e514]:
+        - generic [ref=e515]:
+          - heading "お問い合わせ" [level=2] [ref=e516]:
+            - img "お問い合わせ" [ref=e517]
+          - paragraph [ref=e518]: "[ Contact ]"
+        - paragraph [ref=e519]:
+          - text: 売り上げ・集客力向上に関するご相談や、
+          - text: 各種サービスに関するご質問までお気軽にご相談ください。
+        - generic [ref=e520]:
+          - paragraph [ref=e521]: お急ぎの方はこちら
+          - paragraph [ref=e522]:
+            - generic [ref=e523]: Tel
+            - generic [ref=e524]: 03-5989-0919
+  - contentinfo [ref=e525]:
+    - generic [ref=e527]:
+      - generic [ref=e528]:
+        - link "madoguchi" [ref=e530] [cursor=pointer]:
+          - /url: https://madoguchi.inc/
+          - paragraph [ref=e531]:
+            - generic [ref=e532]: madoguchi
+            - img [ref=e533]
+          - img [ref=e536]
+        - generic [ref=e538]:
+          - term [ref=e539]: madoguchi株式会社
+          - definition [ref=e540]:
+            - paragraph [ref=e541]:
+              - text: 〒108-0073
+              - text: 東京都港区三田3丁目5-27 住友不動産東京三田サウスタワー2階
+            - paragraph [ref=e542]: TEL.03-5989-0919
+            - paragraph [ref=e543]: FAX.03-6730-1973
+      - generic [ref=e544]:
+        - list [ref=e545]:
+          - listitem [ref=e546]:
+            - link "Top トップページ" [ref=e547] [cursor=pointer]:
+              - /url: https://madoguchi.inc/
+              - paragraph [ref=e548]: Top
+              - paragraph [ref=e549]: トップページ
+          - listitem [ref=e550]:
+            - generic [ref=e551]:
+              - link "Service 運営メディア一覧" [ref=e553] [cursor=pointer]:
+                - /url: https://madoguchi.inc/service/
+                - paragraph [ref=e554]: Service
+                - paragraph [ref=e555]: 運営メディア一覧
+              - list [ref=e558]:
+                - listitem [ref=e559]:
+                  - link "ハウスクリーニングメディア「おそうじ合衆国」" [ref=e560] [cursor=pointer]:
+                    - /url: https://madoguchi.inc/service/osouji_support/
+                - listitem [ref=e561]:
+                  - link "不用品回収・遺品整理メディア「不用品回収の窓口」" [ref=e562] [cursor=pointer]:
+                    - /url: https://madoguchi.inc/service/fuyouhin_support/
+                - listitem [ref=e563]:
+                  - link "リユース支援メディア「みんなの買取」" [ref=e564] [cursor=pointer]:
+                    - /url: https://madoguchi.inc/service/reuse/
+                - listitem [ref=e565]:
+                  - link "外壁塗装メディア「gaiheki＋」" [ref=e566] [cursor=pointer]:
+                    - /url: https://madoguchi.inc/service/gaiheki/
+                - listitem [ref=e567]:
+                  - link "お庭仕事メディア「SENBATSU」" [ref=e568] [cursor=pointer]:
+                    - /url: https://madoguchi.inc/service/senbatsu/
+                - listitem [ref=e569]:
+                  - link "害虫駆除メディア「GEKITAI」" [ref=e570] [cursor=pointer]:
+                    - /url: https://madoguchi.inc/service/gekitai/
+                - listitem [ref=e571]:
+                  - link "業者呼び出しアプリ「オヨビー」" [ref=e572] [cursor=pointer]:
+                    - /url: https://madoguchi.inc/service/oyobee/
+        - list [ref=e573]:
+          - listitem [ref=e574]:
+            - generic [ref=e575]:
+              - link "Achievement 成果事例" [ref=e577] [cursor=pointer]:
+                - /url: https://madoguchi.inc/achievement/
+                - paragraph [ref=e578]: Achievement
+                - paragraph [ref=e579]: 成果事例
+              - list [ref=e582]:
+                - listitem [ref=e583]:
+                  - link "ブランド買取 専門業者" [ref=e584] [cursor=pointer]:
+                    - /url: https://madoguchi.inc/achievement/174/
+                - listitem [ref=e585]:
+                  - link "害虫駆除 専門業者" [ref=e586] [cursor=pointer]:
+                    - /url: https://madoguchi.inc/achievement/227/
+                - listitem [ref=e587]:
+                  - link "不用品回収 専門業者" [ref=e588] [cursor=pointer]:
+                    - /url: https://madoguchi.inc/achievement/336/
+                - listitem [ref=e589]:
+                  - link "不用品回収・買取 専門業者" [ref=e590] [cursor=pointer]:
+                    - /url: https://madoguchi.inc/achievement/382/
+                - listitem [ref=e591]:
+                  - link "外壁塗装 専門業者" [ref=e592] [cursor=pointer]:
+                    - /url: https://madoguchi.inc/achievement/397/
+                - listitem [ref=e593]:
+                  - link "ハウスクリーニング 専門業者" [ref=e594] [cursor=pointer]:
+                    - /url: https://madoguchi.inc/achievement/411/
+                - listitem [ref=e595]:
+                  - link "ハウスクリーニング 専門業者" [ref=e596] [cursor=pointer]:
+                    - /url: https://madoguchi.inc/achievement/444/
+          - listitem [ref=e597]:
+            - generic [ref=e598]:
+              - generic [ref=e600]:
+                - paragraph [ref=e601]: Company
+                - paragraph [ref=e602]: 会社情報
+              - list [ref=e605]:
+                - listitem [ref=e606]:
+                  - link "経営理念" [ref=e607] [cursor=pointer]:
+                    - /url: https://madoguchi.inc/philosophy/
+                - listitem [ref=e608]:
+                  - link "madoguchiについて" [ref=e609] [cursor=pointer]:
+                    - /url: https://madoguchi.inc/about/
+                - listitem [ref=e610]:
+                  - link "代表挨拶" [ref=e611] [cursor=pointer]:
+                    - /url: https://madoguchi.inc/message/
+                - listitem [ref=e612]:
+                  - link "役員紹介" [ref=e613] [cursor=pointer]:
+                    - /url: https://madoguchi.inc/executive/
+        - list [ref=e614]:
+          - listitem [ref=e615]:
+            - link "Strengths 勝ち筋のつくり方" [ref=e616] [cursor=pointer]:
+              - /url: https://madoguchi.inc/strengths/
+              - paragraph [ref=e617]: Strengths
+              - paragraph [ref=e618]: 勝ち筋のつくり方
+          - listitem [ref=e619]:
+            - link "Member 社員紹介" [ref=e620] [cursor=pointer]:
+              - /url: https://madoguchi.inc/member/
+              - paragraph [ref=e621]: Member
+              - paragraph [ref=e622]: 社員紹介
+          - listitem [ref=e623]:
+            - link "FAQ よくあるご質問" [ref=e624] [cursor=pointer]:
+              - /url: https://madoguchi.inc/faq/
+              - paragraph [ref=e625]: FAQ
+              - paragraph [ref=e626]: よくあるご質問
+          - listitem [ref=e627]:
+            - link "News お知らせ" [ref=e628] [cursor=pointer]:
+              - /url: https://madoguchi.inc/news/
+              - paragraph [ref=e629]: News
+              - paragraph [ref=e630]: お知らせ
+          - listitem [ref=e631]:
+            - link "Download 資料請求" [ref=e632] [cursor=pointer]:
+              - /url: https://madoguchi.inc/download/
+              - paragraph [ref=e633]: Download
+              - paragraph [ref=e634]: 資料請求
+          - listitem [ref=e635]:
+            - link "Recruit 採用情報" [ref=e636] [cursor=pointer]:
+              - /url: https://madoguchi.inc/recruit/
+              - paragraph [ref=e637]: Recruit
+              - paragraph [ref=e638]: 採用情報
+          - listitem [ref=e639]:
+            - link "Entry エントリー" [ref=e640] [cursor=pointer]:
+              - /url: https://madoguchi.inc/entry/
+              - paragraph [ref=e641]: Entry
+              - paragraph [ref=e642]: エントリー
+    - generic [ref=e644]:
+      - list [ref=e645]:
+        - listitem [ref=e646]:
+          - link "Instagram" [ref=e647] [cursor=pointer]:
+            - /url: https://www.instagram.com/madoguchi.inc/
+            - img "Instagram" [ref=e648]
+        - listitem [ref=e649]:
+          - link "TikTok" [ref=e650] [cursor=pointer]:
+            - /url: https://www.tiktok.com/@madoguchi.inc
+            - img "TikTok" [ref=e651]
+        - listitem [ref=e652]:
+          - link "YouTube" [ref=e653] [cursor=pointer]:
+            - /url: https://www.youtube.com/channel/UCTt0q_Hs92Umhu0mhPLokAQ
+            - img "YouTube" [ref=e654]
+        - listitem [ref=e655]:
+          - link "Wantedly" [ref=e656] [cursor=pointer]:
+            - /url: https://www.wantedly.com/companies/madoguchi
+            - img "Wantedly" [ref=e657]
+        - listitem [ref=e658]:
+          - link "マイナビ" [ref=e659] [cursor=pointer]:
+            - /url: https://job.mynavi.jp/27/pc/search/corp283679/outline.html
+            - img "マイナビ" [ref=e660]
+      - generic [ref=e661]:
+        - generic [ref=e662]:
+          - link "Great Place To Work" [ref=e663] [cursor=pointer]:
+            - /url: https://hatarakigai.info/ranking/certified_companies/1231_5309.html
+            - img "Great Place To Work" [ref=e664]
+          - paragraph [ref=e665]:
+            - img "2026年版「働きがい認定企業」に選出されました" [ref=e666]
+        - list [ref=e667]:
+          - listitem [ref=e668]:
+            - link "熱狂ベンチャー100選 熱狂ベンチャー100選" [ref=e669] [cursor=pointer]:
+              - /url: https://nekkyo-navi.jp/madoguchi-100/
+              - img "熱狂ベンチャー100選" [ref=e671]
+              - paragraph [ref=e672]:
+                - generic [ref=e673]: 熱狂ベンチャー100選
+                - img [ref=e675]
+          - listitem [ref=e677]:
+            - link "Best Venture 100 Best Venture 100" [ref=e678] [cursor=pointer]:
+              - /url: https://best100.v-tsushin.jp/about/
+              - img "Best Venture 100" [ref=e680]
+              - paragraph [ref=e681]:
+                - generic [ref=e682]: Best Venture 100
+                - img [ref=e684]
+    - generic [ref=e686]:
+      - generic [ref=e687]:
+        - paragraph [ref=e688]:
+          - img "日々の商いに、勝ち筋をつくる。" [ref=e690]
+        - paragraph [ref=e691]:
+          - img "専門業者の頭脳となるWEBサービス会社" [ref=e693]
+      - generic [ref=e694]:
+        - list [ref=e695]:
+          - listitem [ref=e696]:
+            - link "個人情報保護方針" [ref=e697] [cursor=pointer]:
+              - /url: https://madoguchi.inc/privacy-policy/
+        - paragraph [ref=e698]: madoguci Inc. © 2025. All Rights Reserved.
