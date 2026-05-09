@@ -42,10 +42,12 @@ identity: 工藤陸 | ofmeton | n/a
 
 ## 名義3ライン分離（必須）
 
-- **工藤陸**: `wiki/business/bsa/` 配下のみ。frontmatter `identity: 工藤陸`
+- **工藤陸**: `wiki/business/bsa/` + `wiki/business/personal/` + 関連 `wiki/people/clients/`（BSA 提案・受注・契約・個人案件すべて）。frontmatter `identity: 工藤陸`
 - **ofmeton**: `wiki/business/portfolio/` + ブランド発信系。frontmatter `identity: ofmeton`
 - **はぐりん**: `monetize-os/` 側 wiki に隔離。**本 wiki の frontmatter には登場しない**
 - クライアント情報は名義をまたいで cross-link しない（lint で検出）
+
+注: `business/personal/` は BSA 枠外の個人案件（テラ一色民泊 HP 等）を扱う。BSA 提案の Week KPI には含めず、運用上は分離する。
 
 ## ingest プロトコル
 

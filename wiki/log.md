@@ -15,6 +15,23 @@ Plan: `docs/superpowers/plans/2026-05-09-llm-wiki-phase0-1.md`
 `knowledge/context/pricing-catalog.md` → `wiki/business/bsa/pricing-catalog.md` 移動。
 14 ファイルのリンク張替え済み（残存ゼロ確認）。frontmatter 追加（type=source, identity=工藤陸）。
 
+## [2026-05-10] ingest | TERRA HAYAMA HP 制作（パイロット ingest）
+
+raw/deals/2026-04-terra-isshiki/ から 4 素材を取り込み:
+- 01-confirmation-items.md (v0.1, 2026-05-01)
+- 02-confirmation-items-v0.2.md (v0.2, 2026-05-07 — 依頼者回答反映、最新)
+- 03-photo-mapping-v0.2.md
+- 04-design-direction-v0.1.md
+
+作成ページ:
+- wiki/people/clients/terra-hayama.md (entity)
+- wiki/business/personal/deals/2026-04-terra-isshiki.md (source)
+
+cross-link: 双方向 [[terra-hayama]] ↔ [[2026-04-terra-isshiki]]
+
+設計調整: SCHEMA.md「名義3ライン分離」を update。工藤陸名義は BSA 配下のみ → BSA + personal + 関連 clients。
+新クラスタ: wiki/business/personal/ + wiki/people/clients/
+
 ## [2026-05-09] phase | BSA wiki 新規 3 ページ作成
 
 - business/bsa/overview.md (topic 型)

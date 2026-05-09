@@ -12,13 +12,18 @@
 - [proposals/templates](business/bsa/proposals/templates.md) — 提案文テンプレ集（パイロット ingest で育てる）
 - [lessons-proposal-patterns](business/bsa/lessons-proposal-patterns.md) — 提案勝ち筋の横断学び（lint で育てる）
 
+### personal
+- [deals/2026-04-terra-isshiki](business/personal/deals/2026-04-terra-isshiki.md) — TERRA HAYAMA HP 制作（葉山・個人案件）
+
 ## domain
 
 ### lp-hp-design
 - [motion-techniques](domain/lp-hp-design/motion-techniques.md) — LP/HP 演出技法カタログ（spade-co.jp 解析由来）
 
 ## people
-（Phase 1 で追加）
+
+### clients
+- [terra-hayama](people/clients/terra-hayama.md) — TERRA HAYAMA（葉山民泊・BEAT ICE 運営）
 
 ## self
 （Phase 3）
@@ -32,6 +37,6 @@
 ---
 
 ## 統計（lint で更新）
-- 総ページ数: 0
-- 最終 ingest: -
+- 総ページ数: 8（SCHEMA + index + log + bsa 5 + lp-hp-design 1 + people 1 + personal 1 = 11 を含む）
+- 最終 ingest: 2026-05-10 (TERRA HAYAMA / 2026-04-terra-isshiki)
 - 最終 lint: -
