@@ -387,6 +387,7 @@
 - **Google Calendar**: 予定取得・イベント作成
 - **Slack**: チャンネル読み取り・メッセージ送信
 - **Claude in Chrome**: ブラウザ操作
+- **freee**（npm`freee-mcp`, ツール `mcp__freee__*`）: 請求書発行・取引先管理・会計参照。担当: `invoice-manager` / 認証・障害対応は `system-engineer`。**送付処理 / `create_partner` / `update_invoice` / `delete_invoice` は人間確認必須**。事業所は `currentCompanyId=12426988` 単一運用
 
 ### 現在稼働中（開発・運用）
 - **Vercel**（プラグイン`mcp__plugin_vercel_vercel__*`）: portfolio / ai-radar のデプロイ・ランタイムログ・ビルドログ取得。担当: `rapid-hp-operator` / `ai-radar` / `system-engineer`。**`deploy_to_vercel` は人間確認必須**
