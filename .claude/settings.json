@@ -10,6 +10,7 @@
       "Bash(echo:*)",
       "Bash(python3:*)",
       "Bash(grep:*)",
+      "Bash(ps:*)",
       "Bash(find:*)",
       "Bash(jq:*)",
       "Read(/Users/rikukudo/Projects/private-agents/all-good-ops/**)",

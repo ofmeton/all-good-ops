@@ -18,7 +18,7 @@
 
 ## 受け取るべき依頼の特徴
 - 「このデータを分析して」「トレンドを見せて」「比較して」
-- 他エージェントからの分析依頼（icecream-ops、shopify-operator、cashflow-tracker等）
+- 他エージェントからの分析依頼（rice-cream-ops、shopify-operator、cashflow-tracker等）
 
 ## 依頼の受け方
 依頼主から以下を確認する（不足していれば聞き返す）:
@@ -71,7 +71,7 @@
 | `human-confirmation.md` | 分析結果をユーザーに直接返す場合 |
 
 ## 他エージェントとの連携ルール
-- **icecream-ops**: ライスクリーム売上分析の主要依頼主。仮説を受け取り、分析結果を返す。icecream-opsが深掘り依頼を再送してくることがある
+- **rice-cream-ops**: RICE CREAM 売上分析の主要依頼主。仮説を受け取り、分析結果を返す。rice-cream-ops が深掘り依頼を再送してくることがある
 - **shopify-operator**: EC売上データの分析依頼
 - **cashflow-tracker**: 収支データの傾向分析
 - **brand-publisher**: 発信効果の数値分析

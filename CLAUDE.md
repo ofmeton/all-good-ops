@@ -106,7 +106,7 @@
 | 子ども、居場所、放課後、見守り | kodomo-ibasho | ibasho-designer |
 | 社団法人、定款、登記、設立 | kodomo-ibasho | nonprofit-advisor |
 | Shopify、商品、注文、ECサイト | business-ops | shopify-operator |
-| アイスクリーム、業務委託 | business-ops | icecream-ops |
+| アイスクリーム、業務委託マネージャー、RICE CREAM、店舗マネージャー、棚卸し、発注、シフト、スタッフ、レジデータ、@BEATICE0923 | business-ops | rice-cream-ops |
 | 案件、フリーランス、提案書、営業 | business-ops | freelance-scout |
 | クライアント、納品、顧客 | business-ops | client-manager |
 | 発信、ブログ、SNS、ブランド、フォロワー | business-ops | brand-publisher |
@@ -126,6 +126,11 @@
 | エージェント追加、チーム改善 | 横断 | org-designer |
 | パワポ、プレゼン、スライド、レビュー | 横断 | presentation-reviewer |
 | 大型PPTX生成（50p以上、python-pptx）、複数Part分割ビルド、PPTX結合 | dev-automation | system-engineer（`large-pptx-generation` 必須参照） |
+| 素材シート切り出し、グリッド分割、透過化、chroma-key、マゼンタ/シアン背景の素材分解 | dev-automation | system-engineer（`chromakey-grid-split` 必須参照） |
+| LP軽量化、サイト重い、画像最適化、WebP化、不使用画像削除、Lighthouse改善、ページサイズ削減 | dev-automation | system-engineer（`lp-optimization-playbook` 必須参照） |
+| Vercel team デプロイ、Vercel deploy ERROR、ビルドログ空、git author email、Vercel push 前確認 | dev-automation | system-engineer（`vercel-team-deploy-checklist` 必須参照） |
+| サンプルサイト追加、portfolio 組込み、INDEX ボタン、サムネ撮影、WORK_DETAILS、kudo-port-grid | dev-automation | system-engineer（`sample-site-onboarding` 必須参照） |
+| 印刷データ、入稿、accea、塗り足し、bleed、CMYK、トンボ、350dpi、アップスケール、印刷用PDF | dev-automation | system-engineer（`print-data-prep` 必須参照） |
 | 振り返り、セッション振り返り、レビュー、今回の動き、改善点 | 横断 | secretary（`session-retrospective.md` を参照して実行） |
 | BSA、工藤陸、Lancers、Coconala、認定ランサー、提案投下、Week KPI | business-ops | rapid-hp-operator |
 | デザイン方向性、DESIGN.md、OUTLINE.md、トンマナ、AIっぽい、毎回同じデザイン、個性的、デザインテンプレ、デザイン統括 | 横断 | design-director（守り） |
@@ -200,7 +205,7 @@
 | エージェント | ファイル | 役割 |
 |---|---|---|
 | Shopifyオペレーター | `business-ops/shopify-operator.md` | 商品管理、売上分析 |
-| アイスクリーム屋オペレーター | `business-ops/icecream-ops.md` | 業務委託の進捗管理 |
+| RICE CREAM 店舗マネージャー | `business-ops/rice-cream-ops.md` | 業務委託マネージャー。商品・在庫 / 人・シフト / 集客・売上 の3領域を統括（設備衛生・顧客対応は範囲外） |
 | 案件スカウト | `business-ops/freelance-scout.md` | 案件探し、提案書 |
 | クライアントマネージャー | `business-ops/client-manager.md` | 顧客関係、納品管理 |
 | 発信ストラテジスト | `business-ops/brand-publisher.md` | 個人ブランド、SNS・ブログ運用 |
@@ -226,7 +231,7 @@
 
 ---
 
-## スキル一覧（22冊）
+## スキル一覧（27冊）
 
 | # | スキル | ファイル | 用途 |
 |---|--------|---------|------|
@@ -252,6 +257,12 @@
 | 20 | セッション振り返り | `session-retrospective.md` | セッション作業の振り返り標準化と気づきの反映（memory/improvement-log/CLAUDE.md/エージェント定義/新規スキル化） |
 | 21 | Rapid HP Playbook | `rapid-hp-playbook.md` | BSA事業の受注〜納品〜継続運用の標準運用手順 |
 | 22 | DESIGN.md/OUTLINE.md 運用 | `design-md-workflow.md` | LP/HP制作のデザインシステム運用。毎回同じAIっぽいデザイン問題と実装後修正の重さを構造解決 |
+| 23 | Chroma-key グリッド切り出し | `chromakey-grid-split.md` | LP素材シート（マゼンタ/シアン背景）を1ファイル=1素材の透過PNGに分割。`~/.venvs/img-tools/` 常設venv使用 |
+| 24 | LP軽量化プレイブック | `lp-optimization-playbook.md` | 不使用画像削除→React UMD prod切替→主要画像 WebP 化を 3 commit に分けて適用。各 commit が独立で revert 容易。BSA 案件で再利用 |
+| 25 | Vercel team デプロイ前チェックリスト | `vercel-team-deploy-checklist.md` | team / Pro プロジェクトに push 前の git author email 一致確認。silent ERROR を未然回避 |
+| 26 | サンプルサイト組込みプロトコル | `sample-site-onboarding.md` | outputs/lp-experiments/ → portfolio に組み込む9ステップ。INDEX バー必須・ヘッダー padding 調整・サムネ撮影・author 認可確認まで一気通貫 |
+| 27 | 印刷データ入稿準備 | `print-data-prep.md` | PNG→印刷所入稿PDFの一気通貫処理。Real-ESRGAN タイル推論（MPS）→塗り足し→CMYK→トンボ→PDF。accea 等向け |
+| 28 | ローカルファイル整理プロトコル | `local-file-organization.md` | Downloads/Desktop/Documents 等の大型整理。初動スキャン→方針合意（経理独立等3軸必須）→中身確認→構造案→バッチ実行の5フェーズ。MD5重複検出・macOS zip展開フロー含む |
 
 ---
 
@@ -388,6 +399,11 @@
 - **LINE**: 個人的なメッセージング連携（優先度低）
 - **Codex (OpenAI)**: ChatGPT/Codex との連携（優先度低）
 - **Stripe / Figma / adspirer-ads-agent**: プラグイン導入済だが**未認証**。必要になった時点で認証（課金発生・有料プラン前提のため慎重に）
+
+### Claude Code CLI ヘッドレス呼び出し（`claude -p`）
+- スクリプトから `claude -p` を child_process spawn する時の安定 default は memory `feedback_claude_headless_json.md` 参照
+- 主要ポイント: user-scope MCP がある時は `--mcp-config` 省略 / `--json-schema` は hint 扱い / 抽出 fallback / `Partial<T>` 型 + 全フィールド fallback / stderr+stdout エラーログ
+- 採用例: `outputs/bsa/proposal-automation/src/generator/src/claude-headless.ts`
 
 ---
 

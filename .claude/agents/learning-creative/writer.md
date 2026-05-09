@@ -42,7 +42,7 @@
 - **brand-publisher**: 発信戦略に基づいた記事執筆
 - **researcher**: 執筆に必要な情報の調査を依頼
 - **shopify-operator**: 商品説明文の執筆で連携
-- **icecream-ops**: 報告書の執筆で連携
+- **rice-cream-ops**: オーナー報告書の執筆で連携
 
 ## escalation 条件
 - 専門知識が不足するテーマの場合
