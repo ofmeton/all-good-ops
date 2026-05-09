@@ -15,6 +15,12 @@ Plan: `docs/superpowers/plans/2026-05-09-llm-wiki-phase0-1.md`
 `knowledge/context/pricing-catalog.md` → `wiki/business/bsa/pricing-catalog.md` 移動。
 14 ファイルのリンク張替え済み（残存ゼロ確認）。frontmatter 追加（type=source, identity=工藤陸）。
 
+## [2026-05-09] phase | motion-techniques 移行
+
+`knowledge/context/motion-techniques-catalog.md` → `wiki/domain/lp-hp-design/motion-techniques.md` 移動。
+4 ファイル（conversion-designer, design-director, system-engineer, rapid-hp-operator）のリンク更新。
+frontmatter 追加（type=concept, identity=n/a）。
+
 ## [2026-05-09] phase | proven-track-record 移行
 
 `knowledge/context/proven-track-record.md` → `wiki/business/bsa/proven-track-record.md` 移動。

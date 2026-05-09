@@ -12,7 +12,7 @@
 ## domain
 
 ### lp-hp-design
-（Phase 1 で追加）
+- [motion-techniques](domain/lp-hp-design/motion-techniques.md) — LP/HP 演出技法カタログ（spade-co.jp 解析由来）
 
 ## people
 （Phase 1 で追加）
