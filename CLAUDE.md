@@ -141,6 +141,7 @@
 | はぐりん、persona、Threads 投稿、note 記事、有料記事、メンバーシップ、収益化コンテンツ、topic-seeds、competitor-watch、90日計画（発信系） | **外部スポーク: monetize-os** | monetize-os/growth-lead |
 | 公開前チェック、規約確認、アフィリエイト開示、景表法、薬機法、ステマ | **外部スポーク: monetize-os** | monetize-os/compliance |
 | 工務店、HP 制作、クライアントサイト、Vercel、サンプルサイト、ポートフォリオサイト | **外部スポーク: portfolio** | (秘書が business-ops/client-manager 起動 + portfolio/ 作業ディレクトリへ移動) |
+| wiki、ingest、知識ベース、Karpathy wiki、wiki 取り込み、wiki query、wiki lint | 横断 | secretary（標準分類。`wiki/SCHEMA.md` 必読） |
 
 ### 外部スポークへの委譲ルール
 
@@ -328,7 +329,7 @@
 | **外部送信** | メール・LINE・SNS投稿の送信。文面を提示し「送信してよいですか？」と確認 |
 | **法的手続き** | 届出書類の提出、法人登記関連。提出前に全文を提示し承認を得る |
 | **税務・確定申告** | 税務判断の最終確定、申告書の提出 |
-| **ファイル削除** | knowledge/ 以外のファイルの削除・上書き |
+| **ファイル削除** | knowledge/ 以外のファイルの削除・上書き。**特に raw/ 配下は immutable で、削除・修正は人間承認必須** |
 | **エージェント変更** | エージェントの**新規追加・削除・統合**（※自己改善ループ経由の文言調整・バグ修正は秘書の判断で自動承認可） |
 | **戦略変更** | 長期目標・KPIの変更 |
 | **熟議開始** | 3回会議プロセスの発動。「熟議プロセスに入ります」と宣言し承認 |
@@ -345,6 +346,8 @@
   - スクリプトのバグ修正（ロジック変更なし）
   - ログ・データスキーマの改善
   - ドキュメント整形
+- wiki/ 配下への ingest（新規ページ作成・既存更新・index.md 更新・log.md append）
+- raw/ 配下への素材追加（既存ファイルの上書き・削除はしない）
 
 ---
 
@@ -407,6 +410,37 @@
 - スクリプトから `claude -p` を child_process spawn する時の安定 default は memory `feedback_claude_headless_json.md` 参照
 - 主要ポイント: user-scope MCP がある時は `--mcp-config` 省略 / `--json-schema` は hint 扱い / 抽出 fallback / `Partial<T>` 型 + 全フィールド fallback / stderr+stdout エラーログ
 - 採用例: `outputs/bsa/proposal-automation/src/generator/src/claude-headless.ts`
+
+---
+
+## wiki 運用
+
+LLM が漸進的にメンテする知識ベース。Karpathy LLM Wiki パターン準拠。詳細は `wiki/SCHEMA.md`。
+
+### 構造
+- `wiki/` — LLM 維持の知識ベース（Obsidian vault）
+- `raw/` — 不可侵の素材（Web 記事・案件素材・気づき）
+- 規約 SSOT: `wiki/SCHEMA.md`（**wiki に触れる前に必読**）
+
+### 操作
+- **ingest**: ユーザーが raw/ に素材を置き、秘書経由で wiki に取り込む
+- **query**: メインセッション or 秘書経由で wiki から合成
+- **lint**: 月 1（人間トリガー）。重いので自動化しない
+
+### 担当
+- MVP 段階: 秘書直接処理（標準分類）
+- 将来: wiki-curator agent（人間承認後に新設）
+
+### 既存資産との関係
+- `knowledge/context/` 配下は段階的に wiki に移行（Phase 1〜3）
+- `memory/` は維持（auto-memory として性質が違う）
+- `data/*.jsonl` は維持（grep 用構造化ログ）
+
+### 名義3ライン分離
+- 工藤陸: `wiki/business/bsa/` 配下のみ
+- ofmeton: `wiki/business/portfolio/` + ブランド発信系
+- はぐりん: monetize-os 側 wiki に隔離（このリポでは扱わない）
+- クライアント情報を異名義間で cross-link しない
 
 ---
 
