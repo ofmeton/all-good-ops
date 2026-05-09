@@ -15,6 +15,22 @@ Plan: `docs/superpowers/plans/2026-05-09-llm-wiki-phase0-1.md`
 `knowledge/context/pricing-catalog.md` → `wiki/business/bsa/pricing-catalog.md` 移動。
 14 ファイルのリンク張替え済み（残存ゼロ確認）。frontmatter 追加（type=source, identity=工藤陸）。
 
+## [2026-05-10] ingest | spade-motion-study (motion-techniques orphan 解消)
+
+raw/notes/2026-04-26-spade-motion-absorption.md から取り込み:
+- wiki/domain/lp-hp-design/spade-motion-study.md (source) 新規作成
+- 双方向 cross-link: [[motion-techniques]] ↔ [[spade-motion-study]]
+- motion-techniques.md frontmatter に sources/related 追加
+
+並行作業 (Task E):
+- wiki/business/bsa/overview.md に「演出技法（モーション）」セクション追加
+- L1〜L4 商品ライン別の必須/推奨/過剰技法を明示
+- BSA → motion-techniques 参照経路を確立
+
+orphan 状況:
+- 旧 motion-techniques.md wikilink:0 → 現 wikilink:2 (spade-motion-study + overview)
+- 4 週間検証指標の ingest 件数: 1/5
+
 ## [2026-05-10] lint | MVP 動作確認 (Task 18)
 
 軽量 lint（orphan / 名義3ライン混在 / wikilink 整合）実行:

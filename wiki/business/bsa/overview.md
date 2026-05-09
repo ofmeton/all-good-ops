@@ -36,6 +36,19 @@ identity: 工藤陸
 - 案件スキャン: freelance-scout
 - 文面推敲: message-crafter
 
+## 演出技法（モーション）
+
+商品ライン別の動き提案・実装で参照する標準語彙。
+
+- [[motion-techniques]] — LP/HP 演出技法カタログ（技法 1〜7+ 補助）。早見表で L1/L2/L3 の必須・推奨・過剰を即決
+- [[spade-motion-study]] — 技法 1〜7 の出所（spade-co.jp 観測駆動解析）
+
+商品ライン別の使い分け（カタログ §案件タイプ別早見表 を参照）:
+- L1 Single LP: 必須は技法 1（文字フェード）、推奨は技法 5（パララックス）
+- L2 Corporate 5P: 必須は 1, 5、推奨は 4（slide-in）。技法 7（WebGL）は過剰
+- L3 LP+広告運用: 必須は 1, 5、CTA 周辺で技法 6（SVG モーフ）が映える
+- L4 Express: 既存サイトに馴染ませる前提で、新規モーション追加は控える
+
 ## 関連ページ
 
 - [[pricing-catalog]] — 価格 SSOT

@@ -1,9 +1,9 @@
 ---
 type: concept
 created: 2026-04-26
-updated: 2026-05-09
-sources: []
-related: []
+updated: 2026-05-10
+sources: [[[spade-motion-study]]]
+related: [[spade-motion-study]]
 tags: [lp-design, motion, technique-catalog]
 status: active
 identity: n/a
@@ -11,7 +11,7 @@ identity: n/a
 
 # Motion Techniques Catalog — LP/HP 制作の引き出し
 
-LP/HP 実装で「動きをつけたい」と思った時の標準語彙。spade-co.jp 解析（2026-04-26）と madoguchi.inc 解析（2026-04-27）で吸収した技法を、**いつ使うか・どう書くか・参考実装のどこを見るか**をセットで記録する。次回以降、design-director / conversion-designer / rapid-hp-operator / system-engineer はここから引き出して使う。
+LP/HP 実装で「動きをつけたい」と思った時の標準語彙。spade-co.jp 解析（2026-04-26、出所詳細は [[spade-motion-study]]）と madoguchi.inc 解析（2026-04-27）で吸収した技法を、**いつ使うか・どう書くか・参考実装のどこを見るか**をセットで記録する。次回以降、design-director / conversion-designer / rapid-hp-operator / system-engineer はここから引き出して使う。
 
 参考実装:
 - spade-co.jp ベース: `outputs/lp-experiments/spade-study/`（index.html / styles.css / app.js）

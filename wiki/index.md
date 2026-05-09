@@ -19,6 +19,7 @@
 
 ### lp-hp-design
 - [motion-techniques](domain/lp-hp-design/motion-techniques.md) — LP/HP 演出技法カタログ（spade-co.jp 解析由来）
+- [spade-motion-study](domain/lp-hp-design/spade-motion-study.md) — spade-co.jp モーション技法吸収の出所記録（2026-04-26 解析）
 
 ## people
 
@@ -37,6 +38,6 @@
 ---
 
 ## 統計（lint で更新）
-- 総ページ数: 8（SCHEMA + index + log + bsa 5 + lp-hp-design 1 + people 1 + personal 1 = 11 を含む）
-- 最終 ingest: 2026-05-10 (TERRA HAYAMA / 2026-04-terra-isshiki)
-- 最終 lint: -
+- 総ページ数: 9（SCHEMA + index + log + bsa 5 + lp-hp-design 2 + people 1 + personal 1 = 12 を含む）
+- 最終 ingest: 2026-05-10 (spade-motion-study)
+- 最終 lint: 2026-05-10 (Phase 1 MVP 動作確認)
