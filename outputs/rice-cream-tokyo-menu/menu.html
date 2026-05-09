@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<title>RICE CREAM TOKYO — Menu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Hina+Mincho&display=swap" rel="stylesheet" />
+<style>
+  /* ==============================================================
+     RICE CREAM TOKYO — A4 Menu (print-ready, editable single file)
+     ==============================================================
+     - 1ページ目: Signature Menu (ソフトクリーム + 抹茶ドリンク)
+     - 2ページ目: Special Menu (季節フレーバー5種 × Latte/Float)
+     - A4 portrait 794×1123px (96dpi) / 印刷時は 210×297mm
+     - 編集する場合は <article class="page page-…"> 配下の HTML を直接書き換えてください
+  ============================================================== */
+
+  :root {
+    --facade:    #1F4A3A;  /* facade green / primary */
+    --facade-dk: #143028;  /* deeper green / type */
+    --rice:      #F6F2E8;  /* rice white / page bg */
+    --rice-warm: #EFE8D8;  /* warm cream / secondary surface */
+    --young:     #A8C59A;  /* young rice green */
+    --gold:      #B58A2E;  /* harvest gold */
+    --gold-soft: #C9A24E;  /* softer gold accents */
+    --clay:      #E8DFCB;
+    --ink:       #2A2A22;
+    --ink-soft:  #5A5648;
+    --hairline:  rgba(31,74,58,0.13);
+
+    --font-serif: "Cormorant Garamond", "Hiragino Mincho ProN", "YuMincho", serif;
+    --font-sans:  "Inter Tight", "Hiragino Kaku Gothic ProN", "YuGothic", sans-serif;
+    --font-mono:  "JetBrains Mono", ui-monospace, monospace;
+  }
+
+  /* ── Reset ───────────────────────────────────────────────────── */
+  *, *::before, *::after {
+    box-sizing: border-box;
+    /* Force background colors to print/PDF-export reliably across browsers */
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: #ddd;
+    font-family: var(--font-sans);
+    color: var(--ink);
+  }
+
+  /* ── A4 sheet ────────────────────────────────────────────────── */
+  .page {
+    width: 794px;
+    height: 1123px;
+    background: var(--rice);
+    position: relative;
+    overflow: hidden;
+    margin: 24px auto;
+    box-shadow: 0 4px 30px rgba(0,0,0,0.15);
+    page-break-after: always;
+  }
+  .page:last-of-type { page-break-after: auto; }
+
+  /* z-index: keep content above hero photo / overlay backgrounds */
+  .std-header,
+  .spc-header,
+  .big-block,
+  .spc-grid,
+  .topping-footer,
+  .topping-footer-jp {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ============================================================
+     PAGE 1 — SIGNATURE MENU
+  ============================================================ */
+  .page-standard .hero-photo {
+    position: absolute; left: 0; right: 0; top: 0; height: 320px;
+    background-image: url("photos/terrace-dusk.jpg");
+    background-size: cover;
+    background-position: center 50%;
+    opacity: 0.62;
+  }
+  .page-standard .hero-overlay {
+    position: absolute; left: 0; right: 0; top: 0; height: 380px;
+    background: linear-gradient(180deg,
+      rgba(246,242,232,0.4) 0%,
+      rgba(246,242,232,0.45) 35%,
+      rgba(246,242,232,0.65) 60%,
+      var(--rice) 100%);
+  }
+  .page-standard .seigaiha-bg {
+    position: absolute; left: 0; right: 0; top: 360px; bottom: 0;
+    background: var(--rice);
+    opacity: 1;
+  }
+  .page-standard .seigaiha-bg::before {
+    content: "";
+    position: absolute; inset: 0;
+    opacity: 0.025;
+    background-image:
+      radial-gradient(circle at 35px 17px, transparent 13px, var(--facade) 13px, var(--facade) 14px, transparent 14px),
+      radial-gradient(circle at 35px 17px, transparent 20px, var(--facade) 20px, var(--facade) 21px, transparent 21px),
+      radial-gradient(circle at 35px 17px, transparent 27px, var(--facade) 27px, var(--facade) 28px, transparent 28px),
+      radial-gradient(circle at 35px 17px, transparent 34px, var(--facade) 34px, var(--facade) 35px, transparent 35px),
+      radial-gradient(circle at 0 17px, transparent 13px, var(--facade) 13px, var(--facade) 14px, transparent 14px),
+      radial-gradient(circle at 0 17px, transparent 20px, var(--facade) 20px, var(--facade) 21px, transparent 21px),
+      radial-gradient(circle at 70px 17px, transparent 13px, var(--facade) 13px, var(--facade) 14px, transparent 14px);
+    background-size: 70px 35px;
+    pointer-events: none;
+  }
+
+  .std-header {
+    position: relative;
+    padding: 22px 60px 0;
+    text-align: center;
+  }
+  .std-header h1 {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: 50px;
+    line-height: 1;
+    margin: 0;
+    color: var(--facade-dk);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .std-header .by {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 16px;
+    color: var(--ink-soft);
+    margin-top: 6px;
+  }
+  .std-header .label-mono {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.34em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-top: 14px;
+  }
+  .std-header .tagline {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 14px;
+    color: var(--ink-soft);
+    margin-top: 8px;
+    line-height: 1.4;
+  }
+  .std-header .tagline .jp {
+    color: var(--ink-soft);
+    margin-left: 8px;
+    font-style: normal;
+    font-family: var(--font-sans);
+    font-size: 12px;
+  }
+
+  /* Diamond rule (gold dash · diamond · gold dash) */
+  .diamond-rule {
+    display: flex; justify-content: center; align-items: center;
+    gap: 14px; margin-top: 12px;
+  }
+  .diamond-rule .dash { width: 36px; height: 1px; background: var(--gold); }
+  .diamond-rule .diamond {
+    width: 6px; height: 6px;
+    border: 1px solid var(--gold);
+    transform: rotate(45deg);
+  }
+
+  /* ── Big block ─────────────────────────────────────────────── */
+  .big-block {
+    position: relative;
+    background: #fffdf8;
+    border: 1px solid rgba(31,74,58,0.13);
+    border-radius: 6px;
+    padding: 12px 24px 12px;
+    box-shadow:
+      0 1px 0 rgba(31,74,58,0.04),
+      0 12px 30px -22px rgba(31,74,58,0.25);
+  }
+  .big-block + .big-block { margin-top: 8px; }
+  .big-block.first { margin: 10px 60px 0; }
+  .big-block.next  { margin: 8px 60px 0; }
+
+  .big-block > header {
+    display: flex; align-items: baseline; gap: 14px;
+    margin-bottom: 8px;
+  }
+  .big-block > header h2 {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: 30px;
+    line-height: 1;
+    color: var(--facade-dk);
+    letter-spacing: -0.005em;
+  }
+  .big-block > header .header-rule { flex: 1; height: 1px; background: var(--hairline); }
+  .big-block > header .header-jp {
+    font-family: var(--font-sans); font-size: 12px;
+    color: var(--ink-soft); letter-spacing: 0.08em;
+  }
+
+  /* Item grids */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr;     gap: 24px; align-items: stretch; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; align-items: stretch; }
+
+  .item-tile {
+    position: relative;
+    display: flex; flex-direction: column; align-items: center;
+    text-align: center;
+    padding: 6px 6px 10px;
+    /* solid equivalent of rgba(239,232,216,0.31) over .big-block bg #fffdf8 */
+    background: #faf6ee;
+    border-radius: 4px;
+  }
+  /* Ranking badges (No.1 / No.2 / No.3) — top-right corner */
+  .rank-badge {
+    position: absolute;
+    top: -8px; right: -8px;
+    width: 38px; height: 38px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    background: var(--gold);
+    color: #fff;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    /* filter: drop-shadow follows the element's shape (circle); box-shadow does not
+       in Chrome PDF export, which produced an unwanted rectangular shadow. */
+    filter: drop-shadow(0 2px 3px rgba(31,74,58,0.22));
+    z-index: 3;
+  }
+  .rank-badge.rank-1 { background: #1F4A3A; }
+  .rank-badge.rank-2 { background: var(--gold); }
+  .rank-badge.rank-3 { background: var(--gold-soft); }
+
+  /* Product image (transparent PNG) — replaces colored placeholder slot */
+  .product-img {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    position: relative;
+  }
+  .product-img img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+  /* Page 1: Soft Serve cone (tall + narrow natural ratio ~0.29) */
+  .product-img.cone { width: 100px; height: 178px; }
+  /* Page 1: Matcha drinks — cup body normalized via image preprocessing (aspect ~0.571) */
+  .product-img.cup  { width: 110px; height: 192px; }
+  /* (Matcha / Matcha Latte / Matcha Float — all use the default .product-img.cup size) */
+  /* Page 2: Standards flavors — same normalized aspect */
+  .product-img.spc-cup {
+    width: 100px;
+    height: 175px;
+    position: relative;
+  }
+  .product-img.spc-cup img {
+    object-position: bottom center;
+  }
+  /* Latte (left cell) slightly smaller than Float */
+  .flavor-pair > .pair-cell:first-of-type .product-img.spc-cup {
+    width: 90px;
+    height: 158px;
+  }
+  /* Per-flavor fine-tuning (scale + bottom anchor; image bottom stays fixed) */
+  /* Kinako Latte (-2%) */
+  .spc-grid > section:nth-child(4) .flavor-pair > .pair-cell:first-of-type .product-img.spc-cup {
+    width: 88px;
+    height: 155px;
+  }
+  /* Coffee Latte (-2%) */
+  .spc-grid > section:nth-child(5) .flavor-pair > .pair-cell:first-of-type .product-img.spc-cup {
+    width: 88px;
+    height: 155px;
+  }
+  /* Page 1: Matcha & Matcha Latte cup images: -10% (bottom anchored) */
+  .matcha-grid .item-tile:nth-child(1) .product-img.cup img,
+  .matcha-grid .item-tile:nth-child(2) .product-img.cup img {
+    transform: scale(0.9);
+    transform-origin: center bottom;
+  }
+  /* Page 2: Sakura Float -10% (bottom anchored) */
+  .spc-grid > section:nth-child(1) .flavor-pair > .pair-cell:last-of-type .product-img.spc-cup img {
+    transform: scale(0.9);
+    transform-origin: center bottom;
+  }
+  /* Page 2: Kinako Float / Coffee Float — height kept at +10%, width pulled in 10% toward center */
+  .spc-grid > section:nth-child(4) .flavor-pair > .pair-cell:last-of-type .product-img.spc-cup img,
+  .spc-grid > section:nth-child(5) .flavor-pair > .pair-cell:last-of-type .product-img.spc-cup img {
+    transform: scale(0.99, 1.1);
+    transform-origin: center bottom;
+  }
+  /* Page 1: Soft Serve cone images — widen horizontally (~+10% each side) while keeping height */
+  .product-img.cone img {
+    transform: scaleX(1.1);
+    transform-origin: center;
+  }
+  /* "ICED / HOT" overlay for Latte (non-float drinks) — top of empty space, gold */
+  .product-img.spc-cup .serve-text-overlay {
+    position: absolute;
+    top: 4px; left: 0; right: 0;
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    z-index: 2;
+    pointer-events: none;
+  }
+  /* Page 2: Topping card icons */
+  .product-img.topping-img { width: 84px; height: 100px; }
+
+  /* (Legacy placeholder styles — kept for fallback/reference but no longer used by page 1/2) */
+  .product-slot {
+    width: 108px;
+    border-radius: 6px 6px 14px 14px; /* cup-ish silhouette */
+    position: relative;
+    overflow: hidden;
+    display: flex; align-items: flex-end; justify-content: center;
+    background: var(--rice-warm);
+  }
+  .product-slot.cone { height: 130px; }
+  .product-slot.cup  { height: 116px; }
+  .product-slot::before {
+    content: "";
+    position: absolute; inset: 0;
+    background-image: repeating-linear-gradient(135deg,
+      transparent 0 8px, rgba(31,74,58,0.04) 8px 9px);
+  }
+  .product-slot.tone-cream  { background: var(--rice-warm); }
+  .product-slot.tone-green  { background: #E8EFE2; }
+  .product-slot.tone-gold   { background: #F1E8D0; }
+  .product-slot.tone-pink   { background: #F1E2DD; }
+  .product-slot.tone-purple { background: #E5DEE6; }
+  .product-slot.tone-tan    { background: #EAE0CB; }
+  .product-slot.tone-dark   { background: #3D352B; }
+  .product-slot .slot-label {
+    font-family: var(--font-mono);
+    font-size: 9px; letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(31,74,58,0.45);
+    padding: 0 0 10px;
+    position: relative;
+  }
+  .product-slot.tone-dark .slot-label,
+  .product-slot.tone-dark::before { color: rgba(255,255,255,0.55); }
+  .product-slot.tone-dark::before {
+    background-image: repeating-linear-gradient(135deg,
+      transparent 0 8px, rgba(255,255,255,0.04) 8px 9px);
+  }
+
+  .item-tile .item-text {
+    flex: 1;
+    display: flex; flex-direction: column; align-items: center;
+    width: 100%;
+  }
+  .item-tile .name {
+    font-family: var(--font-serif);
+    font-size: 28px; color: var(--facade-dk);
+    line-height: 1.15; margin-top: 6px;
+    font-weight: 500; letter-spacing: -0.005em;
+    /* unify center vertical of 1-line vs 2-line names */
+    min-height: 64px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .item-tile .name .nowrap { white-space: nowrap; }
+  .item-tile .jp {
+    font-family: var(--font-sans); font-size: 12px;
+    color: var(--ink-soft); margin-top: 4px;
+    letter-spacing: 0.04em;
+    min-height: 18px;          /* unify Page-1 jp baselines */
+  }
+  /* Middle row centers chips / topping inline between jp and price */
+  .item-tile .middle-row {
+    flex: 1;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    width: 100%;
+    min-height: 36px;
+  }
+  /* Serve type label (gold text, replaces ICED/HOT pill chips) */
+  .item-tile .serve-text {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    color: var(--gold);
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .item-tile .price {
+    display: flex; align-items: baseline; gap: 3px; margin-top: 6px;
+  }
+  .item-tile .price .yen {
+    font-family: var(--font-mono); font-size: 13px; color: var(--gold);
+  }
+  .item-tile .price .num {
+    font-family: var(--font-serif); font-size: 30px; color: var(--gold);
+    font-weight: 500; line-height: 1;
+  }
+
+  /* Block note */
+  .block-note {
+    margin: 8px -6px 0;
+    padding: 6px 4px 0;
+    border-top: 1px dashed rgba(31,74,58,0.13);
+    font-family: var(--font-sans);
+    font-size: 12px;
+    color: var(--ink);
+    line-height: 1.5;
+  }
+  .block-note .label-mono {
+    font-family: var(--font-mono); font-size: 10px;
+    letter-spacing: 0.22em; color: var(--gold);
+    text-transform: uppercase; margin-right: 10px;
+  }
+  .block-note .jp-italic {
+    font-style: italic; color: var(--ink-soft); margin-left: 8px;
+  }
+
+  /* Topping inline note — placed inside Matcha Float card (between jp and price) */
+  .topping-inline {
+    margin-top: 8px;
+    padding: 6px 8px 7px;
+    width: calc(100% - 4px);
+    background: rgba(181,138,46,0.08);
+    border-top: 1px dashed rgba(181,138,46,0.4);
+    border-bottom: 1px dashed rgba(181,138,46,0.4);
+    text-align: center;
+  }
+  .topping-inline .label-mono {
+    font-family: var(--font-mono); font-size: 9px;
+    letter-spacing: 0.2em; color: var(--gold);
+    text-transform: uppercase;
+  }
+  .topping-inline .options {
+    font-family: var(--font-sans); font-size: 10.5px;
+    color: var(--ink); margin-top: 3px; line-height: 1.3;
+  }
+  .topping-inline .options-jp {
+    font-family: var(--font-sans); font-size: 9px;
+    font-style: italic; color: var(--ink-soft);
+    margin-top: 1px;
+  }
+
+  /* ============================================================
+     PAGE 2 — SPECIAL MENU
+  ============================================================ */
+  .page-special .hero-photo {
+    position: absolute; left: 0; right: 0; top: 0; height: 260px;
+    background-image: url("photos/rice-drying.jpg");
+    background-size: cover;
+    background-position: center 55%;
+    opacity: 0.42;
+  }
+  .page-special .hero-overlay {
+    position: absolute; left: 0; right: 0; top: 0; height: 320px;
+    background: linear-gradient(180deg,
+      rgba(246,242,232,0.5) 0%,
+      rgba(246,242,232,0.55) 35%,
+      rgba(246,242,232,0.75) 60%,
+      var(--rice) 100%);
+  }
+  .page-special .side-rule {
+    position: absolute; top: 50px; bottom: 50px; width: 1px;
+    background: rgba(181,138,46,0.33);
+  }
+  .page-special .side-rule.left  { left: 28px; }
+  .page-special .side-rule.right { right: 28px; }
+
+  /* Page 2 uses std-header; tighter top padding (no hero photo) */
+  .spc-header-aligned {
+    padding-top: 24px;
+    padding-left: 70px;
+    padding-right: 70px;
+  }
+
+  .spc-grid {
+    padding: 16px 70px 0;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+  }
+
+  .flavor-block {
+    background: #fff;
+    border: 1px solid rgba(31,74,58,0.15);
+    border-radius: 4px;
+    padding: 10px 10px 12px;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .flavor-block header { display: block; }
+  .flavor-block .name {
+    font-family: var(--font-serif); font-size: 21px;
+    color: var(--facade-dk); line-height: 1.15;
+    letter-spacing: -0.01em;
+    white-space: nowrap;     /* keep title + en-sub on one line */
+  }
+  .flavor-block .name .name-en {
+    font-family: var(--font-serif); font-size: 10px;
+    font-style: italic;
+    color: var(--ink-soft);
+    font-weight: 400;
+    margin-left: 3px;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    vertical-align: 0.1em;
+  }
+  .flavor-block .jp {
+    font-family: var(--font-sans); font-size: 12px;
+    color: var(--ink-soft); margin-top: 2px;
+  }
+  .flavor-pair {
+    display: grid; grid-template-columns: 1fr 1px 1fr;
+    gap: 8px; align-items: end;
+    /* solid equivalent of rgba(239,232,216,0.31) over .flavor-block bg #fff */
+    background: #faf8f3;
+    border-radius: 4px;
+    padding: 10px 4px 8px;
+  }
+  .flavor-pair .divider {
+    background: rgba(31,74,58,0.13);
+    align-self: stretch;
+  }
+  .pair-cell {
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+  }
+  .pair-cell .label-mono {
+    font-family: var(--font-mono); font-size: 10px;
+    letter-spacing: 0.22em; color: var(--gold);
+    text-transform: uppercase; margin-top: 4px;
+  }
+  /* served chips removed — ICED/HOT now lives as overlay on the cup image */
+  .pair-cell .price {
+    font-family: var(--font-serif); font-size: 20px;
+    color: var(--gold); font-weight: 500; line-height: 1;
+  }
+
+  /* Topping card on page 2 — padding/gap match .flavor-block so .pair top-edge
+     aligns with the .flavor-pair top-edge of the neighboring (Coffee Latte) block. */
+  .topping-card {
+    border: 1px dashed rgba(181,138,46,0.53);
+    border-radius: 4px;
+    padding: 10px 14px 12px;
+    display: flex; flex-direction: column; gap: 6px;
+    /* solid equivalent of rgba(239,232,216,0.31) over page bg #F6F2E8 */
+    background: #f4efe3;
+  }
+  /* Header height matches Coffee Latte's "Coffee Latte / コーヒーラテ" header */
+  .topping-card > header {
+    min-height: 41px;
+  }
+  .topping-card .header-mono {
+    font-family: var(--font-mono); font-size: 11px;
+    letter-spacing: 0.24em; color: var(--gold);
+    text-transform: uppercase;
+  }
+  .topping-card .sub-jp {
+    font-family: var(--font-sans); font-size: 12px;
+    color: var(--ink-soft); margin-top: 2px; font-style: italic;
+  }
+  .topping-card .pair {
+    display: grid; grid-template-columns: 1fr 1px 1fr;
+    gap: 8px; align-items: end;
+    background: #fff; border-radius: 4px;
+    padding: 12px 4px 8px;
+    border: 1px solid rgba(31,74,58,0.1);
+  }
+  .topping-card .pair .name {
+    font-family: var(--font-serif); font-size: 18px;
+    color: var(--facade-dk); line-height: 1.1;
+    margin-top: 2px; text-align: center;
+  }
+  .topping-card .pair .jp {
+    font-family: var(--font-sans); font-size: 10px;
+    color: var(--ink-soft); font-style: italic;
+  }
+  .topping-card .other-note {
+    font-family: var(--font-sans); font-size: 10.5px;
+    color: var(--ink-soft); line-height: 1.45;
+    text-align: center;
+    /* Take remaining vertical space and center the note within it */
+    flex: 1;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+  }
+  .topping-card .other-note .jp {
+    display: block; font-style: italic; font-size: 10px; margin-top: 2px;
+  }
+
+  /* ── Print ─────────────────────────────────────────────────── */
+  @media print {
+    body { background: #fff; }
+    .page {
+      width: 210mm;
+      height: 297mm;
+      margin: 0;
+      box-shadow: none;
+    }
+    @page { size: A4 portrait; margin: 0; }
+  }
+
+  /* Screen-only helper to label pages while editing */
+  @media screen {
+    .page::after {
+      content: attr(data-page-name);
+      position: absolute;
+      bottom: -28px; left: 0;
+      font-family: var(--font-mono);
+      font-size: 11px; color: #888;
+    }
+  }
+  @media print {
+    .page::after { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- =========================================================
+     PAGE 1 — SIGNATURE MENU (ソフトクリーム + 抹茶ドリンク)
+========================================================= -->
+<article class="page page-standard" data-page-name="page 1 — signature">
+  <div class="seigaiha-bg"></div>
+
+  <header class="std-header">
+    <h1>RICE CREAM TOKYO</h1>
+    <div class="by">by BEAT ICE</div>
+    <div class="tagline">
+      Rice Cream — Japanese rice soft serve.
+      <span class="jp">日本のお米から生まれたソフトクリーム</span>
+    </div>
+    <div class="diamond-rule">
+      <span class="dash"></span><span class="diamond"></span><span class="dash"></span>
+    </div>
+  </header>
+
+  <!-- BLOCK 1: SOFT SERVE -->
+  <section class="big-block first">
+    <header>
+      <h2>Soft Serve</h2>
+      <span class="header-rule"></span>
+      <span class="header-jp">ソフトクリーム</span>
+    </header>
+
+    <div class="grid-2">
+      <div class="item-tile">
+        <div class="rank-badge rank-1">No.1</div>
+        <div class="product-img cone">
+          <img src="photos/products/rice-cream.png" alt="Rice Cream" />
+        </div>
+        <div class="item-text">
+          <div class="name">Rice Cream</div>
+          <div class="jp">ライスクリーム</div>
+          <div class="price"><span class="yen">¥</span><span class="num">900</span></div>
+        </div>
+      </div>
+
+      <div class="item-tile">
+        <div class="rank-badge rank-2">No.2</div>
+        <div class="product-img cone">
+          <img src="photos/products/rice-cream-matcha.png" alt="Rice Cream with Matcha powder" />
+        </div>
+        <div class="item-text">
+          <div class="name">Rice Cream<br/>with Matcha powder</div>
+          <div class="jp">ライスクリーム 抹茶パウダーがけ</div>
+          <div class="price"><span class="yen">¥</span><span class="num">1,100</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-note">
+      <span class="label-mono">About</span>
+      Rice Cream is made with amazake — a traditional Japanese fermented rice drink — together with rice milk and coconut milk.
+      Cones are gluten-free, made with rice flour.
+      <span class="jp-italic"></br>甘酒・ライスミルク・ココナッツミルクを使ったソフトクリーム。コーンは米粉のグルテンフリー仕立てです。</span>
+    </div>
+  </section>
+
+  <!-- BLOCK 2: MATCHA DRINKS -->
+  <section class="big-block next">
+    <header>
+      <h2>Matcha</h2>
+      <span class="header-rule"></span>
+      <span class="header-jp">抹茶 · ドリンク</span>
+    </header>
+
+    <div class="grid-3 matcha-grid">
+      <div class="item-tile">
+        <div class="product-img cup">
+          <img src="photos/products/matcha.png" alt="Matcha" />
+        </div>
+        <div class="item-text">
+          <div class="name">Matcha</div>
+          <div class="jp">抹茶</div>
+          <div class="middle-row">
+            <div class="serve-text">ICED / HOT</div>
+          </div>
+          <div class="price"><span class="yen">¥</span><span class="num">700</span></div>
+        </div>
+      </div>
+
+      <div class="item-tile">
+        <div class="rank-badge rank-3">No.3</div>
+        <div class="product-img cup">
+          <img src="photos/products/matcha-latte.png" alt="Matcha Latte" />
+        </div>
+        <div class="item-text">
+          <div class="name">Matcha Latte</div>
+          <div class="jp">抹茶ラテ</div>
+          <div class="middle-row">
+            <div class="serve-text">ICED / HOT</div>
+          </div>
+          <div class="price"><span class="yen">¥</span><span class="num">800</span></div>
+        </div>
+      </div>
+
+      <div class="item-tile">
+        <div class="product-img cup">
+          <img src="photos/products/matcha-float.png" alt="Matcha Float" />
+        </div>
+        <div class="item-text">
+          <div class="name">Matcha Float</div>
+          <div class="jp">抹茶フロート</div>
+          <div class="middle-row">
+            <div class="serve-text">+¥200 TOPPING</div>
+          </div>
+          <div class="price"><span class="yen">¥</span><span class="num">1,400</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-note">
+      <span class="label-mono">About lattes</span>
+      Rice milk used in all latte drinks. Organic ceremonial matcha.
+      <span class="jp-italic"></br>ラテにはすべてライスミルクを使用。オーガニック抹茶。</span>
+    </div>
+  </section>
+</article>
+
+<!-- =========================================================
+     PAGE 2 — SPECIAL MENU (季節フレーバー × Latte/Float)
+========================================================= -->
+<article class="page page-special" data-page-name="page 2 — special">
+  <div class="side-rule left"></div>
+  <div class="side-rule right"></div>
+
+  <header class="std-header spc-header-aligned">
+    <h1>RICE CREAM TOKYO</h1>
+    <div class="by">by BEAT ICE</div>
+    <div class="diamond-rule">
+      <span class="dash"></span><span class="diamond"></span><span class="dash"></span>
+    </div>
+  </header>
+
+  <div class="spc-grid">
+
+    <!-- 1. Sakura Matcha -->
+    <section class="flavor-block">
+      <header>
+        <div class="name">Sakura Matcha</div>
+        <div class="jp">桜抹茶ラテ</div>
+      </header>
+      <div class="flavor-pair">
+        <div class="pair-cell">
+          <div class="product-img spc-cup"><span class="serve-text-overlay">ICED / HOT</span><img src="photos/products/sakura-matcha-latte.png" alt="Sakura Matcha Latte"/></div>
+          <div class="label-mono">Latte</div>
+          <div class="price">¥900</div>
+        </div>
+        <div class="divider"></div>
+        <div class="pair-cell">
+          <div class="product-img spc-cup"><img src="photos/products/sakura-matcha-float.png" alt="Sakura Matcha Float"/></div>
+          <div class="label-mono">Float</div>
+          <div class="price">¥1,700</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Murasaki-imo Matcha -->
+    <section class="flavor-block">
+      <header>
+        <div class="name">Murasaki-imo Matcha <span class="name-en">purple sweet potato</span></div>
+        <div class="jp">紫芋抹茶ラテ</div>
+      </header>
+      <div class="flavor-pair">
+        <div class="pair-cell">
+          <div class="product-img spc-cup"><span class="serve-text-overlay">ICED / HOT</span><img src="photos/products/murasaki-imo-latte.png" alt="Murasaki-imo Matcha Latte"/></div>
+          <div class="label-mono">Latte</div>
+          <div class="price">¥900</div>
+        </div>
+        <div class="divider"></div>
+        <div class="pair-cell">
+          <div class="product-img spc-cup"><img src="photos/products/murasaki-imo-float.png" alt="Murasaki-imo Matcha Float"/></div>
+          <div class="label-mono">Float</div>
+          <div class="price">¥1,700</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Kuro-goma Latte -->
+    <section class="flavor-block">
+      <header>
+        <div class="name">Kuro-goma Latte <span class="name-en">black sesame</span></div>
+        <div class="jp">黒胡麻ラテ</div>
+      </header>
+      <div class="flavor-pair">
+        <div class="pair-cell">
+          <div class="product-img spc-cup"><span class="serve-text-overlay">ICED / HOT</span><img src="photos/products/kuro-goma-latte.png" alt="Kuro-goma Latte"/></div>
+          <div class="label-mono">Latte</div>
+          <div class="price">¥800</div>
+        </div>
+        <div class="divider"></div>
+        <div class="pair-cell">
+          <div class="product-img spc-cup"><img src="photos/products/kuro-goma-float.png" alt="Kuro-goma Latte Float"/></div>
+          <div class="label-mono">Float</div>
+          <div class="price">¥1,500</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Kinako Latte -->
+    <section class="flavor-block">
+      <header>
+        <div class="name">Kinako Latte <span class="name-en">roasted soybean</span></div>
+        <div class="jp">きなこラテ</div>
+      </header>
+      <div class="flavor-pair">
+        <div class="pair-cell">
+          <div class="product-img spc-cup"><span class="serve-text-overlay">ICED / HOT</span><img src="photos/products/kinako-latte.png" alt="Kinako Latte"/></div>
+          <div class="label-mono">Latte</div>
+          <div class="price">¥800</div>
+        </div>
+        <div class="divider"></div>
+        <div class="pair-cell">
+          <div class="product-img spc-cup"><img src="photos/products/kinako-float.png" alt="Kinako Latte Float"/></div>
+          <div class="label-mono">Float</div>
+          <div class="price">¥1,500</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Coffee Latte -->
+    <section class="flavor-block">
+      <header>
+        <div class="name">Coffee Latte</div>
+        <div class="jp">コーヒーラテ</div>
+      </header>
+      <div class="flavor-pair">
+        <div class="pair-cell">
+          <div class="product-img spc-cup"><span class="serve-text-overlay">ICED / HOT</span><img src="photos/products/coffee-latte.png" alt="Coffee Latte"/></div>
+          <div class="label-mono">Latte</div>
+          <div class="price">¥800</div>
+        </div>
+        <div class="divider"></div>
+        <div class="pair-cell">
+          <div class="product-img spc-cup"><img src="photos/products/coffee-float.png" alt="Coffee Latte Float"/></div>
+          <div class="label-mono">Float</div>
+          <div class="price">¥1,500</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Topping card -->
+    <section class="topping-card">
+      <header>
+        <div class="header-mono">Float Topping +¥200</div>
+      </header>
+      <div class="pair">
+        <div class="pair-cell">
+          <div class="product-img topping-img"><img src="photos/products/topping-matcha-powder.png" alt="Matcha powder"/></div>
+          <div class="name">Matcha<br/>powder</div>
+          <div class="jp">抹茶パウダー</div>
+        </div>
+        <div class="divider" style="background:rgba(31,74,58,0.13);align-self:stretch;"></div>
+        <div class="pair-cell">
+          <div class="product-img topping-img"><img src="photos/products/topping-chocolate-sauce.png" alt="Chocolate sauce"/></div>
+          <div class="name">Chocolate<br/>sauce</div>
+          <div class="jp">チョコソース</div>
+        </div>
+      </div>
+      <div class="other-note">
+        Other toppings available — ask our staff.
+        <span class="jp">他のトッピングもございます。お気軽にスタッフまで。</span>
+      </div>
+    </section>
+
+  </div>
+</article>
+
+</body>
+</html>
