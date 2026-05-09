@@ -131,6 +131,7 @@
 | Vercel team デプロイ、Vercel deploy ERROR、ビルドログ空、git author email、Vercel push 前確認 | dev-automation | system-engineer（`vercel-team-deploy-checklist` 必須参照） |
 | サンプルサイト追加、portfolio 組込み、INDEX ボタン、サムネ撮影、WORK_DETAILS、kudo-port-grid | dev-automation | system-engineer（`sample-site-onboarding` 必須参照） |
 | 印刷データ、入稿、accea、塗り足し、bleed、CMYK、トンボ、350dpi、アップスケール、印刷用PDF | dev-automation | system-engineer（`print-data-prep` 必須参照） |
+| git整理、コミットしてない、pushしてない、リポジトリ最新化、working tree汚い、.gitignore、ブランチ整理 | dev-automation | system-engineer（`git-repo-cleanup-protocol` 必須参照） |
 | 振り返り、セッション振り返り、レビュー、今回の動き、改善点 | 横断 | secretary（`session-retrospective.md` を参照して実行） |
 | BSA、工藤陸、Lancers、Coconala、認定ランサー、提案投下、Week KPI | business-ops | rapid-hp-operator |
 | デザイン方向性、DESIGN.md、OUTLINE.md、トンマナ、AIっぽい、毎回同じデザイン、個性的、デザインテンプレ、デザイン統括 | 横断 | design-director（守り） |
@@ -231,7 +232,7 @@
 
 ---
 
-## スキル一覧（27冊）
+## スキル一覧（29冊）
 
 | # | スキル | ファイル | 用途 |
 |---|--------|---------|------|
@@ -263,6 +264,7 @@
 | 26 | サンプルサイト組込みプロトコル | `sample-site-onboarding.md` | outputs/lp-experiments/ → portfolio に組み込む9ステップ。INDEX バー必須・ヘッダー padding 調整・サムネ撮影・author 認可確認まで一気通貫 |
 | 27 | 印刷データ入稿準備 | `print-data-prep.md` | PNG→印刷所入稿PDFの一気通貫処理。Real-ESRGAN タイル推論（MPS）→塗り足し→CMYK→トンボ→PDF。accea 等向け |
 | 28 | ローカルファイル整理プロトコル | `local-file-organization.md` | Downloads/Desktop/Documents 等の大型整理。初動スキャン→方針合意（経理独立等3軸必須）→中身確認→構造案→バッチ実行の5フェーズ。MD5重複検出・macOS zip展開フロー含む |
+| 29 | Gitリポジトリ整理プロトコル | `git-repo-cleanup-protocol.md` | 「コミット/プッシュしてないもの整理」依頼の標準フロー。初動スキャン（sub-repo・build artifacts 検出）→方針合意（1回に集約）→.gitignore一括投入→Phase分割計画→コミット実行→pushの5フェーズ |
 
 ---
 

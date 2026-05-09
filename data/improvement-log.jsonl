@@ -27,3 +27,5 @@
 {"ts":"2026-05-06","topic":"image-processing","item":"basicsr は Python 3.13 でインストール不可（__version__ KeyError）。代替: spandrel + PyTorch .pth 直DL が最短ルート。brew/ncnn バイナリ経路は回り道","priority":"medium"}
 {"ts":"2026-05-06","topic":"process","item":"バックグラウンドプロセス多重起動（同一スクリプトを3回起動）。新コマンド実行前に ps aux | grep で既存プロセス確認を習慣化","priority":"medium"}
 {"ts":"2026-05-09","topic":"process","item":"大型ファイル整理タスクで構造案を3回修正した二度手間。前提（粒度・配置・例外ルール=経理系独立扱い）を最初の方針合意で確定すれば構造提案の手戻りを防げる。整理タスクの初手は du -sh */ + 拡張子別件数 + 同サイズ重複候補抽出を1メッセージで実行","priority":"medium"}
+{"ts":"2026-05-09","topic":"process","item":"Git整理タスクの初動チェックリスト未整備。git status だけ見て動き出し、node_modules/.next/tmp/_local-check の混入と sub-repo (mokumoku-koubou) の存在を後段で発見 → 方針確認2回・gitignore 拡張2段階の手戻り。初動で find sub-repo / build artifacts を先打ちするテンプレを feedback_file_organization_init_scan.md に追加","priority":"medium"}
+{"ts":"2026-05-09","topic":"process","item":"Phase 計画提示前にサイズ・ファイル数の概算未実施。Phase D を1コミット計画 → 実際は 436ファイル/280MB/6サブテーマで5分割へ再構成。git ls-files -o + xargs du の概算を計画作成時に組み込む","priority":"medium"}
