@@ -15,6 +15,13 @@ Plan: `docs/superpowers/plans/2026-05-09-llm-wiki-phase0-1.md`
 `knowledge/context/pricing-catalog.md` → `wiki/business/bsa/pricing-catalog.md` 移動。
 14 ファイルのリンク張替え済み（残存ゼロ確認）。frontmatter 追加（type=source, identity=工藤陸）。
 
+## [2026-05-09] phase | BSA wiki 新規 3 ページ作成
+
+- business/bsa/overview.md (topic 型)
+- business/bsa/proposals/templates.md (concept 型)
+- business/bsa/lessons-proposal-patterns.md (topic 型)
+overview から pricing-catalog/proven-track-record/lessons へ cross-link。
+
 ## [2026-05-09] phase | motion-techniques 移行
 
 `knowledge/context/motion-techniques-catalog.md` → `wiki/domain/lp-hp-design/motion-techniques.md` 移動。

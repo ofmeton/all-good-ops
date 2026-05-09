@@ -6,8 +6,11 @@
 ## business
 
 ### bsa
+- [overview](business/bsa/overview.md) — BSA 戦略全体像（4 ヶ月タイムボックス）
 - [pricing-catalog](business/bsa/pricing-catalog.md) — 商品ライン L1/L2/L3/L4 価格・納期・オプション SSOT
 - [proven-track-record](business/bsa/proven-track-record.md) — 提案文に書ける実績 SSOT（Phase 2 で業種別分解検討）
+- [proposals/templates](business/bsa/proposals/templates.md) — 提案文テンプレ集（パイロット ingest で育てる）
+- [lessons-proposal-patterns](business/bsa/lessons-proposal-patterns.md) — 提案勝ち筋の横断学び（lint で育てる）
 
 ## domain
 
