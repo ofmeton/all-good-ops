@@ -150,3 +150,32 @@ memory pointer 更新:
 
 cross-link: [[overview|BSA overview]] / [[2026-04-terra-isshiki]] / [[terra-hayama]] / [[motion-techniques]]
 
+## [2026-05-10] phase | Phase 3 部分着手 - self/goals + ibasho/overview 移行
+
+spec の Phase 3 のうち、context-goals.md / context-ibasho.md を wiki 化（context-life.md は古化・参照ゼロのため保留）。
+
+新規作成:
+- `wiki/self/goals.md` (topic, identity=工藤陸)
+  - **CLAUDE.md と同期**: 旧戦略KGI #3「AIコスト月 5,000 円以内」削除（CLAUDE.md で外された）
+  - 戦略KGI を BSA #1 / 月収凍結 / 居場所 / 生活 の 4 本に再編
+  - BSA Week KPI 連動を反映、実値参照先を明示
+- `wiki/ibasho/overview.md` (topic, identity=工藤陸, status=draft)
+  - 薄いまま移行（ingest で育てる前提）
+  - BSA 期間中は副次の旨を追記
+
+移行:
+- `knowledge/context/context-goals.md` (35 行) → `wiki/self/goals.md` 移行 + 旧ファイル削除
+- `knowledge/context/context-ibasho.md` (26 行) → `wiki/ibasho/overview.md` 移行 + 旧ファイル削除
+
+参照張替え:
+- `.claude/agents/life-planning/goal-tracker.md`
+- `.claude/agents/life-planning/career-strategist.md`
+- `.claude/agents/kodomo-ibasho/ibasho-designer.md`
+- `.claude/agents/kodomo-ibasho/nonprofit-advisor.md`
+- `.claude/skills/context-update.md` のトピックルーティングテーブルを wiki パスに更新（rice-cream / BSA / portfolio 行も追加）
+
+保留:
+- `context-life.md`: 古化（失業手当が CLAUDE.md で制約から外れた）、参照ゼロ。次回判断
+- `context-business.md` / `context-finance.md`: 軽い情報集約として残す
+
+

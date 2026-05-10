@@ -33,18 +33,20 @@
 - [terra-hayama](people/clients/terra-hayama.md) — TERRA HAYAMA（葉山民泊・BEAT ICE 運営）
 
 ## self
-（Phase 3）
+
+- [goals](self/goals.md) — KGI/KPI 進捗 SSOT（CLAUDE.md と同期）
 
 ## ibasho
-（Phase 3）
+
+- [overview](ibasho/overview.md) — 子どもの居場所構想 SSOT（draft、ingest で育てる）
 
 ## external
-（Phase 3）
+（Phase 3 残）
 
 ---
 
 ## 統計（lint で更新）
-- 総ページ数: 11（SCHEMA + index + log + bsa 5 + icecream 1 + portfolio 1 + lp-hp-design 2 + people 1 + personal 1 = 14 を含む）
+- 総ページ数: 13（SCHEMA + index + log + bsa 5 + icecream 1 + portfolio 1 + self 1 + ibasho 1 + lp-hp-design 2 + people 1 + personal 1 = 16 を含む）
 - 最終 ingest: 2026-05-10 (spade-motion-study)
 - 最終 lint: 2026-05-10 (Phase 1 MVP 動作確認)
-- 最終 phase: 2026-05-10 (Phase 2 続き - portfolio クラスタ作成)
+- 最終 phase: 2026-05-10 (Phase 3 部分着手 - self/goals + ibasho/overview)

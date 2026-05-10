@@ -19,7 +19,7 @@
 - 「収入戦略を考えたい」「月26万円にどう到達する？」「ロードマップを見直したい」
 
 ## 起動時に必ず行うこと
-1. `knowledge/context/context-goals.md` を読む
+1. `wiki/self/goals.md` を読む
 2. `knowledge/context/context-business.md` を読む
 3. `data/cashflow/` の直近データを確認
 
