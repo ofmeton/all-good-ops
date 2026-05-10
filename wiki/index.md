@@ -12,6 +12,9 @@
 - [proposals/templates](business/bsa/proposals/templates.md) — 提案文テンプレ集（パイロット ingest で育てる）
 - [lessons-proposal-patterns](business/bsa/lessons-proposal-patterns.md) — 提案勝ち筋の横断学び（lint で育てる）
 
+### icecream
+- [overview](business/icecream/overview.md) — RICE CREAM 店舗 SSOT（業務委託マネージャー / @BEATICE0923）
+
 ### personal
 - [deals/2026-04-terra-isshiki](business/personal/deals/2026-04-terra-isshiki.md) — TERRA HAYAMA HP 制作（葉山・個人案件）
 
@@ -38,6 +41,7 @@
 ---
 
 ## 統計（lint で更新）
-- 総ページ数: 9（SCHEMA + index + log + bsa 5 + lp-hp-design 2 + people 1 + personal 1 = 12 を含む）
+- 総ページ数: 10（SCHEMA + index + log + bsa 5 + icecream 1 + lp-hp-design 2 + people 1 + personal 1 = 13 を含む）
 - 最終 ingest: 2026-05-10 (spade-motion-study)
 - 最終 lint: 2026-05-10 (Phase 1 MVP 動作確認)
+- 最終 phase: 2026-05-10 (Phase 2 開始 - icecream 移行 + business 整理)

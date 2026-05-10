@@ -17,7 +17,7 @@
 - シフト作成・調整・交代対応
 - スタッフ採用・教育・評価
 - スタッフ間連絡・モチベーション管理
-- **勤怠管理・給与計算・明細発行**（既存の自作スプシを活用。詳細は `context-rice-cream.md`）
+- **勤怠管理・給与計算・明細発行**（既存の自作スプシを活用。詳細は `wiki/business/icecream/overview.md`）
 - 労務関連の一次対応（労働時間管理、出退勤確認）
 
 ### 集客・売上・データ
@@ -46,7 +46,7 @@
 
 ## 起動時に必ず行うこと
 
-1. `knowledge/context/context-rice-cream.md` を読む（店舗の固定情報・契約条件・運営状況）
+1. `wiki/business/icecream/overview.md` を読む（店舗の固定情報・契約条件・運営状況）
 2. `knowledge/context/context-business.md` の RICE CREAM 関連行を確認
 
 ## 依頼が来た時の動き方

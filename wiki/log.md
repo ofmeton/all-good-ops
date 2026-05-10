@@ -102,3 +102,29 @@ auto-memory と wiki の重複を解消し、SSOT を wiki に一本化:
 - memory はキーワード入口の pointer 役に専念
 
 orphan / 名義3ライン混在は導入なし（lint 不要）。
+
+## [2026-05-10] phase | Phase 2 開始 - icecream 移行 + business 整理
+
+spec の正規 Phase 2 に着手（B 推奨アプローチ: 実体重視で段階移行）。
+
+新規作成:
+- `wiki/business/icecream/overview.md` (entity, identity=工藤陸)
+
+移行:
+- `knowledge/context/context-rice-cream.md` (109 行) → `wiki/business/icecream/overview.md` 移行 + 旧ファイル削除
+- 「業務委託先（オーナー）」は memory 側に残し wiki に書かない（守秘）
+
+参照張替え:
+- `.claude/agents/business-ops/rice-cream-ops.md` の 2 箇所を新パスに更新
+
+context-business.md 整理:
+- 77 行 → 30 行に圧縮
+- BSA 詳細セクション（Week1 KPI / 商品ライン / 営業プラットフォーム / 関連ドラフト）削除（wiki と重複・古化）
+- 業務委託一覧テーブルを SSOT カラム付きに刷新（wiki ページへのポインタ化）
+- 移行履歴セクション追加
+
+保留:
+- portfolio / shopify / finance クラスタ: 素材薄いため未作成（次回 ingest で素材が貯まったら）
+- context-finance.md: 28 行で実体ほぼなしのため今回触らない
+- context-goals/ibasho/life: spec 上 Phase 3
+

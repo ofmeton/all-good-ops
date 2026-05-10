@@ -1,7 +1,18 @@
-# RICE CREAM 店舗 Context
+---
+type: entity
+created: 2026-05-10
+updated: 2026-05-10
+sources: [knowledge/context/context-rice-cream.md (移行元・2026-05-09 初版)]
+related: []
+tags: [icecream, rice-cream, business-ops]
+status: active
+identity: 工藤陸
+---
+
+# RICE CREAM 店舗 overview
 
 > RICE CREAM 店舗運営に関する常時参照情報の SSOT。
-> rice-cream-ops が起動時に必ず読む。秘書もアイス系キーワードで本ファイルを参照する。
+> rice-cream-ops が起動時に必ず読む。秘書もアイス系キーワードで本ページを参照する。
 
 ## 基本情報
 
@@ -21,7 +32,7 @@
 |---|---|
 | 立場 | **業務委託マネージャー**（+ 店頭販売も兼務） |
 | 契約形態 | **MGR業務 = 月額固定契約 / 店頭販売 = 時給契約** の二段構成 |
-| 業務委託先（オーナー） | （memory 参照、context への明記は保留） |
+| 業務委託先（オーナー） | （memory 参照、wiki への明記は保留） |
 | 契約開始 | 2026-02 |
 | 契約期間 | （未記入） |
 | 報告頻度 | （未記入。週次/月次） |
@@ -106,4 +117,5 @@
 
 | 日付 | 更新者 | 内容 |
 |---|---|---|
-| 2026-05-09 | rice-cream-ops 体制整備 | 初版作成。基本情報・契約・商品・スタッフ・SNS 運用の項目骨格を整理。POP v8 制作実績を記録 |
+| 2026-05-09 | rice-cream-ops 体制整備 | 初版作成（旧 `knowledge/context/context-rice-cream.md`）。基本情報・契約・商品・スタッフ・SNS 運用の項目骨格を整理。POP v8 制作実績を記録 |
+| 2026-05-10 | LLM Wiki Phase 2 | `knowledge/context/context-rice-cream.md` → `wiki/business/icecream/overview.md` 移行。frontmatter 追加（type=entity, identity=工藤陸） |
