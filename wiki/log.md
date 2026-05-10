@@ -128,3 +128,25 @@ context-business.md 整理:
 - context-finance.md: 28 行で実体ほぼなしのため今回触らない
 - context-goals/ibasho/life: spec 上 Phase 3
 
+## [2026-05-10] phase | Phase 2 続き - portfolio クラスタ作成
+
+ofmeton 名義の HP/LP 制作物カタログサイト用のクラスタを新設。
+
+新規作成:
+- `wiki/business/portfolio/overview.md` (entity, identity=ofmeton)
+
+集約内容:
+- portfolio リポ位置・公開 URL（portfolio-fawn-eight-63.vercel.app）
+- 名義位置づけ: portfolio 本体は ofmeton 名義、BSA（工藤陸）でも実績露出 OK の運用ルール明記
+- 主要サンプル 3 本（minato/hiyori/numata）のコンセプト要約
+- src/pages/ サンプル一覧（10 本）
+- clients/ 配下の納品物テーブル（totonoeru-hayama / hayama-tanada-biyori、後者は名義要確認）
+- 関連リソース（design/outline/research/sample_descriptions.md）への pointer
+- 運用ルール: 新サンプル追加プロトコル / Vercel team 認可 / cwd 切替
+
+memory pointer 更新:
+- `reference_portfolio_url.md` を wiki への pointer 化（旧: URL 単独 → 新: 名義位置づけ含む pointer）
+- `MEMORY.md` の説明文更新
+
+cross-link: [[overview|BSA overview]] / [[2026-04-terra-isshiki]] / [[terra-hayama]] / [[motion-techniques]]
+
