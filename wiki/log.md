@@ -82,3 +82,23 @@ frontmatter 追加（type=concept, identity=n/a）。
 - rapid-hp-operator.md のリンク更新
 - frontmatter 追加（type=source, identity=工藤陸）
 - パス解決動作確認済み（node -e existsSync=true）
+
+## [2026-05-10] phase | memory ↔ wiki 重複整理（Phase 1 残務）
+
+auto-memory と wiki の重複を解消し、SSOT を wiki に一本化:
+
+- `wiki/business/bsa/overview.md` 補強:
+  - Week KPI 運用方針（テンプレ + 中止判定ライン + 実値参照先）
+  - BSA 脱出後の本命戦略（D1/D3/L3 継続化）
+  - 営業プラットフォーム（Lancers/Coconala/CW/Indeed）
+  - 実績露出ルール（CPA84%削減 = 毎提案 / 3000万 PoC = 小出し / portfolio = 全面公開）
+- `memory/project_bsa_strategy.md` を pointer 化（17日前の Week1 KPI 過去化を解消）
+- `memory/project_terra_isshiki.md` を pointer 化（古情報「最大6名前後」「中断状態」削除、wiki 8名確定と整合）
+- `memory/MEMORY.md` の説明文を pointer 中心に更新
+
+整理後の状態:
+- BSA 戦略の SSOT: wiki/business/bsa/ 配下 5 ページ
+- TERRA HAYAMA の SSOT: wiki/people/clients/terra-hayama.md + wiki/business/personal/deals/2026-04-terra-isshiki.md
+- memory はキーワード入口の pointer 役に専念
+
+orphan / 名義3ライン混在は導入なし（lint 不要）。

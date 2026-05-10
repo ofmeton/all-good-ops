@@ -1,7 +1,7 @@
 ---
 type: topic
 created: 2026-05-09
-updated: 2026-05-09
+updated: 2026-05-10
 sources: []
 related: [[pricing-catalog]], [[proven-track-record]], [[lessons-proposal-patterns]]
 tags: [bsa, strategy]
@@ -48,6 +48,59 @@ identity: 工藤陸
 - L2 Corporate 5P: 必須は 1, 5、推奨は 4（slide-in）。技法 7（WebGL）は過剰
 - L3 LP+広告運用: 必須は 1, 5、CTA 周辺で技法 6（SVG モーフ）が映える
 - L4 Express: 既存サイトに馴染ませる前提で、新規モーション追加は控える
+
+## Week KPI 運用方針
+
+Week 単位で「提案投下」「受注」「納品」「評価」を計測する。具体的な実値は wiki に書かない（古化を避けるため）。
+
+### テンプレ（毎週この粒度で見る）
+
+| 指標 | 目安 |
+|---|---|
+| 提案投下 | 15〜25 件/週 |
+| 受注 | 1〜3 件/週 |
+| 納品 | 1〜3 件/週 |
+| 評価 | ★5（★4 以下が出たら原因分析） |
+
+### 中止判定ライン（Week ごと）
+
+- 返信率が連続 2 週で 5% 未満 → テンプレ・価格・プロフィールの根本見直し
+- 受注 0 件が連続 2 週 → 商品ライン・価格の見直し（最低 L1 1件は確保すべき）
+
+### 実値の参照先
+
+- 週次レビュー出力: `scripts/weekly-review.sh` の生成物
+- 改善履歴: `data/improvement-log.jsonl`
+- 提案ログ: `outputs/bsa/proposal-automation/` 内 DB（Sqlite）
+
+## BSA 脱出後の本命戦略
+
+BSA は 4 ヶ月タイムボックスの踏み台。タイムボックス満了時、または途中で次フェーズへ移行可能になった時点で以下に展開:
+
+- **D1**: 既存領域（Shopify / D2C 広告運用）の直営業 — 認定ランサー / Coconala プラチナの肩書を活用
+- **D3**: monetize-os（はぐりん名義）との連携で発信からのインバウンド — BSA は実装力の証明として機能
+- **L3 継続化**: 広告運用（広告費原価の 20% / 月）の継続契約を BSA 期間で 2〜3 件確保 → Month5+ の安定収益源化
+
+## 営業プラットフォーム
+
+| 媒体 | 役割 | プロフィール / 出品 |
+|---|---|---|
+| Lancers | メインの提案投下先 | プロフィール: `https://www.lancers.jp/mypage/ofmeton`（刷新済み） |
+| Coconala | 待ちチャネル（出品から流入） | L1/L4 先行 → 全 4 商品展開予定 |
+| CrowdWorks | スキャン対象（即時提案） | 通知ベース |
+| Indeed | フリーランス検索 | 補助 |
+
+提案投下の自動化システムは `outputs/bsa/proposal-automation/` 配下（収集 → 生成 → ダッシュボード → 自動入力の一気通貫）。
+
+## 実績露出ルール
+
+提案文に載せる実績の出し分け基準:
+
+- **CPA 84% 削減（D2C 寝具）**: 毎提案で出して OK（業種問わず汎用的に効く）
+- **D2C マットレス 3000 万 PoC** 等: 小出し（一気に全部は出さない、業種マッチ時に強調）
+- **ポートフォリオ 3 本（minato / hiyori / numata）**: 全面公開 OK。URL は `https://portfolio-fawn-eight-63.vercel.app/`
+
+詳細は [[proven-track-record]] 参照。
 
 ## 関連ページ
 
