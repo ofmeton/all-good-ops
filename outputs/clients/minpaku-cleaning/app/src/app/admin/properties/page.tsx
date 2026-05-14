@@ -1,8 +1,10 @@
 import { resolveAdminActor } from "@/lib/supabase-auth";
 import { listProperties } from "@/lib/db/properties";
 import { listOwners } from "@/lib/db/owners";
+import { getActiveToken } from "@/lib/db/tokens";
 import { redirect } from "next/navigation";
 import { PropertyForm } from "./PropertyForm";
+import { TokenControls } from "../TokenControls";
 
 export default async function PropertiesPage() {
   const actor = await resolveAdminActor();
@@ -11,6 +13,9 @@ export default async function PropertiesPage() {
     listProperties(actor),
     listOwners(actor),
   ]);
+  const tokens = await Promise.all(
+    properties.map((p) => getActiveToken(actor, { type: "owner", propertyId: p.id })),
+  );
   return (
     <main className="space-y-4 max-w-2xl">
       <h1 className="text-xl font-bold">物件管理</h1>
@@ -20,9 +25,14 @@ export default async function PropertiesPage() {
         <PropertyForm owners={owners} />
       )}
       <ul className="divide-y border rounded">
-        {properties.map((p) => (
-          <li key={p.id} className="px-3 py-2 text-sm">
-            {p.name}{p.address ? ` — ${p.address}` : ""}
+        {properties.map((p, i) => (
+          <li key={p.id} className="px-3 py-2 text-sm space-y-1">
+            <div>{p.name}{p.address ? ` — ${p.address}` : ""}</div>
+            <TokenControls
+              target={{ type: "owner", propertyId: p.id }}
+              activeToken={tokens[i] ? { id: tokens[i]!.id, token: tokens[i]!.token } : null}
+              basePath="property"
+            />
           </li>
         ))}
       </ul>
