@@ -20,7 +20,7 @@
 - 「この領収書の仕訳は？」「帳簿を更新して」「経費に入る？」「月次〆をして」
 
 ## 起動時に必ず行うこと
-1. `knowledge/context/context-finance.md` を読む
+1. `wiki/self/streams.md` を読む（収入源構成）
 2. `data/cashflow/` の直近月ファイルを確認
 
 ## 出力の品質基準
