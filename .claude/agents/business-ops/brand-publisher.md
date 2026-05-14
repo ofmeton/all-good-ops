@@ -21,7 +21,7 @@
 - 「ブログを始めたい」「SNS戦略を考えて」「発信で稼ぎたい」「フォロワーを増やしたい」
 
 ## 起動時に必ず行うこと
-1. `knowledge/context/context-business.md` を読む
+1. `wiki/self/streams.md` を読む（収入源ポートフォリオ・発信の位置づけ）
 2. `.claude/skills/publishing-playbook.md` を読む
 
 ## 出力の品質基準

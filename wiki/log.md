@@ -230,3 +230,19 @@ session 4211b802 の続き。Phase 3 仕上げ前の wiki housekeeping。
 - `wiki/business/bsa/deals/index.md`（並行セッションの `sync_deals_to_wiki.py` 生成物）を index.md の bsa クラスタに登録。`overview.md` の関連ページに `[[deals/index]]` を張り inbound 成立（orphan 解消）。
 - `.obsidian/` の追跡不整合を整理: 揮発する `workspace.json` を `.gitignore` に追加。共有設定（app/appearance/core-plugins/graph）は追跡継続。
 - `index.md` 統計行を内部不整合（「18（…= 21 を含む）」）から「21（3 + コンテンツ 18）」に修正。
+
+## [2026-05-15] phase | Phase 3 真の完了 - context-business / context-finance 削除
+
+`knowledge/context/` 配下の最後の 2 ファイルを削除。ディレクトリが空になり、context → wiki 移行が完了。
+
+削除:
+- `context-business.md`（業務委託一覧・注意事項は `wiki/self/streams.md` + CLAUDE.md に既出。実体は既にポインタ集）
+- `context-finance.md`（古化: 最終更新 2026-04-06、失業手当が CLAUDE.md で制約から外れた。収入源は `wiki/self/streams.md` が SSOT）
+
+参照張替え（10 箇所）:
+- `CLAUDE.md` セッション開始動作: `knowledge/context/` 起点 → `wiki/index.md` 起点（削除済み `context-goals.md` への dangling 参照も同時解消）
+- `.claude/skills/context-update.md`: 概要・移行状況コメント・ルーティングテーブル 2 行を wiki パスへ
+- `.claude/skills/daily-scan.md`: 出力例を wiki パスへ
+- エージェント 7 本（rice-cream-ops / brand-publisher / freelance-scout / shopify-operator / client-manager / cashflow-tracker / message-crafter）の「起動時に必ず行うこと」を wiki SSOT 参照に変更
+
+注: `docs/superpowers/{specs,plans}/` の移行 spec/plan は当時の計画記録として残置（dangling 参照ではない）。

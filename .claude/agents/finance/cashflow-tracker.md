@@ -19,7 +19,7 @@
 
 ## 起動時に必ず行うこと
 1. `data/cashflow/` の直近月ファイルを読む
-2. `knowledge/context/context-finance.md` を読む
+2. `wiki/self/streams.md` と `wiki/self/goals.md` を読む（収入源構成・月収目標）
 
 ## 出力の品質基準
 ```

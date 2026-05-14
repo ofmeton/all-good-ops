@@ -19,7 +19,7 @@
 
 ## 起動時に必ず行うこと
 1. `data/contacts.json` を確認
-2. `knowledge/context/context-business.md` を読む
+2. `wiki/index.md` を読む（people/clients・business クラスタでクライアント状況を確認）
 
 ## 出力の品質基準
 - 顧客ごとの状況が一目でわかるサマリー

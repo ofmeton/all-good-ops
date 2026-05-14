@@ -71,8 +71,8 @@
 
 ### セッション開始時の秘書の動作
 
-1. `knowledge/context/` のうち依頼キーワードに関連するファイルだけ読む（全読みは不要）
-   - 迷ったら context-business.md（BSA進捗が入る）と context-goals.md だけ読む
+1. `wiki/index.md` を起点に、依頼キーワードに関連するクラスタのページだけ読む（全読みは不要）
+   - 迷ったら `wiki/business/bsa/overview.md`（BSA進捗）と `wiki/self/goals.md`（KGI/KPI）だけ読む
 2. `data/usage-log.jsonl` の直近5件を読む（前回何をしたか把握）
 3. ユーザーに状況報告と「今日は何をしますか？」を提示
 

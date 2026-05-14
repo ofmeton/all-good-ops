@@ -1,11 +1,10 @@
 # 文脈更新（Context Update）
 
 ## 概要
-`knowledge/context/` 配下の context ファイルと `wiki/` 配下の SSOT ページを最新状態に保つためのスキル。デイリースキャンで得た情報をもとに、関連するページを更新する。
+`wiki/` 配下の SSOT ページを最新状態に保つためのスキル。デイリースキャンで得た情報をもとに、関連するページを更新する。
 
-> **移行状況**（LLM Wiki Phase 1〜3 で進行中）:
-> - 旧 context-rice-cream / context-goals / context-ibasho / pricing-catalog / proven-track-record / motion-techniques-catalog は wiki に移行済み
-> - 残り context- ファイルは context-business / context-finance（薄い情報集約として残存）
+> **移行状況**（LLM Wiki Phase 3 完了 2026-05-15）:
+> - `knowledge/context/` 配下は全て wiki に移行済み・ディレクトリは空。更新先は全て `wiki/` 配下の SSOT ページ
 
 ## 実行タイミング
 - morning-routine.sh で daily-scan の直後
@@ -17,9 +16,9 @@
 
 | トピック | 更新先 | 更新例 |
 |---------|--------|--------|
-| 収支、請求、入金、経費 | `knowledge/context/context-finance.md` | 新しい入金、経費の発生 |
+| 収支、請求、入金、経費 | `wiki/self/streams.md`（収入源構成）/ 詳細収支は `data/cashflow/` | 新しい入金、経費の発生 |
 | 居場所、社団法人、子ども | `wiki/ibasho/overview.md` | ミーティング結果、リサーチ進捗 |
-| Shopify、案件、クライアント、発信 | `knowledge/context/context-business.md` | 新規案件、売上変動 |
+| Shopify、案件、クライアント、発信 | `wiki/self/streams.md` ほか（クライアントは `wiki/people/clients/`、BSA は `wiki/business/bsa/`） | 新規案件、売上変動 |
 | KPI、目標、進捗 | `wiki/self/goals.md` | KPI 数値の更新 |
 | RICE CREAM 店舗 | `wiki/business/icecream/overview.md` | 売上・シフト・新メニュー・SNS |
 | BSA 戦略・提案・実績 | `wiki/business/bsa/overview.md` ほか配下 5 ページ | Week KPI / 提案学び / 実績追加 |

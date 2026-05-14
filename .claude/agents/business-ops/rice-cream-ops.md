@@ -46,8 +46,7 @@
 
 ## 起動時に必ず行うこと
 
-1. `wiki/business/icecream/overview.md` を読む（店舗の固定情報・契約条件・運営状況）
-2. `knowledge/context/context-business.md` の RICE CREAM 関連行を確認
+1. `wiki/business/icecream/overview.md` を読む（店舗の固定情報・契約条件・運営状況。RICE CREAM の SSOT）
 
 ## 依頼が来た時の動き方
 
