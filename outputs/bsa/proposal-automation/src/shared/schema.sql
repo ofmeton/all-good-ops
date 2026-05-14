@@ -91,6 +91,23 @@ CREATE TABLE IF NOT EXISTS proposal_revisions (
 );
 CREATE INDEX IF NOT EXISTS idx_revisions_proposal ON proposal_revisions(proposal_id);
 
+-- 受注台帳（won 遷移時のみ作成）
+-- contract_amount のみ必須。納期・連絡先・実採用ライン等は後追加可。
+CREATE TABLE IF NOT EXISTS deals (
+  job_id              TEXT PRIMARY KEY REFERENCES jobs(job_id) ON DELETE CASCADE,
+  contracted_at       TEXT NOT NULL DEFAULT (datetime('now')),
+  contract_amount     INTEGER NOT NULL,           -- 税込総額
+  delivery_due        TEXT,
+  client_contact      TEXT,                       -- メール / Slack / 媒体内DM等
+  product_line_actual TEXT,                       -- 実採用 L1/L2/L3/L4
+  notes               TEXT,
+  delivered_at        TEXT,
+  paid_at             TEXT,
+  created_at          TEXT NOT NULL DEFAULT (datetime('now')),
+  updated_at          TEXT NOT NULL DEFAULT (datetime('now'))
+);
+CREATE INDEX IF NOT EXISTS idx_deals_contracted_at ON deals(contracted_at);
+
 -- ステータス遷移履歴
 CREATE TABLE IF NOT EXISTS status_history (
   id          INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -151,8 +168,8 @@ INSERT OR IGNORE INTO platforms(prefix, name, search_urls, enabled)
 VALUES (
   'LAN',
   'Lancers',
-  -- 6 カテゴリ: LP / website / ad / modification_customization / responsive / smartphonesite
-  '["https://www.lancers.jp/work/search/web/lp","https://www.lancers.jp/work/search/web/website","https://www.lancers.jp/work/search/ad","https://www.lancers.jp/work/search/web/modification_customization","https://www.lancers.jp/work/search/web/responsive","https://www.lancers.jp/work/search/web/smartphonesite"]',
+  -- 8 カテゴリ: LP / website / ad / modification_customization / responsive / smartphonesite / cms / ec
+  '["https://www.lancers.jp/work/search/web/lp","https://www.lancers.jp/work/search/web/website","https://www.lancers.jp/work/search/ad","https://www.lancers.jp/work/search/web/modification_customization","https://www.lancers.jp/work/search/web/responsive","https://www.lancers.jp/work/search/web/smartphonesite","https://www.lancers.jp/work/search/web/cms","https://www.lancers.jp/work/search/web/ec"]',
   1
 );
 
@@ -160,7 +177,17 @@ INSERT OR IGNORE INTO platforms(prefix, name, search_urls, enabled)
 VALUES (
   'CW',
   'CrowdWorks',
-  -- 3 カテゴリ: LP制作(17) / HP作成(14) / Webサイト修正(285)
-  '["https://crowdworks.jp/public/jobs/category/17","https://crowdworks.jp/public/jobs/category/14","https://crowdworks.jp/public/jobs/category/285"]',
+  -- 6 カテゴリ: LP制作(17) / HP作成(14) / Webサイト修正(285) / CMS導入(7) / モバイルサイト(87) / オウンドメディア(304)
+  '["https://crowdworks.jp/public/jobs/category/17","https://crowdworks.jp/public/jobs/category/14","https://crowdworks.jp/public/jobs/category/285","https://crowdworks.jp/public/jobs/category/7","https://crowdworks.jp/public/jobs/category/87","https://crowdworks.jp/public/jobs/category/304"]',
+  1
+);
+
+-- Coconala 公開依頼（requires_login=False: 閲覧は cookie 不要、提案投下のみログイン必須）
+INSERT OR IGNORE INTO platforms(prefix, name, search_urls, enabled)
+VALUES (
+  'CN',
+  'Coconala',
+  -- 3 カテゴリ: HP作成(500) / LP制作(503) / Webサイト修正(644)
+  '["https://coconala.com/requests/categories/500","https://coconala.com/requests/categories/503","https://coconala.com/requests/categories/644"]',
   1
 );

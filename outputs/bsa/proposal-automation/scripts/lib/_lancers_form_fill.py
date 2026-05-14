@@ -1,13 +1,16 @@
-"""ランサーズ提案画面の自動フォーム入力スクリプト。
+"""ランサーズ提案画面の自動フォーム入力＋自動送信スクリプト。
 
-ダッシュボードの「📤 ランサーズに流し込む」ボタンから subprocess で起動される。
+ダッシュボードの「🚀 提案を自動送信」ボタンから subprocess で起動される。
 
 仕様:
 - 引数: --job-id <LAN-XXXXXXXX-NNN>
 - DB から提案内容（description_md / estimate_md / milestones / options / detail_url）を取得
 - cookies を流用して Playwright (headed) で Lancers の `/work/propose_start/<id>` に遷移
 - 各フィールドに自動入力
-- 「内容を確認する」を自動クリックして確認画面で停止（人間が最終送信）
+- 「内容を確認する」をクリック → 確認画面に遷移
+- （--auto-submit が True の場合）確認画面の「提案する/送信する」を自動クリック
+- 送信完了を URL 変化で検知し、DB の jobs.status を 'submitted' に更新
+- 失敗時はブラウザを開いたままにして人間が介入できるようにする
 
 必須環境:
 - ~/.venvs/bsa-pa の playwright + playwright-stealth が install 済み
@@ -249,14 +252,122 @@ async def fill_options(page: Page, options: list[dict]) -> None:
             print(f"  [warn] option#{i} fill: {e}")
 
 
-async def click_confirm_button(page: Page) -> None:
-    """「内容を確認する」ボタンをクリック → 確認画面に遷移。"""
+async def click_confirm_button(page: Page) -> bool:
+    """「内容を確認する」ボタンをクリック → 確認画面に遷移。
+
+    Returns:
+        True: クリック成功
+        False: ボタンが見つからない
+    """
     btn = page.locator('input[type="submit"][name="send"][value="内容を確認する"]')
     if await btn.count() == 0:
         print("  [warn] 「内容を確認する」ボタンが見つかりませんでした")
-        return
+        return False
     await btn.click()
     print("  [ok] 「内容を確認する」をクリック → 確認画面へ")
+    return True
+
+
+async def submit_on_confirmation_page(page: Page) -> bool:
+    """確認画面の最終送信ボタン（「提案する」「提案を送信する」など）を自動クリック。
+
+    DOM が build ごとに変わる可能性があるため複数セレクタを fallback で試す。
+
+    Returns:
+        True: 送信完了（URL が propose_start から変化）
+        False: ボタン未検出 / 送信検知失敗
+    """
+    # 確認画面の URL/DOM 安定待ち
+    try:
+        await page.wait_for_load_state("domcontentloaded", timeout=15000)
+    except Exception:
+        pass
+    # ネットワークが落ち着くまで少し待つ（React で再描画される可能性）
+    await page.wait_for_timeout(800)
+
+    print(f"  [info] 確認画面 URL: {page.url}")
+
+    # 送信ボタン候補（先頭から優先順）
+    # - name="send" の input submit で value に「提案」「送信」を含むもの
+    # - 「戻る」ボタンとは value が違うもの
+    # - 念のため type=submit の button タグも候補に
+    candidate_selectors = [
+        'input[type="submit"][name="send"][value*="提案する"]',
+        'input[type="submit"][name="send"][value*="提案を送信"]',
+        'input[type="submit"][name="send"][value*="送信"]',
+        'input[type="submit"][value*="提案する"]',
+        'input[type="submit"][value*="提案を送信"]',
+        'button[type="submit"]:has-text("提案する")',
+        'button[type="submit"]:has-text("提案を送信")',
+    ]
+
+    submit_btn = None
+    for sel in candidate_selectors:
+        loc = page.locator(sel).first
+        if await loc.count() > 0:
+            try:
+                if await loc.is_visible():
+                    submit_btn = loc
+                    print(f"  [ok] 送信ボタン検出: {sel}")
+                    break
+            except Exception:
+                continue
+
+    if submit_btn is None:
+        print("  [warn] 確認画面の送信ボタンが見つかりませんでした。手動送信してください。", file=sys.stderr)
+        return False
+
+    # クリック→ナビゲーションを並行待機（送信完了で URL が変化する想定）
+    pre_url = page.url
+    try:
+        async with page.expect_navigation(timeout=30_000):
+            await submit_btn.click()
+    except Exception as e:
+        # ナビゲーション検知失敗。URL が動いていれば成功扱い、そうでなければ fail
+        print(f"  [warn] expect_navigation: {e}")
+
+    # URL の変化で成功判定（propose_start から離れていれば送信完了とみなす）
+    await page.wait_for_timeout(1500)
+    post_url = page.url
+    print(f"  [info] 送信後 URL: {post_url}")
+    if "/work/propose_start/" in post_url and pre_url == post_url:
+        print("  [warn] URL が変化していません。送信失敗の可能性があります。", file=sys.stderr)
+        return False
+    return True
+
+
+def mark_submitted_in_db(job_id: str, note: str = "auto-submitted via dashboard") -> None:
+    """jobs.status='submitted' に更新し、status_history に記録。
+
+    Dashboard 側の updateJobStatus と同等の処理を SQL レベルで行う。
+    changed_by='auto' で人間操作と区別。
+    """
+    conn = sqlite3.connect(DB_PATH)
+    try:
+        row = conn.execute(
+            "SELECT status FROM jobs WHERE job_id = ?", (job_id,)
+        ).fetchone()
+        if row is None:
+            print(f"  [warn] DB 更新失敗: job_id={job_id} 見つからず", file=sys.stderr)
+            return
+        from_status = row[0]
+        conn.execute(
+            "UPDATE jobs SET status = 'submitted', updated_at = datetime('now') WHERE job_id = ?",
+            (job_id,),
+        )
+        conn.execute(
+            "INSERT INTO status_history (job_id, from_status, to_status, changed_by, note) "
+            "VALUES (?, ?, 'submitted', 'auto', ?)",
+            (job_id, from_status, note),
+        )
+        conn.execute(
+            "UPDATE proposals SET submitted_at = datetime('now') WHERE job_id = ?",
+            (job_id,),
+        )
+        conn.commit()
+        print(f"  [ok] DB 更新: {job_id} status={from_status} → submitted")
+    finally:
+        conn.close()
 
 
 # ----------------------------------------------------------------------------
@@ -264,7 +375,7 @@ async def click_confirm_button(page: Page) -> None:
 # ----------------------------------------------------------------------------
 
 
-async def run(job_id: str, auto_confirm: bool) -> int:
+async def run(job_id: str, auto_confirm: bool, auto_submit: bool) -> int:
     bundle = fetch_proposal_bundle(job_id)
     propose_url = detail_url_to_propose_url(bundle["detail_url"])
     print(f"📤 {job_id} を {propose_url} に流し込みます")
@@ -277,6 +388,7 @@ async def run(job_id: str, auto_confirm: bool) -> int:
 
     async with async_playwright() as p:
         context, browser = await create_stealth_context(p, storage_state=cookies, headless=False)
+        keep_browser_open = False
         try:
             page = await context.new_page()
 
@@ -300,41 +412,86 @@ async def run(job_id: str, auto_confirm: bool) -> int:
             await fill_milestones(page, bundle["milestones"])
             await fill_options(page, bundle["options"])
 
-            if auto_confirm:
-                # 軽くスクロールして送信ボタンの位置に戻す（人間が入力ミスを目視できる時間も確保）
-                await page.wait_for_timeout(500)
-                await click_confirm_button(page)
+            if not auto_confirm:
+                print("✅ 自動入力完了。--no-auto-confirm 指定のためここで停止。")
+                keep_browser_open = True
+                return 0
+
+            # 「内容を確認する」をクリック → 確認画面へ
+            await page.wait_for_timeout(500)
+            confirmed = await click_confirm_button(page)
+            if not confirmed:
+                print("❌ 「内容を確認する」ボタンが見つかりません。手動操作してください。", file=sys.stderr)
+                keep_browser_open = True
+                return 4
+
+            if not auto_submit:
+                print("✅ 確認画面まで遷移しました。--no-auto-submit 指定のためここで停止。")
+                print("   ブラウザで内容確認の上、「提案する」を手動クリックしてください。")
+                keep_browser_open = True
+                return 0
+
+            # 確認画面で最終送信
+            print("📨 確認画面で最終送信します...")
+            submitted = await submit_on_confirmation_page(page)
+            if not submitted:
+                print("❌ 自動送信に失敗。ブラウザ上で確認・手動送信してください。", file=sys.stderr)
+                keep_browser_open = True
+                return 5
+
+            # DB 更新
+            mark_submitted_in_db(job_id)
 
             print()
-            print("✅ 自動入力完了。ブラウザで内容を確認の上、")
-            print("   ・確認画面に進んだら「提案を送信する」を手動クリック")
-            print("   ・問題があればブラウザ上で修正")
-            print("   ブラウザを閉じるとこのスクリプトも終了します。")
-
-            # ブラウザが閉じられるまで待機（人間が送信完了するのを待つ）
-            try:
-                await page.wait_for_event("close", timeout=600_000)  # 最大10分
-            except Exception:
-                pass
+            print(f"✅ 提案送信完了: {job_id}")
+            print(f"   送信後 URL: {page.url}")
+            # 送信完了画面を 3 秒だけ表示してから自動で閉じる（操作感のフィードバック）
+            await page.wait_for_timeout(3_000)
+            return 0
+        except Exception as e:
+            print(f"❌ 想定外のエラー: {e}", file=sys.stderr)
+            keep_browser_open = True
+            raise
         finally:
+            if keep_browser_open:
+                # 失敗時は人間が介入できるよう、ブラウザを閉じずに最大10分待つ
+                print("⏸  ブラウザは開いたままにします（最大10分）。閉じるとスクリプト終了。", file=sys.stderr)
+                try:
+                    await page.wait_for_event("close", timeout=600_000)
+                except Exception:
+                    pass
             try:
                 await browser.close()
             except Exception:
                 pass
-    return 0
 
 
 def parse_args() -> argparse.Namespace:
-    p = argparse.ArgumentParser(description="ランサーズ提案画面に提案内容を自動入力する")
+    p = argparse.ArgumentParser(
+        description="ランサーズ提案画面に自動入力 → 確認 → 自動送信"
+    )
     p.add_argument("--job-id", required=True, help="例: LAN-20260429-004")
     p.add_argument(
         "--no-auto-confirm",
         action="store_true",
         help="「内容を確認する」ボタンの自動クリックを無効化（入力のみで停止）",
     )
+    p.add_argument(
+        "--no-auto-submit",
+        action="store_true",
+        help="確認画面での最終送信ボタンの自動クリックを無効化（確認画面で停止）",
+    )
     return p.parse_args()
 
 
 if __name__ == "__main__":
     args = parse_args()
-    sys.exit(asyncio.run(run(args.job_id, auto_confirm=not args.no_auto_confirm)))
+    sys.exit(
+        asyncio.run(
+            run(
+                args.job_id,
+                auto_confirm=not args.no_auto_confirm,
+                auto_submit=not args.no_auto_submit,
+            )
+        )
+    )

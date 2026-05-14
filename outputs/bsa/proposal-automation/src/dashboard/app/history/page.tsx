@@ -1,4 +1,5 @@
 import { getDb, getKpiStats } from '@/lib/db';
+import { HistoryRowActions } from '@/components/HistoryRowActions';
 
 export const dynamic = 'force-dynamic';
 
@@ -24,6 +25,9 @@ const statusMeta: Record<
   replied: { label: '返信中', tone: 'azure' },
   won: { label: '受注 🏆', tone: 'moss' },
   lost: { label: '失注', tone: 'vermilion' },
+  expired: { label: '期限切れ', tone: 'ink' },
+  declined: { label: '辞退', tone: 'ink' },
+  unable_to_submit: { label: '投下不可', tone: 'vermilion' },
 };
 
 export default async function History() {
@@ -94,6 +98,7 @@ export default async function History() {
                 <Th className="text-right">提案 金額</Th>
                 <Th className="text-center">投下</Th>
                 <Th className="text-center">ステータス</Th>
+                <Th className="text-center">振り分け</Th>
               </tr>
             </thead>
             <tbody>
@@ -141,13 +146,16 @@ export default async function History() {
                         {status.label}
                       </span>
                     </Td>
+                    <Td className="text-center">
+                      <HistoryRowActions jobId={j.job_id} status={j.status} />
+                    </Td>
                   </tr>
                 );
               })}
               {jobs.length === 0 && (
                 <tr>
                   <td
-                    colSpan={8}
+                    colSpan={9}
                     className="px-4 py-8 text-center text-sm text-(--color-slate)"
                   >
                     履歴がまだありません。

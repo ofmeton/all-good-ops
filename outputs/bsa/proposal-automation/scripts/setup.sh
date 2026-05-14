@@ -70,6 +70,14 @@ echo "   Playwright がブラウザを開きます。"
 echo "   ログイン完了後、ターミナルで Enter を押してください。"
 read -r "_?Press Enter to start CROWDWORKS login..."
 python "$SCRIPT_DIR/lib/_crowdworks_login.py"
+
+# 6c. Coconala 初回ログイン（提案投下用。collector は cookie 不要だが form_fill に必要）
+echo ""
+echo "📣 Coconala に手動でログインします。"
+echo "   Playwright がブラウザを開きます。"
+echo "   ログイン完了後、ターミナルで Enter を押してください。"
+read -r "_?Press Enter to start COCONALA login..."
+python "$SCRIPT_DIR/lib/_coconala_login.py"
 deactivate
 
 # 7. デスクトップアイコン

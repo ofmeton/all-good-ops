@@ -22,8 +22,18 @@ from .base import PlatformAdapter, ListingItem, JobDetail
 
 _BASE = "https://crowdworks.jp"
 
-# 締切表記の例: "2026年05月06日" / "あと 5日と4時間"
-_DEADLINE_RE = re.compile(r"(\d{4})年(\d{1,2})月(\d{1,2})日")
+# 締切表記:
+# CW 詳細ページは「掲載日 / 応募期限」の順で年月日が並ぶため、最初に出る日付を
+# そのまま拾うと「掲載日（投稿日）」を締切として誤保存する。必ず「応募期限」
+# ラベルの直後の日付だけを採る。
+_DEADLINE_LABELED_RE = re.compile(
+    r"応募期限[\s　]*(\d{4})年(\d{1,2})月(\d{1,2})日"
+)
+# 募集終了マーカー（応募期限が未来でも、既に締め切られているケースを検知）
+_CLOSED_MARKERS = (
+    "このお仕事の募集は終了して",
+    "募集は終了しています",
+)
 _PROPOSAL_COUNT_RE = re.compile(r"応募\s*(\d+)|提案\s*(\d+)")
 _BUDGET_RE = re.compile(r"([\d,]+)\s*円")
 _BUDGET_MAN_RE = re.compile(r"([\d,]+)\s*万円")
@@ -224,9 +234,10 @@ class CrowdWorksAdapter(PlatformAdapter):
                 if budget_min:
                     break
 
-        # 3) 締切: YYYY年MM月DD日 を最初に見つけたものを採用
+        # 3) 締切: 必ず「応募期限」ラベル直後の日付のみを拾う
+        # （「掲載日 = 投稿日」が先に出るため、無印 \d{4}年\d{1,2}月\d{1,2}日 だと誤検出する）
         deadline: Optional[str] = None
-        m = _DEADLINE_RE.search(full_text)
+        m = _DEADLINE_LABELED_RE.search(full_text)
         if m:
             y, mo, d = m.group(1), m.group(2).zfill(2), m.group(3).zfill(2)
             deadline = f"{y}-{mo}-{d}"
@@ -264,6 +275,9 @@ class CrowdWorksAdapter(PlatformAdapter):
         # 8) service_category
         service_category = _detect_service_category(listing.source_url)
 
+        # 9) 募集終了判定（応募期限が未来でも、サイト側で募集打切られているケース）
+        is_closed = any(marker in full_text for marker in _CLOSED_MARKERS)
+
         return JobDetail(
             listing=listing,
             description=description,
@@ -275,6 +289,7 @@ class CrowdWorksAdapter(PlatformAdapter):
             client_verified=client_verified,
             client_history_count=client_history_count,
             service_category=service_category,
+            is_closed=is_closed,
         )
 
     async def fetch_detail(self, page: Page, listing: ListingItem) -> JobDetail:

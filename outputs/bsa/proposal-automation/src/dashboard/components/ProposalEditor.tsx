@@ -138,21 +138,95 @@ export function ProposalEditor({ data }: { data: JobWithProposal }) {
     setTimeout(() => setCopiedId(false), 1500);
   }
 
-  const isCW = data.platform_prefix === 'CW';
+  // ── 投下後トラッキング: replied / won / lost / expired ──
+  // submitted/replied 状態の案件にのみアクションを表示。
+  const isAfterSubmit = data.status === 'submitted' || data.status === 'replied';
+  const [dealOpen, setDealOpen] = useState(false);
 
-  // ランサーズ提案画面を Playwright で開いて自動入力する（LAN のみ）
-  async function fillLancersForm() {
-    // 未保存の編集を先に保存
+  async function transitionTo(status: 'replied' | 'lost' | 'expired', note: string) {
+    await fetch(`/api/jobs/${data.job_id}/status`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status, note }),
+    });
+    setStatusMsg(`📝 ステータスを ${status} に更新`);
+    router.refresh();
+    setTimeout(() => setStatusMsg(null), 1800);
+  }
+
+  const isCW = data.platform_prefix === 'CW';
+  const isCN = data.platform_prefix === 'CN';
+  const platformLabel = isCW ? 'CrowdWorks' : isCN ? 'ココナラ' : 'ランサーズ';
+
+  // 媒体（LAN / CW / CN）の提案画面を Playwright で開いて自動入力 → 自動送信。
+  // - LAN: 入力 → 「内容を確認する」 → 確認画面 → 「提案する」（2段階）
+  // - CW : 入力 → 「応募する」（即送信・1段階）
+  // - CN : 入力 → 「確認する」 → 確認画面 → 「応募する」（2段階）
+  //
+  // ポーリング戦略（2系統並行）:
+  // - DB の jobs.status='submitted' で成功検知
+  // - ログ末尾に ❌ が出たら即時失敗表示（cookie 切れ・フォーム未検出など）
+  async function autoSubmitProposal() {
     await save();
-    setStatusMsg('🚀 ランサーズ画面を開きます...');
+    setStatusMsg(`🚀 ${platformLabel} 画面を開きます...`);
     try {
       const res = await fetch(`/api/proposals/${data.job_id}/fill-form`, {
         method: 'POST',
       });
       const json = (await res.json()) as { ok?: boolean; error?: string; log?: string };
       if (!json.ok) throw new Error(json.error ?? 'unknown error');
-      setStatusMsg(`📤 自動入力中。ブラウザを確認してください（log: ${json.log?.split('/').pop()}）`);
-      setTimeout(() => setStatusMsg(null), 6000);
+      const logFile = json.log?.split('/').pop() ?? '';
+      setStatusMsg(`📤 自動入力＋送信を実行中（log: ${logFile}）`);
+
+      const startedAt = Date.now();
+      const TIMEOUT_MS = 120_000;
+      const POLL_MS = 2_000;
+      while (Date.now() - startedAt < TIMEOUT_MS) {
+        await new Promise((r) => setTimeout(r, POLL_MS));
+
+        // 1) ログを覗いて ❌ があれば即時エラー表示してループを抜ける
+        if (logFile) {
+          try {
+            const lres = await fetch(
+              `/api/fill-form-log?file=${encodeURIComponent(logFile)}`
+            );
+            if (lres.ok) {
+              const ld = (await lres.json()) as {
+                tail?: string[];
+                error_lines?: string[];
+                done?: boolean;
+              };
+              if (ld.error_lines && ld.error_lines.length > 0) {
+                const lastErr = ld.error_lines[ld.error_lines.length - 1];
+                setStatusMsg(`❌ ${lastErr}`);
+                setTimeout(() => setStatusMsg(null), 15000);
+                return;
+              }
+            }
+          } catch {
+            // ログ未生成や瞬断は無視してリトライ
+          }
+        }
+
+        // 2) DB が submitted になったら完了（DB 反映＝Python 側成功確定）
+        try {
+          const sres = await fetch(`/api/jobs/${data.job_id}/status`);
+          if (!sres.ok) continue;
+          const s = (await sres.json()) as { status?: string };
+          if (s.status === 'submitted') {
+            setStatusMsg('✅ 提案を自動送信しました。一覧に戻ります...');
+            await new Promise((r) => setTimeout(r, 1200));
+            router.push('/');
+            return;
+          }
+        } catch {
+          // ignore
+        }
+      }
+      setStatusMsg(
+        `⚠️ 120秒以内に完了を検知できませんでした。ブラウザ画面と log を確認してください。`
+      );
+      setTimeout(() => setStatusMsg(null), 10000);
     } catch (e) {
       setStatusMsg(`❌ 起動失敗: ${e instanceof Error ? e.message : String(e)}`);
       setTimeout(() => setStatusMsg(null), 6000);
@@ -188,7 +262,7 @@ export function ProposalEditor({ data }: { data: JobWithProposal }) {
             rel="noreferrer"
             className="btn btn-vermilion shrink-0"
           >
-            🔗 {isCW ? 'CrowdWorks' : 'Lancers'} で募集を開く ↗
+            🔗 {platformLabel} で募集を開く ↗
           </a>
         </div>
         <p className="mt-2 truncate text-[11px] text-(--color-slate)">
@@ -284,6 +358,11 @@ export function ProposalEditor({ data }: { data: JobWithProposal }) {
               <p className="mt-3 text-[11px] leading-relaxed text-(--color-slate)">
                 CW の提案フォームは <b>税抜き入力</b>。「契約金額（税抜）」欄に <b>{priceExTax.toLocaleString()} 円</b> を入力してください。
               </p>
+            ) : isCN ? (
+              <p className="mt-3 text-[11px] leading-relaxed text-(--color-slate)">
+                ココナラの提案フォームは <b>税込入力</b>。「提案金額」欄に <b>{priceIncTax.toLocaleString()} 円</b>（税込総額）を入力します。
+                納品希望日は <b>「納期（日）」</b> から算出（マイルストーンがあれば最終 schedule_date を優先）。
+              </p>
             ) : (
               <p className="mt-3 text-[11px] leading-relaxed text-(--color-slate)">
                 ランサーズの提案画面は <b>税抜き入力</b>（税抜＝ceil(税込÷1.10)）。各マイルストーンの金額は税抜きで登録します。
@@ -342,6 +421,29 @@ export function ProposalEditor({ data }: { data: JobWithProposal }) {
                 </details>
               </Panel>
             </>
+          ) : isCN ? (
+            /* ── CN（ココナラ）用レイアウト ── */
+            <Panel kicker="① 提案内容欄" title="提案文（ココナラ提案フォームに貼り付け）">
+              <p className="mb-2 text-[11px] text-(--color-slate)">
+                ココナラ提案フォームの <b>「提案内容」</b> 欄に貼り付け。<b>200字以上が必須</b>（未満だと確認画面に進めません）。
+                マイルストーン・追加オプション欄はありません。
+              </p>
+              <div className="mb-2 flex items-center justify-between">
+                <span className="text-[11px] text-(--color-slate)">
+                  {description.length} 字
+                  {description.length < 200 && (
+                    <span className="ml-1 text-(--color-vermilion)">⚠️ 200字未満</span>
+                  )}
+                </span>
+                <button onClick={() => copyToClipboard(description, '提案内容')} className="btn btn-ghost">📋 コピー</button>
+              </div>
+              <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className="field block h-[28rem] w-full font-mono-id text-sm leading-7"
+                placeholder="〇〇様&#10;&#10;ご依頼拝見しました。..."
+              />
+            </Panel>
           ) : (
             /* ── LAN 用レイアウト ── */
             <>
@@ -437,30 +539,215 @@ export function ProposalEditor({ data }: { data: JobWithProposal }) {
             <button onClick={() => router.push('/')} className="btn btn-ghost">
               ← 一覧に戻る
             </button>
-            <button onClick={save} disabled={saving} className="btn btn-primary">
-              {saving ? '保存中…' : '💾 保存'}
-            </button>
-            <button onClick={copyRegenerationPrompt} className="btn btn-ghost">
-              🤖 再生成依頼
-            </button>
-            {!isCW && (
-              <button onClick={fillLancersForm} className="btn btn-azure">
-                📤 ランサーズに流し込む
-              </button>
+            {!isAfterSubmit && (
+              <>
+                <button onClick={save} disabled={saving} className="btn btn-primary">
+                  {saving ? '保存中…' : '💾 保存'}
+                </button>
+                <button onClick={copyRegenerationPrompt} className="btn btn-ghost">
+                  🤖 再生成依頼
+                </button>
+                <button onClick={autoSubmitProposal} className="btn btn-azure">
+                  🚀 {platformLabel} へ自動送信
+                </button>
+                <button onClick={markUnableAndBack} className="btn btn-ghost">
+                  ⛔ 提案不可
+                </button>
+                <button onClick={markSubmittedAndBack} className="btn btn-vermilion">
+                  ✅ 提案済みにして一覧へ
+                </button>
+              </>
             )}
-            <button onClick={markUnableAndBack} className="btn btn-ghost">
-              ⛔ 提案不可
-            </button>
-            <button onClick={markSubmittedAndBack} className="btn btn-vermilion">
-              ✅ 提案済みにして一覧へ
-            </button>
+            {isAfterSubmit && (
+              <>
+                <span className="mono-tag border border-(--color-azure) px-2 py-1 text-(--color-azure)">
+                  {data.status === 'replied' ? '📩 返信あり' : '✅ 投下済'}
+                </span>
+                {data.status === 'submitted' && (
+                  <button
+                    onClick={() => transitionTo('replied', '先方から返信あり')}
+                    className="btn btn-azure"
+                  >
+                    📩 返信あり
+                  </button>
+                )}
+                <button onClick={() => setDealOpen(true)} className="btn btn-vermilion">
+                  ✅ 受注
+                </button>
+                <button
+                  onClick={() => transitionTo('lost', '見送り通知')}
+                  className="btn btn-ghost"
+                >
+                  ❌ 見送り
+                </button>
+                <button
+                  onClick={() => transitionTo('expired', '無反応のまま期限切れ')}
+                  className="btn btn-ghost"
+                >
+                  ⏰ 期限切れ
+                </button>
+              </>
+            )}
             <span className="ml-auto text-xs text-(--color-slate)">
               {statusMsg ?? (savedAt ? `保存済 · ${savedAt}` : '')}
             </span>
           </div>
+
+          {dealOpen && (
+            <DealModal
+              jobId={data.job_id}
+              suggestedAmount={data.price ?? 30000}
+              suggestedLine={data.product_line ?? data.estimated_product_line ?? 'L1'}
+              onClose={() => setDealOpen(false)}
+              onSaved={() => {
+                setDealOpen(false);
+                setStatusMsg('🏆 受注を記録しました');
+                setTimeout(() => router.push('/history'), 800);
+              }}
+            />
+          )}
         </section>
       </div>
     </main>
+  );
+}
+
+function DealModal({
+  jobId,
+  suggestedAmount,
+  suggestedLine,
+  onClose,
+  onSaved,
+}: {
+  jobId: string;
+  suggestedAmount: number;
+  suggestedLine: string;
+  onClose: () => void;
+  onSaved: () => void;
+}) {
+  const [amount, setAmount] = useState<number>(suggestedAmount);
+  const [deliveryDue, setDeliveryDue] = useState('');
+  const [productLine, setProductLine] = useState(suggestedLine);
+  const [contact, setContact] = useState('');
+  const [notes, setNotes] = useState('');
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function submit() {
+    if (!Number.isFinite(amount) || amount <= 0) {
+      setError('契約金額は必須です（税込・正の数）');
+      return;
+    }
+    setSaving(true);
+    setError(null);
+    try {
+      const res = await fetch(`/api/jobs/${jobId}/deal`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contract_amount: amount,
+          delivery_due: deliveryDue || null,
+          product_line_actual: productLine || null,
+          client_contact: contact || null,
+          notes: notes || null,
+        }),
+      });
+      if (!res.ok) {
+        const j = (await res.json()) as { error?: string };
+        throw new Error(j.error ?? `HTTP ${res.status}`);
+      }
+      onSaved();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 px-4"
+      onClick={onClose}
+    >
+      <div
+        className="w-full max-w-md border border-(--color-ink) bg-(--color-paper) p-6 shadow-[6px_6px_0_var(--color-ink)]"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <p className="kicker">— 受注記録 —</p>
+        <h3 className="masthead mt-1 text-2xl text-(--color-ink)">🏆 受注</h3>
+        <p className="mt-1 text-xs text-(--color-slate)">{jobId}</p>
+
+        <div className="mt-5 space-y-4">
+          <label className="block">
+            <span className="meta-label">契約金額（税込・必須）</span>
+            <input
+              type="number"
+              value={amount}
+              onChange={(e) => setAmount(Number(e.target.value))}
+              className="field mt-1 block w-full font-mono-id text-lg"
+              placeholder="100000"
+              min={1}
+              required
+            />
+          </label>
+          <label className="block">
+            <span className="meta-label">納期（任意）</span>
+            <input
+              type="date"
+              value={deliveryDue}
+              onChange={(e) => setDeliveryDue(e.target.value)}
+              className="field mt-1 block w-full font-mono-id"
+            />
+          </label>
+          <label className="block">
+            <span className="meta-label">採用ライン（任意）</span>
+            <select
+              value={productLine}
+              onChange={(e) => setProductLine(e.target.value)}
+              className="field mt-1 block w-full font-mono-id"
+            >
+              <option value="L1">L1 / Rapid Single LP</option>
+              <option value="L2">L2 / Rapid Corporate 5P</option>
+              <option value="L3">L3 / Rapid LP + 広告運用</option>
+              <option value="L4">L4 / Express 修正・改修</option>
+            </select>
+          </label>
+          <label className="block">
+            <span className="meta-label">連絡先（任意）</span>
+            <input
+              type="text"
+              value={contact}
+              onChange={(e) => setContact(e.target.value)}
+              className="field mt-1 block w-full"
+              placeholder="メール / 媒体内DM等"
+            />
+          </label>
+          <label className="block">
+            <span className="meta-label">メモ（任意）</span>
+            <textarea
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              className="field mt-1 block h-20 w-full text-sm"
+              placeholder="ヒアリング日程 / 特記事項 など"
+            />
+          </label>
+        </div>
+
+        {error && (
+          <p className="mt-3 border border-(--color-vermilion) bg-(--color-paper-soft) px-3 py-2 text-sm text-(--color-vermilion)">
+            ❌ {error}
+          </p>
+        )}
+
+        <div className="mt-6 flex items-center justify-end gap-2">
+          <button onClick={onClose} className="btn btn-ghost">
+            キャンセル
+          </button>
+          <button onClick={submit} disabled={saving} className="btn btn-vermilion">
+            {saving ? '保存中…' : '🏆 受注を記録'}
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
 

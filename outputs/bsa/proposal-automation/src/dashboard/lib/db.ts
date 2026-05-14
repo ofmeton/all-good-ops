@@ -53,11 +53,10 @@ export interface JobWithProposal {
 }
 
 export function getTodaysSummary(): JobWithProposal[] {
-  // collected_at は UTC で保存されているため、JST の「本日」判定だと
-  // 日付境界（UTC 15時 = JST 0時）でズレる。
-  // 「直近 24 時間に収集された案件」という実用的なフィルタに変更。
-  // 投下済み(submitted) / 投下不可(unable_to_submit) / 辞退(declined) は履歴ページに退避し
-  // 一覧からは除外する（アーカイブ扱い）。
+  // collected_at は UTC 保存。「直近 24 時間に収集された案件」フィルタ + replied は常に表示。
+  // 投下済み(submitted) / 不可(unable_to_submit) / 辞退(declined) / 失注(lost) / 期限切れ(expired) /
+  // 受注(won) は履歴ページへ。replied（先方から返信あり・未確定）は最重要として
+  // 24時間フィルタ無視で先頭表示。
   const db = getDb();
   return db
     .prepare(
@@ -66,9 +65,14 @@ export function getTodaysSummary(): JobWithProposal[] {
               p.research_notes, p.generated_at
        FROM jobs j
        LEFT JOIN proposals p ON p.job_id = j.job_id
-       WHERE j.collected_at >= datetime('now', '-24 hours')
-         AND j.status IN ('collected', 'proposing')
-       ORDER BY (j.fit_score IS NULL), j.fit_score DESC, j.collected_at DESC`
+       WHERE (
+         (j.collected_at >= datetime('now', '-24 hours') AND j.status IN ('collected', 'proposing'))
+         OR j.status = 'replied'
+       )
+       ORDER BY (j.status = 'replied') DESC,
+                (j.fit_score IS NULL),
+                j.fit_score DESC,
+                j.collected_at DESC`
     )
     .all() as JobWithProposal[];
 }
@@ -179,6 +183,61 @@ export function updateJobStatus(
       `UPDATE proposals SET submitted_at = datetime('now') WHERE job_id = ?`
     ).run(job_id);
   }
+}
+
+// ─── 受注台帳（deals） ─────────────────────────────────────────
+export interface DealInput {
+  contract_amount: number;        // 税込総額（必須）
+  delivery_due?: string | null;
+  client_contact?: string | null;
+  product_line_actual?: string | null;
+  notes?: string | null;
+}
+
+export interface DealRow extends DealInput {
+  job_id: string;
+  contracted_at: string;
+  delivered_at: string | null;
+  paid_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+// 受注を記録 → status を 'won' に遷移。upsert（同案件で再入力可）。
+// status_history への記録は updateJobStatus 内で行うので、こちらは deals upsert のみ。
+export function recordDeal(job_id: string, input: DealInput): void {
+  const db = getDb();
+  if (!Number.isFinite(input.contract_amount) || input.contract_amount <= 0) {
+    throw new Error('contract_amount must be a positive number');
+  }
+  db.prepare(
+    `INSERT INTO deals (job_id, contract_amount, delivery_due, client_contact, product_line_actual, notes)
+     VALUES (?, ?, ?, ?, ?, ?)
+     ON CONFLICT(job_id) DO UPDATE SET
+       contract_amount     = excluded.contract_amount,
+       delivery_due        = COALESCE(excluded.delivery_due, deals.delivery_due),
+       client_contact      = COALESCE(excluded.client_contact, deals.client_contact),
+       product_line_actual = COALESCE(excluded.product_line_actual, deals.product_line_actual),
+       notes               = COALESCE(excluded.notes, deals.notes),
+       updated_at          = datetime('now')`
+  ).run(
+    job_id,
+    input.contract_amount,
+    input.delivery_due ?? null,
+    input.client_contact ?? null,
+    input.product_line_actual ?? null,
+    input.notes ?? null
+  );
+  updateJobStatus(job_id, 'won', `受注記録: ¥${input.contract_amount.toLocaleString()}`);
+}
+
+export function getDeal(job_id: string): DealRow | null {
+  const db = getDb();
+  return (
+    (db.prepare('SELECT * FROM deals WHERE job_id = ?').get(job_id) as
+      | DealRow
+      | undefined) ?? null
+  );
 }
 
 export function createGenerationRequest(

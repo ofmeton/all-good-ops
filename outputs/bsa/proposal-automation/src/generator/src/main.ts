@@ -167,14 +167,54 @@ async function generateForJob(
   );
 }
 
+function parseOnlyArg(): string | null {
+  // `--only <job_id>` を process.argv から拾う。最小実装。
+  const argv = process.argv.slice(2);
+  const idx = argv.indexOf('--only');
+  if (idx < 0) return null;
+  const v = argv[idx + 1];
+  if (!v) {
+    throw new Error('--only フラグには job_id を指定してください (例: --only LAN-20260509-005)');
+  }
+  return v;
+}
+
 async function main(): Promise<number> {
   const db = openDb();
   let generatedCount = 0;
   let errorMessage: string | null = null;
 
   const FIT_SCORE_THRESHOLD = 80;
+  const onlyJobId = parseOnlyArg();
 
   try {
+    // --only モード: 指定 job_id だけ生成し、上位処理・pending キューはスキップ
+    if (onlyJobId) {
+      const job = db
+        .prepare('SELECT * FROM jobs WHERE job_id = ?')
+        .get(onlyJobId) as JobRow | undefined;
+      if (!job) {
+        console.error(`❌ job_id=${onlyJobId} が見つかりません`);
+        return 1;
+      }
+      console.log(`📊 --only モード: ${onlyJobId} の提案文を生成します`);
+      try {
+        await generateForJob(db, job);
+        generatedCount++;
+      } catch (e) {
+        console.error(
+          `❌ [${onlyJobId}] 失敗:`,
+          e instanceof ClaudeHeadlessError ? e.message : e
+        );
+      }
+      db.prepare(
+        `INSERT INTO runs (started_at, ended_at, stage, generated_count, status)
+         VALUES (datetime('now'), datetime('now'), 'generate', ?, 'success')`
+      ).run(generatedCount);
+      console.log(`\n✅ 生成完了: ${generatedCount} 件`);
+      return 0;
+    }
+
     const topJobs = getJobsAboveFitScore(db, FIT_SCORE_THRESHOLD);
     console.log(`📊 fit_score >= ${FIT_SCORE_THRESHOLD} の ${topJobs.length} 件の提案文を生成します`);
 

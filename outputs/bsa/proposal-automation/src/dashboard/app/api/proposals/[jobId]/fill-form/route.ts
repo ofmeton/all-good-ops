@@ -27,7 +27,22 @@ export async function POST(
   // 環境変数 BSA_PA_BASE があればそれを優先（運用上の安全策）。
   const baseDir =
     process.env.BSA_PA_BASE ?? resolve(process.cwd(), '..', '..');
-  const script = join(baseDir, 'scripts', 'lib', '_lancers_form_fill.py');
+
+  // prefix で媒体ごとのスクリプトを切替
+  const prefix = jobId.split('-')[0];
+  const scriptByPrefix: Record<string, string> = {
+    LAN: '_lancers_form_fill.py',
+    CW: '_crowdworks_form_fill.py',
+    CN: '_coconala_form_fill.py',
+  };
+  const scriptName = scriptByPrefix[prefix];
+  if (!scriptName) {
+    return NextResponse.json(
+      { error: `unsupported platform prefix: ${prefix}` },
+      { status: 400 }
+    );
+  }
+  const script = join(baseDir, 'scripts', 'lib', scriptName);
   const python = join(homedir(), '.venvs', 'bsa-pa', 'bin', 'python');
 
   const logDir = join(homedir(), 'Library', 'Application Support', 'bsa-pa');

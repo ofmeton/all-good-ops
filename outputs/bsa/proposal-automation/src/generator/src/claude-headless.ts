@@ -7,6 +7,23 @@
  */
 
 import { spawn } from 'node:child_process';
+import { homedir } from 'node:os';
+import { join } from 'node:path';
+
+// `claude` CLI は `~/.local/bin/claude` に実体がある（symlink）。
+// npm run dev など child_process.spawn で起動された時、親 bash session の PATH に
+// `~/.local/bin` が含まれていないと `spawn claude ENOENT` で失敗する。
+// （`.zshenv` 経由で PATH 整備しても、すでに開いている bash には反映されない）
+//
+// 対策として spawn 時の env.PATH に `~/.local/bin` を強制追加する。
+// PATH に既に含まれていれば no-op。
+function buildAugmentedPath(): string {
+  const localBin = join(homedir(), '.local', 'bin');
+  const current = process.env.PATH ?? '';
+  const segments = current.split(':').filter(Boolean);
+  if (segments.includes(localBin)) return current;
+  return [localBin, current].filter(Boolean).join(':');
+}
 
 export interface ClaudeHeadlessOptions {
   /** Claude に渡すプロンプト（stdin で送る）。 */
@@ -62,8 +79,10 @@ export async function callClaudeHeadless<T = unknown>(
 
   const bin = opts.claudeBin ?? 'claude';
 
+  const env = { ...process.env, PATH: buildAugmentedPath() };
+
   return new Promise<T>((resolve, reject) => {
-    const child = spawn(bin, args, { stdio: ['pipe', 'pipe', 'pipe'] });
+    const child = spawn(bin, args, { stdio: ['pipe', 'pipe', 'pipe'], env });
     let stdout = '';
     let stderr = '';
 
