@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
 import { resolveAdminActor } from "@/lib/supabase-auth";
 import { listStaff, createStaff, updateStaff, archiveStaff, StaffArchiveBlockedError } from "@/lib/db/staff";
+import { AuthorizationError } from "@/lib/db/scope";
 
 const baseSchema = z.object({
   name: z.string().min(1),
@@ -17,7 +18,12 @@ const updateSchema = z
 export async function GET() {
   const actor = await resolveAdminActor();
   if (!actor) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
-  return NextResponse.json(await listStaff(actor));
+  try {
+    return NextResponse.json(await listStaff(actor));
+  } catch (e) {
+    if (e instanceof AuthorizationError) return NextResponse.json({ error: e.message }, { status: 403 });
+    throw e;
+  }
 }
 
 export async function POST(req: NextRequest) {
@@ -26,7 +32,12 @@ export async function POST(req: NextRequest) {
   const parsed = baseSchema.safeParse(await req.json());
   if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
   const { property_ids, ...input } = parsed.data;
-  return NextResponse.json(await createStaff(actor, input, property_ids));
+  try {
+    return NextResponse.json(await createStaff(actor, input, property_ids));
+  } catch (e) {
+    if (e instanceof AuthorizationError) return NextResponse.json({ error: e.message }, { status: 403 });
+    throw e;
+  }
 }
 
 export async function PATCH(req: NextRequest) {
@@ -35,8 +46,13 @@ export async function PATCH(req: NextRequest) {
   const parsed = updateSchema.safeParse(await req.json());
   if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
   const { id, property_ids, ...patch } = parsed.data;
-  await updateStaff(actor, id, patch, property_ids);
-  return NextResponse.json({ ok: true });
+  try {
+    await updateStaff(actor, id, patch, property_ids);
+    return NextResponse.json({ ok: true });
+  } catch (e) {
+    if (e instanceof AuthorizationError) return NextResponse.json({ error: e.message }, { status: 403 });
+    throw e;
+  }
 }
 
 export async function DELETE(req: NextRequest) {
