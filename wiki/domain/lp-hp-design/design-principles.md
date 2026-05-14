@@ -3,7 +3,7 @@ type: concept
 created: 2026-05-10
 updated: 2026-05-10
 sources: [raw/notes/lp-design-learnings.md]
-related: [[motion-techniques]], [[spade-motion-study]]
+related: [[motion-techniques]], [[spade-motion-study]], [[image-processing/techniques]]
 tags: [lp-design, mobile-first, typography, css, playwright, bsa]
 status: active
 identity: n/a

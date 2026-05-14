@@ -3,7 +3,7 @@ type: concept
 created: 2026-04-26
 updated: 2026-05-10
 sources: [[[spade-motion-study]]]
-related: [[spade-motion-study]]
+related: [[spade-motion-study]], [[design-principles]]
 tags: [lp-design, motion, technique-catalog]
 status: active
 identity: n/a

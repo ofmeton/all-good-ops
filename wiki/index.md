@@ -54,5 +54,5 @@
 ## 統計（lint で更新）
 - 総ページ数: 18（SCHEMA + index + log + bsa 5 + icecream 1 + portfolio 1 + self 3 + ibasho 1 + lp-hp-design 3 + image-processing 1 + people 1 + personal 1 = 21 を含む）
 - 最終 ingest: 2026-05-10 (memory → raw 4本 → wiki 5ページ一括 ingest)
-- 最終 lint: 2026-05-10 (Phase 1 MVP 動作確認)
-- 最終 phase: 2026-05-10 (Phase 3 部分着手 - self/goals + ibasho/overview)
+- 最終 lint: 2026-05-10 (Phase 3 区切り lint - orphan 4 件全解消・曖昧 wikilink 修正)
+- 最終 phase: 2026-05-10 (Phase 3 完了 - context-life 削除)
