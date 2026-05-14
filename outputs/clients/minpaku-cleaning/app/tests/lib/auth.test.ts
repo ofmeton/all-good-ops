@@ -26,20 +26,24 @@ async function seed() {
 }
 
 describe("resolveActorByToken", () => {
+  let seeded: Awaited<ReturnType<typeof seed>>;
+
   beforeEach(async () => {
-    await seed();
+    seeded = await seed();
   });
 
   it("有効なオーナートークンを解決する", async () => {
+    const { property } = seeded;
     const actor = await resolveActorByToken("owner-token");
-    expect(actor?.role).toBe("owner");
-    expect(actor?.role === "owner" && actor.propertyId).toBeTruthy();
+    expect(actor).toMatchObject({ role: "owner", propertyId: property!.id });
+    expect(actor?.role === "owner" && actor.ownerId).toEqual(expect.any(String));
+    expect(actor?.role === "owner" && actor.ownerId.length).toBeGreaterThan(0);
   });
 
   it("有効なスタッフトークンを解決する", async () => {
+    const { staff } = seeded;
     const actor = await resolveActorByToken("staff-token");
-    expect(actor?.role).toBe("staff");
-    expect(actor?.role === "staff" && actor.staffId).toBeTruthy();
+    expect(actor).toMatchObject({ role: "staff", staffId: staff!.id });
   });
 
   it("revoke済みトークンは null を返す", async () => {

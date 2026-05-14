@@ -6,10 +6,11 @@ export type Actor =
   | { role: "owner"; ownerId: string; propertyId: string }
   | { role: "staff"; staffId: string };
 
+const db = createServiceClient();
+
 // トークン文字列からオーナー/スタッフのアクターを解決する。
 // revoke済み・存在しないトークンは null。
 export async function resolveActorByToken(token: string): Promise<Actor | null> {
-  const db = createServiceClient();
   const { data } = await db
     .from("access_tokens")
     .select("type, property_id, staff_id, revoked_at")
