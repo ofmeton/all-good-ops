@@ -1,4 +1,4 @@
-import { randomBytes } from "crypto";
+import { randomBytes } from "node:crypto";
 
 // 推測困難なトークンURL用文字列を生成する（32バイトの base64url）。
 export function generateToken(): string {

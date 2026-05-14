@@ -7,8 +7,8 @@ describe("generateToken", () => {
     expect(token).toMatch(/^[A-Za-z0-9_-]+$/);
   });
 
-  it("十分な長さがある（32バイト = 43文字以上）", () => {
-    expect(generateToken().length).toBeGreaterThanOrEqual(43);
+  it("常に43文字（32バイトの base64url は決定論的に43文字）", () => {
+    expect(generateToken().length).toBe(43);
   });
 
   it("呼ぶたびに異なる値を返す", () => {
