@@ -22,9 +22,13 @@ Stage 4 dashboard  起動してブラウザで開く  ← ここで止まる
 - `scripts/lib/_lancers_form_fill.py` — 確認画面の「提案する/送信する」までクリック
 - `scripts/lib/_coconala_form_fill.py` — Coconala（確認画面あり、LAN 型2段階）
 
-各 form-fill は成功で `jobs.status=submitted`、失敗で `unable_to_submit` に DB を更新する。
+各 form-fill は `run()` が終了コードを返す（0=成功, 1=cookie/プロファイル無し, 2=ログイン切れ,
+3=フォーム無し, 4=確認ボタン不検出[LAN/CN], 5=送信失敗）。成功時のみ自身で
+`jobs.status=submitted` に更新する。**失敗時のステータス更新は行わない**（呼び出し側の責務）。
+また失敗時は `keep_browser_open` でブラウザを最大10分開いたまま待つ実装になっている
+（無人バッチでは詰まるため、バッチ用フラグで無効化が必要）。
 
-不足しているのは「**生成後に対象案件を自動で選び、送信していくステージ**」のみ。
+不足しているのは「**生成後に対象案件を自動で選び、送信し、結果をステータスに反映するステージ**」。
 
 ## ゴール
 
@@ -43,26 +47,32 @@ Stage 4 dashboard  起動してブラウザで開く  ← ここで止まる
 
 ### 新規: `scripts/auto_submit.py`
 
-DB から対象案件を選び、既存 form-fill の `run(job_id, auto_submit=True)` を順に呼ぶドライバ。
+DB から対象案件を選び、既存 form-fill スクリプトを subprocess として順に起動するドライバ。
 
 **対象案件の抽出クエリ条件:**
 - `proposals` 行が存在（生成済み）
 - `jobs.status IN ('collected','proposing')`（未送信のみ）
 - `fit_score >= 60`
-- 提案が `decline_recommended` でない（生成側の辞退判定を尊重）
+- 提案が `decline_recommended` でない（生成側の辞退判定を尊重）。これは実装上
+  別カラムではなく、辞退済みジョブが `status='declined'` を持つため上記の
+  status フィルタで自動的に除外される
 - 並び順: `fit_score DESC`
 - 件数上限なし
 
 **送信ループ:**
-- job_id の prefix（LAN / CW / CC）で既存 form-fill モジュールを振り分け
-- 各案件を `auto_submit=True` で実行
+- job_id の prefix（LAN / CW / CN）で既存 form-fill スクリプトを subprocess 起動
+  （ダッシュボードの fill-form route と同じ subprocess パターン）
+- バッチ用に各 form-fill へ `--no-keep-open` フラグを追加し、失敗時の10分ハングを無効化。
+  subprocess 自体にもタイムアウト（240秒/件）を backstop として設定
 - 送信間に **30〜90秒のランダム pacing**（件数制限ではなく、媒体のスパム判定・アカウント凍結回避のための人間的ペーシング）
 - 1案件の失敗は catch してログ＋次へ継続（1件のコケで全停止しない）
 - 結果を `{job_id, platform, result, reason}` で集約して返す
 
-**cookie 切れハンドリング:**
-- form-fill がログイン切れを検知した場合、その媒体の残り案件をスキップ（無駄打ち防止）
-- 「要対応」フラグを立てて Stage 3 に渡す
+**終了コード → ステータス（ドライバが書く）:**
+- `0` → 成功。form-fill が `status=submitted` を記録済み
+- `1` / `2`（cookie/プロファイル無し・ログイン切れ）→ ジョブは `proposing` のまま据え置き
+  （relogin 後の次回起動で再試行）。さらに**その媒体の残り案件をスキップ**し要対応フラグを立てる
+- `3` / `4` / `5` / タイムアウト / その他 → `unable_to_submit` に更新（人間レビュー対象）
 
 ### 変更: `scripts/run.command`
 
