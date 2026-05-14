@@ -11,6 +11,7 @@
 - [proven-track-record](business/bsa/proven-track-record.md) — 提案文に書ける実績 SSOT（Phase 2 で業種別分解検討）
 - [proposals/templates](business/bsa/proposals/templates.md) — 提案文テンプレ集（パイロット ingest で育てる）
 - [lessons-proposal-patterns](business/bsa/lessons-proposal-patterns.md) — 提案勝ち筋の横断学び（lint で育てる）
+- [deals/index](business/bsa/deals/index.md) — BSA 受注台帳 INDEX（`sync_deals_to_wiki.py` 自動生成）
 
 ### icecream
 - [overview](business/icecream/overview.md) — RICE CREAM 店舗 SSOT（業務委託マネージャー / @BEATICE0923）
@@ -52,7 +53,7 @@
 ---
 
 ## 統計（lint で更新）
-- 総ページ数: 18（SCHEMA + index + log + bsa 5 + icecream 1 + portfolio 1 + self 3 + ibasho 1 + lp-hp-design 3 + image-processing 1 + people 1 + personal 1 = 21 を含む）
+- 総ページ数: 21（SCHEMA/index/log 3 + コンテンツ 18：bsa 6 + icecream 1 + portfolio 1 + personal 1 + lp-hp-design 3 + image-processing 1 + people 1 + self 3 + ibasho 1）
 - 最終 ingest: 2026-05-10 (memory → raw 4本 → wiki 5ページ一括 ingest)
 - 最終 lint: 2026-05-10 (Phase 3 区切り lint - orphan 4 件全解消・曖昧 wikilink 修正)
-- 最終 phase: 2026-05-10 (Phase 3 完了 - context-life 削除)
+- 最終 phase: 2026-05-15 (housekeeping - deals/index 登録・.obsidian 整理)

@@ -11,6 +11,9 @@ Thumbs.db
 .claude/settings.local.json
 .claude/worktrees/
 
+# Obsidian volatile state (UI レイアウト。共有設定 app/appearance/core-plugins/graph は追跡)
+wiki/.obsidian/workspace.json
+
 # Logs (keep structure, ignore content)
 logs/*.log
 
