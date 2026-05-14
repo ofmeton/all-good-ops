@@ -8,6 +8,10 @@ export default defineConfig({
     environment: "jsdom",
     globals: true,
     setupFiles: ["./tests/setup.ts"],
+    // DB バックのテストは共有のローカル Supabase に対して beforeEach で
+    // テーブルを truncate するため、ファイル間並列実行だと相互に干渉する。
+    // ファイルは逐次実行する（ファイル内のテストは順次）。
+    fileParallelism: false,
   },
   resolve: {
     alias: {

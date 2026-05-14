@@ -1,7 +1,8 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { listProperties, createProperty, updateProperty, archiveProperty } from "@/lib/db/properties";
-import { createServiceClient } from "@/lib/supabase-server";
 import type { Actor } from "@/lib/auth";
+import { createServiceClient } from "@/lib/supabase-server";
+import { resetDb } from "../helpers/reset-db";
 
 const db = createServiceClient();
 const admin: Actor = { role: "admin", adminId: "a1", roleLevel: 1 };
@@ -10,8 +11,7 @@ const staff: Actor = { role: "staff", staffId: "s1" };
 let ownerId: string;
 
 beforeEach(async () => {
-  await db.from("properties").delete().neq("name", "");
-  await db.from("owners").delete().neq("name", "");
+  await resetDb();
   const { data } = await db.from("owners").insert({ name: "オーナーA" }).select().single();
   ownerId = data!.id;
 });

@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach } from "vitest";
 import { listStaff, createStaff, updateStaff, archiveStaff } from "@/lib/db/staff";
 import { createServiceClient } from "@/lib/supabase-server";
 import type { Actor } from "@/lib/auth";
+import { resetDb } from "../helpers/reset-db";
 
 const db = createServiceClient();
 const admin: Actor = { role: "admin", adminId: "a1", roleLevel: 1 };
@@ -9,11 +10,7 @@ const admin: Actor = { role: "admin", adminId: "a1", roleLevel: 1 };
 let propertyId: string;
 
 beforeEach(async () => {
-  await db.from("cleaning_requests").delete().neq("property_id", "00000000-0000-0000-0000-000000000000");
-  await db.from("staff_assignments").delete().neq("staff_id", "00000000-0000-0000-0000-000000000000");
-  await db.from("staff").delete().neq("name", "");
-  await db.from("properties").delete().neq("name", "");
-  await db.from("owners").delete().neq("name", "");
+  await resetDb();
   const { data: owner } = await db.from("owners").insert({ name: "オーナーA" }).select().single();
   const { data: property } = await db
     .from("properties").insert({ owner_id: owner!.id, name: "物件A" }).select().single();

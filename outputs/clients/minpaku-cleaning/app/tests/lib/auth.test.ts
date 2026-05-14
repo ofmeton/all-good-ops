@@ -1,14 +1,12 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { resolveActorByToken } from "@/lib/auth";
 import { createServiceClient } from "@/lib/supabase-server";
+import { resetDb } from "../helpers/reset-db";
 
 const db = createServiceClient();
 
 async function seed() {
-  await db.from("access_tokens").delete().neq("token", "");
-  await db.from("staff").delete().neq("name", "");
-  await db.from("properties").delete().neq("name", "");
-  await db.from("owners").delete().neq("name", "");
+  await resetDb();
 
   const { data: owner } = await db
     .from("owners").insert({ name: "オーナーA" }).select().single();
