@@ -44,6 +44,10 @@ export async function issueToken(
   target: TokenTarget,
 ): Promise<AccessToken> {
   assertAdmin(actor);
+  const existing = await getActiveToken(actor, target);
+  if (existing) {
+    throw new Error("既に有効なトークンが存在します。再発行してください。");
+  }
   const db = createServiceClient();
   const tokenValue = generateToken();
   const { data, error } =

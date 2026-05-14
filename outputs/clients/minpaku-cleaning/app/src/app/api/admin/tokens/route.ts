@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
 import { resolveAdminActor } from "@/lib/supabase-auth";
 import { issueToken, revokeToken, reissueToken, type TokenTarget } from "@/lib/db/tokens";
+import { AuthorizationError } from "@/lib/db/scope";
 
 const targetSchema = z.union([
   z.object({ type: z.literal("owner"), propertyId: z.string().uuid() }),
@@ -18,11 +19,16 @@ export async function POST(req: NextRequest) {
   const parsed = postSchema.safeParse(await req.json());
   if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
   const target = parsed.data.target as TokenTarget;
-  const token =
-    parsed.data.action === "issue"
-      ? await issueToken(actor, target)
-      : await reissueToken(actor, target);
-  return NextResponse.json(token);
+  try {
+    const token =
+      parsed.data.action === "issue"
+        ? await issueToken(actor, target)
+        : await reissueToken(actor, target);
+    return NextResponse.json(token);
+  } catch (e) {
+    if (e instanceof AuthorizationError) return NextResponse.json({ error: e.message }, { status: 403 });
+    throw e;
+  }
 }
 
 export async function DELETE(req: NextRequest) {
@@ -30,6 +36,11 @@ export async function DELETE(req: NextRequest) {
   if (!actor) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   const id = new URL(req.url).searchParams.get("id");
   if (!id) return NextResponse.json({ error: "id required" }, { status: 400 });
-  await revokeToken(actor, id);
-  return NextResponse.json({ ok: true });
+  try {
+    await revokeToken(actor, id);
+    return NextResponse.json({ ok: true });
+  } catch (e) {
+    if (e instanceof AuthorizationError) return NextResponse.json({ error: e.message }, { status: 403 });
+    throw e;
+  }
 }

@@ -48,4 +48,11 @@ describe("access_tokens データアクセス", () => {
     const active = await getActiveToken(admin, { type: "owner", propertyId });
     expect(active?.token).toBe(second.token);
   });
+
+  it("既に有効なトークンがある対象に issueToken すると例外", async () => {
+    await issueToken(admin, { type: "owner", propertyId });
+    await expect(
+      issueToken(admin, { type: "owner", propertyId }),
+    ).rejects.toThrow("既に有効なトークンが存在します");
+  });
 });
