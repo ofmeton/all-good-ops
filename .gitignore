@@ -9,6 +9,7 @@ Thumbs.db
 
 # Claude Code local
 .claude/settings.local.json
+.claude/worktrees/
 
 # Logs (keep structure, ignore content)
 logs/*.log
