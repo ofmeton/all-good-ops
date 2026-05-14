@@ -32,6 +32,9 @@
 ### image-processing
 - [techniques](domain/image-processing/techniques.md) — 画像処理ノウハウ（MPS タイル推論・グリッド切り出し・Playwright 状態観測）
 
+### ai-industry
+- [ai-radar-pointer](domain/ai-industry/ai-radar-pointer.md) — ai-radar（外部スポーク）への外部参照ポインタ
+
 ## people
 
 ### clients
@@ -48,12 +51,13 @@
 - [overview](ibasho/overview.md) — 子どもの居場所構想 SSOT（draft、ingest で育てる）
 
 ## external
-（Phase 3 残）
+
+- [monetize-os-pointer](external/monetize-os-pointer.md) — monetize-os（外部スポーク・はぐりん名義収益化）の存在記録ポインタ
 
 ---
 
 ## 統計（lint で更新）
-- 総ページ数: 21（SCHEMA/index/log 3 + コンテンツ 18：bsa 6 + icecream 1 + portfolio 1 + personal 1 + lp-hp-design 3 + image-processing 1 + people 1 + self 3 + ibasho 1）
+- 総ページ数: 23（SCHEMA/index/log 3 + コンテンツ 20：bsa 6 + icecream 1 + portfolio 1 + personal 1 + lp-hp-design 3 + image-processing 1 + ai-industry 1 + people 1 + self 3 + ibasho 1 + external 1）
 - 最終 ingest: 2026-05-10 (memory → raw 4本 → wiki 5ページ一括 ingest)
 - 最終 lint: 2026-05-10 (Phase 3 区切り lint - orphan 4 件全解消・曖昧 wikilink 修正)
-- 最終 phase: 2026-05-15 (Phase 3 真の完了 - context-business/finance 削除・knowledge/context/ 空)
+- 最終 phase: 2026-05-15 (Phase 3 完了 - external クラスタ作成・context → wiki 移行完了)

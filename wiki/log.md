@@ -246,3 +246,18 @@ session 4211b802 の続き。Phase 3 仕上げ前の wiki housekeeping。
 - エージェント 7 本（rice-cream-ops / brand-publisher / freelance-scout / shopify-operator / client-manager / cashflow-tracker / message-crafter）の「起動時に必ず行うこと」を wiki SSOT 参照に変更
 
 注: `docs/superpowers/{specs,plans}/` の移行 spec/plan は当時の計画記録として残置（dangling 参照ではない）。
+
+## [2026-05-15] phase | external クラスタ作成（spec Phase 3 残）
+
+spec の Phase 3「外部参照ページ作成」を実施。これで spec Phase 3 が完了。
+
+新規作成（2 ページ、ともに type=entity / identity=n/a）:
+- `wiki/domain/ai-industry/ai-radar-pointer.md` — ai-radar（外部スポーク）への外部参照ポインタ
+- `wiki/external/monetize-os-pointer.md` — monetize-os の存在記録のみ（はぐりん名義のため
+  名義3ライン分離に従い詳細・persona 情報は持ち込まない）
+
+index.md 更新: domain に ai-industry クラスタ追加 / external セクションを「（Phase 3 残）」から
+monetize-os エントリに / 統計 21 → 23 ページ。
+
+orphan 解消: `wiki/self/streams.md` に「関連: 外部スポーク」セクション追加し
+`[[ai-radar-pointer]]` / `[[monetize-os-pointer]]` の inbound を成立。frontmatter related も更新。

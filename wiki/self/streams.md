@@ -3,7 +3,7 @@ type: topic
 created: 2026-05-10
 updated: 2026-05-10
 sources: [raw/notes/streams-2026-05.md]
-related: [[goals]], [[profile]], [[wiki/business/bsa/overview]], [[wiki/business/icecream/overview]], [[wiki/business/portfolio/overview]]
+related: [[goals]], [[profile]], [[wiki/business/bsa/overview]], [[wiki/business/icecream/overview]], [[wiki/business/portfolio/overview]], [[monetize-os-pointer]], [[ai-radar-pointer]]
 tags: [self, income, portfolio, bsa, icecream, shopify]
 status: active
 identity: 工藤陸
@@ -74,3 +74,12 @@ identity: 工藤陸
 - ofmeton 名義 / `portfolio-fawn-eight-63.vercel.app`
 - サンプル 3 本: minato / hiyori / numata（工務店系）
 - BSA 提案（工藤陸名義）でも実績 URL として露出 OK
+
+---
+
+## 関連: 外部スポーク（別リポジトリ運用）
+
+→ ハブ・スポーク構造の詳細は `CLAUDE.md`「外部スポークへの委譲ルール」
+
+- [[monetize-os-pointer]] — はぐりん名義の収益化エンジン（収入源の一角。詳細は monetize-os 側 wiki に隔離）
+- [[ai-radar-pointer]] — AI 機会発見 + Skills 事業防衛ダッシュボード（自己基盤インフラ）
