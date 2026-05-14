@@ -3,6 +3,9 @@ import { createServiceClient } from "@/lib/supabase-server";
 import { assertAdmin } from "@/lib/db/scope";
 import type { Actor } from "@/lib/auth";
 
+// 稼働中の清掃依頼があるスタッフをアーカイブしようとしたときに投げる。
+export class StaffArchiveBlockedError extends Error {}
+
 export type StaffInput = {
   name: string;
   line_user_id?: string;
@@ -39,7 +42,11 @@ export async function listStaff(actor: Actor): Promise<Staff[]> {
 
 async function syncAssignments(staffId: string, propertyIds: string[]) {
   const db = createServiceClient();
-  await db.from("staff_assignments").delete().eq("staff_id", staffId);
+  const { error: deleteError } = await db
+    .from("staff_assignments")
+    .delete()
+    .eq("staff_id", staffId);
+  if (deleteError) throw deleteError;
   if (propertyIds.length > 0) {
     const { error } = await db
       .from("staff_assignments")
@@ -85,7 +92,7 @@ export async function archiveStaff(actor: Actor, id: string): Promise<void> {
     .limit(1);
   if (checkError) throw checkError;
   if (active && active.length > 0) {
-    throw new Error("稼働中の清掃依頼があるスタッフはアーカイブできません");
+    throw new StaffArchiveBlockedError("稼働中の清掃依頼があるスタッフはアーカイブできません");
   }
   const { error } = await db
     .from("staff")

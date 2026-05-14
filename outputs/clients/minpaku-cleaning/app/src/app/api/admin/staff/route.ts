@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
 import { resolveAdminActor } from "@/lib/supabase-auth";
-import { listStaff, createStaff, updateStaff, archiveStaff } from "@/lib/db/staff";
+import { listStaff, createStaff, updateStaff, archiveStaff, StaffArchiveBlockedError } from "@/lib/db/staff";
 
 const baseSchema = z.object({
   name: z.string().min(1),
@@ -44,6 +44,13 @@ export async function DELETE(req: NextRequest) {
   if (!actor) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   const id = new URL(req.url).searchParams.get("id");
   if (!id) return NextResponse.json({ error: "id required" }, { status: 400 });
-  await archiveStaff(actor, id);
-  return NextResponse.json({ ok: true });
+  try {
+    await archiveStaff(actor, id);
+    return NextResponse.json({ ok: true });
+  } catch (e) {
+    if (e instanceof StaffArchiveBlockedError) {
+      return NextResponse.json({ error: e.message }, { status: 409 });
+    }
+    throw e;
+  }
 }

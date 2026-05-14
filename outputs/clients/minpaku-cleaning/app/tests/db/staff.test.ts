@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { listStaff, createStaff, updateStaff, archiveStaff } from "@/lib/db/staff";
+import { listStaff, createStaff, updateStaff, archiveStaff, StaffArchiveBlockedError } from "@/lib/db/staff";
 import { createServiceClient } from "@/lib/supabase-server";
 import type { Actor } from "@/lib/auth";
 import { resetDb } from "../helpers/reset-db";
@@ -44,6 +44,7 @@ describe("staff データアクセス", () => {
       assigned_staff_id: created.id,
       status: "assigned",
     });
+    await expect(archiveStaff(admin, created.id)).rejects.toThrow(StaffArchiveBlockedError);
     await expect(archiveStaff(admin, created.id)).rejects.toThrow(
       "稼働中の清掃依頼があるスタッフはアーカイブできません",
     );

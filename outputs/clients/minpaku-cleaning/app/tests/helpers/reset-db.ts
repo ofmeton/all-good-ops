@@ -1,8 +1,11 @@
 import { createServiceClient } from "@/lib/supabase-server";
 
 /**
- * テスト用 DB リセットヘルパー。
- * FK 制約を考慮した順序で全テーブルを削除する。
+ * テスト用 DB リセットヘルパー。Plan 1 テストが触るテーブルのみを対象とする。
+ * cleaning_reports / report_photos / supply_requests / admins / notifications_log は意図的に除外。
+ * Plan 2+ のテストでこれらを seed する場合は、このヘルパーを拡張すること。
+ *
+ * FK 制約を考慮した順序で各テーブルを削除する。
  * 各削除でエラーが発生した場合は即 throw する（silent failure 防止）。
  *
  * 削除順（子→親）:
