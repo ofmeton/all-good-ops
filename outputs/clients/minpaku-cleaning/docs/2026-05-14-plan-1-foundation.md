@@ -370,7 +370,7 @@ npx supabase db reset
 ```bash
 npx supabase db dump --local --schema public -f /tmp/schema_check.sql && grep -c "create table" /tmp/schema_check.sql
 ```
-Expected: `10`（10テーブル）
+Expected: `11`（11テーブル）
 
 - [ ] **Step 4: Commit**
 
@@ -2152,9 +2152,21 @@ git commit -m "feat: アクセストークンの発行・無効化・再発行"
 - [ ] `resolveActorByToken` が有効/無効/revoke済みトークンを正しく判定する
 - [ ] `npm test` が全 PASS、`npm run build` が成功する
 
+## code review 由来の持ち越し事項
+
+Task 3〜12 の code quality review で出た指摘のうち、後続フェーズで対処するもの。
+
+- **Task 11 で staff 削除ガードを実装（Important）** ✅ 対応済: `cleaning_requests.assigned_staff_id` は `on delete set null` のため、`assigned` / `in_progress` の依頼を持つ staff を削除すると `assigned_staff_id` だけ NULL になり `status` が残って不整合になる。`src/lib/db/staff.ts` の `archiveStaff` で「`assigned` / `in_progress` の依頼を持つ staff はアーカイブ前に `StaffArchiveBlockedError`」をアプリ層で enforce 済み。スキーマレベルの `RESTRICT` は `confirmed` 履歴だけの staff も消せなくなるため不採用。
+- **Plan 2 で migration 0002 を追加（Minor）**: cleaning_requests / notifications_log を本格的に使い始める Plan 2 で、以下を `0002_*.sql` として追加する（0001 は改変しない）:
+  - `cleaning_requests`: `check (guest_count > 0)`、`check (checkout_date > checkin_date)`
+  - `create index idx_requests_assigned_staff on cleaning_requests(assigned_staff_id)`
+  - `create index idx_notifications_kind_recipient on notifications_log(kind, recipient, sent_at)`（冪等性チェック用）
+  - `notifications_log.status` を enum 化 or `check (status in (...))`（値が固まり次第）
+  - **access_tokens の重複アクティブトークン防止（Task 12 review 由来・Important）**: 1対象に有効（`revoked_at is null`）なトークンが複数できると `getActiveToken` の `maybeSingle()` が永続 500 になる。Task 12 では `issueToken` にアプリ層ガードを入れたが、真の並行 insert は防げない。`create unique index ... on access_tokens(property_id) where type='owner' and revoked_at is null` および同様の staff 用 partial unique index を 0002 で追加する。
+
 ## 次のプラン
 
-- **Plan 2: 清掃依頼コアフロー** — 依頼CRUD、ステータスフロー、早い者勝ち排他制御、スタッフ画面（承認/開始/チェックリスト/写真提出）
+- **Plan 2: 清掃依頼コアフロー** — 依頼CRUD、ステータスフロー、早い者勝ち排他制御、スタッフ画面（承認/開始/チェックリスト/写真提出）、migration 0002（上記持ち越し）
 - **Plan 3: 通知・カレンダー・オーナービュー・仕上げ** — LINE/メール通知、Vercel Cron（リマインド/未割当アラート/写真自動削除）、カレンダービュー、オーナー閲覧画面、管理者管理画面（`/admin/admins`・追加/削除/権限レベル設定）
 
 > 注: 設計書 section 5 の `/admin/admins`（管理者管理画面）は Plan 1 のスコープ外。Plan 1 では最初の管理者を Task 7 Step 7 の psql 手順で作成し、画面からの管理者追加・権限設定は Plan 3 で実装する。
