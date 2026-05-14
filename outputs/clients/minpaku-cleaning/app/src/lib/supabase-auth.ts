@@ -14,9 +14,14 @@ export async function createAuthClient() {
       cookies: {
         getAll: () => cookieStore.getAll(),
         setAll: (toSet) =>
-          toSet.forEach(({ name, value, options }) =>
-            cookieStore.set(name, value, options),
-          ),
+          toSet.forEach(({ name, value, options }) => {
+            try {
+              cookieStore.set(name, value, options);
+            } catch {
+              // Server Component の layout から呼ばれた場合 cookies() は読み取り専用。
+              // トークンリフレッシュの書き込みは proxy 側に任せるのでここでは無視する。
+            }
+          }),
       },
     },
   );

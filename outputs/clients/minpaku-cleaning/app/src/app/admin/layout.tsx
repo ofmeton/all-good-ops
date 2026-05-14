@@ -6,7 +6,7 @@ import Link from "next/link";
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const path = (await headers()).get("x-pathname") ?? "";
   // ログイン画面自身はガードしない
-  if (!path.endsWith("/admin/login")) {
+  if (path !== "/admin/login") {
     const actor = await resolveAdminActor();
     if (!actor) redirect("/admin/login");
   }
