@@ -348,6 +348,7 @@
   - ドキュメント整形
 - wiki/ 配下への ingest（新規ページ作成・既存更新・index.md 更新・log.md append）
 - raw/ 配下への素材追加（既存ファイルの上書き・削除はしない）
+- **BSA-PA の提案自動送信**（`outputs/bsa/proposal-automation/scripts/auto_submit.py` 経由。ゲート: `fit_score >= 60` ＋ `status` フィルタで decline 済みを自動除外。送信は工藤陸名義・取り消し不可のため、ゲート条件の変更は戦略変更として人間確認対象。kill-switch は環境変数 `BSA_PA_NO_AUTO_SUBMIT=1`）
 
 ---
 
