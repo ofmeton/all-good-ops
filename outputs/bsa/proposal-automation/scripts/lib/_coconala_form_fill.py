@@ -396,7 +396,7 @@ def mark_submitted_in_db(job_id: str, note: str = "auto-submitted via dashboard 
 # ----------------------------------------------------------------------------
 
 
-async def run(job_id: str, auto_confirm: bool, auto_submit: bool) -> int:
+async def run(job_id: str, auto_confirm: bool, auto_submit: bool, keep_open: bool = True) -> int:
     bundle = fetch_proposal_bundle(job_id)
     propose_url = detail_url_to_propose_url(bundle["detail_url"])
     delivery_date = resolve_delivery_date(bundle)
@@ -496,7 +496,7 @@ async def run(job_id: str, auto_confirm: bool, auto_submit: bool) -> int:
             keep_browser_open = True
             raise
         finally:
-            if keep_browser_open and page is not None:
+            if keep_browser_open and keep_open and page is not None:
                 print(
                     "⏸  ブラウザは開いたままにします（最大10分）。閉じるとスクリプト終了。",
                     file=sys.stderr,
@@ -526,6 +526,11 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="確認画面での最終送信ボタンの自動クリックを無効化（確認画面で停止）",
     )
+    p.add_argument(
+        "--no-keep-open",
+        action="store_true",
+        help="失敗時にブラウザを開いたまま待たない（バッチ実行用）",
+    )
     return p.parse_args()
 
 
@@ -537,6 +542,7 @@ if __name__ == "__main__":
                 args.job_id,
                 auto_confirm=not args.no_auto_confirm,
                 auto_submit=not args.no_auto_submit,
+                keep_open=not args.no_keep_open,
             )
         )
     )
