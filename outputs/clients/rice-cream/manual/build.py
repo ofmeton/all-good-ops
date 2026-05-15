@@ -92,3 +92,29 @@ def draw_text_block(canvas: Image.Image, heading: str, body: str) -> None:
     for line in _wrap_text(body, f_body, max_w):
         draw.text((MARGIN_X, y), line, fill=COLOR_TEXT, font=f_body)
         y += 60
+
+
+BAND_H = 90
+COLOR_RED = (200, 50, 50)
+COLOR_BLUE = (40, 90, 180)
+COLOR_BAND_TEXT = (255, 255, 255)
+
+
+def draw_note_band(canvas: Image.Image, kind: str, text: str) -> None:
+    """文字領域下端に注意/補足の帯を描く。
+
+    kind: "note"=赤帯（注意）, "info"=青帯（補足）
+    """
+    color = COLOR_RED if kind == "note" else COLOR_BLUE
+    draw = ImageDraw.Draw(canvas)
+    band_top = CANVAS_H - BAND_H
+    draw.rectangle([0, band_top, CANVAS_W, CANVAS_H], fill=color)
+    f = ImageFont.truetype(FONT_HEAVY, 40)
+    prefix = "⚠ " if kind == "note" else "ℹ "
+    msg = prefix + text
+    max_w = CANVAS_W - MARGIN_X * 2
+    lines = _wrap_text(msg, f, max_w)
+    y = band_top + (BAND_H - len(lines) * 48) // 2
+    for line in lines:
+        draw.text((MARGIN_X, y), line, fill=COLOR_BAND_TEXT, font=f)
+        y += 48

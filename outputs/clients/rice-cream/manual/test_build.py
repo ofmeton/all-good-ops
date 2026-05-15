@@ -40,3 +40,27 @@ def test_draw_text_block_renders_heading_body():
                 found_dark = True
                 break
     assert found_dark, "文字が描かれていない"
+
+
+def test_draw_note_band_red():
+    img = build.make_canvas()
+    build.draw_note_band(img, kind="note", text="暗証番号は「0025」")
+    found_red = False
+    for y in range(1700, 1900, 20):
+        px = img.getpixel((540, y))
+        if px[0] > 150 and px[1] < 100 and px[2] < 100:
+            found_red = True
+            break
+    assert found_red, "赤帯が見つからない"
+
+
+def test_draw_note_band_blue():
+    img = build.make_canvas()
+    build.draw_note_band(img, kind="info", text="あれば追加してOK")
+    found_blue = False
+    for y in range(1700, 1900, 20):
+        px = img.getpixel((540, y))
+        if px[2] > 150 and px[0] < 100:
+            found_blue = True
+            break
+    assert found_blue, "青帯が見つからない"
