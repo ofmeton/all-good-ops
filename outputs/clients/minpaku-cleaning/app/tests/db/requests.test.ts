@@ -11,7 +11,7 @@ import { resetDb } from "../helpers/reset-db";
 import type { Actor } from "@/lib/auth";
 
 const db = createServiceClient();
-const admin: Actor = { role: "admin", adminId: "a1", roleLevel: 1 };
+let admin: Actor;
 const staff: Actor = { role: "staff", staffId: "s1" };
 
 let propertyId: string;
@@ -25,6 +25,28 @@ function dateStr(daysFromNow: number): string {
 
 beforeEach(async () => {
   await resetDb();
+
+  // 実 admin を seed（created_by の FK 制約を満たすため）。
+  // resetDb は admins / auth.users を消さないので毎回 upsert 的に作り直す。
+  const ADMIN_EMAIL = "req-test-admin@example.com";
+  const { data: existingAdmin } = await db
+    .from("admins").select("id").eq("email", ADMIN_EMAIL).maybeSingle();
+  if (existingAdmin) {
+    await db.auth.admin.deleteUser(existingAdmin.id); // admins へ cascade
+  }
+  const { data: createdUser, error: userError } = await db.auth.admin.createUser({
+    email: ADMIN_EMAIL,
+    password: "req-test-admin-pw",
+    email_confirm: true,
+  });
+  if (userError) throw userError;
+  await db.from("admins").insert({
+    id: createdUser.user!.id,
+    email: ADMIN_EMAIL,
+    name: "テスト管理者",
+  });
+  admin = { role: "admin", adminId: createdUser.user!.id, roleLevel: 1 };
+
   const { data: owner } = await db.from("owners").insert({ name: "オーナーA" }).select().single();
   const { data: property } = await db
     .from("properties").insert({ owner_id: owner!.id, name: "物件A" }).select().single();

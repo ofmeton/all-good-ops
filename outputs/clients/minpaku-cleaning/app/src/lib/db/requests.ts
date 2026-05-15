@@ -94,8 +94,7 @@ export async function createRequest(
       option_memo: input.option_memo ?? null,
       status: "unassigned",
       assignment_deadline: deadline,
-      // created_by は admins(id) FK（UUID）。actor.adminId はアプリ層の識別子で
-      // DB の admins テーブルに存在しない場合があるため省略（null = set null on delete）。
+      created_by: actor.adminId,
     })
     .select()
     .single();
