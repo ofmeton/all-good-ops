@@ -24,3 +24,19 @@ def test_paste_photo_fits_in_photo_area(tmp_path):
     build.paste_photo(img, str(photo_path))
     px = img.getpixel((540, 600))
     assert px[0] > 100 and px[1] < 100, f"写真が貼られていない: {px}"
+
+
+def test_draw_text_block_renders_heading_body():
+    img = build.make_canvas()
+    build.draw_text_block(
+        img,
+        heading="鍵を開ける",
+        body="キーボックスから鍵を取り出してドアを開ける",
+    )
+    found_dark = False
+    for x in range(40, 1040, 30):
+        for y in range(1380, 1900, 30):
+            if img.getpixel((x, y)) != (255, 255, 255):
+                found_dark = True
+                break
+    assert found_dark, "文字が描かれていない"

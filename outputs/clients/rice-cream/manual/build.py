@@ -47,3 +47,48 @@ def paste_photo(canvas: Image.Image, photo_path: str) -> None:
     x = (CANVAS_W - pw) // 2
     y = PHOTO_TOP + (PHOTO_AREA_H - ph) // 2
     canvas.paste(photo, (x, y))
+
+
+TEXT_TOP = PHOTO_BOTTOM  # 1360
+TEXT_BOTTOM = CANVAS_H  # 1920
+TEXT_AREA_H = TEXT_BOTTOM - TEXT_TOP  # 560
+COLOR_TEXT = (32, 32, 32)
+MARGIN_X = 48
+
+
+def _wrap_text(text: str, font: ImageFont.FreeTypeFont, max_w: int) -> list[str]:
+    """日本語前提のシンプル折返し（文字単位）。"""
+    lines: list[str] = []
+    buf = ""
+    for ch in text:
+        if ch == "\n":
+            lines.append(buf)
+            buf = ""
+            continue
+        trial = buf + ch
+        bbox = font.getbbox(trial)
+        if bbox[2] - bbox[0] > max_w and buf:
+            lines.append(buf)
+            buf = ch
+        else:
+            buf = trial
+    if buf:
+        lines.append(buf)
+    return lines
+
+
+def draw_text_block(canvas: Image.Image, heading: str, body: str) -> None:
+    """文字領域に見出し+本文を描く。"""
+    draw = ImageDraw.Draw(canvas)
+    f_heading = ImageFont.truetype(FONT_HEAVY, 72)
+    f_body = ImageFont.truetype(FONT_REG, 48)
+    max_w = CANVAS_W - MARGIN_X * 2
+
+    y = TEXT_TOP + 32
+    for line in _wrap_text(heading, f_heading, max_w):
+        draw.text((MARGIN_X, y), line, fill=COLOR_TEXT, font=f_heading)
+        y += 84
+    y += 16
+    for line in _wrap_text(body, f_body, max_w):
+        draw.text((MARGIN_X, y), line, fill=COLOR_TEXT, font=f_body)
+        y += 60
