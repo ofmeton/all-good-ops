@@ -1,0 +1,343 @@
+slides:
+- id: open-001
+  phase: 開店準備
+  index: 1 / 29
+  photo: _src/photos/open-01-1.png
+  heading: 鍵を開ける
+  body: 'キーボックスから鍵を取り出して、ドアを開けて入店する。
+
+    '
+  note: 暗証番号は「0025」
+- id: open-002
+  phase: 開店準備
+  index: 2 / 29
+  photo: _src/photos/open-03-1.png
+  heading: アイスマシーン 停止ボタンを押す
+  body: '操作パネルの「停止」ボタンを1回押す。
+
+    '
+  info: 取扱説明書「始業時の操作」より
+- id: open-003
+  phase: 開店準備
+  index: 3 / 29
+  photo: null
+  heading: 続けて「運転」ボタンを押す
+  body: '停止表示が消えたら、運転ボタンを押す。
+
+    '
+- id: open-004
+  phase: 開店準備
+  index: 4 / 29
+  photo: null
+  heading: 保冷ランプ点灯で起動完了
+  body: '製品出口をアルコール消毒して、
+
+    ソフトクリームが出せる状態に。
+
+    '
+  note: 製品出口の消毒を忘れない
+- id: open-005
+  phase: 開店準備
+  index: 5 / 29
+  photo: _src/photos/open-04-1.png
+  heading: 2階から荷物を下ろす
+  body: '2階スペースのグレーのカーテンの後ろに
+
+    荷物が置かれている。1階に下ろす。
+
+    '
+- id: open-007
+  phase: 開店準備
+  index: 7 / 29
+  photo: _src/photos/open-12-1.png
+  heading: 抹茶マシーンを出す
+  body: '1階奥に置かれている抹茶マシーンを
+
+    カウンターの上に出す。
+
+    '
+- id: open-008
+  phase: 開店準備
+  index: 8 / 29
+  photo: null
+  heading: コンセント類を繋げる
+  body: '段ボールから蛸足・充電器・照明・
+
+    ウォーマーを取り出す。
+
+    '
+- id: open-009
+  phase: 開店準備
+  index: 9 / 29
+  photo: _src/photos/open-11-1.png
+  heading: 段ボールの中身を出す
+  body: '蛸足、充電器、照明、ウォーマーを取り出す。
+
+    '
+- id: open-010
+  phase: 開店準備
+  index: 10 / 29
+  photo: _src/photos/open-13-1.png
+  heading: コンセントはここ
+  body: '蛸足をここに繋ぐ。
+
+    '
+- id: open-011
+  phase: 開店準備
+  index: 11 / 29
+  photo: null
+  heading: 材料を1階の冷蔵庫へ
+  body: '上から持ってきたソフトミックス・
+
+    ライスミルク・ロックアイスを
+
+    1階の冷蔵庫と冷凍庫に入れる。
+
+    '
+- id: open-012
+  phase: 開店準備
+  index: 12 / 29
+  photo: _src/photos/open-14-1.png
+  heading: 左にロックアイス
+  body: '冷凍庫の左側にロックアイスを入れる。
+
+    '
+- id: open-013
+  phase: 開店準備
+  index: 13 / 29
+  photo: _src/photos/open-15-1.png
+  heading: 右にソフトミックスとライスミルク
+  body: '空いていれば、冷蔵庫の右側に
+
+    ソフトミックスとライスミルクを入れる。
+
+    '
+  info: 空いていない時は横のドリンク冷蔵庫の空きを使う
+- id: open-014
+  phase: 開店準備
+  index: 14 / 29
+  photo: _src/photos/open-16-1.png
+  heading: 店内の電気をつける
+  body: 'つけられる電気は全部つけて
+
+    明るさを確保する。
+
+    '
+  info: 全部つけても暗いので照明追加検討中
+- id: open-015
+  phase: 開店準備
+  index: 15 / 29
+  photo: _src/photos/open-17-1.png
+  heading: 白いコンセントをさす
+  body: '抜かれてぶら下がっている
+
+    白いコンセントを、ここにさす。
+
+    '
+- id: open-016
+  phase: 開店準備
+  index: 16 / 29
+  photo: _src/photos/open-18-1.png
+  heading: リモコンで電飾をつける
+  body: 'カウンターのどこかに置いてあるリモコンの
+
+    「ON」ボタンを電飾に向けて連打。
+
+    '
+- id: open-017
+  phase: 開店準備
+  index: 17 / 29
+  photo: _src/photos/open-19-1.png
+  heading: リモコン① 店内最奥の電飾
+  body: '店内最奥の電飾が光る。
+
+    '
+- id: open-018
+  phase: 開店準備
+  index: 18 / 29
+  photo: _src/photos/open-20-1.png
+  heading: リモコン② カウンター棚の電飾
+  body: 'カウンター内のドリンク・グラスの棚の
+
+    電飾が光る。
+
+    '
+- id: open-019
+  phase: 開店準備
+  index: 19 / 29
+  photo: _src/photos/open-21-1.png
+  heading: シンク横の蛸足をONに
+  body: 'シンク横の蛸足のスイッチを
+
+    「ON」（右）に押す。
+
+    '
+  info: カウンター上部のちょうちょ電飾が光る
+- id: open-020
+  phase: 開店準備
+  index: 20 / 29
+  photo: _src/photos/open-22-1.png
+  heading: 段ボールに入ってた照明
+  body: '段ボールに入っていた照明を取り付ける。
+
+    '
+- id: open-021
+  phase: 開店準備
+  index: 21 / 29
+  photo: _src/photos/open-23-1.png
+  heading: 看板を通りに出す
+  body: '置き看板を通りに出す。
+
+    白線を超えないように置く。
+
+    '
+  info: 看板は店の命。目立つポジションを研究中
+- id: open-022
+  phase: 開店準備
+  index: 22 / 29
+  photo: _src/photos/open-31-1.png
+  heading: 店前レイアウト
+  body: '現在の店前レイアウトはこんな感じ。
+
+    '
+  info: 今後アップデート予定
+- id: open-023
+  phase: 開店準備
+  index: 23 / 29
+  photo: _src/photos/open-32-1.png
+  heading: 置きソフトクリームの電源
+  body: '置きソフトクリームの電源は
+
+    ここから取れる。
+
+    '
+- id: open-024
+  phase: 開店準備
+  index: 24 / 29
+  photo: _src/photos/open-33-1.png
+  heading: 注文 / 受け渡し口
+  body: 'お客さんから見た受け渡し口の位置。
+
+    '
+- id: open-025
+  phase: 開店準備
+  index: 25 / 29
+  photo: _src/photos/open-34-1.png
+  heading: こちら目線
+  body: 'スタッフ側から見た
+
+    注文/受け渡しの位置関係。
+
+    '
+- id: open-026
+  phase: 開店準備
+  index: 26 / 29
+  photo: _src/photos/open-35-1.png
+  heading: テーブルセッティング
+  body: 'テーブル位置とクロスを設置する。
+
+    '
+  info: 風で飛ばないようテープで貼り付ける
+- id: open-027
+  phase: 開店準備
+  index: 27 / 29
+  photo: _src/photos/open-36-1.png
+  heading: 黄色POPの貼り方
+  body: '黄色のPOPは裏に丸めたテープを貼って
+
+    テーブルに貼り付ける。
+
+    '
+- id: open-028
+  phase: 開店準備
+  index: 28 / 29
+  photo: _src/photos/open-38-1.png
+  heading: 電気ポットの使い方
+  body: 'HOT用のお湯はこの電気ポットを使う。
+
+    お店の備品を借りている形。
+
+    '
+- id: open-029
+  phase: 開店準備
+  index: 29 / 29
+  photo: _src/photos/open-39-1.png
+  heading: 沸騰ボタンと保温ボタン
+  body: '水を入れたポットを置いて電源ON。
+
+    沸騰ボタンと保温ボタンを1回ずつ押す。
+
+    '
+  info: 沸騰後 体感1時間くらい保温される。たまに見る
+- id: biz-001
+  phase: 営業中
+  index: 1 / 7
+  photo: _src/photos/biz-01-1.png
+  heading: スマッパチケットとは
+  body: 'スマッパグループ内通貨のチケット。
+
+    お釣りは出ない。
+
+    '
+- id: biz-002
+  phase: 営業中
+  index: 2 / 7
+  photo: _src/photos/biz-02-1.png
+  heading: スマッパチケットキーの位置
+  body: 'レジ画面のショートカットから
+
+    「スマッパチケット」キーを使い、
+
+    使用枚数分の金額をマイナスする。
+
+    '
+- id: biz-003
+  phase: 営業中
+  index: 3 / 7
+  photo: _src/photos/biz-03-1.png
+  heading: インバウンドキーとは
+  body: 'インバウンドのお客さんが来たか
+
+    デカメロンに報告するためのキー。
+
+    '
+  info: 「インバウンドっぽいな」と思ったら使う
+- id: biz-004
+  phase: 営業中
+  index: 4 / 7
+  photo: _src/photos/biz-04-1.png
+  heading: インバウンドキーの位置
+  body: '会計時にこのキーをポンと押してから
+
+    いつも通りに会計する。
+
+    '
+- id: biz-005
+  phase: 営業中
+  index: 5 / 7
+  photo: null
+  heading: 補給ランプが光ったら
+  body: 'アイスマシーンの「補給」ランプが
+
+    点灯したら、ソフトミックスの補給時期。
+
+    '
+- id: biz-006
+  phase: 営業中
+  index: 6 / 7
+  photo: null
+  heading: ソフトミックスを補給
+  body: '冷蔵庫からソフトミックスを出して
+
+    上蓋を開け、規定量を補給する。
+
+    '
+  note: 蓋を閉め忘れない / こぼしたら即拭く
+- id: biz-007
+  phase: 営業中
+  index: 7 / 7
+  photo: null
+  heading: 補給ランプ消灯を確認
+  body: 'しばらく待って補給ランプが消えれば完了。
+
+    '
