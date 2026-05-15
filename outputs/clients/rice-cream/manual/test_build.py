@@ -64,3 +64,19 @@ def test_draw_note_band_blue():
             found_blue = True
             break
     assert found_blue, "青帯が見つからない"
+
+
+def test_text_only_uses_photo_area_for_text():
+    img = build.make_canvas()
+    build.draw_text_only(
+        img,
+        heading="写真未撮影",
+        body="ここは追加撮影後にスライド差し替えます。",
+    )
+    found = False
+    for x in range(40, 1040, 40):
+        for y in range(200, 1200, 40):
+            if img.getpixel((x, y)) != (255, 255, 255):
+                found = True
+                break
+    assert found, "テキストオンリー時に写真領域が文字に転用されていない"

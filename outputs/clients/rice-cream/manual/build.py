@@ -118,3 +118,24 @@ def draw_note_band(canvas: Image.Image, kind: str, text: str) -> None:
     for line in lines:
         draw.text((MARGIN_X, y), line, fill=COLOR_BAND_TEXT, font=f)
         y += 48
+
+
+def draw_text_only(canvas: Image.Image, heading: str, body: str) -> None:
+    """写真なしスライド。写真領域+文字領域をすべて文字に使う。"""
+    draw = ImageDraw.Draw(canvas)
+    f_heading = ImageFont.truetype(FONT_HEAVY, 110)
+    f_body = ImageFont.truetype(FONT_REG, 60)
+    max_w = CANVAS_W - MARGIN_X * 2
+
+    h_lines = _wrap_text(heading, f_heading, max_w)
+    b_lines = _wrap_text(body, f_body, max_w)
+    total_h = len(h_lines) * 130 + 40 + len(b_lines) * 76
+    y = HEADER_H + (PHOTO_BOTTOM - HEADER_H + TEXT_AREA_H - total_h) // 2
+
+    for line in h_lines:
+        draw.text((MARGIN_X, y), line, fill=COLOR_TEXT, font=f_heading)
+        y += 130
+    y += 40
+    for line in b_lines:
+        draw.text((MARGIN_X, y), line, fill=COLOR_TEXT, font=f_body)
+        y += 76
