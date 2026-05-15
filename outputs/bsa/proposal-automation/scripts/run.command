@@ -1,9 +1,10 @@
 #!/bin/zsh
 # scripts/run.command - デスクトップから呼ばれるメインスクリプト。
-# Stage 1: collector (Lancers 収集 + fit_score 計算)
-# Stage 2: generator (上位10件の提案文生成)
-# Stage 3: notifier (macOS 通知 + Gmail 送信)
-# Stage 4: dashboard 起動 + ブラウザで開く
+# Stage 1:   collector (Lancers/CW/CN 収集 + fit_score 計算)
+# Stage 2:   generator (提案文生成)
+# Stage 2.5: auto-submit (fit_score>=60 の提案を自動送信。BSA_PA_NO_AUTO_SUBMIT=1 でスキップ)
+# Stage 3:   notifier (macOS 通知 + Gmail 送信)
+# Stage 4:   dashboard 起動 + ブラウザで開く
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
@@ -50,6 +51,26 @@ echo ""
 echo "📝 Stage 2: 提案文を生成中..."
 cd "$BSA_PA_BASE/src/generator"
 npx tsx src/main.ts
+
+# Stage 2.5: auto-submit
+echo ""
+if [ "${BSA_PA_NO_AUTO_SUBMIT:-0}" = "1" ]; then
+  echo "⏭  Stage 2.5: 自動送信スキップ (BSA_PA_NO_AUTO_SUBMIT=1)"
+  rm -f "$BSA_PA_APPDATA/auto-submit-result.json" "$BSA_PA_APPDATA/auto-submit-summary.txt"
+else
+  echo "📨 Stage 2.5: 提案を自動送信中..."
+  source "$BSA_PA_VENV/bin/activate"
+  python "$BSA_PA_BASE/scripts/auto_submit.py"
+  deactivate
+  SUMMARY_FILE="$BSA_PA_APPDATA/auto-submit-summary.txt"
+  if [ -f "$SUMMARY_FILE" ]; then
+    read -r NEEDS_ATTENTION SUBMITTED_N ATTENTION_N < "$SUMMARY_FILE" || true
+    if [ "${NEEDS_ATTENTION:-0}" = "1" ] && [ -x "$NOTIFY" ]; then
+      bash "$NOTIFY" "❌ BSA-PA 自動送信 要対応" \
+        "成功 ${SUBMITTED_N:-0} 件 / 要対応 ${ATTENTION_N:-0} 件。ログとダッシュボードを確認してください"
+    fi
+  fi
+fi
 
 # Stage 3: notify
 echo ""
