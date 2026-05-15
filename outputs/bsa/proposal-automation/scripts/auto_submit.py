@@ -297,7 +297,7 @@ def write_result_json(batch: BatchResult, path) -> None:
 
 
 def write_summary_file(batch: BatchResult, path) -> None:
-    """run.command が読む1行サマリ: `<needs_attention> <submitted> <要対応>`。"""
+    """run.command が読む1行サマリ: `<needs_attention> <submitted> <failed+skipped 件数>`。"""
     needs = 1 if batch.needs_attention else 0
     attention = len(batch.failed) + len(batch.skipped)
     Path(path).write_text(
@@ -322,6 +322,8 @@ def main() -> int:
     python_path = venv / "bin" / "python"
     result_path = appdata / "auto-submit-result.json"
     summary_path = appdata / "auto-submit-summary.txt"
+
+    appdata.mkdir(parents=True, exist_ok=True)
 
     jobs = fetch_eligible_jobs(db_path)
     print(f"📋 自動送信対象: {len(jobs)} 件 (fit_score >= 60)")
