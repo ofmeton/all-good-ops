@@ -35,7 +35,7 @@ def test_draw_text_block_renders_heading_body():
     )
     found_dark = False
     for x in range(40, 1040, 30):
-        for y in range(1380, 1900, 30):
+        for y in range(1520, 1900, 30):
             if img.getpixel((x, y)) != (255, 255, 255):
                 found_dark = True
                 break

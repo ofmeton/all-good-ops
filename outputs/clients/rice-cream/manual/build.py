@@ -37,26 +37,28 @@ def draw_header(img: Image.Image, phase: str, index: str) -> None:
 
 
 PHOTO_TOP = HEADER_H  # 60
-PHOTO_BOTTOM = 1360  # 文字領域上端
-PHOTO_AREA_H = PHOTO_BOTTOM - PHOTO_TOP  # 1300
-COLOR_PHOTO_BG = (240, 240, 240)
+PHOTO_BOTTOM = 1500  # 文字領域上端
+PHOTO_AREA_H = PHOTO_BOTTOM - PHOTO_TOP  # 1440
+COLOR_PHOTO_BG = (255, 255, 255)
 
 
 def paste_photo(canvas: Image.Image, photo_path: str) -> None:
-    """写真を写真領域(1080x1300)に letterbox 配置（余白は薄グレー）。"""
+    """写真を写真領域(1080x1440)に contain 配置（拡大/縮小どちらもアスペクト比保持で領域いっぱい）。"""
     draw = ImageDraw.Draw(canvas)
     draw.rectangle([0, PHOTO_TOP, CANVAS_W, PHOTO_BOTTOM], fill=COLOR_PHOTO_BG)
     photo = Image.open(photo_path).convert("RGB")
-    photo.thumbnail((CANVAS_W, PHOTO_AREA_H), Image.LANCZOS)
-    pw, ph = photo.size
-    x = (CANVAS_W - pw) // 2
-    y = PHOTO_TOP + (PHOTO_AREA_H - ph) // 2
+    scale = min(CANVAS_W / photo.width, PHOTO_AREA_H / photo.height)
+    new_w = max(1, int(photo.width * scale))
+    new_h = max(1, int(photo.height * scale))
+    photo = photo.resize((new_w, new_h), Image.LANCZOS)
+    x = (CANVAS_W - new_w) // 2
+    y = PHOTO_TOP + (PHOTO_AREA_H - new_h) // 2
     canvas.paste(photo, (x, y))
 
 
-TEXT_TOP = PHOTO_BOTTOM  # 1360
+TEXT_TOP = PHOTO_BOTTOM  # 1500
 TEXT_BOTTOM = CANVAS_H  # 1920
-TEXT_AREA_H = TEXT_BOTTOM - TEXT_TOP  # 560
+TEXT_AREA_H = TEXT_BOTTOM - TEXT_TOP  # 420
 COLOR_TEXT = (32, 32, 32)
 MARGIN_X = 48
 
@@ -89,11 +91,11 @@ def draw_text_block(canvas: Image.Image, heading: str, body: str) -> None:
     f_body = ImageFont.truetype(FONT_REG, FONT_SIZE_BODY)
     max_w = CANVAS_W - MARGIN_X * 2
 
-    y = TEXT_TOP + 32
+    y = TEXT_TOP + 20
     for line in _wrap_text(heading, f_heading, max_w):
         draw.text((MARGIN_X, y), line, fill=COLOR_TEXT, font=f_heading)
         y += 84
-    y += 16
+    y += 6
     for line in _wrap_text(body, f_body, max_w):
         draw.text((MARGIN_X, y), line, fill=COLOR_TEXT, font=f_body)
         y += 60
