@@ -12,6 +12,8 @@ export default defineConfig({
     // テーブルを truncate するため、ファイル間並列実行だと相互に干渉する。
     // ファイルは逐次実行する（ファイル内のテストは順次）。
     fileParallelism: false,
+    // e2e/ は Playwright で実行する。Vitest が誤って読み込まないよう除外。
+    exclude: ["**/node_modules/**", "**/e2e/**"],
   },
   resolve: {
     alias: {
