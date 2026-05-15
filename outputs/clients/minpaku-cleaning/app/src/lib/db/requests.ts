@@ -155,3 +155,199 @@ export async function cancelRequest(actor: Actor, id: string): Promise<void> {
     .eq("id", id);
   if (error) throw error;
 }
+
+// ---- 割当・進行遷移 ----
+
+export class RequestAlreadyClaimedError extends Error {}
+
+// スタッフが対象依頼の物件を担当しているか確認する。担当外なら例外。
+async function assertStaffAssignedToRequestProperty(
+  db: ReturnType<typeof createServiceClient>,
+  staffId: string,
+  requestId: string,
+): Promise<void> {
+  const { data: req } = await db
+    .from("cleaning_requests")
+    .select("property_id")
+    .eq("id", requestId)
+    .maybeSingle();
+  if (!req) throw new Error("依頼が見つかりません");
+  const { data: assignment } = await db
+    .from("staff_assignments")
+    .select("property_id")
+    .eq("staff_id", staffId)
+    .eq("property_id", req.property_id)
+    .maybeSingle();
+  if (!assignment) throw new Error("この物件の担当ではありません");
+}
+
+// 早い者勝ち承認: status='unassigned' の条件付きUPDATEで排他する。
+// 影響行数1 → 承認確定 / 0 → 既に他スタッフが取得済み。
+export async function claimRequest(
+  actor: Actor,
+  requestId: string,
+): Promise<void> {
+  if (actor.role !== "staff") throw new Error("スタッフ専用の操作です");
+  const db = createServiceClient();
+  await assertStaffAssignedToRequestProperty(db, actor.staffId, requestId);
+  const { data, error } = await db
+    .from("cleaning_requests")
+    .update({
+      status: "assigned",
+      assigned_staff_id: actor.staffId,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", requestId)
+    .eq("status", "unassigned")
+    .select("id");
+  if (error) throw error;
+  if (!data || data.length === 0) {
+    throw new RequestAlreadyClaimedError("この依頼は既に他のスタッフが承認しました");
+  }
+}
+
+// 管理者による手動割当（unassigned / assigned のどちらからも可・再割当含む）。
+export async function assignRequest(
+  actor: Actor,
+  requestId: string,
+  staffId: string,
+): Promise<void> {
+  assertAdmin(actor);
+  const db = createServiceClient();
+  const { data: req } = await db
+    .from("cleaning_requests")
+    .select("status")
+    .eq("id", requestId)
+    .maybeSingle();
+  if (!req) throw new Error("依頼が見つかりません");
+  if (req.status !== "unassigned" && req.status !== "assigned") {
+    throw new Error(`${req.status} の依頼は割り当てを変更できません`);
+  }
+  const { error } = await db
+    .from("cleaning_requests")
+    .update({
+      status: "assigned",
+      assigned_staff_id: staffId,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", requestId);
+  if (error) throw error;
+}
+
+// スタッフが清掃を開始する（assigned → in_progress）。担当本人のみ。
+export async function startRequest(
+  actor: Actor,
+  requestId: string,
+): Promise<void> {
+  if (actor.role !== "staff") throw new Error("スタッフ専用の操作です");
+  const db = createServiceClient();
+  const { data: req } = await db
+    .from("cleaning_requests")
+    .select("status, assigned_staff_id")
+    .eq("id", requestId)
+    .maybeSingle();
+  if (!req) throw new Error("依頼が見つかりません");
+  if (req.assigned_staff_id !== actor.staffId) {
+    throw new Error("自分が担当する依頼ではありません");
+  }
+  assertTransition(req.status as CleaningStatus, "in_progress");
+  const { error } = await db
+    .from("cleaning_requests")
+    .update({ status: "in_progress", updated_at: new Date().toISOString() })
+    .eq("id", requestId);
+  if (error) throw error;
+}
+
+// 管理者が完了報告を確認する（reported → confirmed）。
+export async function confirmRequest(
+  actor: Actor,
+  requestId: string,
+): Promise<void> {
+  assertAdmin(actor);
+  const db = createServiceClient();
+  const { data: req } = await db
+    .from("cleaning_requests")
+    .select("status")
+    .eq("id", requestId)
+    .maybeSingle();
+  if (!req) throw new Error("依頼が見つかりません");
+  assertTransition(req.status as CleaningStatus, "confirmed");
+  const { error } = await db
+    .from("cleaning_requests")
+    .update({ status: "confirmed", updated_at: new Date().toISOString() })
+    .eq("id", requestId);
+  if (error) throw error;
+  // TODO(Plan 3): 確認完了時に物件オーナーへ通知
+}
+
+// ---- スタッフ向けクエリ ----
+
+export type StaffRequestListItem = CleaningRequest & { property_name: string };
+
+// スタッフの担当物件の「未割当（承認可能）」依頼 + 「自分に割当済み」依頼。
+// 一覧表示用に物件名を同梱する。
+export async function listRequestsForStaff(
+  actor: Actor,
+): Promise<StaffRequestListItem[]> {
+  if (actor.role !== "staff") throw new Error("スタッフ専用の操作です");
+  const db = createServiceClient();
+  const { data: assignments } = await db
+    .from("staff_assignments")
+    .select("property_id")
+    .eq("staff_id", actor.staffId);
+  const propertyIds = (assignments ?? []).map((a) => a.property_id);
+  if (propertyIds.length === 0) return [];
+  const { data, error } = await db
+    .from("cleaning_requests")
+    .select("*, properties(name)")
+    .in("property_id", propertyIds)
+    .or(`status.eq.unassigned,assigned_staff_id.eq.${actor.staffId}`)
+    .order("checkin_date", { ascending: true });
+  if (error) throw error;
+  return (data ?? []).map((row: Record<string, unknown>) => {
+    const { properties, ...request } = row as Record<string, unknown> & {
+      properties: { name: string } | null;
+    };
+    return {
+      ...(request as unknown as CleaningRequest),
+      property_name: properties?.name ?? "?",
+    };
+  });
+}
+
+export type StaffRequestDetail = CleaningRequest & {
+  property: { name: string; checklist_template: unknown[] };
+};
+
+// スタッフ向けの依頼詳細。担当外物件の依頼は null。物件名・チェックリストテンプレ同梱。
+export async function getRequestForStaff(
+  actor: Actor,
+  requestId: string,
+): Promise<StaffRequestDetail | null> {
+  if (actor.role !== "staff") throw new Error("スタッフ専用の操作です");
+  const db = createServiceClient();
+  const { data, error } = await db
+    .from("cleaning_requests")
+    .select("*, properties(name, checklist_template)")
+    .eq("id", requestId)
+    .maybeSingle();
+  if (error) throw error;
+  if (!data) return null;
+  const { data: assignment } = await db
+    .from("staff_assignments")
+    .select("property_id")
+    .eq("staff_id", actor.staffId)
+    .eq("property_id", data.property_id)
+    .maybeSingle();
+  if (!assignment) return null;
+  const { properties, ...request } = data as Record<string, unknown> & {
+    properties: { name: string; checklist_template: unknown[] };
+  };
+  return {
+    ...(request as unknown as CleaningRequest),
+    property: {
+      name: properties.name,
+      checklist_template: properties.checklist_template ?? [],
+    },
+  };
+}

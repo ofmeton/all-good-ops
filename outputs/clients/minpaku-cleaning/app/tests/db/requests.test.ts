@@ -5,6 +5,13 @@ import {
   createRequest,
   updateRequest,
   cancelRequest,
+  claimRequest,
+  assignRequest,
+  startRequest,
+  confirmRequest,
+  listRequestsForStaff,
+  getRequestForStaff,
+  RequestAlreadyClaimedError,
 } from "@/lib/db/requests";
 import { createServiceClient } from "@/lib/supabase-server";
 import { resetDb } from "../helpers/reset-db";
@@ -123,5 +130,109 @@ describe("cleaning_requests データアクセス（管理者CRUD）", () => {
     await cancelRequest(admin, created.id);
     const fetched = await getRequest(admin, created.id);
     expect(fetched?.status).toBe("cancelled");
+  });
+});
+
+describe("cleaning_requests 割当・進行遷移", () => {
+  // 担当スタッフ付きの依頼を1件作るヘルパー
+  async function seedAssignedStaffAndRequest() {
+    const { data: st } = await db.from("staff").insert({ name: "スタッフX" }).select().single();
+    await db.from("staff_assignments").insert({ staff_id: st!.id, property_id: propertyId });
+    const req = await createRequest(admin, {
+      property_id: propertyId,
+      checkin_date: dateStr(3),
+      checkout_date: dateStr(5),
+      guest_count: 2,
+    });
+    return { staffId: st!.id as string, requestId: req.id };
+  }
+
+  it("担当スタッフは未割当の依頼を承認できる（early claim）", async () => {
+    const { staffId, requestId } = await seedAssignedStaffAndRequest();
+    const staffActor: Actor = { role: "staff", staffId };
+    await claimRequest(staffActor, requestId);
+    const req = await getRequest(admin, requestId);
+    expect(req?.status).toBe("assigned");
+    expect(req?.assigned_staff_id).toBe(staffId);
+  });
+
+  it("既に割当済みの依頼を承認すると RequestAlreadyClaimedError", async () => {
+    const { staffId, requestId } = await seedAssignedStaffAndRequest();
+    const staffActor: Actor = { role: "staff", staffId };
+    await claimRequest(staffActor, requestId);
+    // 別スタッフも同物件担当にして二重承認を試みる
+    const { data: st2 } = await db.from("staff").insert({ name: "スタッフY" }).select().single();
+    await db.from("staff_assignments").insert({ staff_id: st2!.id, property_id: propertyId });
+    await expect(
+      claimRequest({ role: "staff", staffId: st2!.id }, requestId),
+    ).rejects.toThrow(RequestAlreadyClaimedError);
+  });
+
+  it("担当外スタッフは承認できない", async () => {
+    const { requestId } = await seedAssignedStaffAndRequest();
+    const { data: outsider } = await db.from("staff").insert({ name: "担当外" }).select().single();
+    await expect(
+      claimRequest({ role: "staff", staffId: outsider!.id }, requestId),
+    ).rejects.toThrow("この物件の担当ではありません");
+  });
+
+  it("管理者は手動でスタッフを割り当てられる", async () => {
+    const { staffId, requestId } = await seedAssignedStaffAndRequest();
+    await assignRequest(admin, requestId, staffId);
+    const req = await getRequest(admin, requestId);
+    expect(req?.status).toBe("assigned");
+    expect(req?.assigned_staff_id).toBe(staffId);
+  });
+
+  it("割当→開始→報告（startRequest）の遷移", async () => {
+    const { staffId, requestId } = await seedAssignedStaffAndRequest();
+    const staffActor: Actor = { role: "staff", staffId };
+    await claimRequest(staffActor, requestId);
+    await startRequest(staffActor, requestId);
+    const req = await getRequest(admin, requestId);
+    expect(req?.status).toBe("in_progress");
+  });
+
+  it("未割当の依頼は開始できない（状態機械で拒否）", async () => {
+    const { staffId, requestId } = await seedAssignedStaffAndRequest();
+    await expect(
+      startRequest({ role: "staff", staffId }, requestId),
+    ).rejects.toThrow("自分が担当する依頼ではありません");
+  });
+
+  it("confirmRequest は reported → confirmed に遷移する", async () => {
+    const { staffId, requestId } = await seedAssignedStaffAndRequest();
+    // reported まで進める
+    await db
+      .from("cleaning_requests")
+      .update({ status: "reported", assigned_staff_id: staffId })
+      .eq("id", requestId);
+    await confirmRequest(admin, requestId);
+    const req = await getRequest(admin, requestId);
+    expect(req?.status).toBe("confirmed");
+  });
+
+  it("listRequestsForStaff は担当物件の未割当＋自分の割当分を物件名付きで返す", async () => {
+    const { staffId, requestId } = await seedAssignedStaffAndRequest();
+    const staffActor: Actor = { role: "staff", staffId };
+    const list = await listRequestsForStaff(staffActor);
+    const found = list.find((r) => r.id === requestId);
+    expect(found).toBeTruthy();
+    expect(found?.property_name).toBe("物件A");
+  });
+
+  it("getRequestForStaff は担当物件の依頼を物件名・チェックリスト付きで返す", async () => {
+    const { staffId, requestId } = await seedAssignedStaffAndRequest();
+    const result = await getRequestForStaff({ role: "staff", staffId }, requestId);
+    expect(result?.id).toBe(requestId);
+    expect(result?.property.name).toBe("物件A");
+    expect(Array.isArray(result?.property.checklist_template)).toBe(true);
+  });
+
+  it("getRequestForStaff は担当外物件の依頼に null を返す", async () => {
+    const { requestId } = await seedAssignedStaffAndRequest();
+    const { data: outsider } = await db.from("staff").insert({ name: "担当外2" }).select().single();
+    const result = await getRequestForStaff({ role: "staff", staffId: outsider!.id }, requestId);
+    expect(result).toBeNull();
   });
 });
