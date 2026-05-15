@@ -29,6 +29,7 @@ export type CleaningRequest = {
 
 // 当日割り当て不可: checkin は翌日以降。checkout > checkin。guest_count > 0。
 // current_date を使う CHECK 制約は immutable でないため不可 → アプリ層で検証する。
+// 日付比較は Node ランタイムのローカルタイム前提（本番は TZ=Asia/Tokyo を想定）。
 function validateRequestFields(input: {
   checkin_date: string;
   checkout_date: string;
