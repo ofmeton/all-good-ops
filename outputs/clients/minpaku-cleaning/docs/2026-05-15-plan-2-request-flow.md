@@ -38,7 +38,7 @@ Plan 1 計画書: `outputs/clients/minpaku-cleaning/docs/2026-05-14-plan-1-found
 outputs/clients/minpaku-cleaning/app/
   supabase/migrations/
     0002_request_constraints.sql   cancelled追加・整合性制約・索引・access_tokens部分unique
-    0003_storage_bucket.sql        report-photos バケット作成
+    0004_storage_bucket.sql        report-photos バケット作成
   src/lib/
     status-machine.ts              清掃依頼ステータスの遷移ルール（純粋ロジック）
     storage.ts                     Supabase Storage（写真アップロード・署名URL・削除）
@@ -1186,20 +1186,22 @@ git commit -m "feat: 完了報告データアクセス（cleaning_reports / repo
 完了写真の保存先 Storage バケットを作成し、アップロード・署名URL発行・削除のヘルパーを実装する。
 
 **Files:**
-- Create: `supabase/migrations/0003_storage_bucket.sql`
+- Create: `supabase/migrations/0004_storage_bucket.sql`
 - Create: `src/lib/storage.ts`
 - Test: `tests/lib/storage.test.ts`
 
 - [ ] **Step 1: バケット作成 migration を書く**
 
-`supabase/migrations/0003_storage_bucket.sql`:
+`supabase/migrations/0004_storage_bucket.sql`:
 ```sql
--- 民泊清掃管理アプリ migration 0003: 完了写真用 Storage バケット
+-- 民泊清掃管理アプリ migration 0004: 完了写真用 Storage バケット
 -- 非公開バケット。閲覧は service role 経由の短期署名URLのみ（設計書 8章）。
 insert into storage.buckets (id, name, public)
 values ('report-photos', 'report-photos', false)
 on conflict (id) do nothing;
 ```
+
+> 注: migration 0003 は Task 5 の code review で追加した `cleaning_reports.request_id` の UNIQUE 制約（`0003_report_unique.sql`）。本タスクの Storage バケットは 0004。
 
 - [ ] **Step 2: migration を適用**
 
@@ -1207,7 +1209,7 @@ on conflict (id) do nothing;
 cd outputs/clients/minpaku-cleaning/app
 npx supabase db reset
 ```
-0001→0002→0003 が適用される。エラーなく完了することを確認。
+0001→0002→0003→0004 が適用される。エラーなく完了することを確認。
 
 - [ ] **Step 3: 失敗するテストを書く**
 
@@ -1307,7 +1309,7 @@ Expected: PASS（2 passed）
 
 ```bash
 cd outputs/clients/minpaku-cleaning
-git add app/supabase/migrations/0003_storage_bucket.sql app/src/lib/storage.ts app/tests/lib/storage.test.ts
+git add app/supabase/migrations/0004_storage_bucket.sql app/src/lib/storage.ts app/tests/lib/storage.test.ts
 git commit -m "feat: 完了写真用 Storage バケットとアップロードヘルパー"
 ```
 

@@ -52,6 +52,8 @@ export async function submitReport(
     throw new Error("清掃中の依頼のみ完了報告できます");
   }
 
+  // TODO(Plan 3): 3段書き込み（report → photos → status更新）をRPC/トランザクション化。
+  // 現状はスタッフアプリの低並行前提で逐次実行。失敗時の部分状態リスクは許容。
   const { data: report, error } = await db
     .from("cleaning_reports")
     .insert({
