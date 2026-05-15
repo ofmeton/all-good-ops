@@ -172,3 +172,31 @@ def submit_one(
     return SubmitResult(
         job.job_id, job.platform_prefix, job.title, outcome, detail, proc.returncode
     )
+
+
+def mark_unable_to_submit(db_path, job_id: str, reason: str) -> None:
+    """送信失敗ジョブを status='unable_to_submit' に更新し status_history に記録する。
+
+    job_id が存在しない場合は何もしない（no-op）。
+    """
+    conn = sqlite3.connect(db_path)
+    try:
+        row = conn.execute(
+            "SELECT status FROM jobs WHERE job_id = ?", (job_id,)
+        ).fetchone()
+        if row is None:
+            return
+        from_status = row[0]
+        conn.execute(
+            "UPDATE jobs SET status = 'unable_to_submit', updated_at = datetime('now') "
+            "WHERE job_id = ?",
+            (job_id,),
+        )
+        conn.execute(
+            "INSERT INTO status_history (job_id, from_status, to_status, changed_by, note) "
+            "VALUES (?, ?, 'unable_to_submit', 'auto', ?)",
+            (job_id, from_status, f"auto-submit failed: {reason}"),
+        )
+        conn.commit()
+    finally:
+        conn.close()

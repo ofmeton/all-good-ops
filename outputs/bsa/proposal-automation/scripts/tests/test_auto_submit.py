@@ -220,3 +220,35 @@ def test_submit_one_unsupported_prefix(tmp_path):
     assert result.outcome == "failed"
     assert result.exit_code is None
     assert "XX" in result.reason  # "unsupported platform prefix: XX"
+
+
+def test_mark_unable_to_submit(tmp_path):
+    db_path = _make_db(tmp_path)
+    _insert_job(db_path, "LAN-20260515-001", "LAN", 80, "proposing")
+
+    auto_submit.mark_unable_to_submit(db_path, "LAN-20260515-001", "submit failed (exit 5)")
+
+    conn = sqlite3.connect(db_path)
+    try:
+        status = conn.execute(
+            "SELECT status FROM jobs WHERE job_id = ?", ("LAN-20260515-001",)
+        ).fetchone()[0]
+        hist = conn.execute(
+            "SELECT from_status, to_status, changed_by, note FROM status_history "
+            "WHERE job_id = ?",
+            ("LAN-20260515-001",),
+        ).fetchone()
+    finally:
+        conn.close()
+
+    assert status == "unable_to_submit"
+    assert hist[0] == "proposing"
+    assert hist[1] == "unable_to_submit"
+    assert hist[2] == "auto"
+    assert "exit 5" in hist[3]
+
+
+def test_mark_unable_to_submit_missing_job_is_noop(tmp_path):
+    db_path = _make_db(tmp_path)
+    # 存在しない job_id でも例外を投げない
+    auto_submit.mark_unable_to_submit(db_path, "LAN-99999999-999", "x")
