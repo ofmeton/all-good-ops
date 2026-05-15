@@ -104,3 +104,41 @@ def test_fetch_eligible_jobs_respects_min_fit_score(tmp_path):
     jobs = auto_submit.fetch_eligible_jobs(db_path, min_fit_score=70)
 
     assert [j.job_id for j in jobs] == ["LAN-20260515-001"]
+
+
+def test_build_command_per_platform():
+    base = Path("/tmp/pa")
+    python = Path("/tmp/venv/bin/python")
+    cmd = auto_submit.build_command("LAN-20260515-001", "LAN", python, base)
+    assert cmd == [
+        "/tmp/venv/bin/python",
+        "/tmp/pa/scripts/lib/_lancers_form_fill.py",
+        "--job-id",
+        "LAN-20260515-001",
+        "--no-keep-open",
+    ]
+    cw = auto_submit.build_command("CW-20260515-001", "CW", python, base)
+    assert cw[1] == "/tmp/pa/scripts/lib/_crowdworks_form_fill.py"
+    cn = auto_submit.build_command("CN-20260515-001", "CN", python, base)
+    assert cn[1] == "/tmp/pa/scripts/lib/_coconala_form_fill.py"
+
+
+def test_build_command_rejects_unknown_prefix():
+    import pytest
+
+    with pytest.raises(ValueError):
+        auto_submit.build_command("XX-1", "XX", Path("/p"), Path("/b"))
+
+
+def test_classify_exit():
+    assert auto_submit.classify_exit(0)[0] == "submitted"
+    assert auto_submit.classify_exit(1)[0] == "blocked"
+    assert auto_submit.classify_exit(2)[0] == "blocked"
+    assert auto_submit.classify_exit(3)[0] == "failed"
+    assert auto_submit.classify_exit(4)[0] == "failed"
+    assert auto_submit.classify_exit(5)[0] == "failed"
+    assert auto_submit.classify_exit(99)[0] == "failed"
+    # None = タイムアウト
+    out, reason = auto_submit.classify_exit(None)
+    assert out == "failed"
+    assert "timeout" in reason.lower()
