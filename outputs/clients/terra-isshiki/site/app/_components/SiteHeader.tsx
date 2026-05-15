@@ -47,6 +47,9 @@ export function SiteHeader({
     ? "absolute inset-x-0 top-0 z-20"
     : "sticky top-0 z-40 bg-(--color-base-light)/95 backdrop-blur-[6px] border-b border-(--color-base-dark)/8";
   const burgerBar = isHero ? "bg-(--color-base-light)" : "bg-(--color-base-dark)";
+  const reserveCls = isHero
+    ? "border border-(--color-base-light)/35 text-(--color-base-light) hover:bg-(--color-base-light)/10"
+    : "bg-(--color-base-dark) text-(--color-base-light) hover:bg-(--color-base-dark)/85";
 
   return (
     <>
@@ -70,49 +73,62 @@ export function SiteHeader({
           </span>
         </Link>
 
-        <nav
-          className="hidden md:block fade-up"
-          style={{ animationDelay: `${delayBase + 0.25}s` }}
-        >
-          <ul
-            className={`flex items-center gap-[clamp(22px,2.03vw,52px)] font-garamond text-[14px] md:text-[clamp(15px,1.02vw,26px)] tracking-[0.22em] uppercase ${textColor}`}
+        <div className="flex items-start gap-[clamp(20px,1.95vw,48px)]">
+          <nav
+            className="hidden md:block fade-up"
+            style={{ animationDelay: `${delayBase + 0.25}s` }}
           >
-            {NAV.map((item) => {
-              const active = current === item.label;
-              return (
-                <li key={item.label} className="group">
-                  <Link
-                    href={item.href}
-                    className="relative inline-block py-2"
-                    aria-current={active ? "page" : undefined}
-                  >
-                    {item.label}
-                    <span
-                      className={`pointer-events-none absolute bottom-0 left-0 h-px ${
-                        active ? "w-full" : "w-0"
-                      } ${navUnderline} transition-[width] duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:w-full`}
-                    />
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
+            <ul
+              className={`flex items-center gap-[clamp(22px,2.03vw,52px)] font-garamond text-[14px] md:text-[clamp(15px,1.02vw,26px)] tracking-[0.22em] uppercase ${textColor}`}
+            >
+              {NAV.map((item) => {
+                const active = current === item.label;
+                return (
+                  <li key={item.label} className="group">
+                    <Link
+                      href={item.href}
+                      className="relative inline-block py-2"
+                      aria-current={active ? "page" : undefined}
+                    >
+                      {item.label}
+                      <span
+                        className={`pointer-events-none absolute bottom-0 left-0 h-px ${
+                          active ? "w-full" : "w-0"
+                        } ${navUnderline} transition-[width] duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:w-full`}
+                      />
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
 
-        <button
-          type="button"
-          aria-label="メニューを開く"
-          aria-expanded={open}
-          onClick={() => setOpen(true)}
-          className="md:hidden flex h-10 w-10 items-center justify-center fade-up"
-          style={{ animationDelay: `${delayBase + 0.25}s` }}
-        >
-          <span className={`block h-px w-7 ${burgerBar} relative`}>
-            <span className={`absolute -top-2 left-0 block h-px w-7 ${burgerBar}`} />
-            <span className={`absolute top-2 left-0 block h-px w-5 ${burgerBar}`} />
-          </span>
-          <span className="sr-only">メニューを開く</span>
-        </button>
+          <a
+            href={AIRBNB_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`hidden md:inline-flex items-center gap-2.5 font-garamond text-[12px] md:text-[clamp(12px,0.7vw,18px)] tracking-[0.32em] uppercase px-5 py-2.5 md:px-[clamp(16px,1.25vw,32px)] md:py-[clamp(8px,0.62vw,16px)] transition-colors fade-up ${reserveCls}`}
+            style={{ animationDelay: `${delayBase + 0.4}s` }}
+          >
+            <span>Reserve</span>
+            <span aria-hidden>↗</span>
+          </a>
+
+          <button
+            type="button"
+            aria-label="メニューを開く"
+            aria-expanded={open}
+            onClick={() => setOpen(true)}
+            className="md:hidden flex h-10 w-10 items-center justify-center fade-up"
+            style={{ animationDelay: `${delayBase + 0.25}s` }}
+          >
+            <span className={`block h-px w-7 ${burgerBar} relative`}>
+              <span className={`absolute -top-2 left-0 block h-px w-7 ${burgerBar}`} />
+              <span className={`absolute top-2 left-0 block h-px w-5 ${burgerBar}`} />
+            </span>
+            <span className="sr-only">メニューを開く</span>
+          </button>
+        </div>
       </header>
 
       {/* Mobile drawer */}

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { SiteHeader } from "../_components/SiteHeader";
+import { ReservationCTA } from "../_components/ReservationCTA";
 
 export const metadata = {
   title: "Stay",
@@ -162,6 +163,8 @@ export default function StayPage() {
           })}
         </div>
       </section>
+
+      <ReservationCTA tone="dark" />
 
       {/* Next link */}
       <section className="border-t border-(--color-base-dark)/10 px-6 py-20 md:px-12 md:py-28 text-center">

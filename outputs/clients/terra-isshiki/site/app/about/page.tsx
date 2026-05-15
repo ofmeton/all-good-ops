@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { SiteHeader } from "../_components/SiteHeader";
+import { ReservationCTA } from "../_components/ReservationCTA";
 
 export const metadata = {
   title: "About",
@@ -131,6 +132,8 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
+
+      <ReservationCTA tone="dark" />
 
       {/* Footer link teaser */}
       <section className="border-t border-(--color-base-dark)/10 px-6 py-20 md:px-12 md:py-28 text-center">
