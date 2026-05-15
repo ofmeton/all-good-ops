@@ -10,11 +10,35 @@ import { spawn } from 'node:child_process';
 import Database from 'better-sqlite3';
 import { homedir } from 'node:os';
 import { join } from 'node:path';
+import { existsSync, readFileSync } from 'node:fs';
 
 const DB_PATH = join(
   homedir(),
   'Library/Application Support/bsa-pa/data.db'
 );
+
+const AUTO_SUBMIT_RESULT_PATH = join(
+  homedir(),
+  'Library/Application Support/bsa-pa/auto-submit-result.json'
+);
+
+interface AutoSubmitEntry {
+  job_id: string;
+  platform: string;
+  title: string;
+  reason: string;
+  exit_code: number | null;
+}
+
+interface AutoSubmitResult {
+  started_at: string;
+  ended_at: string;
+  eligible_count: number;
+  needs_attention: boolean;
+  submitted: AutoSubmitEntry[];
+  failed: AutoSubmitEntry[];
+  skipped: AutoSubmitEntry[];
+}
 
 interface ProposalRow {
   job_id: string;
@@ -80,6 +104,50 @@ function buildBody(summary: DailySummary): string {
   return lines.join('\n');
 }
 
+function readAutoSubmitResult(): AutoSubmitResult | null {
+  if (!existsSync(AUTO_SUBMIT_RESULT_PATH)) return null;
+  try {
+    return JSON.parse(
+      readFileSync(AUTO_SUBMIT_RESULT_PATH, 'utf-8')
+    ) as AutoSubmitResult;
+  } catch {
+    return null;
+  }
+}
+
+function buildAutoSubmitSection(r: AutoSubmitResult): string {
+  const lines = [
+    '',
+    '## 自動送信結果',
+    '',
+    `対象 ${r.eligible_count} 件 / 送信成功 ${r.submitted.length} 件 / ` +
+      `失敗 ${r.failed.length} 件 / スキップ ${r.skipped.length} 件`,
+    '',
+  ];
+  if (r.submitted.length) {
+    lines.push('### 送信成功');
+    r.submitted.forEach((e) =>
+      lines.push(`- [${e.platform}] ${e.job_id} ${e.title}`)
+    );
+    lines.push('');
+  }
+  if (r.failed.length) {
+    lines.push('### ❌ 送信失敗（unable_to_submit に記録・要レビュー）');
+    r.failed.forEach((e) =>
+      lines.push(`- [${e.platform}] ${e.job_id} ${e.title} — ${e.reason}`)
+    );
+    lines.push('');
+  }
+  if (r.skipped.length) {
+    lines.push('### ⏭ スキップ（ログイン切れ等・proposing のまま据え置き）');
+    r.skipped.forEach((e) =>
+      lines.push(`- [${e.platform}] ${e.job_id} ${e.title} — ${e.reason}`)
+    );
+    lines.push('');
+  }
+  return lines.join('\n');
+}
+
 async function sendViaClaudeMcp(
   subject: string,
   body: string,
@@ -140,9 +208,23 @@ async function main(): Promise<number> {
   const db = new Database(DB_PATH, { readonly: true });
   try {
     const summary = buildSummary(db);
-    const subject = `[BSA] ${summary.date} 朝の収集レポート (${summary.proposals.length}件提案準備完了)`;
-    const body = buildBody(summary);
+    let subject = `[BSA] ${summary.date} 朝の収集レポート (${summary.proposals.length}件提案準備完了)`;
+    let body = buildBody(summary);
+
+    const autoResult = readAutoSubmitResult();
+    if (autoResult) {
+      body += '\n' + buildAutoSubmitSection(autoResult);
+      const attn = autoResult.needs_attention ? ' ⚠️要対応あり' : '';
+      subject =
+        `[BSA] ${summary.date} 収集・自動送信レポート ` +
+        `(送信${autoResult.submitted.length}件${attn})`;
+    }
+
     const to = process.env.BSA_GMAIL_TO ?? 'off.me.ton@gmail.com';
+    if (process.env.BSA_NOTIFIER_DRY_RUN === '1') {
+      console.log(`--- DRY RUN (送信しません) ---\nTo: ${to}\nSubject: ${subject}\n\n${body}`);
+      return 0;
+    }
     await sendViaClaudeMcp(subject, body, to);
     console.log(`✅ Gmail 送信完了 → ${to}`);
     return 0;
