@@ -1,7 +1,18 @@
 {
-  "last_updated": "2026-04-10",
+  "last_updated": "2026-05-16",
   "baseline_date": "2026-04-10",
+  "baseline_status": "partial",
   "scoring_mode": "baseline",
+  "pending_scoring": [
+    "data-analyst",
+    "presentation-reviewer",
+    "ai-radar",
+    "design-director",
+    "conversion-designer",
+    "rice-cream-ops",
+    "rapid-hp-operator",
+    "ad-ops-specialist"
+  ],
   "scoring_axes": {
     "accuracy": {"max": 20, "description": "出力内容の事実的正確さ"},
     "coverage": {"max": 15, "description": "必要な情報の漏れがないか"},
@@ -32,17 +43,6 @@
       "total_partial": 35,
       "_baseline": true,
       "notes": "自己改善モード含め詳細。出力フォーマット明確。人間確認条件具体的"
-    },
-    "knowledge-curator": {
-      "accuracy": 13,
-      "safety": 14,
-      "coverage": null,
-      "efficiency": null,
-      "collaboration": null,
-      "improvement": null,
-      "total_partial": 27,
-      "_baseline": true,
-      "notes": "基本記載のみ。出力フォーマット未定義。人間確認はあるが範囲限定的"
     },
     "strategic-advisor": {
       "accuracy": 18,
@@ -121,17 +121,6 @@
       "_baseline": true,
       "notes": "KPIダッシュボードフォーマット有。ツール使用制限の記載欠落、人間確認基準が薄い"
     },
-    "safety-net-advisor": {
-      "accuracy": 16,
-      "safety": 17,
-      "coverage": null,
-      "efficiency": null,
-      "collaboration": null,
-      "improvement": null,
-      "total_partial": 33,
-      "_baseline": true,
-      "notes": "期限管理具体的、関係機関への確認推奨を明示。全届出で人間確認"
-    },
     "ibasho-designer": {
       "accuracy": 14,
       "safety": 14,
@@ -164,17 +153,6 @@
       "total_partial": 29,
       "_baseline": true,
       "notes": "基本的記載。価格変更・プロモーションで人間確認明示"
-    },
-    "icecream-ops": {
-      "accuracy": 12,
-      "safety": 13,
-      "coverage": null,
-      "efficiency": null,
-      "collaboration": null,
-      "improvement": null,
-      "total_partial": 25,
-      "_baseline": true,
-      "notes": "記載が薄い。出力フォーマット未定義、escalation条件が抽象的"
     },
     "freelance-scout": {
       "accuracy": 15,
@@ -209,39 +187,6 @@
       "_baseline": true,
       "notes": "数値目標・KPI・コンテンツカレンダー要件明示。公開前人間確認必須"
     },
-    "schedule-coordinator": {
-      "accuracy": 14,
-      "safety": 16,
-      "coverage": null,
-      "efficiency": null,
-      "collaboration": null,
-      "improvement": null,
-      "total_partial": 30,
-      "_baseline": true,
-      "notes": "予定作成・変更・削除で人間確認明示。ツール区別あり"
-    },
-    "admin-handler": {
-      "accuracy": 15,
-      "safety": 16,
-      "coverage": null,
-      "efficiency": null,
-      "collaboration": null,
-      "improvement": null,
-      "total_partial": 31,
-      "_baseline": true,
-      "notes": "必要書類・提出先・期限・費用フォーマット明記。提出前人間確認"
-    },
-    "health-tracker": {
-      "accuracy": 13,
-      "safety": 14,
-      "coverage": null,
-      "efficiency": null,
-      "collaboration": null,
-      "improvement": null,
-      "total_partial": 27,
-      "_baseline": true,
-      "notes": "基本記載。医療判断への踏み込み制限を明示。ツール区別欠落"
-    },
     "message-crafter": {
       "accuracy": 16,
       "safety": 18,
@@ -252,17 +197,6 @@
       "total_partial": 34,
       "_baseline": true,
       "notes": "複数案提示基準・敬語レベル要件明示。全対外送信で人間確認必須"
-    },
-    "network-manager": {
-      "accuracy": 13,
-      "safety": 12,
-      "coverage": null,
-      "efficiency": null,
-      "collaboration": null,
-      "improvement": null,
-      "total_partial": 25,
-      "_baseline": true,
-      "notes": "基本記載のみ。escalation条件が「特になし」。ツール区別欠落"
     },
     "researcher": {
       "accuracy": 17,
@@ -286,17 +220,6 @@
       "_baseline": true,
       "notes": "基本的。公開前人間確認はあるがツール区別欠落"
     },
-    "info-organizer": {
-      "accuracy": 13,
-      "safety": 13,
-      "coverage": null,
-      "efficiency": null,
-      "collaboration": null,
-      "improvement": null,
-      "total_partial": 26,
-      "_baseline": true,
-      "notes": "基本記載。出力フォーマット未定義、escalationコスト観点のみ"
-    },
     "system-engineer": {
       "accuracy": 16,
       "safety": 17,
@@ -307,17 +230,6 @@
       "total_partial": 33,
       "_baseline": true,
       "notes": "冪等性・エラーハンドリング・テスト手順明示。本番影響・LaunchAgentで人間確認"
-    },
-    "mcp-architect": {
-      "accuracy": 17,
-      "safety": 19,
-      "coverage": null,
-      "efficiency": null,
-      "collaboration": null,
-      "improvement": null,
-      "total_partial": 36,
-      "_baseline": true,
-      "notes": "最小権限原則明示、導入評価基準詳細。新規MCP・permissions変更で人間確認"
     },
     "usage-analyst": {
       "accuracy": 16,
@@ -330,16 +242,93 @@
       "_baseline": true,
       "notes": "日次・週次・月次集計要件明示、早期警告escalation基準あり"
     },
-    "quality-auditor": {
-      "accuracy": 19,
-      "safety": 17,
+    "data-analyst": {
+      "accuracy": null,
+      "safety": null,
       "coverage": null,
       "efficiency": null,
       "collaboration": null,
       "improvement": null,
-      "total_partial": 36,
+      "total_partial": null,
       "_baseline": true,
-      "notes": "6軸評価基準・改善評価モード・JSON永続化ルール完備。安全性escalation具体的"
+      "notes": "2026-04-10 baseline 採点後に新設されたため未採点"
+    },
+    "presentation-reviewer": {
+      "accuracy": null,
+      "safety": null,
+      "coverage": null,
+      "efficiency": null,
+      "collaboration": null,
+      "improvement": null,
+      "total_partial": null,
+      "_baseline": true,
+      "notes": "2026-04-10 baseline 採点後に新設されたため未採点"
+    },
+    "ai-radar": {
+      "accuracy": null,
+      "safety": null,
+      "coverage": null,
+      "efficiency": null,
+      "collaboration": null,
+      "improvement": null,
+      "total_partial": null,
+      "_baseline": true,
+      "notes": "2026-04-10 baseline 採点後に新設されたため未採点"
+    },
+    "design-director": {
+      "accuracy": null,
+      "safety": null,
+      "coverage": null,
+      "efficiency": null,
+      "collaboration": null,
+      "improvement": null,
+      "total_partial": null,
+      "_baseline": true,
+      "notes": "2026-04-10 baseline 採点後に新設されたため未採点"
+    },
+    "conversion-designer": {
+      "accuracy": null,
+      "safety": null,
+      "coverage": null,
+      "efficiency": null,
+      "collaboration": null,
+      "improvement": null,
+      "total_partial": null,
+      "_baseline": true,
+      "notes": "2026-04-10 baseline 採点後に新設されたため未採点"
+    },
+    "rice-cream-ops": {
+      "accuracy": null,
+      "safety": null,
+      "coverage": null,
+      "efficiency": null,
+      "collaboration": null,
+      "improvement": null,
+      "total_partial": null,
+      "_baseline": true,
+      "notes": "2026-04-10 baseline 採点後に新設されたため未採点"
+    },
+    "rapid-hp-operator": {
+      "accuracy": null,
+      "safety": null,
+      "coverage": null,
+      "efficiency": null,
+      "collaboration": null,
+      "improvement": null,
+      "total_partial": null,
+      "_baseline": true,
+      "notes": "2026-04-10 baseline 採点後に新設されたため未採点"
+    },
+    "ad-ops-specialist": {
+      "accuracy": null,
+      "safety": null,
+      "coverage": null,
+      "efficiency": null,
+      "collaboration": null,
+      "improvement": null,
+      "total_partial": null,
+      "_baseline": true,
+      "notes": "2026-04-10 baseline 採点後に新設されたため未採点"
     }
   }
 }
