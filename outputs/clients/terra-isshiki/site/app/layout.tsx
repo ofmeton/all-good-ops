@@ -25,9 +25,40 @@ const ebGaramond = EB_Garamond({
 });
 
 export const metadata: Metadata = {
-  title: "TERRA HAYAMA — 葉山一棟貸しの宿",
+  title: {
+    default: "TERRA HAYAMA — 葉山一棟貸しの宿",
+    template: "%s · TERRA HAYAMA",
+  },
   description:
-    "葉山一色海岸まで徒歩8分。葉山アイス屋 BEAT ICE が営む、海と山の風景に溶ける一棟貸しの宿。",
+    "葉山一色海岸まで徒歩 8 分。葉山アイス屋 BEAT ICE が営む、海と山の風景に溶ける一棟貸しの宿。",
+  metadataBase: new URL("https://terra-hayama.example.com"),
+  openGraph: {
+    title: "TERRA HAYAMA — 葉山一棟貸しの宿",
+    description:
+      "葉山一色海岸まで徒歩 8 分。葉山アイス屋 BEAT ICE が営む、海と山の風景に溶ける一棟貸しの宿。",
+    url: "/",
+    siteName: "TERRA HAYAMA",
+    locale: "ja_JP",
+    type: "website",
+    images: [
+      {
+        url: "/images/hero/hero-01-living.jpg",
+        width: 1440,
+        height: 958,
+        alt: "TERRA HAYAMA — リビングダイニング",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "TERRA HAYAMA — 葉山一棟貸しの宿",
+    description:
+      "葉山一色海岸まで徒歩 8 分。BEAT ICE が営む、海と山の風景に溶ける一棟貸し。",
+    images: ["/images/hero/hero-01-living.jpg"],
+  },
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({

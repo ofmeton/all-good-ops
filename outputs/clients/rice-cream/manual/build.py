@@ -29,3 +29,21 @@ def draw_header(img: Image.Image, phase: str, index: str) -> None:
     bbox = draw.textbbox((0, 0), index, font=font)
     iw = bbox[2] - bbox[0]
     draw.text((CANVAS_W - 32 - iw, 14), index, fill=COLOR_HEADER_TEXT, font=font)
+
+
+PHOTO_TOP = HEADER_H  # 60
+PHOTO_BOTTOM = 1360  # 文字領域上端
+PHOTO_AREA_H = PHOTO_BOTTOM - PHOTO_TOP  # 1300
+COLOR_PHOTO_BG = (240, 240, 240)
+
+
+def paste_photo(canvas: Image.Image, photo_path: str) -> None:
+    """写真を写真領域(1080x1300)に letterbox 配置（余白は薄グレー）。"""
+    draw = ImageDraw.Draw(canvas)
+    draw.rectangle([0, PHOTO_TOP, CANVAS_W, PHOTO_BOTTOM], fill=COLOR_PHOTO_BG)
+    photo = Image.open(photo_path).convert("RGB")
+    photo.thumbnail((CANVAS_W, PHOTO_AREA_H), Image.LANCZOS)
+    pw, ph = photo.size
+    x = (CANVAS_W - pw) // 2
+    y = PHOTO_TOP + (PHOTO_AREA_H - ph) // 2
+    canvas.paste(photo, (x, y))
