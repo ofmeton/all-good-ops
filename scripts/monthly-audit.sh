@@ -15,7 +15,54 @@ log() {
   echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" | tee -a "$LOG_FILE"
 }
 
+# scores と現存エージェント定義の整合性チェック（読み取り専用・既存挙動を変更しない）
+# 結果は logs/audit-integrity-YYYYMMDD.log に書き出し、グローバル変数に件数を残す
+INTEGRITY_MISSING=0
+INTEGRITY_EXTRA=0
+check_scores_integrity() {
+  local integrity_log="${LOG_DIR}/audit-integrity-$(date +%Y%m%d).log"
+  local scores_file="${PROJECT_DIR}/data/quality-scores.json"
+  local agents_dir="${PROJECT_DIR}/.claude/agents"
+
+  if [ ! -f "$scores_file" ] || [ ! -d "$agents_dir" ]; then
+    log "WARN: scores 整合性チェック対象が見つからない（scores=$scores_file, agents=$agents_dir）"
+    return 0
+  fi
+
+  if ! command -v jq &> /dev/null; then
+    log "WARN: jq が無いため scores 整合性チェックをスキップ"
+    return 0
+  fi
+
+  local existing scored
+  existing=$(find "$agents_dir" -name '*.md' -type f -exec basename {} .md \; | sort -u)
+  scored=$(jq -r '.scores | keys[]' "$scores_file" | sort -u)
+
+  local missing extra
+  missing=$(comm -23 <(echo "$existing") <(echo "$scored"))
+  extra=$(comm -13 <(echo "$existing") <(echo "$scored"))
+
+  INTEGRITY_MISSING=$(echo -n "$missing" | grep -c . || true)
+  INTEGRITY_EXTRA=$(echo -n "$extra" | grep -c . || true)
+
+  {
+    echo "# scores 整合性チェック $(date '+%Y-%m-%d %H:%M:%S')"
+    echo "## missing_in_scores（現存エージェントだが scores に未登録）: ${INTEGRITY_MISSING}"
+    echo "$missing"
+    echo "## extra_in_scores（scores にあるが現存しないエージェント）: ${INTEGRITY_EXTRA}"
+    echo "$extra"
+  } > "$integrity_log"
+
+  if [ "$INTEGRITY_MISSING" -gt 0 ] || [ "$INTEGRITY_EXTRA" -gt 0 ]; then
+    log "WARN: scores 整合性に乖離あり (missing=${INTEGRITY_MISSING}, extra=${INTEGRITY_EXTRA}) → ${integrity_log}"
+  else
+    log "scores 整合性 OK (missing=0, extra=0)"
+  fi
+}
+
 log "=== 月次監査開始 ==="
+
+check_scores_integrity
 
 if ! command -v claude &> /dev/null; then
   log "ERROR: claude コマンドが見つかりません"
@@ -77,7 +124,7 @@ else
 fi
 
 cat >> "${PROJECT_DIR}/data/usage-log.jsonl" << EOF
-{"timestamp":"$(date -u +%Y-%m-%dT%H:%M:%SZ)","session_type":"monthly-audit","cost_tier":"standard","agents_invoked":["secretary","quality-auditor","usage-analyst","org-designer"],"skills_referenced":["cost-control"],"exit_code":${EXIT_CODE}}
+{"timestamp":"$(date -u +%Y-%m-%dT%H:%M:%SZ)","session_type":"monthly-audit","cost_tier":"standard","agents_invoked":["secretary","quality-auditor","usage-analyst","org-designer"],"skills_referenced":["cost-control"],"exit_code":${EXIT_CODE},"integrity_check":{"missing":${INTEGRITY_MISSING},"extra":${INTEGRITY_EXTRA}}}
 EOF
 
 log "=== ログ: ${LOG_FILE} ==="
