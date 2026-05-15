@@ -29,7 +29,7 @@ def draw_header(img: Image.Image, phase: str, index: str) -> None:
     """画面最上部に暗色帯＋フェーズ名（左）と連番（右）を描く。"""
     draw = ImageDraw.Draw(img)
     draw.rectangle([0, 0, CANVAS_W, HEADER_H], fill=COLOR_DARK)
-    font = ImageFont.truetype(FONT_HEAVY, 28)
+    font = ImageFont.truetype(FONT_HEAVY, FONT_SIZE_HEADER)
     draw.text((32, 14), phase, fill=COLOR_HEADER_TEXT, font=font)
     bbox = draw.textbbox((0, 0), index, font=font)
     iw = bbox[2] - bbox[0]
@@ -85,8 +85,8 @@ def _wrap_text(text: str, font: ImageFont.FreeTypeFont, max_w: int) -> list[str]
 def draw_text_block(canvas: Image.Image, heading: str, body: str) -> None:
     """文字領域に見出し+本文を描く。"""
     draw = ImageDraw.Draw(canvas)
-    f_heading = ImageFont.truetype(FONT_HEAVY, 72)
-    f_body = ImageFont.truetype(FONT_REG, 48)
+    f_heading = ImageFont.truetype(FONT_HEAVY, FONT_SIZE_H1)
+    f_body = ImageFont.truetype(FONT_REG, FONT_SIZE_BODY)
     max_w = CANVAS_W - MARGIN_X * 2
 
     y = TEXT_TOP + 32
@@ -98,6 +98,13 @@ def draw_text_block(canvas: Image.Image, heading: str, body: str) -> None:
         draw.text((MARGIN_X, y), line, fill=COLOR_TEXT, font=f_body)
         y += 60
 
+
+FONT_SIZE_HEADER = 28
+FONT_SIZE_H1 = 72
+FONT_SIZE_BODY = 48
+FONT_SIZE_BAND = 40
+FONT_SIZE_H1_SOLO = 110
+FONT_SIZE_BODY_SOLO = 60
 
 BAND_H = 90
 COLOR_RED = (200, 50, 50)
@@ -114,12 +121,12 @@ def draw_note_band(canvas: Image.Image, kind: str, text: str) -> None:
     draw = ImageDraw.Draw(canvas)
     band_top = CANVAS_H - BAND_H
     draw.rectangle([0, band_top, CANVAS_W, CANVAS_H], fill=color)
-    f = ImageFont.truetype(FONT_HEAVY, 40)
+    f = ImageFont.truetype(FONT_HEAVY, FONT_SIZE_BAND)
     prefix = "⚠ " if kind == "note" else "ℹ "
     msg = prefix + text
     max_w = CANVAS_W - MARGIN_X * 2
     lines = _wrap_text(msg, f, max_w)
-    y = band_top + (BAND_H - len(lines) * 48) // 2
+    y = max(band_top + 4, band_top + (BAND_H - len(lines) * 48) // 2)
     for line in lines:
         draw.text((MARGIN_X, y), line, fill=COLOR_BAND_TEXT, font=f)
         y += 48
@@ -128,8 +135,8 @@ def draw_note_band(canvas: Image.Image, kind: str, text: str) -> None:
 def draw_text_only(canvas: Image.Image, heading: str, body: str) -> None:
     """写真なしスライド。写真領域+文字領域をすべて文字に使う。"""
     draw = ImageDraw.Draw(canvas)
-    f_heading = ImageFont.truetype(FONT_HEAVY, 110)
-    f_body = ImageFont.truetype(FONT_REG, 60)
+    f_heading = ImageFont.truetype(FONT_HEAVY, FONT_SIZE_H1_SOLO)
+    f_body = ImageFont.truetype(FONT_REG, FONT_SIZE_BODY_SOLO)
     max_w = CANVAS_W - MARGIN_X * 2
 
     h_lines = _wrap_text(heading, f_heading, max_w)

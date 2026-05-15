@@ -109,3 +109,29 @@ def test_render_slide_text_only():
     }
     img = build.render_slide(slide)
     assert img.size == (1080, 1920)
+
+
+def test_wrap_text_basic():
+    from PIL import ImageFont
+    font = ImageFont.truetype(build.FONT_HEAVY, 72)
+    # Short string: no wrap
+    assert build._wrap_text("短い", font, 1000) == ["短い"]
+    # Long string: wraps
+    lines = build._wrap_text("あ" * 100, font, 200)
+    assert len(lines) > 1
+    # Explicit newline: splits
+    assert build._wrap_text("A\nB", font, 1000) == ["A", "B"]
+
+
+def test_render_slide_with_info_band():
+    slide = {
+        "id": "open-x",
+        "phase": "開店準備",
+        "index": "1 / 1",
+        "photo": None,
+        "heading": "補足あり",
+        "body": "本文",
+        "info": "あれば追加",
+    }
+    img = build.render_slide(slide)
+    assert img.size == (1080, 1920)
