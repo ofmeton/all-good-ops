@@ -350,3 +350,47 @@ def test_run_batch_short_circuits_blocked_platform(tmp_path):
     #   LAN-002 (index 1): blocked_platforms に LAN あり → continue → sleep **なし**
     #   CW-001  (index 2, is_last=True): 実行 → submitted → is_last なので sleep **なし**
     assert len(sleeps) == 1
+
+
+def _sample_batch() -> auto_submit.BatchResult:
+    batch = auto_submit.BatchResult("2026-05-15T09:00:00", "2026-05-15T09:05:00", 3)
+    batch.submitted.append(
+        auto_submit.SubmitResult(
+            "LAN-20260515-001", "LAN", "title A", "submitted", "submitted", 0
+        )
+    )
+    batch.failed.append(
+        auto_submit.SubmitResult(
+            "CW-20260515-001", "CW", "title B", "failed", "submit failed (exit 5)", 5
+        )
+    )
+    batch.skipped.append(
+        auto_submit.SubmitResult(
+            "CN-20260515-001", "CN", "title C", "skipped", "login session expired", 2
+        )
+    )
+    return batch
+
+
+def test_write_result_json(tmp_path):
+    path = tmp_path / "auto-submit-result.json"
+    auto_submit.write_result_json(_sample_batch(), path)
+    data = json.loads(path.read_text(encoding="utf-8"))
+    assert data["eligible_count"] == 3
+    assert data["needs_attention"] is True
+    assert [e["job_id"] for e in data["submitted"]] == ["LAN-20260515-001"]
+    assert data["failed"][0]["reason"] == "submit failed (exit 5)"
+    assert data["skipped"][0]["platform"] == "CN"
+
+
+def test_write_summary_file(tmp_path):
+    path = tmp_path / "auto-submit-summary.txt"
+    auto_submit.write_summary_file(_sample_batch(), path)
+    assert path.read_text(encoding="utf-8").strip() == "1 1 2"
+
+
+def test_write_summary_file_clean_run(tmp_path):
+    path = tmp_path / "auto-submit-summary.txt"
+    clean = auto_submit.BatchResult("2026-05-15T09:00:00", "2026-05-15T09:01:00", 0)
+    auto_submit.write_summary_file(clean, path)
+    assert path.read_text(encoding="utf-8").strip() == "0 0 0"

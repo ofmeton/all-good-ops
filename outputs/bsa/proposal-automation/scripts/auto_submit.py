@@ -265,3 +265,91 @@ def run_batch(
 
     batch.ended_at = now_fn().isoformat(timespec="seconds")
     return batch
+
+
+def _serialize_results(results: list[SubmitResult]) -> list[dict]:
+    return [
+        {
+            "job_id": r.job_id,
+            "platform": r.platform,
+            "title": r.title,
+            "reason": r.reason,
+            "exit_code": r.exit_code,
+        }
+        for r in results
+    ]
+
+
+def write_result_json(batch: BatchResult, path) -> None:
+    """BatchResult を JSON で書き出す（gmail.ts が朝のレポートに同梱する）。"""
+    payload = {
+        "started_at": batch.started_at,
+        "ended_at": batch.ended_at,
+        "eligible_count": batch.eligible_count,
+        "needs_attention": batch.needs_attention,
+        "submitted": _serialize_results(batch.submitted),
+        "failed": _serialize_results(batch.failed),
+        "skipped": _serialize_results(batch.skipped),
+    }
+    Path(path).write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
+
+
+def write_summary_file(batch: BatchResult, path) -> None:
+    """run.command が読む1行サマリ: `<needs_attention> <submitted> <要対応>`。"""
+    needs = 1 if batch.needs_attention else 0
+    attention = len(batch.failed) + len(batch.skipped)
+    Path(path).write_text(
+        f"{needs} {len(batch.submitted)} {attention}\n", encoding="utf-8"
+    )
+
+
+def main() -> int:
+    base_dir = Path(
+        os.environ.get("BSA_PA_BASE", Path(__file__).resolve().parent.parent)
+    )
+    appdata = Path(
+        os.environ.get(
+            "BSA_PA_APPDATA",
+            Path.home() / "Library" / "Application Support" / "bsa-pa",
+        )
+    )
+    db_path = Path(os.environ.get("BSA_PA_DB", appdata / "data.db"))
+    venv = Path(
+        os.environ.get("BSA_PA_VENV", Path.home() / ".venvs" / "bsa-pa")
+    )
+    python_path = venv / "bin" / "python"
+    result_path = appdata / "auto-submit-result.json"
+    summary_path = appdata / "auto-submit-summary.txt"
+
+    jobs = fetch_eligible_jobs(db_path)
+    print(f"📋 自動送信対象: {len(jobs)} 件 (fit_score >= 60)")
+    for j in jobs:
+        print(f"  - {j.job_id} [{j.platform_prefix}] fit={j.fit_score} {j.title[:40]}")
+
+    if not jobs:
+        now = datetime.now().isoformat(timespec="seconds")
+        empty = BatchResult(started_at=now, ended_at=now, eligible_count=0)
+        write_result_json(empty, result_path)
+        write_summary_file(empty, summary_path)
+        print("送信対象なし。終了します。")
+        return 0
+
+    batch = run_batch(
+        jobs, python_path=python_path, base_dir=base_dir, db_path=db_path
+    )
+    write_result_json(batch, result_path)
+    write_summary_file(batch, summary_path)
+
+    print()
+    print(f"✅ 送信成功: {len(batch.submitted)} 件")
+    print(f"❌ 送信失敗: {len(batch.failed)} 件 (unable_to_submit に更新)")
+    print(f"⏭  スキップ: {len(batch.skipped)} 件 (ログイン切れ等・proposing 据え置き)")
+    print(f"結果ファイル: {result_path}")
+    # 失敗があっても 0 を返す（run.command の後続ステージを止めない）。
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
