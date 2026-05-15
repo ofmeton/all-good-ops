@@ -176,6 +176,7 @@ def test_submit_one_success(tmp_path):
     )
     assert result.outcome == "submitted"
     assert result.exit_code == 0
+    assert result.reason == "submitted"
 
 
 def test_submit_one_blocked_on_login(tmp_path):
@@ -207,3 +208,15 @@ def test_submit_one_timeout(tmp_path):
     assert result.outcome == "failed"
     assert "timeout" in result.reason.lower()
     assert result.exit_code is None
+
+
+def test_submit_one_unsupported_prefix(tmp_path):
+    """build_command が ValueError を投げる未対応 prefix では runner に到達せず failed を返す。"""
+    job = _job("XX-20260515-001", prefix="XX")
+    runner = _runner_returning({})  # 呼ばれない
+    result = auto_submit.submit_one(
+        job, python_path=Path("/p"), base_dir=tmp_path, runner=runner
+    )
+    assert result.outcome == "failed"
+    assert result.exit_code is None
+    assert "XX" in result.reason  # "unsupported platform prefix: XX"
