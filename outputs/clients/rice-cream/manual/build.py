@@ -5,6 +5,11 @@
 
 仕様: docs/superpowers/specs/2026-05-15-rice-cream-manual-design.md
 """
+import argparse
+import sys
+from pathlib import Path
+
+import yaml
 from PIL import Image, ImageDraw, ImageFont
 
 CANVAS_W = 1080
@@ -139,3 +144,49 @@ def draw_text_only(canvas: Image.Image, heading: str, body: str) -> None:
     for line in b_lines:
         draw.text((MARGIN_X, y), line, fill=COLOR_TEXT, font=f_body)
         y += 76
+
+
+def render_slide(slide: dict) -> Image.Image:
+    """スライド定義dict からPNG画像を生成して返す。"""
+    img = make_canvas()
+    draw_header(img, phase=slide["phase"], index=slide["index"])
+
+    if slide.get("photo"):
+        paste_photo(img, slide["photo"])
+        draw_text_block(img, heading=slide["heading"], body=slide["body"])
+    else:
+        draw_text_only(img, heading=slide["heading"], body=slide["body"])
+
+    if slide.get("note"):
+        draw_note_band(img, "note", slide["note"])
+    elif slide.get("info"):
+        draw_note_band(img, "info", slide["info"])
+    return img
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--manifest", default="slides.yaml")
+    parser.add_argument("--out-dir", default=".")
+    parser.add_argument("--only", help="特定 id だけ生成（デバッグ用）")
+    args = parser.parse_args()
+
+    manifest = yaml.safe_load(Path(args.manifest).read_text(encoding="utf-8"))
+    out_dir = Path(args.out_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    count = 0
+    for slide in manifest["slides"]:
+        if args.only and slide["id"] != args.only:
+            continue
+        img = render_slide(slide)
+        out_path = out_dir / f"{slide['id']}.png"
+        img.save(out_path)
+        print(f"wrote {out_path}")
+        count += 1
+    print(f"done: {count} slides")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

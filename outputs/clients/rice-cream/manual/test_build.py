@@ -80,3 +80,32 @@ def test_text_only_uses_photo_area_for_text():
                 found = True
                 break
     assert found, "テキストオンリー時に写真領域が文字に転用されていない"
+
+
+def test_render_slide_with_photo(tmp_path):
+    photo = tmp_path / "p.png"
+    Image.new("RGB", (800, 600), (50, 200, 50)).save(photo)
+    slide = {
+        "id": "open-001",
+        "phase": "開店準備",
+        "index": "1 / 38",
+        "photo": str(photo),
+        "heading": "鍵を開ける",
+        "body": "キーボックスから取り出す",
+        "note": "暗証番号は「0025」",
+    }
+    img = build.render_slide(slide)
+    assert img.size == (1080, 1920)
+
+
+def test_render_slide_text_only():
+    slide = {
+        "id": "open-002",
+        "phase": "開店準備",
+        "index": "2 / 38",
+        "photo": None,
+        "heading": "未撮影箇所",
+        "body": "後で写真を差し込みます",
+    }
+    img = build.render_slide(slide)
+    assert img.size == (1080, 1920)
