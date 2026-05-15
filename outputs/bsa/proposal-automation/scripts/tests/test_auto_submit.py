@@ -394,3 +394,18 @@ def test_write_summary_file_clean_run(tmp_path):
     clean = auto_submit.BatchResult("2026-05-15T09:00:00", "2026-05-15T09:01:00", 0)
     auto_submit.write_summary_file(clean, path)
     assert path.read_text(encoding="utf-8").strip() == "0 0 0"
+
+
+def test_filter_by_platform():
+    jobs = [
+        _job("LAN-20260515-001", "LAN"),
+        _job("CW-20260515-001", "CW"),
+        _job("CN-20260515-001", "CN"),
+    ]
+    out = auto_submit.filter_by_platform(jobs, {"LAN"})
+    assert [j.job_id for j in out] == ["CW-20260515-001", "CN-20260515-001"]
+
+
+def test_filter_by_platform_empty_skip_is_passthrough():
+    jobs = [_job("LAN-20260515-001", "LAN"), _job("CW-20260515-001", "CW")]
+    assert auto_submit.filter_by_platform(jobs, set()) == jobs

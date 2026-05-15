@@ -84,6 +84,13 @@ def fetch_eligible_jobs(db_path, min_fit_score: int = 60) -> list[EligibleJob]:
     ]
 
 
+def filter_by_platform(jobs: list[EligibleJob], skip_prefixes: set[str]) -> list[EligibleJob]:
+    """skip_prefixes に含まれる platform_prefix のジョブを除外する。"""
+    if not skip_prefixes:
+        return jobs
+    return [j for j in jobs if j.platform_prefix not in skip_prefixes]
+
+
 # form-fill の終了コードの意味（_lancers / _crowdworks / _coconala_form_fill.py 共通）
 EXIT_MEANING = {
     0: "submitted",
@@ -325,7 +332,18 @@ def main() -> int:
 
     appdata.mkdir(parents=True, exist_ok=True)
 
+    skip_prefixes = {
+        p.strip().upper()
+        for p in os.environ.get("BSA_PA_AUTOSUBMIT_SKIP", "").split(",")
+        if p.strip()
+    }
     jobs = fetch_eligible_jobs(db_path)
+    if skip_prefixes:
+        before = len(jobs)
+        jobs = filter_by_platform(jobs, skip_prefixes)
+        print(
+            f"⏭  媒体スキップ {sorted(skip_prefixes)}: {before - len(jobs)} 件を対象外"
+        )
     print(f"📋 自動送信対象: {len(jobs)} 件 (fit_score >= 60)")
     for j in jobs:
         print(f"  - {j.job_id} [{j.platform_prefix}] fit={j.fit_score} {j.title[:40]}")
