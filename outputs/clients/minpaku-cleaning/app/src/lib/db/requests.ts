@@ -1,6 +1,6 @@
 import "server-only";
 import { createServiceClient } from "@/lib/supabase-server";
-import { assertAdmin } from "@/lib/db/scope";
+import { assertAdmin, StaffOnlyError } from "@/lib/db/scope";
 import { assertTransition, type CleaningStatus } from "@/lib/status-machine";
 import type { Actor } from "@/lib/auth";
 
@@ -187,8 +187,10 @@ export async function claimRequest(
   actor: Actor,
   requestId: string,
 ): Promise<void> {
-  if (actor.role !== "staff") throw new Error("スタッフ専用の操作です");
+  if (actor.role !== "staff") throw new StaffOnlyError("スタッフ専用の操作です");
   const db = createServiceClient();
+  // NOTE: 担当チェックは条件付きUPDATEとは別クエリ。staff_assignments の
+  // 変更は管理者のみ・低頻度のため TOCTOU は許容（将来 join 化を検討）。
   await assertStaffAssignedToRequestProperty(db, actor.staffId, requestId);
   const { data, error } = await db
     .from("cleaning_requests")
@@ -239,7 +241,7 @@ export async function startRequest(
   actor: Actor,
   requestId: string,
 ): Promise<void> {
-  if (actor.role !== "staff") throw new Error("スタッフ専用の操作です");
+  if (actor.role !== "staff") throw new StaffOnlyError("スタッフ専用の操作です");
   const db = createServiceClient();
   const { data: req } = await db
     .from("cleaning_requests")
@@ -289,7 +291,8 @@ export type StaffRequestListItem = CleaningRequest & { property_name: string };
 export async function listRequestsForStaff(
   actor: Actor,
 ): Promise<StaffRequestListItem[]> {
-  if (actor.role !== "staff") throw new Error("スタッフ専用の操作です");
+  // staffId は検証済みのサーバ側トークン由来。未検証入力ではこの補間を使わないこと。
+  if (actor.role !== "staff") throw new StaffOnlyError("スタッフ専用の操作です");
   const db = createServiceClient();
   const { data: assignments } = await db
     .from("staff_assignments")
@@ -324,7 +327,7 @@ export async function getRequestForStaff(
   actor: Actor,
   requestId: string,
 ): Promise<StaffRequestDetail | null> {
-  if (actor.role !== "staff") throw new Error("スタッフ専用の操作です");
+  if (actor.role !== "staff") throw new StaffOnlyError("スタッフ専用の操作です");
   const db = createServiceClient();
   const { data, error } = await db
     .from("cleaning_requests")
