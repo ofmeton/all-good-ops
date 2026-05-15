@@ -33,7 +33,7 @@ class SubmitResult:
     job_id: str
     platform: str
     title: str
-    outcome: str  # "submitted" / "blocked" / "failed"
+    outcome: str  # "submitted" / "blocked" / "failed" / "skipped"
     reason: str
     exit_code: int | None
 

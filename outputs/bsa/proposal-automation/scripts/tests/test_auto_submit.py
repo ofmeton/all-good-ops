@@ -312,13 +312,15 @@ def test_run_batch_short_circuits_blocked_platform(tmp_path):
         {"LAN-20260515-001": 2, "CW-20260515-001": 0}
     )
 
+    sleeps: list[float] = []
+
     batch = auto_submit.run_batch(
         jobs,
         python_path=Path("/p"),
         base_dir=tmp_path,
         db_path=db_path,
         runner=runner,
-        sleep_fn=lambda _: None,
+        sleep_fn=sleeps.append,
         now_fn=lambda: datetime(2026, 5, 15, 9, 0, 0),
     )
 
@@ -343,3 +345,8 @@ def test_run_batch_short_circuits_blocked_platform(tmp_path):
         "LAN-20260515-001": "proposing",
         "LAN-20260515-002": "proposing",
     }
+    # pacing 回数の検証:
+    #   LAN-001 (index 0, is_last=False): subprocess 実行 → blocked → sleep **あり** (1回)
+    #   LAN-002 (index 1): blocked_platforms に LAN あり → continue → sleep **なし**
+    #   CW-001  (index 2, is_last=True): 実行 → submitted → is_last なので sleep **なし**
+    assert len(sleeps) == 1
