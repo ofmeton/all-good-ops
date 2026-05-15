@@ -127,3 +127,48 @@ def classify_exit(exit_code: int | None) -> tuple[str, str]:
     if exit_code in (1, 2):
         return ("blocked", EXIT_MEANING.get(exit_code, "login issue"))
     return ("failed", EXIT_MEANING.get(exit_code, f"unknown exit code {exit_code}"))
+
+
+SUBPROCESS_TIMEOUT_SEC = 240  # form-fill 1件あたりの backstop タイムアウト
+
+
+def submit_one(
+    job: EligibleJob,
+    *,
+    python_path,
+    base_dir,
+    timeout_sec: int = SUBPROCESS_TIMEOUT_SEC,
+    runner=subprocess.run,
+) -> SubmitResult:
+    """1案件の form-fill を subprocess 起動し、結果を SubmitResult で返す。"""
+    try:
+        cmd = build_command(job.job_id, job.platform_prefix, python_path, base_dir)
+    except ValueError as e:
+        return SubmitResult(
+            job.job_id, job.platform_prefix, job.title, "failed", str(e), None
+        )
+
+    try:
+        proc = runner(
+            cmd,
+            timeout=timeout_sec,
+            capture_output=True,
+            text=True,
+            cwd=str(base_dir),
+        )
+    except subprocess.TimeoutExpired:
+        outcome, reason = classify_exit(None)
+        return SubmitResult(
+            job.job_id,
+            job.platform_prefix,
+            job.title,
+            outcome,
+            f"{reason} ({timeout_sec}s)",
+            None,
+        )
+
+    outcome, reason = classify_exit(proc.returncode)
+    detail = reason if proc.returncode == 0 else f"{reason} (exit {proc.returncode})"
+    return SubmitResult(
+        job.job_id, job.platform_prefix, job.title, outcome, detail, proc.returncode
+    )

@@ -142,3 +142,68 @@ def test_classify_exit():
     out, reason = auto_submit.classify_exit(None)
     assert out == "failed"
     assert "timeout" in reason.lower()
+
+
+class _FakeProc:
+    def __init__(self, returncode: int):
+        self.returncode = returncode
+        self.stdout = ""
+        self.stderr = ""
+
+
+def _runner_returning(code_by_job: dict):
+    """job_id ごとに固定の終了コード（または "timeout"）を返す fake runner。"""
+
+    def _runner(cmd, **kwargs):
+        job_id = cmd[cmd.index("--job-id") + 1]
+        code = code_by_job[job_id]
+        if code == "timeout":
+            raise subprocess.TimeoutExpired(cmd, kwargs.get("timeout"))
+        return _FakeProc(code)
+
+    return _runner
+
+
+def _job(job_id: str, prefix: str = "LAN", fit: int = 80) -> auto_submit.EligibleJob:
+    return auto_submit.EligibleJob(job_id, prefix, f"title {job_id}", fit)
+
+
+def test_submit_one_success(tmp_path):
+    job = _job("LAN-20260515-001")
+    runner = _runner_returning({"LAN-20260515-001": 0})
+    result = auto_submit.submit_one(
+        job, python_path=Path("/p"), base_dir=tmp_path, runner=runner
+    )
+    assert result.outcome == "submitted"
+    assert result.exit_code == 0
+
+
+def test_submit_one_blocked_on_login(tmp_path):
+    job = _job("CW-20260515-001", prefix="CW")
+    runner = _runner_returning({"CW-20260515-001": 2})
+    result = auto_submit.submit_one(
+        job, python_path=Path("/p"), base_dir=tmp_path, runner=runner
+    )
+    assert result.outcome == "blocked"
+    assert result.exit_code == 2
+
+
+def test_submit_one_failed(tmp_path):
+    job = _job("CN-20260515-001", prefix="CN")
+    runner = _runner_returning({"CN-20260515-001": 5})
+    result = auto_submit.submit_one(
+        job, python_path=Path("/p"), base_dir=tmp_path, runner=runner
+    )
+    assert result.outcome == "failed"
+    assert "exit 5" in result.reason
+
+
+def test_submit_one_timeout(tmp_path):
+    job = _job("LAN-20260515-001")
+    runner = _runner_returning({"LAN-20260515-001": "timeout"})
+    result = auto_submit.submit_one(
+        job, python_path=Path("/p"), base_dir=tmp_path, runner=runner
+    )
+    assert result.outcome == "failed"
+    assert "timeout" in result.reason.lower()
+    assert result.exit_code is None
