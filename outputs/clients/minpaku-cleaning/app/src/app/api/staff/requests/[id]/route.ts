@@ -79,6 +79,8 @@ export async function POST(
     );
     return NextResponse.json(report);
   } catch (e) {
+    if (e instanceof InvalidTransitionError)
+      return NextResponse.json({ error: e.message }, { status: 409 });
     if (e instanceof Error)
       return NextResponse.json({ error: e.message }, { status: 400 });
     throw e;

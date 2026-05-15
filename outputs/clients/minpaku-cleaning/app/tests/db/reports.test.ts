@@ -75,7 +75,7 @@ describe("cleaning_reports データアクセス", () => {
     await db.from("cleaning_requests").update({ status: "assigned" }).eq("id", requestId);
     await expect(
       submitReport(staffActor, requestId, [], []),
-    ).rejects.toThrow("清掃中の依頼のみ完了報告");
+    ).rejects.toThrow("から reported へは遷移できません");
   });
 
   it("担当外スタッフは提出できない", async () => {

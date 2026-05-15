@@ -2,6 +2,7 @@ import "server-only";
 import { createServiceClient } from "@/lib/supabase-server";
 import { assertAdmin, StaffOnlyError } from "@/lib/db/scope";
 import type { Actor } from "@/lib/auth";
+import { assertTransition, type CleaningStatus } from "@/lib/status-machine";
 
 // チェックリスト1項目の提出結果。label は properties.checklist_template から、
 // checked/note はスタッフが記入する。
@@ -48,9 +49,7 @@ export async function submitReport(
   if (req.assigned_staff_id !== actor.staffId) {
     throw new Error("自分が担当する依頼ではありません");
   }
-  if (req.status !== "in_progress") {
-    throw new Error("清掃中の依頼のみ完了報告できます");
-  }
+  assertTransition(req.status as CleaningStatus, "reported");
 
   // TODO(Plan 3): 3段書き込み（report → photos → status更新）をRPC/トランザクション化。
   // 現状はスタッフアプリの低並行前提で逐次実行。失敗時の部分状態リスクは許容。
