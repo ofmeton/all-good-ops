@@ -200,3 +200,68 @@ def mark_unable_to_submit(db_path, job_id: str, reason: str) -> None:
         conn.commit()
     finally:
         conn.close()
+
+
+PACING_RANGE_SEC = (30, 90)  # 送信間のランダム待機（スパム判定回避の人間的ペーシング）
+
+
+def run_batch(
+    jobs: list[EligibleJob],
+    *,
+    python_path,
+    base_dir,
+    db_path,
+    timeout_sec: int = SUBPROCESS_TIMEOUT_SEC,
+    pacing_range: tuple[int, int] = PACING_RANGE_SEC,
+    runner=subprocess.run,
+    sleep_fn=time.sleep,
+    now_fn=datetime.now,
+) -> BatchResult:
+    """対象ジョブを順に送信し、結果を BatchResult に集約する。
+
+    - "submitted": form-fill が status=submitted を記録済み
+    - "blocked"  : ログイン問題。ジョブは proposing 据え置き＋以降の同媒体をスキップ
+    - "failed"   : mark_unable_to_submit でステータス更新
+    """
+    started = now_fn().isoformat(timespec="seconds")
+    batch = BatchResult(started_at=started, ended_at=started, eligible_count=len(jobs))
+    blocked_platforms: set[str] = set()
+
+    for i, job in enumerate(jobs):
+        is_last = i == len(jobs) - 1
+
+        if job.platform_prefix in blocked_platforms:
+            batch.skipped.append(
+                SubmitResult(
+                    job.job_id,
+                    job.platform_prefix,
+                    job.title,
+                    "skipped",
+                    "platform blocked earlier in this run",
+                    None,
+                )
+            )
+            continue
+
+        result = submit_one(
+            job,
+            python_path=python_path,
+            base_dir=base_dir,
+            timeout_sec=timeout_sec,
+            runner=runner,
+        )
+
+        if result.outcome == "submitted":
+            batch.submitted.append(result)
+        elif result.outcome == "blocked":
+            blocked_platforms.add(job.platform_prefix)
+            batch.skipped.append(result)  # ジョブは proposing 据え置き（DB 更新しない）
+        else:  # "failed"
+            mark_unable_to_submit(db_path, job.job_id, result.reason)
+            batch.failed.append(result)
+
+        if not is_last:
+            sleep_fn(random.uniform(*pacing_range))
+
+    batch.ended_at = now_fn().isoformat(timespec="seconds")
+    return batch

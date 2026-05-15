@@ -252,3 +252,94 @@ def test_mark_unable_to_submit_missing_job_is_noop(tmp_path):
     db_path = _make_db(tmp_path)
     # 存在しない job_id でも例外を投げない
     auto_submit.mark_unable_to_submit(db_path, "LAN-99999999-999", "x")
+
+
+def test_run_batch_aggregates_and_marks_failures(tmp_path):
+    db_path = _make_db(tmp_path)
+    _insert_job(db_path, "LAN-20260515-001", "LAN", 90, "proposing")
+    _insert_job(db_path, "CW-20260515-001", "CW", 80, "proposing")
+    jobs = [
+        _job("LAN-20260515-001", "LAN", 90),
+        _job("CW-20260515-001", "CW", 80),
+    ]
+    runner = _runner_returning(
+        {"LAN-20260515-001": 0, "CW-20260515-001": 5}
+    )
+    sleeps: list[float] = []
+
+    batch = auto_submit.run_batch(
+        jobs,
+        python_path=Path("/p"),
+        base_dir=tmp_path,
+        db_path=db_path,
+        runner=runner,
+        sleep_fn=sleeps.append,
+        now_fn=lambda: datetime(2026, 5, 15, 9, 0, 0),
+    )
+
+    assert [r.job_id for r in batch.submitted] == ["LAN-20260515-001"]
+    assert [r.job_id for r in batch.failed] == ["CW-20260515-001"]
+    assert batch.skipped == []
+    assert batch.eligible_count == 2
+    assert batch.needs_attention is True
+    # pacing は件間 1 回だけ（2件なら 1 回）
+    assert len(sleeps) == 1
+    assert 30 <= sleeps[0] <= 90
+    # 失敗ジョブは unable_to_submit に更新済み
+    conn = sqlite3.connect(db_path)
+    try:
+        cw_status = conn.execute(
+            "SELECT status FROM jobs WHERE job_id = ?", ("CW-20260515-001",)
+        ).fetchone()[0]
+    finally:
+        conn.close()
+    assert cw_status == "unable_to_submit"
+
+
+def test_run_batch_short_circuits_blocked_platform(tmp_path):
+    db_path = _make_db(tmp_path)
+    for jid in ("LAN-20260515-001", "LAN-20260515-002", "CW-20260515-001"):
+        prefix = jid.split("-")[0]
+        _insert_job(db_path, jid, prefix, 80, "proposing")
+    jobs = [
+        _job("LAN-20260515-001", "LAN", 92),
+        _job("LAN-20260515-002", "LAN", 88),
+        _job("CW-20260515-001", "CW", 80),
+    ]
+    # 1件目の LAN がログイン切れ（exit 2）。2件目の LAN は subprocess を
+    # 起動せずスキップされる想定なので runner には登録しない。
+    runner = _runner_returning(
+        {"LAN-20260515-001": 2, "CW-20260515-001": 0}
+    )
+
+    batch = auto_submit.run_batch(
+        jobs,
+        python_path=Path("/p"),
+        base_dir=tmp_path,
+        db_path=db_path,
+        runner=runner,
+        sleep_fn=lambda _: None,
+        now_fn=lambda: datetime(2026, 5, 15, 9, 0, 0),
+    )
+
+    assert [r.job_id for r in batch.submitted] == ["CW-20260515-001"]
+    assert {r.job_id for r in batch.skipped} == {
+        "LAN-20260515-001",
+        "LAN-20260515-002",
+    }
+    assert batch.failed == []
+    # ブロックされた LAN ジョブは proposing のまま据え置き
+    conn = sqlite3.connect(db_path)
+    try:
+        statuses = {
+            jid: conn.execute(
+                "SELECT status FROM jobs WHERE job_id = ?", (jid,)
+            ).fetchone()[0]
+            for jid in ("LAN-20260515-001", "LAN-20260515-002")
+        }
+    finally:
+        conn.close()
+    assert statuses == {
+        "LAN-20260515-001": "proposing",
+        "LAN-20260515-002": "proposing",
+    }
