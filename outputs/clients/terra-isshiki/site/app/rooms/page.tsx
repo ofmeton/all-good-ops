@@ -214,16 +214,48 @@ export default function RoomsPage() {
             <h3 className="font-serif text-[22px] md:text-[clamp(26px,1.95vw,50px)] leading-[1.4] tracking-[0.04em] text-(--color-base-dark) mb-10 md:mb-14">
               ご利用にあたって。
             </h3>
-            <ol className="border-t border-(--color-base-dark)/15">
+
+            {/* Mobile: collapsed by default to save scroll */}
+            <details className="md:hidden group border-t border-(--color-base-dark)/15">
+              <summary className="list-none cursor-pointer flex items-center justify-between py-5 [&::-webkit-details-marker]:hidden">
+                <span className="font-mincho text-[14px] tracking-[0.06em] text-(--color-base-dark)">
+                  ご注意事項 全 {NOTICES.length} 件をひらく
+                </span>
+                <span
+                  aria-hidden
+                  className="font-garamond text-[16px] text-(--color-base-dark)/60 transition-transform duration-300 group-open:rotate-45"
+                >
+                  ＋
+                </span>
+              </summary>
+              <ol className="border-t border-(--color-base-dark)/15">
+                {NOTICES.map((text, i) => (
+                  <li
+                    key={i}
+                    className="grid grid-cols-[36px_1fr] gap-x-4 border-b border-(--color-base-dark)/10 py-5"
+                  >
+                    <span className="font-garamond italic text-[13px] tracking-[0.24em] text-(--color-base-dark)/40 pt-[2px]">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <p className="font-mincho text-[14px] leading-[1.95] tracking-[0.06em] text-(--color-base-dark)/85">
+                      {text}
+                    </p>
+                  </li>
+                ))}
+              </ol>
+            </details>
+
+            {/* Desktop: always expanded */}
+            <ol className="hidden md:block border-t border-(--color-base-dark)/15">
               {NOTICES.map((text, i) => (
                 <li
                   key={i}
-                  className="grid grid-cols-[36px_1fr] md:grid-cols-[60px_1fr] gap-x-4 md:gap-x-8 border-b border-(--color-base-dark)/10 py-5 md:py-6"
+                  className="grid grid-cols-[60px_1fr] gap-x-8 border-b border-(--color-base-dark)/10 py-6"
                 >
-                  <span className="font-garamond italic text-[13px] md:text-[clamp(14px,0.78vw,20px)] tracking-[0.24em] text-(--color-base-dark)/40 pt-[2px]">
+                  <span className="font-garamond italic text-[clamp(14px,0.78vw,20px)] tracking-[0.24em] text-(--color-base-dark)/40 pt-[2px]">
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <p className="font-mincho text-[14px] md:text-[clamp(15px,0.86vw,22px)] leading-[1.95] tracking-[0.06em] text-(--color-base-dark)/85">
+                  <p className="font-mincho text-[clamp(15px,0.86vw,22px)] leading-[1.95] tracking-[0.06em] text-(--color-base-dark)/85">
                     {text}
                   </p>
                 </li>
