@@ -3,7 +3,9 @@ import { createServiceClient } from "@/lib/supabase-server";
 import { isCronAuthenticated } from "@/lib/cron-auth";
 import { notify, resolveStaffRecipients } from "@/lib/notify";
 
-// 翌日の YYYY-MM-DD（JST 想定 / Node ランタイムローカルタイム）
+// 翌日の YYYY-MM-DD（UTC 基準）。Cron は UTC 08:00 起動（vercel.json）で
+// その時点では UTC 日付と JST 日付が一致するため、JST「明日」の依頼を正しく拾える。
+// Cron 時刻を 00:00〜14:59 UTC 範囲に変える場合は日付ずれが起きるので注意。
 function tomorrowDateStr(): string {
   const d = new Date();
   d.setDate(d.getDate() + 1);

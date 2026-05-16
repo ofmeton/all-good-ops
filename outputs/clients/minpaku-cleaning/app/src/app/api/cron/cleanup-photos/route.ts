@@ -26,7 +26,9 @@ export async function GET(req: NextRequest) {
       await deletePhoto(p.storage_path);
       storageDeleted += 1;
     } catch {
-      // 個別の Storage 削除エラーは無視（次の DB 削除は続行）。一覧は次回 cron でも再試行される。
+      // Storage 削除エラーは無視して DB 行は削除する。孤立した Storage ファイルを
+      // 残すリスクと引き換えに、DB 上は確実に期限切れ状態にする方を優先（無害方向）。
+      // 孤立ファイルは Supabase ダッシュボードから手動掃除する運用とし、納品手順書に明記。
     }
     const { error: delErr } = await db.from("report_photos").delete().eq("id", p.id);
     if (!delErr) dbDeleted += 1;
