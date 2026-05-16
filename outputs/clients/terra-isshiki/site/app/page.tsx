@@ -145,9 +145,10 @@ export default function Home() {
               風景に、息を整える。
             </p>
           </div>
-          <div className="md:max-w-none">
-            <h2 className="font-serif text-[28px] md:text-[clamp(36px,2.73vw,70px)] leading-[1.36] tracking-[0.04em] text-(--color-base-dark) mb-10 whitespace-nowrap">
-              葉山への愛から生まれた、一棟貸しの宿。
+          <div className="md:max-w-none min-w-0">
+            <h2 className="font-serif text-[26px] md:text-[clamp(34px,2.5vw,64px)] leading-[1.36] tracking-[0.04em] text-(--color-base-dark) mb-10">
+              <span className="block">葉山への愛から生まれた、</span>
+              <span className="block">一棟貸しの宿。</span>
             </h2>
             <p className="font-mincho text-[15px] md:text-[clamp(16px,0.94vw,24px)] leading-[2.0] tracking-[0.08em] text-(--color-base-dark)/85 mb-10">
               海越しに望む富士山、棚田が広がる里山。<br />
