@@ -7,17 +7,25 @@ export function MobileStickyReserve() {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="ご予約はこちら（Airbnb）"
-      className="xl:hidden fixed bottom-5 right-5 z-40 inline-flex items-center gap-2.5 rounded-full bg-(--color-base-dark) text-(--color-base-light) px-5 py-3.5 shadow-[0_8px_28px_-6px_rgba(26,20,16,0.55)] backdrop-blur-[2px] hover:bg-(--color-base-dark)/90 transition-colors duration-300"
+      className="group xl:hidden fixed bottom-5 right-5 z-40 inline-flex items-center gap-3 rounded-full bg-(--color-base-dark) text-(--color-base-light) px-5 py-3.5 shadow-[0_8px_28px_-6px_rgba(26,20,16,0.55)] backdrop-blur-[2px] hover:bg-(--color-base-dark)/90 transition-colors duration-300"
     >
       <span className="font-mincho text-[13px] tracking-[0.18em] leading-none">
         ご予約はこちら
       </span>
-      <span
+      {/* Thin custom arrow — 細い水平線 + 控えめなシェブロン */}
+      <svg
+        viewBox="0 0 28 10"
+        className="w-[26px] h-[10px] overflow-visible transition-transform duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:translate-x-1"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1"
+        strokeLinecap="round"
+        strokeLinejoin="round"
         aria-hidden
-        className="font-garamond text-[14px] leading-none -translate-y-px"
       >
-        ↗
-      </span>
+        <line x1="0" y1="5" x2="25" y2="5" />
+        <polyline points="20,1 26,5 20,9" />
+      </svg>
     </a>
   );
 }
