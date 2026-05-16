@@ -71,7 +71,7 @@ export default function StayPage() {
       <SiteHeader variant="page" current="Stay" />
 
       {/* Hero */}
-      <section className="relative bg-(--color-paper) px-6 py-28 md:px-12 md:py-44 overflow-hidden">
+      <section className="relative bg-(--color-paper) px-6 py-[clamp(112px,11.5vw,176px)] md:px-12 overflow-hidden">
         <div className="mx-auto max-w-[1480px] relative z-10">
           <p
             className="fade-up font-garamond italic text-[clamp(13px,0.86vw,22px)] tracking-[0.4em] uppercase text-(--color-soil) mb-6"
@@ -104,7 +104,7 @@ export default function StayPage() {
       </section>
 
       {/* Experiences */}
-      <section className="relative py-20 md:py-28 bg-(--color-base-light)">
+      <section className="relative py-[clamp(80px,7.3vw,112px)] bg-(--color-base-light)">
         <div className="grid gap-20 md:gap-32">
           {EXPERIENCES.map((exp) => {
             const accentColor =
@@ -167,7 +167,7 @@ export default function StayPage() {
       <ReservationCTA tone="dark" />
 
       {/* Next link */}
-      <section className="border-t border-(--color-base-dark)/10 px-6 py-20 md:px-12 md:py-28 text-center">
+      <section className="border-t border-(--color-base-dark)/10 px-6 py-[clamp(80px,7.3vw,112px)] md:px-12 text-center">
         <p className="font-garamond italic text-[clamp(13px,0.86vw,22px)] tracking-[0.4em] uppercase text-(--color-soil) mb-6">
           Next
         </p>

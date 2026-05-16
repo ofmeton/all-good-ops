@@ -135,7 +135,7 @@ export default function Home() {
       </section>
 
       {/* Concept teaser */}
-      <section className="relative bg-(--color-paper) px-6 py-28 md:px-12 md:py-44">
+      <section className="relative bg-(--color-paper) px-6 py-[clamp(112px,11.5vw,176px)] md:px-12">
         <div className="mx-auto max-w-[1480px] grid gap-12 md:grid-cols-[180px_1fr] md:gap-16">
           <div>
             <p className="font-garamond italic text-[clamp(13px,0.86vw,22px)] tracking-[0.4em] uppercase text-(--color-soil) mb-3">
@@ -170,7 +170,7 @@ export default function Home() {
       </section>
 
       {/* Section gateway cards */}
-      <section className="relative bg-(--color-base-light) py-24 md:py-32">
+      <section className="relative bg-(--color-base-light) py-[clamp(96px,8.34vw,128px)]">
         <div className="mx-auto max-w-[1640px] px-6 md:px-12">
           <p className="font-garamond italic text-[clamp(13px,0.86vw,22px)] tracking-[0.4em] uppercase text-(--color-soil) mb-6 md:text-center">
             Explore
@@ -252,7 +252,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-(--color-base-dark) text-(--color-base-light) px-6 py-16 md:px-12 md:py-24 lg:py-28">
+      <footer className="bg-(--color-base-dark) text-(--color-base-light) px-6 py-[clamp(64px,7vw,112px)] md:px-12">
         <div className="mx-auto max-w-[1640px] grid gap-10 md:grid-cols-[1fr_auto] md:items-end">
           <div>
             <p className="font-serif text-[24px] md:text-[clamp(30px,2.19vw,56px)] tracking-[0.18em] mb-3">TERRA</p>

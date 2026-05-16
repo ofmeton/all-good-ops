@@ -139,7 +139,7 @@ export default function RoomsPage() {
       {/* Overview — Specs / Facilities / Notices */}
       <section
         id="overview"
-        className="relative bg-(--color-paper) px-6 py-24 md:px-12 md:py-32"
+        className="relative bg-(--color-paper) px-6 py-[clamp(96px,8.34vw,128px)] md:px-12"
       >
         <div className="mx-auto max-w-[1480px]">
           <p className="font-garamond italic text-[clamp(13px,0.86vw,22px)] tracking-[0.4em] uppercase text-(--color-soil) mb-4">
@@ -236,7 +236,7 @@ export default function RoomsPage() {
       <ReservationCTA tone="dark" />
 
       {/* Next link */}
-      <section className="border-t border-(--color-base-dark)/10 px-6 py-20 md:px-12 md:py-28 text-center">
+      <section className="border-t border-(--color-base-dark)/10 px-6 py-[clamp(80px,7.3vw,112px)] md:px-12 text-center">
         <p className="font-garamond italic text-[clamp(13px,0.86vw,22px)] tracking-[0.4em] uppercase text-(--color-soil) mb-6">
           Next
         </p>

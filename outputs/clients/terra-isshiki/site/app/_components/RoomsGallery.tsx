@@ -81,7 +81,7 @@ export function RoomsGallery() {
       {SECTIONS.map((section, sIdx) => (
         <section
           key={section.label}
-          className={`relative py-20 md:py-28 ${
+          className={`relative py-[clamp(80px,7.3vw,112px)] ${
             sIdx % 2 === 1 ? "bg-(--color-paper)" : "bg-(--color-base-light)"
           }`}
         >

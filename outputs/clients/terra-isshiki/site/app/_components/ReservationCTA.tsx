@@ -20,7 +20,7 @@ export function ReservationCTA({
 
   return (
     <section
-      className={`relative ${bg} ${text} px-6 py-20 md:px-12 md:py-28`}
+      className={`relative ${bg} ${text} px-6 py-[clamp(80px,7.3vw,112px)] md:px-12`}
     >
       <div className="mx-auto max-w-[1280px] flex flex-col items-start md:items-center md:text-center gap-8 md:gap-10">
         <p

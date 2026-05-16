@@ -79,7 +79,7 @@ export default function AccessPage() {
       {/* Address & POI */}
       <section className="relative">
         <div className="grid md:grid-cols-2 items-stretch">
-          <div className="px-6 py-20 md:px-16 lg:px-24 md:py-28 flex flex-col justify-center">
+          <div className="px-6 py-[clamp(80px,7.3vw,112px)] md:px-16 lg:px-24 flex flex-col justify-center">
             <p className="font-garamond italic text-[clamp(13px,0.86vw,22px)] tracking-[0.4em] uppercase text-(--color-soil) mb-4">
               Location
             </p>
@@ -142,7 +142,7 @@ export default function AccessPage() {
       </section>
 
       {/* Map */}
-      <section className="bg-(--color-paper) px-6 py-24 md:px-12 md:py-32">
+      <section className="bg-(--color-paper) px-6 py-[clamp(96px,8.34vw,128px)] md:px-12">
         <div className="mx-auto max-w-[1480px]">
           <p className="font-garamond italic text-[clamp(13px,0.86vw,22px)] tracking-[0.4em] uppercase text-(--color-soil) mb-4">
             Map
@@ -195,7 +195,7 @@ export default function AccessPage() {
       </section>
 
       {/* Reservation: Availability calendar */}
-      <section className="border-t border-(--color-base-dark)/10 px-6 py-24 md:px-12 md:py-32 bg-(--color-base-light)">
+      <section className="border-t border-(--color-base-dark)/10 px-6 py-[clamp(96px,8.34vw,128px)] md:px-12 bg-(--color-base-light)">
         <div className="mx-auto max-w-[1480px]">
           <p className="font-garamond italic text-[clamp(13px,0.86vw,22px)] tracking-[0.4em] uppercase text-(--color-soil) mb-4">
             Reservation
