@@ -1,6 +1,7 @@
 import "server-only";
 import { randomBytes } from "crypto";
 import { createServiceClient } from "@/lib/supabase-server";
+import { resizeForUpload } from "@/lib/image";
 
 const BUCKET = "report-photos";
 
@@ -12,13 +13,13 @@ export async function uploadReportPhoto(
   contentType: string,
 ): Promise<string> {
   const db = createServiceClient();
-  // Plan 2 では png/jpg のみ判定。webp/heic（iPhone カメラ等）は .jpg 拡張子で
-  // 保存されるが contentType 自体は正しく渡る。拡張子マップの整備は Plan 3。
-  const ext = contentType === "image/png" ? "png" : "jpg";
+  // Plan 3: アップロード前にリサイズ・圧縮する（長辺1600px / JPEG q80 or PNG）
+  const { buffer, contentType: outType } = await resizeForUpload(file, contentType);
+  const ext = outType === "image/png" ? "png" : "jpg";
   const path = `${requestId}/${Date.now()}-${randomBytes(6).toString("hex")}.${ext}`;
   const { error } = await db.storage
     .from(BUCKET)
-    .upload(path, file, { contentType });
+    .upload(path, buffer, { contentType: outType });
   if (error) throw error;
   return path;
 }

@@ -3,6 +3,11 @@ import { createServiceClient } from "@/lib/supabase-server";
 import { assertAdmin, StaffOnlyError } from "@/lib/db/scope";
 import { assertTransition, type CleaningStatus } from "@/lib/status-machine";
 import type { Actor } from "@/lib/auth";
+import {
+  notify,
+  resolveStaffForProperty,
+  resolveOwnerForProperty,
+} from "@/lib/notify";
 
 export type CleaningRequestInput = {
   property_id: string;
@@ -100,7 +105,17 @@ export async function createRequest(
     .select()
     .single();
   if (error) throw error;
-  // TODO(Plan 3): 依頼作成時に担当スタッフへ通知
+  // 担当スタッフ全員に依頼作成を通知
+  const staffRecipients = await resolveStaffForProperty(input.property_id);
+  await notify(
+    "request_created",
+    staffRecipients,
+    {
+      subject: "新しい清掃依頼があります",
+      text: `${input.checkin_date}〜${input.checkout_date}（${input.guest_count}名）の清掃依頼が登録されました。`,
+    },
+    { request_id: data.id, property_id: input.property_id },
+  );
   return data as CleaningRequest;
 }
 
@@ -269,7 +284,7 @@ export async function confirmRequest(
   const db = createServiceClient();
   const { data: req } = await db
     .from("cleaning_requests")
-    .select("status")
+    .select("status, property_id")
     .eq("id", requestId)
     .maybeSingle();
   if (!req) throw new Error("依頼が見つかりません");
@@ -279,7 +294,19 @@ export async function confirmRequest(
     .update({ status: "confirmed", updated_at: new Date().toISOString() })
     .eq("id", requestId);
   if (error) throw error;
-  // TODO(Plan 3): 確認完了時に物件オーナーへ通知
+  // 物件オーナーに確認完了を通知
+  const owner = await resolveOwnerForProperty(req.property_id);
+  if (owner) {
+    await notify(
+      "request_confirmed",
+      [owner],
+      {
+        subject: "清掃が完了しました",
+        text: "管理者により清掃の確認が完了しました。詳細はオーナーURLからご覧ください。",
+      },
+      { request_id: requestId, property_id: req.property_id },
+    );
+  }
 }
 
 // ---- スタッフ向けクエリ ----

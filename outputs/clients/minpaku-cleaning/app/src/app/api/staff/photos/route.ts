@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { resolveActorByToken } from "@/lib/auth";
 import { uploadReportPhoto } from "@/lib/storage";
+import { StaffOnlyError } from "@/lib/db/scope";
 
 // multipart/form-data: token / requestId / file（画像）。
 // アップロード成功で { storagePath } を返す。完了報告の photoPaths にこの値を載せる。
@@ -26,6 +27,8 @@ export async function POST(req: NextRequest) {
     );
     return NextResponse.json({ storagePath });
   } catch (e) {
+    if (e instanceof StaffOnlyError)
+      return NextResponse.json({ error: e.message }, { status: 403 });
     if (e instanceof Error)
       return NextResponse.json({ error: e.message }, { status: 400 });
     throw e;

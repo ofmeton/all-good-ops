@@ -2,6 +2,7 @@ import "server-only";
 import { createServiceClient } from "@/lib/supabase-server";
 import { assertAdmin, StaffOnlyError } from "@/lib/db/scope";
 import type { Actor } from "@/lib/auth";
+import { notify, resolveAllAdmins, resolveOwnerForProperty } from "@/lib/notify";
 
 export type SupplyRequestInput = {
   property_id: string;
@@ -43,7 +44,19 @@ export async function createSupplyRequest(
     .select()
     .single();
   if (error) throw error;
-  // TODO(Plan 3): 備品補充依頼時に管理者＋オーナーへ通知
+  // 管理者＋オーナーに備品補充依頼を通知
+  const admins = await resolveAllAdmins();
+  const owner = await resolveOwnerForProperty(input.property_id);
+  const recipients = owner ? [...admins, owner] : admins;
+  await notify(
+    "supply_requested",
+    recipients,
+    {
+      subject: "備品補充の依頼があります",
+      text: `スタッフから備品補充の依頼がありました: ${input.items}`,
+    },
+    { supply_request_id: data.id, property_id: input.property_id },
+  );
   return data as SupplyRequest;
 }
 

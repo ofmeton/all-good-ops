@@ -9,6 +9,7 @@ type Props = {
   status: string;
   assignedStaffId: string | null;
   staff: Staff[];
+  adjacentRequests: { id: string; checkin_date: string; checkout_date: string }[];
 };
 
 export function RequestActions({
@@ -16,6 +17,7 @@ export function RequestActions({
   status,
   assignedStaffId,
   staff,
+  adjacentRequests = [],
 }: Props) {
   const router = useRouter();
   const [staffId, setStaffId] = useState(assignedStaffId ?? staff[0]?.id ?? "");
@@ -45,6 +47,13 @@ export function RequestActions({
 
   return (
     <div className="space-y-2 border rounded p-3">
+      {adjacentRequests.length > 0 && (
+        <div className="bg-yellow-50 border border-yellow-300 rounded p-2 text-xs text-yellow-900">
+          ⚠ 同物件に連続予約があります（{adjacentRequests
+            .map((a) => `${a.checkin_date}〜${a.checkout_date}`)
+            .join(", ")}）。割り当て時はスタッフの稼働状況にご注意ください。
+        </div>
+      )}
       {canAssign && (
         <div className="flex items-center gap-2">
           <select
