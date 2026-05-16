@@ -130,14 +130,15 @@ export default function StayPage() {
                   </div>
                 ) : (
                   <div className="relative aspect-[16/10] md:aspect-[5/2] w-full overflow-hidden bg-(--color-paper) flex items-center justify-center">
+                    <div aria-hidden className="paper-noise absolute inset-0" />
                     <div
                       aria-hidden
-                      className="absolute right-[2vw] top-[-6%] font-garamond italic text-[clamp(160px,17.19vw,440px)] leading-none text-(--color-base-dark)/[0.05] select-none"
+                      className="absolute right-[3vw] top-[-4%] md:right-[2vw] md:top-[-6%] font-garamond italic text-[clamp(200px,18vw,440px)] leading-none text-(--color-base-dark)/[0.07] select-none"
                     >
                       {exp.no}
                     </div>
                     <div
-                      className={`relative z-10 ${accentColor}/70 opacity-80 [&_svg]:w-[clamp(64px,5.47vw,140px)] [&_svg]:h-[clamp(64px,5.47vw,140px)]`}
+                      className={`relative z-10 ${accentColor}/70 opacity-85 [&_svg]:w-[clamp(88px,7vw,160px)] [&_svg]:h-[clamp(88px,7vw,160px)]`}
                     >
                       {exp.icon ? ICONS[exp.icon] : null}
                     </div>
