@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { resolveAdminActor } from "@/lib/supabase-auth";
 import { listStaff } from "@/lib/db/staff";
 import { listProperties } from "@/lib/db/properties";
@@ -25,7 +26,9 @@ export default async function StaffPage() {
         {staff.map((s, i) => (
           <li key={s.id} className="px-3 py-2 text-sm space-y-1">
             <div>
-              {s.name}
+              <Link href={`/admin/staff/${s.id}`} className="underline">
+                {s.name}
+              </Link>
               <span className="text-gray-500">
                 {s.property_ids.length > 0
                   ? ` — ${s.property_ids.map((id) => nameById.get(id) ?? "?").join("、")}`

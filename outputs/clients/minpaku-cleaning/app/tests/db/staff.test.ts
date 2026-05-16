@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { listStaff, createStaff, updateStaff, archiveStaff, StaffArchiveBlockedError } from "@/lib/db/staff";
+import { listStaff, getStaff, createStaff, updateStaff, archiveStaff, StaffArchiveBlockedError } from "@/lib/db/staff";
 import { createServiceClient } from "@/lib/supabase-server";
 import type { Actor } from "@/lib/auth";
 import { resetDb } from "../helpers/reset-db";
@@ -32,6 +32,38 @@ describe("staff データアクセス", () => {
     const list = await listStaff(admin);
     expect(list[0].name).toBe("スタッフA改");
     expect(list[0].property_ids).toEqual([]);
+  });
+
+  it("getStaff: 既存スタッフを property_ids 込みで返す", async () => {
+    const created = await createStaff(admin, { name: "詳細テスト", email: "test@example.com" }, [propertyId]);
+    const fetched = await getStaff(admin, created.id);
+    expect(fetched?.id).toBe(created.id);
+    expect(fetched?.name).toBe("詳細テスト");
+    expect(fetched?.email).toBe("test@example.com");
+    expect(fetched?.property_ids).toEqual([propertyId]);
+  });
+
+  it("getStaff: 存在しない ID は null", async () => {
+    const fetched = await getStaff(admin, "00000000-0000-0000-0000-000000000000");
+    expect(fetched).toBeNull();
+  });
+
+  it("getStaff: archived は null", async () => {
+    const created = await createStaff(admin, { name: "削除対象" }, []);
+    await archiveStaff(admin, created.id);
+    const fetched = await getStaff(admin, created.id);
+    expect(fetched).toBeNull();
+  });
+
+  it("updateStaff: LINE ID と property_ids を一括更新", async () => {
+    const { data: p2 } = await db
+      .from("properties").insert({ owner_id: (await db.from("owners").select("id").limit(1).single()).data!.id, name: "物件B" })
+      .select().single();
+    const created = await createStaff(admin, { name: "佐藤" }, [propertyId]);
+    await updateStaff(admin, created.id, { line_user_id: "Uabc123" }, [p2!.id]);
+    const fetched = await getStaff(admin, created.id);
+    expect(fetched?.line_user_id).toBe("Uabc123");
+    expect(fetched?.property_ids).toEqual([p2!.id]);
   });
 
   it("稼働中の清掃依頼があるスタッフはアーカイブできない", async () => {

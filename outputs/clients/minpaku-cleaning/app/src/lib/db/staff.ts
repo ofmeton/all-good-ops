@@ -40,6 +40,28 @@ export async function listStaff(actor: Actor): Promise<Staff[]> {
   }));
 }
 
+export async function getStaff(actor: Actor, id: string): Promise<Staff | null> {
+  assertAdmin(actor);
+  const db = createServiceClient();
+  const { data, error } = await db
+    .from("staff")
+    .select("id, name, line_user_id, email, staff_assignments(property_id)")
+    .eq("id", id)
+    .is("archived_at", null)
+    .maybeSingle();
+  if (error) throw error;
+  if (!data) return null;
+  return {
+    id: data.id as string,
+    name: data.name as string,
+    line_user_id: data.line_user_id as string | null,
+    email: data.email as string | null,
+    property_ids: ((data.staff_assignments as { property_id: string }[]) ?? []).map(
+      (a) => a.property_id,
+    ),
+  };
+}
+
 async function syncAssignments(staffId: string, propertyIds: string[]) {
   const db = createServiceClient();
   const { error: deleteError } = await db
