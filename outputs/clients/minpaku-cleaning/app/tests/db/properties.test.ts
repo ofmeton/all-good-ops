@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { listProperties, createProperty, updateProperty, archiveProperty } from "@/lib/db/properties";
+import { listProperties, getProperty, createProperty, updateProperty, archiveProperty } from "@/lib/db/properties";
 import type { Actor } from "@/lib/auth";
 import { createServiceClient } from "@/lib/supabase-server";
 import { resetDb } from "../helpers/reset-db";
@@ -41,5 +41,35 @@ describe("properties データアクセス", () => {
     const created = await createProperty(admin, { owner_id: ownerId, name: "物件A" });
     await archiveProperty(admin, created.id);
     expect(await listProperties(admin)).toHaveLength(0);
+  });
+
+  it("getProperty: 既存物件を返す", async () => {
+    const created = await createProperty(admin, {
+      owner_id: ownerId, name: "詳細テスト", address: "横浜",
+    });
+    const fetched = await getProperty(admin, created.id);
+    expect(fetched?.id).toBe(created.id);
+    expect(fetched?.name).toBe("詳細テスト");
+    expect(fetched?.address).toBe("横浜");
+  });
+
+  it("getProperty: 存在しないIDは null", async () => {
+    const fetched = await getProperty(admin, "00000000-0000-0000-0000-000000000000");
+    expect(fetched).toBeNull();
+  });
+
+  it("getProperty: archived な物件は null", async () => {
+    const created = await createProperty(admin, { owner_id: ownerId, name: "削除対象" });
+    await archiveProperty(admin, created.id);
+    const fetched = await getProperty(admin, created.id);
+    expect(fetched).toBeNull();
+  });
+
+  it("updateProperty: owner_id を変更できる（オーナー再割当）", async () => {
+    const { data: o2 } = await db.from("owners").insert({ name: "オーナーB" }).select().single();
+    const created = await createProperty(admin, { owner_id: ownerId, name: "物件A" });
+    await updateProperty(admin, created.id, { owner_id: o2!.id });
+    const fetched = await getProperty(admin, created.id);
+    expect(fetched?.owner_id).toBe(o2!.id);
   });
 });

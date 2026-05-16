@@ -33,6 +33,19 @@ export async function listProperties(actor: Actor): Promise<Property[]> {
   return data as Property[];
 }
 
+export async function getProperty(actor: Actor, id: string): Promise<Property | null> {
+  assertAdmin(actor);
+  const db = createServiceClient();
+  const { data, error } = await db
+    .from("properties")
+    .select("*")
+    .eq("id", id)
+    .is("archived_at", null)
+    .maybeSingle();
+  if (error) throw error;
+  return (data as Property) ?? null;
+}
+
 export async function createProperty(actor: Actor, input: PropertyInput): Promise<Property> {
   assertAdmin(actor);
   const db = createServiceClient();

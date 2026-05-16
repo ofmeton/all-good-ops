@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { resolveAdminActor } from "@/lib/supabase-auth";
 import { listProperties } from "@/lib/db/properties";
 import { listOwners } from "@/lib/db/owners";
@@ -27,7 +28,12 @@ export default async function PropertiesPage() {
       <ul className="divide-y border rounded">
         {properties.map((p, i) => (
           <li key={p.id} className="px-3 py-2 text-sm space-y-1">
-            <div>{p.name}{p.address ? ` — ${p.address}` : ""}</div>
+            <div>
+              <Link href={`/admin/properties/${p.id}`} className="underline">
+                {p.name}
+              </Link>
+              {p.address ? <span className="text-gray-500"> — {p.address}</span> : null}
+            </div>
             <TokenControls
               target={{ type: "owner", propertyId: p.id }}
               activeToken={tokens[i] ? { id: tokens[i]!.id, token: tokens[i]!.token } : null}
