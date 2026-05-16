@@ -9,8 +9,8 @@ export function MobileStickyReserve() {
 
   useEffect(() => {
     const update = () => {
-      // Hero を 60% 抜けたあたりから出現させる（Hero は概ね 64svh〜100svh）
-      setVisible(window.scrollY > window.innerHeight * 0.6);
+      // Hero (64〜100svh) を 55% 抜けたあたりから出現
+      setVisible(window.scrollY > window.innerHeight * 0.55);
     };
     update();
     window.addEventListener("scroll", update, { passive: true });
@@ -26,17 +26,22 @@ export function MobileStickyReserve() {
       href={AIRBNB_URL}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label="Airbnb で予約する"
-      className={`md:hidden fixed bottom-6 right-6 z-40 inline-flex items-center justify-center w-14 h-14 rounded-full bg-(--color-base-dark) text-(--color-base-light) shadow-[0_8px_28px_-6px_rgba(26,20,16,0.45)] transition-all duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] ${
+      aria-label="ご予約はこちら（Airbnb）"
+      className={`xl:hidden fixed bottom-5 right-5 z-40 inline-flex items-center gap-2.5 rounded-full bg-(--color-base-dark) text-(--color-base-light) px-5 py-3.5 shadow-[0_8px_28px_-6px_rgba(26,20,16,0.55)] backdrop-blur-[2px] transition-all duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] ${
         visible
           ? "opacity-100 translate-y-0 pointer-events-auto"
           : "opacity-0 translate-y-4 pointer-events-none"
       }`}
     >
-      <span aria-hidden className="font-garamond text-[20px] leading-none -translate-y-px">
+      <span className="font-mincho text-[13px] tracking-[0.18em] leading-none">
+        ご予約はこちら
+      </span>
+      <span
+        aria-hidden
+        className="font-garamond text-[14px] leading-none -translate-y-px"
+      >
         ↗
       </span>
-      <span className="sr-only">Airbnb で予約する</span>
     </a>
   );
 }

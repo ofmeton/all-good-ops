@@ -20,11 +20,27 @@ export function SiteHeader({
   current,
   delayBase = 0.2,
 }: {
+  // variant は現在 styling には未使用（scroll 位置で自動切替）。
+  // current の active 表示と互換性のため残置。
   variant?: SiteHeaderVariant;
   current?: string;
   delayBase?: number;
 }) {
+  void variant; // 互換性のため受け取るだけ
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const threshold = () => Math.max(80, window.innerHeight * 0.55);
+    const update = () => setScrolled(window.scrollY > threshold());
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    return () => {
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
+    };
+  }, []);
 
   useEffect(() => {
     if (!open) return;
@@ -39,22 +55,29 @@ export function SiteHeader({
     };
   }, [open]);
 
-  const isHero = variant === "hero";
-  const textColor = isHero ? "text-(--color-base-light)" : "text-(--color-base-dark)";
-  const subColor = isHero ? "text-(--color-base-light)/85" : "text-(--color-base-dark)/65";
-  const navUnderline = isHero ? "bg-(--color-base-light)" : "bg-(--color-base-dark)";
-  const positionCls = isHero
-    ? "absolute inset-x-0 top-0 z-20"
-    : "sticky top-0 z-40 bg-(--color-base-light)/95 backdrop-blur-[6px] border-b border-(--color-base-dark)/8";
-  const burgerBar = isHero ? "bg-(--color-base-light)" : "bg-(--color-base-dark)";
-  const reserveCls = isHero
-    ? "border border-(--color-base-light)/35 text-(--color-base-light) hover:bg-(--color-base-light)/10"
-    : "bg-(--color-base-dark) text-(--color-base-light) hover:bg-(--color-base-dark)/85";
+  // Hero 領域 (画面トップ + dark 背景) では透過 + 薄色テキスト、
+  // スクロール後 (light コンテンツ上) では不透明 + 濃色テキスト。
+  const showLight = !scrolled;
+  const textColor = showLight
+    ? "text-(--color-base-light)"
+    : "text-(--color-base-dark)";
+  const subColor = showLight
+    ? "text-(--color-base-light)/85"
+    : "text-(--color-base-dark)/65";
+  const navUnderline = showLight
+    ? "bg-(--color-base-light)"
+    : "bg-(--color-base-dark)";
+  const burgerBar = showLight
+    ? "bg-(--color-base-light)"
+    : "bg-(--color-base-dark)";
+  const headerBg = showLight
+    ? "bg-transparent"
+    : "bg-(--color-base-light)/95 backdrop-blur-[6px] border-b border-(--color-base-dark)/8";
 
   return (
     <>
       <header
-        className={`${positionCls} flex items-start justify-between px-6 py-7 md:px-12 md:py-10`}
+        className={`fixed inset-x-0 top-0 z-40 flex items-start justify-between px-6 py-5 md:px-12 md:py-8 transition-[background-color,border-color,box-shadow] duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] ${headerBg}`}
       >
         <Link
           href="/"
@@ -62,73 +85,60 @@ export function SiteHeader({
           style={{ animationDelay: `${delayBase}s` }}
         >
           <span
-            className={`block font-serif text-[22px] md:text-[clamp(30px,2.34vw,60px)] font-medium tracking-[0.18em] ${textColor}`}
+            className={`block font-serif text-[20px] md:text-[clamp(26px,1.95vw,52px)] font-medium tracking-[0.18em] transition-colors duration-500 ${textColor}`}
           >
             TERRA
           </span>
           <span
-            className={`block mt-1 font-garamond text-[10px] md:text-[clamp(13px,0.86vw,22px)] uppercase tracking-[0.42em] ${subColor}`}
+            className={`block mt-1 font-garamond text-[9px] md:text-[clamp(11px,0.78vw,18px)] uppercase tracking-[0.42em] transition-colors duration-500 ${subColor}`}
           >
             Hayama, Isshiki
           </span>
         </Link>
 
-        <div className="flex items-start gap-[clamp(20px,1.95vw,48px)]">
-          <nav
-            className="hidden md:block fade-up"
-            style={{ animationDelay: `${delayBase + 0.25}s` }}
+        <nav
+          className="hidden md:block fade-up"
+          style={{ animationDelay: `${delayBase + 0.25}s` }}
+        >
+          <ul
+            className={`flex items-center gap-[clamp(22px,2.03vw,52px)] font-garamond text-[14px] md:text-[clamp(15px,1.02vw,26px)] tracking-[0.22em] uppercase transition-colors duration-500 ${textColor}`}
           >
-            <ul
-              className={`flex items-center gap-[clamp(22px,2.03vw,52px)] font-garamond text-[14px] md:text-[clamp(15px,1.02vw,26px)] tracking-[0.22em] uppercase ${textColor}`}
-            >
-              {NAV.map((item) => {
-                const active = current === item.label;
-                return (
-                  <li key={item.label} className="group">
-                    <Link
-                      href={item.href}
-                      className="relative inline-block py-2"
-                      aria-current={active ? "page" : undefined}
-                    >
-                      {item.label}
-                      <span
-                        className={`pointer-events-none absolute bottom-0 left-0 h-px ${
-                          active ? "w-full" : "w-0"
-                        } ${navUnderline} transition-[width] duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:w-full`}
-                      />
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
-          </nav>
+            {NAV.map((item) => {
+              const active = current === item.label;
+              return (
+                <li key={item.label} className="group">
+                  <Link
+                    href={item.href}
+                    className="relative inline-block py-2"
+                    aria-current={active ? "page" : undefined}
+                  >
+                    {item.label}
+                    <span
+                      className={`pointer-events-none absolute bottom-0 left-0 h-px ${
+                        active ? "w-full" : "w-0"
+                      } ${navUnderline} transition-[width,background-color] duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:w-full`}
+                    />
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
 
-          <a
-            href={AIRBNB_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`hidden md:inline-flex items-center gap-2.5 font-garamond text-[12px] md:text-[clamp(12px,0.7vw,18px)] tracking-[0.32em] uppercase px-5 py-2.5 md:px-[clamp(16px,1.25vw,32px)] md:py-[clamp(8px,0.62vw,16px)] transition-colors fade-up ${reserveCls}`}
-            style={{ animationDelay: `${delayBase + 0.4}s` }}
-          >
-            <span>Reserve</span>
-            <span aria-hidden>↗</span>
-          </a>
-
-          <button
-            type="button"
-            aria-label="メニューを開く"
-            aria-expanded={open}
-            onClick={() => setOpen(true)}
-            className="md:hidden flex h-10 w-10 items-center justify-center fade-up"
-            style={{ animationDelay: `${delayBase + 0.25}s` }}
-          >
-            <span className={`block h-px w-7 ${burgerBar} relative`}>
-              <span className={`absolute -top-2 left-0 block h-px w-7 ${burgerBar}`} />
-              <span className={`absolute top-2 left-0 block h-px w-5 ${burgerBar}`} />
-            </span>
-            <span className="sr-only">メニューを開く</span>
-          </button>
-        </div>
+        <button
+          type="button"
+          aria-label="メニューを開く"
+          aria-expanded={open}
+          onClick={() => setOpen(true)}
+          className="md:hidden flex h-10 w-10 items-center justify-center fade-up"
+          style={{ animationDelay: `${delayBase + 0.25}s` }}
+        >
+          <span className={`block h-px w-7 ${burgerBar} relative transition-colors duration-500`}>
+            <span className={`absolute -top-2 left-0 block h-px w-7 ${burgerBar} transition-colors duration-500`} />
+            <span className={`absolute top-2 left-0 block h-px w-5 ${burgerBar} transition-colors duration-500`} />
+          </span>
+          <span className="sr-only">メニューを開く</span>
+        </button>
       </header>
 
       {/* Mobile drawer */}
@@ -218,7 +228,7 @@ export function SiteHeader({
               rel="noopener noreferrer"
               className="inline-flex items-center gap-3 font-garamond text-[12px] tracking-[0.32em] uppercase border border-(--color-base-light)/25 px-6 py-3.5 text-(--color-base-light)"
             >
-              Reserve on Airbnb
+              ご予約はこちら
               <span aria-hidden>↗</span>
             </a>
             <p className="mt-8 font-mincho text-[12px] leading-[1.85] tracking-[0.06em] text-(--color-base-light)/70">

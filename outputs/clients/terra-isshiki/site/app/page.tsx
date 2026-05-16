@@ -77,25 +77,6 @@ export default function Home() {
           </p>
         </div>
 
-        {/* Vertical CTA (right) */}
-        <a
-          href={AIRBNB_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="fade-up hidden xl:flex absolute right-6 2xl:right-12 top-1/2 z-10 -translate-y-1/2 vrl items-center gap-9 2xl:gap-12 px-5 py-10 2xl:px-7 2xl:py-14 bg-(--color-base-dark)/55 hover:bg-(--color-base-dark)/85 transition-colors duration-500 backdrop-blur-[3px] border border-(--color-base-light)/20"
-          style={{ animationDelay: "1.5s" }}
-        >
-          <span className="font-mincho text-[clamp(16px,1.09vw,28px)] tracking-[0.45em] text-(--color-base-light)">
-            予約は Airbnb から
-          </span>
-          <span
-            aria-hidden
-            className="font-garamond text-[clamp(12px,0.7vw,18px)] tracking-[0.32em] text-(--color-base-light)/75"
-          >
-            BOOK ↓
-          </span>
-        </a>
-
         {/* Mountain SVG silhouette (bottom) — soft Hayama coastline + twin peaks */}
         <svg
           aria-hidden
@@ -114,24 +95,6 @@ export default function Home() {
           />
         </svg>
 
-        {/* Mobile / tablet bottom CTA — shown below xl, replaced by vertical side CTA at xl+ */}
-        <a
-          href={AIRBNB_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="fade-up xl:hidden absolute bottom-6 right-6 md:bottom-10 md:right-12 z-10 inline-flex items-center gap-3 md:gap-5 bg-(--color-base-dark)/75 px-5 py-3 md:px-9 md:py-5 text-(--color-base-light) backdrop-blur-[2px]"
-          style={{ animationDelay: "1.35s" }}
-        >
-          <span className="font-mincho text-[13px] md:text-[clamp(15px,0.86vw,22px)] tracking-[0.32em]">
-            予約は Airbnb から
-          </span>
-          <span
-            aria-hidden
-            className="font-garamond text-[10px] md:text-[clamp(12px,0.62vw,16px)] tracking-[0.32em] opacity-75"
-          >
-            ↗
-          </span>
-        </a>
       </section>
 
       {/* Concept teaser */}

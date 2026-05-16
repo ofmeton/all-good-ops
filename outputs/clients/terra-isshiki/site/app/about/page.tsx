@@ -62,7 +62,7 @@ export default function AboutPage() {
               </p>
             </div>
 
-            <div className="space-y-8 font-mincho text-[16px] md:text-[23px] lg:text-[27px] leading-[2.05] tracking-[0.06em] text-(--color-base-dark)/90">
+            <div className="space-y-8 font-mincho text-[16px] md:text-[clamp(17px,1.4vw,22px)] leading-[2.05] tracking-[0.06em] text-(--color-base-dark)/90">
               <p>
                 TERRA は、葉山への愛から生まれました。<br />
                 海越しに望む富士山、棚田が広がる里山。<br />
