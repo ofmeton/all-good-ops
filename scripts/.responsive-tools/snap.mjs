@@ -95,7 +95,29 @@ async function snapPage(browser, baseUrl, pagePath, viewport, outDir) {
       el.style.animation = "none";
     });
   }).catch(() => {});
-  await page.waitForTimeout(1000);
+
+  // Trigger lazy-loaded images by scrolling through the page.
+  // next/image and other Intersection Observer-based loaders won't fire
+  // for content below the fold during fullPage screenshot otherwise.
+  await page.evaluate(async () => {
+    const totalHeight = document.body.scrollHeight;
+    const step = Math.max(400, Math.floor(window.innerHeight * 0.8));
+    for (let y = 0; y <= totalHeight + step; y += step) {
+      window.scrollTo(0, y);
+      await new Promise(r => setTimeout(r, 150));
+    }
+    window.scrollTo(0, 0);
+  }).catch(() => {});
+
+  // Wait for any in-flight image decoding
+  await page.evaluate(async () => {
+    const imgs = Array.from(document.querySelectorAll("img"));
+    await Promise.all(imgs.map(i => i.complete ? Promise.resolve() : new Promise(r => {
+      i.addEventListener("load", r, { once: true });
+      i.addEventListener("error", r, { once: true });
+    })));
+  }).catch(() => {});
+  await page.waitForTimeout(500);
 
   // Metrics: horizontal overflow and dimensions
   const metrics = await page.evaluate(() => {
