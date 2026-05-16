@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Noto_Serif_JP, Zen_Old_Mincho, EB_Garamond } from "next/font/google";
+import { MobileStickyReserve } from "./_components/MobileStickyReserve";
 import "./globals.css";
 
 const notoSerifJP = Noto_Serif_JP({
@@ -69,7 +70,10 @@ export default function RootLayout({
       lang="ja"
       className={`${notoSerifJP.variable} ${zenOldMincho.variable} ${ebGaramond.variable} h-full antialiased`}
     >
-      <body className="min-h-full">{children}</body>
+      <body className="min-h-full">
+        {children}
+        <MobileStickyReserve />
+      </body>
     </html>
   );
 }
