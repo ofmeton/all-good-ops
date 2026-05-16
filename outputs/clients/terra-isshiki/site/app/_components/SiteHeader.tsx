@@ -19,12 +19,16 @@ export function SiteHeader({
   variant = "page",
   current,
   delayBase = 0.2,
+  heroBg = "dark",
 }: {
   // variant は現在 styling には未使用（scroll 位置で自動切替）。
   // current の active 表示と互換性のため残置。
   variant?: SiteHeaderVariant;
   current?: string;
   delayBase?: number;
+  // ページ上端の Hero 背景。"dark" は画像系（透明ヘッダー→スクロールで不透明化）、
+  // "light" は paper 等の明色（最初から不透明）。
+  heroBg?: "dark" | "light";
 }) {
   void variant; // 互換性のため受け取るだけ
   const [open, setOpen] = useState(false);
@@ -57,7 +61,8 @@ export function SiteHeader({
 
   // Hero 領域 (画面トップ + dark 背景) では透過 + 薄色テキスト、
   // スクロール後 (light コンテンツ上) では不透明 + 濃色テキスト。
-  const showLight = !scrolled;
+  // ただし heroBg="light" のページは最初から不透明 + 濃色（Stay 等）。
+  const showLight = !scrolled && heroBg === "dark";
   const textColor = showLight
     ? "text-(--color-base-light)"
     : "text-(--color-base-dark)";

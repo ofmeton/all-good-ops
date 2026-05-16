@@ -68,7 +68,7 @@ const ICONS: Record<string, React.ReactNode> = {
 export default function StayPage() {
   return (
     <main className="bg-(--color-base-light)">
-      <SiteHeader variant="page" current="Stay" />
+      <SiteHeader variant="page" current="Stay" heroBg="light" />
 
       {/* Hero */}
       <section className="relative bg-(--color-paper) px-6 py-[clamp(112px,11.5vw,176px)] md:px-12 overflow-hidden">
