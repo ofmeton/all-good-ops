@@ -62,7 +62,7 @@ export default function Home() {
             Hayama, Kanagawa
           </p>
           <h1
-            className="fade-up font-serif font-medium text-[40px] leading-[1.18] md:text-[clamp(56px,5.47vw,140px)] md:leading-[1.12] tracking-[0.02em] text-(--color-base-light)"
+            className="fade-up font-serif font-medium text-[clamp(30px,9.5vw,44px)] leading-[1.18] md:text-[clamp(56px,5.47vw,140px)] md:leading-[1.12] tracking-[0.02em] text-(--color-base-light)"
             style={{ animationDelay: "0.95s" }}
           >
             <span className="block whitespace-nowrap">葉山の風景に、</span>
