@@ -3,6 +3,7 @@ import { createServiceClient } from "@/lib/supabase-server";
 import { assertAdmin, StaffOnlyError } from "@/lib/db/scope";
 import type { Actor } from "@/lib/auth";
 import { assertTransition, type CleaningStatus } from "@/lib/status-machine";
+import { notify, resolveAllAdmins } from "@/lib/notify";
 
 // チェックリスト1項目の提出結果。label は properties.checklist_template から、
 // checked/note はスタッフが記入する。
@@ -84,7 +85,17 @@ export async function submitReport(
     .update({ status: "reported", updated_at: new Date().toISOString() })
     .eq("id", requestId);
   if (statusError) throw statusError;
-  // TODO(Plan 3): 完了報告時に管理者へ通知
+  // 管理者全員に完了報告を通知
+  const admins = await resolveAllAdmins();
+  await notify(
+    "report_submitted",
+    admins,
+    {
+      subject: "完了報告が提出されました",
+      text: "スタッフから清掃の完了報告が提出されました。管理画面で内容をご確認ください。",
+    },
+    { request_id: requestId, report_id: report.id },
+  );
 
   return report as CleaningReport;
 }
