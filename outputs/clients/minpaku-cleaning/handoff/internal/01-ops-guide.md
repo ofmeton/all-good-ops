@@ -144,8 +144,10 @@ Vercel Dashboard → Project → Settings → Cron Jobs に3本登録済み:
 | Path | Schedule (UTC) | JST 換算 | 目的 |
 |---|---|---|---|
 | `/api/cron/remind` | `0 8 * * *` | 17:00 | 翌日担当の前日リマインド |
-| `/api/cron/unassigned-alerts` | `0 * * * *` | 毎時0分 | 24h未割当依頼の管理者・オーナーへのアラート |
+| `/api/cron/unassigned-alerts` | `0 9 * * *` | 翌18:00 | 24h未割当依頼の管理者・オーナーへのアラート |
 | `/api/cron/cleanup-photos` | `0 18 * * *` | 翌03:00 | 期限切れ写真（90日経過）の削除 |
+
+> **Hobby plan 制約注記:** unassigned-alerts は本来「毎時実行」(`0 * * * *`) で設計しているが、Vercel Hobby plan は「Cron は1日1回まで」のため `0 9 * * *`（毎日UTC9時 = JST18時）に暫定設定している。Pro plan ($20/月) へ移行する際は `vercel.json` の cron 設定を `0 * * * *` に戻すこと。検収・初期運用段階では未割当検知の遅れ(最大24時間)を許容する想定。
 
 ### 実行ログの確認
 
