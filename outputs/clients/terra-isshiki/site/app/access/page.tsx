@@ -84,8 +84,8 @@ export default function AccessPage() {
               Location
             </p>
             <h2 className="font-serif text-[28px] md:text-[clamp(34px,2.81vw,72px)] leading-[1.4] tracking-[0.04em] text-(--color-base-dark) mb-8">
-              葉山町一色に、<br className="hidden md:block" />
-              佇む。
+              <span className="block">葉山町一色に、</span>
+              <span className="block">佇む。</span>
             </h2>
             <dl className="border-t border-(--color-base-dark)/15 divide-y divide-(--color-base-dark)/10 mb-10">
               <div className="grid grid-cols-[110px_1fr] md:grid-cols-[140px_1fr] py-5">
@@ -148,8 +148,8 @@ export default function AccessPage() {
             Map
           </p>
           <h2 className="font-serif text-[26px] md:text-[clamp(32px,2.5vw,64px)] leading-[1.4] tracking-[0.04em] text-(--color-base-dark) mb-10">
-            一色海岸からほど近い、<br className="hidden md:block" />
-            静かな住宅地に。
+            <span className="block">一色海岸からほど近い、</span>
+            <span className="block">静かな住宅地に。</span>
           </h2>
 
           <div className="relative w-full aspect-[16/9] md:aspect-[21/9] overflow-hidden border border-(--color-base-dark)/10 bg-(--color-base-light)">
@@ -201,8 +201,8 @@ export default function AccessPage() {
             Reservation
           </p>
           <h2 className="font-serif text-[28px] md:text-[clamp(36px,3.12vw,80px)] leading-[1.36] tracking-[0.04em] text-(--color-base-dark) mb-12 md:mb-16">
-            予約は Airbnb から。<br className="hidden md:block" />
-            空き状況はこちらで確認できます。
+            <span className="block">予約は Airbnb から。</span>
+            <span className="block">空き状況はこちらで確認できます。</span>
           </h2>
 
           <AvailabilityCalendar monthCount={3} />

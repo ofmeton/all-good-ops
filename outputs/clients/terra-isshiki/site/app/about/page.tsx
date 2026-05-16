@@ -113,8 +113,8 @@ export default function AboutPage() {
               <span className="block tracking-[0.16em] text-[20px] md:text-[36px] lg:text-[40px] text-(--color-base-dark)/60 mb-2 font-garamond uppercase">
                 BEAT ICE
               </span>
-              葉山アイス屋が営む、<br className="hidden md:block" />
-              一棟貸しの宿。
+              <span className="block">葉山アイス屋が営む、</span>
+              <span className="block">一棟貸しの宿。</span>
             </h2>
             <div className="space-y-6 font-mincho text-[15px] md:text-[clamp(16px,1.02vw,26px)] leading-[2.0] tracking-[0.06em] text-(--color-base-dark)/85">
               <p>
