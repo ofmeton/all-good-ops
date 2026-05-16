@@ -154,9 +154,9 @@ Vercel Dashboard → Project → Deployments → 任意のデプロイ → Funct
 ### 手動トリガ（動作確認）
 
 ```bash
-curl -H "Authorization: Bearer $CRON_SECRET" https://<本番URL>/api/cron/unassigned-alerts
-curl -H "Authorization: Bearer $CRON_SECRET" https://<本番URL>/api/cron/remind
-curl -H "Authorization: Bearer $CRON_SECRET" https://<本番URL>/api/cron/cleanup-photos
+curl -H "Authorization: Bearer $CRON_SECRET" https://minpaku-cleaning.vercel.app/api/cron/unassigned-alerts
+curl -H "Authorization: Bearer $CRON_SECRET" https://minpaku-cleaning.vercel.app/api/cron/remind
+curl -H "Authorization: Bearer $CRON_SECRET" https://minpaku-cleaning.vercel.app/api/cron/cleanup-photos
 ```
 
 正常時のレスポンス例:
