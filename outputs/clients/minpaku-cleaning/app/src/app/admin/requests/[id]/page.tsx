@@ -1,4 +1,5 @@
 import { resolveAdminActor } from "@/lib/supabase-auth";
+import { createServiceClient } from "@/lib/supabase-server";
 import { getRequest } from "@/lib/db/requests";
 import { getReportForRequest } from "@/lib/db/reports";
 import { listProperties } from "@/lib/db/properties";
@@ -36,6 +37,22 @@ export default async function RequestDetailPage({
   const staffName =
     staff.find((s) => s.id === request.assigned_staff_id)?.name ?? null;
 
+  // 連続予約（前後1日以内）を検索（同物件・cancelled以外）
+  const db = createServiceClient();
+  const { data: adjacent } = await db
+    .from("cleaning_requests")
+    .select("id, checkin_date, checkout_date, status")
+    .eq("property_id", request.property_id)
+    .neq("id", request.id)
+    .neq("status", "cancelled");
+  const adjacentRequests = (adjacent ?? []).filter((other) => {
+    // 前後1日以内に他予約のチェックイン/アウトが接しているか
+    return (
+      other.checkin_date === request.checkout_date ||
+      other.checkout_date === request.checkin_date
+    );
+  });
+
   // reported / confirmed なら完了報告と写真を取得し、写真は署名URLにする
   const reportData =
     request.status === "reported" || request.status === "confirmed"
@@ -64,6 +81,7 @@ export default async function RequestDetailPage({
         status={request.status}
         assignedStaffId={request.assigned_staff_id}
         staff={staff}
+        adjacentRequests={adjacentRequests}
       />
 
       {reportData && (
