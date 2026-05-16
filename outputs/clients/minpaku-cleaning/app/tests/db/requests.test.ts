@@ -23,11 +23,16 @@ const staff: Actor = { role: "staff", staffId: "s1" };
 
 let propertyId: string;
 
-// 翌日以降の YYYY-MM-DD を返すヘルパー（当日割り当て不可の検証用）
+// 翌日以降の YYYY-MM-DD を返すヘルパー（JST 基準・実装側 todayInJST と整合）
 function dateStr(daysFromNow: number): string {
-  const d = new Date();
-  d.setDate(d.getDate() + daysFromNow);
-  return d.toISOString().slice(0, 10);
+  const base = new Date();
+  base.setUTCDate(base.getUTCDate() + daysFromNow);
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Tokyo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(base);
 }
 
 beforeEach(async () => {

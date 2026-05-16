@@ -13,9 +13,14 @@ let requestId: string;
 let staffActor: Actor;
 
 function dateStr(daysFromNow: number): string {
-  const d = new Date();
-  d.setDate(d.getDate() + daysFromNow);
-  return d.toISOString().slice(0, 10);
+  const base = new Date();
+  base.setUTCDate(base.getUTCDate() + daysFromNow);
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Tokyo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(base);
 }
 
 beforeEach(async () => {

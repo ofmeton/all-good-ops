@@ -34,20 +34,27 @@ export type CleaningRequest = {
 
 // 当日割り当て不可: checkin は翌日以降。checkout > checkin。guest_count > 0。
 // current_date を使う CHECK 制約は immutable でないため不可 → アプリ層で検証する。
-// 日付比較は Node ランタイムのローカルタイム前提（本番は TZ=Asia/Tokyo を想定）。
+// TZ は Vercel Serverless Runtime で予約されており env var で渡せないため、
+// Intl.DateTimeFormat で JST 日付を直接取得する（ランタイム TZ に依存しない）。
+function todayInJST(): string {
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Tokyo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date());
+}
+
 function validateRequestFields(input: {
   checkin_date: string;
   checkout_date: string;
   guest_count: number;
 }): void {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const checkin = new Date(input.checkin_date + "T00:00:00");
-  const checkout = new Date(input.checkout_date + "T00:00:00");
-  if (checkin <= today) {
+  const today = todayInJST();
+  if (input.checkin_date <= today) {
     throw new Error("チェックイン日は翌日以降にしてください");
   }
-  if (checkout <= checkin) {
+  if (input.checkout_date <= input.checkin_date) {
     throw new Error("チェックアウト日はチェックイン日より後にしてください");
   }
   if (input.guest_count <= 0) {
