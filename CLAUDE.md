@@ -132,6 +132,7 @@
 | サンプルサイト追加、portfolio 組込み、INDEX ボタン、サムネ撮影、WORK_DETAILS、kudo-port-grid | dev-automation | system-engineer（`sample-site-onboarding` 必須参照） |
 | 印刷データ、入稿、accea、塗り足し、bleed、CMYK、トンボ、350dpi、アップスケール、印刷用PDF | dev-automation | system-engineer（`print-data-prep` 必須参照） |
 | git整理、コミットしてない、pushしてない、リポジトリ最新化、working tree汚い、.gitignore、ブランチ整理 | dev-automation | system-engineer（`git-repo-cleanup-protocol` 必須参照） |
+| レスポンシブ、レイアウト崩れ、viewport、サイズ不適合、横スクロール、mobile崩れ、breakpoint、clamp、auto-fit minmax | dev-automation | system-engineer（`responsive-layout` 必須参照。`responsive-snap.sh`/`responsive-audit.sh` 使用） |
 | 振り返り、セッション振り返り、レビュー、今回の動き、改善点 | 横断 | secretary（`session-retrospective.md` を参照して実行） |
 | BSA、工藤陸、Lancers、Coconala、認定ランサー、提案投下、Week KPI | business-ops | rapid-hp-operator |
 | デザイン方向性、DESIGN.md、OUTLINE.md、トンマナ、AIっぽい、毎回同じデザイン、個性的、デザインテンプレ、デザイン統括 | 横断 | design-director（守り） |
@@ -142,6 +143,14 @@
 | 公開前チェック、規約確認、アフィリエイト開示、景表法、薬機法、ステマ | **外部スポーク: monetize-os** | monetize-os/compliance |
 | 工務店、HP 制作、クライアントサイト、Vercel、サンプルサイト、ポートフォリオサイト | **外部スポーク: portfolio** | (秘書が business-ops/client-manager 起動 + portfolio/ 作業ディレクトリへ移動) |
 | wiki、ingest、知識ベース、Karpathy wiki、wiki 取り込み、wiki query、wiki lint | 横断 | secretary（標準分類。`wiki/SCHEMA.md` 必読） |
+| コミットして、コミット作成、PR 作成、PR 出して、git push、commit & push | dev-automation | system-engineer（`commit-commands:commit` / `commit-push-pr` skill 参照） |
+| PR レビュー、コードレビュー、pull request レビュー、review-pr | dev-automation | system-engineer（`pr-review-toolkit:review-pr` / `code-review:code-review` skill 参照） |
+| a11y、アクセシビリティ、LCP、Lighthouse、Core Web Vitals、DevTools、メモリリーク、Chrome DevTools 調査 | dev-automation | system-engineer（`chrome-devtools-mcp:*` skill 参照） |
+| CLAUDE.md 更新、ルーティング表更新、体制ドキュメント整備 | 横断 | org-designer（`claude-md-management:revise-claude-md` skill 参照） |
+| Anthropic SDK、anthropic-sdk、Claude API、prompt caching、extended thinking、tool use（SDK） | dev-automation | system-engineer（`claude-api` skill 参照） |
+| セッション使用量レポート、token cost 分析、subagent 利用状況、HTML レポート（usage） | dev-automation | usage-analyst（`session-report:session-report` skill 参照） |
+| スキル作って、skill 化、SKILL.md 書いて、既存スキル改善、スキル設計 | 横断 | org-designer（`skill-creator:skill-creator` skill 参照） |
+| settings.json、hook 追加、permission 調整、環境変数設定、自動化ルール（毎回X時にY） | dev-automation | system-engineer（`update-config` skill 参照。秘書が軽量判定して直接処理する場合もあり） |
 
 ### 外部スポークへの委譲ルール
 
@@ -266,6 +275,7 @@
 | 27 | 印刷データ入稿準備 | `print-data-prep.md` | PNG→印刷所入稿PDFの一気通貫処理。Real-ESRGAN タイル推論（MPS）→塗り足し→CMYK→トンボ→PDF。accea 等向け |
 | 28 | ローカルファイル整理プロトコル | `local-file-organization.md` | Downloads/Desktop/Documents 等の大型整理。初動スキャン→方針合意（経理独立等3軸必須）→中身確認→構造案→バッチ実行の5フェーズ。MD5重複検出・macOS zip展開フロー含む |
 | 29 | Gitリポジトリ整理プロトコル | `git-repo-cleanup-protocol.md` | 「コミット/プッシュしてないもの整理」依頼の標準フロー。初動スキャン（sub-repo・build artifacts 検出）→方針合意（1回に集約）→.gitignore一括投入→Phase分割計画→コミット実行→pushの5フェーズ |
+| 30 | レスポンシブレイアウト規約 + 検証 | `responsive-layout.md` | LP/HP 制作時の崩れ対策ベスプラ集 + `responsive-snap.sh`（全 viewport 横スクロール自動検出）+ `responsive-audit.sh`（固定px/nowrap/overflow-x:hidden/clamp採用率）案内。frontend-design とペア起動。実装着手前 + リリース前チェック必須 |
 
 ---
 

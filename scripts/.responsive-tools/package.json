@@ -1,0 +1,10 @@
+{
+  "name": "responsive-tools",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Internal Playwright tooling for responsive-snap.sh",
+  "dependencies": {
+    "playwright": "1.49.1"
+  }
+}

@@ -42,3 +42,7 @@ build/
 outputs/**/tmp/
 outputs/**/_local-check/
 outputs/**/_check/
+
+# responsive-snap / responsive-audit 生成物
+/tmp/
+scripts/.responsive-tools/node_modules/
