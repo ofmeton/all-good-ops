@@ -8,6 +8,7 @@ import {
 } from "@/lib/db/requests";
 import { submitReport } from "@/lib/db/reports";
 import { InvalidTransitionError } from "@/lib/status-machine";
+import { StaffOnlyError } from "@/lib/db/scope";
 
 // PATCH: ステータス操作（claim / start）
 const patchSchema = z.object({
@@ -53,6 +54,8 @@ export async function PATCH(
       e instanceof InvalidTransitionError
     )
       return NextResponse.json({ error: e.message }, { status: 409 });
+    if (e instanceof StaffOnlyError)
+      return NextResponse.json({ error: e.message }, { status: 403 });
     if (e instanceof Error)
       return NextResponse.json({ error: e.message }, { status: 400 });
     throw e;
@@ -81,6 +84,8 @@ export async function POST(
   } catch (e) {
     if (e instanceof InvalidTransitionError)
       return NextResponse.json({ error: e.message }, { status: 409 });
+    if (e instanceof StaffOnlyError)
+      return NextResponse.json({ error: e.message }, { status: 403 });
     if (e instanceof Error)
       return NextResponse.json({ error: e.message }, { status: 400 });
     throw e;

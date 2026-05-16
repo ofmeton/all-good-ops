@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
 import { resolveActorByToken } from "@/lib/auth";
 import { createSupplyRequest } from "@/lib/db/supplies";
+import { StaffOnlyError } from "@/lib/db/scope";
 
 const schema = z.object({
   token: z.string().min(1),
@@ -21,6 +22,8 @@ export async function POST(req: NextRequest) {
   try {
     return NextResponse.json(await createSupplyRequest(actor, input));
   } catch (e) {
+    if (e instanceof StaffOnlyError)
+      return NextResponse.json({ error: e.message }, { status: 403 });
     if (e instanceof Error)
       return NextResponse.json({ error: e.message }, { status: 400 });
     throw e;
