@@ -19,6 +19,35 @@ log() {
 # 結果は logs/audit-integrity-YYYYMMDD.log に書き出し、グローバル変数に件数を残す
 INTEGRITY_MISSING=0
 INTEGRITY_EXTRA=0
+# 外部スポーク評価データの鮮度モニタ（読み取り + ログのみ・既存挙動を変更しない）
+STALE_SPOKES=()
+STALE_COUNT=0
+SPOKE_THRESHOLD_DAYS=14
+check_spoke_freshness() {
+  local spokes=(
+    "/Users/rikukudo/Projects/monetize-os/ops/agent-harness-eval.md"
+    "/Users/rikukudo/Projects/monetize-os/ops/organization-harness-eval.md"
+    "/Users/rikukudo/Projects/ai-radar/ops/dashboard-health.md"
+  )
+  for f in "${spokes[@]}"; do
+    [ ! -f "$f" ] && continue
+    local age=$(( ( $(date +%s) - $(stat -f %m "$f") ) / 86400 ))
+    if [ "$age" -gt "$SPOKE_THRESHOLD_DAYS" ]; then
+      STALE_SPOKES+=("$(basename "$f"): ${age}日")
+    fi
+  done
+  STALE_COUNT=${#STALE_SPOKES[@]}
+  if [ "$STALE_COUNT" -gt 0 ]; then
+    log "WARN: 外部スポーク評価データが ${SPOKE_THRESHOLD_DAYS}日 以上古い:"
+    for s in "${STALE_SPOKES[@]}"; do
+      log "  - $s"
+    done
+    log "ACTION: 該当スポークのハーネス評価バッチを人間トリガーで再実行してください。"
+  else
+    log "外部スポーク評価 OK (鮮度 ${SPOKE_THRESHOLD_DAYS}日 以内)"
+  fi
+}
+
 check_scores_integrity() {
   local integrity_log="${LOG_DIR}/audit-integrity-$(date +%Y%m%d).log"
   local scores_file="${PROJECT_DIR}/data/quality-scores.json"
@@ -63,6 +92,7 @@ check_scores_integrity() {
 log "=== 月次監査開始 ==="
 
 check_scores_integrity
+check_spoke_freshness
 
 if ! command -v claude &> /dev/null; then
   log "ERROR: claude コマンドが見つかりません"
@@ -123,8 +153,15 @@ else
   log "ERROR: 月次監査がエラーコード ${EXIT_CODE} で終了"
 fi
 
+# JSON 用 stale list 構築（空配列 + set -u 対応）
+if [ "$STALE_COUNT" -gt 0 ] && command -v jq &> /dev/null; then
+  STALE_JSON=$(printf '%s\n' "${STALE_SPOKES[@]}" | jq -R . | jq -s -c .)
+else
+  STALE_JSON="[]"
+fi
+
 cat >> "${PROJECT_DIR}/data/usage-log.jsonl" << EOF
-{"timestamp":"$(date -u +%Y-%m-%dT%H:%M:%SZ)","session_type":"monthly-audit","cost_tier":"standard","agents_invoked":["secretary","quality-auditor","usage-analyst","org-designer"],"skills_referenced":["cost-control"],"exit_code":${EXIT_CODE},"integrity_check":{"missing":${INTEGRITY_MISSING},"extra":${INTEGRITY_EXTRA}}}
+{"timestamp":"$(date -u +%Y-%m-%dT%H:%M:%SZ)","session_type":"monthly-audit","cost_tier":"standard","agents_invoked":["secretary","quality-auditor","usage-analyst","org-designer"],"skills_referenced":["cost-control"],"exit_code":${EXIT_CODE},"integrity_check":{"missing":${INTEGRITY_MISSING},"extra":${INTEGRITY_EXTRA}},"spoke_freshness":{"stale":${STALE_JSON},"stale_count":${STALE_COUNT},"threshold_days":${SPOKE_THRESHOLD_DAYS}}}
 EOF
 
 log "=== ログ: ${LOG_FILE} ==="
