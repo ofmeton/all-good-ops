@@ -218,13 +218,21 @@ class CoconalaAdapter(PlatformAdapter):
         client_name: Optional[str] = listing.client_name
 
         # 6) 本人確認 / 7) 発注実績: 募集者情報セクション内から抽出。
+        # 「認証状況」テーブルの「本人確認」行の body にはアイコンのみが置かれ、
+        # テキストには「済」「未」のような文字は出ない。未認証は
+        # `i.coconala-icon.-minus-thin`（ハイフン薄色アイコン）でマークされる。
+        # よって「本人確認」行内に -minus-thin アイコンが無ければ認証済みと判定する。
         client_verified: bool = False
         client_history_count: Optional[int] = None
         req_el = soup.select_one("div.c-requestDetailRequester")
         if req_el:
-            req_text = req_el.get_text(" ", strip=True)
-            # 認証状況テーブルに「本人確認」+「済」が出ていれば確認済み
-            client_verified = "本人確認" in req_text and "済" in req_text
+            for row in req_el.select("div.c-infoRequesterTableRow"):
+                heading = row.select_one("div.c-infoRequesterTableRow_heading")
+                if heading and heading.get_text(strip=True) == "本人確認":
+                    body = row.select_one("div.c-infoRequesterTableRow_body")
+                    if body and body.select_one("i.coconala-icon.-minus-thin") is None:
+                        client_verified = True
+                    break
             # 発注実績テーブル: 「発注件数」heading に対応する body の数値
             for heading in req_el.select("div.c-infoRequesterTableColumn_heading"):
                 if heading.get_text(strip=True) == "発注件数":
