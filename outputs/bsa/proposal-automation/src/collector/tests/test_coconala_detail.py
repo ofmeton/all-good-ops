@@ -109,6 +109,15 @@ def test_detail_basic_fields(adapter, detail_html, listing):
     assert detail.is_closed is False
 
 
+def test_client_verified_unverified_returns_false(adapter, detail_html, listing):
+    """fixture は未認証クライアント（victoire95）。本人確認行に -minus-thin
+    アイコンがあるため client_verified=False になること。
+    認証済みケースの fixture は未取得（実運用観察に委ねる）。
+    """
+    detail = adapter.parse_detail_from_html(detail_html, listing)
+    assert detail.client_verified is False
+
+
 # ── 予算パース ──────────────────────────────────────────────
 
 
