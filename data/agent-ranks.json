@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-25",
+  "last_updated": "2026-05-19",
   "rank_definitions": {
     "N": "新規（初期ランク。実績なし）",
     "N-C": "安定稼働。基本品質を満たす",
@@ -25,7 +25,7 @@
     "ibasho-designer": "N",
     "nonprofit-advisor": "N",
     "shopify-operator": "N",
-    "icecream-ops": "N",
+    "rice-cream-ops": "N",
     "freelance-scout": "N",
     "client-manager": "N",
     "brand-publisher": "N",
