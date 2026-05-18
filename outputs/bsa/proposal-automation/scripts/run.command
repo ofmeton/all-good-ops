@@ -4,6 +4,7 @@
 # Stage 2:   generator (提案文生成)
 # Stage 2.5: auto-submit (fit_score>=60 の提案を自動送信。BSA_PA_NO_AUTO_SUBMIT=1 でスキップ)
 # Stage 3:   notifier (macOS 通知 + Gmail 送信)
+# Stage 3.5: session-check (LAN/CW/CN セッション疎通テスト → 切れていれば自動 relogin)
 # Stage 4:   dashboard 起動 + ブラウザで開く
 set -euo pipefail
 
@@ -89,6 +90,22 @@ fi
 
 cd "$BSA_PA_BASE/src/notifier"
 npx tsx gmail.ts || echo "⚠️ Gmail 送信失敗（無視して続行）"
+
+# Stage 3.5: session-check（dashboard 起動の直前。切れていればここで自動 relogin）
+echo ""
+echo "🔑 Stage 3.5: ログインセッションをチェック中..."
+source "$BSA_PA_VENV/bin/activate"
+EXPIRED=$(python "$BSA_PA_BASE/scripts/check_sessions.py" 2>/dev/null || true)
+deactivate
+if [ -n "$EXPIRED" ]; then
+  echo "⚠️ セッション切れ検出: $EXPIRED"
+  echo "🔑 自動 relogin を開始します（ブラウザで手動ログインしてください）..."
+  for prefix in $EXPIRED; do
+    bash "$BSA_PA_BASE/scripts/relogin.sh" "$prefix" || echo "⚠️ relogin failed for $prefix（手動再試行してください）"
+  done
+else
+  echo "✓ 全媒体セッション健全"
+fi
 
 # Stage 4: dashboard 起動 + ブラウザ
 echo ""
