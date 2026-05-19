@@ -88,7 +88,7 @@ const NOTICES: string[] = [
 
 export default function RoomsPage() {
   return (
-    <main className="bg-(--color-base-light)">
+    <main className="bg-(--color-paper)">
       <SiteHeader variant="page" current="Rooms" />
 
       {/* Hero */}
@@ -118,7 +118,7 @@ export default function RoomsPage() {
             Rooms
           </p>
           <h1
-            className="fade-up font-serif font-medium text-[clamp(24px,8.1vw,36px)] leading-[1.2] md:text-[clamp(46px,3.91vw,100px)] md:leading-[1.14] tracking-[0.02em]"
+            className="fade-up font-serif font-medium text-[clamp(20px,6.2vw,30px)] leading-[1.2] md:text-[clamp(34px,2.97vw,72px)] md:leading-[1.14] tracking-[0.02em]"
             style={{ animationDelay: "0.55s" }}
           >
             <span className="block whitespace-nowrap">部屋と空間。</span>
@@ -265,7 +265,7 @@ export default function RoomsPage() {
         </div>
       </section>
 
-      <ReservationCTA tone="dark" />
+      <ReservationCTA tone="light" />
 
       {/* Next link */}
       <section className="border-t border-(--color-base-dark)/10 px-6 py-[clamp(80px,7.3vw,112px)] md:px-12 text-center">

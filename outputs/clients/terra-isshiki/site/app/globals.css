@@ -34,8 +34,9 @@ html, body {
 
 @keyframes heroSlide {
   0%    { opacity: 0; transform: scale(1.0); }
-  4.7%  { opacity: 1; transform: scale(1.0); }
-  29.7% { opacity: 0; transform: scale(1.08); }
+  3%    { opacity: 1; transform: scale(1.0); }
+  30%   { opacity: 1; transform: scale(1.06); }
+  33%   { opacity: 0; transform: scale(1.08); }
   100%  { opacity: 0; transform: scale(1.0); }
 }
 

@@ -42,9 +42,9 @@ const EXPERIENCES = [
   {
     no: "04",
     label: "抹茶マシーン",
-    sub: "Citizen Matcha at home",
+    sub: "Cuzen Matcha at home",
     body:
-      "京都生まれ Citizen Matcha の抹茶マシーンを、宿のキッチンに。挽きたての一服を、いつでも手元に。",
+      "京都生まれ Cuzen Matcha の抹茶マシーンを、宿のキッチンに。挽きたての一服を、いつでも手元に。",
     image: "/images/stay/stay-matcha.jpg",
     accent: "pine",
   },
@@ -67,7 +67,7 @@ const ICONS: Record<string, React.ReactNode> = {
 
 export default function StayPage() {
   return (
-    <main className="bg-(--color-base-light)">
+    <main className="bg-(--color-paper)">
       <SiteHeader variant="page" current="Stay" heroBg="light" />
 
       {/* Hero */}
@@ -80,7 +80,7 @@ export default function StayPage() {
             Stay — Things to Experience
           </p>
           <h1
-            className="fade-up font-serif font-medium text-[clamp(26px,8.6vw,40px)] leading-[1.22] md:text-[clamp(48px,4.69vw,120px)] md:leading-[1.16] tracking-[0.02em] text-(--color-base-dark)"
+            className="fade-up font-serif font-medium text-[clamp(22px,6.6vw,32px)] leading-[1.22] md:text-[clamp(36px,3.55vw,84px)] md:leading-[1.16] tracking-[0.02em] text-(--color-base-dark)"
             style={{ animationDelay: "0.45s" }}
           >
             <span className="block">葉山で過ごす、</span>
@@ -104,7 +104,7 @@ export default function StayPage() {
       </section>
 
       {/* Experiences */}
-      <section className="relative py-[clamp(80px,7.3vw,112px)] bg-(--color-base-light)">
+      <section className="relative py-[clamp(80px,7.3vw,112px)] bg-(--color-paper)">
         <div className="grid gap-20 md:gap-32">
           {EXPERIENCES.map((exp) => {
             const accentColor =
@@ -165,7 +165,7 @@ export default function StayPage() {
         </div>
       </section>
 
-      <ReservationCTA tone="dark" />
+      <ReservationCTA tone="light" />
 
       {/* Next link */}
       <section className="border-t border-(--color-base-dark)/10 px-6 py-[clamp(80px,7.3vw,112px)] md:px-12 text-center">

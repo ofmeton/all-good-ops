@@ -14,7 +14,7 @@ const AIRBNB_URL =
 
 export default function Home() {
   return (
-    <main className="bg-(--color-base-light)">
+    <main className="bg-(--color-paper)">
       <section className="relative isolate h-[100svh] w-full overflow-hidden bg-(--color-base-dark) text-(--color-base-light)">
         {/* Slideshow */}
         <div aria-hidden className="absolute inset-0">
@@ -62,7 +62,7 @@ export default function Home() {
             Hayama, Kanagawa
           </p>
           <h1
-            className="fade-up font-serif font-medium text-[clamp(30px,9.5vw,44px)] leading-[1.18] md:text-[clamp(56px,5.47vw,140px)] md:leading-[1.12] tracking-[0.02em] text-(--color-base-light)"
+            className="fade-up font-serif font-medium text-[clamp(26px,7vw,36px)] leading-[1.18] md:text-[clamp(42px,4.2vw,100px)] md:leading-[1.12] tracking-[0.02em] text-(--color-base-light)"
             style={{ animationDelay: "0.95s" }}
           >
             <span className="block whitespace-nowrap">葉山の風景に、</span>
@@ -133,7 +133,7 @@ export default function Home() {
       </section>
 
       {/* Section gateway cards */}
-      <section className="relative bg-(--color-base-light) py-[clamp(96px,8.34vw,128px)]">
+      <section className="relative bg-(--color-paper) py-[clamp(96px,8.34vw,128px)]">
         <div className="mx-auto max-w-[1640px] px-6 md:px-12">
           <p className="font-garamond italic text-[clamp(13px,0.86vw,22px)] tracking-[0.4em] uppercase text-(--color-soil) mb-6 md:text-center">
             Explore
