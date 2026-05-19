@@ -70,36 +70,46 @@ export default function StayPage() {
     <main className="bg-(--color-paper)">
       <SiteHeader variant="page" current="Stay" heroBg="light" />
 
-      {/* Hero */}
-      <section className="relative bg-(--color-paper) px-6 py-[clamp(112px,11.5vw,176px)] md:px-12 overflow-hidden">
-        <div className="mx-auto max-w-[1480px] relative z-10">
+      {/* Hero — full image */}
+      <section className="relative h-[64svh] min-h-[420px] w-full overflow-hidden bg-(--color-paper) text-(--color-base-dark)">
+        <Image
+          src="/images/hero/hero-06-137.jpg"
+          alt="TERRA HAYAMA Stay — 床の間に飾られた棚田のアート"
+          fill
+          priority
+          sizes="100vw"
+          quality={88}
+          className="object-cover object-center"
+        />
+        <div
+          aria-hidden
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(245,241,234,0.20) 0%, rgba(245,241,234,0.06) 35%, rgba(236,229,216,0.65) 100%)",
+          }}
+        />
+        <div className="absolute bottom-12 left-6 md:bottom-20 md:left-12 z-10 max-w-[88%] md:max-w-[760px]">
           <p
-            className="fade-up font-garamond italic text-[clamp(13px,0.86vw,22px)] tracking-[0.4em] uppercase text-(--color-soil) mb-6"
-            style={{ animationDelay: "0.2s" }}
+            className="fade-up font-garamond italic text-[clamp(13px,0.86vw,22px)] tracking-[0.4em] uppercase text-(--color-soil) mb-5"
+            style={{ animationDelay: "0.3s" }}
           >
             Stay — Things to Experience
           </p>
           <h1
             className="fade-up font-serif font-medium text-[clamp(22px,6.6vw,32px)] leading-[1.22] md:text-[clamp(36px,3.55vw,84px)] md:leading-[1.16] tracking-[0.02em] text-(--color-base-dark)"
-            style={{ animationDelay: "0.45s" }}
+            style={{ animationDelay: "0.55s" }}
           >
             <span className="block">葉山で過ごす、</span>
             <span className="block">四つの一日。</span>
           </h1>
           <p
-            className="fade-up mt-10 md:mt-14 max-w-[640px] font-mincho text-[15px] md:text-[23px] lg:text-[27px] leading-[2.0] tracking-[0.08em] text-(--color-base-dark)/80"
-            style={{ animationDelay: "0.7s" }}
+            className="fade-up mt-5 md:mt-8 font-mincho text-[14px] md:text-[clamp(16px,1.02vw,26px)] leading-[1.85] tracking-[0.16em] text-(--color-base-dark)/80"
+            style={{ animationDelay: "0.85s" }}
           >
-            棚田・海・地元の食材・抹茶。滞在中に出会える、葉山らしい四つの過ごし方です。
+            棚田・海・地元の食材・抹茶。<br />
+            滞在中に出会える、葉山らしい四つの過ごし方。
           </p>
-        </div>
-
-        {/* Decorative number */}
-        <div
-          aria-hidden
-          className="hidden md:block absolute right-[-40px] bottom-[-60px] font-garamond italic text-[260px] leading-none text-(--color-base-dark)/[0.04] select-none"
-        >
-          04
         </div>
       </section>
 
