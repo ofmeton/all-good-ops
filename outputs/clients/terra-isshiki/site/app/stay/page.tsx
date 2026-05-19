@@ -126,6 +126,21 @@ export default function StayPage() {
 
             return (
               <article key={exp.no}>
+                {/* Text — readable width, padded — comes FIRST */}
+                <div className="mx-auto max-w-[1480px] px-6 md:px-12 mb-8 md:mb-14">
+                  <p
+                    className={`font-garamond italic text-[clamp(13px,0.78vw,20px)] tracking-[0.42em] uppercase mb-3 ${accentColor}`}
+                  >
+                    {exp.no}・{exp.sub}
+                  </p>
+                  <h2 className="font-serif text-[26px] md:text-[clamp(32px,2.5vw,64px)] leading-[1.36] tracking-[0.04em] text-(--color-base-dark) mb-6 md:mb-8">
+                    {exp.label}
+                  </h2>
+                  <p className="font-mincho text-[14px] md:text-[clamp(16px,1.02vw,26px)] leading-[2.0] tracking-[0.08em] text-(--color-base-dark)/85 md:max-w-[900px]">
+                    {exp.body}
+                  </p>
+                </div>
+
                 {/* Visual — full bleed, large */}
                 {exp.image ? (
                   <div className="relative aspect-[16/10] md:aspect-[5/2] w-full overflow-hidden bg-(--color-base-dark)/5">
@@ -154,21 +169,6 @@ export default function StayPage() {
                     </div>
                   </div>
                 )}
-
-                {/* Text — readable width, padded */}
-                <div className="mx-auto max-w-[1480px] px-6 md:px-12 mt-8 md:mt-14">
-                  <p
-                    className={`font-garamond italic text-[clamp(13px,0.78vw,20px)] tracking-[0.42em] uppercase mb-3 ${accentColor}`}
-                  >
-                    {exp.no}・{exp.sub}
-                  </p>
-                  <h2 className="font-serif text-[26px] md:text-[clamp(32px,2.5vw,64px)] leading-[1.36] tracking-[0.04em] text-(--color-base-dark) mb-6 md:mb-8">
-                    {exp.label}
-                  </h2>
-                  <p className="font-mincho text-[14px] md:text-[clamp(16px,1.02vw,26px)] leading-[2.0] tracking-[0.08em] text-(--color-base-dark)/85 md:max-w-[900px]">
-                    {exp.body}
-                  </p>
-                </div>
               </article>
             );
           })}

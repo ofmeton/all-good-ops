@@ -52,7 +52,7 @@ export default function Home() {
             className="fade-up font-serif font-medium text-[clamp(20px,5.4vw,28px)] leading-[1.18] md:text-[clamp(32px,3.2vw,72px)] md:leading-[1.12] tracking-[0.02em] text-(--color-base-light)"
             style={{ animationDelay: "0.95s" }}
           >
-            <span className="block whitespace-nowrap">ゆっくり溶ける、</span>
+            <span className="block whitespace-nowrap">ゆっくり流れる、</span>
             <span className="block whitespace-nowrap">葉山時間。</span>
           </h1>
           <p

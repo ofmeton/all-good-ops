@@ -70,8 +70,8 @@ export default function AccessPage() {
             className="fade-up mt-5 md:mt-8 font-mincho text-[14px] md:text-[clamp(16px,1.02vw,26px)] leading-[1.85] tracking-[0.16em] text-(--color-base-light)/85"
             style={{ animationDelay: "0.85s" }}
           >
-            一色海岸の喧騒から少し離れた、<br />
-            棚田と松林に囲まれた一棟貸し。
+            住宅地に流れる、<br />
+            葉山らしい時間の中に佇む。
           </p>
         </div>
       </section>
