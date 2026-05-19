@@ -22,8 +22,8 @@ const MAPS_LINK = `https://www.google.com/maps/search/?api=1&query=${MAP_LAT}%2C
 const POINTS = [
   { name: "一色海岸", time: "徒歩 8 分", note: "CNN 世界の厳選ビーチ 100 選" },
   { name: "葉山御用邸", time: "徒歩 12 分", note: "皇室の別邸を擁する一色エリアの中心" },
-  { name: "コンビニ", time: "徒歩 ◯ 分", note: "日用品・夜食のちょっとした買い出しに" },
-  { name: "スーパー", time: "徒歩 ◯ 分", note: "食材調達・滞在中の自炊に" },
+  { name: "セブンイレブン 葉山一色店", time: "徒歩 30 秒", note: "日用品・夜食のちょっとした買い出しに" },
+  { name: "スズキヤ 葉山店", time: "徒歩 5 分", note: "食材調達・滞在中の自炊に" },
   { name: "森戸海岸", time: "車 8 分", note: "葉山きっての海水浴と日没スポット" },
   { name: "上山口の棚田", time: "車 12 分", note: "葉山アイスのお米を育てる棚田" },
   { name: "JR 逗子駅", time: "車 15 分 / バス 25 分", note: "横須賀線・湘南新宿ライン" },
