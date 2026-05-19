@@ -78,15 +78,14 @@ export default function AccessPage() {
       </section>
 
       {/* Address & POI */}
-      <section className="relative">
+      <section className="relative pt-[clamp(40px,4vw,72px)]">
         <div className="grid md:grid-cols-2 items-stretch">
           <div className="px-6 py-[clamp(80px,7.3vw,112px)] md:px-16 lg:px-24 flex flex-col justify-center">
             <p className="font-garamond italic text-[clamp(13px,0.86vw,22px)] tracking-[0.4em] uppercase text-(--color-soil) mb-4">
               Location
             </p>
             <h2 className="font-serif text-[28px] md:text-[clamp(34px,2.81vw,72px)] leading-[1.4] tracking-[0.04em] text-(--color-base-dark) mb-8">
-              <span className="block">葉山町、</span>
-              <span className="block">一色。</span>
+              <span className="block">葉山町、一色。</span>
             </h2>
             <dl className="border-t border-(--color-base-dark)/15 divide-y divide-(--color-base-dark)/10 mb-10">
               <div className="grid grid-cols-[110px_1fr] md:grid-cols-[140px_1fr] py-5">

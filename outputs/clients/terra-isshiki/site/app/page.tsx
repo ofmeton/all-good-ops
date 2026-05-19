@@ -115,18 +115,18 @@ export default function Home() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-1.5 md:gap-2">
             {[
               {
-                href: "/rooms",
-                num: "01",
-                en: "Rooms",
-                jp: "部屋と空間",
-                img: "/images/rooms/rooms-hero.jpg",
-              },
-              {
                 href: "/about",
-                num: "02",
+                num: "01",
                 en: "About",
                 jp: "宿のはじまり",
                 img: "/images/about-exterior.jpg",
+              },
+              {
+                href: "/rooms",
+                num: "02",
+                en: "Rooms",
+                jp: "部屋と空間",
+                img: "/images/rooms/rooms-hero.jpg",
               },
               {
                 href: "/stay",
