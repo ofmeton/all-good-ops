@@ -49,11 +49,11 @@ export default function Home() {
             Hayama, Kanagawa
           </p>
           <h1
-            className="fade-up font-serif font-medium text-[clamp(26px,7vw,36px)] leading-[1.18] md:text-[clamp(42px,4.2vw,100px)] md:leading-[1.12] tracking-[0.02em] text-(--color-base-light)"
+            className="fade-up font-serif font-medium text-[clamp(20px,5.4vw,28px)] leading-[1.18] md:text-[clamp(32px,3.2vw,72px)] md:leading-[1.12] tracking-[0.02em] text-(--color-base-light)"
             style={{ animationDelay: "0.95s" }}
           >
-            <span className="block whitespace-nowrap">葉山の風景に、</span>
-            <span className="block whitespace-nowrap">ゆっくり溶ける。</span>
+            <span className="block whitespace-nowrap">ゆっくり溶ける、</span>
+            <span className="block whitespace-nowrap">葉山時間。</span>
           </h1>
           <p
             className="fade-up mt-6 md:mt-8 font-mincho text-[14px] md:text-[clamp(15px,0.94vw,24px)] leading-[1.85] tracking-[0.16em] text-(--color-base-light)/80"
@@ -74,7 +74,7 @@ export default function Home() {
               Concept
             </p>
             <p className="vrl hidden md:inline-block font-mincho text-[14px] md:text-[clamp(15px,0.94vw,24px)] tracking-[0.5em] text-(--color-base-dark)/55">
-              風景に、息を整える。
+              風景に、呼吸を整える。
             </p>
           </div>
           <div className="md:max-w-none min-w-0">

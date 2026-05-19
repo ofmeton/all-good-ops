@@ -97,11 +97,11 @@ export default function StayPage() {
             Stay — Things to Experience
           </p>
           <h1
-            className="fade-up font-serif font-medium text-[clamp(22px,6.6vw,32px)] leading-[1.22] md:text-[clamp(36px,3.55vw,84px)] md:leading-[1.16] tracking-[0.02em]"
+            className="fade-up font-serif font-medium text-[clamp(18px,5.1vw,26px)] leading-[1.22] md:text-[clamp(28px,2.7vw,64px)] md:leading-[1.16] tracking-[0.02em]"
             style={{ animationDelay: "0.55s" }}
           >
-            <span className="block">葉山で過ごす、</span>
-            <span className="block">四つの一日。</span>
+            <span className="block">葉山らしさを、</span>
+            <span className="block">四つの体験で。</span>
           </h1>
           <p
             className="fade-up mt-5 md:mt-8 font-mincho text-[14px] md:text-[clamp(16px,1.02vw,26px)] leading-[1.85] tracking-[0.16em] text-(--color-base-light)/85"

@@ -61,7 +61,7 @@ export default function AccessPage() {
             Access
           </p>
           <h1
-            className="fade-up font-serif font-medium text-[clamp(20px,6.2vw,30px)] leading-[1.2] md:text-[clamp(34px,2.97vw,72px)] md:leading-[1.14] tracking-[0.02em]"
+            className="fade-up font-serif font-medium text-[clamp(16px,4.8vw,24px)] leading-[1.2] md:text-[clamp(26px,2.3vw,56px)] md:leading-[1.14] tracking-[0.02em]"
             style={{ animationDelay: "0.55s" }}
           >
             <span className="block whitespace-nowrap">海まで、徒歩 8 分。</span>
@@ -84,8 +84,8 @@ export default function AccessPage() {
               Location
             </p>
             <h2 className="font-serif text-[28px] md:text-[clamp(34px,2.81vw,72px)] leading-[1.4] tracking-[0.04em] text-(--color-base-dark) mb-8">
-              <span className="block">葉山町一色に、</span>
-              <span className="block">佇む。</span>
+              <span className="block">葉山町、</span>
+              <span className="block">一色。</span>
             </h2>
             <dl className="border-t border-(--color-base-dark)/15 divide-y divide-(--color-base-dark)/10 mb-10">
               <div className="grid grid-cols-[110px_1fr] md:grid-cols-[140px_1fr] py-5">

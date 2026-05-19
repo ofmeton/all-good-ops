@@ -40,7 +40,7 @@ export default function AboutPage() {
             About TERRA HAYAMA
           </p>
           <h1
-            className="fade-up font-serif font-medium text-[clamp(20px,6.2vw,30px)] leading-[1.22] md:text-[clamp(34px,2.97vw,72px)] md:leading-[1.14] tracking-[0.02em]"
+            className="fade-up font-serif font-medium text-[clamp(16px,4.8vw,24px)] leading-[1.22] md:text-[clamp(26px,2.3vw,56px)] md:leading-[1.14] tracking-[0.02em]"
             style={{ animationDelay: "0.55s" }}
           >
             <span className="block whitespace-nowrap">葉山への愛から、</span>
