@@ -60,7 +60,7 @@ export default function Home() {
             style={{ animationDelay: "1.25s" }}
           >
             一色海岸まで徒歩 8 分。<br />
-            葉山アイス屋 BEAT ICE が営む、海と山の物語に出会う宿。
+            BEAT ICE が手がける、葉山一色の一棟貸し。
           </p>
         </div>
 
@@ -108,8 +108,7 @@ export default function Home() {
             Explore
           </p>
           <h2 className="font-serif text-[26px] md:text-[clamp(34px,2.81vw,72px)] leading-[1.4] tracking-[0.04em] text-(--color-base-dark) md:text-center mb-14 md:mb-20">
-            <span className="block md:inline">空間と、</span>
-            <span className="block md:inline">葉山の物語を歩く。</span>
+            TERRA HAYAMA について。
           </h2>
         </div>
 
