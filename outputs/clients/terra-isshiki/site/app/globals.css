@@ -44,7 +44,7 @@ html, body {
   position: absolute;
   inset: 0;
   opacity: 0;
-  animation: heroSlide 32s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  animation: heroSlide 48s cubic-bezier(0.4, 0, 0.2, 1) infinite;
   will-change: opacity, transform;
 }
 

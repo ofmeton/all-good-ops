@@ -4,9 +4,13 @@ import { SiteHeader } from "./_components/SiteHeader";
 
 const HERO_SLIDES = [
   { src: "/images/hero/hero-01-living.jpg", alt: "TERRA HAYAMA リビングダイニング" },
+  { src: "/images/hero/hero-05-135.jpg", alt: "TERRA HAYAMA 押し花と『Beat Ice Harmony』の詩" },
   { src: "/images/hero/hero-02-bedroom.jpg", alt: "TERRA HAYAMA 寝室" },
+  { src: "/images/hero/hero-06-137.jpg", alt: "TERRA HAYAMA 床の間に飾られた棚田のアート" },
   { src: "/images/hero/hero-03-dining.jpg", alt: "TERRA HAYAMA ダイニングとキッチン" },
+  { src: "/images/hero/hero-07-125.jpg", alt: "TERRA HAYAMA 葉山ふるさと古里かるたの籐籠" },
   { src: "/images/hero/hero-04-arch.jpg", alt: "TERRA HAYAMA 和モダンの空間" },
+  { src: "/images/hero/hero-08-139.jpg", alt: "TERRA HAYAMA 棚に並ぶ『たんぼ』の写真集" },
 ];
 
 const AIRBNB_URL =
@@ -22,7 +26,7 @@ export default function Home() {
             <div
               key={s.src}
               className="hero-slide"
-              style={{ animationDelay: `${i * 8 - 1.5}s` }}
+              style={{ animationDelay: `${i * 6 - 1.5}s` }}
             >
               <Image
                 src={s.src}

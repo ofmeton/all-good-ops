@@ -37,8 +37,8 @@ export default function AccessPage() {
       {/* Hero */}
       <section className="relative h-[64svh] min-h-[420px] w-full overflow-hidden bg-(--color-base-dark) text-(--color-base-light)">
         <Image
-          src="/images/access/access-approach.jpg"
-          alt="TERRA HAYAMA — 1階駐車場と外階段からのアプローチ"
+          src="/images/access/access-entrance.jpg"
+          alt="TERRA HAYAMA — 玄関の赤土壁と組子の引き戸"
           fill
           priority
           sizes="100vw"

@@ -94,8 +94,8 @@ export default function RoomsPage() {
       {/* Hero */}
       <section className="relative h-[64svh] min-h-[420px] w-full overflow-hidden bg-(--color-base-dark) text-(--color-base-light)">
         <Image
-          src="/images/rooms/rooms-hero.jpg"
-          alt="TERRA HAYAMA Rooms — リビングと寝室をつなぐ空間"
+          src="/images/hero/hero-05-135.jpg"
+          alt="TERRA HAYAMA Rooms — 押し花と『Beat Ice Harmony』の詩"
           fill
           priority
           sizes="100vw"
