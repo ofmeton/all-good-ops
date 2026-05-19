@@ -33,12 +33,12 @@ html, body {
 }
 
 @keyframes heroSlide {
-  /* 8 slides × offset 12.5% (6s on a 48s loop). 各 slide は短い peak と
-     1s 程度のクロスフェードのみで、重なり過剰による暗転や 2-3 枚同時露出を防ぐ。 */
+  /* 8 slides × offset 12.5% (4s on a 32s loop). 各 slide は約 3s 表示 +
+     1s クロスフェード。cycle 境界での体感差を抑えてスナッピーに。 */
   0%     { opacity: 0; transform: scale(1.0); }
-  2%     { opacity: 1; transform: scale(1.0); }
+  3%     { opacity: 1; transform: scale(1.0); }
   12.5%  { opacity: 1; transform: scale(1.04); }
-  14.5%  { opacity: 0; transform: scale(1.06); }
+  15.5%  { opacity: 0; transform: scale(1.06); }
   100%   { opacity: 0; transform: scale(1.0); }
 }
 
@@ -46,7 +46,7 @@ html, body {
   position: absolute;
   inset: 0;
   opacity: 0;
-  animation: heroSlide 48s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  animation: heroSlide 32s cubic-bezier(0.4, 0, 0.2, 1) infinite;
   will-change: opacity, transform;
 }
 

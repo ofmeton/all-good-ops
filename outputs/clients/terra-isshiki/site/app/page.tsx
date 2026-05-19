@@ -26,7 +26,7 @@ export default function Home() {
             <div
               key={s.src}
               className="hero-slide"
-              style={{ animationDelay: `${i * 6 - 1.5}s` }}
+              style={{ animationDelay: `${i * 4 - 1}s` }}
             >
               <Image
                 src={s.src}
@@ -80,24 +80,6 @@ export default function Home() {
             葉山アイス屋 BEAT ICE が営む、海と山の物語に出会う宿。
           </p>
         </div>
-
-        {/* Mountain SVG silhouette (bottom) — soft Hayama coastline + twin peaks */}
-        <svg
-          aria-hidden
-          viewBox="0 0 1440 200"
-          preserveAspectRatio="none"
-          className="absolute inset-x-0 bottom-0 z-[3] h-[120px] w-full md:h-[170px] text-(--color-base-dark)/55"
-        >
-          <path
-            d="M0,200 L0,118 C 80,100 180,88 280,96 C 380,104 460,140 560,128 C 650,118 720,72 820,82 C 920,92 980,128 1080,118 C 1180,108 1260,80 1360,92 C 1400,96 1430,104 1440,108 L1440,200 Z"
-            fill="currentColor"
-          />
-          <path
-            d="M0,200 L0,158 C 120,148 280,164 460,150 C 640,136 800,158 1000,148 C 1200,138 1340,158 1440,150 L1440,200 Z"
-            fill="currentColor"
-            opacity="0.5"
-          />
-        </svg>
 
       </section>
 
