@@ -33,11 +33,13 @@ html, body {
 }
 
 @keyframes heroSlide {
-  0%    { opacity: 0; transform: scale(1.0); }
-  3%    { opacity: 1; transform: scale(1.0); }
-  30%   { opacity: 1; transform: scale(1.06); }
-  33%   { opacity: 0; transform: scale(1.08); }
-  100%  { opacity: 0; transform: scale(1.0); }
+  /* 8 slides × offset 12.5% (6s on a 48s loop). 各 slide は短い peak と
+     1s 程度のクロスフェードのみで、重なり過剰による暗転や 2-3 枚同時露出を防ぐ。 */
+  0%     { opacity: 0; transform: scale(1.0); }
+  2%     { opacity: 1; transform: scale(1.0); }
+  12.5%  { opacity: 1; transform: scale(1.04); }
+  14.5%  { opacity: 0; transform: scale(1.06); }
+  100%   { opacity: 0; transform: scale(1.0); }
 }
 
 .hero-slide {

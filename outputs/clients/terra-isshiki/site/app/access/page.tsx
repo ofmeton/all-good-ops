@@ -31,7 +31,7 @@ const POINTS = [
 
 export default function AccessPage() {
   return (
-    <main className="bg-(--color-paper)">
+    <main className="bg-(--color-base-light)">
       <SiteHeader variant="page" current="Access" />
 
       {/* Hero */}
@@ -195,7 +195,7 @@ export default function AccessPage() {
       </section>
 
       {/* Reservation: Availability calendar */}
-      <section className="border-t border-(--color-base-dark)/10 px-6 py-[clamp(96px,8.34vw,128px)] md:px-12 bg-(--color-paper)">
+      <section className="border-t border-(--color-base-dark)/10 px-6 py-[clamp(96px,8.34vw,128px)] md:px-12 bg-(--color-base-light)">
         <div className="mx-auto max-w-[1480px]">
           <p className="font-garamond italic text-[clamp(13px,0.86vw,22px)] tracking-[0.4em] uppercase text-(--color-soil) mb-4">
             Reservation

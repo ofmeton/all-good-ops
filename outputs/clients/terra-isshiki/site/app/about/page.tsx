@@ -10,11 +10,11 @@ export const metadata = {
 
 export default function AboutPage() {
   return (
-    <main className="bg-(--color-paper)">
+    <main className="bg-(--color-base-light)">
       <SiteHeader variant="page" current="About" />
 
       {/* Hero — Beat Ice Harmony 詩のフレーム */}
-      <section className="relative h-[68svh] min-h-[480px] w-full overflow-hidden bg-(--color-base-dark) text-(--color-base-light)">
+      <section className="relative h-[64svh] min-h-[420px] w-full overflow-hidden bg-(--color-base-dark) text-(--color-base-light)">
         <Image
           src="/images/about-hero-tanada.jpg"
           alt="TERRA HAYAMA — 葉山アイス BEAT ICE の棚田、夕陽の風景"
@@ -133,7 +133,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <ReservationCTA tone="light" />
+      <ReservationCTA tone="dark" />
 
       {/* Footer link teaser */}
       <section className="border-t border-(--color-base-dark)/10 px-6 py-[clamp(80px,7.3vw,112px)] md:px-12 text-center">

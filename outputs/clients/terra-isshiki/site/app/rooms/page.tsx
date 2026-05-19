@@ -88,7 +88,7 @@ const NOTICES: string[] = [
 
 export default function RoomsPage() {
   return (
-    <main className="bg-(--color-paper)">
+    <main className="bg-(--color-base-light)">
       <SiteHeader variant="page" current="Rooms" />
 
       {/* Hero */}
@@ -265,7 +265,7 @@ export default function RoomsPage() {
         </div>
       </section>
 
-      <ReservationCTA tone="light" />
+      <ReservationCTA tone="dark" />
 
       {/* Next link */}
       <section className="border-t border-(--color-base-dark)/10 px-6 py-[clamp(80px,7.3vw,112px)] md:px-12 text-center">

@@ -18,7 +18,7 @@ const AIRBNB_URL =
 
 export default function Home() {
   return (
-    <main className="bg-(--color-paper)">
+    <main className="bg-(--color-base-light)">
       <section className="relative isolate h-[100svh] w-full overflow-hidden bg-(--color-base-dark) text-(--color-base-light)">
         {/* Slideshow */}
         <div aria-hidden className="absolute inset-0">
@@ -137,7 +137,7 @@ export default function Home() {
       </section>
 
       {/* Section gateway cards */}
-      <section className="relative bg-(--color-paper) py-[clamp(96px,8.34vw,128px)]">
+      <section className="relative bg-(--color-base-light) py-[clamp(96px,8.34vw,128px)]">
         <div className="mx-auto max-w-[1640px] px-6 md:px-12">
           <p className="font-garamond italic text-[clamp(13px,0.86vw,22px)] tracking-[0.4em] uppercase text-(--color-soil) mb-6 md:text-center">
             Explore

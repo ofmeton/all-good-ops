@@ -16,7 +16,7 @@ const EXPERIENCES = [
     sub: "Tanada × BEAT ICE",
     body:
       "葉山の棚田で育てたお米が、BEAT ICE のアイスクリームに変わる。風景を「食べる」体験を、滞在中に。",
-    image: "/images/stay/stay-tanada.jpg",
+    image: "/images/stay/stay-tanada-tools.jpg",
     accent: "soil",
   },
   {
@@ -67,14 +67,14 @@ const ICONS: Record<string, React.ReactNode> = {
 
 export default function StayPage() {
   return (
-    <main className="bg-(--color-paper)">
+    <main className="bg-(--color-base-light)">
       <SiteHeader variant="page" current="Stay" />
 
       {/* Hero — full image */}
       <section className="relative h-[64svh] min-h-[420px] w-full overflow-hidden bg-(--color-base-dark) text-(--color-base-light)">
         <Image
-          src="/images/stay/stay-tanada.jpg"
-          alt="TERRA HAYAMA Stay — 棚田に沈む夕陽"
+          src="/images/hero/hero-06-137.jpg"
+          alt="TERRA HAYAMA Stay — 床の間に飾られた棚田のアート"
           fill
           priority
           sizes="100vw"
@@ -86,7 +86,7 @@ export default function StayPage() {
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(180deg, rgba(26,20,16,0.30) 0%, rgba(26,20,16,0.05) 35%, rgba(26,20,16,0.55) 100%)",
+              "linear-gradient(180deg, rgba(26,20,16,0.55) 0%, rgba(26,20,16,0.18) 35%, rgba(26,20,16,0.65) 100%)",
           }}
         />
         <div className="absolute bottom-12 left-6 md:bottom-20 md:left-12 z-10 max-w-[88%] md:max-w-[760px]">
@@ -114,7 +114,7 @@ export default function StayPage() {
       </section>
 
       {/* Experiences */}
-      <section className="relative py-[clamp(80px,7.3vw,112px)] bg-(--color-paper)">
+      <section className="relative py-[clamp(80px,7.3vw,112px)] bg-(--color-base-light)">
         <div className="grid gap-20 md:gap-32">
           {EXPERIENCES.map((exp) => {
             const accentColor =
@@ -175,7 +175,7 @@ export default function StayPage() {
         </div>
       </section>
 
-      <ReservationCTA tone="light" />
+      <ReservationCTA tone="dark" />
 
       {/* Next link */}
       <section className="border-t border-(--color-base-dark)/10 px-6 py-[clamp(80px,7.3vw,112px)] md:px-12 text-center">
