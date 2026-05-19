@@ -81,12 +81,14 @@ export function RoomsGallery() {
       {SECTIONS.map((section, sIdx) => (
         <section
           key={section.label}
-          className={`relative py-[clamp(80px,7.3vw,112px)] ${
+          className={`relative ${
             sIdx % 2 === 1 ? "bg-(--color-paper)" : "bg-(--color-base-light)"
           }`}
         >
-          {/* Section header — readable width, padded */}
-          <div className="mx-auto max-w-[1480px] px-6 md:px-12 mb-10 md:mb-16">
+          {/* Section header — readable width, padded.
+             section 自体には py をかけず、header に pt のみ持たせて
+             gallery sections 間の余白を最小化する。 */}
+          <div className="mx-auto max-w-[1480px] px-6 md:px-12 mb-10 md:mb-16 pt-12 md:pt-16">
             <p className="font-garamond italic text-[clamp(13px,0.78vw,20px)] tracking-[0.42em] uppercase text-(--color-soil) mb-3">
               {section.caption}
             </p>

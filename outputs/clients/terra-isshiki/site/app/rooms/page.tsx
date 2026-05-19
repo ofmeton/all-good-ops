@@ -118,7 +118,7 @@ export default function RoomsPage() {
             Rooms
           </p>
           <h1
-            className="fade-up font-serif font-medium text-[clamp(16px,4.8vw,24px)] leading-[1.2] md:text-[clamp(26px,2.3vw,56px)] md:leading-[1.14] tracking-[0.02em]"
+            className="fade-up font-serif font-medium text-[clamp(16px,4.8vw,24px)] leading-[1.2] md:text-[clamp(26px,2.3vw,56px)] xl:text-[clamp(20px,1.67vw,26px)] 2xl:text-[clamp(26px,2.3vw,56px)] md:leading-[1.14] tracking-[0.02em]"
             style={{ animationDelay: "0.55s" }}
           >
             <span className="block whitespace-nowrap">部屋と空間。</span>
