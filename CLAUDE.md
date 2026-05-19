@@ -107,6 +107,7 @@
 | 社団法人、定款、登記、設立 | kodomo-ibasho | nonprofit-advisor |
 | Shopify、商品、注文、ECサイト | business-ops | shopify-operator |
 | アイスクリーム、業務委託マネージャー、RICE CREAM、店舗マネージャー、棚卸し、発注、シフト、スタッフ、レジデータ、@BEATICE0923 | business-ops | rice-cream-ops |
+| 家庭教師、授業計画、テスト対策、つかさ、そうま、中学理科、生徒カルテ、家庭教師業務、塾、学習指導 | business-ops | tutor-coach |
 | 案件、フリーランス、提案書、営業 | business-ops | freelance-scout |
 | クライアント、納品、顧客 | business-ops | client-manager |
 | 発信、ブログ、SNS、ブランド、フォロワー | business-ops | brand-publisher |
@@ -178,7 +179,7 @@
 
 ---
 
-## 部門一覧（7部門 + 横断チーム = 28エージェント）
+## 部門一覧（7部門 + 横断チーム = 29エージェント）
 
 ### 横断チーム
 | エージェント | ファイル | 役割 |
@@ -222,6 +223,7 @@
 | 発信ストラテジスト | `business-ops/brand-publisher.md` | 個人ブランド、SNS・ブログ運用 |
 | Rapid HP Operator | `business-ops/rapid-hp-operator.md` | BSA事業オペレーター（提案→受注→ヒアリング→納品→継続運用を一貫担当） |
 | 広告運用スペシャリスト | `business-ops/ad-ops-specialist.md` | Google広告/Meta広告の運用プロ。L3（LP+広告運用初月）の運用責任者、LPOループ、広告運用代行案件の提案 |
+| 家庭教師コーチ | `business-ops/tutor-coach.md` | 家庭教師業務の授業設計・生徒理解・教科指導準備・保護者対応方針・学習心理サポート。「できた！」の連鎖設計が最重要KPI |
 
 ### communication（コミュニケーション）
 | エージェント | ファイル | 役割 |

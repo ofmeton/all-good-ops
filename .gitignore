@@ -10,6 +10,7 @@ Thumbs.db
 # Claude Code local
 .claude/settings.local.json
 .claude/worktrees/
+.claire/
 
 # Obsidian volatile state (UI レイアウト。共有設定 app/appearance/core-plugins/graph は追跡)
 wiki/.obsidian/workspace.json
@@ -29,6 +30,8 @@ logs/*.log
 # Tool generated
 .playwright-mcp/
 *.egg-info/
+__pycache__/
+*.pyc
 
 # Build / dependency artifacts (どのサブプロジェクトでも除外)
 node_modules/

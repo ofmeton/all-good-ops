@@ -82,7 +82,7 @@ export function RoomsGallery() {
         <section
           key={section.label}
           className={`relative py-[clamp(80px,7.3vw,112px)] ${
-            sIdx % 2 === 1 ? "bg-(--color-paper)" : "bg-(--color-base-light)"
+            "bg-(--color-paper)"
           }`}
         >
           {/* Section header — readable width, padded */}

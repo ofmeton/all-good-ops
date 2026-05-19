@@ -4,9 +4,13 @@ import { SiteHeader } from "./_components/SiteHeader";
 
 const HERO_SLIDES = [
   { src: "/images/hero/hero-01-living.jpg", alt: "TERRA HAYAMA リビングダイニング" },
+  { src: "/images/hero/hero-05-135.jpg", alt: "TERRA HAYAMA 押し花と『Beat Ice Harmony』の詩" },
   { src: "/images/hero/hero-02-bedroom.jpg", alt: "TERRA HAYAMA 寝室" },
+  { src: "/images/hero/hero-06-137.jpg", alt: "TERRA HAYAMA 床の間に飾られた棚田のアート" },
   { src: "/images/hero/hero-03-dining.jpg", alt: "TERRA HAYAMA ダイニングとキッチン" },
+  { src: "/images/hero/hero-07-125.jpg", alt: "TERRA HAYAMA 葉山ふるさと古里かるたの籐籠" },
   { src: "/images/hero/hero-04-arch.jpg", alt: "TERRA HAYAMA 和モダンの空間" },
+  { src: "/images/hero/hero-08-139.jpg", alt: "TERRA HAYAMA 棚に並ぶ『たんぼ』の写真集" },
 ];
 
 const AIRBNB_URL =
@@ -14,7 +18,7 @@ const AIRBNB_URL =
 
 export default function Home() {
   return (
-    <main className="bg-(--color-base-light)">
+    <main className="bg-(--color-paper)">
       <section className="relative isolate h-[100svh] w-full overflow-hidden bg-(--color-base-dark) text-(--color-base-light)">
         {/* Slideshow */}
         <div aria-hidden className="absolute inset-0">
@@ -22,7 +26,7 @@ export default function Home() {
             <div
               key={s.src}
               className="hero-slide"
-              style={{ animationDelay: `${i * 8 - 1.5}s` }}
+              style={{ animationDelay: `${i * 6 - 1.5}s` }}
             >
               <Image
                 src={s.src}
@@ -62,7 +66,7 @@ export default function Home() {
             Hayama, Kanagawa
           </p>
           <h1
-            className="fade-up font-serif font-medium text-[clamp(30px,9.5vw,44px)] leading-[1.18] md:text-[clamp(56px,5.47vw,140px)] md:leading-[1.12] tracking-[0.02em] text-(--color-base-light)"
+            className="fade-up font-serif font-medium text-[clamp(26px,7vw,36px)] leading-[1.18] md:text-[clamp(42px,4.2vw,100px)] md:leading-[1.12] tracking-[0.02em] text-(--color-base-light)"
             style={{ animationDelay: "0.95s" }}
           >
             <span className="block whitespace-nowrap">葉山の風景に、</span>
@@ -133,7 +137,7 @@ export default function Home() {
       </section>
 
       {/* Section gateway cards */}
-      <section className="relative bg-(--color-base-light) py-[clamp(96px,8.34vw,128px)]">
+      <section className="relative bg-(--color-paper) py-[clamp(96px,8.34vw,128px)]">
         <div className="mx-auto max-w-[1640px] px-6 md:px-12">
           <p className="font-garamond italic text-[clamp(13px,0.86vw,22px)] tracking-[0.4em] uppercase text-(--color-soil) mb-6 md:text-center">
             Explore

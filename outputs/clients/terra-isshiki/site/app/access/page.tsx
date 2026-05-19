@@ -31,14 +31,14 @@ const POINTS = [
 
 export default function AccessPage() {
   return (
-    <main className="bg-(--color-base-light)">
+    <main className="bg-(--color-paper)">
       <SiteHeader variant="page" current="Access" />
 
       {/* Hero */}
       <section className="relative h-[64svh] min-h-[420px] w-full overflow-hidden bg-(--color-base-dark) text-(--color-base-light)">
         <Image
-          src="/images/access/access-approach.jpg"
-          alt="TERRA HAYAMA — 1階駐車場と外階段からのアプローチ"
+          src="/images/access/access-entrance.jpg"
+          alt="TERRA HAYAMA — 玄関の赤土壁と組子の引き戸"
           fill
           priority
           sizes="100vw"
@@ -61,7 +61,7 @@ export default function AccessPage() {
             Access
           </p>
           <h1
-            className="fade-up font-serif font-medium text-[clamp(24px,8.1vw,36px)] leading-[1.2] md:text-[clamp(46px,3.91vw,100px)] md:leading-[1.14] tracking-[0.02em]"
+            className="fade-up font-serif font-medium text-[clamp(20px,6.2vw,30px)] leading-[1.2] md:text-[clamp(34px,2.97vw,72px)] md:leading-[1.14] tracking-[0.02em]"
             style={{ animationDelay: "0.55s" }}
           >
             <span className="block whitespace-nowrap">海まで、徒歩 8 分。</span>
@@ -195,7 +195,7 @@ export default function AccessPage() {
       </section>
 
       {/* Reservation: Availability calendar */}
-      <section className="border-t border-(--color-base-dark)/10 px-6 py-[clamp(96px,8.34vw,128px)] md:px-12 bg-(--color-base-light)">
+      <section className="border-t border-(--color-base-dark)/10 px-6 py-[clamp(96px,8.34vw,128px)] md:px-12 bg-(--color-paper)">
         <div className="mx-auto max-w-[1480px]">
           <p className="font-garamond italic text-[clamp(13px,0.86vw,22px)] tracking-[0.4em] uppercase text-(--color-soil) mb-4">
             Reservation
