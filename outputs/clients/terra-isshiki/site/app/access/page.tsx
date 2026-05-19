@@ -10,14 +10,15 @@ export const metadata = {
 
 const ADDRESS = "〒240-0111 神奈川県三浦郡葉山町一色 1759-1-5";
 const AIRBNB_URL = "https://www.airbnb.jp/rooms/1399746059557999139";
-// 葉山町一色 1759-1-5 周辺の地図（OpenStreetMap embed）
-const MAP_LAT = 35.272;
-const MAP_LNG = 139.585;
-const MAP_BBOX = "139.575,35.265,139.595,35.279";
-const MAPS_EMBED = `https://www.openstreetmap.org/export/embed.html?bbox=${encodeURIComponent(
-  MAP_BBOX
-)}&layer=mapnik&marker=${MAP_LAT}%2C${MAP_LNG}`;
-const MAPS_LINK = `https://www.google.com/maps/search/?api=1&query=${MAP_LAT}%2C${MAP_LNG}`;
+// 住所 query で Google Maps の geocoding に任せる方式に統一（embed + link で
+// 同じピン位置が出るようにする）
+const MAP_QUERY = "神奈川県三浦郡葉山町一色1759-1-5";
+const MAPS_EMBED = `https://maps.google.com/maps?q=${encodeURIComponent(
+  MAP_QUERY,
+)}&z=16&output=embed`;
+const MAPS_LINK = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+  MAP_QUERY,
+)}`;
 
 const POINTS = [
   { name: "一色海岸", time: "徒歩 8 分", note: "CNN 世界の厳選ビーチ 100 選" },
