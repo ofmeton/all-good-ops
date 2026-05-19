@@ -15,10 +15,10 @@ export function MobileStickyReserve() {
       {/* Thin custom arrow — 細い水平線 + 控えめなシェブロン */}
       <svg
         viewBox="0 0 28 10"
-        className="w-[26px] h-[10px] overflow-visible transition-transform duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:translate-x-1"
+        className="w-[16px] h-[7px] overflow-visible transition-transform duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:translate-x-1"
         fill="none"
         stroke="currentColor"
-        strokeWidth="1"
+        strokeWidth="1.2"
         strokeLinecap="round"
         strokeLinejoin="round"
         aria-hidden

@@ -78,7 +78,7 @@ export default function AccessPage() {
       </section>
 
       {/* Address & POI */}
-      <section className="relative pt-[clamp(40px,4vw,72px)]">
+      <section className="relative pt-[clamp(40px,4vw,72px)] md:pb-[clamp(40px,4vw,72px)]">
         <div className="grid md:grid-cols-2 items-stretch">
           <div className="px-6 py-[clamp(80px,7.3vw,112px)] md:px-16 lg:px-24 flex flex-col justify-center">
             <p className="font-garamond italic text-[clamp(13px,0.86vw,22px)] tracking-[0.4em] uppercase text-(--color-soil) mb-4">
@@ -164,7 +164,7 @@ export default function AccessPage() {
               href={MAPS_LINK}
               target="_blank"
               rel="noopener noreferrer"
-              className="absolute right-3 bottom-3 inline-flex items-center gap-2 bg-(--color-base-light)/95 backdrop-blur px-4 py-2 text-(--color-base-dark) font-garamond text-[11px] tracking-[0.32em] uppercase border border-(--color-base-dark)/15 hover:bg-(--color-base-light)"
+              className="absolute right-2 bottom-2 md:right-3 md:bottom-3 inline-flex items-center gap-1.5 md:gap-2 bg-(--color-base-light)/95 backdrop-blur px-2.5 py-1.5 md:px-4 md:py-2 text-(--color-base-dark) font-garamond text-[9px] md:text-[11px] tracking-[0.24em] md:tracking-[0.32em] uppercase border border-(--color-base-dark)/15 hover:bg-(--color-base-light)"
             >
               View on Google Maps
               <span aria-hidden>→</span>
