@@ -43,7 +43,7 @@ export function ReservationCTA({
           className={`group inline-flex items-center gap-4 font-garamond text-[13px] md:text-[clamp(14px,0.86vw,22px)] tracking-[0.32em] uppercase px-8 md:px-[clamp(28px,2.19vw,56px)] py-4 md:py-[clamp(16px,1.09vw,28px)] transition-colors ${buttonCls}`}
         >
           <span>Book on Airbnb</span>
-          <span aria-hidden>↗</span>
+          <span aria-hidden>→</span>
         </a>
       </div>
     </section>

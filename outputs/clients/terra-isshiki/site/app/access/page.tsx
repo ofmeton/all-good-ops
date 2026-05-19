@@ -124,7 +124,7 @@ export default function AccessPage() {
                 Reserve on Airbnb
                 <span className="absolute -bottom-1 left-0 h-px w-full bg-(--color-base-dark)/30 transition-colors duration-500 group-hover:bg-(--color-base-dark)" />
               </span>
-              <span aria-hidden>↗</span>
+              <span aria-hidden>→</span>
             </a>
           </div>
 
@@ -167,7 +167,7 @@ export default function AccessPage() {
               className="absolute right-3 bottom-3 inline-flex items-center gap-2 bg-(--color-base-light)/95 backdrop-blur px-4 py-2 text-(--color-base-dark) font-garamond text-[11px] tracking-[0.32em] uppercase border border-(--color-base-dark)/15 hover:bg-(--color-base-light)"
             >
               View on Google Maps
-              <span aria-hidden>↗</span>
+              <span aria-hidden>→</span>
             </a>
           </div>
 
@@ -215,7 +215,7 @@ export default function AccessPage() {
               className="group inline-flex items-center gap-4 bg-(--color-base-dark) text-(--color-base-light) font-garamond text-[13px] md:text-[clamp(14px,0.86vw,22px)] tracking-[0.32em] uppercase px-8 py-4 hover:bg-(--color-base-dark)/85 transition-colors"
             >
               <span>Book on Airbnb</span>
-              <span aria-hidden>↗</span>
+              <span aria-hidden>→</span>
             </a>
           </div>
         </div>

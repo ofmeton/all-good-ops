@@ -113,7 +113,7 @@ export default function AboutPage() {
               <span className="block tracking-[0.16em] text-[20px] md:text-[36px] lg:text-[40px] text-(--color-base-dark)/60 mb-2 font-garamond uppercase">
                 BEAT ICE
               </span>
-              <span className="block">葉山アイス屋が営む、</span>
+              <span className="block">BEAT ICE が営む、</span>
               <span className="block">一棟貸しの宿。</span>
             </h2>
             <div className="space-y-6 font-mincho text-[15px] md:text-[clamp(16px,1.02vw,26px)] leading-[2.0] tracking-[0.06em] text-(--color-base-dark)/85">
@@ -123,7 +123,7 @@ export default function AboutPage() {
                 棚田の景色と海の風景を行き来する暮らしから生まれた感性が、TERRA HAYAMA という宿のかたちを支えています。
               </p>
               <p>
-                運営は、葉山に暮らして十年。地域の食材・棚田・海と寄り添いながら、訪れる人にも葉山の物語を体感してもらえる滞在を作っています。
+                運営は、葉山に暮らして十年。地域の食材・棚田・海と寄り添いながら、訪れる人にも葉山の物語を体感してもらえる空間を作っています。
               </p>
             </div>
             <p className="mt-10 font-garamond text-[12px] tracking-[0.32em] uppercase text-(--color-base-dark)/55">

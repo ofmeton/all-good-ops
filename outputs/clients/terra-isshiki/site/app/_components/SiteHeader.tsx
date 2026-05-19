@@ -234,7 +234,7 @@ export function SiteHeader({
               className="inline-flex items-center gap-3 font-garamond text-[12px] tracking-[0.32em] uppercase border border-(--color-base-light)/25 px-6 py-3.5 text-(--color-base-light)"
             >
               ご予約はこちら
-              <span aria-hidden>↗</span>
+              <span aria-hidden>→</span>
             </a>
             <p className="mt-8 font-mincho text-[12px] leading-[1.85] tracking-[0.06em] text-(--color-base-light)/70">
               〒240-0111 神奈川県三浦郡葉山町一色 1759-1-5<br />

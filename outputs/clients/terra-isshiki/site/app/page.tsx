@@ -173,7 +173,7 @@ export default function Home() {
                       {card.jp}
                     </h3>
                     <p className="font-garamond text-[11px] md:text-[clamp(12px,0.62vw,16px)] tracking-[0.32em] uppercase opacity-75">
-                      View ↗
+                      View →
                     </p>
                   </div>
                 </div>
@@ -202,7 +202,7 @@ export default function Home() {
             className="group inline-flex items-center gap-3 font-garamond text-[12px] md:text-[clamp(13px,0.7vw,18px)] tracking-[0.32em] uppercase border border-(--color-base-light)/20 px-7 py-4 md:px-[clamp(28px,2.19vw,56px)] md:py-[clamp(16px,1.09vw,28px)] hover:bg-(--color-base-light)/8 transition-colors"
           >
             <span>Reserve on Airbnb</span>
-            <span aria-hidden>↗</span>
+            <span aria-hidden>→</span>
           </a>
         </div>
         <p className="mt-12 md:mt-16 font-garamond text-[10px] md:text-[11px] lg:text-[12px] tracking-[0.32em] uppercase opacity-55 text-center md:text-left">
