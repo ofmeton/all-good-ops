@@ -68,13 +68,13 @@ const ICONS: Record<string, React.ReactNode> = {
 export default function StayPage() {
   return (
     <main className="bg-(--color-paper)">
-      <SiteHeader variant="page" current="Stay" heroBg="light" />
+      <SiteHeader variant="page" current="Stay" />
 
       {/* Hero — full image */}
-      <section className="relative h-[64svh] min-h-[420px] w-full overflow-hidden bg-(--color-paper) text-(--color-base-dark)">
+      <section className="relative h-[64svh] min-h-[420px] w-full overflow-hidden bg-(--color-base-dark) text-(--color-base-light)">
         <Image
-          src="/images/hero/hero-06-137.jpg"
-          alt="TERRA HAYAMA Stay — 床の間に飾られた棚田のアート"
+          src="/images/stay/stay-tanada.jpg"
+          alt="TERRA HAYAMA Stay — 棚田に沈む夕陽"
           fill
           priority
           sizes="100vw"
@@ -86,25 +86,25 @@ export default function StayPage() {
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(180deg, rgba(245,241,234,0.20) 0%, rgba(245,241,234,0.06) 35%, rgba(236,229,216,0.65) 100%)",
+              "linear-gradient(180deg, rgba(26,20,16,0.30) 0%, rgba(26,20,16,0.05) 35%, rgba(26,20,16,0.55) 100%)",
           }}
         />
         <div className="absolute bottom-12 left-6 md:bottom-20 md:left-12 z-10 max-w-[88%] md:max-w-[760px]">
           <p
-            className="fade-up font-garamond italic text-[clamp(13px,0.86vw,22px)] tracking-[0.4em] uppercase text-(--color-soil) mb-5"
+            className="fade-up font-garamond italic text-[clamp(13px,0.86vw,22px)] tracking-[0.4em] text-(--color-base-light)/80 mb-5"
             style={{ animationDelay: "0.3s" }}
           >
             Stay — Things to Experience
           </p>
           <h1
-            className="fade-up font-serif font-medium text-[clamp(22px,6.6vw,32px)] leading-[1.22] md:text-[clamp(36px,3.55vw,84px)] md:leading-[1.16] tracking-[0.02em] text-(--color-base-dark)"
+            className="fade-up font-serif font-medium text-[clamp(22px,6.6vw,32px)] leading-[1.22] md:text-[clamp(36px,3.55vw,84px)] md:leading-[1.16] tracking-[0.02em]"
             style={{ animationDelay: "0.55s" }}
           >
             <span className="block">葉山で過ごす、</span>
             <span className="block">四つの一日。</span>
           </h1>
           <p
-            className="fade-up mt-5 md:mt-8 font-mincho text-[14px] md:text-[clamp(16px,1.02vw,26px)] leading-[1.85] tracking-[0.16em] text-(--color-base-dark)/80"
+            className="fade-up mt-5 md:mt-8 font-mincho text-[14px] md:text-[clamp(16px,1.02vw,26px)] leading-[1.85] tracking-[0.16em] text-(--color-base-light)/85"
             style={{ animationDelay: "0.85s" }}
           >
             棚田・海・地元の食材・抹茶。<br />
