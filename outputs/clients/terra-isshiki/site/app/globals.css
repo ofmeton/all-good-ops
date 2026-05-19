@@ -32,23 +32,8 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-@keyframes heroSlide {
-  /* 8 slides × offset 12.5% (4s on a 32s loop). 各 slide は約 3s 表示 +
-     1s クロスフェード。cycle 境界での体感差を抑えてスナッピーに。 */
-  0%     { opacity: 0; transform: scale(1.0); }
-  3%     { opacity: 1; transform: scale(1.0); }
-  12.5%  { opacity: 1; transform: scale(1.04); }
-  15.5%  { opacity: 0; transform: scale(1.06); }
-  100%   { opacity: 0; transform: scale(1.0); }
-}
-
-.hero-slide {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  animation: heroSlide 32s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-  will-change: opacity, transform;
-}
+/* heroSlide / .hero-slide は HeroSlideshow component (JS-based) に置換済み。
+   旧 CSS animation は dark bg 抜けと cycle 境界の暗転問題があったため廃止。 */
 
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(24px); filter: blur(4px); }

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { SiteHeader } from "./_components/SiteHeader";
+import { HeroSlideshow } from "./_components/HeroSlideshow";
 
 const HERO_SLIDES = [
   { src: "/images/hero/hero-01-living.jpg", alt: "TERRA HAYAMA リビングダイニング" },
@@ -21,25 +22,7 @@ export default function Home() {
     <main className="bg-(--color-base-light)">
       <section className="relative isolate h-[100svh] w-full overflow-hidden bg-(--color-base-dark) text-(--color-base-light)">
         {/* Slideshow */}
-        <div aria-hidden className="absolute inset-0">
-          {HERO_SLIDES.map((s, i) => (
-            <div
-              key={s.src}
-              className="hero-slide"
-              style={{ animationDelay: `${i * 4 - 1}s` }}
-            >
-              <Image
-                src={s.src}
-                alt={s.alt}
-                fill
-                priority={i === 0}
-                sizes="100vw"
-                quality={85}
-                className="object-cover object-center"
-              />
-            </div>
-          ))}
-        </div>
+        <HeroSlideshow slides={HERO_SLIDES} intervalMs={4500} fadeMs={1200} />
 
         {/* Overlay: vertical vignette for top/bottom legibility, photo breathes in middle */}
         <div
@@ -57,8 +40,8 @@ export default function Home() {
         <SiteHeader variant="hero" current="Home" />
 
 
-        {/* Main copy */}
-        <div className="absolute bottom-[12svh] left-6 md:bottom-[14svh] md:left-12 z-10 max-w-[calc(100%-32px)] md:max-w-[80vw]">
+        {/* Main copy — anchored to bottom-left corner */}
+        <div className="absolute bottom-12 left-6 md:bottom-20 md:left-12 z-10 max-w-[calc(100%-32px)] md:max-w-[80vw]">
           <p
             className="fade-up font-garamond italic text-[12px] md:text-[clamp(15px,1.02vw,26px)] tracking-[0.4em] text-(--color-base-light)/80 mb-6"
             style={{ animationDelay: "0.7s" }}
