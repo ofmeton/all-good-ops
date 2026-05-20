@@ -278,6 +278,7 @@
 | 28 | ローカルファイル整理プロトコル | `local-file-organization.md` | Downloads/Desktop/Documents 等の大型整理。初動スキャン→方針合意（経理独立等3軸必須）→中身確認→構造案→バッチ実行の5フェーズ。MD5重複検出・macOS zip展開フロー含む |
 | 29 | Gitリポジトリ整理プロトコル | `git-repo-cleanup-protocol.md` | 「コミット/プッシュしてないもの整理」依頼の標準フロー。初動スキャン（sub-repo・build artifacts 検出）→方針合意（1回に集約）→.gitignore一括投入→Phase分割計画→コミット実行→pushの5フェーズ |
 | 30 | レスポンシブレイアウト規約 + 検証 | `responsive-layout.md` | LP/HP 制作時の崩れ対策ベスプラ集 + `responsive-snap.sh`（全 viewport 横スクロール自動検出）+ `responsive-audit.sh`（固定px/nowrap/overflow-x:hidden/clamp採用率）案内。frontend-design とペア起動。実装着手前 + リリース前チェック必須 |
+| 31 | Tailwind 全テキスト一括スケール | `tailwind-bulk-text-resize.md` | LP/HP の全 text-[Npx]/text-[clamp(...)] を一括 N% スケール。基準ズーム誤認補正・全体トーン変更時に。Python regex で安全変換、単一 commit で `git revert` 1 発復元可 |
 
 ---
 

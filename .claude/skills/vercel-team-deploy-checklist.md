@@ -85,9 +85,32 @@ git push
 
 通常の build error。`get_deployment_build_logs` で確認し、ローカル `npm run build` で再現させて修正。
 
+## デプロイ後の URL 共有可否（team SSO 注意）
+
+team / Pro プロジェクトでは **Deployment Protection (Vercel Authentication)
+がデフォルト ON**。発行された production URL
+（例: `site-XXX-org.vercel.app`）は **チームメンバー以外開けない**
+（外部から開くと Vercel ログイン画面にリダイレクトされる）。
+
+クライアントへ共有する前に「そのまま渡せるか」を必ず判定:
+
+| 状況 | クライアントに URL 渡せる? |
+|---|---|
+| Deployment Protection: All Deployments (default) | ❌ Vercel ログイン要求 |
+| Deployment Protection: Only Preview Deployments | ✅ Production URL は public |
+| Deployment Protection: Disabled | ✅ どの URL も public |
+| カスタムドメイン設定済 (例: terra-hayama.com) | ✅ 設定次第（通常 public） |
+
+deploy 完了報告時に「Production URL を共有可能か」を必ず明示する。
+クライアント共有目的であれば、デプロイ前 or 直後に Vercel ダッシュボード →
+Project Settings → Deployment Protection で「Only Preview Deployments」
+or 「Disabled」に変更が必要 (これはユーザー手動操作、CLI/MCP からは
+できない場合がある)。
+
 ## 関連リソース
 
 - memory: `feedback_vercel_git_author_authorization.md`（理由・経緯の詳細）
+- memory: `feedback_vercel_subproject_cwd.md`（monorepo 下で cwd 間違いを防ぐ）
 - skill: `lp-optimization-playbook.md`（軽量化を絡めた連続 commit push 時に併用）
 - CLAUDE.md MCP セクション: Vercel MCP `deploy_to_vercel` は人間確認必須ルール
 
