@@ -133,7 +133,7 @@ export default function StayPage() {
                   >
                     {exp.no}・{exp.sub}
                   </p>
-                  <h2 className="font-serif text-[18.2px] md:text-[clamp(22.4px,1.75vw,44.8px)] leading-[1.36] tracking-[0.04em] text-(--color-base-dark) mb-6 md:mb-8">
+                  <h2 className="font-serif text-[14.56px] md:text-[clamp(17.92px,1.4vw,35.84px)] leading-[1.36] tracking-[0.04em] text-(--color-base-dark) mb-6 md:mb-8">
                     {exp.label}
                   </h2>
                   <p className="font-mincho text-[9.8px] md:text-[clamp(11.2px,0.71vw,18.2px)] leading-[2.0] tracking-[0.08em] text-(--color-base-dark)/85 md:max-w-[900px]">

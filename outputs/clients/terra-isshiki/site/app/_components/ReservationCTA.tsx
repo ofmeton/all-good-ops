@@ -28,7 +28,7 @@ export function ReservationCTA({
         >
           Reservation
         </p>
-        <h2 className="font-serif text-[19.6px] md:text-[clamp(25.2px,2.18vw,56px)] leading-[1.32] tracking-[0.04em]">
+        <h2 className="font-serif text-[15.68px] md:text-[clamp(20.16px,1.74vw,44.8px)] leading-[1.32] tracking-[0.04em]">
           <span className="block md:inline">予約は Airbnb から。</span>
         </h2>
         <p

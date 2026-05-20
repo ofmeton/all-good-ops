@@ -84,7 +84,7 @@ export default function AccessPage() {
             <p className="font-garamond italic text-[clamp(9.1px,0.6vw,15.4px)] tracking-[0.4em] uppercase text-(--color-soil) mb-4">
               Location
             </p>
-            <h2 className="font-serif text-[19.6px] md:text-[clamp(23.8px,1.97vw,50.4px)] leading-[1.4] tracking-[0.04em] text-(--color-base-dark) mb-8">
+            <h2 className="font-serif text-[15.68px] md:text-[clamp(19.04px,1.58vw,40.32px)] leading-[1.4] tracking-[0.04em] text-(--color-base-dark) mb-8">
               <span className="block">葉山町、一色。</span>
             </h2>
             <dl className="border-t border-(--color-base-dark)/15 divide-y divide-(--color-base-dark)/10 mb-10">
@@ -147,7 +147,7 @@ export default function AccessPage() {
           <p className="font-garamond italic text-[clamp(9.1px,0.6vw,15.4px)] tracking-[0.4em] uppercase text-(--color-soil) mb-4">
             Map
           </p>
-          <h2 className="font-serif text-[18.2px] md:text-[clamp(22.4px,1.75vw,44.8px)] leading-[1.4] tracking-[0.04em] text-(--color-base-dark) mb-10">
+          <h2 className="font-serif text-[14.56px] md:text-[clamp(17.92px,1.4vw,35.84px)] leading-[1.4] tracking-[0.04em] text-(--color-base-dark) mb-10">
             <span className="block">一色海岸からほど近い、</span>
             <span className="block">静かな住宅地に。</span>
           </h2>
@@ -200,7 +200,7 @@ export default function AccessPage() {
           <p className="font-garamond italic text-[clamp(9.1px,0.6vw,15.4px)] tracking-[0.4em] uppercase text-(--color-soil) mb-4">
             Reservation
           </p>
-          <h2 className="font-serif text-[19.6px] md:text-[clamp(25.2px,2.18vw,56px)] leading-[1.36] tracking-[0.04em] text-(--color-base-dark) mb-12 md:mb-16">
+          <h2 className="font-serif text-[15.68px] md:text-[clamp(20.16px,1.74vw,44.8px)] leading-[1.36] tracking-[0.04em] text-(--color-base-dark) mb-12 md:mb-16">
             <span className="block">予約は Airbnb から。</span>
             <span className="block">空き状況はこちらで確認できます。</span>
           </h2>

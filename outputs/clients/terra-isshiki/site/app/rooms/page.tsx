@@ -145,7 +145,7 @@ export default function RoomsPage() {
           <p className="font-garamond italic text-[clamp(9.1px,0.6vw,15.4px)] tracking-[0.4em] uppercase text-(--color-soil) mb-4">
             Overview
           </p>
-          <h2 className="font-serif text-[18.2px] md:text-[clamp(22.4px,1.75vw,44.8px)] leading-[1.4] tracking-[0.04em] text-(--color-base-dark) mb-14 md:mb-20">
+          <h2 className="font-serif text-[14.56px] md:text-[clamp(17.92px,1.4vw,35.84px)] leading-[1.4] tracking-[0.04em] text-(--color-base-dark) mb-14 md:mb-20">
             宿のご利用について。
           </h2>
 

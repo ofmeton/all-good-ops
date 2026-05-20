@@ -78,7 +78,7 @@ export default function Home() {
             </p>
           </div>
           <div className="md:max-w-none min-w-0">
-            <h2 className="font-serif text-[18.2px] md:text-[clamp(23.8px,1.75vw,44.8px)] leading-[1.36] tracking-[0.04em] text-(--color-base-dark) mb-10">
+            <h2 className="font-serif text-[14.56px] md:text-[clamp(19.04px,1.4vw,35.84px)] leading-[1.36] tracking-[0.04em] text-(--color-base-dark) mb-10">
               <span className="block">葉山への愛から生まれた、</span>
               <span className="block">一棟貸しの宿。</span>
             </h2>
@@ -107,7 +107,7 @@ export default function Home() {
           <p className="font-garamond italic text-[clamp(9.1px,0.6vw,15.4px)] tracking-[0.4em] uppercase text-(--color-soil) mb-6 md:text-center">
             Explore
           </p>
-          <h2 className="font-serif text-[18.2px] md:text-[clamp(23.8px,1.97vw,50.4px)] leading-[1.4] tracking-[0.04em] text-(--color-base-dark) md:text-center mb-14 md:mb-20">
+          <h2 className="font-serif text-[14.56px] md:text-[clamp(19.04px,1.58vw,40.32px)] leading-[1.4] tracking-[0.04em] text-(--color-base-dark) md:text-center mb-14 md:mb-20">
             TERRA HAYAMA について。
           </h2>
         </div>

@@ -92,7 +92,7 @@ export function RoomsGallery() {
             <p className="font-garamond italic text-[clamp(9.1px,0.55vw,14px)] tracking-[0.42em] uppercase text-(--color-soil) mb-3">
               {section.caption}
             </p>
-            <h2 className="font-serif text-[22.4px] md:text-[clamp(28px,2.3vw,58.8px)] leading-[1.2] tracking-[0.04em] text-(--color-base-dark) whitespace-nowrap mb-6 md:mb-8">
+            <h2 className="font-serif text-[17.92px] md:text-[clamp(22.4px,1.84vw,47.04px)] leading-[1.2] tracking-[0.04em] text-(--color-base-dark) whitespace-nowrap mb-6 md:mb-8">
               {section.label}
             </h2>
             <p className="font-mincho text-[10.5px] md:text-[clamp(11.2px,0.71vw,18.2px)] leading-[2.0] tracking-[0.08em] text-(--color-base-dark)/80 md:max-w-[760px]">

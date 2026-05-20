@@ -109,7 +109,7 @@ export default function AboutPage() {
             <p className="font-garamond italic text-[clamp(9.1px,0.6vw,15.4px)] tracking-[0.4em] uppercase text-(--color-soil) mb-5">
               Operator
             </p>
-            <h2 className="font-serif text-[19.6px] md:text-[clamp(25.2px,2.18vw,56px)] leading-[1.34] tracking-[0.04em] text-(--color-base-dark) mb-8">
+            <h2 className="font-serif text-[15.68px] md:text-[clamp(20.16px,1.74vw,44.8px)] leading-[1.34] tracking-[0.04em] text-(--color-base-dark) mb-8">
               <span className="block">BEAT ICE が営む、</span>
               <span className="block">一棟貸しの宿。</span>
             </h2>
