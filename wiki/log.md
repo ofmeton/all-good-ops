@@ -261,3 +261,12 @@ monetize-os エントリに / 統計 21 → 23 ページ。
 
 orphan 解消: `wiki/self/streams.md` に「関連: 外部スポーク」セクション追加し
 `[[ai-radar-pointer]]` / `[[monetize-os-pointer]]` の inbound を成立。frontmatter related も更新。
+
+## [2026-05-20] phase | Phase 4 publishing クラスタ初期化
+
+- 新規クラスタ wiki/publishing/ を作成（index / log / buzz-patterns / by-media×3 / by-theme×4 / inspirations プレースホルダ）
+- spec §3 リサーチ要点を buzz-patterns / by-media / by-theme に seed として注入
+- raw/publishing/inspirations/ ディレクトリと README を作成
+- SCHEMA 例外規定（自動 ingest 許可）追記済み（前 commit）
+
+参照: docs/superpowers/plans/2026-05-20-publishing-pivot-phase4.md Phase 4B

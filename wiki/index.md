@@ -56,6 +56,20 @@
 
 ---
 
+## publishing
+
+- [index](publishing/index.md) — ofmeton 名義の発信戦略（X / Instagram / note）目次
+- [buzz-patterns](publishing/buzz-patterns.md) — 媒体横断のバズパターン SSOT（lint で育てる）
+- [by-media/x](publishing/by-media/x.md) — X 特化の学び
+- [by-media/note](publishing/by-media/note.md) — note 特化の学び
+- [by-media/instagram](publishing/by-media/instagram.md) — Instagram 特化の学び
+- [by-theme/before-after](publishing/by-theme/before-after.md) — Before-After 型の学び
+- [by-theme/prompt-collection](publishing/by-theme/prompt-collection.md) — プロンプト集型の学び
+- [by-theme/hook-patterns](publishing/by-theme/hook-patterns.md) — フック 1 行目パターン集
+- [by-theme/visual-templates](publishing/by-theme/visual-templates.md) — 視覚デザインの参考集
+
+---
+
 ## 統計（lint で更新）
 - 総ページ数: 23（SCHEMA/index/log 3 + コンテンツ 20：bsa 6 + icecream 1 + portfolio 1 + personal 1 + lp-hp-design 3 + image-processing 1 + ai-industry 1 + people 1 + self 3 + ibasho 1 + external 1）
 - 最終 ingest: 2026-05-10 (memory → raw 4本 → wiki 5ページ一括 ingest)
