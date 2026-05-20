@@ -36,3 +36,7 @@ identity: ofmeton
 - 直下に `<media>-<YYYY-MM-DD>-<slug>.md` 形式で source 型ページ。
 - raw/publishing/inspirations/ から ingest した個別投稿のスナップショット + 抽出された学び。
 - 100 件超えたら二次的整理を検討（spec §7.8）。
+
+### ingest 済みリスト
+
+- [note-2026-05-20-smartround-cowork-cases](inspirations/note-2026-05-20-smartround-cowork-cases.md) — 非エンジニア向け Claude Cowork 活用事例 3 選（CS/経理/PdM）

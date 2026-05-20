@@ -34,6 +34,12 @@ identity: ofmeton
 
 詳細は `.claude/skills/note-revenue-playbook.md`。
 
+## 観測 [2026-05-20]
+
+出典: [[../inspirations/note-2026-05-20-smartround-cowork-cases]]
+- 企業 note の法人アカウント型でも「事例＋数値」の構造は個人アカウントと同じ。冒頭 1 行の結論型フックが有効
+- 業種ごとの事例集（3-5 事例 / 8,000-12,000 字）が 500 円帯有料記事の型として機能する
+
 ## KPI（Phase 別）
 
 | Phase | 期間 | 月売上 | 有料記事本数累積 |

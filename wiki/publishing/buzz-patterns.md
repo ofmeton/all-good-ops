@@ -23,6 +23,11 @@ identity: ofmeton
 
 採用率: 高（X / Instagram カルーセル 1 枚目）
 
+### 観測 [2026-05-20]
+
+出典: [[inspirations/note-2026-05-20-smartround-cowork-cases]]
+「チケット整理 1 時間以上 → 20 分」のように Before-After を分単位で数値化するほどフックが効く。抽象的な「効率化」では弱い。
+
 ## パターン 2: Before-After 画像（左右 or 上下）
 
 実物のスクショ・成果物の Before-After を画像で見せる。
@@ -65,6 +70,11 @@ identity: ofmeton
 - ツール名は固有名詞で具体（"AI" でなく "Claude" "freee MCP"）
 
 採用媒体: 全媒体
+
+### 観測 [2026-05-20]
+
+出典: [[inspirations/note-2026-05-20-smartround-cowork-cases]]
+「CS × Cowork」「経理 × Linear」のように職種名 + ツール固有名詞の組み合わせが読者の自分事化を促進。業種ごとに3-5事例をまとめる note 記事の型として有効。
 
 ## パターン 6: 視覚デザインのフォントワーク
 
