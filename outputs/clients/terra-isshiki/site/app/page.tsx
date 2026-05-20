@@ -82,7 +82,7 @@ export default function Home() {
               <span className="block">葉山への愛から生まれた、</span>
               <span className="block">一棟貸しの宿。</span>
             </h2>
-            <p className="font-mincho text-[10.5px] md:text-[clamp(11.2px,0.66vw,16.8px)] leading-[2.0] tracking-[0.08em] text-(--color-base-dark)/85 mb-10">
+            <p className="font-mincho text-[11.03px] md:text-[clamp(11.76px,0.69vw,17.64px)] leading-[2.0] tracking-[0.08em] text-(--color-base-dark)/85 mb-10">
               海越しに望む富士山、棚田が広がる里山。<br />
               ここでは、訪れる人と葉山との距離が、<br />
               ゆっくりとほどけていきます。
