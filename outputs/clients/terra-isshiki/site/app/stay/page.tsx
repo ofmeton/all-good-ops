@@ -24,7 +24,7 @@ const EXPERIENCES = [
     label: "海越しの富士山、夕陽",
     sub: "Mt. Fuji from the coast",
     body:
-      "一色海岸まで徒歩 8 分。冬の晴れた日、海の向こうに富士山。沈む夕陽が、海と山を一筋に染める。",
+      "一色海岸まで徒歩 8 分。澄んだ空気の晴れた日は、海の向こうに富士山。沈む夕陽が、海と山を一筋に染める。",
     image: null,
     icon: "sun",
     accent: "mist",
