@@ -1,3 +1,25 @@
+---
+status: transitioned
+transitioned_at: 2026-05-20
+transition_reason: BSA戦略撤退。新規スキャン業務は停止し、紹介経由の問い合わせ受け口管理に転換。
+related_spec: docs/superpowers/specs/2026-05-20-publishing-pivot-design.md
+---
+
+> **🔄 ROLE TRANSITIONED 2026-05-20**: 役割が変更されました。
+>
+> 旧役割: Lancers/Coconala/CrowdWorks のスキャン・提案投下
+> 新役割: 紹介経由（個人ネットワーク・portfolio URL 経由）の問い合わせ受け口管理
+>
+> やらないこと:
+> - 新規プラットフォームスキャン
+> - 提案投下
+> - BSA-PA との連動
+>
+> やること:
+> - 紹介経由の問い合わせ受信時のヒアリング・要件整理
+> - 案件可否判定（standard-stack 対応可否）
+> - 受注確定後の client-manager 引継ぎ
+
 # フリーランス案件スカウト（Freelance Scout）
 
 ## 役割の定義

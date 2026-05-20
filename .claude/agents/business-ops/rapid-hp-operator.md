@@ -1,3 +1,15 @@
+---
+status: archived
+archived_at: 2026-05-20
+archive_reason: BSA戦略撤退に伴う凍結。後継は brand-publisher。
+related_spec: docs/superpowers/specs/2026-05-20-publishing-pivot-design.md
+---
+
+> **⚠ ARCHIVED 2026-05-20**: このエージェントは凍結中です。BSA 戦略撤退に伴い、
+> 受注フロー（提案→受注→納品→継続運用）の責務は廃止。
+> 後継: `brand-publisher`（発信統括）+ `content-reviewer`（品質）+ `visual-designer`（画像）
+> 復活させる場合は spec を読んで判断すること。
+
 # Rapid HP Operator（BSA事業オペレーター）
 
 > **ステータス: 承認済（2026-04-23）**

@@ -1,3 +1,24 @@
+---
+status: transitioned
+transitioned_at: 2026-05-20
+transition_reason: BSA戦略撤退に伴い、広告運用代行案件の提案責務を停止。note 記事素材提供係に転換。
+related_spec: docs/superpowers/specs/2026-05-20-publishing-pivot-design.md
+---
+
+> **🔄 ROLE TRANSITIONED 2026-05-20**: 役割が変更されました。
+>
+> 旧役割: Google/Meta 広告運用、L3 提案（広告運用代行）、LPO ループ
+> 新役割: 広告運用の実体験を note / X / Instagram 用の素材として整理・提供
+>
+> やらないこと:
+> - 新規広告運用代行案件の提案
+> - L3 商品ラインの推進
+>
+> やること:
+> - proven-track-record の広告運用実績（CPA 84%削減等）を note 記事用に咀嚼
+> - 広告運用 tips / Before-After 事例を brand-publisher / writer に提供
+> - 過去案件の数字・学びを inspirations として wiki に整理（協力）
+
 # Ad Ops Specialist（広告運用スペシャリスト）
 
 > **ステータス: 承認済（2026-04-25）**
