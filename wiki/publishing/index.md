@@ -36,3 +36,11 @@ identity: ofmeton
 - 直下に `<media>-<YYYY-MM-DD>-<slug>.md` 形式で source 型ページ。
 - raw/publishing/inspirations/ から ingest した個別投稿のスナップショット + 抽出された学び。
 - 100 件超えたら二次的整理を検討（spec §7.8）。
+
+### ingest 済みリスト
+
+- [note-2026-05-20-smartround-cowork-cases](inspirations/note-2026-05-20-smartround-cowork-cases.md) — 非エンジニア向け Claude Cowork 活用事例 3 選（CS/経理/PdM）
+- [meta-2026-05-20-chaen-buzz-5steps](inspirations/meta-2026-05-20-chaen-buzz-5steps.md) — チャエン「Xでバズる投稿をAIで自動生成する5ステップ」（X/Few-Shot）
+- [note-2026-05-20-kajiken-claudecode-everyone](inspirations/note-2026-05-20-kajiken-claudecode-everyone.md) — 梶谷健人「Claude Code はエンジニア以外も全員が使うべき」（note/非エンジニア向け）
+- [instagram-2026-05-20-asc-carousel-15slides](inspirations/instagram-2026-05-20-asc-carousel-15slides.md) — ASC「Instagramカルーセル15枚構成プロンプト集」（Instagram/visual）
+- [note-2026-05-20-uravation-claude-x-viral](inspirations/note-2026-05-20-uravation-claude-x-viral.md) — uravation「Claude Code で X 投稿バイラル｜3 ツイート構成プロンプト 7 選」（X/thread）

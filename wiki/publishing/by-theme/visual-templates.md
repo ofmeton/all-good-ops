@@ -37,6 +37,19 @@ identity: ofmeton
 | 8 | Before-After 比較 or 結論まとめ |
 | 9 | CTA（保存 / プロフ → note リンク） |
 
+## 異論 [2026-05-20]: カルーセル枚数 — 9 枚標準 vs 15 枚説
+
+**本ページの既存方針**: カルーセル 9 枚の標準構成（上記テーブル参照）
+
+**ASC の主張（ingest 素材より）**:
+出典: [[../inspirations/instagram-2026-05-20-asc-carousel-15slides]]
+「15 枚構成」を「完全保存版」として推奨。保存率・ファン化に有効と主張。
+
+**さらに別の説**:
+neworder 記事（https://www.neworder.co.jp/2026/04/19/instagram_carousel_8ro10/ ）は「8-10 枚」が最適と主張（未 ingest）。
+
+**現在の判断**: 9 枚で運用開始し保存率・リーチを計測。ALG データが出てから採否を判断。消さず両論を保持。
+
 ## 参考にしたい外部アカウント（ingest 候補）
 
 - raw/publishing/inspirations/ に投げ込まれた素材を ingest 後、ここに採用テンプレを蓄積
