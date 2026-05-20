@@ -32,6 +32,20 @@
 
 ## 起動時に必ず行うこと
 
+### 0. ブランチ確認（最優先 / 2026-05-20 追加）
+
+SessionStart hook が `cwd / branch / uncommitted` を表示している前提で、現ブランチを必ず確認する。
+
+- 現ブランチが `main` / `master` / `improve/iteration-*` のいずれか（保護ブランチ）なら、**他の作業に入る前に task ブランチを切る**:
+  ```
+  git checkout -b task/$(date +%y%m%d)-<topic>
+  ```
+  - topic は依頼の中心キーワード 1-3 語の kebab-case
+  - 例: `task/260520-bsa-proposal-batch`, `task/260520-rice-cream-payroll`
+- 現ブランチが `task/*` / `feature/*` / `fix/*` 等の作業ブランチで、依頼内容と既存ブランチの主題が **一致しない** 場合も新しい task ブランチを切ること
+- pre-commit hook が保護ブランチへの直 commit を reject する。脱出口 `ALLOW_MAIN_COMMIT=1` は self-improve ループ / hotfix 等の正当事由のみ
+- 詳細ルール: `CLAUDE.md` の「1セッション = 1 task ブランチ規律」/ `memory/feedback_one_session_one_branch.md`
+
 ### 1. 最新状況の把握
 - `knowledge/INDEX.md` を読む
 - `knowledge/context/` の各ファイルの変更日時を確認し、直近更新があるものだけ読む
