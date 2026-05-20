@@ -1,11 +1,11 @@
 ---
 type: concept
 created: 2026-05-09
-updated: 2026-05-09
+updated: 2026-05-20
 sources: []
 related: [[overview]], [[lessons-proposal-patterns]]
 tags: [bsa, proposal, template]
-status: draft
+status: archived
 identity: 工藤陸
 ---
 

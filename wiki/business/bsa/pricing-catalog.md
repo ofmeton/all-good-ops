@@ -1,11 +1,11 @@
 ---
 type: source
 created: 2026-04-22
-updated: 2026-05-09
+updated: 2026-05-20
 sources: []
 related: [[overview]]
 tags: [bsa, pricing, ssot]
-status: active
+status: archived
 identity: 工藤陸
 ---
 

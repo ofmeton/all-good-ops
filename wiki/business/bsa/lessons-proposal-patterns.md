@@ -1,11 +1,11 @@
 ---
 type: topic
 created: 2026-05-09
-updated: 2026-05-09
+updated: 2026-05-20
 sources: []
 related: [[overview]], [[proposals/templates]]
 tags: [bsa, lessons, proposal]
-status: draft
+status: archived
 identity: 工藤陸
 ---
 
