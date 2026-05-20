@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+# pre-commit hook: 1セッション = 1 task ブランチ ルール強制
+#
+# main / master / improve/iteration-* への直 commit を拒否する。
+# 複数セッションが同じブランチに乗ってきて commit 主題が混ざる事故を予防。
+#
+# 緊急時の脱出口:
+#   ALLOW_MAIN_COMMIT=1 git commit ...
+#
+# install: bash scripts/install-git-hooks.sh
+
+set -euo pipefail
+
+current_branch="$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo unknown)"
+
+# 保護対象ブランチ
+protected_pattern='^(main|master|improve/iteration-.*)$'
+
+if [[ "$current_branch" =~ $protected_pattern ]]; then
+  if [[ "${ALLOW_MAIN_COMMIT:-0}" == "1" ]]; then
+    echo "⚠️  保護ブランチ '$current_branch' への commit を許可（ALLOW_MAIN_COMMIT=1）" >&2
+    exit 0
+  fi
+
+  cat >&2 <<EOF
+
+❌ 保護ブランチ '$current_branch' への直 commit はできません。
+
+理由:
+  複数セッションが同じブランチに乗ると commit 主題が混在して整理不能になる。
+  1セッション = 1 task ブランチ が原則。
+
+対処（推奨）:
+  1) task ブランチを切る:
+       git checkout -b task/\$(date +%y%m%d)-<topic>
+  2) そのブランチで commit
+  3) 完了時に main に merge → task ブランチ削除
+
+緊急時の脱出口:
+  ALLOW_MAIN_COMMIT=1 git commit ...
+
+EOF
+  exit 1
+fi
+
+exit 0

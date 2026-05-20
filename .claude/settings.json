@@ -102,7 +102,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "cd \"$CLAUDE_PROJECT_DIR\" 2>/dev/null && printf '\\n📍 cwd: %s\\n   branch: %s\\n   uncommitted: %s files\\n' \"$(pwd)\" \"$(git branch --show-current 2>/dev/null || echo not-git)\" \"$(git status --short 2>/dev/null | wc -l | xargs)\""
+            "command": "bash \"$CLAUDE_PROJECT_DIR/scripts/session-start-banner.sh\""
           }
         ]
       }
