@@ -97,7 +97,7 @@ export default function StayPage() {
             Stay — Things to Experience
           </p>
           <h1
-            className="fade-up font-serif font-medium text-[clamp(18px,5.1vw,26px)] leading-[1.22] md:text-[clamp(28px,2.7vw,64px)] xl:text-[clamp(22px,2vw,30px)] 2xl:text-[clamp(28px,2.7vw,64px)] md:leading-[1.16] tracking-[0.02em]"
+            className="fade-up font-serif font-medium text-[clamp(18px,5.1vw,26px)] leading-[1.22] md:text-[clamp(22px,2.1vw,52px)] md:leading-[1.16] tracking-[0.02em]"
             style={{ animationDelay: "0.55s" }}
           >
             <span className="block">葉山らしさを、</span>

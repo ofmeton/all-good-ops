@@ -40,7 +40,7 @@ export default function AboutPage() {
             About TERRA HAYAMA
           </p>
           <h1
-            className="fade-up font-serif font-medium text-[clamp(16px,4.8vw,24px)] leading-[1.22] md:text-[clamp(26px,2.3vw,56px)] xl:text-[clamp(20px,1.67vw,26px)] 2xl:text-[clamp(26px,2.3vw,56px)] md:leading-[1.14] tracking-[0.02em]"
+            className="fade-up font-serif font-medium text-[clamp(16px,4.8vw,24px)] leading-[1.22] md:text-[clamp(20px,1.75vw,44px)] md:leading-[1.14] tracking-[0.02em]"
             style={{ animationDelay: "0.55s" }}
           >
             <span className="block whitespace-nowrap">葉山への愛から、</span>
@@ -62,7 +62,7 @@ export default function AboutPage() {
               </p>
             </div>
 
-            <div className="space-y-8 font-mincho text-[16px] md:text-[clamp(17px,1.4vw,22px)] xl:text-[clamp(15px,1.1vw,18px)] 2xl:text-[clamp(17px,1.4vw,22px)] min-[2200px]:!text-[clamp(24px,1.1vw,30px)] leading-[2.05] tracking-[0.06em] text-(--color-base-dark)/90">
+            <div className="space-y-8 font-mincho text-[16px] md:text-[clamp(15px,1.2vw,24px)] min-[2200px]:!text-[clamp(24px,1.1vw,30px)] leading-[2.05] tracking-[0.06em] text-(--color-base-dark)/90">
               <p>
                 TERRA は、葉山への愛から生まれました。<br />
                 海越しに望む富士山、棚田が広がる里山。<br />
