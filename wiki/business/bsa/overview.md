@@ -1,15 +1,19 @@
 ---
 type: topic
 created: 2026-05-09
-updated: 2026-05-10
+updated: 2026-05-20
 sources: []
-related: [[pricing-catalog]], [[proven-track-record]], [[lessons-proposal-patterns]]
+related: [[pricing-catalog]], [[proven-track-record]], [[lessons-proposal-patterns]], [[archive-notice]]
 tags: [bsa, strategy]
-status: active
+status: archived
 identity: 工藤陸
 ---
 
 # BSA 戦略全体像
+
+> **⚠ ARCHIVED 2026-05-20**: BSA 戦略は完全撤退しました。
+> 撤退記録: [[archive-notice]]
+> 後継戦略: `docs/superpowers/specs/2026-05-20-publishing-pivot-design.md`
 
 2026-04-22〜2026-08-22 の 4 ヶ月タイムボックス型 HP 制作ブートストラップ戦略。
 工藤陸（本名）名義で運用。
