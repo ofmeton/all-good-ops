@@ -1,0 +1,9 @@
+# wiki/publishing/inspirations/
+
+個別バズ投稿の source 型ページの置き場。
+ingest フロー: raw/publishing/inspirations/<file>.md → 本ディレクトリ <id>.md
+
+frontmatter:
+- type: source
+- identity: ofmeton
+- sources: [raw/publishing/inspirations/<file>.md]
