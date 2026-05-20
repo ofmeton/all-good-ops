@@ -1,0 +1,13 @@
+CN|collected|41
+CN|declined|3
+CN|submitted|1
+CW|collected|52
+CW|declined|104
+CW|proposing|2
+CW|replied|1
+CW|submitted|21
+CW|unable_to_submit|7
+LAN|collected|75
+LAN|declined|15
+LAN|submitted|9
+LAN|unable_to_submit|4
