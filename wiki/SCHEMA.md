@@ -69,6 +69,19 @@ identity: 工藤陸 | ofmeton | n/a
 - `index.md` を毎回起点にして重複ページ作成を防ぐ
 - 既存ページに矛盾する情報が来たら、新情報側を残しつつ「## 異論」セクションで旧主張を保存（**消さない**）
 
+### 例外: `raw/publishing/inspirations/` 配下の自動 ingest
+
+このディレクトリに限り、ユーザーの明示指示なしにセッション開始時の自動スキャン + 一括確認による ingest を許可する。標準フロー（ユーザー指示 → ingest）から外れる根拠は、バズ投稿の参考素材を 5 秒で投げ込める運用設計上の必要性（spec §7.4）。
+
+ただし以下を遵守:
+- 一括取り込み実行前にユーザー Y/N 確認を必ず取る（自動 commit 禁止）
+- 既存ページとの矛盾検出時は「## 異論」併記で SCHEMA 標準フローを維持
+- 1 ingest = 1 commit を厳守
+- 自動スキャンで取り込み済み判定は `wiki/publishing/log.md` を SSOT とする
+- 対象は `raw/publishing/inspirations/` の直下ファイルのみ（サブディレクトリの再帰は適用外）
+
+適用エージェント: `brand-publisher` / `secretary` がセッション開始時にスキャン実行可能。実行手順は `.claude/skills/publishing-wiki-ingest.md` を参照。
+
 ## query プロトコル
 
 1. ユーザーが質問
