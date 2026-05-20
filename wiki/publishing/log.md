@@ -13,6 +13,13 @@ identity: ofmeton
 
 > 時系列 append-only。`grep "^## \[" log.md | tail -10` で直近 10 イベントが見える形式。
 
+## [2026-05-20] ingest | ASC「Instagramカルーセル15枚構成プロンプト集」(Instagram)
+
+- raw: raw/publishing/inspirations/instagram-20260520-asc-carousel-15枚構成.md
+- wiki: wiki/publishing/inspirations/instagram-2026-05-20-asc-carousel-15slides.md
+- 反映先: by-media/instagram.md（異論 1 件追加）/ by-theme/visual-templates.md（異論 1 件追加）
+- 抽出された学び: カルーセル 15 枚説 vs 9 枚標準 → 両論併記。ALG データ揃い次第採否判断。感情的つながり + ストーリー性の設計思想は枚数非依存で採用可能
+
 ## [2026-05-20] ingest | 梶谷健人「Claude Code はエンジニア以外も全員が使うべき」(note)
 
 - raw: raw/publishing/inspirations/note-20260520-kajiken-claudecode-everyone.md
