@@ -34,7 +34,14 @@ identity: ofmeton
 
 詳細は `.claude/skills/note-revenue-playbook.md`。
 
-## 観測 [2026-05-20]
+## 観測 [2026-05-20] — kajiken: Claude Code × 非エンジニア
+
+出典: [[../inspirations/note-2026-05-20-kajiken-claudecode-everyone]]
+- 「コピペで再現できる」即時実用性 + 「プログラミング知識不要」の断言が non-engineer 読者を引き寄せる
+- CLAUDE.md・スキル機能等の具体的仕組みを解説する記事形式が有料化候補として有効
+- タイトル「2026年、もはや〜」の年号 + 断言型は強フック — タイトル設計に採用候補
+
+## 観測 [2026-05-20] — smartround: 事例集型
 
 出典: [[../inspirations/note-2026-05-20-smartround-cowork-cases]]
 - 企業 note の法人アカウント型でも「事例＋数値」の構造は個人アカウントと同じ。冒頭 1 行の結論型フックが有効

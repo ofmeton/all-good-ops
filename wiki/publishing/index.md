@@ -41,3 +41,4 @@ identity: ofmeton
 
 - [note-2026-05-20-smartround-cowork-cases](inspirations/note-2026-05-20-smartround-cowork-cases.md) — 非エンジニア向け Claude Cowork 活用事例 3 選（CS/経理/PdM）
 - [meta-2026-05-20-chaen-buzz-5steps](inspirations/meta-2026-05-20-chaen-buzz-5steps.md) — チャエン「Xでバズる投稿をAIで自動生成する5ステップ」（X/Few-Shot）
+- [note-2026-05-20-kajiken-claudecode-everyone](inspirations/note-2026-05-20-kajiken-claudecode-everyone.md) — 梶谷健人「Claude Code はエンジニア以外も全員が使うべき」（note/非エンジニア向け）

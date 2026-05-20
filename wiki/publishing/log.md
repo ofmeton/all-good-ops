@@ -13,6 +13,14 @@ identity: ofmeton
 
 > 時系列 append-only。`grep "^## \[" log.md | tail -10` で直近 10 イベントが見える形式。
 
+## [2026-05-20] ingest | 梶谷健人「Claude Code はエンジニア以外も全員が使うべき」(note)
+
+- raw: raw/publishing/inspirations/note-20260520-kajiken-claudecode-everyone.md
+- wiki: wiki/publishing/inspirations/note-2026-05-20-kajiken-claudecode-everyone.md
+- WebFetch: https://note.com/kajiken0630/n/nc0cb92bc080f（raw が URL のみのため取得）
+- 反映先: buzz-patterns.md（パターン 1 に断言型フック観測追加）/ by-media/note.md / by-theme/prompt-collection.md
+- 抽出された学び: 年号 + 断言型フックが non-engineer 向けに強い。「1コマンドで○○自動化」型の解説記事は有料化候補
+
 ## [2026-05-20] ingest | チャエン「Xでバズる投稿をAIで自動生成する5ステップ」(meta/X)
 
 - raw: raw/publishing/inspirations/meta-20260520-chaen-buzz-5steps.md
