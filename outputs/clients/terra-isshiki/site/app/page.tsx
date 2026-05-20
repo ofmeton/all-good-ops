@@ -43,20 +43,20 @@ export default function Home() {
         {/* Main copy — anchored to bottom-left corner */}
         <div className="absolute bottom-12 left-6 md:bottom-20 md:left-12 z-10 max-w-[calc(100%-32px)] md:max-w-[80vw]">
           <p
-            className="fade-up font-garamond italic text-[12px] md:text-[clamp(15px,1.02vw,26px)] tracking-[0.4em] text-(--color-base-light)/80 mb-6"
+            className="fade-up font-garamond italic text-[8.4px] md:text-[clamp(10.5px,0.71vw,18.2px)] tracking-[0.4em] text-(--color-base-light)/80 mb-6"
             style={{ animationDelay: "0.7s" }}
           >
             Hayama, Kanagawa
           </p>
           <h1
-            className="fade-up font-serif font-medium text-[clamp(20px,5.4vw,28px)] leading-[1.18] md:text-[clamp(28px,2.5vw,60px)] md:leading-[1.12] tracking-[0.02em] text-(--color-base-light)"
+            className="fade-up font-serif font-medium text-[clamp(14px,3.78vw,19.6px)] leading-[1.18] md:text-[clamp(19.6px,1.75vw,42px)] md:leading-[1.12] tracking-[0.02em] text-(--color-base-light)"
             style={{ animationDelay: "0.95s" }}
           >
             <span className="block whitespace-nowrap">ゆっくり流れる、</span>
             <span className="block whitespace-nowrap">葉山時間。</span>
           </h1>
           <p
-            className="fade-up mt-6 md:mt-8 font-mincho text-[14px] md:text-[clamp(15px,0.94vw,24px)] leading-[1.85] tracking-[0.16em] text-(--color-base-light)/80"
+            className="fade-up mt-6 md:mt-8 font-mincho text-[9.8px] md:text-[clamp(10.5px,0.66vw,16.8px)] leading-[1.85] tracking-[0.16em] text-(--color-base-light)/80"
             style={{ animationDelay: "1.25s" }}
           >
             一色海岸まで徒歩 8 分。<br />
@@ -70,32 +70,32 @@ export default function Home() {
       <section className="relative bg-(--color-paper) px-6 py-[clamp(112px,11.5vw,176px)] md:px-12">
         <div className="mx-auto max-w-[1480px] grid gap-12 md:grid-cols-[180px_1fr] md:gap-16">
           <div>
-            <p className="font-garamond italic text-[clamp(13px,0.86vw,22px)] tracking-[0.4em] uppercase text-(--color-soil) mb-3">
+            <p className="font-garamond italic text-[clamp(9.1px,0.6vw,15.4px)] tracking-[0.4em] uppercase text-(--color-soil) mb-3">
               Concept
             </p>
-            <p className="vrl hidden md:inline-block font-mincho text-[14px] md:text-[clamp(15px,0.94vw,24px)] tracking-[0.5em] text-(--color-base-dark)/55">
+            <p className="vrl hidden md:inline-block font-mincho text-[9.8px] md:text-[clamp(10.5px,0.66vw,16.8px)] tracking-[0.5em] text-(--color-base-dark)/55">
               風景に、呼吸を整える。
             </p>
           </div>
           <div className="md:max-w-none min-w-0">
-            <h2 className="font-serif text-[26px] md:text-[clamp(34px,2.5vw,64px)] leading-[1.36] tracking-[0.04em] text-(--color-base-dark) mb-10">
+            <h2 className="font-serif text-[18.2px] md:text-[clamp(23.8px,1.75vw,44.8px)] leading-[1.36] tracking-[0.04em] text-(--color-base-dark) mb-10">
               <span className="block">葉山への愛から生まれた、</span>
               <span className="block">一棟貸しの宿。</span>
             </h2>
-            <p className="font-mincho text-[15px] md:text-[clamp(16px,0.94vw,24px)] leading-[2.0] tracking-[0.08em] text-(--color-base-dark)/85 mb-10">
+            <p className="font-mincho text-[10.5px] md:text-[clamp(11.2px,0.66vw,16.8px)] leading-[2.0] tracking-[0.08em] text-(--color-base-dark)/85 mb-10">
               海越しに望む富士山、棚田が広がる里山。<br />
               ここでは、訪れる人と葉山との距離が、<br />
               ゆっくりとほどけていきます。
             </p>
             <Link
               href="/about"
-              className="group inline-flex items-center gap-4 font-garamond text-[13px] md:text-[clamp(14px,0.86vw,22px)] tracking-[0.32em] uppercase text-(--color-base-dark)"
+              className="group inline-flex items-center gap-4 font-garamond text-[9.1px] md:text-[clamp(9.8px,0.6vw,15.4px)] tracking-[0.32em] uppercase text-(--color-base-dark)"
             >
               <span className="relative">
                 More about TERRA
                 <span className="absolute -bottom-1 left-0 h-px w-full bg-(--color-base-dark)/30 transition-colors duration-500 group-hover:bg-(--color-base-dark)" />
               </span>
-              <span aria-hidden className="text-[14px]">→</span>
+              <span aria-hidden className="text-[9.8px]">→</span>
             </Link>
           </div>
         </div>
@@ -104,10 +104,10 @@ export default function Home() {
       {/* Section gateway cards */}
       <section className="relative bg-(--color-base-light) py-[clamp(96px,8.34vw,128px)]">
         <div className="mx-auto max-w-[1640px] px-6 md:px-12">
-          <p className="font-garamond italic text-[clamp(13px,0.86vw,22px)] tracking-[0.4em] uppercase text-(--color-soil) mb-6 md:text-center">
+          <p className="font-garamond italic text-[clamp(9.1px,0.6vw,15.4px)] tracking-[0.4em] uppercase text-(--color-soil) mb-6 md:text-center">
             Explore
           </p>
-          <h2 className="font-serif text-[26px] md:text-[clamp(34px,2.81vw,72px)] leading-[1.4] tracking-[0.04em] text-(--color-base-dark) md:text-center mb-14 md:mb-20">
+          <h2 className="font-serif text-[18.2px] md:text-[clamp(23.8px,1.97vw,50.4px)] leading-[1.4] tracking-[0.04em] text-(--color-base-dark) md:text-center mb-14 md:mb-20">
             TERRA HAYAMA について。
           </h2>
         </div>
@@ -165,14 +165,14 @@ export default function Home() {
                   }}
                 />
                 <div className="absolute inset-0 flex flex-col justify-between p-6 md:p-8 lg:p-10 text-(--color-base-light)">
-                  <p className="font-garamond italic text-[clamp(12px,0.7vw,18px)] md:text-[clamp(13px,0.78vw,20px)] tracking-[0.42em] uppercase opacity-85">
+                  <p className="font-garamond italic text-[clamp(8.4px,0.49vw,12.6px)] md:text-[clamp(9.1px,0.55vw,14px)] tracking-[0.42em] uppercase opacity-85">
                     {card.num} — {card.en}
                   </p>
                   <div>
-                    <h3 className="font-serif text-[24px] md:text-[clamp(24px,1.48vw,38px)] leading-[1.3] tracking-[0.04em] mb-2">
+                    <h3 className="font-serif text-[16.8px] md:text-[clamp(16.8px,1.04vw,26.6px)] leading-[1.3] tracking-[0.04em] mb-2">
                       {card.jp}
                     </h3>
-                    <p className="font-garamond text-[11px] md:text-[clamp(12px,0.62vw,16px)] tracking-[0.32em] uppercase opacity-75">
+                    <p className="font-garamond text-[7.7px] md:text-[clamp(8.4px,0.43vw,11.2px)] tracking-[0.32em] uppercase opacity-75">
                       View →
                     </p>
                   </div>
@@ -186,11 +186,11 @@ export default function Home() {
       <footer className="bg-(--color-base-dark) text-(--color-base-light) px-6 py-[clamp(64px,7vw,112px)] md:px-12">
         <div className="mx-auto max-w-[1640px] grid gap-10 md:grid-cols-[1fr_auto] md:items-end">
           <div>
-            <p className="font-serif text-[24px] md:text-[clamp(30px,2.19vw,56px)] tracking-[0.18em] mb-3">TERRA</p>
-            <p className="font-garamond text-[11px] md:text-[clamp(12px,0.78vw,20px)] tracking-[0.42em] uppercase opacity-75 mb-6 md:mb-10">
+            <p className="font-serif text-[16.8px] md:text-[clamp(21px,1.53vw,39.2px)] tracking-[0.18em] mb-3">TERRA</p>
+            <p className="font-garamond text-[7.7px] md:text-[clamp(8.4px,0.55vw,14px)] tracking-[0.42em] uppercase opacity-75 mb-6 md:mb-10">
               Hayama, Isshiki
             </p>
-            <p className="font-mincho text-[13px] md:text-[clamp(14px,0.86vw,22px)] leading-[1.85] tracking-[0.06em] opacity-80">
+            <p className="font-mincho text-[9.1px] md:text-[clamp(9.8px,0.6vw,15.4px)] leading-[1.85] tracking-[0.06em] opacity-80">
               〒240-0111 神奈川県三浦郡葉山町一色 1759-1-5<br />
               運営: 株式会社 BEAT ICE
             </p>
@@ -199,13 +199,13 @@ export default function Home() {
             href={AIRBNB_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="group inline-flex items-center gap-3 font-garamond text-[12px] md:text-[clamp(13px,0.7vw,18px)] tracking-[0.32em] uppercase border border-(--color-base-light)/20 px-7 py-4 md:px-[clamp(28px,2.19vw,56px)] md:py-[clamp(16px,1.09vw,28px)] hover:bg-(--color-base-light)/8 transition-colors"
+            className="group inline-flex items-center gap-3 font-garamond text-[8.4px] md:text-[clamp(9.1px,0.49vw,12.6px)] tracking-[0.32em] uppercase border border-(--color-base-light)/20 px-7 py-4 md:px-[clamp(28px,2.19vw,56px)] md:py-[clamp(16px,1.09vw,28px)] hover:bg-(--color-base-light)/8 transition-colors"
           >
             <span>Reserve on Airbnb</span>
             <span aria-hidden>→</span>
           </a>
         </div>
-        <p className="mt-12 md:mt-16 font-garamond text-[10px] md:text-[11px] lg:text-[12px] tracking-[0.32em] uppercase opacity-55 text-center md:text-left">
+        <p className="mt-12 md:mt-16 font-garamond text-[7px] md:text-[7.7px] lg:text-[8.4px] tracking-[0.32em] uppercase opacity-55 text-center md:text-left">
           © 2026 TERRA HAYAMA. All rights reserved.
         </p>
       </footer>

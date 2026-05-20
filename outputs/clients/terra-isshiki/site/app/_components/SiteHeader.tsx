@@ -90,12 +90,12 @@ export function SiteHeader({
           style={{ animationDelay: `${delayBase}s` }}
         >
           <span
-            className={`block font-serif text-[20px] md:text-[clamp(26px,1.95vw,52px)] font-medium tracking-[0.18em] transition-colors duration-500 ${textColor}`}
+            className={`block font-serif text-[14px] md:text-[clamp(18.2px,1.36vw,36.4px)] font-medium tracking-[0.18em] transition-colors duration-500 ${textColor}`}
           >
             TERRA
           </span>
           <span
-            className={`block mt-1 font-garamond text-[9px] md:text-[clamp(11px,0.78vw,18px)] uppercase tracking-[0.42em] transition-colors duration-500 ${subColor}`}
+            className={`block mt-1 font-garamond text-[6.3px] md:text-[clamp(7.7px,0.55vw,12.6px)] uppercase tracking-[0.42em] transition-colors duration-500 ${subColor}`}
           >
             Hayama, Isshiki
           </span>
@@ -106,7 +106,7 @@ export function SiteHeader({
           style={{ animationDelay: `${delayBase + 0.25}s` }}
         >
           <ul
-            className={`flex items-center gap-[clamp(22px,2.03vw,52px)] font-garamond text-[14px] md:text-[clamp(15px,1.02vw,26px)] tracking-[0.22em] uppercase transition-colors duration-500 ${textColor}`}
+            className={`flex items-center gap-[clamp(22px,2.03vw,52px)] font-garamond text-[9.8px] md:text-[clamp(10.5px,0.71vw,18.2px)] tracking-[0.22em] uppercase transition-colors duration-500 ${textColor}`}
           >
             {NAV.map((item) => {
               const active = current === item.label;
@@ -171,10 +171,10 @@ export function SiteHeader({
               onClick={() => setOpen(false)}
               className="block leading-none"
             >
-              <span className="block font-serif text-[22px] font-medium tracking-[0.18em] text-(--color-base-light)">
+              <span className="block font-serif text-[15.4px] font-medium tracking-[0.18em] text-(--color-base-light)">
                 TERRA
               </span>
-              <span className="block mt-1 font-garamond text-[10px] uppercase tracking-[0.42em] text-(--color-base-light)/85">
+              <span className="block mt-1 font-garamond text-[7px] uppercase tracking-[0.42em] text-(--color-base-light)/85">
                 Hayama, Isshiki
               </span>
             </Link>
@@ -206,11 +206,11 @@ export function SiteHeader({
                       }}
                     >
                       <span className="flex items-baseline gap-4">
-                        <span className="font-garamond italic text-[11px] tracking-[0.32em] uppercase text-(--color-base-light)/55 w-8">
+                        <span className="font-garamond italic text-[7.7px] tracking-[0.32em] uppercase text-(--color-base-light)/55 w-8">
                           0{i + 1}
                         </span>
                         <span
-                          className={`font-serif text-[34px] leading-[1.1] tracking-[0.04em] ${
+                          className={`font-serif text-[23.8px] leading-[1.1] tracking-[0.04em] ${
                             active
                               ? "text-(--color-base-light)"
                               : "text-(--color-base-light)/85 group-hover:text-(--color-base-light)"
@@ -231,12 +231,12 @@ export function SiteHeader({
               href={AIRBNB_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-3 font-garamond text-[12px] tracking-[0.32em] uppercase border border-(--color-base-light)/25 px-6 py-3.5 text-(--color-base-light)"
+              className="inline-flex items-center gap-3 font-garamond text-[8.4px] tracking-[0.32em] uppercase border border-(--color-base-light)/25 px-6 py-3.5 text-(--color-base-light)"
             >
               ご予約はこちら
               <span aria-hidden>→</span>
             </a>
-            <p className="mt-8 font-mincho text-[12px] leading-[1.85] tracking-[0.06em] text-(--color-base-light)/70">
+            <p className="mt-8 font-mincho text-[8.4px] leading-[1.85] tracking-[0.06em] text-(--color-base-light)/70">
               〒240-0111 神奈川県三浦郡葉山町一色 1759-1-5<br />
               運営: 株式会社 BEAT ICE
             </p>

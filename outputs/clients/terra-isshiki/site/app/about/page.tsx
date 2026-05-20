@@ -34,13 +34,13 @@ export default function AboutPage() {
         />
         <div className="absolute bottom-12 left-6 md:bottom-20 md:left-12 z-10 max-w-[88%] md:max-w-[820px]">
           <p
-            className="fade-up font-garamond italic text-[clamp(13px,0.86vw,22px)] tracking-[0.4em] text-(--color-base-light)/80 mb-5"
+            className="fade-up font-garamond italic text-[clamp(9.1px,0.6vw,15.4px)] tracking-[0.4em] text-(--color-base-light)/80 mb-5"
             style={{ animationDelay: "0.3s" }}
           >
             About TERRA HAYAMA
           </p>
           <h1
-            className="fade-up font-serif font-medium text-[clamp(16px,4.8vw,24px)] leading-[1.22] md:text-[clamp(20px,1.75vw,44px)] md:leading-[1.14] tracking-[0.02em]"
+            className="fade-up font-serif font-medium text-[clamp(11.2px,3.36vw,16.8px)] leading-[1.22] md:text-[clamp(14px,1.22vw,30.8px)] md:leading-[1.14] tracking-[0.02em]"
             style={{ animationDelay: "0.55s" }}
           >
             <span className="block whitespace-nowrap">葉山への愛から、</span>
@@ -54,15 +54,15 @@ export default function AboutPage() {
         <div className="mx-auto max-w-[1280px]">
           <div className="grid gap-x-12 gap-y-12 md:grid-cols-[180px_1fr]">
             <div className="md:pt-2">
-              <p className="font-garamond italic text-[clamp(13px,0.86vw,22px)] tracking-[0.4em] uppercase text-(--color-soil)">
+              <p className="font-garamond italic text-[clamp(9.1px,0.6vw,15.4px)] tracking-[0.4em] uppercase text-(--color-soil)">
                 Concept
               </p>
-              <p className="mt-3 vrl hidden md:inline-block font-mincho text-[14px] md:text-[clamp(15px,0.94vw,24px)] tracking-[0.5em] text-(--color-base-dark)/55">
+              <p className="mt-3 vrl hidden md:inline-block font-mincho text-[9.8px] md:text-[clamp(10.5px,0.66vw,16.8px)] tracking-[0.5em] text-(--color-base-dark)/55">
                 風景に、息を整える。
               </p>
             </div>
 
-            <div className="space-y-8 font-mincho text-[16px] md:text-[clamp(15px,1.2vw,24px)] min-[2200px]:!text-[clamp(24px,1.1vw,30px)] leading-[2.05] tracking-[0.06em] text-(--color-base-dark)/90">
+            <div className="space-y-8 font-mincho text-[11.2px] md:text-[clamp(10.5px,0.84vw,16.8px)] min-[2200px]:!text-[clamp(16.8px,0.77vw,21px)] leading-[2.05] tracking-[0.06em] text-(--color-base-dark)/90">
               <p>
                 TERRA は、葉山への愛から生まれました。<br />
                 海越しに望む富士山、棚田が広がる里山。<br />
@@ -106,14 +106,14 @@ export default function AboutPage() {
             />
           </div>
           <div className="px-6 py-[clamp(64px,7vw,112px)] md:px-16 lg:px-24 flex flex-col justify-center">
-            <p className="font-garamond italic text-[clamp(13px,0.86vw,22px)] tracking-[0.4em] uppercase text-(--color-soil) mb-5">
+            <p className="font-garamond italic text-[clamp(9.1px,0.6vw,15.4px)] tracking-[0.4em] uppercase text-(--color-soil) mb-5">
               Operator
             </p>
-            <h2 className="font-serif text-[28px] md:text-[clamp(36px,3.12vw,80px)] leading-[1.34] tracking-[0.04em] text-(--color-base-dark) mb-8">
+            <h2 className="font-serif text-[19.6px] md:text-[clamp(25.2px,2.18vw,56px)] leading-[1.34] tracking-[0.04em] text-(--color-base-dark) mb-8">
               <span className="block">BEAT ICE が営む、</span>
               <span className="block">一棟貸しの宿。</span>
             </h2>
-            <div className="space-y-6 font-mincho text-[15px] md:text-[clamp(16px,1.02vw,26px)] leading-[2.0] tracking-[0.06em] text-(--color-base-dark)/85">
+            <div className="space-y-6 font-mincho text-[10.5px] md:text-[clamp(11.2px,0.71vw,18.2px)] leading-[2.0] tracking-[0.06em] text-(--color-base-dark)/85">
               <p>
                 葉山町に根を張り、棚田で育てたお米から手づくりのアイスクリームを生み出す
                 BEAT ICE。<br />
@@ -123,7 +123,7 @@ export default function AboutPage() {
                 運営は、葉山に暮らして十年。地域の食材・棚田・海と寄り添いながら、訪れる人にも葉山の物語を体感してもらえる空間を作っています。
               </p>
             </div>
-            <p className="mt-10 font-garamond text-[12px] tracking-[0.32em] uppercase text-(--color-base-dark)/55">
+            <p className="mt-10 font-garamond text-[8.4px] tracking-[0.32em] uppercase text-(--color-base-dark)/55">
               Hayama, Kanagawa — Established 2026
             </p>
           </div>
@@ -134,21 +134,21 @@ export default function AboutPage() {
 
       {/* Footer link teaser */}
       <section className="border-t border-(--color-base-dark)/10 px-6 py-[clamp(80px,7.3vw,112px)] md:px-12 text-center">
-        <p className="font-garamond italic text-[clamp(13px,0.86vw,22px)] tracking-[0.4em] uppercase text-(--color-soil) mb-6">
+        <p className="font-garamond italic text-[clamp(9.1px,0.6vw,15.4px)] tracking-[0.4em] uppercase text-(--color-soil) mb-6">
           Next
         </p>
-        <h3 className="font-serif text-[26px] md:text-[clamp(34px,2.81vw,72px)] leading-[1.4] tracking-[0.04em] text-(--color-base-dark) mb-10">
+        <h3 className="font-serif text-[18.2px] md:text-[clamp(23.8px,1.97vw,50.4px)] leading-[1.4] tracking-[0.04em] text-(--color-base-dark) mb-10">
           部屋と空間を見る。
         </h3>
         <a
           href="/rooms"
-          className="group inline-flex items-center gap-4 font-garamond text-[13px] md:text-[clamp(14px,0.86vw,22px)] tracking-[0.32em] uppercase text-(--color-base-dark)"
+          className="group inline-flex items-center gap-4 font-garamond text-[9.1px] md:text-[clamp(9.8px,0.6vw,15.4px)] tracking-[0.32em] uppercase text-(--color-base-dark)"
         >
           <span className="relative">
             View Rooms
             <span className="absolute -bottom-1 left-0 h-px w-full bg-(--color-base-dark)/30 transition-[transform,background] duration-500 group-hover:bg-(--color-base-dark) origin-left" />
           </span>
-          <span aria-hidden className="text-[14px]">→</span>
+          <span aria-hidden className="text-[9.8px]">→</span>
         </a>
       </section>
     </main>

@@ -56,19 +56,19 @@ export default function AccessPage() {
         />
         <div className="absolute bottom-12 left-6 md:bottom-20 md:left-12 z-10 max-w-[88%] md:max-w-[760px]">
           <p
-            className="fade-up font-garamond italic text-[clamp(13px,0.86vw,22px)] tracking-[0.4em] text-(--color-base-light)/80 mb-5"
+            className="fade-up font-garamond italic text-[clamp(9.1px,0.6vw,15.4px)] tracking-[0.4em] text-(--color-base-light)/80 mb-5"
             style={{ animationDelay: "0.3s" }}
           >
             Access
           </p>
           <h1
-            className="fade-up font-serif font-medium text-[clamp(16px,4.8vw,24px)] leading-[1.2] md:text-[clamp(20px,1.75vw,44px)] md:leading-[1.14] tracking-[0.02em]"
+            className="fade-up font-serif font-medium text-[clamp(11.2px,3.36vw,16.8px)] leading-[1.2] md:text-[clamp(14px,1.22vw,30.8px)] md:leading-[1.14] tracking-[0.02em]"
             style={{ animationDelay: "0.55s" }}
           >
             <span className="block whitespace-nowrap">海まで、徒歩 8 分。</span>
           </h1>
           <p
-            className="fade-up mt-5 md:mt-8 font-mincho text-[14px] md:text-[clamp(16px,1.02vw,26px)] leading-[1.85] tracking-[0.16em] text-(--color-base-light)/85"
+            className="fade-up mt-5 md:mt-8 font-mincho text-[9.8px] md:text-[clamp(11.2px,0.71vw,18.2px)] leading-[1.85] tracking-[0.16em] text-(--color-base-light)/85"
             style={{ animationDelay: "0.85s" }}
           >
             住宅地に流れる、<br />
@@ -81,34 +81,34 @@ export default function AccessPage() {
       <section className="relative pt-[clamp(40px,4vw,72px)] md:pb-[clamp(40px,4vw,72px)]">
         <div className="grid md:grid-cols-2 items-stretch">
           <div className="px-6 py-[clamp(80px,7.3vw,112px)] md:px-16 lg:px-24 flex flex-col justify-center">
-            <p className="font-garamond italic text-[clamp(13px,0.86vw,22px)] tracking-[0.4em] uppercase text-(--color-soil) mb-4">
+            <p className="font-garamond italic text-[clamp(9.1px,0.6vw,15.4px)] tracking-[0.4em] uppercase text-(--color-soil) mb-4">
               Location
             </p>
-            <h2 className="font-serif text-[28px] md:text-[clamp(34px,2.81vw,72px)] leading-[1.4] tracking-[0.04em] text-(--color-base-dark) mb-8">
+            <h2 className="font-serif text-[19.6px] md:text-[clamp(23.8px,1.97vw,50.4px)] leading-[1.4] tracking-[0.04em] text-(--color-base-dark) mb-8">
               <span className="block">葉山町、一色。</span>
             </h2>
             <dl className="border-t border-(--color-base-dark)/15 divide-y divide-(--color-base-dark)/10 mb-10">
               <div className="grid grid-cols-[110px_1fr] md:grid-cols-[140px_1fr] py-5">
-                <dt className="font-garamond uppercase text-[clamp(11px,0.62vw,16px)] tracking-[0.32em] text-(--color-base-dark)/55 pt-[3px]">
+                <dt className="font-garamond uppercase text-[clamp(7.7px,0.43vw,11.2px)] tracking-[0.32em] text-(--color-base-dark)/55 pt-[3px]">
                   Address
                 </dt>
-                <dd className="font-mincho text-[15px] md:text-[clamp(16px,0.86vw,22px)] leading-[1.85] tracking-[0.06em] text-(--color-base-dark)/90">
+                <dd className="font-mincho text-[10.5px] md:text-[clamp(11.2px,0.6vw,15.4px)] leading-[1.85] tracking-[0.06em] text-(--color-base-dark)/90">
                   {ADDRESS}
                 </dd>
               </div>
               <div className="grid grid-cols-[110px_1fr] md:grid-cols-[140px_1fr] py-5">
-                <dt className="font-garamond uppercase text-[clamp(11px,0.62vw,16px)] tracking-[0.32em] text-(--color-base-dark)/55 pt-[3px]">
+                <dt className="font-garamond uppercase text-[clamp(7.7px,0.43vw,11.2px)] tracking-[0.32em] text-(--color-base-dark)/55 pt-[3px]">
                   Type
                 </dt>
-                <dd className="font-mincho text-[15px] md:text-[clamp(16px,0.86vw,22px)] leading-[1.85] tracking-[0.06em] text-(--color-base-dark)/90">
+                <dd className="font-mincho text-[10.5px] md:text-[clamp(11.2px,0.6vw,15.4px)] leading-[1.85] tracking-[0.06em] text-(--color-base-dark)/90">
                   一棟貸し（一軒家の 2 階フロア）／最大 8 名
                 </dd>
               </div>
               <div className="grid grid-cols-[110px_1fr] md:grid-cols-[140px_1fr] py-5">
-                <dt className="font-garamond uppercase text-[clamp(11px,0.62vw,16px)] tracking-[0.32em] text-(--color-base-dark)/55 pt-[3px]">
+                <dt className="font-garamond uppercase text-[clamp(7.7px,0.43vw,11.2px)] tracking-[0.32em] text-(--color-base-dark)/55 pt-[3px]">
                   Parking
                 </dt>
-                <dd className="font-mincho text-[15px] md:text-[clamp(16px,0.86vw,22px)] leading-[1.85] tracking-[0.06em] text-(--color-base-dark)/90">
+                <dd className="font-mincho text-[10.5px] md:text-[clamp(11.2px,0.6vw,15.4px)] leading-[1.85] tracking-[0.06em] text-(--color-base-dark)/90">
                   1 階に駐車スペースあり
                 </dd>
               </div>
@@ -118,7 +118,7 @@ export default function AccessPage() {
               href={AIRBNB_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex items-center gap-4 font-garamond text-[13px] md:text-[clamp(14px,0.86vw,22px)] tracking-[0.32em] uppercase text-(--color-base-dark)"
+              className="group inline-flex items-center gap-4 font-garamond text-[9.1px] md:text-[clamp(9.8px,0.6vw,15.4px)] tracking-[0.32em] uppercase text-(--color-base-dark)"
             >
               <span className="relative">
                 Reserve on Airbnb
@@ -144,10 +144,10 @@ export default function AccessPage() {
       {/* Map */}
       <section className="bg-(--color-paper) px-6 py-[clamp(96px,8.34vw,128px)] md:px-12">
         <div className="mx-auto max-w-[1480px]">
-          <p className="font-garamond italic text-[clamp(13px,0.86vw,22px)] tracking-[0.4em] uppercase text-(--color-soil) mb-4">
+          <p className="font-garamond italic text-[clamp(9.1px,0.6vw,15.4px)] tracking-[0.4em] uppercase text-(--color-soil) mb-4">
             Map
           </p>
-          <h2 className="font-serif text-[26px] md:text-[clamp(32px,2.5vw,64px)] leading-[1.4] tracking-[0.04em] text-(--color-base-dark) mb-10">
+          <h2 className="font-serif text-[18.2px] md:text-[clamp(22.4px,1.75vw,44.8px)] leading-[1.4] tracking-[0.04em] text-(--color-base-dark) mb-10">
             <span className="block">一色海岸からほど近い、</span>
             <span className="block">静かな住宅地に。</span>
           </h2>
@@ -164,7 +164,7 @@ export default function AccessPage() {
               href={MAPS_LINK}
               target="_blank"
               rel="noopener noreferrer"
-              className="absolute right-2 bottom-2 md:right-3 md:bottom-3 inline-flex items-center gap-1.5 md:gap-2 bg-(--color-base-light)/95 backdrop-blur px-2.5 py-1.5 md:px-4 md:py-2 text-(--color-base-dark) font-garamond text-[9px] md:text-[11px] tracking-[0.24em] md:tracking-[0.32em] uppercase border border-(--color-base-dark)/15 hover:bg-(--color-base-light)"
+              className="absolute right-2 bottom-2 md:right-3 md:bottom-3 inline-flex items-center gap-1.5 md:gap-2 bg-(--color-base-light)/95 backdrop-blur px-2.5 py-1.5 md:px-4 md:py-2 text-(--color-base-dark) font-garamond text-[6.3px] md:text-[7.7px] tracking-[0.24em] md:tracking-[0.32em] uppercase border border-(--color-base-dark)/15 hover:bg-(--color-base-light)"
             >
               View on Google Maps
               <span aria-hidden>→</span>
@@ -178,14 +178,14 @@ export default function AccessPage() {
                 className="grid grid-cols-[1fr_auto] items-baseline gap-x-4 border-b border-(--color-base-dark)/10 py-3"
               >
                 <div>
-                  <p className="font-serif text-[17px] md:text-[clamp(20px,1.17vw,30px)] tracking-[0.04em] text-(--color-base-dark)">
+                  <p className="font-serif text-[11.9px] md:text-[clamp(14px,0.82vw,21px)] tracking-[0.04em] text-(--color-base-dark)">
                     {p.name}
                   </p>
-                  <p className="mt-1.5 font-mincho text-[13px] md:text-[clamp(14px,0.7vw,18px)] tracking-[0.06em] text-(--color-base-dark)/65">
+                  <p className="mt-1.5 font-mincho text-[9.1px] md:text-[clamp(9.8px,0.49vw,12.6px)] tracking-[0.06em] text-(--color-base-dark)/65">
                     {p.note}
                   </p>
                 </div>
-                <p className="font-garamond text-[13px] md:text-[clamp(14px,0.7vw,18px)] tracking-[0.32em] uppercase text-(--color-base-dark)/70 whitespace-nowrap">
+                <p className="font-garamond text-[9.1px] md:text-[clamp(9.8px,0.49vw,12.6px)] tracking-[0.32em] uppercase text-(--color-base-dark)/70 whitespace-nowrap">
                   {p.time}
                 </p>
               </li>
@@ -197,10 +197,10 @@ export default function AccessPage() {
       {/* Reservation: Availability calendar */}
       <section className="border-t border-(--color-base-dark)/10 px-6 py-[clamp(96px,8.34vw,128px)] md:px-12 bg-(--color-base-light)">
         <div className="mx-auto max-w-[1480px]">
-          <p className="font-garamond italic text-[clamp(13px,0.86vw,22px)] tracking-[0.4em] uppercase text-(--color-soil) mb-4">
+          <p className="font-garamond italic text-[clamp(9.1px,0.6vw,15.4px)] tracking-[0.4em] uppercase text-(--color-soil) mb-4">
             Reservation
           </p>
-          <h2 className="font-serif text-[28px] md:text-[clamp(36px,3.12vw,80px)] leading-[1.36] tracking-[0.04em] text-(--color-base-dark) mb-12 md:mb-16">
+          <h2 className="font-serif text-[19.6px] md:text-[clamp(25.2px,2.18vw,56px)] leading-[1.36] tracking-[0.04em] text-(--color-base-dark) mb-12 md:mb-16">
             <span className="block">予約は Airbnb から。</span>
             <span className="block">空き状況はこちらで確認できます。</span>
           </h2>
@@ -212,7 +212,7 @@ export default function AccessPage() {
               href={AIRBNB_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex items-center gap-4 bg-(--color-base-dark) text-(--color-base-light) font-garamond text-[13px] md:text-[clamp(14px,0.86vw,22px)] tracking-[0.32em] uppercase px-8 py-4 hover:bg-(--color-base-dark)/85 transition-colors"
+              className="group inline-flex items-center gap-4 bg-(--color-base-dark) text-(--color-base-light) font-garamond text-[9.1px] md:text-[clamp(9.8px,0.6vw,15.4px)] tracking-[0.32em] uppercase px-8 py-4 hover:bg-(--color-base-dark)/85 transition-colors"
             >
               <span>Book on Airbnb</span>
               <span aria-hidden>→</span>

@@ -14,7 +14,7 @@ export function SideReserve() {
         aria-hidden
         className="absolute top-3 left-1/2 -translate-x-1/2 h-px w-5 bg-(--color-base-light)/35 group-hover:w-8 transition-[width] duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)]"
       />
-      <span className="font-mincho text-[clamp(16px,1.09vw,28px)] tracking-[0.45em]">
+      <span className="font-mincho text-[clamp(11.2px,0.76vw,19.6px)] tracking-[0.45em]">
         ご予約はこちら
       </span>
       <span

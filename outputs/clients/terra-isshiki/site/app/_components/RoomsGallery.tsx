@@ -89,13 +89,13 @@ export function RoomsGallery() {
              section 自体には py をかけず、header に pt のみ持たせて
              gallery sections 間の余白を最小化する。 */}
           <div className="mx-auto max-w-[1480px] px-6 md:px-12 mb-10 md:mb-16 pt-12 md:pt-16">
-            <p className="font-garamond italic text-[clamp(13px,0.78vw,20px)] tracking-[0.42em] uppercase text-(--color-soil) mb-3">
+            <p className="font-garamond italic text-[clamp(9.1px,0.55vw,14px)] tracking-[0.42em] uppercase text-(--color-soil) mb-3">
               {section.caption}
             </p>
-            <h2 className="font-serif text-[32px] md:text-[clamp(40px,3.28vw,84px)] leading-[1.2] tracking-[0.04em] text-(--color-base-dark) whitespace-nowrap mb-6 md:mb-8">
+            <h2 className="font-serif text-[22.4px] md:text-[clamp(28px,2.3vw,58.8px)] leading-[1.2] tracking-[0.04em] text-(--color-base-dark) whitespace-nowrap mb-6 md:mb-8">
               {section.label}
             </h2>
-            <p className="font-mincho text-[15px] md:text-[clamp(16px,1.02vw,26px)] leading-[2.0] tracking-[0.08em] text-(--color-base-dark)/80 md:max-w-[760px]">
+            <p className="font-mincho text-[10.5px] md:text-[clamp(11.2px,0.71vw,18.2px)] leading-[2.0] tracking-[0.08em] text-(--color-base-dark)/80 md:max-w-[760px]">
               {section.description}
             </p>
           </div>
