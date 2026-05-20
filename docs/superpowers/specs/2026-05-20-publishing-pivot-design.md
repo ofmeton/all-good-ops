@@ -258,7 +258,7 @@ Instagram 経由:
 7. **AI 使用透明性**:
    - AI を使った箇所と手修正した箇所が明示されているか（「ここは Claude 生成、ここは加筆」）
 
-**参照スキル**: `scqa-writing-framework.md`（既存）+ 新設 `content-quality-rubric.md`
+**参照スキル / wiki**: `scqa-writing-framework.md`（既存）+ 新設 `content-quality-rubric.md` + `wiki/publishing/buzz-patterns.md` + `wiki/publishing/by-media/*`（§7 参照）
 
 #### `visual-designer` （新規・横断）
 
@@ -277,21 +277,21 @@ Instagram 経由:
 2. Figma で配置調整（テンプレ化済みファイル使用）
 3. 書き出し: PNG / WebP
 
-**参照スキル**: 新設 `visual-design-system.md` + 既存 `frontend-design`
+**参照スキル / wiki**: 新設 `visual-design-system.md` + 既存 `frontend-design` + `wiki/publishing/by-theme/visual-templates.md`
 
 ### 5.2 既存エージェントの強化
 
 #### `brand-publisher`（business-ops）
 
 - **拡張内容**: 3媒体（note/X/Instagram）統括ストラテジスト化
-- **追加責務**: 週次プランニング / 投稿スケジューリング / 月次レビュー
-- **参照スキル**: 既存 `publishing-playbook.md` + 新設 `multi-platform-publishing.md`
+- **追加責務**: 週次プランニング / 投稿スケジューリング / 月次レビュー / wiki ingest セッション初動チェック
+- **参照スキル / wiki**: 既存 `publishing-playbook.md` + 新設 `multi-platform-publishing.md` + `publishing-wiki-ingest.md` + `wiki/publishing/buzz-patterns.md` + `wiki/publishing/by-media/*` + `wiki/publishing/by-theme/*`
 
 #### `writer`（learning-creative）
 
 - **拡張内容**: 「非エンジニア向け Claude 活用記事」テンプレ特化
 - **追加責務**: SCQA + 失敗談先行型の構造で記事生成
-- **参照スキル**: 既存 `scqa-writing-framework.md` + 新設 `non-engineer-translation.md`
+- **参照スキル / wiki**: 既存 `scqa-writing-framework.md` + 新設 `non-engineer-translation.md` + `wiki/publishing/by-theme/hook-patterns.md`
 
 #### `conversion-designer`（横断）
 
@@ -313,6 +313,7 @@ Instagram 経由:
 | `multi-platform-publishing.md` | 3媒体役割分担・連動運用手順 |
 | `non-engineer-translation.md` | 非エンジニア向け翻訳の言語ルール（業務用語・避けるカタカナ等） |
 | `note-revenue-playbook.md` | note 売れる記事の構成テンプレ・価格設計・ティーザー設計 |
+| `publishing-wiki-ingest.md` | `raw/publishing/inspirations/` → `wiki/publishing/` への半自動 ingest フロー（§7 参照） |
 
 ---
 
@@ -356,11 +357,14 @@ Instagram 経由:
 - `freelance-scout.md` の役割を「紹介経由の受け口管理」に変更
 - `ad-ops-specialist.md` の役割を「note 記事素材提供係」に変更
 
-**Phase 4: 新規エージェント・スキル作成（所要：4-6時間）**
+**Phase 4: 新規エージェント・スキル・wiki 連携作成（所要：5-8時間）**
 - `content-reviewer.md` 作成
 - `visual-designer.md` 作成
 - `brand-publisher.md` 拡張
-- 新規スキル5本作成
+- 新規スキル6本作成（§5.4 参照）
+- `wiki/publishing/` クラスタ初期化（index / log / buzz-patterns / by-media / by-theme の雛形作成、本 spec の §3 リサーチ要点を初期 seed として注入）
+- `raw/publishing/inspirations/` ディレクトリ作成 + README.md（投入ガイド 5 行）
+- `wiki/SCHEMA.md` 例外規定追記（§7.7、ユーザー承認別ステップ）
 
 **Phase 5: 進行中案件の完走（並行）**
 - terra-isshiki / minpaku-cleaning は通常運用で継続
@@ -370,7 +374,137 @@ Instagram 経由:
 
 ---
 
-## 7. 実装ロードマップ（暫定）
+## 7. wiki 連携設計（バズ投稿の双方向参照ループ）
+
+### 7.1 狙い
+
+ユーザーと Claude の間に「学習速度の高い双方向ループ」を作る:
+
+- **ユーザー → Claude**: ユーザーが見つけたバズ投稿・参考にしたい投稿を 5 秒で raw に投げ込めば、Claude が wiki に整理して以降の発信に反映する
+- **Claude → ユーザー**: Claude が「今、何を参考にして判断しているか」が wiki から一覧可能。判断根拠の透明化
+- **ループ効果**: 新発見のバズパターンが「次のセッションの content-reviewer rubric」「次の writer 出力」に最短で反映される
+
+### 7.2 raw 側の置き場
+
+```
+raw/publishing/inspirations/
+  └─ <media>-<YYYY-MM-DD>-<slug>.md
+       例:
+       - x-20260520-chaen-bazz-prompt-thread.md
+       - note-20260520-keito-claude-tips.md
+       - instagram-20260521-abe-carousel-fontwork.md
+       - meta-20260522-fladdict-fukuya-comment.md  （媒体不問の知見メモ）
+```
+
+**中身の自由度**:
+- URL 1 行だけでも OK
+- 本文を貼り付けても OK
+- スクショ + 自分の気づきメモでも OK
+- 「これ参考にして」の一言だけでも OK
+
+ユーザーは思いついた時に **5 秒** で投げ込める設計を最優先。フォーマット縛りは弱く設定し、ingest 側で吸収する。
+
+### 7.3 wiki 側のクラスタ構成（新設 `wiki/publishing/`）
+
+```
+wiki/publishing/
+  ├─ index.md                         全体目次（LLM 用カタログ）
+  ├─ log.md                           ingest / lint 履歴（時系列 append-only）
+  ├─ buzz-patterns.md                 媒体横断のパターン SSOT（lint で育てる）
+  ├─ by-media/
+  │   ├─ x.md                         X 特化の学び
+  │   ├─ note.md                      note 特化の学び
+  │   └─ instagram.md                 Instagram 特化の学び
+  ├─ by-theme/
+  │   ├─ before-after.md              Before-After 型の学び
+  │   ├─ prompt-collection.md         プロンプト集型の学び
+  │   ├─ hook-patterns.md             フック1行目パターン集
+  │   └─ visual-templates.md          視覚デザインの参考集
+  └─ inspirations/
+      └─ <id>.md                      個別 inspiration ページ（type: source）
+```
+
+frontmatter は SCHEMA 準拠で `identity: ofmeton` 固定。
+
+### 7.4 ingest フロー（半自動化）
+
+**SCHEMA の標準フローからの差分**: 標準は「ユーザー指示 → ingest」だが、`raw/publishing/inspirations/` に限り **セッション開始時の自動チェック + 一括確認** を導入。これは SCHEMA への例外規定追記が必要（§7.7 参照）。
+
+```
+[セッション開始時 / 自動]
+   秘書 or brand-publisher が raw/publishing/inspirations/ をスキャン
+   wiki/publishing/log.md と突合 → 未取込ファイル N 件抽出
+        ↓
+[未取込あり / ユーザー通知]
+   「未 ingest が N 件あります（一覧）。まとめて取り込みますか？」
+        ↓ ユーザー Y
+[一括 ingest 実行]
+   各 raw ファイルについて:
+     1. URL のみなら WebFetch で本文取得
+     2. wiki/publishing/inspirations/<id>.md を source 型で新規作成
+     3. buzz-patterns.md / by-media / by-theme に学びを反映:
+        - 既存パターンと一致 → 該当ページに「## 観測 [YYYY-MM-DD]」セクション追加
+        - 新規パターン → 新規概念ページ作成
+        - 既存パターンと矛盾 → 「## 異論」セクションで両論併記（SCHEMA 準拠で消さない）
+     4. index.md にエントリ追加
+     5. log.md に「## [YYYY-MM-DD] ingest | <title>」append
+   1 ingest = 1 commit（rollback 容易）
+        ↓
+[完了報告]
+   「N 件取り込みました。buzz-patterns.md に新パターン M 件追加 / 既存 K 件更新」
+```
+
+**ユーザー操作**: raw に投げ込むだけ + セッション開始時の Y 押下だけ。実質ゼロ手間。
+
+### 7.5 content-reviewer / brand-publisher の参照ルール
+
+| エージェント | 必読 wiki ページ | 用途 |
+|---|---|---|
+| `content-reviewer` | `wiki/publishing/buzz-patterns.md` + `by-media/*` | rubric の根拠。新発見パターンを rubric に組み込む判断 |
+| `brand-publisher` | 上記 + `by-theme/*` + `inspirations/` 直近 N 件 | 週次プランニングの題材選定、競合動向把握 |
+| `writer` | `wiki/publishing/by-theme/hook-patterns.md` 等 | 記事執筆時のテンプレ参照 |
+| `visual-designer` | `wiki/publishing/by-theme/visual-templates.md` | カルーセル・サムネ設計時の参考 |
+
+rubric 自体は **buzz-patterns.md の蓄積に応じて自動更新候補が生まれる**。content-reviewer が「新規パターン追加 → rubric に組み込む？」をユーザーに月次提案する設計。
+
+### 7.6 双方向の可視性
+
+**Claude が何を見ているかの可視化**:
+- ユーザーは Obsidian の `wiki/publishing/` クラスタを開けば、今 Claude が参考にしている全パターンが見える
+- `wiki/publishing/log.md` で「いつ何を取り込んだか」が一覧
+- `buzz-patterns.md` で「現行ベストプラクティス」が SSOT として一望
+- グラフビューで cluster 全体の関係性も見える
+
+**ユーザーが投げ込んだものの所在**:
+- `raw/publishing/inspirations/` は immutable で残り続ける（投入元のスナップショット）
+- wiki 側は LLM が整理したサマリ（要点抽出）
+- 突き合わせて「自分が何を投げて、Claude がどう咀嚼したか」が比較可能
+
+### 7.7 SCHEMA 例外規定（人間確認必須）
+
+`wiki/SCHEMA.md` §ingest プロトコル に以下例外規定の追記が必要:
+
+> **例外: `raw/publishing/inspirations/` 配下の自動 ingest**
+>
+> このディレクトリに限り、ユーザーの明示指示なしにセッション開始時の自動スキャン + 一括確認による ingest を許可する。
+> ただし以下を遵守:
+> - 一括取り込み実行前にユーザー Y/N 確認を必ず取る
+> - 既存ページとの矛盾検出時は「## 異論」併記で SCHEMA 標準フローを維持
+> - 1 ingest = 1 commit を厳守
+> - 自動スキャンで取り込み済み判定は `wiki/publishing/log.md` を SSOT とする
+
+SCHEMA 改定は人間承認必須事項のため、本 spec 承認後の Phase 4 内で **別ステップとしてユーザー承認** を取って実施。
+
+### 7.8 オープン論点（wiki 連携）
+
+- ingest 時の「学びの抽出粒度」をどこまで自動化するか（人間判断が要る部分の境界）
+- `by-media` と `by-theme` の重複情報の整理方針（どちらが正本か）
+- inspiration が 100 件超えた時の二次的な整理（クラスタリング・要約再生成）
+- 失われた情報（削除されたツイート等）への対応（WebFetch 不可時の扱い）
+
+---
+
+## 8. 実装ロードマップ（暫定）
 
 ### 今週（2026-05-20〜26）
 - 本 spec のユーザーレビュー
@@ -396,7 +530,7 @@ Instagram 経由:
 
 ---
 
-## 8. オープン論点（後で決める）
+## 9. オープン論点（後で決める）
 
 1. **note アカウント名**: 「ofmeton」そのまま使うか、別名（「ofmeton@AI活用」等）
 2. **Instagram アカウント名**: 同上
@@ -409,7 +543,7 @@ Instagram 経由:
 
 ---
 
-## 9. 採否判定基準
+## 10. 採否判定基準
 
 本 spec のレビューでユーザーが判断すべき項目:
 
@@ -420,11 +554,13 @@ Instagram 経由:
 - [ ] レビュー rubric の7項目に同意するか（追加・削除あるか）
 - [ ] 自律運用フローの「1日1通の承認」モデルに同意するか
 - [ ] 撤退手順 Phase 1-5 の段取りに同意するか
+- [ ] **wiki 連携設計**（§7、raw/publishing/inspirations → wiki/publishing/ 双方向参照ループ + 半自動 ingest）に同意するか
+- [ ] **SCHEMA 例外規定**（§7.7、`raw/publishing/inspirations/` 配下の自動 ingest 許可）を Phase 4 で別途承認することに同意するか
 - [ ] オープン論点 1-8 を、本 spec 確定後に個別に決めることに同意するか
 
 ---
 
-## 10. 関連ファイル
+## 11. 関連ファイル
 
 - `CLAUDE.md`（書き換え対象）
 - `wiki/business/bsa/overview.md`（archive 対象）
