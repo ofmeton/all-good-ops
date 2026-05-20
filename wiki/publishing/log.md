@@ -13,6 +13,13 @@ identity: ofmeton
 
 > 時系列 append-only。`grep "^## \[" log.md | tail -10` で直近 10 イベントが見える形式。
 
+## [2026-05-20] ingest | uravation「Claude CodeでX投稿バイラル｜3ツイート構成プロンプト7選」(X)
+
+- raw: raw/publishing/inspirations/note-20260520-uravation-claude-x-viral.md
+- wiki: wiki/publishing/inspirations/note-2026-05-20-uravation-claude-x-viral.md
+- 反映先: buzz-patterns.md（パターン 2.5 新設・パターン 7 観測追加）/ by-media/x.md / by-theme/hook-patterns.md
+- 抽出された学び: 3 ツイート完結型は量産向き。Few-Shot 自己学習ループが 2 件で確認されパターン確度↑。note → X 圧縮ワークフロー設計の必要性を示唆
+
 ## [2026-05-20] ingest | ASC「Instagramカルーセル15枚構成プロンプト集」(Instagram)
 
 - raw: raw/publishing/inspirations/instagram-20260520-asc-carousel-15枚構成.md
