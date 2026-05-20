@@ -13,6 +13,13 @@ identity: ofmeton
 
 > 時系列 append-only。`grep "^## \[" log.md | tail -10` で直近 10 イベントが見える形式。
 
+## [2026-05-20] ingest | チャエン「Xでバズる投稿をAIで自動生成する5ステップ」(meta/X)
+
+- raw: raw/publishing/inspirations/meta-20260520-chaen-buzz-5steps.md
+- wiki: wiki/publishing/inspirations/meta-2026-05-20-chaen-buzz-5steps.md
+- 反映先: buzz-patterns.md（パターン 7 新設・異論 1 件追加）/ by-media/x.md / by-theme/hook-patterns.md（異論 1 件追加）
+- 抽出された学び: Few-Shot 自己学習ループが新規パターンとして有効。【】記号フックは rubric との矛盾あり → 両論併記（月次 lint 判断）。**rubric 更新提案あり**
+
 ## [2026-05-20] ingest | スマートラウンド「非エンジニアの Claude Cowork 活用事例 3 選」(note)
 
 - raw: raw/publishing/inspirations/note-20260520-smartround-cowork-cases.md
