@@ -1,28 +1,28 @@
 -- ============================================================================
--- money-bot 初期 schema
+-- money-bot 初期 schema (ai-radar project に同居、schema 分離方式)
 -- spec: docs/superpowers/specs/2026-05-22-money-bot-design.md §5 §6 §9
 --
--- 適用方法:
---   - ローカル開発: supabase db push (要 supabase CLI link 済み)
---   - 本番: Supabase dashboard > SQL editor で実行、または
---           Supabase MCP の apply_migration (人間承認必須 — CLAUDE.md MCP 連携節)
+-- 配置: ai-radar Supabase project (jzlhzfdvaculblgwlkxz) の money_bot schema 配下
+-- 理由: Supabase Free tier の 2 project 制限により ai-radar に同居 (2026-05-22 採用)
+--       選択肢 A: §6.4 の ai-radar 連携 (α direct Supabase) と整合的
 --
 -- 設計方針:
---   - RLS は初版 OFF (server-only access のみを想定。Phase 2 で公開ダッシュボード作る時に ON)
+--   - money_bot schema 配下にすべて閉じ込め、ai-radar の public schema には触らない
+--   - RLS は初版 OFF (server-only access のみ。Phase 2 で公開ダッシュボード作る時に ON)
 --   - timestamptz + default now() で UTC 統一
---   - id は UUID v4 default。run_id はワークフロー側で生成した識別子をそのまま入れる
 -- ============================================================================
 
 -- ---------------------------------------------------------------------------
--- 拡張
+-- 拡張 & schema
 -- ---------------------------------------------------------------------------
 create extension if not exists "pgcrypto"; -- gen_random_uuid()
+create schema if not exists money_bot;
 
 -- ---------------------------------------------------------------------------
 -- publish_queue
 --   workflow が生成した記事 + visual + sns を承認待ち / 公開済として管理
 -- ---------------------------------------------------------------------------
-create table if not exists public.publish_queue (
+create table if not exists money_bot.publish_queue (
   id               uuid primary key default gen_random_uuid(),
   workflow_run_id  text not null,
   draft            jsonb not null,        -- { title, body, topicSlug, references[] }
@@ -39,12 +39,12 @@ create table if not exists public.publish_queue (
 );
 
 create index if not exists publish_queue_status_idx
-  on public.publish_queue (status, created_at desc);
+  on money_bot.publish_queue (status, created_at desc);
 create index if not exists publish_queue_run_id_idx
-  on public.publish_queue (workflow_run_id);
+  on money_bot.publish_queue (workflow_run_id);
 
--- updated_at 自動更新 trigger
-create or replace function public.tg_set_updated_at()
+-- updated_at 自動更新 trigger (money_bot schema 配下に閉じ込め)
+create or replace function money_bot.tg_set_updated_at()
 returns trigger language plpgsql as $$
 begin
   new.updated_at = now();
@@ -52,16 +52,16 @@ begin
 end;
 $$;
 
-drop trigger if exists set_updated_at on public.publish_queue;
+drop trigger if exists set_updated_at on money_bot.publish_queue;
 create trigger set_updated_at
-  before update on public.publish_queue
-  for each row execute function public.tg_set_updated_at();
+  before update on money_bot.publish_queue
+  for each row execute function money_bot.tg_set_updated_at();
 
 -- ---------------------------------------------------------------------------
 -- approvals
 --   人間の承認 / 却下 の決定ログ。publish_queue.workflow_run_id と紐づく
 -- ---------------------------------------------------------------------------
-create table if not exists public.approvals (
+create table if not exists money_bot.approvals (
   id          uuid primary key default gen_random_uuid(),
   run_id      text not null,
   approved    boolean not null,
@@ -71,7 +71,7 @@ create table if not exists public.approvals (
 );
 
 create index if not exists approvals_run_id_idx
-  on public.approvals (run_id, decided_at desc);
+  on money_bot.approvals (run_id, decided_at desc);
 
 -- ---------------------------------------------------------------------------
 -- kpi_daily
@@ -79,7 +79,7 @@ create index if not exists approvals_run_id_idx
 --   channel = 'note' | 'x' | 'instagram' | 'stock' | 'kdp' (将来)
 --   PK は (date, channel) で UPSERT 運用
 -- ---------------------------------------------------------------------------
-create table if not exists public.kpi_daily (
+create table if not exists money_bot.kpi_daily (
   date          date not null,
   channel       text not null
                 check (channel in ('note', 'x', 'instagram', 'stock', 'kdp')),
@@ -94,29 +94,31 @@ create table if not exists public.kpi_daily (
   primary key (date, channel)
 );
 
-drop trigger if exists set_updated_at_kpi on public.kpi_daily;
+drop trigger if exists set_updated_at_kpi on money_bot.kpi_daily;
 create trigger set_updated_at_kpi
-  before update on public.kpi_daily
-  for each row execute function public.tg_set_updated_at();
+  before update on money_bot.kpi_daily
+  for each row execute function money_bot.tg_set_updated_at();
 
 -- ---------------------------------------------------------------------------
 -- ai_radar_signals_cache
 --   ai-radar 改修完了前の暫定キャッシュ。改修後も短期メモ用途で残す。
 --   spec §6.4
+--   注: ai-radar 本体のテーブルは ai-radar project の public schema にある。
+--       これは money-bot 側のキャッシュなので money_bot schema 配下。
 -- ---------------------------------------------------------------------------
-create table if not exists public.ai_radar_signals_cache (
+create table if not exists money_bot.ai_radar_signals_cache (
   signal_id   text primary key,
   content     jsonb not null,
   fetched_at  timestamptz not null default now()
 );
 
 create index if not exists ai_radar_signals_cache_fetched_idx
-  on public.ai_radar_signals_cache (fetched_at desc);
+  on money_bot.ai_radar_signals_cache (fetched_at desc);
 
 -- ---------------------------------------------------------------------------
 -- 完了。
+-- ai-radar の public schema には一切触らない。すべて money_bot schema 配下。
 -- TODO(Phase 1):
 --   - RLS を on にする時の policy 設計 (公開ダッシュボード作るタイミングで)
 --   - kpi_daily に A/B テスト用 dimension を生やす想定
---   - publish_queue から approvals への FK は run_id 経由 (UUID 外部生成のため明示 FK は張らない)
 -- ---------------------------------------------------------------------------
