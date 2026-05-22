@@ -88,21 +88,68 @@ parent:
 
 ## 5. 構成（Plan-B 採用前提）
 
-### 5.1 主軸 cron pipeline (1日1サイクル)
+### 5.1 主軸 daily-publish workflow (Vercel Workflow DevKit ベース)
 
+1日1回 cron で起動する **durable workflow**。30-60 分の長時間処理を Vercel Function 5分制限を超えて継続できる。承認待ち中は課金停止。
+
+```ts
+// pseudo-code: /workflows/daily-publish.ts
+import { DurableAgent } from "@workflow/ai/agent";
+import { defineHook, sleep } from "workflow";
+
+const approvalHook = defineHook<{ approved: boolean; edits?: object }>();
+
+export async function dailyPublishWorkflow() {
+  "use workflow";
+
+  // Step 1: AI 動向シグナル収集 (ai-radar 連携、改修完了後に本接続 — §6.4)
+  const signals = await fetchAiRadarSignals();
+
+  // Step 2: トピック選定 (wiki/publishing/by-theme/ 紐づけ + 重複除外)
+  const topic = await selectTopic(signals);
+
+  // Step 3-5: Claude Agent SDK で subagent を durable に実行
+  const draft = await writerAgent.run(topic);           // writer / SCQA + non-engineer-translation
+  const visuals = await visualDesignerAgent.run(draft); // gpt-image-2 で図解 + ヘッダー
+  const reviewed = await contentReviewerAgent.run({ draft, visuals }); // 7軸 rubric
+
+  // Step 6: X 投稿文 + Instagram カルーセル生成
+  const sns = await snsGeneratorAgent.run(reviewed);
+
+  // Step 7: 人間承認ゲート (Plan-B)
+  const hook = approvalHook.create({ metadata: { reviewed, sns } });
+  // → Slack/モバイルに承認 URL 通知。承認待ち中は workflow が durable に停止し課金されない
+  const approval = await hook;
+  if (!approval.approved) return await recordSkip(reviewed);
+
+  // Step 8: publish
+  await publishNote(reviewed);              // Plan-B: 半自動 (URL 発行 → 人間が30秒承認)
+  await postX(sns.tweet);                   // Plan-B: 半自動 (Slack に投稿文 + 画像、人間がポスト)
+  await publishInstagram(sns.carousel);     // Graph API で完全自動
+
+  // Step 9: KPI 記録
+  await recordKpi({ publishedAt: new Date(), urls: [...] });
+}
+
+export const config = { cron: "0 5 * * *" }; // JST 14:00
 ```
-05:00 JST: AI 動向シグナル収集 (ai-radar DB 直近24h を抽出)
-06:00 JST: トピック選定 (wiki/publishing/by-theme/ と紐づけ・重複除外)
-07:00 JST: 記事ドラフト生成 (writer エージェント / non-engineer-translation + SCQA)
-08:00 JST: 図解 + ヘッダー画像生成 (visual-designer / gpt-image-2)
-09:00 JST: rubric review (content-reviewer 7軸チェック)
-10:00 JST: X 投稿文 + Instagram カルーセル生成
-10:30 JST: 人間レビュー Slack 通知 (Plan-B では publish 承認待ち)
-[人間 publish] note / X
-12:00 JST: Instagram 自動投稿 (Graph API)
-[Adobe Stock 週1まとめて手動アップロード]
-23:00 JST: KPI 集計 (Supabase に publish 記録・view数・likes・売上)
-```
+
+#### workflow の特徴
+
+- **durable**: 30-60 分の処理中に Function timeout しても自動継続
+- **approval hook**: 承認待ち中は課金されず、人間が UI で Y を押した瞬間に再開
+- **step replay**: 失敗ステップだけ retry（cron 全体の再実行不要）
+- **ai-radar 連携**: Step 1 は改修完了後に本接続（§6.4）
+
+### 5.2 補助 workflow: stock-batch-gen (週1)
+
+Adobe Stock 用に毎週 50-70 枚 batch 生成 → Supabase queue に格納。週末に人間が一括アップロード（30分）。
+
+#### Plan-B での承認 UI 設計
+
+- Slack 通知: 「note ドラフト準備完了、承認 → [URL]」
+- モバイル承認画面: ドラフト全文 + 図解 + SNS 投稿文プレビュー + Y/N ボタン
+- 「N」時は edits 入力欄で修正指示 → 次サイクルに学習反映
 
 ### 5.2 投稿頻度
 
@@ -126,38 +173,72 @@ parent:
 
 ## 6. 実行環境
 
-### 6.1 インフラ
-- Vercel cron (無料枠) — 1日1サイクルの自動実行
-- Supabase (無料枠) — KPI ログ / publish 履歴 / A/B テストデータ / 人間承認キュー
-- Resend / Gmail MCP — 人間承認 Slack 通知 / エラー通知
+### 6.1 主要スタック
+
+- **Vercel Workflow DevKit (WDK)** — `useworkflow.dev`、durable workflow オーケストレーション
+  - `"use workflow"` directive で workflow 関数を宣言
+  - `DurableAgent` で各 subagent を durable に実行
+  - `defineHook` で人間承認ゲート (Plan-B の publish 承認)
+  - `sleep` で時間制約・rate limit 対応
+- **Claude Agent SDK** — `@anthropic-ai/claude-agent-sdk`
+  - `settingSources: ['user', 'project']` で **既存 `.claude/agents/` `.claude/skills/` を filesystem からロード**
+  - `allowedTools: ['Task', 'Skill', 'Read', 'Write', 'Bash', ...]` で subagent と skill を有効化
+  - 既存エージェント (writer / visual-designer / content-reviewer / brand-publisher) を再利用
+- **Vercel AI Gateway** — `anthropic/claude-haiku-4.5` 等の model 指定で provider fallback / observability
+- **Supabase** (無料枠) — KPI ログ / publish 履歴 / A/B テストデータ / 承認キュー
+- **Vercel cron** — daily-publish workflow を 1日1回トリガー
+- **Resend / Gmail MCP** — 承認 Slack 通知 / エラー通知
 
 ### 6.2 既存資産流用 (ゼロからの立ち上げではない)
-- **エージェント**: brand-publisher / writer / visual-designer / content-reviewer
-- **wiki**: wiki/publishing/buzz-patterns.md / by-media/ / by-theme/
-- **raw**: raw/publishing/inspirations/
-- **スキル**: scqa-writing-framework / non-engineer-translation / content-quality-rubric / visual-design-system / multi-platform-publishing / note-revenue-playbook
+
+- **エージェント**: brand-publisher / writer / visual-designer / content-reviewer (Agent SDK の `settingSources` で自動ロード)
+- **wiki**: wiki/publishing/buzz-patterns.md / by-media/ / by-theme/ (Read tool で参照)
+- **raw**: raw/publishing/inspirations/ (Read tool で参照)
+- **スキル**: scqa-writing-framework / non-engineer-translation / content-quality-rubric / visual-design-system / multi-platform-publishing / note-revenue-playbook (`Skill` tool で invoke)
 - **アカウント**: ofmeton (X / Instagram / note 既存)
 
 ### 6.3 新規構築
-- `/pipeline/daily-publish-prep` (Vercel function): 1日1サイクル
-- `/pipeline/instagram-publisher` (Vercel function): Instagram 自動投稿のみ
-- `/pipeline/stock-batch-gen` (Vercel function): 週次 batch 生成
+
+- `/workflows/daily-publish.ts` (WDK workflow): 1日1サイクル durable workflow
+- `/workflows/stock-batch-gen.ts` (WDK workflow): 週次 batch 生成
+- `/api/approval-hook` (Vercel function): 承認 hook 受け口 (WDK の defineHook callback)
 - `/dashboard/money-bot` (Vercel page): KPI 可視化（ai-radar 流用）
 - `/approval-queue` (Vercel page): note / X publish 承認 UI（モバイル対応）
 
+### 6.4 ai-radar との連携 (Phase 1 で本接続)
+
+- ai-radar 側で改修中（`raw/facts/situations/2026-05-22-ai-radar-money-bot-integration.md`）
+- 改修完了後、money-bot の §5 Step 1「AI 動向シグナル収集」を ai-radar と本接続
+- **接続方式の候補** (Phase 1 着手時に確定):
+  - α. ai-radar の Supabase DB を direct read (両プロジェクト同一 Supabase project なら最速)
+  - β. ai-radar の公開 API endpoint 経由 (RLS / プロジェクト分離なら現実的)
+- **連携データ**: AI 動向シグナル (24h window) / 既存記事化済みフラグ / 関連度スコア
+- **改修完了タイミング**: 未確定。完了後にユーザー通知 → Phase 1 で接続テスト
+- **改修完了前の暫定実装**: モック関数 `fetchAiRadarSignals()` が固定サンプルを返す。ai-radar 不在でも workflow 全体は動かせる状態にしておく
+
 ## 7. 予算 1万円内訳
 
-| 項目 | 月額 |
-|---|---|
-| Claude API (記事執筆 + レビュー + SNS生成) | ¥5,000 |
-| gpt-image-2 (note 図解 + IG カルーセル + Stock) | ¥4,000 |
-| Vercel / Supabase / Resend | ¥0 (無料枠) |
-| 余裕 (A/B テスト原資) | ¥1,000 |
-| **合計** | **¥10,000** |
+| 項目 | 月額 | 備考 |
+|---|---|---|
+| Claude API (記事執筆 + レビュー + SNS生成) | ¥5,000 | Vercel AI Gateway 経由、Provider markup 含む |
+| gpt-image-2 (note 図解 + IG カルーセル + Stock) | ¥4,000 | OpenAI 直叩き or Codex MCP 経由 |
+| Vercel Workflow DevKit | **¥0 (Hobby 無料枠想定、要 Phase 1 実測)** | Active CPU pricing、承認待ち中は課金停止 |
+| Vercel cron / Function invocations | ¥0 (無料枠) | 月 ~900 invocations 想定（無料枠 100k/月） |
+| Supabase / Resend | ¥0 (無料枠) | |
+| 余裕 (A/B テスト原資) | ¥1,000 | |
+| **合計** | **¥10,000** | |
 
-予算超過時は **kill switch** で自動停止（Vercel function で月初リセット）。
+予算超過時は **kill switch** で自動停止（WDK workflow 起動時に月初予算チェック）。
 
 X API は採用しない（$200/月で予算超過のため）。
+
+### 予算リスクと観察項目 (Phase 1 で実測必須)
+
+- Vercel Workflow の Active CPU 課金が無料枠を超えないか
+- Function invocations が 100k/月を超えないか
+- Anthropic API のトークン消費量（record 単位ログ + 日次集計）
+- AI Gateway の Provider markup が想定内か
+- gpt-image-2 の生成枚数あたりコスト変動
 
 ## 8. 人間介入の最小化
 
@@ -276,9 +357,18 @@ X API は採用しない（$200/月で予算超過のため）。
 - `memory/feedback_external_api_cost_check.md`
 - `memory/project_current_streams.md`
 
+### raw facts
+- `raw/facts/situations/2026-05-22-ai-radar-money-bot-integration.md`
+
+### 外部技術ドキュメント (context7 で取得済み)
+- Claude Agent SDK: `/nothflare/claude-agent-sdk-docs` (subagents, skills, settingSources)
+- Vercel Workflow DevKit: `/llmstxt/useworkflow_dev_llms_txt` (DurableAgent, defineHook, sleep)
+
 ## 13. ユーザー判断が必要な箇所
 
 1. **Plan-A / Plan-B / Plan-C どれを採用するか** (推奨 Plan-B)
-2. **Instagram Graph API 設定の Facebook Business Manager 経由を許容するか**（プライバシー上の懸念があれば代替案検討）
+2. ~~Instagram Graph API 設定の Facebook Business Manager 経由を許容するか~~ ✅ 回答済み: OK (プライバシー懸念なし、2026-05-22)
 3. **承認 UI のモバイル設計**: Slack 通知 + URL クリックで承認画面が開く形でよいか
 4. **撤退ライン¥3,000 / 3ヶ月**: もっと厳しく / 緩くするか
+5. **ai-radar 連携タイミング**: ai-radar 改修完了通知後、Phase 1 で接続テスト着手でよいか
+6. **WDK / Agent SDK のバージョン pinning**: WDK は新しいプロダクト (GA / public beta)。Phase 1 で固定バージョンに pin して継続更新を計画する方針でよいか
