@@ -6,7 +6,6 @@ sources: [raw/publishing/inspirations/meta-20260520-chaen-buzz-5steps.md]
 related: [[../buzz-patterns]], [[../by-media/x]], [[../by-theme/hook-patterns]]
 tags: [publishing, x, ofmeton, hook-patterns, few-shot]
 status: active
-identity: ofmeton
 ---
 
 # チャエン「Xでバズる投稿をAIで自動生成する5ステップ」

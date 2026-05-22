@@ -6,7 +6,6 @@ sources: [raw/notes/2026-04-26-spade-motion-absorption.md]
 related: [[motion-techniques]]
 tags: [lp-design, motion, source, spade]
 status: active
-identity: n/a
 ---
 
 # spade-co.jp モーション技法吸収 — 出所記録

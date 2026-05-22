@@ -69,7 +69,6 @@ sources: [raw/publishing/inspirations/<file>.md]
 related: [[../buzz-patterns]]
 tags: [publishing, <media>, ofmeton]
 status: active
-identity: ofmeton
 ---
 ```
 

@@ -6,7 +6,6 @@ sources: []
 related: [[overview]]
 tags: [bsa, pricing, ssot]
 status: archived
-identity: 工藤陸
 ---
 
 # 価格・サービス表記 正本（Single Source of Truth）

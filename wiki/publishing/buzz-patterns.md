@@ -6,7 +6,6 @@ sources: [docs/superpowers/specs/2026-05-20-publishing-pivot-design.md]
 related: [[by-media/x]], [[by-media/note]], [[by-media/instagram]], [[by-theme/before-after]], [[by-theme/hook-patterns]]
 tags: [publishing, buzz-patterns, ofmeton]
 status: active
-identity: ofmeton
 ---
 
 # Buzz Patterns — 媒体横断バズパターン SSOT

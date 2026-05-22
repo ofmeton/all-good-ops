@@ -6,7 +6,6 @@ sources: [docs/superpowers/specs/2026-05-20-publishing-pivot-design.md]
 related: [[../buzz-patterns]]
 tags: [publishing, before-after, ofmeton]
 status: active
-identity: ofmeton
 ---
 
 # Before-After 型の学び

@@ -6,7 +6,6 @@ sources: [raw/publishing/inspirations/instagram-20260520-asc-carousel-15枚構�
 related: [[../buzz-patterns]], [[../by-media/instagram]], [[../by-theme/visual-templates]]
 tags: [publishing, instagram, ofmeton, carousel, visual-templates]
 status: active
-identity: ofmeton
 ---
 
 # ASC「Instagramカルーセル投稿をAIで自動生成！熱狂的ファンを生む「15枚構成」プロンプト集」

@@ -6,7 +6,6 @@ sources: [docs/superpowers/specs/2026-05-20-publishing-pivot-design.md]
 related: [[../buzz-patterns]], [[../by-theme/visual-templates]]
 tags: [publishing, instagram, ofmeton]
 status: active
-identity: ofmeton
 ---
 
 # Instagram — ブランド構築・保存型認知 → note + プロフ送客

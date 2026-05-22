@@ -6,7 +6,6 @@ sources: []
 related: [[index]]
 tags: [publishing, log]
 status: active
-identity: ofmeton
 ---
 
 # wiki/publishing/ Log

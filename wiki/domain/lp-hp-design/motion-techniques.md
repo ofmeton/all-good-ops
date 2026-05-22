@@ -6,7 +6,6 @@ sources: [[[spade-motion-study]]]
 related: [[spade-motion-study]], [[design-principles]]
 tags: [lp-design, motion, technique-catalog]
 status: active
-identity: n/a
 ---
 
 # Motion Techniques Catalog — LP/HP 制作の引き出し

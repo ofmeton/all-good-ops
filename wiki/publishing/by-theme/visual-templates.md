@@ -6,7 +6,6 @@ sources: [docs/superpowers/specs/2026-05-20-publishing-pivot-design.md]
 related: [[../buzz-patterns]], [[../by-media/instagram]]
 tags: [publishing, visual-templates, ofmeton]
 status: active
-identity: ofmeton
 ---
 
 # 視覚デザインの参考集

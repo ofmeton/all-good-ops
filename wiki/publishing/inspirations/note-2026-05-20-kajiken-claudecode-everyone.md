@@ -6,7 +6,6 @@ sources: [raw/publishing/inspirations/note-20260520-kajiken-claudecode-everyone.
 related: [[../buzz-patterns]], [[../by-media/note]], [[../by-theme/prompt-collection]]
 tags: [publishing, note, ofmeton, claude-code, non-engineer]
 status: active
-identity: ofmeton
 ---
 
 # 梶谷健人「2026年、もはや Claude Code はエンジニア以外も全員が使うべきツールになった」

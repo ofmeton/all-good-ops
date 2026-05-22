@@ -6,7 +6,6 @@ sources: []
 related: [[pricing-catalog]], [[proven-track-record]], [[lessons-proposal-patterns]], [[archive-notice]]
 tags: [bsa, strategy]
 status: archived
-identity: 工藤陸
 ---
 
 # BSA 戦略全体像

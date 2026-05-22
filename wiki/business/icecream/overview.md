@@ -6,7 +6,6 @@ sources: [knowledge/context/context-rice-cream.md (移行元・2026-05-09 初版
 related: []
 tags: [icecream, rice-cream, business-ops]
 status: active
-identity: 工藤陸
 ---
 
 # RICE CREAM 店舗 overview

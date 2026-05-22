@@ -6,7 +6,6 @@ sources: []
 related: [[overview]], [[proposals/templates]]
 tags: [bsa, lessons, proposal]
 status: archived
-identity: 工藤陸
 ---
 
 # BSA 提案文の勝ち筋パターン

@@ -6,7 +6,6 @@ sources: []
 related: [[overview]], [[lessons-proposal-patterns]]
 tags: [bsa, proposal, template]
 status: archived
-identity: 工藤陸
 ---
 
 # 提案文テンプレ集

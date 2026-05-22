@@ -6,7 +6,6 @@ sources: []
 related: [[streams]]
 tags: [external, ai-industry, ai-radar]
 status: active
-identity: n/a
 ---
 
 # ai-radar（外部スポーク・ポインタ）

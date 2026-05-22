@@ -6,7 +6,6 @@ sources: [raw/notes/image-processing-learnings.md]
 related: []
 tags: [image-processing, mps, real-esrgan, grid-split, playwright, python]
 status: active
-identity: n/a
 ---
 
 # 画像処理ノウハウカタログ

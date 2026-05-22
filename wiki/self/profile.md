@@ -6,7 +6,6 @@ sources: [raw/self/profile.md]
 related: [[goals]], [[wiki/business/bsa/proven-track-record]], [[wiki/business/bsa/overview]]
 tags: [self, profile, career, skills, bsa]
 status: active
-identity: 工藤陸
 ---
 
 # 工藤陸 — プロフィール・職歴・スキル

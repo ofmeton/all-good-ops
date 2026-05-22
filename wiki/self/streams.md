@@ -6,7 +6,6 @@ sources: [raw/notes/streams-2026-05.md]
 related: [[goals]], [[profile]], [[wiki/business/bsa/overview]], [[wiki/business/icecream/overview]], [[wiki/business/portfolio/overview]], [[monetize-os-pointer]], [[ai-radar-pointer]]
 tags: [self, income, portfolio, bsa, icecream, shopify]
 status: active
-identity: 工藤陸
 ---
 
 # 収入源ポートフォリオ（2026-05）

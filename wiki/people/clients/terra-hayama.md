@@ -6,7 +6,6 @@ sources: [raw/deals/2026-04-terra-isshiki/02-confirmation-items-v0.2.md, raw/dea
 related: [[2026-04-terra-isshiki]]
 tags: [client, minpaku, hayama, personal]
 status: active
-identity: 工藤陸
 ---
 
 # TERRA HAYAMA（テラ葉山）

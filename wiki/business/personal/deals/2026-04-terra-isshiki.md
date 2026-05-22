@@ -6,7 +6,6 @@ sources: [raw/deals/2026-04-terra-isshiki/01-confirmation-items.md, raw/deals/20
 related: [[terra-hayama]]
 tags: [deal, hayama, personal, hp-production]
 status: active
-identity: 工藤陸
 ---
 
 # 案件: TERRA HAYAMA HP 制作（2026-04 開始）

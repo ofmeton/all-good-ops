@@ -6,7 +6,6 @@ sources: []
 related: [[overview]]
 tags: [bsa, track-record]
 status: active
-identity: 工藤陸
 ---
 
 # 工藤陸 検証済み実績 SSOT（提案文に書ける実績の唯一の正本）

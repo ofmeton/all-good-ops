@@ -6,7 +6,6 @@ sources: []
 related: [[overview]]
 tags: [bsa, deals, index]
 status: archived
-identity: 工藤陸
 ---
 
 # BSA 受注台帳 INDEX

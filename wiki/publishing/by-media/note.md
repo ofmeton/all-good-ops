@@ -6,7 +6,6 @@ sources: [docs/superpowers/specs/2026-05-20-publishing-pivot-design.md]
 related: [[../buzz-patterns]], [[../by-theme/prompt-collection]]
 tags: [publishing, note, ofmeton]
 status: active
-identity: ofmeton
 ---
 
 # note — 収益化・深掘り → 上位事業へのリード

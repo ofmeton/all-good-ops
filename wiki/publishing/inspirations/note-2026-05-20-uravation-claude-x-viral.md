@@ -6,7 +6,6 @@ sources: [raw/publishing/inspirations/note-20260520-uravation-claude-x-viral.md]
 related: [[../buzz-patterns]], [[../by-media/x]], [[../by-theme/hook-patterns]], [[../by-theme/prompt-collection]]
 tags: [publishing, x, ofmeton, thread, prompt-collection]
 status: active
-identity: ofmeton
 ---
 
 # uravation「Claude CodeでX投稿バイラル｜3ツイート構成プロンプト7選」

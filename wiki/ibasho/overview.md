@@ -6,7 +6,6 @@ sources: [knowledge/context/context-ibasho.md (移行元・2026-04-06 初版)]
 related: [[goals]]
 tags: [ibasho, kodomo, nonprofit]
 status: draft
-identity: 工藤陸
 ---
 
 # 子どもの居場所 overview

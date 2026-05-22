@@ -6,7 +6,6 @@ sources: [raw/publishing/inspirations/note-20260520-smartround-cowork-cases.md]
 related: [[../buzz-patterns]], [[../by-media/note]], [[../by-theme/before-after]]
 tags: [publishing, note, ofmeton, before-after, use-cases]
 status: active
-identity: ofmeton
 ---
 
 # スマートラウンド「非エンジニアの Claude Cowork 活用事例 3 選」

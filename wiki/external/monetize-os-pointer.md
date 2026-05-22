@@ -6,13 +6,12 @@ sources: []
 related: [[streams]]
 tags: [external, monetize-os]
 status: active
-identity: n/a
 ---
 
 # monetize-os（外部スポーク・ポインタ）
 
 > このページは **存在の記録のみ**。monetize-os は はぐりん（persona）名義の収益化を扱うため、
-> 名義3ライン分離に従い詳細・persona 情報は本 wiki に持ち込まない（[[SCHEMA]]「名義3ライン分離」参照）。
+> persona 情報は本 wiki に持ち込まず monetize-os/ 側に隔離する。
 
 ## 概要
 

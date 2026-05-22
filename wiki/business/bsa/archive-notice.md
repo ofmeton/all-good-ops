@@ -6,7 +6,6 @@ sources: [docs/superpowers/specs/2026-05-20-publishing-pivot-design.md]
 related: [[overview]], [[pricing-catalog]], [[proven-track-record]]
 tags: [bsa, archive, lessons]
 status: active
-identity: 工藤陸
 ---
 
 # BSA 戦略 撤退記録（2026-05-20）

@@ -6,7 +6,6 @@ sources: [knowledge/context/context-goals.md (移行元・2026-04-06 初版)]
 related: [[business/bsa/overview]], [[ibasho/overview]], [[streams]]
 tags: [goals, kgi, kpi, self]
 status: active
-identity: 工藤陸
 ---
 
 # KGI/KPI 進捗

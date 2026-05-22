@@ -6,7 +6,6 @@ sources: [docs/superpowers/specs/2026-05-20-publishing-pivot-design.md]
 related: [[../buzz-patterns]], [[../by-theme/hook-patterns]]
 tags: [publishing, x, ofmeton]
 status: active
-identity: ofmeton
 ---
 
 # X — 拡散・認知 → note 送客

@@ -6,7 +6,6 @@ sources: [docs/superpowers/specs/2026-05-20-publishing-pivot-design.md]
 related: [[../buzz-patterns]], [[../by-media/note]]
 tags: [publishing, prompt-collection, ofmeton]
 status: active
-identity: ofmeton
 ---
 
 # プロンプト集型の学び

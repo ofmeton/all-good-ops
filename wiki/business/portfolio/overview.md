@@ -6,7 +6,6 @@ sources: []
 related: []
 tags: [portfolio, ofmeton, hp-production]
 status: active
-identity: ofmeton
 ---
 
 # portfolio リポジトリ overview

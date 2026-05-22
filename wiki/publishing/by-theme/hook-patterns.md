@@ -6,7 +6,6 @@ sources: [docs/superpowers/specs/2026-05-20-publishing-pivot-design.md]
 related: [[../buzz-patterns]], [[../by-media/x]]
 tags: [publishing, hook-patterns, ofmeton]
 status: active
-identity: ofmeton
 ---
 
 # フック 1 行目パターン集
