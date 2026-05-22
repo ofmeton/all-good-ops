@@ -238,7 +238,7 @@ source: session
 | note 有料記事、メンバーシップ、price、ティーザー設計 | business-ops | brand-publisher（`note-revenue-playbook.md` 参照） |
 | デザイン方向性、DESIGN.md、OUTLINE.md、トンマナ、AIっぽい、毎回同じデザイン、個性的、デザインテンプレ、デザイン統括 | 横断 | design-director（守り） |
 | LP 訴求、ファーストビュー、FV、CVR、LP潮流、ユーザー心理、コピー訴求、視線誘導、オファー強度、LPレビュー | 横断 | conversion-designer（攻め。design-director とペア起動） |
-| AI動向、AI業界、新モデル、Anthropic動向、機会発見、ビジネスチャンス（AI）、Skills事業防衛、競合動向（AI）、ai-radar、ダッシュボード | **外部スポーク: ai-radar** | ai-radar |
+| AI動向、AI業界、新モデル、Anthropic動向、Claude Tips、Claude活用ネタ、発信ネタ（AI由来）、市況シグナル、vertical_surge、bm_shift、r1_risk、ai-radar、ダッシュボード | **外部スポーク: ai-radar** | ai-radar |
 | はぐりん、persona、Threads 投稿、note 記事、有料記事、メンバーシップ、収益化コンテンツ、topic-seeds、competitor-watch、90日計画（発信系） | **外部スポーク: monetize-os** | monetize-os/growth-lead |
 | 公開前チェック、規約確認、アフィリエイト開示、景表法、薬機法、ステマ | **外部スポーク: monetize-os** | monetize-os/compliance |
 | 工務店、HP 制作、クライアントサイト、Vercel、サンプルサイト、ポートフォリオサイト | **外部スポーク: portfolio** | (秘書が business-ops/client-manager 起動 + portfolio/ 作業ディレクトリへ移動) |
@@ -256,7 +256,7 @@ source: session
 
 - **monetize-os**（`/Users/rikukudo/Projects/monetize-os/`）: 収益化特化の運用 OS。秘書は growth-lead に委譲し、実行結果を受け取って統合する。persona 配下エージェント（hagurin/hook-writer 等）を秘書が直接呼ばない。詳細は `monetize-os/CLAUDE.md` 参照
 - **portfolio**（`/Users/rikukudo/Projects/portfolio/`）: 既存制作物・進行中個人案件（terra-isshiki / minpaku-cleaning）のリポジトリ。BSA 撤退に伴い新規 HP 受注用途は停止。発信戦略の「制作事例」コンテンツ柱の作例集としても活用
-- **ai-radar**（`/Users/rikukudo/Projects/ai-radar/`）: AIエコシステム機会発見 + Skills事業防衛シグナル検知のダッシュボード。Next.js/Supabase/Vercel で常時稼働。秘書は ai-radar エージェントに委譲し、ダッシュボードのヒット確認・ソース精査・深掘り依頼を任せる。実装コード改修は system-engineer に委譲。詳細は `outputs/documents/ai-radar/01-implementation-plan.md` 参照
+- **ai-radar**（`/Users/rikukudo/Projects/ai-radar/`）: **v2 ピボット (2026-05-22)** 後の目的は (1) Claude 活用ネタ集め (2) 3 媒体発信ネタ集め (3) 市況シグナル監視 (vertical_surge / bm_shift / r1_risk の縮小 3 種)。Next.js/Supabase/Vercel + Codex MCP worker (3 モード: deep_dive / content_seed_drafts / claude_tip_recipe) で稼働。62 ソース (Anthropic 公式 8 / Claude RSS 3 / Reddit 13 / X 海外 24 / X 日本 10 / 他 4)。秘書は ai-radar エージェントに委譲。実装コード改修は system-engineer。計画書 v2.1: `outputs/documents/ai-radar/09-pivot-plan.md` / 旧計画 archived: `outputs/documents/ai-radar/01-implementation-plan.md`
 - **brand-publisher（business-ops）と monetize-os/growth-lead の境界**: brand-publisher は **ofmeton 名義の発信**、growth-lead は **persona（はぐりん等）名義の発信** を担当。役割の重複を避けるため persona 系の依頼は growth-lead に委譲する
 
 ### Step 3: エージェントを起動
@@ -288,7 +288,7 @@ source: session
 | 戦略参謀 | `strategic-advisor.md` | 仮説思考、ブレスト、次の一手 |
 | データアナリスト | `data-analyst.md` | データ分析専門。他エージェントからの分析依頼を受ける |
 | プレゼンレビュアー | `presentation-reviewer.md` | PPTX品質チェック。全パワポの納品前レビュー必須 |
-| AIレーダー | `ai-radar.md` | AIエコシステム機会発見 + Skills事業防衛シグナル検知。`/Users/rikukudo/Projects/ai-radar/` の独立プロジェクトを運用 |
+| AIレーダー | `ai-radar.md` | **v2 (2026-05-22)**: Claude 活用ネタ + 3 媒体発信ネタ + 市況シグナル監視。`/Users/rikukudo/Projects/ai-radar/` の独立プロジェクトを運用 |
 | デザインディレクター | `design-director.md` | LP/HP制作のデザイン方向性統括。DESIGN.md/OUTLINE.md 確定、Do's & Don'ts 判断、AIっぽさチェック（**守り**） |
 | コンバージョンデザイナー | `conversion-designer.md` | LP の訴求力・CVR・ファーストビュー・最新潮流採用・ユーザー心理。design-director と対の**攻め**役 |
 | コンテンツレビュアー | `content-reviewer.md` | 3媒体（X/Instagram/note）の品質を rubric でチェック。AI感ゼロ、画像リッチ度、専門用語密度等 |
