@@ -2,29 +2,36 @@
   "name": "money-bot",
   "version": "0.1.0",
   "private": true,
-  "description": "24時間自律エージェントで月1万円稼ぐ — Plan-B (半自律・規約遵守) 実装本体。spec: docs/superpowers/specs/2026-05-22-money-bot-design.md",
+  "description": "24h autonomous publishing engine for ofmeton (Plan-B). spec: docs/superpowers/specs/2026-05-22-money-bot-design.md",
   "engines": {
     "node": ">=20.0.0"
   },
   "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
     "typecheck": "tsc --noEmit",
-    "build": "tsc -p tsconfig.json",
-    "dev": "echo 'Phase 1: dev runner 未実装。vercel dev 単独 or workflow 単体テストは Phase 1 実装時に追加'",
-    "test": "echo 'Phase 1: テスト未実装。実装時に vitest 追加'"
+    "lint": "next lint"
   },
   "dependencies": {
-    "@anthropic-ai/claude-agent-sdk": "^0.1.0",
-    "workflow": "^0.1.0",
-    "@workflow/ai": "^0.1.0",
-    "ai": "^4.0.0",
-    "@ai-sdk/anthropic": "^1.0.0",
-    "@supabase/supabase-js": "^2.45.0",
-    "@line/bot-sdk": "^9.0.0",
-    "zod": "^3.23.0"
+    "@anthropic-ai/claude-agent-sdk": "0.3.148",
+    "@anthropic-ai/sdk": "0.98.0",
+    "@line/bot-sdk": "11.0.0",
+    "@modelcontextprotocol/sdk": "1.29.0",
+    "@supabase/supabase-js": "2.106.1",
+    "@workflow/ai": "4.1.2",
+    "ai": "6.0.190",
+    "next": "16.2.6",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "resend": "6.12.3",
+    "workflow": "4.2.4",
+    "zod": "4.1.8"
   },
   "devDependencies": {
-    "typescript": "^5.5.0",
-    "@types/node": "^20.14.0"
-  },
-  "comment_about_versions": "上記バージョンは目安。WDK / Claude Agent SDK は更新が早いため、Phase 1 実装着手時に context7 で最新 stable を確認してから npm install すること（spec §13-6 のバージョン pinning 方針）。"
+    "@types/node": "20.14.10",
+    "@types/react": "19.0.0",
+    "@types/react-dom": "19.0.0",
+    "typescript": "5.5.4"
+  }
 }

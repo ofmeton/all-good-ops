@@ -1,23 +1,20 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "_comment_about_layout": "money-bot は all-good-ops worktree のサブディレクトリ。Vercel project を money-bot/ をルートとして link する想定 (vercel link 時に Root Directory = money-bot を指定)。app router or standalone functions のどちらでも動く構成。Phase 1 着手時に Next.js App Router を入れるか、純粋な Vercel Functions スタンドアロンにするかを確定する。",
+  "framework": "nextjs",
   "crons": [
     {
-      "_comment": "daily-publish workflow: JST 14:00 = UTC 05:00。Hobby plan は cron 1日1回まで (feedback_vercel_hobby_cron_constraint.md)。",
       "path": "/api/cron/daily-publish",
       "schedule": "0 5 * * *"
     }
   ],
-  "_comment_about_secondary_cron": "stock-batch-gen (週1) は Hobby plan の 1日1回制約を満たすため、daily-publish と同じ endpoint 内で『今日は何曜日か』を見て分岐するか、Pro plan に移行してから別 cron として有効化する。Phase 1 では daily-publish 内分岐方式で実装する想定。",
   "functions": {
-    "api/cron/daily-publish.ts": {
-      "_comment": "WDK durable workflow は Vercel Function timeout (Hobby 10s / Pro 60s) を超えても継続できるが、cron entry function 自体は短時間で workflow を kick して return する設計が無難。",
+    "app/api/cron/daily-publish/route.ts": {
       "maxDuration": 60
     },
-    "api/approval-hook.ts": {
+    "app/api/approval-hook/route.ts": {
       "maxDuration": 30
     },
-    "api/line-webhook.ts": {
+    "app/api/line-webhook/route.ts": {
       "maxDuration": 10
     }
   }
