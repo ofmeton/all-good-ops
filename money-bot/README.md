@@ -4,8 +4,8 @@
 
 - 親 spec: [`docs/superpowers/specs/2026-05-22-money-bot-design.md`](../docs/superpowers/specs/2026-05-22-money-bot-design.md)
 - 規約調査: [`outputs/research/2026-05-22-platform-policy-research.md`](../outputs/research/2026-05-22-platform-policy-research.md)
-- ステータス: **Phase 1 着手準備完了 (scaffold + skeleton まで)**
-- ブランチ: `task/260522-money-bot-design`
+- ステータス: **Phase 1 Claude 担当部分 実装完了 (2026-05-23)**。本番稼働には人間タスク（Supabase / LINE / Meta / Vercel link / env 投入）が必須
+- ブランチ: `task/260523-money-bot-phase1`
 
 ## このディレクトリの位置づけ
 
@@ -17,22 +17,62 @@
 
 ```
 money-bot/
-├── package.json                       # deps (WDK / Agent SDK / Supabase / LINE / AI SDK)
-├── tsconfig.json                      # strict, ES2022, Bundler resolution
+├── package.json                       # next 16 / WDK 4.2 / claude-agent-sdk 0.3 / LINE 11 / Supabase / zod 4
+├── tsconfig.json                      # strict, noUncheckedIndexedAccess
+├── next.config.ts                     # outputFileTracingRoot で親 .claude/ を bundle
 ├── vercel.json                        # crons + functions maxDuration
-├── .env.example                       # 必要 env 一覧 (各値はコピー後手動入力)
+├── .env.example                       # 必要 env 一覧
 ├── README.md                          # ← このファイル
 ├── PHASE_1_CHECKLIST.md               # Phase 1 タスク網羅チェックリスト
+├── app/                               # Next.js App Router
+│   ├── layout.tsx / globals.css       # 共通レイアウト
+│   ├── page.tsx                       # ランディング
+│   ├── api/
+│   │   ├── cron/daily-publish/route.ts   # cron entry (CRON_SECRET 認証 + start workflow)
+│   │   ├── approval-hook/route.ts        # 承認 hook resolver
+│   │   └── line-webhook/route.ts         # LINE webhook 受け口 (userId capture)
+│   └── approval-queue/[runId]/
+│       ├── page.tsx                   # server: publish_queue 読み込み + プレビュー
+│       └── approval-form.tsx          # client: Y/N + edits 入力
 ├── workflows/
-│   └── daily-publish.ts               # WDK durable workflow skeleton (1日1回)
+│   └── daily-publish.ts               # WDK durable workflow ("use workflow" + defineHook + 5 step chain)
 ├── lib/
-│   ├── agents.ts                      # Claude Agent SDK ラッパー (writer / visual-designer / content-reviewer / sns-generator)
-│   ├── supabase.ts                    # Supabase server client
-│   └── notify.ts                      # LINE / Resend 通知
+│   ├── agents.ts                      # Claude Agent SDK query() ラッパー + zod schema 安全パース
+│   ├── ai-radar.ts                    # ai-radar 連携 (direct supabase α / API β) + mock fallback
+│   ├── budget.ts                      # recordKpi / checkBudgetOrAbort / KillSwitch
+│   ├── notify.ts                      # LINE messagingApi.MessagingApiClient + Resend fallback
+│   ├── publishers.ts                  # publishInstagram (Graph API 4-step) + note/X は publish_queue 保存
+│   └── supabase.ts                    # createClient + service_role キャッシュ
 └── supabase/
     └── migrations/
         └── 0001_init.sql              # publish_queue / approvals / kpi_daily / ai_radar_signals_cache
 ```
+
+## Phase 1 Claude 担当部分 — 完了状況 (2026-05-23)
+
+| カテゴリ | 担当 | ステータス |
+|---|---|---|
+| Section 2 依存 install + 環境構築 | 🤖 | ✅ 完了 (`npm install` + lockfile commit + `npx tsc --noEmit` 0 error + `next build` success) |
+| Section 3.1 Claude Agent SDK | 🤖 | ✅ `lib/agents.ts` で `query()` + `settingSources: ['project']` + zod schema 出力パース実装 |
+| Section 3.2 WDK | 🤖 | ✅ `workflows/daily-publish.ts` で `"use workflow"` + `defineHook` + `start()` 実装 |
+| Section 3.3.1-2 LINE Messaging API | 🤖 | ✅ `lib/notify.ts` (messagingApi.MessagingApiClient) + `app/api/line-webhook/route.ts` (signature 検証 + userId capture) |
+| Section 3.4.2-4 承認 UI | 🤖 | ✅ `app/approval-queue/[runId]/page.tsx` + `approval-form.tsx` (軽量 Web 方式) + `/api/approval-hook` で `approvalHook.resume()` |
+| Section 3.5.1-2 Instagram Graph API | 🤖 | ✅ `lib/publishers.ts::publishInstagram()` で 4-step (slide upload → carousel container → publish → permalink) |
+| Section 3.5.4 60日トークン refresh | ⏳ | 未着手 (Phase 1 末で着手予定) |
+| Section 3.6 ai-radar 連携 | 🤖 | ✅ `lib/ai-radar.ts` で α (direct supabase) + β (API endpoint) 両対応。env 未設定なら mock |
+| Section 3.7 KPI + budget guard | 🤖 | ✅ `lib/budget.ts` (recordKpi / checkBudgetOrAbort / KillSwitchError / BudgetExceededError) |
+| Section 4 動作確認 | ⏳ | E2E は env 投入後に実施 (人間タスク) |
+| Section 5 ドキュメント整備 | 🤖 | ✅ README / wiki / memory / raw/facts 更新済み |
+
+**残る人間タスク (Section 1):**
+1. Supabase project 作成 + `0001_init.sql` 適用
+2. LINE Messaging API channel 作成 + bot 友だち追加 + userId 控え
+3. Meta for Developers > Instagram Graph API app + 60日トークン取得
+4. Vercel project link (Root Directory = `money-bot/`) + env 投入
+5. `git config user.email` を Vercel team authorized email と一致確認
+6. Adobe Stock コントリビューター登録 (Phase 2 で運用)
+
+env 投入後は `npm run dev` で local 動作確認 → preview deploy → cron 観察 1日 へ進む。
 
 ## Phase 1 セットアップ手順 (人間が実施)
 
