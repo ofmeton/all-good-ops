@@ -23,11 +23,28 @@ const MOCK_SIGNALS: AiRadarSignal[] = [
   },
 ];
 
+interface AiRadarArticleRow {
+  id: string;
+  title_ja: string | null;
+  title_original: string | null;
+  summary_3line: string | null;
+  seed_summary: string | null;
+  tip_summary: string | null;
+  pipeline: string | null;
+  detected_at: string | null;
+  published_at: string | null;
+  claude_tip_score: number | null;
+  content_seed_score: number | null;
+  score_note: number | null;
+  recommended_media: string | null;
+}
+
+const PIPELINES_FOR_NOTE = ["content_seed", "claude_tip", "both"] as const;
+
 /**
- * ai-radar 連携。spec §6.4 の α (direct Supabase read) を実装。
- * AI_RADAR_SUPABASE_URL / AI_RADAR_SUPABASE_ANON_KEY が両方設定されていれば
- * ai-radar 側の `signals` テーブルから 24h window を読みに行く。
- * いずれかが欠ければ既存の AI_RADAR_API_ENDPOINT を試し、それも無ければ mock を返す。
+ * ai-radar 連携。spec §6.4 の α 方式 (direct supabase) を実装。
+ * 実テーブルは `articles` (ai-radar v2 schema)。`pipeline IN (content_seed/claude_tip/both)` を 24h window で読む。
+ * AI_RADAR_* が無ければ β (API endpoint) を試し、いずれも無ければ MOCK を返す。
  */
 export async function fetchAiRadarSignals(): Promise<AiRadarSignal[]> {
   const directUrl = process.env.AI_RADAR_SUPABASE_URL;
@@ -39,26 +56,18 @@ export async function fetchAiRadarSignals(): Promise<AiRadarSignal[]> {
       });
       const sinceIso = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
       const { data, error } = await aiRadar
-        .from("signals")
-        .select("id, content, fetched_at, relevance_score")
-        .gte("fetched_at", sinceIso)
-        .order("relevance_score", { ascending: false, nullsFirst: false })
+        .from("articles")
+        .select(
+          "id, title_ja, title_original, summary_3line, seed_summary, tip_summary, pipeline, detected_at, published_at, claude_tip_score, content_seed_score, score_note, recommended_media",
+        )
+        .gte("detected_at", sinceIso)
+        .in("pipeline", [...PIPELINES_FOR_NOTE])
+        .order("content_seed_score", { ascending: false, nullsFirst: false })
         .limit(20);
       if (error) throw error;
-      const signals: AiRadarSignal[] = (data ?? []).map(
-        (row: {
-          id: string;
-          content: string;
-          fetched_at: string;
-          relevance_score: number | null;
-        }) => ({
-          signalId: row.id,
-          content: row.content,
-          fetchedAt: row.fetched_at,
-          ...(row.relevance_score != null
-            ? { relevanceScore: row.relevance_score }
-            : {}),
-        }),
+
+      const signals: AiRadarSignal[] = (data ?? []).map((row) =>
+        articleRowToSignal(row as AiRadarArticleRow),
       );
       if (signals.length > 0) {
         await upsertSignalCache(signals);
@@ -93,6 +102,24 @@ export async function fetchAiRadarSignals(): Promise<AiRadarSignal[]> {
   return MOCK_SIGNALS;
 }
 
+function articleRowToSignal(row: AiRadarArticleRow): AiRadarSignal {
+  const title = row.title_ja ?? row.title_original ?? "(no title)";
+  const summary = row.summary_3line ?? row.seed_summary ?? row.tip_summary ?? "";
+  const content = summary ? `${title}\n\n${summary}` : title;
+  const score =
+    Math.max(
+      row.content_seed_score ?? 0,
+      row.claude_tip_score ?? 0,
+      row.score_note ?? 0,
+    ) / 100;
+  return {
+    signalId: row.id,
+    content,
+    fetchedAt: row.detected_at ?? row.published_at ?? new Date().toISOString(),
+    ...(Number.isFinite(score) && score > 0 ? { relevanceScore: score } : {}),
+  };
+}
+
 async function upsertSignalCache(signals: AiRadarSignal[]): Promise<void> {
   if (!hasSupabase() || signals.length === 0) return;
   const supabase = getSupabase();
@@ -112,17 +139,17 @@ export function selectTopic(signals: AiRadarSignal[]): {
   signals: AiRadarSignal[];
 } {
   const head = signals[0];
-  const slug = head
-    ? slugify(head.content)
-    : `untitled-${Date.now()}`;
+  const slug = head ? slugify(head.content) : `untitled-${Date.now()}`;
   return { slug, signals };
 }
 
 function slugify(text: string): string {
-  return text
-    .slice(0, 32)
-    .replace(/[^a-zA-Z0-9\-ぁ-んァ-ヶー一-龯]+/g, "-")
-    .replace(/-+/g, "-")
-    .replace(/^-|-$/g, "")
-    .toLowerCase() || `topic-${Date.now()}`;
+  return (
+    text
+      .slice(0, 32)
+      .replace(/[^a-zA-Z0-9\-ぁ-んァ-ヶー一-龯]+/g, "-")
+      .replace(/-+/g, "-")
+      .replace(/^-|-$/g, "")
+      .toLowerCase() || `topic-${Date.now()}`
+  );
 }
