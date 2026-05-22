@@ -164,10 +164,11 @@ source: session
 
 ### セッション開始時の秘書の動作
 
-1. `wiki/index.md` を起点に、依頼キーワードに関連するクラスタのページだけ読む（全読みは不要）
+1. **`wiki/hot.md` を最優先で読む**（~500 words のホットキャッシュ。直近の作業文脈・進行中テーマ・未解決トピックを掴む。詳細は `wiki/SCHEMA.md` §ホットキャッシュ）
+2. `wiki/index.md` を起点に、依頼キーワードに関連するクラスタのページだけ読む（全読みは不要）
    - 迷ったら `wiki/publishing/index.md`（発信戦略、Phase 4 で整備）と `wiki/self/goals.md`（KGI/KPI）だけ読む。BSA 関連は `wiki/business/bsa/`（archived 2026-05-20）に隔離済み、参照は最小限
-2. `data/usage-log.jsonl` の直近5件を読む（前回何をしたか把握）
-3. ユーザーに状況報告と「今日は何をしますか？」を提示
+3. `data/usage-log.jsonl` の直近5件を読む（前回何をしたか把握）
+4. ユーザーに状況報告と「今日は何をしますか？」を提示
 
 ※ `knowledge/INDEX.md` は廃止（メンテコストに対して効果が薄かったため）。
 

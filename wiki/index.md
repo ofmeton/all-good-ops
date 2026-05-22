@@ -3,6 +3,10 @@
 > **このファイルは LLM が ingest/lint で自動更新します。人間は触らないでください。**
 > 人間が wiki を眺めるには Obsidian graph view を使ってください。
 
+## 起動時に最優先で読む
+
+- [hot](hot.md) — ホットキャッシュ（~500 words の作業文脈サマリ）。詳細仕様: [SCHEMA](SCHEMA.md) §ホットキャッシュ
+
 ## business
 
 ### bsa

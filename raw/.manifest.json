@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "description": "LLM-managed delta tracking for raw/ ingest. Exempt from raw/ immutability (see wiki/SCHEMA.md §raw/ 例外).",
+  "sources": {
+    "raw/publishing/inspirations/instagram-20260520-asc-carousel-15枚構成.md": {
+      "hash": "md5:2be49e93fee68998331c8cf956cdd74b",
+      "ingested_at": "2026-05-20",
+      "pages_created": [
+        "wiki/publishing/inspirations/instagram-2026-05-20-asc-carousel-15slides.md"
+      ],
+      "pages_updated": [
+        "wiki/publishing/buzz-patterns.md",
+        "wiki/publishing/index.md",
+        "wiki/publishing/log.md"
+      ],
+      "backfilled": true
+    },
+    "raw/publishing/inspirations/meta-20260520-chaen-buzz-5steps.md": {
+      "hash": "md5:4fbdee2e386839ae3885fc1a40ae3f49",
+      "ingested_at": "2026-05-20",
+      "pages_created": [
+        "wiki/publishing/inspirations/meta-2026-05-20-chaen-buzz-5steps.md"
+      ],
+      "pages_updated": [
+        "wiki/publishing/buzz-patterns.md",
+        "wiki/publishing/index.md",
+        "wiki/publishing/log.md"
+      ],
+      "backfilled": true
+    },
+    "raw/publishing/inspirations/note-20260520-kajiken-claudecode-everyone.md": {
+      "hash": "md5:bfb7312c5b1ed1b6ee2800b9a6572b38",
+      "ingested_at": "2026-05-20",
+      "pages_created": [
+        "wiki/publishing/inspirations/note-2026-05-20-kajiken-claudecode-everyone.md"
+      ],
+      "pages_updated": [
+        "wiki/publishing/buzz-patterns.md",
+        "wiki/publishing/index.md",
+        "wiki/publishing/log.md"
+      ],
+      "backfilled": true
+    },
+    "raw/publishing/inspirations/note-20260520-smartround-cowork-cases.md": {
+      "hash": "md5:3217c3fb696a5b9df7e1b79eefb97d4c",
+      "ingested_at": "2026-05-20",
+      "pages_created": [
+        "wiki/publishing/inspirations/note-2026-05-20-smartround-cowork-cases.md"
+      ],
+      "pages_updated": [
+        "wiki/publishing/buzz-patterns.md",
+        "wiki/publishing/index.md",
+        "wiki/publishing/log.md"
+      ],
+      "backfilled": true
+    },
+    "raw/publishing/inspirations/note-20260520-uravation-claude-x-viral.md": {
+      "hash": "md5:21547254155c0b31e3162563c9a58a0d",
+      "ingested_at": "2026-05-20",
+      "pages_created": [
+        "wiki/publishing/inspirations/note-2026-05-20-uravation-claude-x-viral.md"
+      ],
+      "pages_updated": [
+        "wiki/publishing/buzz-patterns.md",
+        "wiki/publishing/index.md",
+        "wiki/publishing/log.md"
+      ],
+      "backfilled": true
+    }
+  }
+}

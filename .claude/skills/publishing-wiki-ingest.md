@@ -11,7 +11,7 @@
 - 一括取り込み実行前にユーザー Y/N 確認必須（自動 commit 禁止）
 - 既存矛盾は「## 異論」併記で SCHEMA 標準維持
 - 1 ingest = 1 commit
-- 取り込み済み判定は `wiki/publishing/log.md` を SSOT とする
+- 取り込み済み判定は `raw/.manifest.json` の md5 ハッシュを SSOT とする（`wiki/publishing/log.md` の grep は副次的に併用）
 - 対象は raw/publishing/inspirations/ 直下のみ（再帰なし）
 
 ## フロー
@@ -22,11 +22,16 @@
 # raw 側ファイル一覧
 ls raw/publishing/inspirations/*.md 2>/dev/null | grep -v README.md
 
-# 取り込み済み一覧（wiki/publishing/log.md から）
+# manifest hash check（堅牢な dedup・SSOT）
+# raw/.manifest.json の sources[<path>].hash と `md5 -q <path>` を突合
+# - ハッシュ一致 → ingest 済（変更なし）→ 除外
+# - ハッシュ不一致 or 未記録 → 未 ingest 候補
+
+# 副次チェック（フォーマット崩れ検知用）
 grep "^## \[" wiki/publishing/log.md | grep "ingest"
 ```
 
-突合して未取り込みファイルを抽出。
+manifest を SSOT として未取り込みファイルを抽出。
 
 ### Step 2: ユーザー通知 + Y/N 確認
 
@@ -100,16 +105,35 @@ status: active
 - 抽出された学び: 1-2 行
 ```
 
-### Step 4: 各 ingest を 1 commit にして保存
+### Step 4: 各 ingest 後に manifest 更新
+
+各ファイル ingest 完了時、`raw/.manifest.json` の `sources` に追加:
+
+```json
+{
+  "raw/publishing/inspirations/<file>.md": {
+    "hash": "md5:<hash>",
+    "ingested_at": "YYYY-MM-DD",
+    "pages_created": ["wiki/publishing/inspirations/<id>.md"],
+    "pages_updated": ["wiki/publishing/buzz-patterns.md", "wiki/publishing/index.md", "wiki/publishing/log.md"]
+  }
+}
+```
+
+### Step 5: wiki/hot.md 更新
+
+ingest 完了 batch ごとに `wiki/hot.md` の `Recently Touched` セクションに entry を追加（直近 7 件まで、超えたら古い順に間引く）。
+
+### Step 6: 各 ingest を 1 commit にして保存
 
 ```bash
-git add wiki/publishing/inspirations/<id>.md wiki/publishing/{buzz-patterns,by-media/...,by-theme/...,index,log}.md
+git add wiki/publishing/inspirations/<id>.md wiki/publishing/{buzz-patterns,by-media/...,by-theme/...,index,log}.md raw/.manifest.json wiki/hot.md
 git commit -m "ingest(publishing): <title> (<media>)"
 ```
 
 複数ファイル一括取り込みの場合も、ファイル単位で commit を分割（rollback 容易）。
 
-### Step 5: 完了報告
+### Step 7: 完了報告
 
 ```
 N 件取り込みました:
