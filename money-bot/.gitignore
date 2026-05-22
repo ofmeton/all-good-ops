@@ -1,0 +1,19 @@
+# money-bot 配下のローカル除外
+# (親 repo の .gitignore に追加して、ここではテンプレートを追跡可能にする)
+
+# .env.example はテンプレートとして追跡したいので親 .gitignore の `.env.*` から除外
+!.env.example
+
+# 実値ファイルは追跡しない
+.env
+.env.local
+.env.production
+.env.development
+
+# node / build artifacts (親 .gitignore で既に除外済みだが念のため)
+node_modules/
+.next/
+.vercel/
+dist/
+build/
+*.tsbuildinfo
