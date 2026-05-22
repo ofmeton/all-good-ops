@@ -345,7 +345,7 @@ source: session
 
 ---
 
-## スキル一覧（37冊）
+## スキル一覧（40冊）
 
 | # | スキル | ファイル | 用途 |
 |---|--------|---------|------|
@@ -386,6 +386,9 @@ source: session
 | 35 | 非エンジニア向け翻訳ルール | `non-engineer-translation.md` | writer が非エンジニア（中小事業者・士業・コンサル）向け Claude 活用記事を執筆する言語ルール。用語別翻訳表 10 件 / 避けるカタカナ / 失敗談先行型構造 |
 | 36 | note 収益化プレイブック | `note-revenue-playbook.md` | note 売れる記事構成テンプレ・価格設計（500/980/980-1480 円）・ティーザー設計。brand-publisher / conversion-designer 共用 |
 | 37 | publishing wiki ingest | `publishing-wiki-ingest.md` | raw/publishing/inspirations/ → wiki/publishing/ の半自動 ingest 手順（セッション初動スキャン + Y/N 確認 + 1 ingest=1 commit）。SCHEMA 例外規定に準拠 |
+| 38 | OAuth トラブルシューティング | `oauth-troubleshooting.md` | OAuth プロバイダ (Meta / Google / Stripe 等) の認証エラー時の三段構え (シークレット試行 / Cookie 削除 / 拡張機能 OFF) |
+| 39 | Vercel env 一括投入 | `vercel-env-bulk-add.md` | `.env.local` から stdin 経由で Vercel production env への一括投入。シェル履歴に値を残さない安全な方式 |
+| 40 | Supabase project 前提チェック | `supabase-project-precheck.md` | `create_project` 前の list_projects + Free tier 2 制限確認 + 残り枠なし時の A〜E 代替案提示 |
 
 ---
 
@@ -624,6 +627,16 @@ cd ../all-good-ops-<topic>
 判定:
 - **単一セッション運用**: 通常のブランチ切替で OK
 - **並列セッション運用が予期される or 既に動いている**: worktree を切ってから着手
+
+**並列セッション検出のシグナル** (以下が 1 つでも観測されたら、新作業着手前に worktree 化を強制):
+
+1. SessionStart hook で表示される branch が想定と違う (別セッションが checkout 済み)
+2. `git log --all --oneline -10` で別 task ブランチに直近 24h の commit あり
+3. `git worktree list` で 2 つ以上の worktree が active
+4. メイン cwd の `git status --short` に他主題の uncommitted / untracked が多数（5 件以上）
+5. PR merge / pull / fetch 時に「raw/... / wiki/... 等の同パス untracked と衝突」エラー
+
+検出時の動作: 「並列セッションが観測されたので worktree で物理隔離します」と 1 行明示してから `git worktree add` 実行。memory: `feedback_one_session_one_branch.md` 参照
 - 既存スキル: `superpowers:using-git-worktrees`
 
 セッション終了時の片付けは `git worktree remove` も含める（worktree のディレクトリだけ消すと `prune` 必要）。
