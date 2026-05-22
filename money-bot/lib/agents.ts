@@ -1,103 +1,35 @@
-/**
- * Claude Agent SDK の `query()` ラッパー。
- *
- * spec: docs/superpowers/specs/2026-05-22-money-bot-design.md §6.1
- *
- * 役割:
- *   - `settingSources: ['project']` で all-good-ops の既存 .claude/agents/ .claude/skills/ を
- *     filesystem からロードして使う
- *   - writer / visual-designer / content-reviewer / brand-publisher をそのまま再利用する
- *
- * TODO(Phase 1):
- *   - @anthropic-ai/claude-agent-sdk の最新シグネチャは context7 で再確認
- *     (本ファイル作成時点で 0.1.x 系を想定。Skill / settingSources / allowedTools の引数名は要再確認)
- *   - CLAUDE_PROJECT_ROOT を Vercel build に含める bundling 戦略を確定
- *     (Vercel 上は `.claude/` が deploy bundle に含まれていないと filesystem load が失敗するため)
- *   - cost 観測のため Vercel AI Gateway 経由に切り替える設定を追加
- */
-
-// NOTE: 実 import は npm install 後に有効化される。Phase 1 着手前は型解決エラーになる想定。
-//       下記 import は実装時にコメントアウト解除する。
-// import { query } from "@anthropic-ai/claude-agent-sdk";
-
+import { query, type Options } from "@anthropic-ai/claude-agent-sdk";
 import { z } from "zod";
-
-// ---------------------------------------------------------------------------
-// 共通型
-// ---------------------------------------------------------------------------
 
 export type AgentName =
   | "writer"
   | "visual-designer"
   | "content-reviewer"
   | "brand-publisher"
-  | "sns-generator"; // sns-generator は spec §5.1 step 6。既存にない場合は Phase 2 で新設
+  | "sns-generator";
 
 export interface AgentRunInput<T = unknown> {
   agent: AgentName;
   prompt: string;
-  /** 既存 .claude/skills/ から invoke するスキル名 (例: 'scqa-writing-framework') */
   skills?: string[];
-  /** 任意の構造化 input。agent prompt template 側で {{input.xxx}} 参照する想定 */
   input?: T;
+  /** zod schema to parse the final result string into structured output */
+  outputSchema?: z.ZodTypeAny;
+  maxTurns?: number;
 }
 
 export interface AgentRunResult<T = unknown> {
   agent: AgentName;
   output: T;
-  /** Anthropic API 応答の usage。コスト集計 / KPI 用 */
+  rawResult: string;
   usage?: {
     inputTokens?: number;
     outputTokens?: number;
     cacheCreationInputTokens?: number;
     cacheReadInputTokens?: number;
-  };
-  raw?: unknown;
-}
-
-// ---------------------------------------------------------------------------
-// ラッパー本体
-// ---------------------------------------------------------------------------
-
-/**
- * 既存 all-good-ops の subagent を一発実行する high-level wrapper。
- *
- * TODO(Phase 1): 下記は pseudo-code レベル。実 SDK shape は context7 で再確認後に書き直す。
- *   想定 shape (subject to change):
- *     const result = await query({
- *       prompt,
- *       settingSources: ['project'],
- *       allowedTools: ['Task', 'Skill', 'Read', 'Write', 'Bash'],
- *       cwd: process.env.CLAUDE_PROJECT_ROOT,
- *       agents: { default: input.agent },  // or subagent invocation 経由
- *     });
- */
-export async function runAgent<TIn = unknown, TOut = unknown>(
-  input: AgentRunInput<TIn>,
-): Promise<AgentRunResult<TOut>> {
-  // TODO(Phase 1): 実 SDK 呼び出しに差し替え
-  // const result = await query({
-  //   prompt: buildPrompt(input),
-  //   settingSources: ['project'],
-  //   allowedTools: ['Task', 'Skill', 'Read', 'Write'],
-  //   cwd: process.env.CLAUDE_PROJECT_ROOT,
-  // });
-  // return { agent: input.agent, output: result.output as TOut, usage: result.usage };
-
-  // Phase 1 着手前 mock: 呼び出されたら呼び出し情報を返すだけのプレースホルダ
-  return {
-    agent: input.agent,
-    output: {
-      __mock__: true,
-      message: `[mock] runAgent called for ${input.agent}. Replace with real SDK call in Phase 1.`,
-      input,
-    } as unknown as TOut,
+    totalCostUsd?: number;
   };
 }
-
-// ---------------------------------------------------------------------------
-// 個別エージェントの便利ラッパー (workflow から見やすくするため)
-// ---------------------------------------------------------------------------
 
 const draftSchema = z.object({
   title: z.string(),
@@ -145,44 +77,216 @@ export const schemas = {
   sns: snsSchema,
 };
 
-export async function writerAgent(topic: { slug: string; signals: unknown[] }) {
-  return runAgent<typeof topic, Draft>({
-    agent: "writer",
-    skills: ["scqa-writing-framework", "non-engineer-translation"],
-    prompt:
-      "AI 動向シグナルから note 記事ドラフトを生成。SCQA + 非エンジニア翻訳ルール厳守。",
-    input: topic,
-  });
+function buildPrompt<T>(input: AgentRunInput<T>): string {
+  const lines: string[] = [];
+  lines.push(`You are the ${input.agent} subagent.`);
+  lines.push("");
+  lines.push("Task:");
+  lines.push(input.prompt);
+  if (input.skills?.length) {
+    lines.push("");
+    lines.push("Required skills (invoke via Skill tool):");
+    for (const s of input.skills) lines.push(`- ${s}`);
+  }
+  if (input.input !== undefined) {
+    lines.push("");
+    lines.push("Input (JSON):");
+    lines.push("```json");
+    lines.push(JSON.stringify(input.input, null, 2));
+    lines.push("```");
+  }
+  lines.push("");
+  lines.push(
+    "Respond with ONLY a single JSON object that matches the requested schema. " +
+      "No prose, no markdown fences.",
+  );
+  return lines.join("\n");
 }
 
-export async function visualDesignerAgent(draft: Draft) {
-  return runAgent<Draft, Visuals>({
-    agent: "visual-designer",
-    skills: ["visual-design-system"],
-    prompt:
-      "draft からヘッダー画像 + 記事内図解を gpt-image-2 で生成し URL を返す。",
-    input: draft,
-  });
+function tryParseJson(text: string): unknown | null {
+  const trimmed = text.trim();
+  const fenced = trimmed.match(/```(?:json)?\s*([\s\S]*?)```/);
+  const body = fenced?.[1] ?? trimmed;
+  try {
+    return JSON.parse(body);
+  } catch {
+    const objStart = body.indexOf("{");
+    const objEnd = body.lastIndexOf("}");
+    if (objStart >= 0 && objEnd > objStart) {
+      try {
+        return JSON.parse(body.slice(objStart, objEnd + 1));
+      } catch {
+        return null;
+      }
+    }
+    return null;
+  }
+}
+
+function hasAnthropicKey(): boolean {
+  return Boolean(process.env.ANTHROPIC_API_KEY || process.env.VERCEL_AI_GATEWAY_API_KEY);
+}
+
+function mockResult<T>(input: AgentRunInput, fallback: T): AgentRunResult<T> {
+  return {
+    agent: input.agent,
+    output: fallback,
+    rawResult: "[mock]",
+  };
+}
+
+async function runQuery<T>(
+  input: AgentRunInput,
+  fallback: T,
+): Promise<AgentRunResult<T>> {
+  if (!hasAnthropicKey()) {
+    return mockResult<T>(input, fallback);
+  }
+
+  const cwd = process.env.CLAUDE_PROJECT_ROOT;
+  const options: Options = {
+    settingSources: ["project"],
+    allowedTools: ["Task", "Skill", "Read", "Glob", "Grep"],
+    permissionMode: "bypassPermissions",
+    maxTurns: input.maxTurns ?? 30,
+    ...(cwd ? { cwd } : {}),
+  };
+
+  let resultText = "";
+  let usage: AgentRunResult["usage"];
+
+  for await (const msg of query({ prompt: buildPrompt(input), options })) {
+    if (msg.type === "result") {
+      if (msg.subtype === "success") {
+        resultText = msg.result;
+        usage = {
+          inputTokens: msg.usage?.input_tokens,
+          outputTokens: msg.usage?.output_tokens,
+          cacheCreationInputTokens: msg.usage?.cache_creation_input_tokens,
+          cacheReadInputTokens: msg.usage?.cache_read_input_tokens,
+          totalCostUsd: msg.total_cost_usd,
+        };
+        break;
+      }
+      throw new Error(`agent ${input.agent} returned non-success result: ${msg.subtype}`);
+    }
+  }
+
+  if (!resultText) {
+    return mockResult<T>(input, fallback);
+  }
+
+  const parsed = tryParseJson(resultText);
+  if (parsed && input.outputSchema) {
+    const safe = input.outputSchema.safeParse(parsed);
+    if (safe.success) {
+      return {
+        agent: input.agent,
+        output: safe.data as T,
+        rawResult: resultText,
+        ...(usage ? { usage } : {}),
+      };
+    }
+    console.warn(`[agent ${input.agent}] schema parse failed, using fallback`, safe.error);
+  }
+
+  return {
+    agent: input.agent,
+    output: (parsed as T) ?? fallback,
+    rawResult: resultText,
+    ...(usage ? { usage } : {}),
+  };
+}
+
+export async function writerAgent(topic: {
+  slug: string;
+  signals: unknown[];
+}): Promise<AgentRunResult<Draft>> {
+  const fallback: Draft = {
+    title: `[mock] ${topic.slug}`,
+    body: `[mock draft for ${topic.slug}]`,
+    topicSlug: topic.slug,
+    references: [],
+  };
+  return runQuery<Draft>(
+    {
+      agent: "writer",
+      skills: ["scqa-writing-framework", "non-engineer-translation"],
+      prompt:
+        "Generate a note article draft from AI industry signals. " +
+        "Strictly follow SCQA + non-engineer translation rules. " +
+        "Output a JSON object: { title, body, topicSlug, references[] }.",
+      input: topic,
+      outputSchema: schemas.draft,
+    },
+    fallback,
+  );
+}
+
+export async function visualDesignerAgent(
+  draft: Draft,
+): Promise<AgentRunResult<Visuals>> {
+  const fallback: Visuals = { headerImageUrl: null, figures: [] };
+  return runQuery<Visuals>(
+    {
+      agent: "visual-designer",
+      skills: ["visual-design-system"],
+      prompt:
+        "Plan header image and in-article figures for the given draft. " +
+        "Output a JSON object: { headerImageUrl, figures[] }. " +
+        "If image generation is not available, return placeholder URLs and continue.",
+      input: draft,
+      outputSchema: schemas.visuals,
+    },
+    fallback,
+  );
 }
 
 export async function contentReviewerAgent(args: {
   draft: Draft;
   visuals: Visuals;
-}) {
-  return runAgent<typeof args, Reviewed>({
-    agent: "content-reviewer",
-    skills: ["content-quality-rubric"],
-    prompt: "7軸 rubric で評価。F評価が出たら approved=false を返す。",
-    input: args,
-  });
+}): Promise<AgentRunResult<Reviewed>> {
+  const fallback: Reviewed = {
+    draft: args.draft,
+    visuals: args.visuals,
+    rubricScore: 0,
+    rubricNotes: ["[mock] reviewer not run"],
+    approved: false,
+  };
+  return runQuery<Reviewed>(
+    {
+      agent: "content-reviewer",
+      skills: ["content-quality-rubric"],
+      prompt:
+        "Evaluate the draft using the 7-axis rubric (AI-feel zero / image-rich / " +
+        "jargon density / structure / hook / target clarity / AI transparency). " +
+        "Output a JSON object: { draft, visuals, rubricScore (0-100), rubricNotes[], approved (boolean) }. " +
+        "Set approved=false on F grade.",
+      input: args,
+      outputSchema: schemas.reviewed,
+    },
+    fallback,
+  );
 }
 
-export async function snsGeneratorAgent(reviewed: Reviewed) {
-  return runAgent<Reviewed, SnsContent>({
-    agent: "sns-generator",
-    skills: ["multi-platform-publishing", "visual-design-system"],
-    prompt:
-      "note 記事から X 投稿文 (Before-After + 数値見出し) + Instagram カルーセル 9 枚を生成。",
-    input: reviewed,
-  });
+export async function snsGeneratorAgent(
+  reviewed: Reviewed,
+): Promise<AgentRunResult<SnsContent>> {
+  const fallback: SnsContent = {
+    tweet: `[mock] ${reviewed.draft.title}`,
+    tweetImageUrl: null,
+    carousel: [],
+  };
+  return runQuery<SnsContent>(
+    {
+      agent: "sns-generator",
+      skills: ["multi-platform-publishing", "visual-design-system"],
+      prompt:
+        "Generate X post (Before-After + numeric headline) and Instagram 9-slide carousel " +
+        "from the reviewed note article. Output a JSON object: { tweet, tweetImageUrl, carousel[] }.",
+      input: reviewed,
+      outputSchema: schemas.sns,
+    },
+    fallback,
+  );
 }

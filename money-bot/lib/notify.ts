@@ -1,53 +1,119 @@
-/**
- * LINE / Resend 通知ラッパー。
- *
- * spec §5.1 (approval gate) / §6.1 (LINE Messaging API) / §10 (障害時 fallback)
- *
- * - 主経路: LINE Messaging API push (ofmeton bot)
- * - 副経路: Resend mail (LINE 障害時の fallback)
- *
- * 月次予算: LINE 無料枠 500通/月 内に収まる想定 (1日1通 = 30通/月 + エラー数件)
- */
-
-// TODO(Phase 1): npm install 後に有効化
-// import { Client as LineClient, type MessageAPIResponseBase } from "@line/bot-sdk";
+import { messagingApi } from "@line/bot-sdk";
+import { Resend } from "resend";
 
 export interface ApprovalNotifyPayload {
   runId: string;
   approvalUrl: string;
   draftTitle: string;
-  thumbnailUrl?: string;
+  thumbnailUrl?: string | undefined;
+}
+
+type NotifyChannel = "line" | "resend" | "mock";
+
+let cachedLineClient: messagingApi.MessagingApiClient | null = null;
+function getLineClient(): messagingApi.MessagingApiClient | null {
+  const channelAccessToken = process.env.LINE_CHANNEL_ACCESS_TOKEN;
+  if (!channelAccessToken) return null;
+  if (!cachedLineClient) {
+    cachedLineClient = new messagingApi.MessagingApiClient({ channelAccessToken });
+  }
+  return cachedLineClient;
+}
+
+let cachedResend: Resend | null = null;
+function getResend(): Resend | null {
+  const key = process.env.RESEND_API_KEY;
+  if (!key) return null;
+  if (!cachedResend) {
+    cachedResend = new Resend(key);
+  }
+  return cachedResend;
 }
 
 export async function notifyApprovalReady(
   payload: ApprovalNotifyPayload,
-): Promise<{ ok: boolean; via: "line" | "resend" | "mock" }> {
-  const accessToken = process.env.LINE_CHANNEL_ACCESS_TOKEN;
+): Promise<{ ok: boolean; via: NotifyChannel }> {
+  const line = getLineClient();
   const toUserId = process.env.LINE_TO_USER_ID;
 
-  if (!accessToken || !toUserId) {
-    // Phase 1 着手前: 環境変数未設定なら mock 経路
-    // eslint-disable-next-line no-console
-    console.warn("[notify] LINE env not set, falling back to mock", payload);
-    return { ok: true, via: "mock" };
+  if (line && toUserId) {
+    try {
+      await line.pushMessage({
+        to: toUserId,
+        messages: [
+          {
+            type: "text",
+            text:
+              `[money-bot] ドラフト準備完了\n` +
+              `${payload.draftTitle}\n\n` +
+              `承認: ${payload.approvalUrl}`,
+          },
+          ...(payload.thumbnailUrl
+            ? ([
+                {
+                  type: "image",
+                  originalContentUrl: payload.thumbnailUrl,
+                  previewImageUrl: payload.thumbnailUrl,
+                },
+              ] as const)
+            : []),
+        ],
+      });
+      return { ok: true, via: "line" };
+    } catch (err) {
+      console.error("[notify] LINE push failed, falling back to Resend", err);
+    }
   }
 
-  // TODO(Phase 1): 実装
-  // const client = new LineClient({ channelAccessToken: accessToken });
-  // await client.pushMessage(toUserId, [
-  //   {
-  //     type: "text",
-  //     text: `[money-bot] note ドラフト準備完了: ${payload.draftTitle}\n承認: ${payload.approvalUrl}`,
-  //   },
-  //   ...(payload.thumbnailUrl
-  //     ? [{ type: "image" as const, originalContentUrl: payload.thumbnailUrl, previewImageUrl: payload.thumbnailUrl }]
-  //     : []),
-  // ]);
-  return { ok: true, via: "line" };
+  const resend = getResend();
+  const fallbackTo = process.env.NOTIFY_FALLBACK_EMAIL;
+  if (resend && fallbackTo) {
+    try {
+      await resend.emails.send({
+        from: process.env.RESEND_FROM ?? "money-bot@example.com",
+        to: fallbackTo,
+        subject: `[money-bot] approval needed — ${payload.draftTitle}`,
+        text: `Approval URL: ${payload.approvalUrl}\nrun: ${payload.runId}`,
+      });
+      return { ok: true, via: "resend" };
+    } catch (err) {
+      console.error("[notify] Resend fallback failed", err);
+    }
+  }
+
+  console.warn("[notify] no channel configured, mock-only", payload);
+  return { ok: true, via: "mock" };
 }
 
 export async function notifyError(message: string, context?: unknown): Promise<void> {
-  // TODO(Phase 1): LINE 経由 + 失敗時 Resend fallback
-  // eslint-disable-next-line no-console
+  const line = getLineClient();
+  const toUserId = process.env.LINE_TO_USER_ID;
+  const body = `[money-bot ERROR]\n${message}\n${context ? JSON.stringify(context).slice(0, 800) : ""}`;
+
+  if (line && toUserId) {
+    try {
+      await line.pushMessage({ to: toUserId, messages: [{ type: "text", text: body }] });
+      return;
+    } catch (err) {
+      console.error("[notify.error] LINE push failed", err);
+    }
+  }
+
+  const resend = getResend();
+  const fallbackTo = process.env.NOTIFY_FALLBACK_EMAIL;
+  if (resend && fallbackTo) {
+    try {
+      await resend.emails.send({
+        from: process.env.RESEND_FROM ?? "money-bot@example.com",
+        to: fallbackTo,
+        subject: "[money-bot] error",
+        text: body,
+      });
+      return;
+    } catch (err) {
+      console.error("[notify.error] Resend fallback failed", err);
+    }
+  }
+
   console.error("[notify.error]", message, context);
 }
