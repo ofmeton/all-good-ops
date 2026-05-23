@@ -4,29 +4,10 @@ import { resolveAdminActor } from "@/lib/supabase-auth";
 import { createServiceClient } from "@/lib/supabase-server";
 import { AdminShell } from "@/components/admin/AdminShell";
 
-type NavKey =
-  | "dashboard"
-  | "requests"
-  | "properties"
-  | "staff"
-  | "owners"
-  | "supplies"
-  | "admins";
-
-function pathToCurrent(path: string): NavKey {
-  if (path.startsWith("/admin/requests")) return "requests";
-  if (path.startsWith("/admin/properties")) return "properties";
-  if (path.startsWith("/admin/staff")) return "staff";
-  if (path.startsWith("/admin/owners")) return "owners";
-  if (path.startsWith("/admin/supplies")) return "supplies";
-  if (path.startsWith("/admin/admins")) return "admins";
-  return "dashboard";
-}
-
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const path = (await headers()).get("x-pathname") ?? "";
 
-  // ログイン画面はガードもシェルも不要
+  // ログイン画面はガードもシェルも不要（proxy.ts が x-pathname を載せる前提）
   if (path === "/admin/login") {
     return <>{children}</>;
   }
@@ -43,9 +24,5 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     .maybeSingle();
   const userName = admin?.name ?? admin?.email ?? "管";
 
-  return (
-    <AdminShell current={pathToCurrent(path)} userName={userName}>
-      {children}
-    </AdminShell>
-  );
+  return <AdminShell userName={userName}>{children}</AdminShell>;
 }
