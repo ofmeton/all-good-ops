@@ -32,9 +32,14 @@ interface SessionCreateResponse {
   status?: string;
 }
 
+interface ContentBlock {
+  type: string;
+  text?: string;
+}
+
 interface AgentEvent {
   type: string;
-  content?: string;
+  content?: ContentBlock[] | string;
   id?: string;
   created_at?: string;
 }
@@ -80,8 +85,12 @@ export async function runManagedAgent(args: {
     method: "POST",
     headers: getHeaders(),
     body: JSON.stringify({
-      type: "user.message",
-      content: args.userMessage,
+      events: [
+        {
+          type: "user.message",
+          content: [{ type: "text", text: args.userMessage }],
+        },
+      ],
     }),
   });
   if (!sendRes.ok) {
@@ -109,8 +118,16 @@ export async function runManagedAgent(args: {
     const list = (await listRes.json()) as EventsListResponse;
     eventCount = list.data.length;
     for (const evt of list.data) {
-      if (evt.type === "agent.message" && typeof evt.content === "string") {
-        lastAgentMessageContent = evt.content;
+      if (evt.type === "agent.message") {
+        if (typeof evt.content === "string") {
+          lastAgentMessageContent = evt.content;
+        } else if (Array.isArray(evt.content)) {
+          const text = evt.content
+            .filter((b) => b.type === "text" && typeof b.text === "string")
+            .map((b) => b.text as string)
+            .join("\n");
+          if (text) lastAgentMessageContent = text;
+        }
       }
       if (evt.type === "session.status_idle" || evt.type === "session.completed") {
         done = true;
