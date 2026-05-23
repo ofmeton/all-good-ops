@@ -84,10 +84,12 @@ export async function dailyPublishWorkflow(): Promise<DailyPublishResult> {
       runId,
       reviewed,
       sns,
-      status: reviewed.approved ? "pending" : "rejected",
+      status: "pending",
     });
 
-    if (!reviewed.approved) {
+    // Phase 1 dogfooding: rubric approved=false でも人間判断のため承認 UI に送る。
+    // rubricNotes は承認 UI で確認可能。strict 化するには MONEY_BOT_RUBRIC_STRICT=1。
+    if (process.env.MONEY_BOT_RUBRIC_STRICT === "1" && !reviewed.approved) {
       return { runId, skipped: true, reason: "rubric_failed" };
     }
 
