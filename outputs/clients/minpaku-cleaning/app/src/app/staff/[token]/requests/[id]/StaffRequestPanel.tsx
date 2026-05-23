@@ -1,6 +1,9 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Card } from "@/components/ui/Card";
+import { Button } from "@/components/ui/Button";
+import { Icon } from "@/components/ui/Icon";
 
 type ChecklistTemplateItem = { label: string; type?: string };
 
@@ -12,6 +15,9 @@ type Props = {
   checklistTemplate: ChecklistTemplateItem[];
 };
 
+const inputCls =
+  "w-full px-3 py-2 rounded-lg ring-1 ring-ink-200 bg-white text-[13px] text-ink-800 outline-none placeholder:text-ink-400 focus:ring-brand-500 focus:ring-2 resize-none";
+
 export function StaffRequestPanel({
   token,
   requestId,
@@ -22,11 +28,7 @@ export function StaffRequestPanel({
   const router = useRouter();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  // チェックリスト記入状態
-  const [checks, setChecks] = useState<boolean[]>(
-    checklistTemplate.map(() => false),
-  );
-  // アップロード済み写真の保存パス
+  const [checks, setChecks] = useState<boolean[]>(checklistTemplate.map(() => false));
   const [photoPaths, setPhotoPaths] = useState<string[]>([]);
   const [supplyItems, setSupplyItems] = useState("");
   const [supplyDone, setSupplyDone] = useState(false);
@@ -62,9 +64,7 @@ export function StaffRequestPanel({
     e.target.value = "";
     if (!res.ok) {
       const b = await res.json().catch(() => null);
-      setError(
-        typeof b?.error === "string" ? b.error : "写真アップロードに失敗しました",
-      );
+      setError(typeof b?.error === "string" ? b.error : "写真アップロードに失敗しました");
       return;
     }
     const { storagePath } = await res.json();
@@ -116,91 +116,184 @@ export function StaffRequestPanel({
     setSupplyDone(true);
   }
 
+  const doneCount = checks.filter(Boolean).length;
+  const allDone = checklistTemplate.length > 0 && doneCount === checklistTemplate.length;
+
   return (
     <div className="space-y-4">
-      {error && <p className="text-red-600 text-sm">{error}</p>}
+      {error && (
+        <p className="text-[12.5px] text-st-cancelled-text bg-st-cancelled-bg px-3 py-2 rounded-lg">
+          {error}
+        </p>
+      )}
 
       {status === "assigned" && (
-        <button
-          onClick={start}
-          disabled={busy}
-          className="bg-black text-white rounded px-3 py-1 text-sm disabled:opacity-50"
-        >
-          清掃を開始する
-        </button>
+        <Card className="p-5">
+          <h3 className="text-[14px] font-bold text-ink-900 mb-1">清掃を開始する</h3>
+          <p className="text-[12px] text-ink-500 mb-4">
+            開始ボタンを押すとステータスが「清掃中」になり、チェックリストが表示されます。
+          </p>
+          <Button
+            variant="primary"
+            size="xl"
+            icon="Play"
+            disabled={busy}
+            onClick={start}
+            className="w-full"
+          >
+            {busy ? "開始中..." : "清掃を開始する"}
+          </Button>
+        </Card>
       )}
 
       {status === "in_progress" && (
-        <section className="space-y-3 border rounded p-3">
-          <h2 className="font-bold text-sm">チェックリスト</h2>
-          <ul className="space-y-1">
-            {checklistTemplate.map((item, i) => (
-              <li key={i}>
-                <label className="flex items-center gap-2 text-sm">
-                  <input
-                    type="checkbox"
-                    checked={checks[i]}
-                    onChange={() =>
-                      setChecks((prev) =>
-                        prev.map((c, j) => (j === i ? !c : c)),
-                      )
-                    }
-                  />
-                  {item.label}
-                </label>
-              </li>
-            ))}
-            {checklistTemplate.length === 0 && (
-              <li className="text-sm text-gray-500">
-                チェックリストは設定されていません。
-              </li>
-            )}
-          </ul>
-          <div className="space-y-1">
-            <label className="block text-sm">
-              完了写真を追加
+        <>
+          {checklistTemplate.length > 0 && (
+            <Card className="p-5">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-[14px] font-bold text-ink-900">作業チェックリスト</h3>
+                <span className="num text-[11.5px] text-ink-500">
+                  {doneCount} / {checklistTemplate.length}
+                </span>
+              </div>
+              <div className="h-1.5 rounded-full bg-ink-100 overflow-hidden mb-3">
+                <div
+                  className="h-full bg-brand-600 transition-all"
+                  style={{
+                    width: `${(doneCount / Math.max(checklistTemplate.length, 1)) * 100}%`,
+                  }}
+                />
+              </div>
+              <ul className="space-y-2.5">
+                {checklistTemplate.map((item, i) => {
+                  const on = checks[i];
+                  return (
+                    <li key={i}>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setChecks((prev) => prev.map((c, j) => (j === i ? !c : c)))
+                        }
+                        className="w-full flex items-center gap-3 text-left"
+                      >
+                        <span
+                          className={`h-6 w-6 rounded-md flex items-center justify-center shrink-0 ${
+                            on ? "bg-brand-600 text-white" : "border-2 border-ink-300"
+                          }`}
+                        >
+                          {on && <Icon name="Check" size={14} strokeWidth={3} />}
+                        </span>
+                        <span
+                          className={`text-[13px] ${
+                            on ? "text-ink-500 line-through" : "text-ink-800 font-medium"
+                          }`}
+                        >
+                          {item.label}
+                        </span>
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </Card>
+          )}
+
+          <Card className="p-5">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-[14px] font-bold text-ink-900">清掃後の写真</h3>
+              <span className="text-[11.5px] text-ink-500">
+                <span className="num font-bold text-ink-800">{photoPaths.length}</span> 枚
+              </span>
+            </div>
+            <label className="block">
+              <span className="sr-only">写真を追加</span>
               <input
                 type="file"
                 accept="image/*"
                 onChange={uploadPhoto}
                 disabled={busy}
-                className="block text-sm"
+                className="block w-full text-[12px] file:mr-3 file:px-3 file:py-2 file:rounded-lg file:border-0 file:bg-brand-600 file:text-white file:text-[12px] file:font-medium hover:file:bg-brand-700"
               />
             </label>
-            <p className="text-xs text-gray-500">
-              アップロード済み: {photoPaths.length}枚
+            <p className="text-[10.5px] text-ink-500 mt-2">
+              撮影した写真はサーバーで自動的に圧縮されます。
             </p>
-          </div>
-          <button
-            onClick={submitReport}
-            disabled={busy}
-            className="bg-black text-white rounded px-3 py-1 text-sm disabled:opacity-50"
-          >
-            完了報告を提出する
-          </button>
-        </section>
+          </Card>
+
+          <Card className="p-5">
+            <h3 className="text-[14px] font-bold text-ink-900 mb-3">完了報告</h3>
+            <Button
+              variant="primary"
+              size="xl"
+              icon="Send"
+              disabled={busy || (checklistTemplate.length > 0 && !allDone)}
+              onClick={submitReport}
+              className="w-full"
+            >
+              {busy
+                ? "送信中..."
+                : checklistTemplate.length > 0
+                  ? `報告を送信する（${doneCount}/${checklistTemplate.length} 完了）`
+                  : "報告を送信する"}
+            </Button>
+            {checklistTemplate.length > 0 && !allDone && (
+              <p className="text-[11px] text-ink-500 mt-2 text-center">
+                すべての項目にチェックを入れると送信できます。
+              </p>
+            )}
+          </Card>
+        </>
       )}
 
-      <section className="space-y-2 border rounded p-3">
-        <h2 className="font-bold text-sm">備品補充依頼</h2>
+      {(status === "reported" || status === "confirmed") && (
+        <Card className="p-5 bg-st-reported-bg/40">
+          <div className="flex items-center gap-3">
+            <div className="h-10 w-10 rounded-xl bg-st-reported-dot/20 text-st-reported-text flex items-center justify-center">
+              <Icon name="CircleCheckBig" size={20} />
+            </div>
+            <div className="flex-1">
+              <div className="text-[13px] font-bold text-st-reported-text">
+                {status === "confirmed" ? "確認済み" : "完了報告を送信しました"}
+              </div>
+              <div className="text-[11px] text-ink-600">
+                {status === "confirmed"
+                  ? "管理者が内容を確認しました。"
+                  : "管理者の確認待ちです。"}
+              </div>
+            </div>
+          </div>
+        </Card>
+      )}
+
+      <Card className="p-5">
+        <h3 className="text-[14px] font-bold text-ink-900 mb-1">備品補充の依頼</h3>
+        <p className="text-[11.5px] text-ink-500 mb-3">
+          不足している備品があれば送信してください。管理者・オーナーへ通知されます。
+        </p>
         {supplyDone && (
-          <p className="text-sm text-green-700">送信しました。</p>
+          <p className="text-[12.5px] text-st-confirmed-text bg-st-confirmed-bg px-3 py-2 rounded-lg mb-3">
+            送信しました。
+          </p>
         )}
         <textarea
           value={supplyItems}
           onChange={(e) => setSupplyItems(e.target.value)}
-          placeholder="不足している備品（例: トイレットペーパー 6ロール）"
-          className="w-full border rounded px-2 py-1 text-sm"
-          rows={2}
+          placeholder="例: トイレットペーパー 6ロール、ハンドソープ 2本"
+          rows={3}
+          className={inputCls}
         />
-        <button
-          onClick={submitSupply}
-          disabled={busy || !supplyItems.trim()}
-          className="text-sm underline disabled:opacity-50"
-        >
-          備品補充を依頼する
-        </button>
-      </section>
+        <div className="flex justify-end mt-3">
+          <Button
+            type="button"
+            variant="secondary"
+            icon="Package"
+            disabled={busy || !supplyItems.trim()}
+            onClick={submitSupply}
+          >
+            備品補充を依頼する
+          </Button>
+        </div>
+      </Card>
     </div>
   );
 }

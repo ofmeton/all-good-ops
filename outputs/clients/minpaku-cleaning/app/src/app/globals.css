@@ -1,26 +1,104 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ===========================================================================
+   StayClean Design Tokens (Tailwind v4 @theme)
+   Migrated from Claude Design handoff bundle (minpaku-clean).
+=========================================================================== */
+@theme {
+  --font-sans: var(--font-jp), "Noto Sans JP", system-ui, sans-serif;
+  --font-display: var(--font-display), Manrope, "Noto Sans JP", sans-serif;
+
+  /* Brand (accent #2563EB) */
+  --color-brand-50: #EFF4FF;
+  --color-brand-100: #DBE6FE;
+  --color-brand-500: #3B82F6;
+  --color-brand-600: #2563EB;
+  --color-brand-700: #1D4ED8;
+  --color-brand-900: #1E3A8A;
+
+  /* Ink (slate grayscale) */
+  --color-ink-50: #F8FAFC;
+  --color-ink-100: #F1F5F9;
+  --color-ink-200: #E2E8F0;
+  --color-ink-300: #CBD5E1;
+  --color-ink-400: #94A3B8;
+  --color-ink-500: #64748B;
+  --color-ink-600: #475569;
+  --color-ink-700: #334155;
+  --color-ink-800: #1E293B;
+  --color-ink-900: #0F172A;
+
+  /* Status palette (6 states + warn) */
+  --color-st-unassigned-bg: #F1F5F9;
+  --color-st-unassigned-text: #475569;
+  --color-st-unassigned-dot: #94A3B8;
+
+  --color-st-assigned-bg: #DBEAFE;
+  --color-st-assigned-text: #1D4ED8;
+  --color-st-assigned-dot: #3B82F6;
+
+  --color-st-cleaning-bg: #FFEDD5;
+  --color-st-cleaning-text: #9A3412;
+  --color-st-cleaning-dot: #F59E0B;
+
+  --color-st-reported-bg: #EDE9FE;
+  --color-st-reported-text: #6D28D9;
+  --color-st-reported-dot: #8B5CF6;
+
+  --color-st-confirmed-bg: #D1FAE5;
+  --color-st-confirmed-text: #047857;
+  --color-st-confirmed-dot: #10B981;
+
+  --color-st-cancelled-bg: #FEE2E2;
+  --color-st-cancelled-text: #B91C1C;
+  --color-st-cancelled-dot: #EF4444;
+
+  --color-st-warn-bg: #FEF9C3;
+  --color-st-warn-text: #854D0E;
+  --color-st-warn-dot: #FACC15;
+
+  /* Shadows */
+  --shadow-card: 0 1px 2px rgba(15, 23, 42, .04), 0 1px 1px rgba(15, 23, 42, .03);
+  --shadow-card-hi: 0 4px 16px rgba(15, 23, 42, .06), 0 1px 2px rgba(15, 23, 42, .04);
+  --shadow-phone: 0 30px 60px -20px rgba(15, 23, 42, .35), 0 12px 30px -10px rgba(15, 23, 42, .2);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+html, body {
+  background: #F5F7FB;
+  color: #0F172A;
 }
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-jp), "Noto Sans JP", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
+
+/* Tabular numerics for Manrope-display blocks */
+.num {
+  font-family: var(--font-display), Manrope, "Noto Sans JP", sans-serif;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+.tnum { font-variant-numeric: tabular-nums; }
+
+/* Subtle inner ring used on cards */
+.ring-soft { box-shadow: inset 0 0 0 1px var(--color-ink-200); }
+
+/* iPhone bezel for staff mobile previews */
+.bezel-shadow {
+  box-shadow:
+    inset 0 0 0 2px var(--color-ink-800),
+    inset 0 0 0 12px var(--color-ink-900),
+    0 30px 60px -20px rgba(15, 23, 42, .4);
+}
+
+/* Property photo gradient placeholders */
+.photo-a { background: linear-gradient(135deg, #94A3B8 0%, #475569 100%); }
+.photo-b { background: linear-gradient(135deg, #FCA5A5 0%, #B45309 100%); }
+.photo-c { background: linear-gradient(135deg, #86EFAC 0%, #047857 100%); }
+.photo-d { background: linear-gradient(135deg, #FCD34D 0%, #B45309 100%); }
+.photo-e { background: linear-gradient(135deg, #A5B4FC 0%, #4338CA 100%); }
+.photo-f { background: linear-gradient(135deg, #F0ABFC 0%, #86198F 100%); }
+
+/* Scrollbar trim */
+.nicebar::-webkit-scrollbar { height: 6px; width: 6px; }
+.nicebar::-webkit-scrollbar-thumb { background: var(--color-ink-300); border-radius: 999px; }

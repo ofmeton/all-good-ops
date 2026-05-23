@@ -1,6 +1,11 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/Button";
+
+const inputCls =
+  "w-full h-10 px-3 rounded-lg ring-1 ring-ink-200 bg-white text-[13px] text-ink-800 outline-none placeholder:text-ink-400 focus:ring-brand-500 focus:ring-2";
+const labelCls = "block text-[11.5px] text-ink-600 font-medium mb-1.5";
 
 export function AdminForm() {
   const router = useRouter();
@@ -34,26 +39,61 @@ export function AdminForm() {
   }
 
   return (
-    <form onSubmit={submit} className="space-y-2 border rounded p-3">
-      <input value={name} onChange={(e) => setName(e.target.value)} required
-        placeholder="氏名" className="w-full border rounded px-2 py-1" />
-      <input value={email} onChange={(e) => setEmail(e.target.value)} required
-        type="email" placeholder="メールアドレス"
-        className="w-full border rounded px-2 py-1" />
-      <input value={password} onChange={(e) => setPassword(e.target.value)} required
-        type="password" placeholder="初期パスワード（8文字以上）"
-        className="w-full border rounded px-2 py-1" />
-      <label className="block text-sm">
-        権限レベル
-        <input type="number" min={1} value={roleLevel}
-          onChange={(e) => setRoleLevel(Number(e.target.value))}
-          className="w-full border rounded px-2 py-1" />
-      </label>
-      {error && <p className="text-red-600 text-sm">{error}</p>}
-      <button type="submit" disabled={busy}
-        className="bg-black text-white rounded px-3 py-1 text-sm disabled:opacity-50">
-        管理者を追加
-      </button>
+    <form onSubmit={submit} className="space-y-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <label className="block">
+          <span className={labelCls}>氏名</span>
+          <input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+            placeholder="例: 山田 花子"
+            className={inputCls}
+          />
+        </label>
+        <label className="block">
+          <span className={labelCls}>メールアドレス</span>
+          <input
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            type="email"
+            placeholder="admin@example.com"
+            className={inputCls}
+          />
+        </label>
+        <label className="block">
+          <span className={labelCls}>初期パスワード（8文字以上）</span>
+          <input
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            type="password"
+            placeholder="••••••••"
+            className={inputCls}
+          />
+        </label>
+        <label className="block">
+          <span className={labelCls}>権限レベル</span>
+          <input
+            type="number"
+            min={1}
+            value={roleLevel}
+            onChange={(e) => setRoleLevel(Number(e.target.value))}
+            className={inputCls}
+          />
+        </label>
+      </div>
+      {error && (
+        <p className="text-[12.5px] text-st-cancelled-text bg-st-cancelled-bg px-3 py-2 rounded-lg">
+          {error}
+        </p>
+      )}
+      <div className="flex justify-end">
+        <Button type="submit" variant="primary" icon="Check" disabled={busy}>
+          {busy ? "追加中..." : "管理者を追加"}
+        </Button>
+      </div>
     </form>
   );
 }

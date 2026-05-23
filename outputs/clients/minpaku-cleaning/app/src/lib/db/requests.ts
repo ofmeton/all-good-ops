@@ -353,10 +353,15 @@ export async function listRequestsForStaff(
 }
 
 export type StaffRequestDetail = CleaningRequest & {
-  property: { name: string; checklist_template: unknown[] };
+  property: {
+    name: string;
+    address: string | null;
+    access_info_note: string | null;
+    checklist_template: unknown[];
+  };
 };
 
-// スタッフ向けの依頼詳細。担当外物件の依頼は null。物件名・チェックリストテンプレ同梱。
+// スタッフ向けの依頼詳細。担当外物件の依頼は null。物件名・住所・アクセス情報・チェックリストテンプレ同梱。
 export async function getRequestForStaff(
   actor: Actor,
   requestId: string,
@@ -365,7 +370,7 @@ export async function getRequestForStaff(
   const db = createServiceClient();
   const { data, error } = await db
     .from("cleaning_requests")
-    .select("*, properties(name, checklist_template)")
+    .select("*, properties(name, address, access_info_note, checklist_template)")
     .eq("id", requestId)
     .maybeSingle();
   if (error) throw error;
@@ -378,12 +383,19 @@ export async function getRequestForStaff(
     .maybeSingle();
   if (!assignment) return null;
   const { properties, ...request } = data as Record<string, unknown> & {
-    properties: { name: string; checklist_template: unknown[] };
+    properties: {
+      name: string;
+      address: string | null;
+      access_info_note: string | null;
+      checklist_template: unknown[];
+    };
   };
   return {
     ...(request as unknown as CleaningRequest),
     property: {
       name: properties.name,
+      address: properties.address ?? null,
+      access_info_note: properties.access_info_note ?? null,
       checklist_template: properties.checklist_template ?? [],
     },
   };

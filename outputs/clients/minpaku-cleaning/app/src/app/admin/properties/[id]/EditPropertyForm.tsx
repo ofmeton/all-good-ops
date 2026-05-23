@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/Button";
 
 type Owner = { id: string; name: string };
 type Property = {
@@ -10,6 +11,10 @@ type Property = {
   address: string | null;
   access_info_note: string | null;
 };
+
+const inputCls =
+  "w-full h-10 px-3 rounded-lg ring-1 ring-ink-200 bg-white text-[13px] text-ink-800 outline-none placeholder:text-ink-400 focus:ring-brand-500 focus:ring-2";
+const labelCls = "block text-[11.5px] text-ink-600 font-medium mb-1.5";
 
 export function EditPropertyForm({
   property,
@@ -54,9 +59,7 @@ export function EditPropertyForm({
     if (!confirm(`物件「${property.name}」を削除します。よろしいですか？`)) return;
     setError(null);
     setDeleting(true);
-    const res = await fetch(`/api/admin/properties?id=${property.id}`, {
-      method: "DELETE",
-    });
+    const res = await fetch(`/api/admin/properties?id=${property.id}`, { method: "DELETE" });
     setDeleting(false);
     if (!res.ok) {
       setError("削除に失敗しました");
@@ -67,58 +70,62 @@ export function EditPropertyForm({
   }
 
   return (
-    <form onSubmit={submit} className="space-y-2 border rounded p-3">
-      <label className="block text-sm text-gray-600">オーナー</label>
-      <select
-        value={ownerId}
-        onChange={(e) => setOwnerId(e.target.value)}
-        className="w-full border rounded px-2 py-1"
+    <form onSubmit={submit} className="space-y-3">
+      <div
+        className="grid gap-x-6 gap-y-3"
+        style={{ gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))" }}
       >
-        {owners.map((o) => (
-          <option key={o.id} value={o.id}>
-            {o.name}
-          </option>
-        ))}
-      </select>
-      <label className="block text-sm text-gray-600">物件名</label>
-      <input
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        required
-        className="w-full border rounded px-2 py-1"
-      />
-      <label className="block text-sm text-gray-600">住所</label>
-      <input
-        value={address}
-        onChange={(e) => setAddress(e.target.value)}
-        placeholder="任意"
-        className="w-full border rounded px-2 py-1"
-      />
-      <label className="block text-sm text-gray-600">アクセス情報・備考</label>
-      <textarea
-        value={accessInfoNote}
-        onChange={(e) => setAccessInfoNote(e.target.value)}
-        placeholder="任意（鍵の場所、ゴミ捨て曜日など）"
-        rows={3}
-        className="w-full border rounded px-2 py-1"
-      />
-      {error && <p className="text-red-600 text-sm">{error}</p>}
-      <div className="flex gap-2 pt-2">
-        <button
-          type="submit"
-          disabled={saving}
-          className="bg-black text-white rounded px-3 py-1 text-sm disabled:opacity-50"
-        >
+        <label className="block">
+          <span className={labelCls}>オーナー</span>
+          <select value={ownerId} onChange={(e) => setOwnerId(e.target.value)} className={inputCls}>
+            {owners.map((o) => (
+              <option key={o.id} value={o.id}>
+                {o.name}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="block">
+          <span className={labelCls}>物件名</span>
+          <input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+            className={inputCls}
+          />
+        </label>
+        <label className="block md:col-span-2" style={{ gridColumn: "1 / -1" }}>
+          <span className={labelCls}>住所</span>
+          <input
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+            placeholder="任意"
+            className={inputCls}
+          />
+        </label>
+        <label className="block md:col-span-2" style={{ gridColumn: "1 / -1" }}>
+          <span className={labelCls}>アクセス情報・備考</span>
+          <textarea
+            value={accessInfoNote}
+            onChange={(e) => setAccessInfoNote(e.target.value)}
+            placeholder="鍵の場所、ゴミ捨て曜日など"
+            rows={3}
+            className={`${inputCls} h-auto py-2 resize-none`}
+          />
+        </label>
+      </div>
+      {error && (
+        <p className="text-[12.5px] text-st-cancelled-text bg-st-cancelled-bg px-3 py-2 rounded-lg">
+          {error}
+        </p>
+      )}
+      <div className="flex flex-wrap gap-2 pt-1">
+        <Button type="submit" variant="primary" icon="Check" disabled={saving}>
           {saving ? "保存中..." : "保存"}
-        </button>
-        <button
-          type="button"
-          onClick={remove}
-          disabled={deleting}
-          className="border border-red-600 text-red-600 rounded px-3 py-1 text-sm disabled:opacity-50"
-        >
+        </Button>
+        <Button type="button" variant="danger" icon="Trash2" disabled={deleting} onClick={remove}>
           {deleting ? "削除中..." : "この物件を削除"}
-        </button>
+        </Button>
       </div>
     </form>
   );

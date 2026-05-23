@@ -1,6 +1,11 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/Button";
+
+const inputCls =
+  "w-full h-10 px-3 rounded-lg ring-1 ring-ink-200 bg-white text-[13px] text-ink-800 outline-none placeholder:text-ink-400 focus:ring-brand-500 focus:ring-2";
+const labelCls = "block text-[11.5px] text-ink-600 font-medium mb-1.5";
 
 export function OwnerForm() {
   const router = useRouter();
@@ -8,10 +13,12 @@ export function OwnerForm() {
   const [email, setEmail] = useState("");
   const [lineId, setLineId] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
+    setBusy(true);
     const res = await fetch("/api/admin/owners", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -21,23 +28,60 @@ export function OwnerForm() {
         line_user_id: lineId || undefined,
       }),
     });
-    if (!res.ok) { setError("登録に失敗しました"); return; }
-    setName(""); setEmail(""); setLineId("");
+    setBusy(false);
+    if (!res.ok) {
+      setError("登録に失敗しました");
+      return;
+    }
+    setName("");
+    setEmail("");
+    setLineId("");
     router.refresh();
   }
 
   return (
-    <form onSubmit={submit} className="space-y-2 border rounded p-3">
-      <input value={name} onChange={(e) => setName(e.target.value)} required
-        placeholder="オーナー名" className="w-full border rounded px-2 py-1" />
-      <input value={email} onChange={(e) => setEmail(e.target.value)} type="email"
-        placeholder="メールアドレス（任意）" className="w-full border rounded px-2 py-1" />
-      <input value={lineId} onChange={(e) => setLineId(e.target.value)}
-        placeholder="LINEユーザーID（任意）" className="w-full border rounded px-2 py-1" />
-      {error && <p className="text-red-600 text-sm">{error}</p>}
-      <button type="submit" className="bg-black text-white rounded px-3 py-1 text-sm">
-        オーナーを追加
-      </button>
+    <form onSubmit={submit} className="space-y-3">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <label className="block">
+          <span className={labelCls}>オーナー名</span>
+          <input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+            placeholder="例: 田中 一郎"
+            className={inputCls}
+          />
+        </label>
+        <label className="block">
+          <span className={labelCls}>メールアドレス（任意）</span>
+          <input
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            type="email"
+            placeholder="owner@example.com"
+            className={inputCls}
+          />
+        </label>
+        <label className="block">
+          <span className={labelCls}>LINE ユーザーID（任意）</span>
+          <input
+            value={lineId}
+            onChange={(e) => setLineId(e.target.value)}
+            placeholder="U で始まる文字列"
+            className={inputCls}
+          />
+        </label>
+      </div>
+      {error && (
+        <p className="text-[12.5px] text-st-cancelled-text bg-st-cancelled-bg px-3 py-2 rounded-lg">
+          {error}
+        </p>
+      )}
+      <div className="flex justify-end">
+        <Button type="submit" variant="primary" icon="Check" disabled={busy}>
+          {busy ? "登録中..." : "オーナーを追加"}
+        </Button>
+      </div>
     </form>
   );
 }

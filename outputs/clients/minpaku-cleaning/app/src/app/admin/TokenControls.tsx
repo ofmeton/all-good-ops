@@ -1,6 +1,8 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Icon } from "@/components/ui/Icon";
+import { Button } from "@/components/ui/Button";
 
 type Props = {
   target: { type: "owner"; propertyId: string } | { type: "staff"; staffId: string };
@@ -11,6 +13,7 @@ type Props = {
 export function TokenControls({ target, activeToken, basePath }: Props) {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
+  const [copied, setCopied] = useState(false);
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "";
   const url = activeToken ? `${appUrl}/${basePath}/${activeToken.token}` : null;
 
@@ -27,25 +30,60 @@ export function TokenControls({ target, activeToken, basePath }: Props) {
 
   async function revoke() {
     if (!activeToken) return;
+    if (!confirm("この URL を無効化します。よろしいですか？")) return;
     setBusy(true);
     await fetch(`/api/admin/tokens?id=${activeToken.id}`, { method: "DELETE" });
     setBusy(false);
     router.refresh();
   }
 
+  async function copy() {
+    if (!url) return;
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      /* ignore */
+    }
+  }
+
   if (!url) {
     return (
-      <button onClick={() => post("issue")} disabled={busy}
-        className="text-xs underline disabled:opacity-50">
-        URLを発行
-      </button>
+      <Button variant="secondary" size="sm" icon="Link2" disabled={busy} onClick={() => post("issue")}>
+        {busy ? "発行中..." : "URLを発行"}
+      </Button>
     );
   }
   return (
-    <span className="flex items-center gap-2 text-xs">
-      <a href={url} className="underline break-all">{url}</a>
-      <button onClick={() => post("reissue")} disabled={busy} className="underline">再発行</button>
-      <button onClick={revoke} disabled={busy} className="underline text-red-600">無効化</button>
-    </span>
+    <div className="space-y-2">
+      <div className="flex items-center gap-2 bg-ink-50 rounded-lg px-3 py-2">
+        <Icon name="Link2" size={13} className="text-ink-500 shrink-0" />
+        <a
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="num text-[11px] text-ink-700 truncate flex-1 hover:underline"
+        >
+          {url}
+        </a>
+        <button
+          type="button"
+          onClick={copy}
+          aria-label="URLをコピー"
+          className="h-7 w-7 rounded-md hover:bg-white text-ink-600 flex items-center justify-center shrink-0"
+        >
+          <Icon name={copied ? "Check" : "Copy"} size={13} />
+        </button>
+      </div>
+      <div className="grid grid-cols-2 gap-2">
+        <Button variant="secondary" size="sm" icon="RefreshCw" disabled={busy} onClick={() => post("reissue")}>
+          再発行
+        </Button>
+        <Button variant="ghost" size="sm" icon="Ban" disabled={busy} onClick={revoke}>
+          無効化
+        </Button>
+      </div>
+    </div>
   );
 }
