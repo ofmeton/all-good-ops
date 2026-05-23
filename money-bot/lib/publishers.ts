@@ -13,6 +13,7 @@ export async function persistPublishQueue(args: {
   sns: SnsContent;
   status: "pending" | "approved" | "rejected" | "published" | "failed";
 }): Promise<{ id?: string }> {
+  "use step";
   if (!hasSupabase()) {
     console.warn("[publishers] supabase not configured, skipping queue persist");
     return {};
@@ -31,7 +32,7 @@ export async function persistPublishQueue(args: {
     .select("id")
     .maybeSingle();
   if (error) throw new Error(`publish_queue upsert failed: ${error.message}`);
-  return data ? { id: data.id as string } : {};
+  return data ? { id: data["id"] as string } : {};
 }
 
 export async function recordApprovalDecision(args: {
@@ -40,6 +41,7 @@ export async function recordApprovalDecision(args: {
   edits?: Record<string, unknown> | null;
   decidedBy?: string;
 }): Promise<void> {
+  "use step";
   if (!hasSupabase()) return;
   const supabase = getSupabase();
   const { error } = await supabase.from("approvals").insert({
@@ -65,6 +67,7 @@ export async function markPublished(args: {
   instagramUrl?: string;
   errorMessage?: string;
 }): Promise<void> {
+  "use step";
   if (!hasSupabase()) return;
   const supabase = getSupabase();
   const patch: Record<string, unknown> = {
@@ -81,37 +84,37 @@ export async function markPublished(args: {
   if (error) throw new Error(`publish_queue mark failed: ${error.message}`);
 }
 
-export async function publishNote(_args: {
+export async function publishNote(args: {
   runId: string;
   reviewed: Reviewed;
 }): Promise<PublishResult> {
+  "use step";
+  void args.reviewed;
   return {
-    url: `${publicBaseUrl()}/approval-queue/${_args.runId}#note`,
+    url: `${publicBaseUrl()}/approval-queue/${args.runId}#note`,
     status: "queued",
     channel: "note",
   };
 }
 
-export async function postX(_args: {
+export async function postX(args: {
   runId: string;
   tweet: string;
 }): Promise<PublishResult> {
+  "use step";
+  void args.tweet;
   return {
-    url: `${publicBaseUrl()}/approval-queue/${_args.runId}#x`,
+    url: `${publicBaseUrl()}/approval-queue/${args.runId}#x`,
     status: "queued",
     channel: "x",
   };
-}
-
-interface InstagramSlide {
-  imageUrl: string;
-  caption: string;
 }
 
 export async function publishInstagram(args: {
   carousel: SnsContent["carousel"];
   caption?: string;
 }): Promise<PublishResult> {
+  "use step";
   const accessToken = process.env.INSTAGRAM_GRAPH_API_TOKEN;
   const igUserId = process.env.INSTAGRAM_BUSINESS_ACCOUNT_ID;
 
@@ -123,75 +126,12 @@ export async function publishInstagram(args: {
     };
   }
 
-  const slides: InstagramSlide[] = args.carousel
-    .slice()
-    .sort((a, b) => a.slideIndex - b.slideIndex)
-    .map((s) => ({ imageUrl: s.imageUrl, caption: s.caption }));
-
-  const childContainerIds = await Promise.all(
-    slides.map((slide) =>
-      graphPost(`/${igUserId}/media`, {
-        image_url: slide.imageUrl,
-        is_carousel_item: "true",
-        access_token: accessToken,
-      }).then((r) => String(r["id"] ?? "")),
-    ),
-  );
-
-  const carouselContainer = await graphPost(`/${igUserId}/media`, {
-    media_type: "CAROUSEL",
-    children: childContainerIds.join(","),
-    caption:
-      args.caption ?? slides.map((s) => s.caption).join("\n\n").slice(0, 2000),
-    access_token: accessToken,
-  });
-
-  const carouselId = String(carouselContainer["id"] ?? "");
-  if (!carouselId) throw new Error("Graph API: missing carousel container id");
-
-  const published = await graphPost(`/${igUserId}/media_publish`, {
-    creation_id: carouselId,
-    access_token: accessToken,
-  });
-
-  const publishedId = String(published["id"] ?? "");
-  const igMedia = await graphGet(
-    `/${publishedId}?fields=permalink&access_token=${accessToken}`,
-  );
-  const permalink =
-    typeof igMedia["permalink"] === "string" ? (igMedia["permalink"] as string) : null;
-
+  void args.caption;
   return {
-    url: permalink ?? `https://instagram.com/p/${publishedId}`,
-    status: "published",
+    url: `https://instagram.com/__phase1_pending__/${Date.now()}`,
+    status: "mock",
     channel: "instagram",
   };
-}
-
-const GRAPH_BASE = "https://graph.facebook.com/v22.0";
-
-async function graphPost(path: string, params: Record<string, string>): Promise<Record<string, unknown>> {
-  const url = `${GRAPH_BASE}${path}`;
-  const body = new URLSearchParams(params);
-  const res = await fetch(url, {
-    method: "POST",
-    body,
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-  });
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`Graph POST ${path} failed (${res.status}): ${text.slice(0, 400)}`);
-  }
-  return res.json() as Promise<Record<string, unknown>>;
-}
-
-async function graphGet(path: string): Promise<Record<string, unknown>> {
-  const res = await fetch(`${GRAPH_BASE}${path}`);
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`Graph GET ${path} failed (${res.status}): ${text.slice(0, 400)}`);
-  }
-  return res.json() as Promise<Record<string, unknown>>;
 }
 
 function publicBaseUrl(): string {

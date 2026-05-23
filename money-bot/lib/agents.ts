@@ -1,35 +1,24 @@
-import { query, type Options } from "@anthropic-ai/claude-agent-sdk";
+/**
+ * Agent wrappers backed by Anthropic Managed Agents (E 案).
+ *
+ * spec: docs/superpowers/specs/2026-05-22-money-bot-design.md §6.1
+ *
+ * 構造化出力: Managed Agents の agent.message は string なので、prompt 内で
+ * "ONLY a single JSON object" を強制し、tryParseJson + zod schema で validate。
+ */
+
 import { z } from "zod";
 
-export type AgentName =
-  | "writer"
-  | "visual-designer"
-  | "content-reviewer"
-  | "brand-publisher"
-  | "sns-generator";
+import {
+  getAgentId,
+  getEnvironmentId,
+  hasManagedAgentsConfig,
+  runManagedAgent,
+} from "./managed-agents";
 
-export interface AgentRunInput<T = unknown> {
-  agent: AgentName;
-  prompt: string;
-  skills?: string[];
-  input?: T;
-  /** zod schema to parse the final result string into structured output */
-  outputSchema?: z.ZodTypeAny;
-  maxTurns?: number;
-}
-
-export interface AgentRunResult<T = unknown> {
-  agent: AgentName;
-  output: T;
-  rawResult: string;
-  usage?: {
-    inputTokens?: number;
-    outputTokens?: number;
-    cacheCreationInputTokens?: number;
-    cacheReadInputTokens?: number;
-    totalCostUsd?: number;
-  };
-}
+// ---------------------------------------------------------------------------
+// Schemas (same shape as Phase 0 mocks, kept compatible)
+// ---------------------------------------------------------------------------
 
 const draftSchema = z.object({
   title: z.string(),
@@ -77,31 +66,15 @@ export const schemas = {
   sns: snsSchema,
 };
 
-function buildPrompt<T>(input: AgentRunInput<T>): string {
-  const lines: string[] = [];
-  lines.push(`You are the ${input.agent} subagent.`);
-  lines.push("");
-  lines.push("Task:");
-  lines.push(input.prompt);
-  if (input.skills?.length) {
-    lines.push("");
-    lines.push("Required skills (invoke via Skill tool):");
-    for (const s of input.skills) lines.push(`- ${s}`);
-  }
-  if (input.input !== undefined) {
-    lines.push("");
-    lines.push("Input (JSON):");
-    lines.push("```json");
-    lines.push(JSON.stringify(input.input, null, 2));
-    lines.push("```");
-  }
-  lines.push("");
-  lines.push(
-    "Respond with ONLY a single JSON object that matches the requested schema. " +
-      "No prose, no markdown fences.",
-  );
-  return lines.join("\n");
+export interface AgentRunResult<T = unknown> {
+  output: T;
+  rawText: string;
+  sessionId?: string;
 }
+
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
 
 function tryParseJson(text: string): unknown | null {
   const trimmed = text.trim();
@@ -123,129 +96,89 @@ function tryParseJson(text: string): unknown | null {
   }
 }
 
-function hasAnthropicKey(): boolean {
-  return Boolean(process.env.ANTHROPIC_API_KEY || process.env.VERCEL_AI_GATEWAY_API_KEY);
-}
-
-function mockResult<T>(input: AgentRunInput, fallback: T): AgentRunResult<T> {
-  return {
-    agent: input.agent,
-    output: fallback,
-    rawResult: "[mock]",
-  };
-}
-
-async function runQuery<T>(
-  input: AgentRunInput,
+async function callAgent<T>(
+  role: "writer" | "visual" | "reviewer" | "sns",
+  userMessage: string,
+  schema: z.ZodType<T>,
   fallback: T,
 ): Promise<AgentRunResult<T>> {
-  if (!hasAnthropicKey()) {
-    return mockResult<T>(input, fallback);
+  if (!hasManagedAgentsConfig()) {
+    console.warn(`[agents.${role}] Managed Agents config missing — returning mock`);
+    return { output: fallback, rawText: "[mock]" };
   }
 
-  const cwd = process.env.CLAUDE_PROJECT_ROOT;
-  const options: Options = {
-    settingSources: ["project"],
-    allowedTools: ["Task", "Skill", "Read", "Glob", "Grep"],
-    permissionMode: "bypassPermissions",
-    maxTurns: input.maxTurns ?? 30,
-    ...(cwd ? { cwd } : {}),
-  };
+  const result = await runManagedAgent({
+    agentId: getAgentId(role),
+    environmentId: getEnvironmentId(),
+    userMessage,
+  });
 
-  let resultText = "";
-  let usage: AgentRunResult["usage"];
-
-  for await (const msg of query({ prompt: buildPrompt(input), options })) {
-    if (msg.type === "result") {
-      if (msg.subtype === "success") {
-        resultText = msg.result;
-        usage = {
-          inputTokens: msg.usage?.input_tokens,
-          outputTokens: msg.usage?.output_tokens,
-          cacheCreationInputTokens: msg.usage?.cache_creation_input_tokens,
-          cacheReadInputTokens: msg.usage?.cache_read_input_tokens,
-          totalCostUsd: msg.total_cost_usd,
-        };
-        break;
-      }
-      throw new Error(`agent ${input.agent} returned non-success result: ${msg.subtype}`);
-    }
-  }
-
-  if (!resultText) {
-    return mockResult<T>(input, fallback);
-  }
-
-  const parsed = tryParseJson(resultText);
-  if (parsed && input.outputSchema) {
-    const safe = input.outputSchema.safeParse(parsed);
+  const parsed = tryParseJson(result.text);
+  if (parsed) {
+    const safe = schema.safeParse(parsed);
     if (safe.success) {
       return {
-        agent: input.agent,
-        output: safe.data as T,
-        rawResult: resultText,
-        ...(usage ? { usage } : {}),
+        output: safe.data,
+        rawText: result.text,
+        sessionId: result.sessionId,
       };
     }
-    console.warn(`[agent ${input.agent}] schema parse failed, using fallback`, safe.error);
+    console.warn(
+      `[agents.${role}] schema parse failed, using raw parsed object`,
+      safe.error,
+    );
+    return {
+      output: parsed as T,
+      rawText: result.text,
+      sessionId: result.sessionId,
+    };
   }
 
-  return {
-    agent: input.agent,
-    output: (parsed as T) ?? fallback,
-    rawResult: resultText,
-    ...(usage ? { usage } : {}),
-  };
+  console.warn(`[agents.${role}] JSON parse failed, returning fallback`, result.text.slice(0, 200));
+  return { output: fallback, rawText: result.text, sessionId: result.sessionId };
 }
+
+// ---------------------------------------------------------------------------
+// Individual agent wrappers (called as workflow steps)
+// ---------------------------------------------------------------------------
 
 export async function writerAgent(topic: {
   slug: string;
   signals: unknown[];
 }): Promise<AgentRunResult<Draft>> {
+  "use step";
   const fallback: Draft = {
     title: `[mock] ${topic.slug}`,
     body: `[mock draft for ${topic.slug}]`,
     topicSlug: topic.slug,
     references: [],
   };
-  return runQuery<Draft>(
-    {
-      agent: "writer",
-      skills: ["scqa-writing-framework", "non-engineer-translation"],
-      prompt:
-        "Generate a note article draft from AI industry signals. " +
-        "Strictly follow SCQA + non-engineer translation rules. " +
-        "Output a JSON object: { title, body, topicSlug, references[] }.",
-      input: topic,
-      outputSchema: schemas.draft,
-    },
-    fallback,
-  );
+  const msg =
+    `今日のトピック (slug: ${topic.slug})。\n\n` +
+    `AI 動向シグナル:\n` +
+    JSON.stringify(topic.signals, null, 2) +
+    `\n\n` +
+    `note 記事ドラフトを生成してください。出力は ONLY a single JSON object。`;
+  return callAgent("writer", msg, schemas.draft, fallback);
 }
 
 export async function visualDesignerAgent(
   draft: Draft,
 ): Promise<AgentRunResult<Visuals>> {
+  "use step";
   const fallback: Visuals = { headerImageUrl: null, figures: [] };
-  return runQuery<Visuals>(
-    {
-      agent: "visual-designer",
-      skills: ["visual-design-system"],
-      prompt:
-        "Plan header image and in-article figures for the given draft. " +
-        "Output a JSON object: { headerImageUrl, figures[] }. " +
-        "If image generation is not available, return placeholder URLs and continue.",
-      input: draft,
-      outputSchema: schemas.visuals,
-    },
-    fallback,
-  );
+  const msg =
+    `次の note 記事ドラフトに対する図解プランを返してください。\n\n` +
+    JSON.stringify(draft, null, 2) +
+    `\n\n出力は ONLY a single JSON object。Phase 1 は imageUrl placeholder で OK。`;
+  return callAgent("visual", msg, schemas.visuals, fallback);
 }
 
 export async function contentReviewerAgent(args: {
   draft: Draft;
   visuals: Visuals;
 }): Promise<AgentRunResult<Reviewed>> {
+  "use step";
   const fallback: Reviewed = {
     draft: args.draft,
     visuals: args.visuals,
@@ -253,40 +186,25 @@ export async function contentReviewerAgent(args: {
     rubricNotes: ["[mock] reviewer not run"],
     approved: false,
   };
-  return runQuery<Reviewed>(
-    {
-      agent: "content-reviewer",
-      skills: ["content-quality-rubric"],
-      prompt:
-        "Evaluate the draft using the 7-axis rubric (AI-feel zero / image-rich / " +
-        "jargon density / structure / hook / target clarity / AI transparency). " +
-        "Output a JSON object: { draft, visuals, rubricScore (0-100), rubricNotes[], approved (boolean) }. " +
-        "Set approved=false on F grade.",
-      input: args,
-      outputSchema: schemas.reviewed,
-    },
-    fallback,
-  );
+  const msg =
+    `次の記事 + 図解プランを 7 軸 rubric でレビューしてください。\n\n` +
+    JSON.stringify(args, null, 2) +
+    `\n\n出力は ONLY a single JSON object。draft / visuals は入力をそのまま含めてください。`;
+  return callAgent("reviewer", msg, schemas.reviewed, fallback);
 }
 
 export async function snsGeneratorAgent(
   reviewed: Reviewed,
 ): Promise<AgentRunResult<SnsContent>> {
+  "use step";
   const fallback: SnsContent = {
     tweet: `[mock] ${reviewed.draft.title}`,
     tweetImageUrl: null,
     carousel: [],
   };
-  return runQuery<SnsContent>(
-    {
-      agent: "sns-generator",
-      skills: ["multi-platform-publishing", "visual-design-system"],
-      prompt:
-        "Generate X post (Before-After + numeric headline) and Instagram 9-slide carousel " +
-        "from the reviewed note article. Output a JSON object: { tweet, tweetImageUrl, carousel[] }.",
-      input: reviewed,
-      outputSchema: schemas.sns,
-    },
-    fallback,
-  );
+  const msg =
+    `次のレビュー済み note 記事から X 投稿 + Instagram カルーセル 9 枚を生成してください。\n\n` +
+    JSON.stringify(reviewed, null, 2) +
+    `\n\n出力は ONLY a single JSON object。carousel は必ず 9 枚 (slideIndex 1-9)。imageUrl は placeholder で OK。`;
+  return callAgent("sns", msg, schemas.sns, fallback);
 }

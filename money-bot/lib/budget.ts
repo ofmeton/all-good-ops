@@ -28,6 +28,7 @@ export class KillSwitchError extends Error {
 }
 
 export async function recordKpi(record: KpiRecord): Promise<void> {
+  "use step";
   if (!hasSupabase()) {
     console.warn("[budget] supabase not configured, skipping kpi", record);
     return;
@@ -49,8 +50,15 @@ export async function recordKpi(record: KpiRecord): Promise<void> {
   if (error) throw new Error(`kpi_daily upsert failed: ${error.message}`);
 }
 
-export async function getMonthlyCostJpy(): Promise<number> {
-  if (!hasSupabase()) return 0;
+export async function checkBudgetOrAbort(): Promise<void> {
+  "use step";
+  if (process.env.MONEY_BOT_KILL_SWITCH === "1") {
+    throw new KillSwitchError();
+  }
+  const limit = Number(process.env.MONEY_BOT_MONTHLY_BUDGET_JPY ?? "10000");
+  if (!Number.isFinite(limit) || limit <= 0) return;
+
+  if (!hasSupabase()) return;
   const supabase = getSupabase();
   const monthStart = new Date();
   monthStart.setUTCDate(1);
@@ -61,24 +69,11 @@ export async function getMonthlyCostJpy(): Promise<number> {
     .from("kpi_daily")
     .select("cost")
     .gte("date", startIso);
-  if (error) throw new Error(`kpi_daily read failed: ${error.message}`);
-  const sum = (data ?? []).reduce(
-    (acc: number, row: { cost: number | string | null }) =>
-      acc + Number(row.cost ?? 0),
+  if (error) return;
+  const spent = (data ?? []).reduce(
+    (acc: number, row: { cost: number | string | null }) => acc + Number(row.cost ?? 0),
     0,
   );
-  return sum;
-}
-
-export async function checkBudgetOrAbort(): Promise<void> {
-  if (process.env.MONEY_BOT_KILL_SWITCH === "1") {
-    throw new KillSwitchError();
-  }
-
-  const limit = Number(process.env.MONEY_BOT_MONTHLY_BUDGET_JPY ?? "10000");
-  if (!Number.isFinite(limit) || limit <= 0) return;
-
-  const spent = await getMonthlyCostJpy();
   if (spent > limit) {
     throw new BudgetExceededError(spent, limit);
   }

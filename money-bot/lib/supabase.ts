@@ -38,12 +38,3 @@ export interface PublishQueueRow {
   created_at: string;
   updated_at: string;
 }
-
-export interface ApprovalRow {
-  id: string;
-  run_id: string;
-  approved: boolean;
-  edits: unknown | null;
-  decided_by: string | null;
-  decided_at: string;
-}

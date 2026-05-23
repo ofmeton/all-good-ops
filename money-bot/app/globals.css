@@ -4,12 +4,10 @@
   --fg: #111;
   --muted: #6b6b6b;
   --border: #e3e3df;
-  --accent: #d35400;
   --ok: #2e7d32;
   --bad: #c62828;
   --card: #fff;
 }
-
 @media (prefers-color-scheme: dark) {
   :root {
     --bg: #121212;
@@ -19,136 +17,24 @@
     --card: #1a1a1a;
   }
 }
-
-* {
-  box-sizing: border-box;
-}
-
-html,
-body {
-  margin: 0;
-  padding: 0;
-  background: var(--bg);
-  color: var(--fg);
-  font-family:
-    -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN",
-    "Noto Sans JP", "Helvetica Neue", Arial, sans-serif;
+* { box-sizing: border-box; }
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg); color: var(--fg);
+  font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Helvetica Neue", Arial, sans-serif;
   line-height: 1.6;
 }
-
-main {
-  max-width: 720px;
-  margin: 0 auto;
-  padding: 20px 16px 80px;
-}
-
-h1 {
-  font-size: 1.25rem;
-  margin: 0 0 12px;
-}
-
-h2 {
-  font-size: 1.05rem;
-  margin: 24px 0 8px;
-}
-
-.muted {
-  color: var(--muted);
-  font-size: 0.9rem;
-}
-
-.card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 16px;
-}
-
-pre {
-  white-space: pre-wrap;
-  word-break: break-word;
-  background: rgba(0, 0, 0, 0.04);
-  padding: 12px;
-  border-radius: 8px;
-  font-size: 0.85rem;
-  max-height: 360px;
-  overflow: auto;
-}
-
-@media (prefers-color-scheme: dark) {
-  pre {
-    background: rgba(255, 255, 255, 0.05);
-  }
-}
-
-textarea,
-input[type="text"] {
-  width: 100%;
-  padding: 8px 10px;
-  font: inherit;
-  color: inherit;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-}
-
-label {
-  display: block;
-  font-size: 0.85rem;
-  color: var(--muted);
-  margin: 12px 0 4px;
-}
-
-button {
-  font: inherit;
-  padding: 12px 20px;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: var(--card);
-  color: inherit;
-  cursor: pointer;
-  min-height: 44px;
-}
-
-button.primary {
-  background: var(--ok);
-  color: #fff;
-  border-color: var(--ok);
-}
-
-button.danger {
-  background: var(--bad);
-  color: #fff;
-  border-color: var(--bad);
-}
-
-button:disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
-}
-
-.actions {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin-top: 16px;
-  position: sticky;
-  bottom: 0;
-  background: var(--bg);
-  padding: 12px 0;
-}
-
-.image-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: 8px;
-}
-
-.image-grid img {
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  object-fit: cover;
-  border-radius: 8px;
-  border: 1px solid var(--border);
-}
+main { max-width: 720px; margin: 0 auto; padding: 20px 16px 80px; }
+h1 { font-size: 1.25rem; margin: 0 0 12px; }
+h2 { font-size: 1.05rem; margin: 24px 0 8px; }
+.muted { color: var(--muted); font-size: 0.9rem; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+pre { white-space: pre-wrap; word-break: break-word; background: rgba(0,0,0,0.04); padding: 12px; border-radius: 8px; font-size: 0.85rem; max-height: 360px; overflow: auto; }
+@media (prefers-color-scheme: dark) { pre { background: rgba(255,255,255,0.05); } }
+textarea, input[type="text"] { width: 100%; padding: 8px 10px; font: inherit; color: inherit; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; }
+label { display: block; font-size: 0.85rem; color: var(--muted); margin: 12px 0 4px; }
+button { font: inherit; padding: 12px 20px; border-radius: 999px; border: 1px solid var(--border); background: var(--card); color: inherit; cursor: pointer; min-height: 44px; }
+button.primary { background: var(--ok); color: #fff; border-color: var(--ok); }
+button.danger { background: var(--bad); color: #fff; border-color: var(--bad); }
+button:disabled { opacity: 0.55; cursor: not-allowed; }
+.actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 16px; position: sticky; bottom: 0; background: var(--bg); padding: 12px 0; }

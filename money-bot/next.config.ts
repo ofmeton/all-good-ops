@@ -1,9 +1,9 @@
 import type { NextConfig } from "next";
+import { withWorkflow } from "workflow/next";
 
 const config: NextConfig = {
   reactStrictMode: true,
   serverExternalPackages: [
-    "@anthropic-ai/claude-agent-sdk",
     "@anthropic-ai/sdk",
     "@line/bot-sdk",
     "@supabase/supabase-js",
@@ -12,4 +12,4 @@ const config: NextConfig = {
   ],
 };
 
-export default config;
+export default withWorkflow(config);

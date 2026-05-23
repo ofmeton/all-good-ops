@@ -95,7 +95,6 @@ export async function dailyPublishWorkflow(): Promise<DailyPublishResult> {
       runId,
       approvalUrl: approvalUrlFor(runId),
       draftTitle: reviewed.draft.title,
-      thumbnailUrl: reviewed.visuals.headerImageUrl ?? undefined,
     });
 
     const hook = approvalHook.create({ token: approvalTokenForRun(runId) });
@@ -106,14 +105,11 @@ export async function dailyPublishWorkflow(): Promise<DailyPublishResult> {
       return { runId, skipped: true, reason: "user_rejected" };
     }
 
-    const finalReviewed = applyEdits(reviewed, approval.edits);
-    const finalSns = applySnsEdits(sns, approval.edits);
-
-    const note = await publishNote({ runId, reviewed: finalReviewed });
-    const x = await postX({ runId, tweet: finalSns.tweet });
+    const note = await publishNote({ runId, reviewed });
+    const x = await postX({ runId, tweet: sns.tweet });
     const ig = await publishInstagram({
-      carousel: finalSns.carousel,
-      caption: finalReviewed.draft.title,
+      carousel: sns.carousel,
+      caption: reviewed.draft.title,
     });
 
     await markPublished({
@@ -123,13 +119,10 @@ export async function dailyPublishWorkflow(): Promise<DailyPublishResult> {
       instagramUrl: ig.url,
     });
 
-    const cost = costFromUsage([draftRes, visualsRes, reviewedRes, snsRes]);
     const today = todayIsoDate();
-    await Promise.all([
-      recordKpi({ date: today, channel: "note", posts: 1, cost: cost / 3 }),
-      recordKpi({ date: today, channel: "x", posts: 1, cost: cost / 3 }),
-      recordKpi({ date: today, channel: "instagram", posts: 1, cost: cost / 3 }),
-    ]);
+    await recordKpi({ date: today, channel: "note", posts: 1, cost: 0 });
+    await recordKpi({ date: today, channel: "x", posts: 1, cost: 0 });
+    await recordKpi({ date: today, channel: "instagram", posts: 1, cost: 0 });
 
     return {
       runId,
@@ -142,40 +135,6 @@ export async function dailyPublishWorkflow(): Promise<DailyPublishResult> {
     await notifyError("dailyPublishWorkflow failed", { runId, err: String(err) });
     throw err;
   }
-}
-
-function applyEdits(
-  reviewed: Reviewed,
-  edits: ApprovalDecision["edits"],
-): Reviewed {
-  if (!edits) return reviewed;
-  return {
-    ...reviewed,
-    draft: {
-      ...reviewed.draft,
-      ...(edits.title ? { title: edits.title } : {}),
-      ...(edits.body ? { body: edits.body } : {}),
-    },
-  };
-}
-
-function applySnsEdits(
-  sns: SnsContent,
-  edits: ApprovalDecision["edits"],
-): SnsContent {
-  if (!edits?.snsTweet) return sns;
-  return { ...sns, tweet: edits.snsTweet };
-}
-
-interface UsageBearing {
-  usage?: { totalCostUsd?: number };
-}
-
-const USD_TO_JPY = 150;
-
-function costFromUsage(results: UsageBearing[]): number {
-  const usd = results.reduce((acc, r) => acc + (r.usage?.totalCostUsd ?? 0), 0);
-  return Math.round(usd * USD_TO_JPY * 100) / 100;
 }
 
 function approvalUrlFor(runId: string): string {

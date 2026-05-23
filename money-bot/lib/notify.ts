@@ -33,6 +33,7 @@ function getResend(): Resend | null {
 export async function notifyApprovalReady(
   payload: ApprovalNotifyPayload,
 ): Promise<{ ok: boolean; via: NotifyChannel }> {
+  "use step";
   const line = getLineClient();
   const toUserId = process.env.LINE_TO_USER_ID;
 
@@ -48,15 +49,6 @@ export async function notifyApprovalReady(
               `${payload.draftTitle}\n\n` +
               `承認: ${payload.approvalUrl}`,
           },
-          ...(payload.thumbnailUrl
-            ? ([
-                {
-                  type: "image",
-                  originalContentUrl: payload.thumbnailUrl,
-                  previewImageUrl: payload.thumbnailUrl,
-                },
-              ] as const)
-            : []),
         ],
       });
       return { ok: true, via: "line" };
@@ -86,6 +78,7 @@ export async function notifyApprovalReady(
 }
 
 export async function notifyError(message: string, context?: unknown): Promise<void> {
+  "use step";
   const line = getLineClient();
   const toUserId = process.env.LINE_TO_USER_ID;
   const body = `[money-bot ERROR]\n${message}\n${context ? JSON.stringify(context).slice(0, 800) : ""}`;
@@ -96,22 +89,6 @@ export async function notifyError(message: string, context?: unknown): Promise<v
       return;
     } catch (err) {
       console.error("[notify.error] LINE push failed", err);
-    }
-  }
-
-  const resend = getResend();
-  const fallbackTo = process.env.NOTIFY_FALLBACK_EMAIL;
-  if (resend && fallbackTo) {
-    try {
-      await resend.emails.send({
-        from: process.env.RESEND_FROM ?? "money-bot@example.com",
-        to: fallbackTo,
-        subject: "[money-bot] error",
-        text: body,
-      });
-      return;
-    } catch (err) {
-      console.error("[notify.error] Resend fallback failed", err);
     }
   }
 
