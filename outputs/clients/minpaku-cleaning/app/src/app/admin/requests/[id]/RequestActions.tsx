@@ -1,6 +1,7 @@
 "use client";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
 
 type Staff = { id: string; name: string };
@@ -16,15 +17,20 @@ type Props = {
 const inputCls =
   "h-10 px-3 rounded-lg ring-1 ring-ink-200 bg-white text-[13px] text-ink-800 outline-none focus:ring-brand-500 focus:ring-2";
 
+const ACTION_LABEL: Record<string, string> = {
+  assign: "スタッフを割り当てました",
+  confirm: "確認済みにしました",
+  cancel: "依頼をキャンセルしました",
+};
+
 export function RequestActions({ requestId, status, assignedStaffId, staff }: Props) {
   const router = useRouter();
   const [staffId, setStaffId] = useState(assignedStaffId ?? staff[0]?.id ?? "");
   const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [pending, startTransition] = useTransition();
 
-  async function patch(body: Record<string, unknown>) {
+  async function patch(body: Record<string, unknown> & { action: string }) {
     setBusy(true);
-    setError(null);
     const res = await fetch(`/api/admin/requests/${requestId}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
@@ -33,12 +39,14 @@ export function RequestActions({ requestId, status, assignedStaffId, staff }: Pr
     setBusy(false);
     if (!res.ok) {
       const b = await res.json().catch(() => null);
-      setError(typeof b?.error === "string" ? b.error : "操作に失敗しました");
+      toast.error(typeof b?.error === "string" ? b.error : "操作に失敗しました");
       return;
     }
-    router.refresh();
+    toast.success(ACTION_LABEL[body.action] ?? "更新しました");
+    startTransition(() => router.refresh());
   }
 
+  const loading = busy || pending;
   const canAssign = status === "unassigned" || status === "assigned";
   const canConfirm = status === "reported";
   const canCancel = status !== "confirmed" && status !== "cancelled";
@@ -62,7 +70,8 @@ export function RequestActions({ requestId, status, assignedStaffId, staff }: Pr
           <Button
             variant="primary"
             icon="UserPlus"
-            disabled={busy || !staffId}
+            loading={loading}
+            disabled={!staffId}
             onClick={() => patch({ action: "assign", staffId })}
           >
             スタッフを割り当て
@@ -74,7 +83,7 @@ export function RequestActions({ requestId, status, assignedStaffId, staff }: Pr
           <Button
             variant="primary"
             icon="CircleCheckBig"
-            disabled={busy}
+            loading={loading}
             onClick={() => patch({ action: "confirm" })}
           >
             内容を確認済みにする
@@ -84,7 +93,7 @@ export function RequestActions({ requestId, status, assignedStaffId, staff }: Pr
           <Button
             variant="danger"
             icon="X"
-            disabled={busy}
+            loading={loading}
             onClick={() => {
               if (!confirm("この依頼をキャンセルしますか？")) return;
               patch({ action: "cancel" });
@@ -94,11 +103,6 @@ export function RequestActions({ requestId, status, assignedStaffId, staff }: Pr
           </Button>
         )}
       </div>
-      {error && (
-        <p className="text-[12.5px] text-st-cancelled-text bg-st-cancelled-bg px-3 py-2 rounded-lg">
-          {error}
-        </p>
-      )}
     </div>
   );
 }

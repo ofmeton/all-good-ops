@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Noto_Sans_JP, Manrope } from "next/font/google";
+import { Toaster } from "sonner";
+import { TopProgress } from "@/components/ui/TopProgress";
 import "./globals.css";
 
 const notoSansJP = Noto_Sans_JP({
@@ -31,7 +33,18 @@ export default function RootLayout({
       lang="ja"
       className={`${notoSansJP.variable} ${manrope.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <TopProgress />
+        {children}
+        <Toaster
+          position="bottom-right"
+          richColors
+          closeButton
+          toastOptions={{
+            className: "!text-[13px] !font-sans",
+          }}
+        />
+      </body>
     </html>
   );
 }

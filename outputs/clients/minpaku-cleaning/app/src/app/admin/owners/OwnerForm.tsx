@@ -1,6 +1,7 @@
 "use client";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
 
 const inputCls =
@@ -12,12 +13,11 @@ export function OwnerForm() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [lineId, setLineId] = useState("");
-  const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [pending, startTransition] = useTransition();
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    setError(null);
     setBusy(true);
     const res = await fetch("/api/admin/owners", {
       method: "POST",
@@ -30,14 +30,17 @@ export function OwnerForm() {
     });
     setBusy(false);
     if (!res.ok) {
-      setError("登録に失敗しました");
+      toast.error("登録に失敗しました");
       return;
     }
+    toast.success(`オーナー「${name}」を追加しました`);
     setName("");
     setEmail("");
     setLineId("");
-    router.refresh();
+    startTransition(() => router.refresh());
   }
+
+  const loading = busy || pending;
 
   return (
     <form onSubmit={submit} className="space-y-3">
@@ -72,14 +75,9 @@ export function OwnerForm() {
           />
         </label>
       </div>
-      {error && (
-        <p className="text-[12.5px] text-st-cancelled-text bg-st-cancelled-bg px-3 py-2 rounded-lg">
-          {error}
-        </p>
-      )}
       <div className="flex justify-end">
-        <Button type="submit" variant="primary" icon="Check" disabled={busy}>
-          {busy ? "登録中..." : "オーナーを追加"}
+        <Button type="submit" variant="primary" icon="Check" loading={loading}>
+          {loading ? "登録中..." : "オーナーを追加"}
         </Button>
       </div>
     </form>

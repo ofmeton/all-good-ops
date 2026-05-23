@@ -1,6 +1,7 @@
 "use client";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
 
 type Property = { id: string; name: string };
@@ -16,12 +17,11 @@ export function RequestForm({ properties }: { properties: Property[] }) {
   const [checkout, setCheckout] = useState("");
   const [guestCount, setGuestCount] = useState(1);
   const [memo, setMemo] = useState("");
-  const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [pending, startTransition] = useTransition();
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    setError(null);
     setBusy(true);
     const res = await fetch("/api/admin/requests", {
       method: "POST",
@@ -37,15 +37,18 @@ export function RequestForm({ properties }: { properties: Property[] }) {
     setBusy(false);
     if (!res.ok) {
       const body = await res.json().catch(() => null);
-      setError(typeof body?.error === "string" ? body.error : "登録に失敗しました");
+      toast.error(typeof body?.error === "string" ? body.error : "登録に失敗しました");
       return;
     }
+    toast.success("依頼を作成しました");
     setCheckin("");
     setCheckout("");
     setGuestCount(1);
     setMemo("");
-    router.refresh();
+    startTransition(() => router.refresh());
   }
+
+  const loading = busy || pending;
 
   return (
     <form onSubmit={submit} className="space-y-3">
@@ -105,14 +108,9 @@ export function RequestForm({ properties }: { properties: Property[] }) {
           className={inputCls}
         />
       </label>
-      {error && (
-        <p className="text-[12.5px] text-st-cancelled-text bg-st-cancelled-bg px-3 py-2 rounded-lg">
-          {error}
-        </p>
-      )}
       <div className="flex justify-end">
-        <Button type="submit" variant="primary" icon="Check" disabled={busy}>
-          {busy ? "作成中..." : "依頼を作成"}
+        <Button type="submit" variant="primary" icon="Check" loading={loading}>
+          {loading ? "作成中..." : "依頼を作成"}
         </Button>
       </div>
     </form>

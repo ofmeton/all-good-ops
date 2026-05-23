@@ -1,6 +1,7 @@
 "use client";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
 
 type Property = { id: string; name: string };
@@ -15,8 +16,8 @@ export function StaffForm({ properties }: { properties: Property[] }) {
   const [email, setEmail] = useState("");
   const [lineId, setLineId] = useState("");
   const [propertyIds, setPropertyIds] = useState<string[]>([]);
-  const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [pending, startTransition] = useTransition();
 
   function toggle(id: string) {
     setPropertyIds((prev) =>
@@ -26,7 +27,6 @@ export function StaffForm({ properties }: { properties: Property[] }) {
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    setError(null);
     setBusy(true);
     const res = await fetch("/api/admin/staff", {
       method: "POST",
@@ -40,15 +40,18 @@ export function StaffForm({ properties }: { properties: Property[] }) {
     });
     setBusy(false);
     if (!res.ok) {
-      setError("登録に失敗しました");
+      toast.error("登録に失敗しました");
       return;
     }
+    toast.success(`スタッフ「${name}」を追加しました`);
     setName("");
     setEmail("");
     setLineId("");
     setPropertyIds([]);
-    router.refresh();
+    startTransition(() => router.refresh());
   }
+
+  const loading = busy || pending;
 
   return (
     <form onSubmit={submit} className="space-y-3">
@@ -111,14 +114,9 @@ export function StaffForm({ properties }: { properties: Property[] }) {
           </div>
         </fieldset>
       )}
-      {error && (
-        <p className="text-[12.5px] text-st-cancelled-text bg-st-cancelled-bg px-3 py-2 rounded-lg">
-          {error}
-        </p>
-      )}
       <div className="flex justify-end">
-        <Button type="submit" variant="primary" icon="Check" disabled={busy}>
-          {busy ? "登録中..." : "スタッフを追加"}
+        <Button type="submit" variant="primary" icon="Check" loading={loading}>
+          {loading ? "登録中..." : "スタッフを追加"}
         </Button>
       </div>
     </form>
