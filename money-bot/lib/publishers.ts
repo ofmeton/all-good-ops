@@ -38,6 +38,7 @@ export async function persistPublishQueue(args: {
 export async function recordApprovalDecision(args: {
   runId: string;
   approved: boolean;
+  feedback?: Record<string, unknown> | null;
   edits?: Record<string, unknown> | null;
   decidedBy?: string;
 }): Promise<void> {
@@ -47,6 +48,7 @@ export async function recordApprovalDecision(args: {
   const { error } = await supabase.from("approvals").insert({
     run_id: args.runId,
     approved: args.approved,
+    feedback: args.feedback ?? {},
     edits: args.edits ?? null,
     decided_by: args.decidedBy ?? null,
   });

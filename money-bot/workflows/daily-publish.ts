@@ -1,14 +1,14 @@
 import { defineHook } from "workflow";
 
 import {
+  buzzToDraft,
   contentReviewerAgent,
   snsGeneratorAgent,
   visualDesignerAgent,
-  writerAgent,
   type Reviewed,
   type SnsContent,
 } from "../lib/agents";
-import { fetchAiRadarSignals, selectTopic } from "../lib/ai-radar";
+import { fetchTopBuzzSignal } from "../lib/buzz-source";
 import {
   BudgetExceededError,
   KillSwitchError,
@@ -22,11 +22,16 @@ import {
   persistPublishQueue,
   postX,
   publishInstagram,
-  publishNote,
 } from "../lib/publishers";
 
 export interface ApprovalDecision {
   approved: boolean;
+  feedback?: {
+    visual?: string;
+    reviewer?: string;
+    sns?: string;
+    general?: string;
+  };
   edits?: {
     title?: string;
     body?: string;
@@ -45,11 +50,17 @@ export interface DailyPublishResult {
   runId: string;
   skipped: boolean;
   reason?: string;
-  noteUrl?: string;
   xUrl?: string;
   instagramUrl?: string;
 }
 
+/**
+ * Phase 1.5 daily-publish workflow.
+ *
+ * 旧: ai-radar → writer → visual → reviewer → sns → approval → note/X/IG publish
+ * 新: x-buzz-radar → (sns agent) buzzToDraft → visual → sns → reviewer → approval → X/IG publish
+ *     (note 生成は一旦停止)
+ */
 export async function dailyPublishWorkflow(): Promise<DailyPublishResult> {
   "use workflow";
 
@@ -66,18 +77,16 @@ export async function dailyPublishWorkflow(): Promise<DailyPublishResult> {
       throw err;
     }
 
-    const signals = await fetchAiRadarSignals();
-    const topic = selectTopic(signals);
-
-    const draftRes = await writerAgent(topic);
+    const buzz = await fetchTopBuzzSignal();
+    const draftRes = await buzzToDraft(buzz);
     const visualsRes = await visualDesignerAgent(draftRes.output);
+    const snsRes = await snsGeneratorAgent({ buzz, draft: draftRes.output });
     const reviewedRes = await contentReviewerAgent({
       draft: draftRes.output,
       visuals: visualsRes.output,
+      sns: snsRes.output,
     });
     const reviewed: Reviewed = reviewedRes.output;
-
-    const snsRes = await snsGeneratorAgent(reviewed);
     const sns: SnsContent = snsRes.output;
 
     await persistPublishQueue({
@@ -87,8 +96,6 @@ export async function dailyPublishWorkflow(): Promise<DailyPublishResult> {
       status: "pending",
     });
 
-    // Phase 1 dogfooding: rubric approved=false でも人間判断のため承認 UI に送る。
-    // rubricNotes は承認 UI で確認可能。strict 化するには MONEY_BOT_RUBRIC_STRICT=1。
     if (process.env.MONEY_BOT_RUBRIC_STRICT === "1" && !reviewed.approved) {
       return { runId, skipped: true, reason: "rubric_failed" };
     }
@@ -107,7 +114,6 @@ export async function dailyPublishWorkflow(): Promise<DailyPublishResult> {
       return { runId, skipped: true, reason: "user_rejected" };
     }
 
-    const note = await publishNote({ runId, reviewed });
     const x = await postX({ runId, tweet: sns.tweet });
     const ig = await publishInstagram({
       carousel: sns.carousel,
@@ -116,20 +122,17 @@ export async function dailyPublishWorkflow(): Promise<DailyPublishResult> {
 
     await markPublished({
       runId,
-      noteUrl: note.url,
       xUrl: x.url,
       instagramUrl: ig.url,
     });
 
     const today = todayIsoDate();
-    await recordKpi({ date: today, channel: "note", posts: 1, cost: 0 });
     await recordKpi({ date: today, channel: "x", posts: 1, cost: 0 });
     await recordKpi({ date: today, channel: "instagram", posts: 1, cost: 0 });
 
     return {
       runId,
       skipped: false,
-      noteUrl: note.url,
       xUrl: x.url,
       instagramUrl: ig.url,
     };

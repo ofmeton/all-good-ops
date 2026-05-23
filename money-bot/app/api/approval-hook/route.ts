@@ -11,9 +11,19 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const maxDuration = 30;
 
+const feedbackSchema = z
+  .object({
+    visual: z.string().optional(),
+    reviewer: z.string().optional(),
+    sns: z.string().optional(),
+    general: z.string().optional(),
+  })
+  .optional();
+
 const payloadSchema = z.object({
   runId: z.string().min(1),
   approved: z.boolean(),
+  feedback: feedbackSchema,
   edits: z
     .object({
       title: z.string().optional(),
@@ -30,12 +40,13 @@ export async function POST(req: Request): Promise<Response> {
   if (!parsed.success) {
     return Response.json({ ok: false, error: parsed.error.format() }, { status: 400 });
   }
-  const { runId, approved, edits, decidedBy } = parsed.data;
+  const { runId, approved, feedback, edits, decidedBy } = parsed.data;
 
   try {
     await recordApprovalDecision({
       runId,
       approved,
+      feedback: feedback ?? null,
       edits: edits ?? null,
       ...(decidedBy ? { decidedBy } : {}),
     });
@@ -48,6 +59,7 @@ export async function POST(req: Request): Promise<Response> {
 
   const decision: ApprovalDecision = {
     approved,
+    ...(feedback ? { feedback } : {}),
     ...(edits ? { edits } : {}),
     ...(decidedBy ? { decidedBy } : {}),
   };
