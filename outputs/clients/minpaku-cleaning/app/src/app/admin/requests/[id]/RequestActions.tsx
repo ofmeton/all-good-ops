@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/Button";
 
 type Staff = { id: string; name: string };
 
@@ -12,13 +13,10 @@ type Props = {
   adjacentRequests: { id: string; checkin_date: string; checkout_date: string }[];
 };
 
-export function RequestActions({
-  requestId,
-  status,
-  assignedStaffId,
-  staff,
-  adjacentRequests = [],
-}: Props) {
+const inputCls =
+  "h-10 px-3 rounded-lg ring-1 ring-ink-200 bg-white text-[13px] text-ink-800 outline-none focus:ring-brand-500 focus:ring-2";
+
+export function RequestActions({ requestId, status, assignedStaffId, staff }: Props) {
   const router = useRouter();
   const [staffId, setStaffId] = useState(assignedStaffId ?? staff[0]?.id ?? "");
   const [busy, setBusy] = useState(false);
@@ -46,55 +44,61 @@ export function RequestActions({
   const canCancel = status !== "confirmed" && status !== "cancelled";
 
   return (
-    <div className="space-y-2 border rounded p-3">
-      {adjacentRequests.length > 0 && (
-        <div className="bg-yellow-50 border border-yellow-300 rounded p-2 text-xs text-yellow-900">
-          ⚠ 同物件に連続予約があります（{adjacentRequests
-            .map((a) => `${a.checkin_date}〜${a.checkout_date}`)
-            .join(", ")}）。割り当て時はスタッフの稼働状況にご注意ください。
-        </div>
-      )}
+    <div className="space-y-3">
       {canAssign && (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <select
             value={staffId}
             onChange={(e) => setStaffId(e.target.value)}
-            className="border rounded px-2 py-1 text-sm"
+            className={inputCls}
           >
+            {staff.length === 0 && <option value="">（スタッフ未登録）</option>}
             {staff.map((s) => (
               <option key={s.id} value={s.id}>
                 {s.name}
               </option>
             ))}
           </select>
-          <button
-            onClick={() => patch({ action: "assign", staffId })}
+          <Button
+            variant="primary"
+            icon="UserPlus"
             disabled={busy || !staffId}
-            className="text-sm underline disabled:opacity-50"
+            onClick={() => patch({ action: "assign", staffId })}
           >
             スタッフを割り当て
-          </button>
+          </Button>
         </div>
       )}
-      {canConfirm && (
-        <button
-          onClick={() => patch({ action: "confirm" })}
-          disabled={busy}
-          className="bg-black text-white rounded px-3 py-1 text-sm disabled:opacity-50"
-        >
-          内容を確認済みにする
-        </button>
+      <div className="flex items-center gap-2 flex-wrap">
+        {canConfirm && (
+          <Button
+            variant="primary"
+            icon="CircleCheckBig"
+            disabled={busy}
+            onClick={() => patch({ action: "confirm" })}
+          >
+            内容を確認済みにする
+          </Button>
+        )}
+        {canCancel && (
+          <Button
+            variant="danger"
+            icon="X"
+            disabled={busy}
+            onClick={() => {
+              if (!confirm("この依頼をキャンセルしますか？")) return;
+              patch({ action: "cancel" });
+            }}
+          >
+            キャンセル
+          </Button>
+        )}
+      </div>
+      {error && (
+        <p className="text-[12.5px] text-st-cancelled-text bg-st-cancelled-bg px-3 py-2 rounded-lg">
+          {error}
+        </p>
       )}
-      {canCancel && (
-        <button
-          onClick={() => patch({ action: "cancel" })}
-          disabled={busy}
-          className="text-sm underline text-red-600 disabled:opacity-50"
-        >
-          この依頼をキャンセル
-        </button>
-      )}
-      {error && <p className="text-red-600 text-sm">{error}</p>}
     </div>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/Button";
 
 type Property = { id: string; name: string };
 type Staff = {
@@ -11,13 +12,11 @@ type Staff = {
   property_ids: string[];
 };
 
-export function EditStaffForm({
-  staff,
-  properties,
-}: {
-  staff: Staff;
-  properties: Property[];
-}) {
+const inputCls =
+  "w-full h-10 px-3 rounded-lg ring-1 ring-ink-200 bg-white text-[13px] text-ink-800 outline-none placeholder:text-ink-400 focus:ring-brand-500 focus:ring-2";
+const labelCls = "block text-[11.5px] text-ink-600 font-medium mb-1.5";
+
+export function EditStaffForm({ staff, properties }: { staff: Staff; properties: Property[] }) {
   const router = useRouter();
   const [name, setName] = useState(staff.name);
   const [email, setEmail] = useState(staff.email ?? "");
@@ -60,9 +59,7 @@ export function EditStaffForm({
     if (!confirm(`スタッフ「${staff.name}」を削除します。よろしいですか？`)) return;
     setError(null);
     setDeleting(true);
-    const res = await fetch(`/api/admin/staff?id=${staff.id}`, {
-      method: "DELETE",
-    });
+    const res = await fetch(`/api/admin/staff?id=${staff.id}`, { method: "DELETE" });
     setDeleting(false);
     if (!res.ok) {
       if (res.status === 409) {
@@ -77,63 +74,82 @@ export function EditStaffForm({
   }
 
   return (
-    <form onSubmit={submit} className="space-y-2 border rounded p-3">
-      <label className="block text-sm text-gray-600">スタッフ名</label>
-      <input
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        required
-        className="w-full border rounded px-2 py-1"
-      />
-      <label className="block text-sm text-gray-600">メールアドレス</label>
-      <input
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        type="email"
-        placeholder="任意"
-        className="w-full border rounded px-2 py-1"
-      />
-      <label className="block text-sm text-gray-600">LINEユーザーID</label>
-      <input
-        value={lineId}
-        onChange={(e) => setLineId(e.target.value)}
-        placeholder="任意（U で始まる文字列）"
-        className="w-full border rounded px-2 py-1"
-      />
-      <fieldset className="border rounded p-2">
-        <legend className="text-sm text-gray-600">担当物件</legend>
+    <form onSubmit={submit} className="space-y-3">
+      <div
+        className="grid gap-x-6 gap-y-3"
+        style={{ gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))" }}
+      >
+        <label className="block">
+          <span className={labelCls}>スタッフ名</span>
+          <input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+            className={inputCls}
+          />
+        </label>
+        <label className="block">
+          <span className={labelCls}>メールアドレス</span>
+          <input
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            type="email"
+            placeholder="任意"
+            className={inputCls}
+          />
+        </label>
+        <label className="block" style={{ gridColumn: "1 / -1" }}>
+          <span className={labelCls}>LINE ユーザーID</span>
+          <input
+            value={lineId}
+            onChange={(e) => setLineId(e.target.value)}
+            placeholder="任意（U で始まる文字列）"
+            className={inputCls}
+          />
+        </label>
+      </div>
+      <fieldset className="rounded-lg ring-1 ring-ink-200 bg-white p-3">
+        <legend className="px-1.5 text-[11.5px] text-ink-600 font-medium">担当物件</legend>
         {properties.length === 0 ? (
-          <p className="text-sm text-gray-500">物件がまだ登録されていません</p>
+          <p className="text-[12px] text-ink-500">物件がまだ登録されていません</p>
         ) : (
-          properties.map((p) => (
-            <label key={p.id} className="flex items-center gap-2 text-sm">
-              <input
-                type="checkbox"
-                checked={propertyIds.includes(p.id)}
-                onChange={() => toggle(p.id)}
-              />
-              {p.name}
-            </label>
-          ))
+          <div className="flex flex-wrap gap-2">
+            {properties.map((p) => {
+              const on = propertyIds.includes(p.id);
+              return (
+                <label
+                  key={p.id}
+                  className={`inline-flex items-center gap-2 h-8 px-3 rounded-full text-[12px] cursor-pointer ${
+                    on
+                      ? "bg-brand-50 text-brand-700 ring-1 ring-brand-200"
+                      : "ring-1 ring-ink-200 text-ink-700 hover:bg-ink-50"
+                  }`}
+                >
+                  <input
+                    type="checkbox"
+                    checked={on}
+                    onChange={() => toggle(p.id)}
+                    className="sr-only"
+                  />
+                  {p.name}
+                </label>
+              );
+            })}
+          </div>
         )}
       </fieldset>
-      {error && <p className="text-red-600 text-sm">{error}</p>}
-      <div className="flex gap-2 pt-2">
-        <button
-          type="submit"
-          disabled={saving}
-          className="bg-black text-white rounded px-3 py-1 text-sm disabled:opacity-50"
-        >
+      {error && (
+        <p className="text-[12.5px] text-st-cancelled-text bg-st-cancelled-bg px-3 py-2 rounded-lg">
+          {error}
+        </p>
+      )}
+      <div className="flex flex-wrap gap-2 pt-1">
+        <Button type="submit" variant="primary" icon="Check" disabled={saving}>
           {saving ? "保存中..." : "保存"}
-        </button>
-        <button
-          type="button"
-          onClick={remove}
-          disabled={deleting}
-          className="border border-red-600 text-red-600 rounded px-3 py-1 text-sm disabled:opacity-50"
-        >
+        </Button>
+        <Button type="button" variant="danger" icon="Trash2" disabled={deleting} onClick={remove}>
           {deleting ? "削除中..." : "このスタッフを削除"}
-        </button>
+        </Button>
       </div>
     </form>
   );
