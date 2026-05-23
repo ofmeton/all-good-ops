@@ -38,6 +38,8 @@ interface TwitterApiTweet {
 }
 
 interface TwitterApiResponse {
+  // 実 API レスポンスは {tweets: [...]} 形式 (x-buzz-radar の interface は古い)
+  tweets?: TwitterApiTweet[];
   data?: TwitterApiTweet[];
 }
 
@@ -89,7 +91,7 @@ export async function fetchTopBuzzSignal(): Promise<BuzzSignal> {
       return MOCK_BUZZ_SIGNAL;
     }
     const json = (await res.json()) as TwitterApiResponse;
-    tweets = (json.data ?? []).slice(0, 15);
+    tweets = (json.tweets ?? json.data ?? []).slice(0, 15);
   } catch (err) {
     console.warn("[buzz-source] fetch failed, MOCK", err);
     return MOCK_BUZZ_SIGNAL;
