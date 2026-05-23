@@ -1,4 +1,6 @@
+"use client";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import { Icon, type IconName } from "@/components/ui/Icon";
 import { Avatar } from "@/components/ui/Avatar";
@@ -37,14 +39,33 @@ const BOTTOM_TABS: { key: NavKey; href: string; label: string; icon: IconName }[
   { key: "owners", href: "/admin/owners", label: "その他", icon: "Ellipsis" },
 ];
 
+/**
+ * pathname から現在の nav key を判定。
+ * 「最も長いプレフィックス一致」を優先することで /admin/requests/[id] でも "requests" になる。
+ * /admin そのものは dashboard。
+ */
+function currentNavKey(pathname: string): NavKey {
+  // 完全一致 or プレフィックスの長い順に判定する
+  // /admin/requests/abc → "requests"
+  if (pathname.startsWith("/admin/requests")) return "requests";
+  if (pathname.startsWith("/admin/properties")) return "properties";
+  if (pathname.startsWith("/admin/staff")) return "staff";
+  if (pathname.startsWith("/admin/owners")) return "owners";
+  if (pathname.startsWith("/admin/supplies")) return "supplies";
+  if (pathname.startsWith("/admin/admins")) return "admins";
+  return "dashboard";
+}
+
 type AdminShellProps = {
-  current: NavKey;
   userName?: string;
   children: ReactNode;
 };
 
-export function AdminShell({ current, userName = "管", children }: AdminShellProps) {
+export function AdminShell({ userName = "管", children }: AdminShellProps) {
+  const pathname = usePathname() ?? "/admin";
+  const current = currentNavKey(pathname);
   const initial = (userName || "管").trim().slice(0, 2);
+
   return (
     <div className="min-h-screen bg-ink-50">
       {/* ===== PC: sidebar shell (lg+) ===== */}
@@ -66,7 +87,8 @@ export function AdminShell({ current, userName = "管", children }: AdminShellPr
                 <Link
                   key={n.key}
                   href={n.href}
-                  className={`flex items-center gap-3 h-9 px-3 rounded-lg text-[13px] ${
+                  aria-current={active ? "page" : undefined}
+                  className={`flex items-center gap-3 h-9 px-3 rounded-lg text-[13px] transition-colors duration-150 ease-out ${
                     active
                       ? "bg-white/10 text-white font-semibold"
                       : "text-ink-300 hover:text-white hover:bg-white/5"
@@ -88,14 +110,14 @@ export function AdminShell({ current, userName = "管", children }: AdminShellPr
         </aside>
         <main className="flex-1 min-w-0 flex flex-col">
           <header className="h-14 bg-white border-b border-ink-200 flex items-center px-6 gap-4">
-            <h1 className="text-[15px] font-bold text-ink-900 sr-only">{
-              NAV.find((n) => n.key === current)?.label ?? "StayClean"
-            }</h1>
+            <h1 className="text-[15px] font-bold text-ink-900 sr-only">
+              {NAV.find((n) => n.key === current)?.label ?? "StayClean"}
+            </h1>
             <div className="flex-1" />
             <button
               type="button"
               aria-label="通知"
-              className="h-9 w-9 rounded-lg hover:bg-ink-100 flex items-center justify-center text-ink-600"
+              className="h-9 w-9 rounded-lg hover:bg-ink-100 flex items-center justify-center text-ink-600 transition-colors duration-150 ease-out"
             >
               <Icon name="Bell" size={16} />
             </button>
@@ -123,7 +145,7 @@ export function AdminShell({ current, userName = "管", children }: AdminShellPr
           <button
             type="button"
             aria-label="通知"
-            className="h-9 w-9 rounded-lg hover:bg-ink-100 flex items-center justify-center text-ink-600 relative"
+            className="h-9 w-9 rounded-lg hover:bg-ink-100 flex items-center justify-center text-ink-600 relative transition-colors duration-150 ease-out"
           >
             <Icon name="Bell" size={16} />
           </button>
@@ -139,7 +161,8 @@ export function AdminShell({ current, userName = "管", children }: AdminShellPr
               <Link
                 key={t.key}
                 href={t.href}
-                className={`flex-1 flex flex-col items-center gap-0.5 ${
+                aria-current={active ? "page" : undefined}
+                className={`flex-1 flex flex-col items-center gap-0.5 transition-colors duration-150 ease-out ${
                   active ? "text-brand-600" : "text-ink-500"
                 }`}
               >
