@@ -14,14 +14,17 @@
       "Bash(find:*)",
       "Bash(jq:*)",
       "Read(/Users/rikukudo/Projects/private-agents/all-good-ops/**)",
+      "Read(/Users/rikukudo/Projects/all-good-ops-*/**)",
       "Write(/Users/rikukudo/Projects/private-agents/all-good-ops/outputs/**)",
       "Write(/Users/rikukudo/Projects/private-agents/all-good-ops/data/**)",
+      "Write(/Users/rikukudo/Projects/all-good-ops-*/**)",
       "Edit(/Users/rikukudo/Projects/private-agents/all-good-ops/data/**)",
       "Edit(/Users/rikukudo/Projects/private-agents/all-good-ops/.claude/agents/**)",
       "Edit(/Users/rikukudo/Projects/private-agents/all-good-ops/.claude/skills/**)",
       "Edit(/Users/rikukudo/Projects/private-agents/all-good-ops/scripts/**)",
       "Edit(/Users/rikukudo/Projects/private-agents/all-good-ops/knowledge/**)",
       "Edit(/Users/rikukudo/Projects/private-agents/all-good-ops/CLAUDE.md)",
+      "Edit(/Users/rikukudo/Projects/all-good-ops-*/**)",
       "Bash(git checkout:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
@@ -103,6 +106,17 @@
           {
             "type": "command",
             "command": "bash \"$CLAUDE_PROJECT_DIR/scripts/session-start-banner.sh\""
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/scripts/hooks/pretooluse-bash-checkout-guard.sh\""
           }
         ]
       }

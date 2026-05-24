@@ -89,10 +89,66 @@ check_scores_integrity() {
   fi
 }
 
+# worktree 棚卸し: 7日以上 commit ない worktree / merged 済み local task ブランチを列挙
+STALE_WORKTREES=()
+MERGED_TASK_BRANCHES=()
+STALE_WT_COUNT=0
+MERGED_BRANCH_COUNT=0
+WT_THRESHOLD_DAYS=7
+check_worktree_hygiene() {
+  cd "$PROJECT_DIR" || return 0
+
+  # 7日 commit なし worktree（main worktree 除外）
+  local main_wt
+  main_wt="$(git worktree list --porcelain 2>/dev/null | awk '/^worktree / {print $2; exit}')"
+  while IFS= read -r line; do
+    local wt_path branch last_commit_ts age
+    wt_path="$(echo "$line" | awk '{print $1}')"
+    branch="$(echo "$line" | awk '{print $3}' | tr -d '[]')"
+    [ "$wt_path" = "$main_wt" ] && continue
+    [ -z "$branch" ] && continue
+    last_commit_ts="$(git -C "$wt_path" log -1 --format=%ct 2>/dev/null || echo 0)"
+    age=$(( ( $(date +%s) - last_commit_ts ) / 86400 ))
+    if [ "$age" -gt "$WT_THRESHOLD_DAYS" ]; then
+      STALE_WORKTREES+=("$branch@$wt_path: ${age}日")
+    fi
+  done < <(git worktree list 2>/dev/null)
+  STALE_WT_COUNT=${#STALE_WORKTREES[@]}
+
+  # origin/main に merged 済みの local task ブランチ
+  while IFS= read -r b; do
+    b="$(echo "$b" | xargs)"
+    [ -z "$b" ] && continue
+    [[ "$b" == "main" || "$b" == "master" ]] && continue
+    [[ "$b" =~ ^improve/iteration- ]] && continue
+    if [[ "$b" =~ ^task/ ]]; then
+      MERGED_TASK_BRANCHES+=("$b")
+    fi
+  done < <(git branch --merged origin/main 2>/dev/null | sed 's/^\*//' | tr -d ' ')
+  MERGED_BRANCH_COUNT=${#MERGED_TASK_BRANCHES[@]}
+
+  if [ "$STALE_WT_COUNT" -gt 0 ]; then
+    log "WARN: ${WT_THRESHOLD_DAYS}日以上 commit がない worktree が ${STALE_WT_COUNT} 個:"
+    for w in "${STALE_WORKTREES[@]}"; do log "  - $w"; done
+    log "ACTION: bash scripts/wt-done.sh で片付け、または 'git worktree remove <path>' で削除"
+  else
+    log "worktree 鮮度 OK (全て ${WT_THRESHOLD_DAYS}日以内に commit)"
+  fi
+
+  if [ "$MERGED_BRANCH_COUNT" -gt 0 ]; then
+    log "WARN: origin/main に merge 済みの local task ブランチが ${MERGED_BRANCH_COUNT} 本残存:"
+    for b in "${MERGED_TASK_BRANCHES[@]}"; do log "  - $b"; done
+    log "ACTION: 'git branch -d <branch>' で削除（または bash scripts/wt-done.sh が自動で削除）"
+  else
+    log "local task ブランチ OK (merged 残存なし)"
+  fi
+}
+
 log "=== 月次監査開始 ==="
 
 check_scores_integrity
 check_spoke_freshness
+check_worktree_hygiene
 
 if ! command -v claude &> /dev/null; then
   log "ERROR: claude コマンドが見つかりません"
@@ -160,8 +216,20 @@ else
   STALE_JSON="[]"
 fi
 
+# worktree 棚卸し結果も JSON 化
+if [ "$STALE_WT_COUNT" -gt 0 ] && command -v jq &> /dev/null; then
+  STALE_WT_JSON=$(printf '%s\n' "${STALE_WORKTREES[@]}" | jq -R . | jq -s -c .)
+else
+  STALE_WT_JSON="[]"
+fi
+if [ "$MERGED_BRANCH_COUNT" -gt 0 ] && command -v jq &> /dev/null; then
+  MERGED_BRANCH_JSON=$(printf '%s\n' "${MERGED_TASK_BRANCHES[@]}" | jq -R . | jq -s -c .)
+else
+  MERGED_BRANCH_JSON="[]"
+fi
+
 cat >> "${PROJECT_DIR}/data/usage-log.jsonl" << EOF
-{"timestamp":"$(date -u +%Y-%m-%dT%H:%M:%SZ)","session_type":"monthly-audit","cost_tier":"standard","agents_invoked":["secretary","quality-auditor","usage-analyst","org-designer"],"skills_referenced":["cost-control"],"exit_code":${EXIT_CODE},"integrity_check":{"missing":${INTEGRITY_MISSING},"extra":${INTEGRITY_EXTRA}},"spoke_freshness":{"stale":${STALE_JSON},"stale_count":${STALE_COUNT},"threshold_days":${SPOKE_THRESHOLD_DAYS}}}
+{"timestamp":"$(date -u +%Y-%m-%dT%H:%M:%SZ)","session_type":"monthly-audit","cost_tier":"standard","agents_invoked":["secretary","quality-auditor","usage-analyst","org-designer"],"skills_referenced":["cost-control"],"exit_code":${EXIT_CODE},"integrity_check":{"missing":${INTEGRITY_MISSING},"extra":${INTEGRITY_EXTRA}},"spoke_freshness":{"stale":${STALE_JSON},"stale_count":${STALE_COUNT},"threshold_days":${SPOKE_THRESHOLD_DAYS}},"worktree_hygiene":{"stale_worktrees":${STALE_WT_JSON},"stale_count":${STALE_WT_COUNT},"merged_local_branches":${MERGED_BRANCH_JSON},"merged_branch_count":${MERGED_BRANCH_COUNT},"threshold_days":${WT_THRESHOLD_DAYS}}}
 EOF
 
 log "=== ログ: ${LOG_FILE} ==="

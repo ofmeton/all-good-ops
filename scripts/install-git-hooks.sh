@@ -6,8 +6,14 @@
 set -euo pipefail
 
 repo_root="$(git rev-parse --show-toplevel)"
+# worktree でも main repo の .git/hooks/ を共有するため git-common-dir を使う
+git_common_dir="$(git rev-parse --git-common-dir)"
+case "$git_common_dir" in
+  /*) ;;  # 絶対パス → そのまま
+  *) git_common_dir="$repo_root/$git_common_dir" ;;
+esac
 src_dir="$repo_root/scripts/git-hooks"
-dst_dir="$repo_root/.git/hooks"
+dst_dir="$git_common_dir/hooks"
 
 if [[ ! -d "$src_dir" ]]; then
   echo "❌ $src_dir が見つかりません" >&2
