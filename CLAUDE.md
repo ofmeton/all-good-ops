@@ -389,6 +389,7 @@ source: session
 | 38 | OAuth トラブルシューティング | `oauth-troubleshooting.md` | OAuth プロバイダ (Meta / Google / Stripe 等) の認証エラー時の三段構え (シークレット試行 / Cookie 削除 / 拡張機能 OFF) |
 | 39 | Vercel env 一括投入 | `vercel-env-bulk-add.md` | `.env.local` から stdin 経由で Vercel production env への一括投入。シェル履歴に値を残さない安全な方式 |
 | 40 | Supabase project 前提チェック | `supabase-project-precheck.md` | `create_project` 前の list_projects + Free tier 2 制限確認 + 残り枠なし時の A〜E 代替案提示 |
+| 41 | 外部 API コスト開示 | `external-api-cost-disclosure.md` | 従量課金外部 API（twitterapi.io / Firecrawl / OpenAI 等）を新規に叩く時、プラン提示と同ターンに円/回コスト表を併記。Claude Code/Anthropic API はサブスク内のため除外 |
 
 ---
 
