@@ -1,0 +1,81 @@
+◇ injected env (4) from .env.local // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+=== MA Interviewer Sample ===
+started_at: 2026-05-24T10:23:21.102Z
+agent_id:       agent_01UkCNChCLGNKH61CvbDXp6w
+environment_id: env_01Rf6cjbGPqUTELKwWbGtTsM
+
+session_id: sesn_01GjbqGdsY3BuEFBSadJEcKB
+initial_status: idle
+turn 1: 8.7s, in=813 out=191 status=idle
+turn 2: 5.3s, in=816 out=264 status=idle
+turn 3: 8.8s, in=819 out=435 status=idle
+turn 4: 5.2s, in=822 out=581 status=idle
+turn 5: 8.7s, in=825 out=787 status=idle
+
+final_status: idle
+final_active_seconds: 22.095000000000002
+final_duration_seconds: 37.280028289
+final_input_tokens: 825
+final_output_tokens: 787
+
+=== Summary ===
+wall_clock_sec: 38.1
+wall_clock_hour: 0.0106
+total_input_tokens: 4095
+total_output_tokens: 2258
+token_cost_usd:   $0.0462
+session_cost_usd: $0.0008 (= 0.0106h × $0.08)
+TOTAL_USD:        $0.0470
+TOTAL_JPY (155):  ¥7.3
+
+{
+  "session_id": "sesn_01GjbqGdsY3BuEFBSadJEcKB",
+  "turns": [
+    {
+      "turn": 1,
+      "request_at": "2026-05-24T10:23:21.769Z",
+      "response_at": "2026-05-24T10:23:30.426Z",
+      "duration_sec": 8.656,
+      "input_tokens": 813,
+      "output_tokens": 191,
+      "status": "idle"
+    },
+    {
+      "turn": 2,
+      "request_at": "2026-05-24T10:23:30.426Z",
+      "response_at": "2026-05-24T10:23:35.682Z",
+      "duration_sec": 5.256,
+      "input_tokens": 816,
+      "output_tokens": 264,
+      "status": "idle"
+    },
+    {
+      "turn": 3,
+      "request_at": "2026-05-24T10:23:35.682Z",
+      "response_at": "2026-05-24T10:23:44.449Z",
+      "duration_sec": 8.767,
+      "input_tokens": 819,
+      "output_tokens": 435,
+      "status": "idle"
+    },
+    {
+      "turn": 4,
+      "request_at": "2026-05-24T10:23:44.449Z",
+      "response_at": "2026-05-24T10:23:49.667Z",
+      "duration_sec": 5.218,
+      "input_tokens": 822,
+      "output_tokens": 581,
+      "status": "idle"
+    },
+    {
+      "turn": 5,
+      "request_at": "2026-05-24T10:23:49.667Z",
+      "response_at": "2026-05-24T10:23:58.394Z",
+      "duration_sec": 8.727,
+      "input_tokens": 825,
+      "output_tokens": 787,
+      "status": "idle"
+    }
+  ],
+  "wall_clock_sec": 38.142
+}
