@@ -1,0 +1,82 @@
+◇ injected env (4) from .env.local // tip: ⌘ enable debugging { debug: true }
+=== MA Interviewer Sample ===
+started_at: 2026-05-24T10:25:13.196Z
+agent_id:       agent_01UkCNChCLGNKH61CvbDXp6w
+environment_id: env_01Rf6cjbGPqUTELKwWbGtTsM
+
+session_id: sesn_017HQWqB7YJimNmDKmfeEAbG
+initial_status: idle
+turn 1: 8.4s, in=813 out=166 status=idle
+turn 2: 8.5s, in=816 out=339 status=idle
+turn 3: 8.9s, in=819 out=551 status=idle
+turn 4: 8.6s, in=822 out=770 status=idle
+[sleep 30s before last turn — wall-clock 課金挙動の確認用]
+turn 5: 12.2s, in=825 out=1234 status=idle
+
+final_status: idle
+final_active_seconds: 30.374999999999996
+final_duration_seconds: 77.279634758
+final_input_tokens: 825
+final_output_tokens: 1234
+
+=== Summary ===
+wall_clock_sec: 78.2
+wall_clock_hour: 0.0217
+total_input_tokens: 4095
+total_output_tokens: 3060
+token_cost_usd:   $0.0582
+session_cost_usd: $0.0017 (= 0.0217h × $0.08)
+TOTAL_USD:        $0.0599
+TOTAL_JPY (155):  ¥9.3
+
+{
+  "session_id": "sesn_017HQWqB7YJimNmDKmfeEAbG",
+  "turns": [
+    {
+      "turn": 1,
+      "request_at": "2026-05-24T10:25:13.683Z",
+      "response_at": "2026-05-24T10:25:22.124Z",
+      "duration_sec": 8.441,
+      "input_tokens": 813,
+      "output_tokens": 166,
+      "status": "idle"
+    },
+    {
+      "turn": 2,
+      "request_at": "2026-05-24T10:25:22.124Z",
+      "response_at": "2026-05-24T10:25:30.670Z",
+      "duration_sec": 8.546,
+      "input_tokens": 816,
+      "output_tokens": 339,
+      "status": "idle"
+    },
+    {
+      "turn": 3,
+      "request_at": "2026-05-24T10:25:30.670Z",
+      "response_at": "2026-05-24T10:25:39.581Z",
+      "duration_sec": 8.911,
+      "input_tokens": 819,
+      "output_tokens": 551,
+      "status": "idle"
+    },
+    {
+      "turn": 4,
+      "request_at": "2026-05-24T10:25:39.581Z",
+      "response_at": "2026-05-24T10:25:48.184Z",
+      "duration_sec": 8.603,
+      "input_tokens": 822,
+      "output_tokens": 770,
+      "status": "idle"
+    },
+    {
+      "turn": 5,
+      "request_at": "2026-05-24T10:26:18.185Z",
+      "response_at": "2026-05-24T10:26:30.344Z",
+      "duration_sec": 12.159,
+      "input_tokens": 825,
+      "output_tokens": 1234,
+      "status": "idle"
+    }
+  ],
+  "wall_clock_sec": 78.181
+}
