@@ -1,0 +1,1726 @@
+{
+  "session_date": "2026-05-25",
+  "wrapper_version": "0.2.0",
+  "total_calls": 145,
+  "total_tweets_returned": 2254,
+  "estimated_cost_usd": 0.3381,
+  "estimated_cost_jpy": 54,
+  "calls": [
+    {
+      "ts": "2026-05-25T18:39:48.036794+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:ClaudeCode_UT since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "",
+      "cursor_out": "DAADDAABCgABHJKL_YEacV0KAAIckBsj5BsAygAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUckvintwAnEAoABhyS-Ke2_9jwAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:39:52.309827+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:ClaudeCode_UT since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJKL_YEacV0KAAIckBsj5BsAygAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUckvintwAnEAoABhyS-Ke2_9jwAAA",
+      "cursor_out": "DAADDAABCgABHJKL_YEacV0KAAIcjO17cptRVgAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUckvintwAnEAoABhyS-Ke2_7HgAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:39:57.340436+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:ClaudeCode_UT since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJKL_YEacV0KAAIcjO17cptRVgAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUckvintwAnEAoABhyS-Ke2_7HgAAA",
+      "cursor_out": "DAADDAABCgABHJKL_YEacV0KAAIciOV5I5phtgAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUckvintwAnEAoABhyS-Ke2_4rQAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:40:02.075699+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:ClaudeCode_UT since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJKL_YEacV0KAAIciOV5I5phtgAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUckvintwAnEAoABhyS-Ke2_4rQAAA",
+      "cursor_out": "DAADDAABCgABHJKL_YEacV0KAAIchcOGrhqQZwAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUckvintwAnEAoABhyS-Ke2_2PAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:40:08.312614+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:ClaudeCode_UT since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJKL_YEacV0KAAIchcOGrhqQZwAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUckvintwAnEAoABhyS-Ke2_2PAAAA",
+      "cursor_out": "DAADDAABCgABHJKL_YEacV0KAAIcgcUNvRrxvAAIAAIAAAACCAADAAAAAAgABAAAAAQKAAUckvintwAnEAoABhyS-Ke2_zywAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:40:13.334031+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:obsidianstudio9 since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "",
+      "cursor_out": "DAADDAABCgABHJKWTz0aEOAKAAIcj_-uHRsQ5gAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUckvjAZYAnEAoABhyS-MBlf9jwAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:40:17.635581+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:obsidianstudio9 since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJKWTz0aEOAKAAIcj_-uHRsQ5gAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUckvjAZYAnEAoABhyS-MBlf9jwAAA",
+      "cursor_out": "DAADDAABCgABHJKWTz0aEOAKAAIci-iO5FuwhgAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUckvjAZYAnEAoABhyS-MBlf7HgAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:40:22.053058+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:obsidianstudio9 since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJKWTz0aEOAKAAIci-iO5FuwhgAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUckvjAZYAnEAoABhyS-MBlf7HgAAA",
+      "cursor_out": "DAADDAABCgABHJKWTz0aEOAKAAIchwbugxpxfwAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUckvjAZYAnEAoABhyS-MBlf4rQAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:40:26.752153+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:obsidianstudio9 since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJKWTz0aEOAKAAIchwbugxpxfwAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUckvjAZYAnEAoABhyS-MBlf4rQAAA",
+      "cursor_out": "DAADDAABCgABHJKWTz0aEOAKAAIcgoHZkhqQ8QAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUckvjAZYAnEAoABhyS-MBlf2PAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:40:30.986686+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:obsidianstudio9 since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJKWTz0aEOAKAAIcgoHZkhqQ8QAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUckvjAZYAnEAoABhyS-MBlf2PAAAA",
+      "cursor_out": "DAADDAABCgABHJKWTz0aEOAKAAIcfacGcBtgGQAIAAIAAAACCAADAAAAAAgABAAAAAQKAAUckvjAZYAnEAoABhyS-MBlfzywAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:40:35.557528+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:MakeAI_CEO since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "",
+      "cursor_out": "DAADDAABCgABHJK9aobWsaUKAAIckgURGhuQmAAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUckvjWM0AnEAoABhyS-NYzP9jwAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:40:39.657467+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:MakeAI_CEO since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJK9aobWsaUKAAIckgURGhuQmAAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUckvjWM0AnEAoABhyS-NYzP9jwAAA",
+      "cursor_out": "DAADDAABCgABHJK9aobWsaUKAAIckTYgjFagvwAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUckvjWM0AnEAoABhyS-NYzP7HgAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:40:43.501509+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:MakeAI_CEO since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJK9aobWsaUKAAIckTYgjFagvwAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUckvjWM0AnEAoABhyS-NYzP7HgAAA",
+      "cursor_out": "DAADDAABCgABHJK9aobWsaUKAAIckKO5PBqBbAAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUckvjWM0AnEAoABhyS-NYzP4rQAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:40:47.539363+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:MakeAI_CEO since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJK9aobWsaUKAAIckKO5PBqBbAAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUckvjWM0AnEAoABhyS-NYzP4rQAAA",
+      "cursor_out": "DAADDAABCgABHJK9aobWsaUKAAIcj30WdVsQGQAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUckvjWM0AnEAoABhyS-NYzP2PAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:40:54.502065+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:MakeAI_CEO since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJK9aobWsaUKAAIcj30WdVsQGQAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUckvjWM0AnEAoABhyS-NYzP2PAAAA",
+      "cursor_out": "DAADDAABCgABHJK9aobWsaUKAAIcjnXaXZrxGgAIAAIAAAACCAADAAAAAAgABAAAAAQKAAUckvjWM0AnEAoABhyS-NYzPzywAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:40:58.374878+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:mmmiyama_D since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "",
+      "cursor_out": "DAADDAABCgABHJKVSCBbETkKAAIcj7J8e5sAjQAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUckvjsGQAnEAoABhyS-OwY_9jwAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:41:02.050047+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:mmmiyama_D since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJKVSCBbETkKAAIcj7J8e5sAjQAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUckvjsGQAnEAoABhyS-OwY_9jwAAA",
+      "cursor_out": "DAADDAABCgABHJKVSCBbETkKAAIcjfPrfduBvwAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUckvjsGQAnEAoABhyS-OwY_7HgAAA",
+      "has_next_page": true,
+      "tweets_returned": 4
+    },
+    {
+      "ts": "2026-05-25T18:41:06.581440+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:mmmiyama_D since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJKVSCBbETkKAAIcjfPrfduBvwAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUckvjsGQAnEAoABhyS-OwY_7HgAAA",
+      "cursor_out": "DAADDAABCgABHJKVSCBbETkKAAIcjLn61NtRrAAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUckvjsGQAnEAoABhyS-OwY_4rQAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:41:10.848120+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:mmmiyama_D since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJKVSCBbETkKAAIcjLn61NtRrAAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUckvjsGQAnEAoABhyS-OwY_4rQAAA",
+      "cursor_out": "DAADDAABCgABHJKVSCBbETkKAAIcjKJZ3JvQvQAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUckvjsGQAnEAoABhyS-OwY_2PAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:41:14.878348+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:mmmiyama_D since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJKVSCBbETkKAAIcjKJZ3JvQvQAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUckvjsGQAnEAoABhyS-OwY_2PAAAA",
+      "cursor_out": "DAADDAABCgABHJKVSCBbETkKAAIcim8bExsB3QAIAAIAAAACCAADAAAAAAgABAAAAAQKAAUckvjsGQAnEAoABhyS-OwY_zywAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:41:19.281826+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:tetumemo since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "",
+      "cursor_out": "DAADDAABCgABHJLix6gb0d4KAAIckrV1M5tA6QAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUckvkA6MAnEAoABhyS-QDov9jwAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:41:23.585709+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:tetumemo since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJLix6gb0d4KAAIckrV1M5tA6QAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUckvkA6MAnEAoABhyS-QDov9jwAAA",
+      "cursor_out": "DAADDAABCgABHJLix6gb0d4KAAIckja4b9tBpwAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUckvkA6MAnEAoABhyS-QDov7HgAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:41:27.784132+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:tetumemo since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJLix6gb0d4KAAIckja4b9tBpwAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUckvkA6MAnEAoABhyS-QDov7HgAAA",
+      "cursor_out": "DAADDAABCgABHJLix6gb0d4KAAIckVvBshpBKgAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUckvkA6MAnEAoABhyS-QDov4rQAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:41:32.084505+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:tetumemo since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJLix6gb0d4KAAIckVvBshpBKgAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUckvkA6MAnEAoABhyS-QDov4rQAAA",
+      "cursor_out": "DAADDAABCgABHJLix6gb0d4KAAIckLz7Y1rR9gAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUckvkA6MAnEAoABhyS-QDov2PAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:41:36.178341+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:tetumemo since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJLix6gb0d4KAAIckLz7Y1rR9gAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUckvkA6MAnEAoABhyS-QDov2PAAAA",
+      "cursor_out": "DAADDAABCgABHJLix6gb0d4KAAIckDXmVZthhwAIAAIAAAACCAADAAAAAAgABAAAAAQKAAUckvkA6MAnEAoABhyS-QDovzywAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:41:40.557418+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:claudecode_lab since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "",
+      "cursor_out": "DAADDAABCgABHJIFJTEbQKkKAAIchulZmZpRcAAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUckvkVsEAnEAoABhyS-RWwP9jwAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:41:45.339673+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:claudecode_lab since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJIFJTEbQKkKAAIchulZmZpRcAAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUckvkVsEAnEAoABhyS-RWwP9jwAAA",
+      "cursor_out": "DAADDAABCgABHJIFJTEbQKkKAAIcgsPvslpB1wAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUckvkVsEAnEAoABhyS-RWwP7HgAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:41:49.501586+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:claudecode_lab since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJIFJTEbQKkKAAIcgsPvslpB1wAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUckvkVsEAnEAoABhyS-RWwP7HgAAA",
+      "cursor_out": "DAADDAABCgABHJIFJTEbQKkKAAIcfB53rJuABgAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUckvkVsEAnEAoABhyS-RWwP4rQAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:41:53.432485+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:claudecode_lab since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJIFJTEbQKkKAAIcfB53rJuABgAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUckvkVsEAnEAoABhyS-RWwP4rQAAA",
+      "cursor_out": "DAADDAABCgABHJIFJTEbQKkKAAIccHKJPNqg7gAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUckvkVsEAnEAoABhyS-RWwP2PAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:41:57.792644+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:claudecode_lab since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJIFJTEbQKkKAAIccHKJPNqg7gAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUckvkVsEAnEAoABhyS-RWwP2PAAAA",
+      "cursor_out": "DAADDAABCgABHJIFJTEbQKkKAAIcZ4vNyBrA4gAIAAIAAAACCAADAAAAAAgABAAAAAQKAAUckvkVsEAnEAoABhyS-RWwPzywAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:42:05.691819+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:ObsidianOtaku since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "",
+      "cursor_out": "DAADDAABCgABHJK2kLbbcXUKAAIckAaKChphfQAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUckvkxFQAnEAoABhyS-TEU_9jwAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:42:12.981542+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:ObsidianOtaku since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJK2kLbbcXUKAAIckAaKChphfQAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUckvkxFQAnEAoABhyS-TEU_9jwAAA",
+      "cursor_out": "DAADDAABCgABHJK2kLbbcXUKAAIcf9spq5swIwAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUckvkxFQAnEAoABhyS-TEU_7HgAAA",
+      "has_next_page": true,
+      "tweets_returned": 19
+    },
+    {
+      "ts": "2026-05-25T18:42:17.861861+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:ObsidianOtaku since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJK2kLbbcXUKAAIcf9spq5swIwAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUckvkxFQAnEAoABhyS-TEU_7HgAAA",
+      "cursor_out": "DAADDAABCgABHJK2kLbbcXUKAAIcf9spq5swIwAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUckvkxFQAnEAoABhyS-TEU_4rQAAA",
+      "has_next_page": true,
+      "tweets_returned": 7
+    },
+    {
+      "ts": "2026-05-25T18:42:21.750997+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:ObsidianOtaku since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJK2kLbbcXUKAAIcf9spq5swIwAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUckvkxFQAnEAoABhyS-TEU_4rQAAA",
+      "cursor_out": "DAADDAABCgABHJK2kLbbcXUKAAIcf9spq5swIwAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUckvkxFQAnEAoABhyS-TEU_2PAAAA",
+      "has_next_page": true,
+      "tweets_returned": 8
+    },
+    {
+      "ts": "2026-05-25T18:42:25.792725+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:ObsidianOtaku since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJK2kLbbcXUKAAIcf9spq5swIwAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUckvkxFQAnEAoABhyS-TEU_2PAAAA",
+      "cursor_out": "DAADDAABCgABHJK2kLbbcXUKAAIcf9spq5swIwAIAAIAAAACCAADAAAAAAgABAAAAAQKAAUckvkxFQAnEAoABhyS-TEU_zywAAA",
+      "has_next_page": true,
+      "tweets_returned": 7
+    },
+    {
+      "ts": "2026-05-25T18:42:29.847872+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:so_ainsight since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "",
+      "cursor_out": "DAADDAABCgABHJKEGELbUG0KAAIcke0G1xug-gAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUckvlF3sAnEAoABhyS-UXev9jwAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:42:34.050105+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:so_ainsight since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJKEGELbUG0KAAIcke0G1xug-gAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUckvlF3sAnEAoABhyS-UXev9jwAAA",
+      "cursor_out": "DAADDAABCgABHJKEGELbUG0KAAIckQE8N9tAYAAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUckvlF3sAnEAoABhyS-UXev7HgAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:42:37.933881+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:so_ainsight since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJKEGELbUG0KAAIckQE8N9tAYAAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUckvlF3sAnEAoABhyS-UXev7HgAAA",
+      "cursor_out": "DAADDAABCgABHJKEGELbUG0KAAIcjuhzORqR0QAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUckvlF3sAnEAoABhyS-UXev4rQAAA",
+      "has_next_page": true,
+      "tweets_returned": 16
+    },
+    {
+      "ts": "2026-05-25T18:42:42.131790+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:so_ainsight since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJKEGELbUG0KAAIcjuhzORqR0QAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUckvlF3sAnEAoABhyS-UXev4rQAAA",
+      "cursor_out": "DAADDAABCgABHJKEGELbUG0KAAIciR47U1uwdgAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUckvlF3sAnEAoABhyS-UXev2PAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:42:46.105885+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:so_ainsight since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJKEGELbUG0KAAIciR47U1uwdgAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUckvlF3sAnEAoABhyS-UXev2PAAAA",
+      "cursor_out": "DAADDAABCgABHJKEGELbUG0KAAIch_4enxtA7AAIAAIAAAACCAADAAAAAAgABAAAAAQKAAUckvlF3sAnEAoABhyS-UXevzywAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:42:49.923747+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:Codestudiopjbk since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "",
+      "cursor_out": "DAADDAABCgABHJKq_LZaMMoKAAIci79dEJtwEAAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUckvlc8cAnEAoABhyS-Vzxv9jwAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:42:57.862796+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:Codestudiopjbk since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJKq_LZaMMoKAAIci79dEJtwEAAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUckvlc8cAnEAoABhyS-Vzxv9jwAAA",
+      "cursor_out": "DAADDAABCgABHJKq_LZaMMoKAAIchbaISxoBMQAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUckvlc8cAnEAoABhyS-Vzxv7HgAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:43:02.416132+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:Codestudiopjbk since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJKq_LZaMMoKAAIchbaISxoBMQAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUckvlc8cAnEAoABhyS-Vzxv7HgAAA",
+      "cursor_out": "DAADDAABCgABHJKq_LZaMMoKAAIcgVdgK1sw4gAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUckvlc8cAnEAoABhyS-Vzxv4rQAAA",
+      "has_next_page": true,
+      "tweets_returned": 15
+    },
+    {
+      "ts": "2026-05-25T18:43:07.372736+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:Codestudiopjbk since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJKq_LZaMMoKAAIcgVdgK1sw4gAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUckvlc8cAnEAoABhyS-Vzxv4rQAAA",
+      "cursor_out": "DAADDAABCgABHJKq_LZaMMoKAAIcfCZ_qdpxiwAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUckvlc8cAnEAoABhyS-Vzxv2PAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:43:11.721683+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:Codestudiopjbk since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJKq_LZaMMoKAAIcfCZ_qdpxiwAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUckvlc8cAnEAoABhyS-Vzxv2PAAAA",
+      "cursor_out": "DAADDAABCgABHJKq_LZaMMoKAAIcd-7dwRtRGgAIAAIAAAACCAADAAAAAAgABAAAAAQKAAUckvlc8cAnEAoABhyS-VzxvzywAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:43:16.432336+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:exploraX_ since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "",
+      "cursor_out": "DAADDAABCgABHJLXRgiWIOgKAAIckA-lNxew3AAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUckvlzTYAnEAoABhyS-XNNf9jwAAA",
+      "has_next_page": true,
+      "tweets_returned": 7
+    },
+    {
+      "ts": "2026-05-25T18:43:20.744615+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:exploraX_ since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJLXRgiWIOgKAAIckA-lNxew3AAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUckvlzTYAnEAoABhyS-XNNf9jwAAA",
+      "cursor_out": "DAADDAABCgABHJLXRgiWIOgKAAIcjg5oj5aAyAAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUckvlzTYAnEAoABhyS-XNNf7HgAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:43:24.536070+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:exploraX_ since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJLXRgiWIOgKAAIcjg5oj5aAyAAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUckvlzTYAnEAoABhyS-XNNf7HgAAA",
+      "cursor_out": "DAADDAABCgABHJLXRgiWIOgKAAIcjHgzwpeQogAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUckvlzTYAnEAoABhyS-XNNf4rQAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:43:28.318950+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:exploraX_ since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJLXRgiWIOgKAAIcjHgzwpeQogAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUckvlzTYAnEAoABhyS-XNNf4rQAAA",
+      "cursor_out": "DAADDAABCgABHJLXRgiWIOgKAAIci1TkZVcRTAAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUckvlzTYAnEAoABhyS-XNNf2PAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:43:32.024385+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:exploraX_ since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJLXRgiWIOgKAAIci1TkZVcRTAAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUckvlzTYAnEAoABhyS-XNNf2PAAAA",
+      "cursor_out": "DAADDAABCgABHJLXRgiWIOgKAAIcicMDjpdBowAIAAIAAAACCAADAAAAAAgABAAAAAQKAAUckvlzTYAnEAoABhyS-XNNfzywAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:43:36.405273+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:jason_coder0 since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "",
+      "cursor_out": "DAADDAABCgABHJK_nFzaQMYKAAIckryUQhtRuAAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUckvmGpAAnEAoABhyS-Yaj_9jwAAA",
+      "has_next_page": true,
+      "tweets_returned": 10
+    },
+    {
+      "ts": "2026-05-25T18:43:40.402826+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:jason_coder0 since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJK_nFzaQMYKAAIckryUQhtRuAAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUckvmGpAAnEAoABhyS-Yaj_9jwAAA",
+      "cursor_out": "DAADDAABCgABHJK_nFzaQMYKAAIckrqTjRuRKwAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUckvmGpAAnEAoABhyS-Yaj_7HgAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:43:44.001868+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:jason_coder0 since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJK_nFzaQMYKAAIckrqTjRuRKwAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUckvmGpAAnEAoABhyS-Yaj_7HgAAA",
+      "cursor_out": "DAADDAABCgABHJK_nFzaQMYKAAIckrizJFtgswAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUckvmGpAAnEAoABhyS-Yaj_4rQAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:43:47.681985+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:jason_coder0 since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJK_nFzaQMYKAAIckrizJFtgswAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUckvmGpAAnEAoABhyS-Yaj_4rQAAA",
+      "cursor_out": "DAADDAABCgABHJK_nFzaQMYKAAIckkOzl1pA_AAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUckvmGpAAnEAoABhyS-Yaj_2PAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:43:51.362547+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:jason_coder0 since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJK_nFzaQMYKAAIckkOzl1pA_AAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUckvmGpAAnEAoABhyS-Yaj_2PAAAA",
+      "cursor_out": "DAADDAABCgABHJK_nFzaQMYKAAIckjyMldvRFAAIAAIAAAACCAADAAAAAAgABAAAAAQKAAUckvmGpAAnEAoABhyS-Yaj_zywAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:43:54.934246+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:heynavtoor since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "",
+      "cursor_out": "DAADDAABCgABHJLX206aEKMKAAIcktT1Plth9gAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUckvmZmwAnEAoABhyS-Zma_9jwAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:43:59.584930+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:heynavtoor since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJLX206aEKMKAAIcktT1Plth9gAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUckvmZmwAnEAoABhyS-Zma_9jwAAA",
+      "cursor_out": "DAADDAABCgABHJLX206aEKMKAAIckcHywRqxgwAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUckvmZmwAnEAoABhyS-Zma_7HgAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:44:03.653063+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:heynavtoor since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJLX206aEKMKAAIckcHywRqxgwAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUckvmZmwAnEAoABhyS-Zma_7HgAAA",
+      "cursor_out": "DAADDAABCgABHJLX206aEKMKAAIckYcveZrxKAAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUckvmZmwAnEAoABhyS-Zma_4rQAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:44:07.544138+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:heynavtoor since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJLX206aEKMKAAIckYcveZrxKAAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUckvmZmwAnEAoABhyS-Zma_4rQAAA",
+      "cursor_out": "DAADDAABCgABHJLX206aEKMKAAIckVK3JJpBHwAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUckvmZmwAnEAoABhyS-Zma_2PAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:44:12.043302+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:heynavtoor since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJLX206aEKMKAAIckVK3JJpBHwAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUckvmZmwAnEAoABhyS-Zma_2PAAAA",
+      "cursor_out": "DAADDAABCgABHJLX206aEKMKAAIckEsW1xuQLAAIAAIAAAACCAADAAAAAAgABAAAAAQKAAUckvmZmwAnEAoABhyS-Zma_zywAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:44:16.246622+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:ethancoder0 since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "",
+      "cursor_out": "DAADDAABCgABHH8UjCea4JYKAAIce4DGfZrBEgAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUckvmtZAAnEAoABhyS-a1j_9jwAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:44:19.925191+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:ethancoder0 since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHH8UjCea4JYKAAIce4DGfZrBEgAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUckvmtZAAnEAoABhyS-a1j_9jwAAA",
+      "cursor_out": "DAADDAABCgABHH8UjCea4JYKAAIceTXnrduwCQAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUckvmtZAAnEAoABhyS-a1j_7HgAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:44:23.718896+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:ethancoder0 since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHH8UjCea4JYKAAIceTXnrduwCQAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUckvmtZAAnEAoABhyS-a1j_7HgAAA",
+      "cursor_out": "DAADDAABCgABHH8UjCea4JYKAAIceKWN8ltxNQAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUckvmtZAAnEAoABhyS-a1j_4rQAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:44:27.591757+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:ethancoder0 since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHH8UjCea4JYKAAIceKWN8ltxNQAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUckvmtZAAnEAoABhyS-a1j_4rQAAA",
+      "cursor_out": "DAADDAABCgABHH8UjCea4JYKAAIcd2PgClqQrgAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUckvmtZAAnEAoABhyS-a1j_2PAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:44:31.088790+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:ethancoder0 since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHH8UjCea4JYKAAIcd2PgClqQrgAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUckvmtZAAnEAoABhyS-a1j_2PAAAA",
+      "cursor_out": "DAADDAABCgABHH8UjCea4JYKAAIcdhz0mprxLQAIAAIAAAACCAADAAAAAAgABAAAAAQKAAUckvmtZAAnEAoABhyS-a1j_zywAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:44:34.805885+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:cyrilXBT since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "",
+      "cursor_out": "DAADDAABCgABHJL5N6RWYcsKAAIcka-FDheh6gAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUckvnAA4AnEAoABhyS-cADf9jwAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:44:39.382158+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:cyrilXBT since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJL5N6RWYcsKAAIcka-FDheh6gAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUckvnAA4AnEAoABhyS-cADf9jwAAA",
+      "cursor_out": "DAADDAABCgABHJL5N6RWYcsKAAIckM9qzZYB1QAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUckvnAA4AnEAoABhyS-cADf7HgAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:44:43.265465+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:cyrilXBT since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJL5N6RWYcsKAAIckM9qzZYB1QAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUckvnAA4AnEAoABhyS-cADf7HgAAA",
+      "cursor_out": "DAADDAABCgABHJL5N6RWYcsKAAIckE-qOJahOgAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUckvnAA4AnEAoABhyS-cADf4rQAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:44:47.372926+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:cyrilXBT since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJL5N6RWYcsKAAIckE-qOJahOgAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUckvnAA4AnEAoABhyS-cADf4rQAAA",
+      "cursor_out": "DAADDAABCgABHJL5N6RWYcsKAAIcjxufEFpxlgAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUckvnAA4AnEAoABhyS-cADf2PAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:44:51.429661+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:cyrilXBT since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJL5N6RWYcsKAAIcjxufEFpxlgAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUckvnAA4AnEAoABhyS-cADf2PAAAA",
+      "cursor_out": "DAADDAABCgABHJL5N6RWYcsKAAIcjt28RZdAxwAIAAIAAAACCAADAAAAAAgABAAAAAQKAAUckvnAA4AnEAoABhyS-cADfzywAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:44:55.160475+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:daifukujinji since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "",
+      "cursor_out": "DAADDAABCgABHJLHgUzbAagKAAIckobWk5qxKgAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUckvnTiMAnEAoABhyS-dOIv9jwAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:44:58.937681+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:daifukujinji since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJLHgUzbAagKAAIckobWk5qxKgAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUckvnTiMAnEAoABhyS-dOIv9jwAAA",
+      "cursor_out": "DAADDAABCgABHJLHgUzbAagKAAIckiGhyprAHQAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUckvnTiMAnEAoABhyS-dOIv7HgAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:45:05.703781+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:daifukujinji since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJLHgUzbAagKAAIckiGhyprAHQAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUckvnTiMAnEAoABhyS-dOIv7HgAAA",
+      "cursor_out": "DAADDAABCgABHJLHgUzbAagKAAIckWViqVpgTAAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUckvnTiMAnEAoABhyS-dOIv4rQAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:45:09.302524+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:daifukujinji since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJLHgUzbAagKAAIckWViqVpgTAAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUckvnTiMAnEAoABhyS-dOIv4rQAAA",
+      "cursor_out": "DAADDAABCgABHJLHgUzbAagKAAIckQn0VVuxhgAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUckvnTiMAnEAoABhyS-dOIv2PAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:45:13.516457+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:daifukujinji since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJLHgUzbAagKAAIckQn0VVuxhgAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUckvnTiMAnEAoABhyS-dOIv2PAAAA",
+      "cursor_out": "DAADDAABCgABHJLHgUzbAagKAAIckIWTmZtB6AAIAAIAAAACCAADAAAAAAgABAAAAAQKAAUckvnTiMAnEAoABhyS-dOIvzywAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:45:17.577807+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:Fluyeporlaweb since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "",
+      "cursor_out": "DAADDAABCgABHJLwcYgXUEcKAAIckadb7VZBFQAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUckvnppQAnEAoABhyS-emk_9jwAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:45:21.751612+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:Fluyeporlaweb since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJLwcYgXUEcKAAIckadb7VZBFQAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUckvnppQAnEAoABhyS-emk_9jwAAA",
+      "cursor_out": "DAADDAABCgABHJLwcYgXUEcKAAIckCAP_NYh7AAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUckvnppQAnEAoABhyS-emk_7HgAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:45:25.466690+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:Fluyeporlaweb since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJLwcYgXUEcKAAIckCAP_NYh7AAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUckvnppQAnEAoABhyS-emk_7HgAAA",
+      "cursor_out": "DAADDAABCgABHJLwcYgXUEcKAAIcjxMLltegSQAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUckvnppQAnEAoABhyS-emk_4rQAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:45:29.288112+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:Fluyeporlaweb since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJLwcYgXUEcKAAIcjxMLltegSQAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUckvnppQAnEAoABhyS-emk_4rQAAA",
+      "cursor_out": "DAADDAABCgABHJLwcYgXUEcKAAIcjm4wp9YwOQAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUckvnppQAnEAoABhyS-emk_2PAAAA",
+      "has_next_page": true,
+      "tweets_returned": 6
+    },
+    {
+      "ts": "2026-05-25T18:45:33.792290+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:Fluyeporlaweb since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJLwcYgXUEcKAAIcjm4wp9YwOQAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUckvnppQAnEAoABhyS-emk_2PAAAA",
+      "cursor_out": "DAADDAABCgABHJLwcYgXUEcKAAIcjWozHlfBXQAIAAIAAAACCAADAAAAAAgABAAAAAQKAAUckvnppQAnEAoABhyS-emk_zywAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:45:37.751867+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:commte since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "",
+      "cursor_out": "DAADDAABCgABHJKOotSaYF4KAAIcjNa4kFvQuAAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUckvn9awAnEAoABhyS-f1q_9jwAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:45:41.884782+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:commte since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJKOotSaYF4KAAIcjNa4kFvQuAAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUckvn9awAnEAoABhyS-f1q_9jwAAA",
+      "cursor_out": "DAADDAABCgABHJKOotSaYF4KAAIchozjq1tg8AAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUckvn9awAnEAoABhyS-f1q_7HgAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:45:45.886516+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:commte since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJKOotSaYF4KAAIchozjq1tg8AAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUckvn9awAnEAoABhyS-f1q_7HgAAA",
+      "cursor_out": "DAADDAABCgABHJKOotSaYF4KAAIcfJD9cRdBGgAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUckvn9awAnEAoABhyS-f1q_4rQAAA",
+      "has_next_page": true,
+      "tweets_returned": 13
+    },
+    {
+      "ts": "2026-05-25T18:45:50.619523+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:commte since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJKOotSaYF4KAAIcfJD9cRdBGgAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUckvn9awAnEAoABhyS-f1q_4rQAAA",
+      "cursor_out": "DAADDAABCgABHJKOotSaYF4KAAIcbehUA9pR1wAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUckvn9awAnEAoABhyS-f1q_2PAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:45:54.323220+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:commte since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJKOotSaYF4KAAIcbehUA9pR1wAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUckvn9awAnEAoABhyS-f1q_2PAAAA",
+      "cursor_out": "DAADDAABCgABHJKOotSaYF4KAAIcWtg7xdugKAAIAAIAAAACCAADAAAAAAgABAAAAAQKAAUckvn9awAnEAoABhyS-f1q_zywAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:45:58.746314+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:csaba_kissi since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "",
+      "cursor_out": "DAADDAABCgABHJL5o3AXEZQKAAIckoxEtpaR3QAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUckvoRqgAnEAoABhyS-hGp_9jwAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:46:02.529989+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:csaba_kissi since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJL5o3AXEZQKAAIckoxEtpaR3QAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUckvoRqgAnEAoABhyS-hGp_9jwAAA",
+      "cursor_out": "DAADDAABCgABHJL5o3AXEZQKAAIckl7DxRZRAwAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUckvoRqgAnEAoABhyS-hGp_7HgAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:46:06.321301+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:csaba_kissi since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJL5o3AXEZQKAAIckl7DxRZRAwAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUckvoRqgAnEAoABhyS-hGp_7HgAAA",
+      "cursor_out": "DAADDAABCgABHJL5o3AXEZQKAAIckcI3IpaR9gAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUckvoRqgAnEAoABhyS-hGp_4rQAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:46:10.602997+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:csaba_kissi since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJL5o3AXEZQKAAIckcI3IpaR9gAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUckvoRqgAnEAoABhyS-hGp_4rQAAA",
+      "cursor_out": "DAADDAABCgABHJL5o3AXEZQKAAIckB3FQpoB2AAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUckvoRqgAnEAoABhyS-hGp_2PAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:46:14.312918+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:csaba_kissi since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJL5o3AXEZQKAAIckB3FQpoB2AAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUckvoRqgAnEAoABhyS-hGp_2PAAAA",
+      "cursor_out": "DAADDAABCgABHJL5o3AXEZQKAAIcjqR44lbATQAIAAIAAAACCAADAAAAAAgABAAAAAQKAAUckvoRqgAnEAoABhyS-hGp_zywAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:46:17.897112+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:ai_explorer25 since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "",
+      "cursor_out": "DAADDAABCgABHJLjF1GasDoKAAIckW8muFtAMwAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUckvokaMAnEAoABhyS-iRov9jwAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:46:21.788193+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:ai_explorer25 since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJLjF1GasDoKAAIckW8muFtAMwAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUckvokaMAnEAoABhyS-iRov9jwAAA",
+      "cursor_out": "DAADDAABCgABHJLjF1GasDoKAAIcjEQzAlthbQAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUckvokaMAnEAoABhyS-iRov7HgAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:46:25.710871+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:ai_explorer25 since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJLjF1GasDoKAAIcjEQzAlthbQAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUckvokaMAnEAoABhyS-iRov7HgAAA",
+      "cursor_out": "DAADDAABCgABHJLjF1GasDoKAAIciXAbB5awhgAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUckvokaMAnEAoABhyS-iRov4rQAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:46:33.386500+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:ai_explorer25 since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJLjF1GasDoKAAIciXAbB5awhgAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUckvokaMAnEAoABhyS-iRov4rQAAA",
+      "cursor_out": "DAADDAABCgABHJLjF1GasDoKAAIchX8XHdrQgAAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUckvokaMAnEAoABhyS-iRov2PAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:46:37.303403+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:ai_explorer25 since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJLjF1GasDoKAAIchX8XHdrQgAAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUckvokaMAnEAoABhyS-iRov2PAAAA",
+      "cursor_out": "DAADDAABCgABHJLjF1GasDoKAAIcfFDUtRsgpQAIAAIAAAACCAADAAAAAAgABAAAAAQKAAUckvokaMAnEAoABhyS-iRovzywAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:46:41.446609+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:Atenov_D since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "",
+      "cursor_out": "DAADDAABCgABHJLnAoBaYOEKAAIcktwRVtux9wAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUckvo7MoAnEAoABhyS-jsyf9jwAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:46:45.134290+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:Atenov_D since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJLnAoBaYOEKAAIcktwRVtux9wAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUckvo7MoAnEAoABhyS-jsyf9jwAAA",
+      "cursor_out": "DAADDAABCgABHJLnAoBaYOEKAAIcktYDOJsArAAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUckvo7MoAnEAoABhyS-jsyf7HgAAA",
+      "has_next_page": true,
+      "tweets_returned": 1
+    },
+    {
+      "ts": "2026-05-25T18:46:49.536596+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:Atenov_D since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJLnAoBaYOEKAAIcktYDOJsArAAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUckvo7MoAnEAoABhyS-jsyf7HgAAA",
+      "cursor_out": "DAADDAABCgABHJLnAoBaYOEKAAIcksC_iNtQuAAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUckvo7MoAnEAoABhyS-jsyf4rQAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:46:53.164394+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:Atenov_D since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJLnAoBaYOEKAAIcksC_iNtQuAAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUckvo7MoAnEAoABhyS-jsyf4rQAAA",
+      "cursor_out": "DAADDAABCgABHJLnAoBaYOEKAAIckrjdMhsQwQAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUckvo7MoAnEAoABhyS-jsyf2PAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:46:57.011410+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:Atenov_D since:2026-02-24",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJLnAoBaYOEKAAIckrjdMhsQwQAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUckvo7MoAnEAoABhyS-jsyf2PAAAA",
+      "cursor_out": "DAADDAABCgABHJLnAoBaYOEKAAIckrRydtvRywAIAAIAAAACCAADAAAAAAgABAAAAAQKAAUckvo7MoAnEAoABhyS-jsyfzywAAA",
+      "has_next_page": true,
+      "tweets_returned": 1
+    },
+    {
+      "ts": "2026-05-25T18:47:01.720521+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "\"AI\" (\"中小\" OR \"経営者\" OR \"1人社長\") -is:retweet lang:ja min_faves:50",
+        "queryType": "Top"
+      },
+      "cursor_in": "",
+      "cursor_out": "DAACCgACHJL6UA_AJxAKAAMckvpQD7_Y8AgABAAAAAILAAUAAADwRW1QQzZ3QUFBZlEvZ0dKTjB2R3AvQUFBQUJRY2tva2xnNXJnanh4cWhZSUZta0FnSEk1RXppMmIwRUFjZWVsOUNOb0IvQnlEclg4LzI0QnBISVI5OXpwYW9la2NrY3JjVGRxZ2loeUtabWdKVnpEUkhIWlJIbythb0t3Y2tkOVVRSnFSSlJ5RDNSeUdXMkcwSEhoaXFORmJVTUVjWS9pQUhkcFJhUnlNQ3dwYkc3RldIRGZNblJ2YUlBSWNhang1V2hwQTBCeVJjdFUvbW1ERkhKSFFoMGVhSVdNY1hZOU44dHF4K0J4OEJjbmcycUJ6CAAGAAAAAAgABwAAAAAMAAgKAAEcN8ydG9ogAgAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:47:06.637807+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "\"AI\" (\"中小\" OR \"経営者\" OR \"1人社長\") -is:retweet lang:ja min_faves:50",
+        "queryType": "Top"
+      },
+      "cursor_in": "DAACCgACHJL6UA_AJxAKAAMckvpQD7_Y8AgABAAAAAILAAUAAADwRW1QQzZ3QUFBZlEvZ0dKTjB2R3AvQUFBQUJRY2tva2xnNXJnanh4cWhZSUZta0FnSEk1RXppMmIwRUFjZWVsOUNOb0IvQnlEclg4LzI0QnBISVI5OXpwYW9la2NrY3JjVGRxZ2loeUtabWdKVnpEUkhIWlJIbythb0t3Y2tkOVVRSnFSSlJ5RDNSeUdXMkcwSEhoaXFORmJVTUVjWS9pQUhkcFJhUnlNQ3dwYkc3RldIRGZNblJ2YUlBSWNhang1V2hwQTBCeVJjdFUvbW1ERkhKSFFoMGVhSVdNY1hZOU44dHF4K0J4OEJjbmcycUJ6CAAGAAAAAAgABwAAAAAMAAgKAAEcN8ydG9ogAgAAAA",
+      "cursor_out": "DAACCgACHJL6UA_AJxAKAAMckvpQD7-x4AgABAAAAAILAAUAAAHIRW1QQzZ3QUFBZlEvZ0dKTjB2R3AvQUFBQUNnY2tva2xnNXJnanh5SmlHS3FtN0EzSEc5dUFTNmJrTzRjamtUT0xadlFRQng1NlgwSTJnSDhISVNYVmExYmNmOGNoSDMzT2xxaDZSeUtabWdKVnpEUkhKSG54aTVhRWZNY1UydmQvQllBMWh5SGduTWttdkJTSElWdVRaeGFzR1FjZUdLbzBWdFF3UnlJeDdFYTJoRFlIRU9vQU5lYVVDb2NmZk1BNlJyQnBoeU9KdENRbWtBdEhGY2ZoZ0JYWUY0Y2FvV0NCWnBBSUJ5TEJHaTlHcUEzSElPdGZ6L2JnR2tjalBycnNadVF5UnlSeXR4TjJxQ0tISUNKbktYYlFUMGNkbEVlajVxZ3JCeUdra3E2R25DcUhJUlpCWTdhVVFnY2MwZ3BBNW9CYlJ5R2pkZmoyeUdLSEpIZlZFQ2FrU1VjWFk5Tjh0cXgrQnlIQTJqZVc4QTBIR1A0Z0IzYVVXa2NnOTBjaGx0aHRCeVIwSWRIbWlGakhEZk1uUnZhSUFJY2FqeDVXaHBBMEJ5TUN3cGJHN0ZXSEpGeTFUK2FZTVVjZkFYSjROcWdjdz09CAAGAAAAAAgABwAAAAEMAAgKAAEcQ6gA15pQKgAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:47:14.320633+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "\"AI\" (\"中小\" OR \"経営者\" OR \"1人社長\") -is:retweet lang:ja min_faves:50",
+        "queryType": "Top"
+      },
+      "cursor_in": "DAACCgACHJL6UA_AJxAKAAMckvpQD7-x4AgABAAAAAILAAUAAAHIRW1QQzZ3QUFBZlEvZ0dKTjB2R3AvQUFBQUNnY2tva2xnNXJnanh5SmlHS3FtN0EzSEc5dUFTNmJrTzRjamtUT0xadlFRQng1NlgwSTJnSDhISVNYVmExYmNmOGNoSDMzT2xxaDZSeUtabWdKVnpEUkhKSG54aTVhRWZNY1UydmQvQllBMWh5SGduTWttdkJTSElWdVRaeGFzR1FjZUdLbzBWdFF3UnlJeDdFYTJoRFlIRU9vQU5lYVVDb2NmZk1BNlJyQnBoeU9KdENRbWtBdEhGY2ZoZ0JYWUY0Y2FvV0NCWnBBSUJ5TEJHaTlHcUEzSElPdGZ6L2JnR2tjalBycnNadVF5UnlSeXR4TjJxQ0tISUNKbktYYlFUMGNkbEVlajVxZ3JCeUdra3E2R25DcUhJUlpCWTdhVVFnY2MwZ3BBNW9CYlJ5R2pkZmoyeUdLSEpIZlZFQ2FrU1VjWFk5Tjh0cXgrQnlIQTJqZVc4QTBIR1A0Z0IzYVVXa2NnOTBjaGx0aHRCeVIwSWRIbWlGakhEZk1uUnZhSUFJY2FqeDVXaHBBMEJ5TUN3cGJHN0ZXSEpGeTFUK2FZTVVjZkFYSjROcWdjdz09CAAGAAAAAAgABwAAAAEMAAgKAAEcQ6gA15pQKgAAAA",
+      "cursor_out": "DAACCgACHJL6UA_AJxAKAAMckvpQD7-K0AgABAAAAAILAAUAAAKcRW1QQzZ3QUFBZlEvZ0dKTjB2R3AvQUFBQUR3Y2tva2xnNXJnanh5SmlHS3FtN0EzSEk1RXppMmIwRUFjZWVsOUNOb0IvQnlFbDFXdFczSC9ISWVDY3lTYThGSWNlR0tvMFZ0UXdSeDV2MWdpMnNGMEhJNjMzaXRiSU5VY2hIR0tvRnFRa1J5SzI5a1JtckF1SEVPb0FOZWFVQ29jamliUWtKcEFMUnlHNzBLbDF3RW1IR3FGZ2dXYVFDQWNnNjEvUDl1QWFSeUxCR2k5R3FBM0hJdXl3V0NhQU9VY2RsRWVqNXFnckJ5UDFKZHoyOERXSEVYWVBCOWFvWk1jYzBncEE1b0JiUnlFV1FXTzJsRUlISkhmVkVDYWtTVWNZL2lBSGRwUmFSeUQzUnlHVzJHMEhKRnkxVCthWU1VY2pBc0tXeHV4Vmh4ZGowM3kyckg0SEkzend2VWJvTGtjZkFYSjROcWdjeHh2YmdFdW01RHVISXRjV2g0YU1hZ2NpVzhVL0JjQW1CeUVmZmM2V3FIcEhGTnIzZndXQU5ZY2tlZkdMbG9SOHh5S1ptZ0pWekRSSElWdVRaeGFzR1FjaFMwUlk1dXg5aHlJeDdFYTJoRFlISkhTenlQYmdRc2NodmxrbDFzZ2VoeGhiUm8yMnZITUhIM3pBT2thd2FZY2poVG9aOXFoS2h4WEg0WUFWMkJlSEkzeVhjWWFNZm9ja2NyY1RkcWdpaHlFUjFPZ1d4RlZISUNKbktYYlFUMGNocEpLdWhwd3FoeUhBMmplVzhBMEhJYU4xK1BiSVlvY2pQcnJzWnVReVJ4b21OaFptdUZJSERmTW5SdmFJQUljYWp4NVdocEEwQnlSMElkSG1pRmpISSsyN3ozYW9MQT0IAAYAAAAACAAHAAAAAgwACAoAARxF2DwfWqGTAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:47:19.072034+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "\"AI\" (\"中小\" OR \"経営者\" OR \"1人社長\") -is:retweet lang:ja min_faves:50",
+        "queryType": "Top"
+      },
+      "cursor_in": "DAACCgACHJL6UA_AJxAKAAMckvpQD7-K0AgABAAAAAILAAUAAAKcRW1QQzZ3QUFBZlEvZ0dKTjB2R3AvQUFBQUR3Y2tva2xnNXJnanh5SmlHS3FtN0EzSEk1RXppMmIwRUFjZWVsOUNOb0IvQnlFbDFXdFczSC9ISWVDY3lTYThGSWNlR0tvMFZ0UXdSeDV2MWdpMnNGMEhJNjMzaXRiSU5VY2hIR0tvRnFRa1J5SzI5a1JtckF1SEVPb0FOZWFVQ29jamliUWtKcEFMUnlHNzBLbDF3RW1IR3FGZ2dXYVFDQWNnNjEvUDl1QWFSeUxCR2k5R3FBM0hJdXl3V0NhQU9VY2RsRWVqNXFnckJ5UDFKZHoyOERXSEVYWVBCOWFvWk1jYzBncEE1b0JiUnlFV1FXTzJsRUlISkhmVkVDYWtTVWNZL2lBSGRwUmFSeUQzUnlHVzJHMEhKRnkxVCthWU1VY2pBc0tXeHV4Vmh4ZGowM3kyckg0SEkzend2VWJvTGtjZkFYSjROcWdjeHh2YmdFdW01RHVISXRjV2g0YU1hZ2NpVzhVL0JjQW1CeUVmZmM2V3FIcEhGTnIzZndXQU5ZY2tlZkdMbG9SOHh5S1ptZ0pWekRSSElWdVRaeGFzR1FjaFMwUlk1dXg5aHlJeDdFYTJoRFlISkhTenlQYmdRc2NodmxrbDFzZ2VoeGhiUm8yMnZITUhIM3pBT2thd2FZY2poVG9aOXFoS2h4WEg0WUFWMkJlSEkzeVhjWWFNZm9ja2NyY1RkcWdpaHlFUjFPZ1d4RlZISUNKbktYYlFUMGNocEpLdWhwd3FoeUhBMmplVzhBMEhJYU4xK1BiSVlvY2pQcnJzWnVReVJ4b21OaFptdUZJSERmTW5SdmFJQUljYWp4NVdocEEwQnlSMElkSG1pRmpISSsyN3ozYW9MQT0IAAYAAAAACAAHAAAAAgwACAoAARxF2DwfWqGTAAAA",
+      "cursor_out": "DAACCgACHJL6UA_AJxAKAAMckvpQD79jwAgABAAAAAILAAUAAANwRW1QQzZ3QUFBZlEvZ0dKTjB2R3AvQUFBQUZBY2tva2xnNXJnanh5SmlHS3FtN0EzSEk1RXppMmIwRUFjZWVsOUNOb0IvQnlDcURNa0dpRFJIRUFTNldFYVlVZ2NXSFBmK2hzUXB4eUVsMVd0VzNIL0hJZUNjeVNhOEZJY2VHS28wVnRRd1J4NXYxZ2kyc0YwSEk2MzNpdGJJTlVjUS9yNTBaZGdPQnlFY1lxZ1dwQ1JISXJiMlJHYXNDNGNRNmdBMTVwUUtoeU9KdENRbWtBdEhGT0RvNXZhVWM0Y2h1OUNwZGNCSmh4cWhZSUZta0FnSEYwYWlSUWFzRGNjZzYxL1A5dUFhUnlMQkdpOUdxQTNIRm5nNlltYWtRMGNpN0xCWUpvQTVSdzVuSTFzV3REbkhIWlJIbythb0t3Y2o5U1hjOXZBMWh4RjJEd2ZXcUdUSEhOSUtRT2FBVzBjaEZrRmp0cFJDQnlSMzFSQW1wRWxIRk5DWjcyYlFjd2NGamFLMEJyQVF4eGorSUFkMmxGcEhJUGRISVpiWWJRY2tYTFZQNXBneFJ5TUN3cGJHN0ZXSEYyUFRmTGFzZmdjUTl1NjM1c3hveHlPMUdRMldxRzZISTN6d3ZVYm9Ma2NmQVhKNE5xZ2N4eHZiZ0V1bTVEdUhJdGNXaDRhTWFnY2lXOFUvQmNBbUJ5UmhhUmJXOUhvSElSOTl6cGFvZWtjVTJ2ZC9CWUExaHlSNThZdVdoSHpISXBtYUFsWE1ORWNoN0NPd1ZveEFCeUZiazJjV3JCa0hJVXRFV09ic2ZZY2lNZXhHdG9RMkJ5UjBzOGoyNEVMSEliNVpKZGJJSG9jWVcwYU50cnh6QnlNQkF4VkZ5QWRISDN6QU9rYXdhWWNqaFRvWjlxaEtoeFhINFlBVjJCZUhGK25HL0RXOEkwY2pmSmR4aG94K2h5TGNHakFXa0NrSEpISzNFM2FvSW9jaEVkVG9Gc1JWUnhTdFI0MDI1R3BISUNKbktYYlFUMGNXRWs1aXh0QUpCeUdra3E2R25DcUhJY0RhTjVid0RRY2hvM1g0OXNoaWh4QVVSeFEyakJESEl6NjY3R2JrTWtjYUpqWVdacmhTQnczekowYjJpQUNIR284ZVZvYVFOQWNrZENIUjVvaFl4eVB0dTg5MnFDdwgABgAAAAAIAAcAAAADDAAICgABHEXYPB9aoZMAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:47:23.636861+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "\"AI\" (\"中小\" OR \"経営者\" OR \"1人社長\") -is:retweet lang:ja min_faves:50",
+        "queryType": "Top"
+      },
+      "cursor_in": "DAACCgACHJL6UA_AJxAKAAMckvpQD79jwAgABAAAAAILAAUAAANwRW1QQzZ3QUFBZlEvZ0dKTjB2R3AvQUFBQUZBY2tva2xnNXJnanh5SmlHS3FtN0EzSEk1RXppMmIwRUFjZWVsOUNOb0IvQnlDcURNa0dpRFJIRUFTNldFYVlVZ2NXSFBmK2hzUXB4eUVsMVd0VzNIL0hJZUNjeVNhOEZJY2VHS28wVnRRd1J4NXYxZ2kyc0YwSEk2MzNpdGJJTlVjUS9yNTBaZGdPQnlFY1lxZ1dwQ1JISXJiMlJHYXNDNGNRNmdBMTVwUUtoeU9KdENRbWtBdEhGT0RvNXZhVWM0Y2h1OUNwZGNCSmh4cWhZSUZta0FnSEYwYWlSUWFzRGNjZzYxL1A5dUFhUnlMQkdpOUdxQTNIRm5nNlltYWtRMGNpN0xCWUpvQTVSdzVuSTFzV3REbkhIWlJIbythb0t3Y2o5U1hjOXZBMWh4RjJEd2ZXcUdUSEhOSUtRT2FBVzBjaEZrRmp0cFJDQnlSMzFSQW1wRWxIRk5DWjcyYlFjd2NGamFLMEJyQVF4eGorSUFkMmxGcEhJUGRISVpiWWJRY2tYTFZQNXBneFJ5TUN3cGJHN0ZXSEYyUFRmTGFzZmdjUTl1NjM1c3hveHlPMUdRMldxRzZISTN6d3ZVYm9Ma2NmQVhKNE5xZ2N4eHZiZ0V1bTVEdUhJdGNXaDRhTWFnY2lXOFUvQmNBbUJ5UmhhUmJXOUhvSElSOTl6cGFvZWtjVTJ2ZC9CWUExaHlSNThZdVdoSHpISXBtYUFsWE1ORWNoN0NPd1ZveEFCeUZiazJjV3JCa0hJVXRFV09ic2ZZY2lNZXhHdG9RMkJ5UjBzOGoyNEVMSEliNVpKZGJJSG9jWVcwYU50cnh6QnlNQkF4VkZ5QWRISDN6QU9rYXdhWWNqaFRvWjlxaEtoeFhINFlBVjJCZUhGK25HL0RXOEkwY2pmSmR4aG94K2h5TGNHakFXa0NrSEpISzNFM2FvSW9jaEVkVG9Gc1JWUnhTdFI0MDI1R3BISUNKbktYYlFUMGNXRWs1aXh0QUpCeUdra3E2R25DcUhJY0RhTjVid0RRY2hvM1g0OXNoaWh4QVVSeFEyakJESEl6NjY3R2JrTWtjYUpqWVdacmhTQnczekowYjJpQUNIR284ZVZvYVFOQWNrZENIUjVvaFl4eVB0dTg5MnFDdwgABgAAAAAIAAcAAAADDAAICgABHEXYPB9aoZMAAAA",
+      "cursor_out": "DAACCgACHJL6UA_AJxAKAAMckvpQD788sAgABAAAAAILAAUAAAO8QUFBQUFDNk5zd2dBQUFCa0FBQUFBQUFBRlh3QUFBQUhBQUFBVmdFQVVRUkFnQUFBQUFJb01BZ0FBUUFJZ0FBQUJBQUFRQUFESkNBQUFCb0FSQVFnb2tBSVFTS0FnQUlBUkFJQUFRd0FBQUlBZ1VCQ0VCZ0FJSURRa0FBQ0FBQUJBQUFCQUNqQkFJQVFBQUFnQ2dBQUlJQkFBQUlBQUFBRXdBQUFBQ0VBQUdRZ0NBQ0FDZ0FBRUJBQVFFQUJoa0FDQlNZWVF3R0FBQWdJQUFBQUFBQUFnQ0FBQUFBQUFBa01Bb1NBRUVhRUlra2hZR3dBQVFBQUlwQUNBaElBbkFCS0NCQUFBQkdnVUFBQ0VJa0FBTUFBQUFFREFnQVFBQXdFQUFZd0N5QWlRUUFBQkFHQUFDUUFBQUdBQUFDZ0lJQW9EQUFBUUN3QUFKUUJRQUFBRUFnQUNnQUJFSUtBUUdFQ0FFU0VLUUVBRkJBQUFFRUFZZ2dVQURBRUFBQ0lNQUFvQU9GRWdDQUFJQUFJQUFBQUFBZ2d3UUFBQUlBQUFJb0FFZ0NJQUFjQkFBQUFBa0FRQVFBQUVRVkFKQUFCQkFDSUNpQkFTQ0FBQkFCQUFFQlNnS0lRQVlvSUlFQVFBQWdCZ1FBRkVBQ1FBQUFDQ0FBRndRUUJFQUJBZ1FFQWlBaEFZQ0FnS1JBSUFTZ0lnd0FCQ3dBQUVBQUFBRUFBRUFBaEJBRUlBZ0NHQUJBQUVBQUFBUUNDQWdFZ0NBWUlBQUVGQkFRRUlBQUFCQUJBQUNRQUVCQUFRUUFBQUFBaEFBQ2lBZ2dRQWdNQUVBQWdJQUFBSUVva0VBRUFJQUFBQ0FBQUFFUUFBQUFRQUFBR0lFQUFBRUFBZ2lBQUFBQUFnQUFBQUFVaEFCZ0FVQ0Vnd01BU0NBQ01RQ0FBQ0FBQUdBQWdRQUFBQUFBQVVBb0FLVUFDQUFDa0FBSWtBQUFBQURFQUJBQUFBQWhFQUJBQ0ZDQVFBQUFJQVFDQUlRRUFBQWlDQUJRQUFCR0VJQWdCQUFBZ0FEQkRJSkFCZ0FPQUFBQUVDTUlBZ0VFUUlBQ0NBQVFCQUFBQVFBQUFBQUFJQVJDZ0V3RlVBQ0FBQUVBQUVBQVFrQUNBSVFBQ0NBQUVKQUNDQUFCQ1JvZ01BQkFBQklBQUFCQ2hrQ3hnZ0FBQmdBSVFBQ0FBZWlvQUFBRWdBQUVBQUFsQUFBQ0FFSUZBVUFFRUFKQUFpSUVJQUJLSkFoaUFBSVVJUUFDQUFBQT0IAAYAAAAACAAHAAAABAwACAoAARxF2DwfWqGTAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:47:34.780774+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "\"AI\" (\"士業\" OR \"税理士\" OR \"社労士\" OR \"行政書士\") -is:retweet lang:ja min_faves:30",
+        "queryType": "Top"
+      },
+      "cursor_in": "",
+      "cursor_out": "DAACCgACHJL6c0JAJxAKAAMckvpzQj_Y8AgABAAAAAILAAUAAADwRW1QQzZ3QUFBZlEvZ0dKTjB2R3AvQUFBQUJRY1dFSUFjaHJnMHh4T2REZllHdUFESEl3RGQwaWFNVlFjaTZPbms1cGhWeHlPQ3dOd0d1Q09ISDRtOXBtYUlGZ2NmSmRodGhveFBCeUtlbStkV3NEMkhJRzNnWmRiQVlrY2hzSXVraHNRUGh4ejNqekMyNUFiSEpFWEFpcGJNREFjaXM4NytKWmc4aHgwN0RUK2xuQmlISkhRaDBlYUlXTWNraXRXcHh2UjNoeU44OEt5R2lBUkhKSk5pTTdhb1pnY2JJNGFJcGZCNWh4OHRoYzZHbkdVCAAGAAAAAAgABwAAAAAMAAgKAAEcTnQ32BrgAwAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:47:42.600261+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "\"AI\" (\"士業\" OR \"税理士\" OR \"社労士\" OR \"行政書士\") -is:retweet lang:ja min_faves:30",
+        "queryType": "Top"
+      },
+      "cursor_in": "DAACCgACHJL6c0JAJxAKAAMckvpzQj_Y8AgABAAAAAILAAUAAADwRW1QQzZ3QUFBZlEvZ0dKTjB2R3AvQUFBQUJRY1dFSUFjaHJnMHh4T2REZllHdUFESEl3RGQwaWFNVlFjaTZPbms1cGhWeHlPQ3dOd0d1Q09ISDRtOXBtYUlGZ2NmSmRodGhveFBCeUtlbStkV3NEMkhJRzNnWmRiQVlrY2hzSXVraHNRUGh4ejNqekMyNUFiSEpFWEFpcGJNREFjaXM4NytKWmc4aHgwN0RUK2xuQmlISkhRaDBlYUlXTWNraXRXcHh2UjNoeU44OEt5R2lBUkhKSk5pTTdhb1pnY2JJNGFJcGZCNWh4OHRoYzZHbkdVCAAGAAAAAAgABwAAAAAMAAgKAAEcTnQ32BrgAwAAAA",
+      "cursor_out": "DAACCgACHJL6c0JAJxAKAAMckvpzQj-x4AgABAAAAAILAAUAAAHIRW1QQzZ3QUFBZlEvZ0dKTjB2R3AvQUFBQUNnY2lZaGlxcHV3Tnh5U2V4UGZtcEEzSEl3RGQwaWFNVlFjVG5RMzJCcmdBeHhZUWdCeUd1RFRISXd4ejNUYUFPZ2NYcGt1a2xzZ0ZoeUxvNmVUbW1GWEhJaitrVHFhRVJNY2RsK0lKUnV4bWh4SnRoNk9teEFVSEhIQWFYMmFnRkFjalU0d3ZSclJraHlNTjlneDJpR1pISFRzTlA2V2NHSWNpVGNMOTV2UmZoeVNLMWFuRzlIZUhIeTJGem9hY1pRY2k0VGNnUm9RL3h4dFNTdWlXbUdDSElsd29abldNVDRjamdzRGNCcmdqaHhIZVNBNzI3RE9ISDRtOXBtYUlGZ2NpbnB2blZyQTloeDhsMkcyR2pFOEhJYkNMcEliRUQ0Y2diZUJsMXNCaVJ5Uko3bDVXMkNOSEpFWEFpcGJNREFjaXM4NytKWmc4aHh6M2p6QzI1QWJISkZ4M3dMYmdHTWNrZENIUjVvaFl4eUtGazJMbWxIT0hKS0ZoTmFiUVprY2trMkl6dHFobUJ4c2pob2lsOEhtSEkzendySWFJQkVjZTNnUXV0cWc0QT09CAAGAAAAAAgABwAAAAEMAAgKAAEcTnQ32BrgAwAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:47:47.144123+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "\"AI\" (\"士業\" OR \"税理士\" OR \"社労士\" OR \"行政書士\") -is:retweet lang:ja min_faves:30",
+        "queryType": "Top"
+      },
+      "cursor_in": "DAACCgACHJL6c0JAJxAKAAMckvpzQj-x4AgABAAAAAILAAUAAAHIRW1QQzZ3QUFBZlEvZ0dKTjB2R3AvQUFBQUNnY2lZaGlxcHV3Tnh5U2V4UGZtcEEzSEl3RGQwaWFNVlFjVG5RMzJCcmdBeHhZUWdCeUd1RFRISXd4ejNUYUFPZ2NYcGt1a2xzZ0ZoeUxvNmVUbW1GWEhJaitrVHFhRVJNY2RsK0lKUnV4bWh4SnRoNk9teEFVSEhIQWFYMmFnRkFjalU0d3ZSclJraHlNTjlneDJpR1pISFRzTlA2V2NHSWNpVGNMOTV2UmZoeVNLMWFuRzlIZUhIeTJGem9hY1pRY2k0VGNnUm9RL3h4dFNTdWlXbUdDSElsd29abldNVDRjamdzRGNCcmdqaHhIZVNBNzI3RE9ISDRtOXBtYUlGZ2NpbnB2blZyQTloeDhsMkcyR2pFOEhJYkNMcEliRUQ0Y2diZUJsMXNCaVJ5Uko3bDVXMkNOSEpFWEFpcGJNREFjaXM4NytKWmc4aHh6M2p6QzI1QWJISkZ4M3dMYmdHTWNrZENIUjVvaFl4eUtGazJMbWxIT0hKS0ZoTmFiUVprY2trMkl6dHFobUJ4c2pob2lsOEhtSEkzendySWFJQkVjZTNnUXV0cWc0QT09CAAGAAAAAAgABwAAAAEMAAgKAAEcTnQ32BrgAwAAAA",
+      "cursor_out": "DAACCgACHJL6c0JAJxAKAAMckvpzQj-K0AgABAAAAAILAAUAAAKcRW1QQzZ3QUFBZlEvZ0dKTjB2R3AvQUFBQUR3Y2tuc1QzNXFRTnh5SmlHS3FtN0EzSEIxNVgvdmJVSk1jaFVQcW9KdlFkaHhPZERmWUd1QURISXdEZDBpYU1WUWNpNk9uazVwaFZ4eUkvcEU2bWhFVEhJbVdLekphc1VjY1NiWWVqcHNRRkJ5RWNZcWdXcENSSEl3MzJESGFJWmtjalU0d3ZSclJraHlTSzFhbkc5SGVISWszQy9lYjBYNGNrZTA3NmxyZ0xCeVNLS1NoR3VFMUhHMUpLNkphWVlJY2lqNTNCdHB4WUJ5T0N3TndHdUNPSEhEMGd2UmJJSkFjaHNJdWtoc1FQaHlSSjdsNVcyQ05ISkVYQWlwYk1EQWNpczg3K0paZzhoeEhlU0E3MjdET0hKS0ZoTmFiUVprY1VmU0xoUnJCb1J4Qi9KVmlGcUVkSEpDNEtYNGJjSTBjZTNnUXV0cWc0QnlNeXlIYkcyQi9ISXd4ejNUYUFPZ2NXRUlBY2hyZzB4eGVtUzZTV3lBV0hIWmZpQ1Vic1pvY2NjQnBmWnFBVUJ4MDdEVCtsbkJpSEpGS0s0d1hRWHNjajcxYWo5clJZQng4dGhjNkduR1VISXVFM0lFYUVQOGNpdG9OSUJ1QVlCeUpjS0daMWpFK0hIaFRsWnhiZ0xzY2ZKZGh0aG94UEJ4K0p2YVptaUJZSElwbzlNcmFFWEljaW5wdm5WckE5aHlDWEJMNDI5QkRISUczZ1pkYkFZa2NkU20xSjV1d0FoeHozanpDMjVBYkhKSFFoMGVhSVdNY2tYSGZBdHVBWXh5S0ZrMkxtbEhPSEg4ZVZnK2FvTDBja2sySXp0cWhtQnlOODhLeUdpQVJIR3lPR2lLWHdlWT0IAAYAAAAACAAHAAAAAgwACAoAARxOdDfYGuADAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:47:51.786772+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "\"AI\" (\"士業\" OR \"税理士\" OR \"社労士\" OR \"行政書士\") -is:retweet lang:ja min_faves:30",
+        "queryType": "Top"
+      },
+      "cursor_in": "DAACCgACHJL6c0JAJxAKAAMckvpzQj-K0AgABAAAAAILAAUAAAKcRW1QQzZ3QUFBZlEvZ0dKTjB2R3AvQUFBQUR3Y2tuc1QzNXFRTnh5SmlHS3FtN0EzSEIxNVgvdmJVSk1jaFVQcW9KdlFkaHhPZERmWUd1QURISXdEZDBpYU1WUWNpNk9uazVwaFZ4eUkvcEU2bWhFVEhJbVdLekphc1VjY1NiWWVqcHNRRkJ5RWNZcWdXcENSSEl3MzJESGFJWmtjalU0d3ZSclJraHlTSzFhbkc5SGVISWszQy9lYjBYNGNrZTA3NmxyZ0xCeVNLS1NoR3VFMUhHMUpLNkphWVlJY2lqNTNCdHB4WUJ5T0N3TndHdUNPSEhEMGd2UmJJSkFjaHNJdWtoc1FQaHlSSjdsNVcyQ05ISkVYQWlwYk1EQWNpczg3K0paZzhoeEhlU0E3MjdET0hKS0ZoTmFiUVprY1VmU0xoUnJCb1J4Qi9KVmlGcUVkSEpDNEtYNGJjSTBjZTNnUXV0cWc0QnlNeXlIYkcyQi9ISXd4ejNUYUFPZ2NXRUlBY2hyZzB4eGVtUzZTV3lBV0hIWmZpQ1Vic1pvY2NjQnBmWnFBVUJ4MDdEVCtsbkJpSEpGS0s0d1hRWHNjajcxYWo5clJZQng4dGhjNkduR1VISXVFM0lFYUVQOGNpdG9OSUJ1QVlCeUpjS0daMWpFK0hIaFRsWnhiZ0xzY2ZKZGh0aG94UEJ4K0p2YVptaUJZSElwbzlNcmFFWEljaW5wdm5WckE5aHlDWEJMNDI5QkRISUczZ1pkYkFZa2NkU20xSjV1d0FoeHozanpDMjVBYkhKSFFoMGVhSVdNY2tYSGZBdHVBWXh5S0ZrMkxtbEhPSEg4ZVZnK2FvTDBja2sySXp0cWhtQnlOODhLeUdpQVJIR3lPR2lLWHdlWT0IAAYAAAAACAAHAAAAAgwACAoAARxOdDfYGuADAAAA",
+      "cursor_out": "DAACCgACHJL6c0JAJxAKAAMckvpzQj9jwAgABAAAAAILAAUAAANwRW1QQzZ3QUFBZlEvZ0dKTjB2R3AvQUFBQUZBY2tuc1QzNXFRTnh5SmlHS3FtN0EzSEIxNVgvdmJVSk1jaFVQcW9KdlFkaHhPZERmWUd1QURISXdEZDBpYU1WUWNnb1ltRnhyQStoeUxvNmVUbW1GWEhJaitrVHFhRVJNY2laWXJNbHF4Unh4bFRkN1gyOEEzSEVtMkhvNmJFQlFjaTI3Mm5Cb0JqQnlFY1lxZ1dwQ1JISXczMkRIYUlaa2NqVTR3dlJyUmtoeU1kV3lPMmtFd0hKSXJWcWNiMGQ0Y2lUY0w5NXZSZmh5UjdUdnFXdUFzSEpJb3BLRWE0VFVjYlVrcm9scGhnaHgxMnlJeTJvSEFISkloNlJ4YkVhWWNhajJ0WDlwUU9oeUtQbmNHMm5GZ0hJNExBM0FhNEk0Y2NQU0M5RnNna0J5T3pIVThXNEhRSElsWkpRQWJJYUFjajVCRkZkcXhtUnlHd2k2U0d4QStISkVudVhsYllJMGNrUmNDS2xzd01CeUt6enY0bG1EeUhFZDVJRHZic000Y2tvV0UxcHRCbVJ4UjlJdUZHc0doSEVIOGxXSVdvUjBja0xncGZodHdqUng3ZUJDNjJxRGdISXpMSWRzYllIOGNpMXhhSGhveHFCeU1NYzkwMmdEb0hGaENBSElhNE5NY1hwa3VrbHNnRmh4c2RWaWFtdUFXSEhaZmlDVWJzWm9jY2NCcGZacUFVQnlJeDdFYTJoRFlISFRzTlA2V2NHSWNpWWpFVFplQjBoeUtZK3dlMmxCNEhJLzJlc3hhTVRJY2JPMXB0TmF3RWh5UlNpdU1GMEY3SEkrOVdvL2EwV0FjZkxZWE9ocHhsQnlOOGwzR0dqSDZISXVFM0lFYUVQOGNpdG9OSUJ1QVlCeUpjS0daMWpFK0hIaFRsWnhiZ0xzY1kzT2kzRm94cEJ4OGwyRzJHakU4SEg0bTlwbWFJRmdjaW1qMHl0b1JjaHlLZW0rZFdzRDJISUpjRXZqYjBFTWNnYmVCbDFzQmlSeDFLYlVubTdBQ0hIUGVQTUxia0JzY2tkQ0hSNW9oWXh5UmNkOEMyNEJqSElvV1RZdWFVYzRja012UnROc1IwaHgvSGxZUG1xQzlISkpOaU03YW9aZ2NqZlBDc2hvZ0VSeHNqaG9pbDhIbQgABgAAAAAIAAcAAAADDAAICgABHGNzotxaMaQAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:47:56.612208+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "\"AI\" (\"士業\" OR \"税理士\" OR \"社労士\" OR \"行政書士\") -is:retweet lang:ja min_faves:30",
+        "queryType": "Top"
+      },
+      "cursor_in": "DAACCgACHJL6c0JAJxAKAAMckvpzQj9jwAgABAAAAAILAAUAAANwRW1QQzZ3QUFBZlEvZ0dKTjB2R3AvQUFBQUZBY2tuc1QzNXFRTnh5SmlHS3FtN0EzSEIxNVgvdmJVSk1jaFVQcW9KdlFkaHhPZERmWUd1QURISXdEZDBpYU1WUWNnb1ltRnhyQStoeUxvNmVUbW1GWEhJaitrVHFhRVJNY2laWXJNbHF4Unh4bFRkN1gyOEEzSEVtMkhvNmJFQlFjaTI3Mm5Cb0JqQnlFY1lxZ1dwQ1JISXczMkRIYUlaa2NqVTR3dlJyUmtoeU1kV3lPMmtFd0hKSXJWcWNiMGQ0Y2lUY0w5NXZSZmh5UjdUdnFXdUFzSEpJb3BLRWE0VFVjYlVrcm9scGhnaHgxMnlJeTJvSEFISkloNlJ4YkVhWWNhajJ0WDlwUU9oeUtQbmNHMm5GZ0hJNExBM0FhNEk0Y2NQU0M5RnNna0J5T3pIVThXNEhRSElsWkpRQWJJYUFjajVCRkZkcXhtUnlHd2k2U0d4QStISkVudVhsYllJMGNrUmNDS2xzd01CeUt6enY0bG1EeUhFZDVJRHZic000Y2tvV0UxcHRCbVJ4UjlJdUZHc0doSEVIOGxXSVdvUjBja0xncGZodHdqUng3ZUJDNjJxRGdISXpMSWRzYllIOGNpMXhhSGhveHFCeU1NYzkwMmdEb0hGaENBSElhNE5NY1hwa3VrbHNnRmh4c2RWaWFtdUFXSEhaZmlDVWJzWm9jY2NCcGZacUFVQnlJeDdFYTJoRFlISFRzTlA2V2NHSWNpWWpFVFplQjBoeUtZK3dlMmxCNEhJLzJlc3hhTVRJY2JPMXB0TmF3RWh5UlNpdU1GMEY3SEkrOVdvL2EwV0FjZkxZWE9ocHhsQnlOOGwzR0dqSDZISXVFM0lFYUVQOGNpdG9OSUJ1QVlCeUpjS0daMWpFK0hIaFRsWnhiZ0xzY1kzT2kzRm94cEJ4OGwyRzJHakU4SEg0bTlwbWFJRmdjaW1qMHl0b1JjaHlLZW0rZFdzRDJISUpjRXZqYjBFTWNnYmVCbDFzQmlSeDFLYlVubTdBQ0hIUGVQTUxia0JzY2tkQ0hSNW9oWXh5UmNkOEMyNEJqSElvV1RZdWFVYzRja012UnROc1IwaHgvSGxZUG1xQzlISkpOaU03YW9aZ2NqZlBDc2hvZ0VSeHNqaG9pbDhIbQgABgAAAAAIAAcAAAADDAAICgABHGNzotxaMaQAAAA",
+      "cursor_out": "DAACCgACHJL6c0JAJxAKAAMckvpzQj88sAgABAAAAAILAAUAAAO8QUFBQUFDNk5zd2dBQUFCa0FBQUFBQUFBRlh3QUFBQUhBQUFBVmdnQUFDRVNBZ0FBQUFFQUNDZ0NCUWtBUUFBQVFRQUVnQ0FHRUFBWWhJQUFBQ1VBZ0VBQUFnQ2dCd0FBUUFBUUFRQWdBQ0FBQUFBQUlvQUFFQVFBQUNBQUl3UVNBQUlBQVVBa0FBQUFBQUVBSWlBQUFJQUdBQUlDQ0FFUUlBQUZCaFJFQW5FQkVFQUlDSUFBQUFGRVFVR0FBa0FBQUFBQkNBS0VCQ0VBQWdBQ0FRSUFHQnNBRUttQVpBSkNRQXdRQkNBQUlrQVNRa0dCQUFRQWdBQ2dBQVFna0FBSUNCQkFBZ0VCQWhFVUNKQ0FNVUFnQUFDQUFRQUFBQUFBQWdJQ0NHQUJBQVFFZ0l3UUF3NEFBQUFEQkNBUUFnUURBQUNBUUFFVkFLQUFTUUFCQUFnRUF3Z0FFQTVBQWtBRUFvU0U0QXNnUWhBZ0NBQUFBUUVFQVFBQUl3QUFBUUFDQUFCVkFBRVFBQWlBZ0FEQ2dnaFVBQUFDQUFBS0JJZ0FBQUFJZ0JHQWtBT0FBQWNIQUFJRUFNQUFFQ0tBQUFDUVFCQkFBQURCSUlBSkJBRVFFQUFDQUFBQUtBQUFBTW9nQUFBQUFBUVFTQXVXU0FpRUJJU01BZ0JBQUlFSkJGV0FJSUFVUVFBeFFSQUJJZ0FCUUVBQUNBUUFBUUFBQVFFWkFBQUFNQ0FNQUFDQ2dBQUFDQUVNQUFBZ0lBTUlBQUFBQUF4QUFnQUFJQUFBQUlRQUJBQVFBQWhBZ0FBQUFBZ2dBQkFBQkFBQUFDQUFJQUFJZ0FCQUFBRUVBQUFBSUFBQUlBQUFnQkFCQUFBQVJBQUNaQUFBQUNBQVFFVUNnQUJBQUZRQUFBQVFVQlFRSUFBQWdDQUFRQUJvQUFnQ29FQUJBQUVCQkFBQUVBQUNBNEFJQUFJaWdBS0JJQkJBUVNHQUFBQUFCQUJBSUlCQVFDQVFLSElBQUFBSUFHQUFBQmlBQVNBZ0VBQUFCQVFBQUlBZ0JFQUVBREFBQUJJQkFBd0FBd0JBSUdBQWdnQUFoUUFDQUlBU0VBWXdRR0NRQUVBZ0NBQ0lRQUFDRUFBSUljUUlBQUlwQ0FJZ0VCQUJFRUNDQUFJQVJ3QUFJQUVBSkFnR0NBaUFBRUFnZ0FBZ0ZRQUJBQUNBQVNFS0FBQUFOUUFBQkFBQUFBb0NBRFlFRUFnSWlrQUFBQUVBQkJCQVVRQUFBQXFBSWFnQ0FCQT0IAAYAAAAACAAHAAAABAwACAoAARxjc6LcWjGkAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:48:01.169258+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "(\"業務効率化\" OR \"業務自動化\") \"AI\" -is:retweet lang:ja min_faves:50",
+        "queryType": "Top"
+      },
+      "cursor_in": "",
+      "cursor_out": "DAACCgACHJL6ibSAJxAKAAMckvqJtH_Y8AgABAAAAAILAAUAAADwRW1QQzZ3QUFBZlEvZ0dKTjB2R3AvQUFBQUJRY1E1MlZ6NXB4NXh3bUlFKzdXb0VFSENJWGpmOGJZVEFjSWRzRjNwcGhVUnlKb1dEa1dwQVBIQmZZdjArYlVUSWNrUlVCWU50QXZCeU9Dd053R3VDT0hIanBDYUphTU40Y05DUllPaHRBTnh5SGduTWttdkJTSEJ4UWRjOGE4ZmdjWVlqOHpscHhJeHhEYUlJNjJpRkZIRXljR1VPYmdKMGNIeitZdWhyQXRSeFlUZUliVzBCV0hHVXRpOU5hTVNRY00veE41bGFSUXh4TTJaYmVWckhCCAAGAAAAAAgABwAAAAAMAAgKAAEcF9i_T5tRMgAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:48:05.603197+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "(\"業務効率化\" OR \"業務自動化\") \"AI\" -is:retweet lang:ja min_faves:50",
+        "queryType": "Top"
+      },
+      "cursor_in": "DAACCgACHJL6ibSAJxAKAAMckvqJtH_Y8AgABAAAAAILAAUAAADwRW1QQzZ3QUFBZlEvZ0dKTjB2R3AvQUFBQUJRY1E1MlZ6NXB4NXh3bUlFKzdXb0VFSENJWGpmOGJZVEFjSWRzRjNwcGhVUnlKb1dEa1dwQVBIQmZZdjArYlVUSWNrUlVCWU50QXZCeU9Dd053R3VDT0hIanBDYUphTU40Y05DUllPaHRBTnh5SGduTWttdkJTSEJ4UWRjOGE4ZmdjWVlqOHpscHhJeHhEYUlJNjJpRkZIRXljR1VPYmdKMGNIeitZdWhyQXRSeFlUZUliVzBCV0hHVXRpOU5hTVNRY00veE41bGFSUXh4TTJaYmVWckhCCAAGAAAAAAgABwAAAAAMAAgKAAEcF9i_T5tRMgAAAA",
+      "cursor_out": "DAACCgACHJL6ibSAJxAKAAMckvqJtH-x4AgABAAAAAILAAUAAAHIRW1QQzZ3QUFBZlEvZ0dKTjB2R3AvQUFBQUNnY1E1MlZ6NXB4NXh4SWt1WjNXZ0FwSENJbUttV1hvQ0VjaWFGZzVGcVFEeHlSOVNjUldzQnFIQlpFY1NIWHdPTWNhaTkxZUJzZ0xCeGlmNXBSRzJFSkhCeFFkYzhhOGZnY2g0SnpKSnJ3VWh3MEpGZzZHMEEzSEhqcENhSmFNTjRjWVlqOHpscHhJeHhEYUlJNjJpRkZIQ1RibkRJYkVKVWNIeitZdWhyQXRSeE1uQmxEbTRDZEhHVXRpOU5hTVNRY0ljMzg2VnFRR1J3VlpJM3JtM0g5SEV6Wmx0NVdzY0VjRldUZkZsZHhhQnhtVzlzTG00REdIQ0lYamY4YllUQWNKaUJQdTFxQkJCd3lpWll1VnZFaUhDSGJCZDZhWVZFYi85RUpBMWN4TEJ3WDJMOVBtMUV5SEpFVkFXRGJRTHdjT284R1hkZFJieHlPQ3dOd0d1Q09HNnZ1aE1vYTBTc2NWZER5NGhyd0h4eFlUZUliVzBCV0hHWVh2bnVhNGVNY1hSMXVFZHJoZnh3ei9FM21WcEZESEl1Yy91WGFVS2NjTlRpN2xab3hVQT09CAAGAAAAAAgABwAAAAEMAAgKAAEcF9i_T5tRMgAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:48:19.792709+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "(\"業務効率化\" OR \"業務自動化\") \"AI\" -is:retweet lang:ja min_faves:50",
+        "queryType": "Top"
+      },
+      "cursor_in": "DAACCgACHJL6ibSAJxAKAAMckvqJtH-x4AgABAAAAAILAAUAAAHIRW1QQzZ3QUFBZlEvZ0dKTjB2R3AvQUFBQUNnY1E1MlZ6NXB4NXh4SWt1WjNXZ0FwSENJbUttV1hvQ0VjaWFGZzVGcVFEeHlSOVNjUldzQnFIQlpFY1NIWHdPTWNhaTkxZUJzZ0xCeGlmNXBSRzJFSkhCeFFkYzhhOGZnY2g0SnpKSnJ3VWh3MEpGZzZHMEEzSEhqcENhSmFNTjRjWVlqOHpscHhJeHhEYUlJNjJpRkZIQ1RibkRJYkVKVWNIeitZdWhyQXRSeE1uQmxEbTRDZEhHVXRpOU5hTVNRY0ljMzg2VnFRR1J3VlpJM3JtM0g5SEV6Wmx0NVdzY0VjRldUZkZsZHhhQnhtVzlzTG00REdIQ0lYamY4YllUQWNKaUJQdTFxQkJCd3lpWll1VnZFaUhDSGJCZDZhWVZFYi85RUpBMWN4TEJ3WDJMOVBtMUV5SEpFVkFXRGJRTHdjT284R1hkZFJieHlPQ3dOd0d1Q09HNnZ1aE1vYTBTc2NWZER5NGhyd0h4eFlUZUliVzBCV0hHWVh2bnVhNGVNY1hSMXVFZHJoZnh3ei9FM21WcEZESEl1Yy91WGFVS2NjTlRpN2xab3hVQT09CAAGAAAAAAgABwAAAAEMAAgKAAEcF9i_T5tRMgAAAA",
+      "cursor_out": "DAACCgACHJL6ibSAJxAKAAMckvqJtH-K0AgABAAAAAILAAUAAAKcRW1QQzZ3QUFBZlEvZ0dKTjB2R3AvQUFBQUR3Y2k1eis1ZHBRcHh2a0FKV01WdUIvRy94MnliS1hzR01jTkNSWU9odEFOeHhxTDNWNEd5QXNISWVDY3lTYThGSWNrZlVuRVZyQWFod2NVSFhQR3ZINEhHR0kvTTVhY1NNY1EyaUNPdG9oUlJ3azI1d3lHeENWSEI4L21Mb2F3TFViKzlFRUc5cWdieHdYOEc0a21zSHhIR1V0aTlOYU1TUWNabHZiQzV1QXhoeEhucXh2RndDc0cvL1JDUU5YTVN3YnFWUXJ5UnNSMVJ3aDJ3WGVtbUZSSEpDdk9WaGFNVm9jQ0VhM0xkZHd2UnlSRlFGZzIwQzhISTRMQTNBYTRJNGNNb21XTGxieElodXI3b1RLR3RFckcvWXYrei9ia1BJYis4bm9JdHNCRVJ4elMxdWtXekZTSEJmU2RFSlh3TE1jWmhlK2U1cmg0eHcxT0x1Vm1qRlFIRU9kbGMrYWNlY2NTSkxtZDFvQUtSeUpvV0RrV3BBUEhDSW1LbVdYb0NFY0ZrUnhJZGZBNHh4aWY1cFJHMkVKRytwd2l5K1hRUlVjZnE5aVZWdWdjaHg0NlFtaVdqRGVISUtJUGc0YU1MNGNUSndaUTV1QW5Sd2h6ZnpwV3BBWkhCVmtqZXViY2YwY1RObVczbGF4d1J3VlpOOFdWM0ZvSENZZ1Q3dGFnUVFjSWhlTi94dGhNQnZ2bHQ2K1ZqQW5IQmZZdjArYlVUSWNPbzhHWGRkUmJ4d3cwQVlRR29GMkc4S0hPRWxXOElBY1ZkRHk0aHJ3SHh3NThVZ1VXeENsSEZoTjRodGJRRlljZzA1MEFsdWcveHhkSFc0UjJ1Ri9IRFA4VGVaV2tVTT0IAAYAAAAACAAHAAAAAgwACAoAARwX2L9Pm1EyAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:48:24.230282+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "(\"業務効率化\" OR \"業務自動化\") \"AI\" -is:retweet lang:ja min_faves:50",
+        "queryType": "Top"
+      },
+      "cursor_in": "DAACCgACHJL6ibSAJxAKAAMckvqJtH-K0AgABAAAAAILAAUAAAKcRW1QQzZ3QUFBZlEvZ0dKTjB2R3AvQUFBQUR3Y2k1eis1ZHBRcHh2a0FKV01WdUIvRy94MnliS1hzR01jTkNSWU9odEFOeHhxTDNWNEd5QXNISWVDY3lTYThGSWNrZlVuRVZyQWFod2NVSFhQR3ZINEhHR0kvTTVhY1NNY1EyaUNPdG9oUlJ3azI1d3lHeENWSEI4L21Mb2F3TFViKzlFRUc5cWdieHdYOEc0a21zSHhIR1V0aTlOYU1TUWNabHZiQzV1QXhoeEhucXh2RndDc0cvL1JDUU5YTVN3YnFWUXJ5UnNSMVJ3aDJ3WGVtbUZSSEpDdk9WaGFNVm9jQ0VhM0xkZHd2UnlSRlFGZzIwQzhISTRMQTNBYTRJNGNNb21XTGxieElodXI3b1RLR3RFckcvWXYrei9ia1BJYis4bm9JdHNCRVJ4elMxdWtXekZTSEJmU2RFSlh3TE1jWmhlK2U1cmg0eHcxT0x1Vm1qRlFIRU9kbGMrYWNlY2NTSkxtZDFvQUtSeUpvV0RrV3BBUEhDSW1LbVdYb0NFY0ZrUnhJZGZBNHh4aWY1cFJHMkVKRytwd2l5K1hRUlVjZnE5aVZWdWdjaHg0NlFtaVdqRGVISUtJUGc0YU1MNGNUSndaUTV1QW5Sd2h6ZnpwV3BBWkhCVmtqZXViY2YwY1RObVczbGF4d1J3VlpOOFdWM0ZvSENZZ1Q3dGFnUVFjSWhlTi94dGhNQnZ2bHQ2K1ZqQW5IQmZZdjArYlVUSWNPbzhHWGRkUmJ4d3cwQVlRR29GMkc4S0hPRWxXOElBY1ZkRHk0aHJ3SHh3NThVZ1VXeENsSEZoTjRodGJRRlljZzA1MEFsdWcveHhkSFc0UjJ1Ri9IRFA4VGVaV2tVTT0IAAYAAAAACAAHAAAAAgwACAoAARwX2L9Pm1EyAAAA",
+      "cursor_out": "DAACCgACHJL6ibSAJxAKAAMckvqJtH9jwAgABAAAAAILAAUAAANwRW1QQzZ3QUFBZlEvZ0dKTjB2R3AvQUFBQUZBY2k1eis1ZHBRcHh2a0FKV01WdUIvRy94MnliS1hzR01jSXFUd1loYkJweHcwSkZnNkcwQTNIR292ZFhnYklDd2NoNEp6Skpyd1VoeVI5U2NSV3NCcUhCeFFkYzhhOGZnY2oxbkZHdHJSdFJ4aGlQek9XbkVqSEVOb2dqcmFJVVVjSk51Y01oc1FsUndmUDVpNkdzQzFHL3ZSQkJ2YW9HOGNGL0J1SkpyQjhSeGxMWXZUV2pFa0c2dFk2MENhNFU0Y1psdmJDNXVBeGh2VkR1WkdHMkVkSEVlZXJHOFhBS3diLzlFSkExY3hMQnVwVkN2Skd4SFZIQ0hiQmQ2YVlWRWNrSzg1V0ZveFdod0lScmN0MTNDOUcvdlNLYXNYY0dnY2tSVUJZTnRBdkJ5T0N3TndHdUNPSERLSmxpNVc4U0licSs2RXloclJLeHd4VGs0VTJqQ2ZHL1lydU1ZYklXRWI5aS83UDl1UThodjd5ZWdpMndFUkhITkxXNlJiTVZJY0kxL2lsMXJRMnh4S0VicnFtNkFiSERob0xlNWFBTmdjRjlKMFFsZkFzeHhtRjc1N211SGpIRFU0dTVXYU1WQWNRNTJWejVweDV4eElrdVozV2dBcEhJbWhZT1Jha0E4Y0lpWXFaWmVnSVJ4eExpTkNHb0ZmSEJaRWNTSFh3T01jWW4rYVVSdGhDUnZxY0lzdmwwRVZISDZ2WWxWYm9ISWNlT2tKb2xvdzNodzRWS2RYMjBGL0hJS0lQZzRhTUw0Y1RKd1pRNXVBblJ4N05oU24yd0dWSENITi9PbGFrQmtjQ1Zhb2VWWVFkeHdWWkkzcm0zSDlIRXpabHQ1V3NjRWNGV1RmRmxkeGFCd2lGNDMvRzJFd0crK1czcjVXTUNjY0ppQlB1MXFCQkJ4Q3JmbTVtaEZCSEYvTWwvTGJjS3NjRjlpL1Q1dFJNaHc2andaZDExRnZIRERRQmhBYWdYWWJ3b2M0U1Zid2dCeFYwUExpR3ZBZkhINzBEbTFYd1FNY2J4UkJ5NXFnb2h3NThVZ1VXeENsRzRCU2RuNGFFV29jV0UzaUcxdEFWaHhBSjE5RWx3RTJISU5PZEFKYm9QOGNYUjF1RWRyaGZ4d3ovRTNtVnBGRAgABgAAAAAIAAcAAAADDAAICgABHBfYv0-bUTIAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:48:32.055433+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "(\"業務効率化\" OR \"業務自動化\") \"AI\" -is:retweet lang:ja min_faves:50",
+        "queryType": "Top"
+      },
+      "cursor_in": "DAACCgACHJL6ibSAJxAKAAMckvqJtH9jwAgABAAAAAILAAUAAANwRW1QQzZ3QUFBZlEvZ0dKTjB2R3AvQUFBQUZBY2k1eis1ZHBRcHh2a0FKV01WdUIvRy94MnliS1hzR01jSXFUd1loYkJweHcwSkZnNkcwQTNIR292ZFhnYklDd2NoNEp6Skpyd1VoeVI5U2NSV3NCcUhCeFFkYzhhOGZnY2oxbkZHdHJSdFJ4aGlQek9XbkVqSEVOb2dqcmFJVVVjSk51Y01oc1FsUndmUDVpNkdzQzFHL3ZSQkJ2YW9HOGNGL0J1SkpyQjhSeGxMWXZUV2pFa0c2dFk2MENhNFU0Y1psdmJDNXVBeGh2VkR1WkdHMkVkSEVlZXJHOFhBS3diLzlFSkExY3hMQnVwVkN2Skd4SFZIQ0hiQmQ2YVlWRWNrSzg1V0ZveFdod0lScmN0MTNDOUcvdlNLYXNYY0dnY2tSVUJZTnRBdkJ5T0N3TndHdUNPSERLSmxpNVc4U0licSs2RXloclJLeHd4VGs0VTJqQ2ZHL1lydU1ZYklXRWI5aS83UDl1UThodjd5ZWdpMndFUkhITkxXNlJiTVZJY0kxL2lsMXJRMnh4S0VicnFtNkFiSERob0xlNWFBTmdjRjlKMFFsZkFzeHhtRjc1N211SGpIRFU0dTVXYU1WQWNRNTJWejVweDV4eElrdVozV2dBcEhJbWhZT1Jha0E4Y0lpWXFaWmVnSVJ4eExpTkNHb0ZmSEJaRWNTSFh3T01jWW4rYVVSdGhDUnZxY0lzdmwwRVZISDZ2WWxWYm9ISWNlT2tKb2xvdzNodzRWS2RYMjBGL0hJS0lQZzRhTUw0Y1RKd1pRNXVBblJ4N05oU24yd0dWSENITi9PbGFrQmtjQ1Zhb2VWWVFkeHdWWkkzcm0zSDlIRXpabHQ1V3NjRWNGV1RmRmxkeGFCd2lGNDMvRzJFd0crK1czcjVXTUNjY0ppQlB1MXFCQkJ4Q3JmbTVtaEZCSEYvTWwvTGJjS3NjRjlpL1Q1dFJNaHc2andaZDExRnZIRERRQmhBYWdYWWJ3b2M0U1Zid2dCeFYwUExpR3ZBZkhINzBEbTFYd1FNY2J4UkJ5NXFnb2h3NThVZ1VXeENsRzRCU2RuNGFFV29jV0UzaUcxdEFWaHhBSjE5RWx3RTJISU5PZEFKYm9QOGNYUjF1RWRyaGZ4d3ovRTNtVnBGRAgABgAAAAAIAAcAAAADDAAICgABHBfYv0-bUTIAAAA",
+      "cursor_out": "DAACCgACHJL6ibSAJxAKAAMckvqJtH88sAgABAAAAAILAAUAAAO8QUFBQUFDNk5zd2dBQUFCa0FBQUFBQUFBRlh3QUFBQUhBQUFBVmdCSkNTb0FBQklBRUFBSkFCUUJFUVNHQUFBQUFGUkFDRUFRQUFJWUE1RUFBQUdBQ2dCQkFBQUFBZ0FEQ1FBR0FDSUtRQUNFQXdRQVF3QWdnQUNRQVFBUU1Gb0JMQUFCQUlBRUFBQUFBRVNEQUJFSWxBQWdDQWdBQUFJQUFJS0FVQUNDQ1FBQUJBQUFBWENBQUtBQUNRQ0FFQ0NnQWdBQUFoQ0FnQ0FRQUFHS0FRQUNBQUFBRUlnR0FRUUFBZ2dBQUVBQUpCQ2dRUUNBQUFBQUpJQUlFQVFBRUFRQ0FBQUFBU0FBS3JBQUNBR0lBQUJnQUFDQUFnUVVBQUJSQUFBUUVLQkVBVVlRQUFFQWdBQUFBUUFEQUFBQUFBNFVBSUFBQUlCUUFKSUFBUUFBUUFrQUFBQ1ZBQkNIR0lNZ0FGQWtCQUVJQUNJQUFBSUFDQ0JBQUlFQUNBQUdBQUFnRUFnRUFBQmtDQ0FHaENCQ0FnZ0FJQWxFUWlBQmNBQUFnQkFTUUVRQUFESUFRbUFoUUVFQ0FBU0NBQVlnSklCTUNCRUlnRUVRUUFJb0VBQUFBRkVNQm9RQVFRQmdCQkVESUNZS0FBQkFDSUFBZ0FBQUFBQklCSXdCQUFrUVJBRUVBZ0FFQ0FFQkFBQUFBb1NBRUZCTUJFRURBQUFRQVFJQUF3QWpKQUFBSVFpQUFBQVNBS0FBQUtGSUJBQWtBUUFBSUlBeUlFS0FBZ0FDQUVJUUlLQUFCQUJCVU1BUUFBb1VBQm9SUmdBOGlnQm9BQUFVZ0VBQVFBQUFBQUlBQWNBQUJBQUFBQUFSQUFBQUFBd0FBQVJBQ0VVQUVUQUFDQ0FRQUFFaUNBQVFBUmdBUWdGQUFBZ0VJQUNBQUdBQ0FDQUFRQUFBRUFBSUJBQUFBQUtFQUFFaEVBQUF3QUlnQ0FBQUFpWnFnQ0NBZ0FBZ1FBQUFBRVFBUUlRQ0FDQVFna0FFQUFCQWdBUUFBRUFBQUlRUkFGQUFBZ0FCQVFBQUFBd0lBQUFBaEFBRWdBQVFBZ0FCQW9nUUVBQVNJQUVFZ0RBQUJnS0FLQ1VBQUFBSUlBUUFFQUJBQUFBQVNCQUFBQUlBb0FBQUFGUUFrQkFBQ0FBZ0FTQUFZNEFBQUFHQUFBQUVBSUFBS0JBUUFBTUFBZ1FBQUFBQlJJQVFBQUFJQUNFTlJBQVJRQUFBSUFRZ0FVQ0lCQUFSZ0FDQUFFRT0IAAYAAAAACAAHAAAABAwACAoAARwX2L9Pm1EyAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:48:37.367684+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "\"Claude\" (\"経理\" OR \"請求書\" OR \"見積\") -is:retweet lang:ja min_faves:30",
+        "queryType": "Top"
+      },
+      "cursor_in": "",
+      "cursor_out": "DAACCgACHJL6rUKAJxAKAAMckvqtQn_Y8AgABAAAAAILAAUAAADwRW1QQzZ3QUFBZlEvZ0dKTjB2R3AvQUFBQUJRY0t1dHhxOXVRRGh5TG8rTjNHbkJzSEFoZEsyMmFjQXdjaHhFazFwdlFjaGphSU8yejI5RkxISElZaGtUYlFQa2NMRzRKNVpwUnRoeUVOYURlRmxFbUhJU3lBMlFiSVZrWnN6dVk5MXFSK2h4Rml0bVhteUFZSEJBWm5iVWFrY2NjZzkzYzVCcHhCaHc1U3dJcFdoR1lIREJJdVNSV2NTZ2NDUGpRUmxweDdSeFBocFltR3hBWEhFNzdPNXhhNFg4Y096S25DZHJ3N1J3dlppRGJHeEF4CAAGAAAAAAgABwAAAAAMAAgKAAEY2iDts9vRSwAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:48:42.076890+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "\"Claude\" (\"経理\" OR \"請求書\" OR \"見積\") -is:retweet lang:ja min_faves:30",
+        "queryType": "Top"
+      },
+      "cursor_in": "DAACCgACHJL6rUKAJxAKAAMckvqtQn_Y8AgABAAAAAILAAUAAADwRW1QQzZ3QUFBZlEvZ0dKTjB2R3AvQUFBQUJRY0t1dHhxOXVRRGh5TG8rTjNHbkJzSEFoZEsyMmFjQXdjaHhFazFwdlFjaGphSU8yejI5RkxISElZaGtUYlFQa2NMRzRKNVpwUnRoeUVOYURlRmxFbUhJU3lBMlFiSVZrWnN6dVk5MXFSK2h4Rml0bVhteUFZSEJBWm5iVWFrY2NjZzkzYzVCcHhCaHc1U3dJcFdoR1lIREJJdVNSV2NTZ2NDUGpRUmxweDdSeFBocFltR3hBWEhFNzdPNXhhNFg4Y096S25DZHJ3N1J3dlppRGJHeEF4CAAGAAAAAAgABwAAAAAMAAgKAAEY2iDts9vRSwAAAA",
+      "cursor_out": "DAACCgACHJL6rUKAJxAKAAMckvqtQn-x4AgABAAAAAILAAUAAAHIRW1QQzZ3QUFBZlEvZ0dKTjB2R3AvQUFBQUNnY0NGMHJiWnB3REJ5SEVTVFdtOUJ5SERCUVN0V2FNS0ljTEc0SjVacFJ0aHdXUkhFaDE4RGpHTm9nN2JQYjBVc2NjaGlHUk50QStSd29pTSthMnNGckhCQVpuYlVha2NjWWZxbG5wMXR3Nnh5RUpiemNtNUFhSElQZDNPUWFjUVljTUVpNUpGWnhLQnhQaHBZbUd4QVhIRDE0RDhsYm9BNGNMMllnMnhzUU1SdzlUNnhjMjZHUkhGbGVsZDhha0NFY0hyTU4wZHVBU3h3cTYzR3IyNUFPSEl1ajQzY2FjR3djT3F6R2RWc1FmaHcvcHAzVVdqR0tISXJXckpmV01lRWNoRFdnM2haUkpobXpPNWozV3BINkhJU3lBMlFiSVZrY1JZclpsNXNnR0J5UFNzYk4yaUU5SEQ1UUhadGJvQ3djYWZtWVFkdUJQQnd3RWNuUlZsQVhIRTc3TzV4YTRYOGNDUGpRUmxweDdSdzVTd0lwV2hHWUhITjZzM1JhSWFzY2JYZHBXMXJSZHh5SmJZTHRHckFRSERzeXB3bmE4TzBjYzBCdkhkdGhyZz09CAAGAAAAAAgABwAAAAEMAAgKAAEY2iDts9vRSwAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:48:46.788837+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "\"Claude\" (\"経理\" OR \"請求書\" OR \"見積\") -is:retweet lang:ja min_faves:30",
+        "queryType": "Top"
+      },
+      "cursor_in": "DAACCgACHJL6rUKAJxAKAAMckvqtQn-x4AgABAAAAAILAAUAAAHIRW1QQzZ3QUFBZlEvZ0dKTjB2R3AvQUFBQUNnY0NGMHJiWnB3REJ5SEVTVFdtOUJ5SERCUVN0V2FNS0ljTEc0SjVacFJ0aHdXUkhFaDE4RGpHTm9nN2JQYjBVc2NjaGlHUk50QStSd29pTSthMnNGckhCQVpuYlVha2NjWWZxbG5wMXR3Nnh5RUpiemNtNUFhSElQZDNPUWFjUVljTUVpNUpGWnhLQnhQaHBZbUd4QVhIRDE0RDhsYm9BNGNMMllnMnhzUU1SdzlUNnhjMjZHUkhGbGVsZDhha0NFY0hyTU4wZHVBU3h3cTYzR3IyNUFPSEl1ajQzY2FjR3djT3F6R2RWc1FmaHcvcHAzVVdqR0tISXJXckpmV01lRWNoRFdnM2haUkpobXpPNWozV3BINkhJU3lBMlFiSVZrY1JZclpsNXNnR0J5UFNzYk4yaUU5SEQ1UUhadGJvQ3djYWZtWVFkdUJQQnd3RWNuUlZsQVhIRTc3TzV4YTRYOGNDUGpRUmxweDdSdzVTd0lwV2hHWUhITjZzM1JhSWFzY2JYZHBXMXJSZHh5SmJZTHRHckFRSERzeXB3bmE4TzBjYzBCdkhkdGhyZz09CAAGAAAAAAgABwAAAAEMAAgKAAEY2iDts9vRSwAAAA",
+      "cursor_out": "DAACCgACHJL6rUKAJxAKAAMckvqtQn-K0AgABAAAAAILAAUAAAKcRW1QQzZ3QUFBZlEvZ0dKTjB2R3AvQUFBQUR3Y0lLbG1TSm9nOEJ3aExydW9tNkd6SEFoZEsyMmFjQXdjTEc0SjVacFJ0aHhKODJVN0dtRVlIQkFabmJVYWtjY1lmcWxucDF0dzZ4eUVKYnpjbTVBYUhJUGQzT1FhY1FZY09EMURxVm9ocXh4UGhwWW1HeEFYSENpeVFpZ2F3VEFjUFhnUHlWdWdEaHZndUlTSEdnR01IQzltSU5zYkVERWNQVStzWE51aGtSeFpYcFhmR3BBaEhCNnpEZEhiZ0VzWmZlWnNjdHNnN2h5TG8rTjNHbkJzSERxc3huVmJFSDRjaERXZzNoWlJKaG16TzVqM1dwSDZIRVdLMlplYklCZ2NPVXNDS1ZvUm1Cd3dFY25SVmxBWEhJUGRISVpiWWJRY1dzcUcxTnNockJ3K1VCMmJXNkFzSEVJUG42OWFFWTBjYlhkcFcxclJkeHlKYllMdEdyQVFIRHN5cHduYThPMGNoWU8zMEZjdzZCeHpRRzhkMjJHdUc4bE9LZ0Jib09NY2h4RWsxcHZRY2h4SFBxMUltdkU0SERCUVN0V2FNS0ljRmtSeElkZkE0eGphSU8yejI5RkxISElZaGtUYlFQa2NLSWpQbXRyQmF4d3dTTGtrVm5Fb0hFTDBnTW5hSVQ0YWlSS3JXbHNSeUJzVGxuc2kyOUFDSEZ0Tnp0MWJVTVljS3V0eHE5dVFEaHhVSEdXWEcwQzVIRCttbmRSYU1Zb2NoTElEWkJzaFdSeUsxcXlYMWpIaEhHbjVtRUhiZ1R3Y1ZXRzNhcG93L1J4eVB2V3Yyd0VBSEhONnMzUmFJYXNjQ1BqUVJscHg3UnhPK3p1Y1d1Ri9ISTlLeHMzYUlUMD0IAAYAAAAACAAHAAAAAgwACAoAARl95mxy2yDuAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:48:57.393951+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "\"Claude\" (\"経理\" OR \"請求書\" OR \"見積\") -is:retweet lang:ja min_faves:30",
+        "queryType": "Top"
+      },
+      "cursor_in": "DAACCgACHJL6rUKAJxAKAAMckvqtQn-K0AgABAAAAAILAAUAAAKcRW1QQzZ3QUFBZlEvZ0dKTjB2R3AvQUFBQUR3Y0lLbG1TSm9nOEJ3aExydW9tNkd6SEFoZEsyMmFjQXdjTEc0SjVacFJ0aHhKODJVN0dtRVlIQkFabmJVYWtjY1lmcWxucDF0dzZ4eUVKYnpjbTVBYUhJUGQzT1FhY1FZY09EMURxVm9ocXh4UGhwWW1HeEFYSENpeVFpZ2F3VEFjUFhnUHlWdWdEaHZndUlTSEdnR01IQzltSU5zYkVERWNQVStzWE51aGtSeFpYcFhmR3BBaEhCNnpEZEhiZ0VzWmZlWnNjdHNnN2h5TG8rTjNHbkJzSERxc3huVmJFSDRjaERXZzNoWlJKaG16TzVqM1dwSDZIRVdLMlplYklCZ2NPVXNDS1ZvUm1Cd3dFY25SVmxBWEhJUGRISVpiWWJRY1dzcUcxTnNockJ3K1VCMmJXNkFzSEVJUG42OWFFWTBjYlhkcFcxclJkeHlKYllMdEdyQVFIRHN5cHduYThPMGNoWU8zMEZjdzZCeHpRRzhkMjJHdUc4bE9LZ0Jib09NY2h4RWsxcHZRY2h4SFBxMUltdkU0SERCUVN0V2FNS0ljRmtSeElkZkE0eGphSU8yejI5RkxISElZaGtUYlFQa2NLSWpQbXRyQmF4d3dTTGtrVm5Fb0hFTDBnTW5hSVQ0YWlSS3JXbHNSeUJzVGxuc2kyOUFDSEZ0Tnp0MWJVTVljS3V0eHE5dVFEaHhVSEdXWEcwQzVIRCttbmRSYU1Zb2NoTElEWkJzaFdSeUsxcXlYMWpIaEhHbjVtRUhiZ1R3Y1ZXRzNhcG93L1J4eVB2V3Yyd0VBSEhONnMzUmFJYXNjQ1BqUVJscHg3UnhPK3p1Y1d1Ri9ISTlLeHMzYUlUMD0IAAYAAAAACAAHAAAAAgwACAoAARl95mxy2yDuAAAA",
+      "cursor_out": "DAACCgACHJL6rUKAJxAKAAMckvqtQn9jwAgABAAAAAILAAUAAANwRW1QQzZ3QUFBZlEvZ0dKTjB2R3AvQUFBQUZBY0lLbG1TSm9nOEJ3aExydW9tNkd6SEFoZEsyMmFjQXdjaEFMbHQxc2dZUnhCQUUza0czQ3lIQ3h1Q2VXYVViWWNlaDBjQ05xUi9SeEo4MlU3R21FWUhCQVpuYlVha2NjWWZxbG5wMXR3Nnh4RGtabTZHNUhwSElRbHZOeWJrQm9jZzkzYzVCcHhCaHc0UFVPcFdpR3JIQzRLK1FLWDBFTWNnOTBnTVZ0d2VSeFBocFltR3hBWEhDeWFibGthUU5nYjRMaUVoeG9CakJ3OWVBL0pXNkFPSENpeVFpZ2F3VEFjTDJZZzJ4c1FNUnc5VDZ4YzI2R1JIRmxlbGQ4YWtDRWNRcG1qTkpweERod2VzdzNSMjRCTEdYM21iSExiSU80Y2k2UGpkeHB3YkJ3NnJNWjFXeEIrSElRMW9ONFdVU1lac3p1WTkxcVIraHhGaXRtWG15QVlIRGxMQWlsYUVaZ2NnOTBjaGx0aHRCd3dFY25SVmxBWEhGcktodFRiSWF3Y1BsQWRtMXVnTEJ4Q0Q1K3ZXaEdOSEcxM2FWdGEwWGNjaVcyQzdScXdFQnc3TXFjSjJ2RHRISVdEdDlCWE1PZ2NjMEJ2SGR0aHJodkpUaW9BVzZEakhFTnlTcXZhSU93Y2o0NEZuTnBRc1JyS1JaOU5HbUR6SEljUkpOYWIwSEljUno2dFNKcnhPQnh3ZUYyRjI2Q01IREJRU3RXYU1LSWNGa1J4SWRmQTR4amFJTzJ6MjlGTEhISVloa1RiUVBrY0Y4V0wzQnRRZGh3b2lNK2Eyc0ZySEd2YmJuQmJzSDRjTUVpNUpGWnhLQmxsaU5oVlcxSEJIRUwwZ01uYUlUNGFpUktyV2xzUnlCc1RsbnNpMjlBQ0hGdE56dDFiVU1ZY0t1dHhxOXVRRGh4Q0JNOTVtaUhnSEZRY1paY2JRTGtjUDZhZDFGb3hpaHlFc2dOa0d5RlpISXJXckpmV01lRWNhZm1ZUWR1QlBCeFZZYmRxbWpEOUhISSs5YS9iQVFBY2hFWjJTTnVRaFJ4emVyTjBXaUdySEFqNDBFWmFjZTBjVHZzN25GcmhmeHlQU3NiTjJpRTlIRXltV0tWYmNEd2NjUWx0Q0pxd01CcW83Sm9jbGtIdwgABgAAAAAIAAcAAAADDAAICgABGX3mbHLbIO4AAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:49:02.353495+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "\"Claude\" (\"経理\" OR \"請求書\" OR \"見積\") -is:retweet lang:ja min_faves:30",
+        "queryType": "Top"
+      },
+      "cursor_in": "DAACCgACHJL6rUKAJxAKAAMckvqtQn9jwAgABAAAAAILAAUAAANwRW1QQzZ3QUFBZlEvZ0dKTjB2R3AvQUFBQUZBY0lLbG1TSm9nOEJ3aExydW9tNkd6SEFoZEsyMmFjQXdjaEFMbHQxc2dZUnhCQUUza0czQ3lIQ3h1Q2VXYVViWWNlaDBjQ05xUi9SeEo4MlU3R21FWUhCQVpuYlVha2NjWWZxbG5wMXR3Nnh4RGtabTZHNUhwSElRbHZOeWJrQm9jZzkzYzVCcHhCaHc0UFVPcFdpR3JIQzRLK1FLWDBFTWNnOTBnTVZ0d2VSeFBocFltR3hBWEhDeWFibGthUU5nYjRMaUVoeG9CakJ3OWVBL0pXNkFPSENpeVFpZ2F3VEFjTDJZZzJ4c1FNUnc5VDZ4YzI2R1JIRmxlbGQ4YWtDRWNRcG1qTkpweERod2VzdzNSMjRCTEdYM21iSExiSU80Y2k2UGpkeHB3YkJ3NnJNWjFXeEIrSElRMW9ONFdVU1lac3p1WTkxcVIraHhGaXRtWG15QVlIRGxMQWlsYUVaZ2NnOTBjaGx0aHRCd3dFY25SVmxBWEhGcktodFRiSWF3Y1BsQWRtMXVnTEJ4Q0Q1K3ZXaEdOSEcxM2FWdGEwWGNjaVcyQzdScXdFQnc3TXFjSjJ2RHRISVdEdDlCWE1PZ2NjMEJ2SGR0aHJodkpUaW9BVzZEakhFTnlTcXZhSU93Y2o0NEZuTnBRc1JyS1JaOU5HbUR6SEljUkpOYWIwSEljUno2dFNKcnhPQnh3ZUYyRjI2Q01IREJRU3RXYU1LSWNGa1J4SWRmQTR4amFJTzJ6MjlGTEhISVloa1RiUVBrY0Y4V0wzQnRRZGh3b2lNK2Eyc0ZySEd2YmJuQmJzSDRjTUVpNUpGWnhLQmxsaU5oVlcxSEJIRUwwZ01uYUlUNGFpUktyV2xzUnlCc1RsbnNpMjlBQ0hGdE56dDFiVU1ZY0t1dHhxOXVRRGh4Q0JNOTVtaUhnSEZRY1paY2JRTGtjUDZhZDFGb3hpaHlFc2dOa0d5RlpISXJXckpmV01lRWNhZm1ZUWR1QlBCeFZZYmRxbWpEOUhISSs5YS9iQVFBY2hFWjJTTnVRaFJ4emVyTjBXaUdySEFqNDBFWmFjZTBjVHZzN25GcmhmeHlQU3NiTjJpRTlIRXltV0tWYmNEd2NjUWx0Q0pxd01CcW83Sm9jbGtIdwgABgAAAAAIAAcAAAADDAAICgABGX3mbHLbIO4AAAA",
+      "cursor_out": "DAACCgACHJL6rUKAJxAKAAMckvqtQn88sAgABAAAAAILAAUAAAO8QUFBQUFDNk5zd2dBQUFCa0FBQUFBQUFBRlh3QUFBQUhBQUFBVmdBSUFBQlJpQUFBQUF3RWdFSkFnQUFBQXdhQVhBQkJnR0FBRUFBQ0FBQUFBQkFBSUFCQXdBSUtZT1FBSUNDQWdBQUFBQUlRQUFBZ0FBaEFRQUFJQkFBS0tBQVFCZ0FCQUFRQ0NFQUFBQUFJQ0FJUUFBQUtRRUpFQkFBQUFBSmlNQUFBQUFBQUswQUFRa0FnQUFBQUFGQWdnQW9JZ2lBQUNnQUlBQUNBQUFJSUFFSUFDVUdDZ1FnVFFBSkFnQUlBVUFVQUtBQWtBQUFBQU9JQUFLQUFDSWlBQWhKUUFBaUFBQUFCQVFBUWtBS0FHUVFBQUFnQXdBUUlRUUFtSUlFQVRBQUFBREFFQUFRQUEwQUFBQUlBQUFGREFJQUFDb2dBQVFBTUJBQ0JrQVFVQzZFQUFBQUFJUUFnZ0JCQUFZQUFRQUlDQUlJSUVESUNBYUJpd0FCQUZJQUFBQVFob0FBQUFDaUlCQUFrQUFRQVFBR0FFQUFFQUFBQUFBS0VRQ0FCQUFnSUNBQUFHQUFBc0FHQUl3QUpBUUlBQWdBQUFnQkFRSUVBRUJvQkVEZ0pBQUlBQUFBQUFnQUFhQkFOZ0FnQUFBQUFnUUlBR0VBQUFCQlF3QUFSRUFDUUFXQUJRQUVBaEFCQUNBUWhFQUFBSkFRRUFOSkNGQUFBQUFBQUlLSUFnSUFFZ0FnQUVFR0NBQUFJZ1FDQUFBQUFRQlFBUUVBQU1BQUNCQkFBaUlBQUFBWVFCQWdBQ29TSXdBQmdEREFDQkdBQUNDbEFBQUFBQUlDSUNFQ0FnRVlBQWdBQUJGQUFTQURCZ0JDbFFZZ0FBQWdBQUlBQUFnQUlnQUJnQUFBUUFBQUVCSkJJQUVBQVNTQUNRU0FCQUFBSUlJQUFCREFBQU5EQUJDQUVRRkVnZ0dBQUJBQ0FCQlFCQVlDQUJBSXdrQWdDRUtBQUFBSUFpQUFRQ0JFQU1JQVVBQVFFZ0RBQUJFUmdnQVlsU0lRQUdBSUFBa2xBQVFDUUVLSUlBUWdFQUFqQUVCQUFBQ0FBZ0FnQm9BQ0VBUUVJRUFBQXlBRUlnQUFFQUFBQkFRQVlBQUFBSWdRQWdCQUFBQUFBQktDQUZBQVNBUUlTQkFBQkFBQUFBQUFBQUVEZ0NGQkFBQUNNQUFvQVJDQUJCQUFJQUVBNVJBUUFBQUNNSWlDRUNBUklFQVFRQUFFSUFTQUFBQUZCQ0FnQkFBZz0IAAYAAAAACAAHAAAABAwACAoAARpjmNSTGjF4AAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-25T18:49:10.134790+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "\"AI automation\" (\"small business\" OR \"non-engineer\" OR \"non-coder\") -is:retweet lang:en min_faves:100",
+        "queryType": "Top"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-25T18:49:13.721026+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "ClaudeCode_UT"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-25T18:49:16.918587+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "obsidianstudio9"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-25T18:49:20.134953+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "MakeAI_CEO"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-25T18:49:23.441478+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "mmmiyama_D"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-25T18:49:26.827404+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "tetumemo"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-25T18:49:29.978044+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "claudecode_lab"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-25T18:49:33.174689+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "ObsidianOtaku"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-25T18:49:36.404065+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "so_ainsight"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-25T18:49:39.728589+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "Codestudiopjbk"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-25T18:49:43.107954+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "exploraX_"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-25T18:49:46.383262+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "jason_coder0"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-25T18:49:49.869603+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "heynavtoor"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-25T18:49:53.041061+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "ethancoder0"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-25T18:49:56.326552+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "cyrilXBT"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-25T18:49:59.899681+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "daifukujinji"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-25T18:50:06.657858+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "Fluyeporlaweb"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-25T18:50:09.935929+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "commte"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-25T18:50:13.129178+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "csaba_kissi"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-25T18:50:16.401131+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "ai_explorer25"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-25T18:50:19.663686+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "Atenov_D"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-25T18:50:22.789644+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "Shimayus"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-25T18:50:26.016019+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "SuguruKun_ai"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-25T18:50:29.214675+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "masahirochaen"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-25T18:50:32.372653+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "ClaudeCode_love"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    }
+  ]
+}

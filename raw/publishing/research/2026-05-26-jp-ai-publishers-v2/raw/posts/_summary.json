@@ -1,0 +1,86 @@
+{
+  "session_date": "2026-05-25",
+  "since_date": "2026-02-24",
+  "handles_fetched": {
+    "ClaudeCode_UT": {
+      "tweets_fetched": 100,
+      "path": "posts/ClaudeCode_UT.json"
+    },
+    "obsidianstudio9": {
+      "tweets_fetched": 100,
+      "path": "posts/obsidianstudio9.json"
+    },
+    "MakeAI_CEO": {
+      "tweets_fetched": 100,
+      "path": "posts/MakeAI_CEO.json"
+    },
+    "mmmiyama_D": {
+      "tweets_fetched": 84,
+      "path": "posts/mmmiyama_D.json"
+    },
+    "tetumemo": {
+      "tweets_fetched": 100,
+      "path": "posts/tetumemo.json"
+    },
+    "claudecode_lab": {
+      "tweets_fetched": 100,
+      "path": "posts/claudecode_lab.json"
+    },
+    "ObsidianOtaku": {
+      "tweets_fetched": 61,
+      "path": "posts/ObsidianOtaku.json"
+    },
+    "so_ainsight": {
+      "tweets_fetched": 96,
+      "path": "posts/so_ainsight.json"
+    },
+    "Codestudiopjbk": {
+      "tweets_fetched": 95,
+      "path": "posts/Codestudiopjbk.json"
+    },
+    "exploraX_": {
+      "tweets_fetched": 87,
+      "path": "posts/exploraX_.json"
+    },
+    "jason_coder0": {
+      "tweets_fetched": 90,
+      "path": "posts/jason_coder0.json"
+    },
+    "heynavtoor": {
+      "tweets_fetched": 100,
+      "path": "posts/heynavtoor.json"
+    },
+    "ethancoder0": {
+      "tweets_fetched": 100,
+      "path": "posts/ethancoder0.json"
+    },
+    "cyrilXBT": {
+      "tweets_fetched": 100,
+      "path": "posts/cyrilXBT.json"
+    },
+    "daifukujinji": {
+      "tweets_fetched": 100,
+      "path": "posts/daifukujinji.json"
+    },
+    "Fluyeporlaweb": {
+      "tweets_fetched": 86,
+      "path": "posts/Fluyeporlaweb.json"
+    },
+    "commte": {
+      "tweets_fetched": 93,
+      "path": "posts/commte.json"
+    },
+    "csaba_kissi": {
+      "tweets_fetched": 100,
+      "path": "posts/csaba_kissi.json"
+    },
+    "ai_explorer25": {
+      "tweets_fetched": 100,
+      "path": "posts/ai_explorer25.json"
+    },
+    "Atenov_D": {
+      "tweets_fetched": 62,
+      "path": "posts/Atenov_D.json"
+    }
+  }
+}
