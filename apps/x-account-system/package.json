@@ -1,0 +1,32 @@
+{
+  "name": "@ofmeton/x-account-system",
+  "version": "0.1.0",
+  "private": true,
+  "description": "ofmeton AI 業務自動化発信システム (X / Instagram / note 3 媒体)",
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "type": "module",
+  "scripts": {
+    "budget": "tsx lib/cost/budget-calculator.ts",
+    "oauth:test": "tsx lib/oauth/pkce-test.ts",
+    "fallback:dry-run": "tsx lib/fallback/trigger.ts --dry-run",
+    "relabel": "python3 scripts/relabel-tweets.py",
+    "dlp:lint": "tsx lib/dlp/lint.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.36.0",
+    "@supabase/supabase-js": "^2.45.0",
+    "dotenv": "^16.4.5",
+    "js-yaml": "^4.1.0",
+    "openai": "^4.65.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^22.7.0",
+    "tsx": "^4.19.1",
+    "typescript": "^5.6.0"
+  }
+}
