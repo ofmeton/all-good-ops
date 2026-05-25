@@ -1,0 +1,1083 @@
+{
+  "ClaudeCode_UT": {
+    "id": "2045207585574539264",
+    "name": "東大ClaudeCode研究所",
+    "userName": "ClaudeCode_UT",
+    "location": "実務で使えるClaudeCodeならここ一択！",
+    "url": "",
+    "description": "Claude Codeを極めた現役東大生集団が運営｜実務で使えるノウハウと最新情報を毎日発信｜大手企業とのAIエージェント開発で現場導入実績あり｜研究レベルの技術を応用して社会実装｜AIエージェントの導入相談はDMまでお願いします📩｜独自ニュースと活用法はLINEで：https://t.co/078j7qOKUH",
+    "entities": {
+      "description": {
+        "urls": [
+          {
+            "display_url": "lin.ee/quYxNMc",
+            "expanded_url": "https://lin.ee/quYxNMc",
+            "indices": [
+              134,
+              157
+            ],
+            "url": "https://t.co/078j7qOKUH"
+          }
+        ]
+      }
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 19595,
+    "following": 9,
+    "favouritesCount": 310,
+    "statusesCount": 340,
+    "mediaCount": 203,
+    "createdAt": "2026-04-17T18:29:47.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/2045207585574539264/1776499582",
+    "profilePicture": "https://pbs.twimg.com/profile_images/2045968105172766720/_u891Zxq_normal.jpg",
+    "canDm": false,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": [
+      "2058664601085157559"
+    ]
+  },
+  "obsidianstudio9": {
+    "id": "2043209661525209088",
+    "name": "りゅう@Obsidianガチ勢",
+    "userName": "obsidianstudio9",
+    "location": "",
+    "url": "",
+    "description": "Claude × Obsidianで“第2の脳”を構築中｜海外の事例を参考にしたナレッジ・コンテキスト管理法を毎日発信｜中の人はコンテキスト総量100億字規模で運用してます｜思考と情報を永久にローカル資産化したい方はフォロー推奨👆",
+    "entities": {
+      "description": {}
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 2788,
+    "following": 16,
+    "favouritesCount": 525,
+    "statusesCount": 311,
+    "mediaCount": 219,
+    "createdAt": "2026-04-12T06:09:49.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/2043209661525209088/1776848297",
+    "profilePicture": "https://pbs.twimg.com/profile_images/2043613057184845824/Ea6O-2j__normal.jpg",
+    "canDm": true,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": [
+      "2058424814637809933"
+    ]
+  },
+  "MakeAI_CEO": {
+    "id": "1912080237028114432",
+    "name": "mana｜株式会社MakeAI CEO",
+    "userName": "MakeAI_CEO",
+    "location": "無料のAI相談はこちら→",
+    "url": "https://t.co/M2Xp3xsVWe",
+    "description": "法人向けAI研修・業務自動化の設計〜実装まで一気通貫で支援｜導入企業で残業ゼロ・離職率低下の実績あり｜中小企業のAI活用を「分かる」から「回る」に変える｜研修/導入支援のご相談はDMまたは公式LINEから↓",
+    "entities": {
+      "description": {},
+      "url": {
+        "urls": [
+          {
+            "display_url": "lin.ee/Z3bEb8N",
+            "expanded_url": "https://lin.ee/Z3bEb8N",
+            "indices": [
+              0,
+              23
+            ],
+            "url": "https://t.co/M2Xp3xsVWe"
+          }
+        ]
+      }
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 22779,
+    "following": 158,
+    "favouritesCount": 5135,
+    "statusesCount": 3785,
+    "mediaCount": 224,
+    "createdAt": "2025-04-15T09:47:16.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/1912080237028114432/1779532367",
+    "profilePicture": "https://pbs.twimg.com/profile_images/2004460966822727680/x2wh_2kc_normal.jpg",
+    "canDm": true,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": [
+      "2035275751852048492"
+    ]
+  },
+  "mmmiyama_D": {
+    "id": "1326316157557592065",
+    "name": "ミヤマ",
+    "userName": "mmmiyama_D",
+    "location": "",
+    "url": "",
+    "description": "デザインだけじゃ足りない！AI×マーケ×忙しい人の働き方を考える、営業部デザイナー｜双子育児＆出社のすき間で発信中｜Amazonアソシエイト参加｜ゆる配信中のニュースレター⇨ https://t.co/Tb5cBz9EYx",
+    "entities": {
+      "description": {
+        "urls": [
+          {
+            "display_url": "mmmiyama.com/lp/miya_new/",
+            "expanded_url": "https://mmmiyama.com/lp/miya_new/",
+            "indices": [
+              88,
+              111
+            ],
+            "url": "https://t.co/Tb5cBz9EYx"
+          }
+        ]
+      }
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 77402,
+    "following": 437,
+    "favouritesCount": 21867,
+    "statusesCount": 14725,
+    "mediaCount": 3084,
+    "createdAt": "2020-11-11T00:10:31.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/1326316157557592065/1757417746",
+    "profilePicture": "https://pbs.twimg.com/profile_images/1627120001655398400/pDN7o_Fz_normal.jpg",
+    "canDm": true,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": [
+      "1804839863365382236"
+    ]
+  },
+  "tetumemo": {
+    "id": "131867975",
+    "name": "テツメモ｜AI図解×検証｜Newsletter",
+    "userName": "tetumemo",
+    "location": "📒毎週火曜日ニュースレター発行：今日からはじまるAI生活",
+    "url": "https://t.co/pn5QpvZzOH",
+    "description": "ニュースレター×AIクリエイター×図解する人🔳｜AIを中心に図解・検証を発信中→結果はハイライト&記事へ｜ 他Web3・Tech・Gadget・Game・3DCG等発信中｜本業 新規事業開発 GtoC向けApp｜筋トレ、写真、映像、アニメ｜ ⇨ https://t.co/qqv5Zts5V4",
+    "entities": {
+      "description": {
+        "urls": [
+          {
+            "display_url": "tetumemo.m-newsletter.com",
+            "expanded_url": "https://tetumemo.m-newsletter.com/",
+            "indices": [
+              123,
+              146
+            ],
+            "url": "https://t.co/qqv5Zts5V4"
+          }
+        ]
+      },
+      "url": {
+        "urls": [
+          {
+            "display_url": "lit.link/tetumemo",
+            "expanded_url": "https://lit.link/tetumemo",
+            "indices": [
+              0,
+              23
+            ],
+            "url": "https://t.co/pn5QpvZzOH"
+          }
+        ]
+      }
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 48408,
+    "following": 386,
+    "favouritesCount": 45137,
+    "statusesCount": 47978,
+    "mediaCount": 15530,
+    "createdAt": "2010-04-11T15:47:48.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/131867975/1703859714",
+    "profilePicture": "https://pbs.twimg.com/profile_images/1740572915685584896/7nsuwNFv_normal.jpg",
+    "canDm": false,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": [
+      "2056800774391554537"
+    ]
+  },
+  "claudecode_lab": {
+    "id": "1807726847154847744",
+    "name": "Claude Code研究所|スパルタClaude Code塾",
+    "userName": "claudecode_lab",
+    "location": "東京都",
+    "url": "https://t.co/8oWsTCy0do",
+    "description": "東京大学にてAI研究に従事していたエンジニアメンバーがClaude Codeに特化した最新情報をお届け。経営者・士業向け名物研修「スパルタClaude Code塾」も運営。\nnote:https://t.co/VAtJlAXlsF\n研修のご依頼などDMでも受付しております✉️",
+    "entities": {
+      "description": {
+        "urls": [
+          {
+            "display_url": "note.com/claudecode_lab",
+            "expanded_url": "https://note.com/claudecode_lab",
+            "indices": [
+              92,
+              115
+            ],
+            "url": "https://t.co/VAtJlAXlsF"
+          }
+        ]
+      },
+      "url": {
+        "urls": [
+          {
+            "display_url": "claude-code-lab.com",
+            "expanded_url": "https://claude-code-lab.com/",
+            "indices": [
+              0,
+              23
+            ],
+            "url": "https://t.co/8oWsTCy0do"
+          }
+        ]
+      }
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 19586,
+    "following": 375,
+    "favouritesCount": 12945,
+    "statusesCount": 272,
+    "mediaCount": 77,
+    "createdAt": "2024-07-01T10:45:57.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/1807726847154847744/1777009967",
+    "profilePicture": "https://pbs.twimg.com/profile_images/2047553749867216896/_SKwpHqG_normal.jpg",
+    "canDm": true,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": [
+      "2058713636957536425"
+    ]
+  },
+  "ObsidianOtaku": {
+    "id": "2045403336451710976",
+    "name": "東大Obsidianオタク｜仕事で使える第2の脳構築",
+    "userName": "ObsidianOtaku",
+    "location": "Obsidianで第二の脳を作りたいならフォロー❗️",
+    "url": "",
+    "description": "東大卒メンバーによるObsidianの活用術を毎日発信｜仕事で使えるObsidianを学べるメディア｜Claude CodeやCodexと組み合わせて使うノウハウを学びたい人はフォロー必須！",
+    "entities": {
+      "description": {}
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 981,
+    "following": 4,
+    "favouritesCount": 12,
+    "statusesCount": 45,
+    "mediaCount": 31,
+    "createdAt": "2026-04-18T07:26:24.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/2045403336451710976/1776497381",
+    "profilePicture": "https://pbs.twimg.com/profile_images/2045403747116081152/ICOUL3T2_normal.jpg",
+    "canDm": false,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": [
+      "2058665087876165671"
+    ]
+  },
+  "so_ainsight": {
+    "id": "1919729970685075456",
+    "name": "そう｜Claude Codeで始めるAI自動化",
+    "userName": "so_ainsight",
+    "location": "",
+    "url": "https://t.co/WimuO5SQFp",
+    "description": "Claude Code×n8n AIエージェント300以上構築｜ソロプレナーでAIエージェント組織企業を運営｜ 累計純利２億超 ｜ 非エンジニアでもできるClaude Codeで「異次元」業務効率化を発信｜ noteでマル㊙️コンテンツ配信中｜ フォローすればAIで「異次元」に時間を生み出す自動化手法が分かる",
+    "entities": {
+      "description": {},
+      "url": {
+        "urls": [
+          {
+            "display_url": "note.com/soh_ainsight",
+            "expanded_url": "https://note.com/soh_ainsight",
+            "indices": [
+              0,
+              23
+            ],
+            "url": "https://t.co/WimuO5SQFp"
+          }
+        ]
+      }
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 15602,
+    "following": 58,
+    "favouritesCount": 340,
+    "statusesCount": 1800,
+    "mediaCount": 379,
+    "createdAt": "2025-05-06T12:25:54.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/1919729970685075456/1757731433",
+    "profilePicture": "https://pbs.twimg.com/profile_images/1951625625455951872/pj57KIjJ_normal.jpg",
+    "canDm": true,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": [
+      "2035350663899525519"
+    ]
+  },
+  "Codestudiopjbk": {
+    "id": "2048622181790470144",
+    "name": "Codex Studio",
+    "userName": "Codestudiopjbk",
+    "location": "サイトはこちら👉",
+    "url": "https://t.co/8pM3Az1DRu",
+    "description": "Codexガチ勢３人で運営｜実務レベルのCLI活用・自動化を毎日発信｜大学院生・ポスドク対象の開発プログラム参加｜賞金30万円獲得｜現在は上場企業とAIエージェントを共同開発中｜AI時代はコンテキスト/ナレッジ管理が９割｜組織全体への「 Codex × Obsidian 」の導入は下のHPからご相談ください👇",
+    "entities": {
+      "description": {},
+      "url": {
+        "urls": [
+          {
+            "display_url": "plai-ai.com",
+            "expanded_url": "http://plai-ai.com",
+            "indices": [
+              0,
+              23
+            ],
+            "url": "https://t.co/8pM3Az1DRu"
+          }
+        ]
+      }
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 8677,
+    "following": 10,
+    "favouritesCount": 473,
+    "statusesCount": 234,
+    "mediaCount": 153,
+    "createdAt": "2026-04-27T04:37:22.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/2048622181790470144/1777265728",
+    "profilePicture": "https://pbs.twimg.com/profile_images/2048623292484136960/-bDB5XH6_normal.jpg",
+    "canDm": true,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": [
+      "2058552181763309605"
+    ]
+  },
+  "exploraX_": {
+    "id": "1168877404598808577",
+    "name": "m0h",
+    "userName": "exploraX_",
+    "location": "multiverse",
+    "url": "https://t.co/W8H7BI49FM",
+    "description": "sharing daily contents that helps you make the most from AI •",
+    "entities": {
+      "description": {},
+      "url": {
+        "urls": [
+          {
+            "display_url": "substack.com/@explorax",
+            "expanded_url": "https://substack.com/@explorax",
+            "indices": [
+              0,
+              23
+            ],
+            "url": "https://t.co/W8H7BI49FM"
+          }
+        ]
+      }
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 25050,
+    "following": 689,
+    "favouritesCount": 77049,
+    "statusesCount": 57445,
+    "mediaCount": 3872,
+    "createdAt": "2019-09-03T13:24:53.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/1168877404598808577/1778581923",
+    "profilePicture": "https://pbs.twimg.com/profile_images/1946598926255095810/fTXuaBJp_normal.jpg",
+    "canDm": true,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": [
+      "2039269234253934811"
+    ]
+  },
+  "jason_coder0": {
+    "id": "1947941249455198208",
+    "name": "Mr. Jason💡",
+    "userName": "jason_coder0",
+    "location": "Australia",
+    "url": "",
+    "description": "AI & Tech Strategist | Elevating Brands with Advanced AI Innovation | Expert Ghostwriter | Email : leocoder56@gmail.com | 📥 |",
+    "entities": {
+      "description": {}
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 21847,
+    "following": 521,
+    "favouritesCount": 67160,
+    "statusesCount": 41686,
+    "mediaCount": 705,
+    "createdAt": "2025-07-23T08:46:19.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/1947941249455198208/1763396796",
+    "profilePicture": "https://pbs.twimg.com/profile_images/1962130802738941952/PLUJ7ETX_normal.jpg",
+    "canDm": true,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": [
+      "2058918572748075184"
+    ]
+  },
+  "heynavtoor": {
+    "id": "1916904726295453696",
+    "name": "Nav Toor",
+    "userName": "heynavtoor",
+    "location": "Free Products + Sponsorships →",
+    "url": "https://t.co/b36GQWSNBh",
+    "description": "Helping you master AI daily with step-by-step AI guides, latest news, & practical tools • DM for Collabs",
+    "entities": {
+      "description": {},
+      "url": {
+        "urls": [
+          {
+            "display_url": "linktr.ee/navtoor",
+            "expanded_url": "https://linktr.ee/navtoor",
+            "indices": [
+              0,
+              23
+            ],
+            "url": "https://t.co/b36GQWSNBh"
+          }
+        ]
+      }
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 138899,
+    "following": 251,
+    "favouritesCount": 5330,
+    "statusesCount": 6134,
+    "mediaCount": 934,
+    "createdAt": "2025-04-28T17:18:09.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/1916904726295453696/1769272939",
+    "profilePicture": "https://pbs.twimg.com/profile_images/2017556052938788865/3E6CcSFP_normal.jpg",
+    "canDm": true,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": [
+      "2044433988312560051"
+    ]
+  },
+  "ethancoder0": {
+    "id": "1994298965542809600",
+    "name": "Ethan Walker",
+    "userName": "ethancoder0",
+    "location": "Worldwide",
+    "url": "https://t.co/5o5kdWePQo",
+    "description": "Regular Tech & AI Updates  | Sharing Free Resources | Collabs: ethancoder01@gmail.com | Daily Tech news | DM For Promo | hzae58ol",
+    "entities": {
+      "description": {},
+      "url": {
+        "urls": [
+          {
+            "display_url": "passionfroot.me/ethan-walker",
+            "expanded_url": "https://www.passionfroot.me/ethan-walker",
+            "indices": [
+              0,
+              23
+            ],
+            "url": "https://t.co/5o5kdWePQo"
+          }
+        ]
+      }
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 10424,
+    "following": 6429,
+    "favouritesCount": 1322,
+    "statusesCount": 1106,
+    "mediaCount": 44,
+    "createdAt": "2025-11-28T06:56:17.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/1994298965542809600/1773616443",
+    "profilePicture": "https://pbs.twimg.com/profile_images/2033320475548651521/6UOJkfIv_normal.jpg",
+    "canDm": true,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": [
+      "2058602592012501185"
+    ]
+  },
+  "cyrilXBT": {
+    "id": "1373665408193036293",
+    "name": "CyrilXBT",
+    "userName": "cyrilXBT",
+    "location": "",
+    "url": "https://t.co/mO8iEkuR3J",
+    "description": "AI • Tech • Crypto | Sharing what I see before everyone else does.",
+    "entities": {
+      "description": {},
+      "url": {
+        "urls": [
+          {
+            "display_url": "linktr.ee/cyrilxbt",
+            "expanded_url": "https://linktr.ee/cyrilxbt",
+            "indices": [
+              0,
+              23
+            ],
+            "url": "https://t.co/mO8iEkuR3J"
+          }
+        ]
+      }
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 180139,
+    "following": 441,
+    "favouritesCount": 35291,
+    "statusesCount": 40295,
+    "mediaCount": 7229,
+    "createdAt": "2021-03-21T15:58:58.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/1373665408193036293/1775621295",
+    "profilePicture": "https://pbs.twimg.com/profile_images/2035229727414534145/aWap3Jbq_normal.jpg",
+    "canDm": true,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": [
+      "2052235121416188114"
+    ]
+  },
+  "daifukujinji": {
+    "id": "860452523085185025",
+    "name": "たか田",
+    "userName": "daifukujinji",
+    "location": "Gemとかツール配信します→",
+    "url": "https://t.co/H3mDWP3sf0",
+    "description": "削られる時間を取り戻すAI屋｜SNSも日々の仕事も「やらなくても進む」仕組みを発信｜もう時間に追われない働き方へ｜生粋のGeminiスト｜#今日から使えるAIを発信　X運用・AI研修の相談はDMへ",
+    "entities": {
+      "description": {
+        "hashtags": [
+          {
+            "indices": [
+              69,
+              82
+            ],
+            "text": "今日から使えるAIを発信"
+          }
+        ]
+      },
+      "url": {
+        "urls": [
+          {
+            "display_url": "lin.ee/uGqLmPs",
+            "expanded_url": "https://lin.ee/uGqLmPs",
+            "indices": [
+              0,
+              23
+            ],
+            "url": "https://t.co/H3mDWP3sf0"
+          }
+        ]
+      }
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 52183,
+    "following": 604,
+    "favouritesCount": 273462,
+    "statusesCount": 104555,
+    "mediaCount": 2000,
+    "createdAt": "2017-05-05T11:14:02.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/860452523085185025/1755501229",
+    "profilePicture": "https://pbs.twimg.com/profile_images/1925886647725375488/A2Y6510O_normal.jpg",
+    "canDm": true,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": [
+      "2028032559657947312"
+    ]
+  },
+  "Fluyeporlaweb": {
+    "id": "1009364234491387904",
+    "name": "PA13L0",
+    "userName": "Fluyeporlaweb",
+    "location": "Grupo de Telegram →",
+    "url": "https://t.co/4p5sQIe3Iz",
+    "description": "Dev y SEO • Creando activos digitales con IA",
+    "entities": {
+      "description": {},
+      "url": {
+        "urls": [
+          {
+            "display_url": "t.me/fluyeporlaweb",
+            "expanded_url": "https://t.me/fluyeporlaweb",
+            "indices": [
+              0,
+              23
+            ],
+            "url": "https://t.co/4p5sQIe3Iz"
+          }
+        ]
+      }
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 21891,
+    "following": 1842,
+    "favouritesCount": 21246,
+    "statusesCount": 25194,
+    "mediaCount": 2868,
+    "createdAt": "2018-06-20T09:16:01.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/1009364234491387904/1771409731",
+    "profilePicture": "https://pbs.twimg.com/profile_images/1919353130182959104/Jy1MsO1c_normal.jpg",
+    "canDm": true,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": [
+      "2056664440573939915"
+    ]
+  },
+  "commte": {
+    "id": "187929218",
+    "name": "コムテ",
+    "userName": "commte",
+    "location": "日本",
+    "url": "https://t.co/2M7oeDl2xQ",
+    "description": "Claude Code 速報・実践テク | AI駆動開発 | 個人開発者がプロダクト登録や技術記事を投稿できるSEO/AEOに強い https://t.co/2M7oeDl2xQ 運営 | ビジョン：無名のプロダクトに光をあてる",
+    "entities": {
+      "description": {
+        "urls": [
+          {
+            "display_url": "izanami.dev",
+            "expanded_url": "https://izanami.dev",
+            "indices": [
+              66,
+              89
+            ],
+            "url": "https://t.co/2M7oeDl2xQ"
+          }
+        ]
+      },
+      "url": {
+        "urls": [
+          {
+            "display_url": "izanami.dev",
+            "expanded_url": "https://izanami.dev",
+            "indices": [
+              0,
+              23
+            ],
+            "url": "https://t.co/2M7oeDl2xQ"
+          }
+        ]
+      }
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 10441,
+    "following": 1962,
+    "favouritesCount": 24971,
+    "statusesCount": 8824,
+    "mediaCount": 725,
+    "createdAt": "2010-09-07T14:22:11.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/187929218/1737018269",
+    "profilePicture": "https://pbs.twimg.com/profile_images/1921356481682624512/mP4IV2A7_normal.jpg",
+    "canDm": true,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": [
+      "2001851242683994177"
+    ]
+  },
+  "csaba_kissi": {
+    "id": "703528675271176192",
+    "name": "Csaba Kissi",
+    "userName": "csaba_kissi",
+    "location": "Home →",
+    "url": "https://t.co/ihXKTT63el",
+    "description": "Coding Dinosaur • Entrepreneur • 200 projects • DM for collabs ➡️ https://t.co/fvuWg2duU6",
+    "entities": {
+      "description": {
+        "urls": [
+          {
+            "display_url": "invoicegenerator.io",
+            "expanded_url": "https://invoicegenerator.io",
+            "indices": [
+              66,
+              89
+            ],
+            "url": "https://t.co/fvuWg2duU6"
+          }
+        ]
+      },
+      "url": {
+        "urls": [
+          {
+            "display_url": "folll.io/csabakissi",
+            "expanded_url": "https://folll.io/csabakissi",
+            "indices": [
+              0,
+              23
+            ],
+            "url": "https://t.co/ihXKTT63el"
+          }
+        ]
+      }
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 255121,
+    "following": 1149,
+    "favouritesCount": 258981,
+    "statusesCount": 132429,
+    "mediaCount": 6923,
+    "createdAt": "2016-02-27T10:34:41.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/703528675271176192/1645535474",
+    "profilePicture": "https://pbs.twimg.com/profile_images/1454861068233228289/6sn9BYOf_normal.jpg",
+    "canDm": true,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": [
+      "2011775185037234627"
+    ]
+  },
+  "ai_explorer25": {
+    "id": "2009204818376876032",
+    "name": "AI_Explorer",
+    "userName": "ai_explorer25",
+    "location": "",
+    "url": "",
+    "description": "Ai and Tech content Creator. 300k+ on Linkedin. Sharing insights on Ai, Tech, Free tools, resources and websites. DM for collabs at : nehajaincollabs@gmail.com",
+    "entities": {
+      "description": {}
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 8115,
+    "following": 139,
+    "favouritesCount": 551,
+    "statusesCount": 596,
+    "mediaCount": 242,
+    "createdAt": "2026-01-08T10:05:56.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/2009204818376876032/1770999663",
+    "profilePicture": "https://pbs.twimg.com/profile_images/2022344365251911680/VTRlBO9__normal.jpg",
+    "canDm": true,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": [
+      "2058912637522727318"
+    ]
+  },
+  "Atenov_D": {
+    "id": "1577008378852802561",
+    "name": "Atenov int.",
+    "userName": "Atenov_D",
+    "location": "",
+    "url": "https://t.co/hifsUnDmWO",
+    "description": "📚 | Part of @zscdao |  FullTime Crypto/X | @Polymarket Adept | Two master's degrees in engineering and marketing | Become part of our big family of smart-users",
+    "entities": {
+      "description": {
+        "user_mentions": [
+          {
+            "id_str": "",
+            "indices": [
+              12,
+              19
+            ],
+            "name": "",
+            "screen_name": "zscdao"
+          },
+          {
+            "id_str": "",
+            "indices": [
+              43,
+              54
+            ],
+            "name": "",
+            "screen_name": "Polymarket"
+          }
+        ]
+      },
+      "url": {
+        "urls": [
+          {
+            "display_url": "t.me/+Eo3B4s34t0A3Z…",
+            "expanded_url": "https://t.me/+Eo3B4s34t0A3ZWZi",
+            "indices": [
+              0,
+              23
+            ],
+            "url": "https://t.co/hifsUnDmWO"
+          }
+        ]
+      }
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 11442,
+    "following": 976,
+    "favouritesCount": 34718,
+    "statusesCount": 27304,
+    "mediaCount": 1188,
+    "createdAt": "2022-10-03T18:51:26.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/1577008378852802561/1764292595",
+    "profilePicture": "https://pbs.twimg.com/profile_images/2018766680860606464/8Omnaqqn_normal.jpg",
+    "canDm": true,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": [
+      "2058194152077009195"
+    ]
+  },
+  "Shimayus": {
+    "id": "137353984",
+    "name": "shimayuz ⤴️ AI影分身構築",
+    "userName": "Shimayus",
+    "location": "日本 東京",
+    "url": "https://t.co/pMbg2fQiVH",
+    "description": "AIエージェント専門家 | 株式会社quai CEO 医師免許を持つ起業家 | 複雑な業務をAIエージェントで自動化するノウハウを公開 | 始動10期SV選抜 | AGI研究所主催AIエージェントハッカソン2026優勝 | 誰でも使えるAI活用術と最新AIエージェント情報をお届け | フォローで生産性が変わります📝",
+    "entities": {
+      "description": {},
+      "url": {
+        "urls": [
+          {
+            "display_url": "quai.new",
+            "expanded_url": "https://www.quai.new/",
+            "indices": [
+              0,
+              23
+            ],
+            "url": "https://t.co/pMbg2fQiVH"
+          }
+        ]
+      }
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 11944,
+    "following": 989,
+    "favouritesCount": 32883,
+    "statusesCount": 9142,
+    "mediaCount": 2024,
+    "createdAt": "2010-04-26T14:24:40.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/137353984/1771422394",
+    "profilePicture": "https://pbs.twimg.com/profile_images/2018684367116328960/SOl0Qt1M_normal.jpg",
+    "canDm": true,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": [
+      "2029419109562433750"
+    ]
+  },
+  "SuguruKun_ai": {
+    "id": "1634801752695533568",
+    "name": "すぐる | ChatGPTガチ勢 𝕏",
+    "userName": "SuguruKun_ai",
+    "location": "法人AI研修 / 受託開発 / 登壇の問い合わせはこちら：",
+    "url": "https://t.co/eGUB3qCGIs",
+    "description": "著書「AIエージェント仕事術」 | AI研修・開発会社「https://t.co/5yexLMSKQq」CEO | AI連載 NewsPicks1位獲得 | 早稲田AI研究会創設 | 岩手出身 | AI顧問5社 | 仕事依頼はDMへ 📩",
+    "entities": {
+      "description": {
+        "urls": [
+          {
+            "display_url": "uravation.com",
+            "expanded_url": "https://uravation.com",
+            "indices": [
+              28,
+              51
+            ],
+            "url": "https://t.co/5yexLMSKQq"
+          }
+        ]
+      },
+      "url": {
+        "urls": [
+          {
+            "display_url": "forms.gle/j9SHVAgD1eJ8Co…",
+            "expanded_url": "https://forms.gle/j9SHVAgD1eJ8Co289",
+            "indices": [
+              0,
+              23
+            ],
+            "url": "https://t.co/eGUB3qCGIs"
+          }
+        ]
+      }
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 105248,
+    "following": 1194,
+    "favouritesCount": 39773,
+    "statusesCount": 8758,
+    "mediaCount": 4111,
+    "createdAt": "2023-03-12T06:21:33.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/1634801752695533568/1710393331",
+    "profilePicture": "https://pbs.twimg.com/profile_images/1765706549824221184/N0yR_7Sj_normal.jpg",
+    "canDm": true,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": [
+      "2053839441698185221"
+    ]
+  },
+  "masahirochaen": {
+    "id": "3120155797",
+    "name": "チャエン | デジライズ CEO《重要AIニュースを毎日最速で発信⚡️》",
+    "userName": "masahirochaen",
+    "location": "自己紹介｜問い合わせ｜メルマガ｜AIスクール｜アプリ👇",
+    "url": "https://t.co/BAL9S2Oc8d",
+    "description": "Xで一番分かりやすく最速でAI情報発信 | 法人向け AI開発・研修、500社・4万人支援 | GMO他複数上場企業顧問 | テレビ出演多数 | Gemini AI アドバイザー | 年間登壇150件以上・日本一｜Youtube4万人｜https://t.co/bU7rVyHIFU｜AI業界最速上場準備中｜ClaudeCode開発",
+    "entities": {
+      "description": {
+        "urls": [
+          {
+            "display_url": "tr.ee/youtube-ai",
+            "expanded_url": "http://tr.ee/youtube-ai",
+            "indices": [
+              118,
+              141
+            ],
+            "url": "https://t.co/bU7rVyHIFU"
+          }
+        ]
+      },
+      "url": {
+        "urls": [
+          {
+            "display_url": "linktr.ee/chaen",
+            "expanded_url": "https://linktr.ee/chaen",
+            "indices": [
+              0,
+              23
+            ],
+            "url": "https://t.co/BAL9S2Oc8d"
+          }
+        ]
+      }
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 194052,
+    "following": 469,
+    "favouritesCount": 11422,
+    "statusesCount": 18456,
+    "mediaCount": 8583,
+    "createdAt": "2015-03-31T12:40:24.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/3120155797/1767361689",
+    "profilePicture": "https://pbs.twimg.com/profile_images/1689665533929725953/fClFlzLd_normal.jpg",
+    "canDm": true,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": [
+      "2051192248503873589"
+    ]
+  },
+  "ClaudeCode_love": {
+    "id": "2042103180478001153",
+    "name": "Claude Code Studio",
+    "userName": "ClaudeCode_love",
+    "location": "自社サイトはこちら👉",
+    "url": "https://t.co/qiB5ZBtLZo",
+    "description": "Claude Codeガチ勢３人で運営｜実務レベルのCLI活用・自動化を毎日発信｜開発プログラム参加｜賞金30万円獲得｜現在は上場企業とAIエージェントを共同開発中｜AI時代はコンテキスト/ナレッジ管理が９割｜組織全体への「 ClaudeCode × Obsidian 」の導入は下のHPからご相談ください👇",
+    "entities": {
+      "description": {},
+      "url": {
+        "urls": [
+          {
+            "display_url": "plai-ai.com",
+            "expanded_url": "http://plai-ai.com",
+            "indices": [
+              0,
+              23
+            ],
+            "url": "https://t.co/qiB5ZBtLZo"
+          }
+        ]
+      }
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 30177,
+    "following": 14,
+    "favouritesCount": 1016,
+    "statusesCount": 459,
+    "mediaCount": 252,
+    "createdAt": "2026-04-09T04:52:16.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/2042103180478001153/1775787273",
+    "profilePicture": "https://pbs.twimg.com/profile_images/2042404213943386115/05hqEdJl_normal.jpg",
+    "canDm": true,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": [
+      "2058496124047249708"
+    ]
+  }
+}
