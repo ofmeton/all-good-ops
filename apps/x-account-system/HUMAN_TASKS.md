@@ -98,14 +98,17 @@
 - [ ] 公開許諾 gate (Supabase `materials_store.publication_consent`) で `granted` 取得時、同意済み連絡先として記録
 - [ ] Phase 1 month-1 中に 30 件確保
 
-## H-9. CR-2: 顧客同意取得フロー — 案件 client への通知
+## H-9. 顧客同意取得フロー (v10.3 改訂、許諾済前提全投入)
 
-Phase 1 で **本人事業 (RICE CREAM / 家庭教師 / portfolio) 由来のみ** を投稿に使う方針なので、顧客同意取得は急がない。  
-Phase 2 以降、案件メモを投稿素材に使う時に下記を実施:
+v10.3 §10.7 で「**本人事業 4 種 + 案件 client 全て許諾済前提**」に方針変更。  
+ofmeton が既に各 client に許諾を取得済の前提で、追加の同意取得作業は不要。  
+監査用に下記を **任意で** 記録:
 
-- [ ] 案件 client (terra-isshiki / minpaku-cleaning 関係者) に LINE / メールで「業務改善内容を抽象化して X / note で発信したい、顧客名は出さない」と通知
-- [ ] 同意取得時 `consent_obtained_from` / `consent_obtained_at` を `materials_store` に手動 INSERT
-- [ ] 同意なし案件は `publication_consent='denied'` で固定 (Writer pool 投入禁止)
+- [ ] 案件 client (terra-isshiki / minpaku-cleaning 等) との許諾取得経路を `materials_store.consent_obtained_from` に記録 ('LINE' / 'email' / 'in_person' / 'na' 等)
+- [ ] 取得日時を `consent_obtained_at` に記録
+- [ ] **投稿文に固有名詞 (氏名 / 社名 / 案件名) は出さない** = Editor +5 DLP redaction で機械的に担保 (人間負担ゼロ)
+
+新規 client が増えた時のみ、許諾の有無を ofmeton 本人が判断して `publication_consent='granted'` or `'denied'` を materials INSERT 時に明示。
 
 ## H-10. 月予算 ¥10,000 設定 + brownout 同意
 
@@ -120,11 +123,26 @@ Phase 2 以降、案件メモを投稿素材に使う時に下記を実施:
 - [ ] `npm install` を `apps/x-account-system/` で実行
 - [ ] ローカル動作確認: `npm run budget` で予算試算が動く
 
+## H-12. note 販売 compliance (v10.3 §10.8、Phase 1 初回有料公開前)
+
+- [ ] note プロフィール or 自社サイトに **特商法表記** ページを用意
+  - 提供内容 / 価格 / 解約・返品 / 連絡方法 / 個別相談の提供条件 / 問い合わせ対応時間
+- [ ] 返金方針を明文化
+- [ ] note の **ML 学習データ提供設定** を確認 (ofmeton は default OFF を推奨)
+- [ ] 初回有料 note 公開前に上記 3 項目 ✅
+
+## H-13. 業法ガード 初動運用 (v10.3 §10.9、業種フォーカス開始時)
+
+- [ ] §1.2 月別業種フォーカス開始時 (2026-07 = 経理 / 業務効率化横断) は **業法独占キーワード hit ゼロ** を Editor +5 で確認
+- [ ] 2026-11 以降 (税理士 / 社労士 / 行政書士 / 司法書士 / 弁護士) は high risk 投稿 1 件ずつ承認 (まとめ NG)
+- [ ] `lib/dlp/business-law.ts` の検査ロジックを `npm run dlp:lint` で動作確認
+
 ---
 
 ## 完了判定
 
 H-1 〜 H-5 + H-8 + H-10 が全て ✅ になった時点で **Phase 1 X launch 可能**。  
-H-6 + H-7 + H-9 + H-11 は Phase 1 着手中に順次。
+H-6 + H-7 + H-9 + H-11 + H-12 + H-13 は Phase 1 着手中に順次。  
+※ H-12 は note 有料公開を始める前 (Phase 1 month-1 末) までに完了必須。
 
 不明点 / 引っかかった項目があれば、Claude に「[H-N] の手順詳しく」と聞いて補完してください。
