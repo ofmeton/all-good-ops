@@ -1,0 +1,1365 @@
+{
+  "umiyuki_ai": {
+    "meta": {
+      "name": "うみゆき@AI研究",
+      "followers": 63501,
+      "description": "ジェネレーティブAIを研究してAIアニメキャラを錬成します。\n本垢は@_darger\nDiscord「ジェネレーティブAI友の会」https://t.co/cdpQAWu3Y9",
+      "n_all": 100,
+      "n_own": 93
+    },
+    "A": {
+      "n": 93,
+      "avg_len": 120.5,
+      "median_len": 104,
+      "len_dist": {
+        "<=140": 66,
+        "141-280": 22,
+        "281-1000": 5,
+        "1001-3000": 0,
+        ">=3001": 0
+      },
+      "url_rate": 0.14,
+      "emoji_post_rate": 0.0,
+      "emoji_top5": [],
+      "hashtag_rate": 0.0,
+      "hashtag_avg_count": 0,
+      "newline_density_avg": 0.001
+    },
+    "B": {
+      "n": 93,
+      "keigo_rate": 0.129,
+      "joutai_rate": 0.194,
+      "first_person": {
+        "無し": 83,
+        "俺": 2,
+        "僕": 3,
+        "自分": 5
+      },
+      "pos_rate": 0.054,
+      "neg_rate": 0.043,
+      "category": {
+        "業務仕組み化": 0.0,
+        "ニュース速報": 0.097,
+        "批評": 0.043,
+        "tips": 0.022
+      },
+      "non_engineer_rate": 0.0,
+      "non_engineer_n": 0,
+      "fail_rate": 0.011,
+      "fail_n": 1,
+      "cta": {
+        "DM言及": 0,
+        "プロフ言及": 0,
+        "URL末尾誘導": 13,
+        "リプ欄言及": 3
+      }
+    },
+    "E": {
+      "n_own": 93,
+      "n_all": 100,
+      "period_days_observed": 6,
+      "posts_per_day_own": 15.5,
+      "hour_hist": {
+        "23": 2,
+        "22": 10,
+        "20": 10,
+        "19": 11,
+        "18": 8,
+        "17": 4,
+        "16": 8,
+        "15": 9,
+        "2": 4,
+        "5": 1,
+        "21": 6,
+        "6": 1,
+        "14": 6,
+        "4": 3,
+        "3": 2,
+        "1": 1,
+        "13": 2,
+        "0": 3,
+        "11": 1,
+        "10": 1
+      },
+      "dow_hist": {
+        "5": 16,
+        "4": 7,
+        "3": 21,
+        "2": 18,
+        "1": 17,
+        "0": 8,
+        "6": 6
+      },
+      "chains_60min": 21
+    },
+    "F": {
+      "profile_cta_detected": [
+        "Discord"
+      ],
+      "has_url_in_desc": true
+    },
+    "G": {
+      "n": 93,
+      "hook_dist": {
+        "数字インパクト": 24,
+        "結論先出し": 33,
+        "問いかけ": 18,
+        "逆張り": 5,
+        "比較": 3,
+        "自己卑下": 1,
+        "メタ言及": 2
+      },
+      "engagement_top25_avg": 0.0083,
+      "engagement_top25_cut": 0.0055,
+      "bracket_rate": 0.0,
+      "leading_len_median": 104,
+      "emoji_lead_rate": 0.0
+    },
+    "H": {
+      "n": 93,
+      "thread_dist": {
+        "1本": 24,
+        "2-3本": 14,
+        "4-7本": 6,
+        "8本以上": 0
+      },
+      "quote_rt_rate": 0.0,
+      "long_post_rate_>=1000": 0.0,
+      "bullet_rate": 0.0,
+      "bullet_emoji_rate": 0.0,
+      "url_end_rate": 0.14,
+      "url_mid_rate": 0.0,
+      "cta_end_rate": 0.0,
+      "multi_url_rate": 0.0
+    }
+  },
+  "Shimayus": {
+    "meta": {
+      "name": "shimayuz ⤴️ AIエージェント実装・業務効率化",
+      "followers": 11944,
+      "description": "AIエージェント専門家 | 株式会社quai CEO 医師免許を持つ起業家 | 複雑な業務をAIエージェントで自動化するノウハウを公開 | 始動10期SV選抜 | AGI研究所主催AIエージェントハッカソン2026優勝 | 誰でも使えるAI活用術と最新AIエージェント情報をお届け | フォローで生産性が変わります📝",
+      "n_all": 100,
+      "n_own": 87
+    },
+    "A": {
+      "n": 87,
+      "avg_len": 172.7,
+      "median_len": 177,
+      "len_dist": {
+        "<=140": 22,
+        "141-280": 61,
+        "281-1000": 4,
+        "1001-3000": 0,
+        ">=3001": 0
+      },
+      "url_rate": 0.184,
+      "emoji_post_rate": 0.115,
+      "emoji_top5": [
+        [
+          "♥",
+          6
+        ],
+        [
+          "👇",
+          3
+        ],
+        [
+          "⚡",
+          1
+        ]
+      ],
+      "hashtag_rate": 0.023,
+      "hashtag_avg_count": 0.02,
+      "newline_density_avg": 0.031
+    },
+    "B": {
+      "n": 87,
+      "keigo_rate": 0.08,
+      "joutai_rate": 0.506,
+      "first_person": {
+        "無し": 66,
+        "私": 15,
+        "自分": 6
+      },
+      "pos_rate": 0.069,
+      "neg_rate": 0.069,
+      "category": {
+        "業務仕組み化": 0.08,
+        "ニュース速報": 0.092,
+        "批評": 0.08,
+        "tips": 0.115
+      },
+      "non_engineer_rate": 0.0,
+      "non_engineer_n": 0,
+      "fail_rate": 0.034,
+      "fail_n": 3,
+      "cta": {
+        "DM言及": 0,
+        "プロフ言及": 0,
+        "URL末尾誘導": 14,
+        "リプ欄言及": 8
+      }
+    },
+    "E": {
+      "n_own": 87,
+      "n_all": 100,
+      "period_days_observed": 41,
+      "posts_per_day_own": 2.12,
+      "hour_hist": {
+        "16": 3,
+        "9": 18,
+        "20": 13,
+        "14": 3,
+        "12": 14,
+        "13": 8,
+        "23": 2,
+        "17": 2,
+        "11": 2,
+        "10": 1,
+        "6": 2,
+        "1": 1,
+        "15": 4,
+        "21": 3,
+        "22": 6,
+        "0": 2,
+        "8": 1,
+        "7": 2
+      },
+      "dow_hist": {
+        "5": 12,
+        "4": 19,
+        "3": 13,
+        "2": 8,
+        "1": 13,
+        "0": 13,
+        "6": 9
+      },
+      "chains_60min": 13
+    },
+    "F": {
+      "profile_cta_detected": [],
+      "has_url_in_desc": false
+    },
+    "G": {
+      "n": 87,
+      "hook_dist": {
+        "数字インパクト": 56,
+        "共感": 1,
+        "結論先出し": 64,
+        "メタ言及": 5,
+        "比較": 1,
+        "問いかけ": 3,
+        "逆張り": 1
+      },
+      "engagement_top25_avg": 0.0084,
+      "engagement_top25_cut": 0.0062,
+      "bracket_rate": 0.046,
+      "leading_len_median": 22,
+      "emoji_lead_rate": 0.0
+    },
+    "H": {
+      "n": 87,
+      "thread_dist": {
+        "1本": 63,
+        "2-3本": 10,
+        "4-7本": 1,
+        "8本以上": 0
+      },
+      "quote_rt_rate": 0.0,
+      "long_post_rate_>=1000": 0.0,
+      "bullet_rate": 0.034,
+      "bullet_emoji_rate": 0.0,
+      "url_end_rate": 0.184,
+      "url_mid_rate": 0.0,
+      "cta_end_rate": 0.023,
+      "multi_url_rate": 0.023
+    }
+  },
+  "SuguruKun_ai": {
+    "meta": {
+      "name": "すぐる | ChatGPTガチ勢 𝕏",
+      "followers": 105267,
+      "description": "著書「AIエージェント仕事術」 | AI研修・開発会社「https://t.co/5yexLMSKQq」CEO | AI連載 NewsPicks1位獲得 | 早稲田AI研究会創設 | 岩手出身 | AI顧問5社 | 仕事依頼はDMへ 📩",
+      "n_all": 100,
+      "n_own": 23
+    },
+    "A": {
+      "n": 23,
+      "avg_len": 381.6,
+      "median_len": 343,
+      "len_dist": {
+        "<=140": 0,
+        "141-280": 10,
+        "281-1000": 12,
+        "1001-3000": 1,
+        ">=3001": 0
+      },
+      "url_rate": 0.348,
+      "emoji_post_rate": 0.826,
+      "emoji_top5": [
+        [
+          "👇",
+          18
+        ],
+        [
+          "🧵",
+          18
+        ],
+        [
+          "🔥",
+          2
+        ],
+        [
+          "📘",
+          1
+        ],
+        [
+          "🎁",
+          1
+        ]
+      ],
+      "hashtag_rate": 0.0,
+      "hashtag_avg_count": 0,
+      "newline_density_avg": 0.03
+    },
+    "B": {
+      "n": 23,
+      "keigo_rate": 0.609,
+      "joutai_rate": 0.217,
+      "first_person": {
+        "無し": 19,
+        "自分": 3,
+        "僕": 1
+      },
+      "pos_rate": 0.261,
+      "neg_rate": 0.043,
+      "category": {
+        "業務仕組み化": 0.348,
+        "ニュース速報": 0.261,
+        "批評": 0.043,
+        "tips": 0.348
+      },
+      "non_engineer_rate": 0.043,
+      "non_engineer_n": 1,
+      "fail_rate": 0.0,
+      "fail_n": 0,
+      "cta": {
+        "DM言及": 0,
+        "プロフ言及": 0,
+        "URL末尾誘導": 5,
+        "リプ欄言及": 0
+      }
+    },
+    "E": {
+      "n_own": 23,
+      "n_all": 100,
+      "period_days_observed": 19,
+      "posts_per_day_own": 1.21,
+      "hour_hist": {
+        "12": 4,
+        "20": 2,
+        "17": 2,
+        "15": 2,
+        "11": 3,
+        "23": 2,
+        "22": 1,
+        "19": 2,
+        "14": 3,
+        "9": 1,
+        "21": 1
+      },
+      "dow_hist": {
+        "4": 1,
+        "6": 7,
+        "3": 4,
+        "2": 4,
+        "0": 4,
+        "5": 2,
+        "1": 1
+      },
+      "chains_60min": 0
+    },
+    "F": {
+      "profile_cta_detected": [
+        "DM"
+      ],
+      "has_url_in_desc": true
+    },
+    "G": {
+      "n": 23,
+      "hook_dist": {
+        "数字インパクト": 12,
+        "結論先出し": 6
+      },
+      "engagement_top25_avg": 0.0123,
+      "engagement_top25_cut": 0.0103,
+      "bracket_rate": 0.043,
+      "leading_len_median": 39,
+      "emoji_lead_rate": 0.0
+    },
+    "H": {
+      "n": 23,
+      "thread_dist": {
+        "1本": 23,
+        "2-3本": 0,
+        "4-7本": 0,
+        "8本以上": 0
+      },
+      "quote_rt_rate": 0.0,
+      "long_post_rate_>=1000": 0.043,
+      "bullet_rate": 0.304,
+      "bullet_emoji_rate": 0.043,
+      "url_end_rate": 0.217,
+      "url_mid_rate": 0.13,
+      "cta_end_rate": 0.783,
+      "multi_url_rate": 0.043
+    }
+  },
+  "masahirochaen": {
+    "meta": {
+      "name": "チャエン | デジライズ CEO《重要AIニュースを毎日最速で発信⚡️》",
+      "followers": 193796,
+      "description": "Xで一番分かりやすく最速でAI情報発信 | 法人向け AI開発・研修、500社・4万人支援 | GMO他複数上場企業顧問 | テレビ出演多数 | Gemini AI アドバイザー | 年間登壇150件以上・日本一｜Youtube4万人｜https://t.co/bU7rVyHIFU｜AI業界最速上場準備中｜ClaudeCode開発",
+      "n_all": 100,
+      "n_own": 50
+    },
+    "A": {
+      "n": 50,
+      "avg_len": 325.5,
+      "median_len": 224,
+      "len_dist": {
+        "<=140": 11,
+        "141-280": 17,
+        "281-1000": 21,
+        "1001-3000": 1,
+        ">=3001": 0
+      },
+      "url_rate": 0.42,
+      "emoji_post_rate": 0.42,
+      "emoji_top5": [
+        [
+          "🔥",
+          11
+        ],
+        [
+          "✅",
+          9
+        ],
+        [
+          "👇",
+          5
+        ],
+        [
+          "🙌",
+          5
+        ],
+        [
+          "⚡",
+          3
+        ]
+      ],
+      "hashtag_rate": 0.04,
+      "hashtag_avg_count": 0.04,
+      "newline_density_avg": 0.042
+    },
+    "B": {
+      "n": 50,
+      "keigo_rate": 0.76,
+      "joutai_rate": 0.32,
+      "first_person": {
+        "無し": 44,
+        "自分": 2,
+        "私": 4
+      },
+      "pos_rate": 0.16,
+      "neg_rate": 0.02,
+      "category": {
+        "業務仕組み化": 0.18,
+        "ニュース速報": 0.4,
+        "批評": 0.02,
+        "tips": 0.06
+      },
+      "non_engineer_rate": 0.04,
+      "non_engineer_n": 2,
+      "fail_rate": 0.0,
+      "fail_n": 0,
+      "cta": {
+        "DM言及": 2,
+        "プロフ言及": 0,
+        "URL末尾誘導": 18,
+        "リプ欄言及": 2
+      }
+    },
+    "E": {
+      "n_own": 50,
+      "n_all": 100,
+      "period_days_observed": 7,
+      "posts_per_day_own": 7.14,
+      "hour_hist": {
+        "18": 3,
+        "17": 3,
+        "16": 4,
+        "10": 3,
+        "6": 5,
+        "19": 1,
+        "15": 3,
+        "8": 3,
+        "7": 3,
+        "20": 2,
+        "1": 4,
+        "3": 2,
+        "2": 4,
+        "14": 3,
+        "9": 1,
+        "23": 1,
+        "22": 2,
+        "12": 1,
+        "0": 1,
+        "13": 1
+      },
+      "dow_hist": {
+        "5": 9,
+        "4": 8,
+        "3": 5,
+        "2": 11,
+        "1": 6,
+        "0": 5,
+        "6": 6
+      },
+      "chains_60min": 8
+    },
+    "F": {
+      "profile_cta_detected": [],
+      "has_url_in_desc": true
+    },
+    "G": {
+      "n": 50,
+      "hook_dist": {
+        "結論先出し": 21,
+        "数字インパクト": 18,
+        "比較": 1,
+        "メタ言及": 3
+      },
+      "engagement_top25_avg": 0.0078,
+      "engagement_top25_cut": 0.006,
+      "bracket_rate": 0.42,
+      "leading_len_median": 33,
+      "emoji_lead_rate": 0.0
+    },
+    "H": {
+      "n": 50,
+      "thread_dist": {
+        "1本": 39,
+        "2-3本": 2,
+        "4-7本": 1,
+        "8本以上": 0
+      },
+      "quote_rt_rate": 0.0,
+      "long_post_rate_>=1000": 0.02,
+      "bullet_rate": 0.48,
+      "bullet_emoji_rate": 0.06,
+      "url_end_rate": 0.38,
+      "url_mid_rate": 0.04,
+      "cta_end_rate": 0.1,
+      "multi_url_rate": 0.08
+    }
+  },
+  "kosuke_agos": {
+    "meta": {
+      "name": "Kosuke",
+      "followers": 89003,
+      "description": "@noimos_AI ファウンダー| メディア売却→時価総額150億円でトークン上場→AI | AIマーケティングエージェント@noimos_aiのベータ版リリースしたので是非試してみてください。",
+      "n_all": 91,
+      "n_own": 47
+    },
+    "A": {
+      "n": 47,
+      "avg_len": 558.9,
+      "median_len": 556,
+      "len_dist": {
+        "<=140": 0,
+        "141-280": 0,
+        "281-1000": 47,
+        "1001-3000": 0,
+        ">=3001": 0
+      },
+      "url_rate": 0.362,
+      "emoji_post_rate": 0.0,
+      "emoji_top5": [],
+      "hashtag_rate": 0.0,
+      "hashtag_avg_count": 0,
+      "newline_density_avg": 0.023
+    },
+    "B": {
+      "n": 47,
+      "keigo_rate": 1.0,
+      "joutai_rate": 1.0,
+      "first_person": {
+        "無し": 40,
+        "私": 2,
+        "自分": 4,
+        "俺": 1
+      },
+      "pos_rate": 0.255,
+      "neg_rate": 0.298,
+      "category": {
+        "業務仕組み化": 0.17,
+        "ニュース速報": 0.064,
+        "批評": 0.255,
+        "tips": 0.085
+      },
+      "non_engineer_rate": 0.0,
+      "non_engineer_n": 0,
+      "fail_rate": 0.085,
+      "fail_n": 4,
+      "cta": {
+        "DM言及": 1,
+        "プロフ言及": 0,
+        "URL末尾誘導": 0,
+        "リプ欄言及": 0
+      }
+    },
+    "E": {
+      "n_own": 47,
+      "n_all": 91,
+      "period_days_observed": 24,
+      "posts_per_day_own": 1.96,
+      "hour_hist": {
+        "16": 13,
+        "15": 4,
+        "14": 18,
+        "22": 3,
+        "18": 3,
+        "13": 4,
+        "17": 2
+      },
+      "dow_hist": {
+        "5": 2,
+        "4": 12,
+        "2": 10,
+        "0": 7,
+        "6": 10,
+        "3": 5,
+        "1": 1
+      },
+      "chains_60min": 17
+    },
+    "F": {
+      "profile_cta_detected": [],
+      "has_url_in_desc": false
+    },
+    "G": {
+      "n": 47,
+      "hook_dist": {
+        "結論先出し": 1,
+        "逆張り": 2,
+        "数字インパクト": 14,
+        "問いかけ": 1
+      },
+      "engagement_top25_avg": 0.0091,
+      "engagement_top25_cut": 0.0074,
+      "bracket_rate": 0.0,
+      "leading_len_median": 79,
+      "emoji_lead_rate": 0.0
+    },
+    "H": {
+      "n": 47,
+      "thread_dist": {
+        "1本": 1,
+        "2-3本": 14,
+        "4-7本": 3,
+        "8本以上": 0
+      },
+      "quote_rt_rate": 0.0,
+      "long_post_rate_>=1000": 0.0,
+      "bullet_rate": 0.0,
+      "bullet_emoji_rate": 0.0,
+      "url_end_rate": 0.0,
+      "url_mid_rate": 0.362,
+      "cta_end_rate": 0.0,
+      "multi_url_rate": 0.0
+    }
+  },
+  "ClaudeCode_love": {
+    "meta": {
+      "name": "Claude Code Studio",
+      "followers": 29523,
+      "description": "Claude Codeガチ勢３人で運営｜実務レベルのCLI活用・自動化を毎日発信｜開発プログラム参加｜賞金30万円獲得｜現在は上場企業とAIエージェントを共同開発中｜AI時代はコンテキスト/ナレッジ管理が９割｜組織全体への「 ClaudeCode × Obsidian 」の導入は下のHPからご相談ください👇",
+      "n_all": 92,
+      "n_own": 70
+    },
+    "A": {
+      "n": 70,
+      "avg_len": 404.0,
+      "median_len": 406,
+      "len_dist": {
+        "<=140": 5,
+        "141-280": 10,
+        "281-1000": 55,
+        "1001-3000": 0,
+        ">=3001": 0
+      },
+      "url_rate": 0.771,
+      "emoji_post_rate": 0.986,
+      "emoji_top5": [
+        [
+          "👇",
+          118
+        ],
+        [
+          "😳",
+          40
+        ],
+        [
+          "🔥",
+          14
+        ],
+        [
+          "👀",
+          13
+        ],
+        [
+          "❌",
+          8
+        ]
+      ],
+      "hashtag_rate": 0.0,
+      "hashtag_avg_count": 0,
+      "newline_density_avg": 0.047
+    },
+    "B": {
+      "n": 70,
+      "keigo_rate": 0.514,
+      "joutai_rate": 0.386,
+      "first_person": {
+        "無し": 50,
+        "自分": 20
+      },
+      "pos_rate": 0.286,
+      "neg_rate": 0.114,
+      "category": {
+        "業務仕組み化": 0.271,
+        "ニュース速報": 0.329,
+        "批評": 0.286,
+        "tips": 0.371
+      },
+      "non_engineer_rate": 0.114,
+      "non_engineer_n": 8,
+      "fail_rate": 0.071,
+      "fail_n": 5,
+      "cta": {
+        "DM言及": 0,
+        "プロフ言及": 0,
+        "URL末尾誘導": 4,
+        "リプ欄言及": 4
+      }
+    },
+    "E": {
+      "n_own": 70,
+      "n_all": 92,
+      "period_days_observed": 15,
+      "posts_per_day_own": 4.67,
+      "hour_hist": {
+        "0": 2,
+        "22": 4,
+        "7": 7,
+        "20": 5,
+        "14": 6,
+        "13": 4,
+        "10": 5,
+        "16": 3,
+        "12": 3,
+        "15": 4,
+        "11": 4,
+        "9": 2,
+        "6": 1,
+        "4": 1,
+        "3": 1,
+        "21": 3,
+        "19": 4,
+        "18": 5,
+        "23": 2,
+        "8": 1,
+        "2": 1,
+        "17": 2
+      },
+      "dow_hist": {
+        "6": 1,
+        "5": 13,
+        "4": 19,
+        "2": 7,
+        "1": 21,
+        "3": 9
+      },
+      "chains_60min": 14
+    },
+    "F": {
+      "profile_cta_detected": [],
+      "has_url_in_desc": false
+    },
+    "G": {
+      "n": 70,
+      "hook_dist": {
+        "数字インパクト": 32,
+        "メタ言及": 2,
+        "警告": 1,
+        "自己卑下": 2
+      },
+      "engagement_top25_avg": 0.0139,
+      "engagement_top25_cut": 0.0088,
+      "bracket_rate": 0.886,
+      "leading_len_median": 4,
+      "emoji_lead_rate": 0.0
+    },
+    "H": {
+      "n": 70,
+      "thread_dist": {
+        "1本": 64,
+        "2-3本": 3,
+        "4-7本": 0,
+        "8本以上": 0
+      },
+      "quote_rt_rate": 0.0,
+      "long_post_rate_>=1000": 0.0,
+      "bullet_rate": 0.843,
+      "bullet_emoji_rate": 0.014,
+      "url_end_rate": 0.043,
+      "url_mid_rate": 0.729,
+      "cta_end_rate": 0.671,
+      "multi_url_rate": 0.014
+    }
+  },
+  "minorun365": {
+    "meta": {
+      "name": "みのるん",
+      "followers": 14612,
+      "description": "テックエバンジェリスト @kddi_agile / AWS AI Hero, Qiita 2025 Top Contributor, デブサミ2026 ベストスピーカー / 著書 #Bedrock開発入門 #AIエージェント開発運用入門 ほか / 近刊 #AgentCore実践入門 #Mastra実践入門",
+      "n_all": 94,
+      "n_own": 58
+    },
+    "A": {
+      "n": 58,
+      "avg_len": 63.1,
+      "median_len": 52,
+      "len_dist": {
+        "<=140": 54,
+        "141-280": 4,
+        "281-1000": 0,
+        "1001-3000": 0,
+        ">=3001": 0
+      },
+      "url_rate": 0.207,
+      "emoji_post_rate": 0.224,
+      "emoji_top5": [
+        [
+          "🔥",
+          2
+        ],
+        [
+          "😭",
+          1
+        ],
+        [
+          "💪",
+          1
+        ],
+        [
+          "😅",
+          1
+        ],
+        [
+          "🤣",
+          1
+        ]
+      ],
+      "hashtag_rate": 0.069,
+      "hashtag_avg_count": 0.07,
+      "newline_density_avg": 0.008
+    },
+    "B": {
+      "n": 58,
+      "keigo_rate": 0.345,
+      "joutai_rate": 0.052,
+      "first_person": {
+        "無し": 54,
+        "自分": 1,
+        "私": 3
+      },
+      "pos_rate": 0.034,
+      "neg_rate": 0.052,
+      "category": {
+        "業務仕組み化": 0.069,
+        "ニュース速報": 0.034,
+        "批評": 0.052,
+        "tips": 0.0
+      },
+      "non_engineer_rate": 0.0,
+      "non_engineer_n": 0,
+      "fail_rate": 0.0,
+      "fail_n": 0,
+      "cta": {
+        "DM言及": 0,
+        "プロフ言及": 0,
+        "URL末尾誘導": 12,
+        "リプ欄言及": 0
+      }
+    },
+    "E": {
+      "n_own": 58,
+      "n_all": 94,
+      "period_days_observed": 6,
+      "posts_per_day_own": 9.67,
+      "hour_hist": {
+        "20": 5,
+        "18": 3,
+        "16": 5,
+        "15": 2,
+        "13": 4,
+        "12": 7,
+        "11": 2,
+        "21": 3,
+        "14": 3,
+        "9": 1,
+        "7": 1,
+        "23": 3,
+        "8": 1,
+        "0": 6,
+        "22": 3,
+        "17": 2,
+        "10": 1,
+        "1": 3,
+        "19": 3
+      },
+      "dow_hist": {
+        "5": 12,
+        "4": 8,
+        "3": 8,
+        "2": 12,
+        "1": 5,
+        "0": 8,
+        "6": 5
+      },
+      "chains_60min": 14
+    },
+    "F": {
+      "profile_cta_detected": [],
+      "has_url_in_desc": false
+    },
+    "G": {
+      "n": 58,
+      "hook_dist": {
+        "数字インパクト": 18,
+        "問いかけ": 6,
+        "結論先出し": 8,
+        "比較": 1,
+        "逆張り": 2
+      },
+      "engagement_top25_avg": 0.0157,
+      "engagement_top25_cut": 0.009,
+      "bracket_rate": 0.0,
+      "leading_len_median": 45,
+      "emoji_lead_rate": 0.0
+    },
+    "H": {
+      "n": 58,
+      "thread_dist": {
+        "1本": 26,
+        "2-3本": 10,
+        "4-7本": 2,
+        "8本以上": 0
+      },
+      "quote_rt_rate": 0.0,
+      "long_post_rate_>=1000": 0.0,
+      "bullet_rate": 0.0,
+      "bullet_emoji_rate": 0.0,
+      "url_end_rate": 0.207,
+      "url_mid_rate": 0.0,
+      "cta_end_rate": 0.0,
+      "multi_url_rate": 0.034
+    }
+  },
+  "icoxfog417": {
+    "meta": {
+      "name": "piqcy",
+      "followers": 19772,
+      "description": "All change is not growth, as all movement is not forward. Ellen Glasgow",
+      "n_all": 100,
+      "n_own": 71
+    },
+    "A": {
+      "n": 71,
+      "avg_len": 101.8,
+      "median_len": 98,
+      "len_dist": {
+        "<=140": 55,
+        "141-280": 14,
+        "281-1000": 2,
+        "1001-3000": 0,
+        ">=3001": 0
+      },
+      "url_rate": 0.282,
+      "emoji_post_rate": 0.056,
+      "emoji_top5": [
+        [
+          "💪",
+          1
+        ],
+        [
+          "👍",
+          1
+        ],
+        [
+          "😭",
+          1
+        ],
+        [
+          "💦",
+          1
+        ]
+      ],
+      "hashtag_rate": 0.0,
+      "hashtag_avg_count": 0,
+      "newline_density_avg": 0.005
+    },
+    "B": {
+      "n": 71,
+      "keigo_rate": 0.366,
+      "joutai_rate": 0.169,
+      "first_person": {
+        "無し": 63,
+        "私": 6,
+        "自分": 2
+      },
+      "pos_rate": 0.099,
+      "neg_rate": 0.028,
+      "category": {
+        "業務仕組み化": 0.0,
+        "ニュース速報": 0.042,
+        "批評": 0.07,
+        "tips": 0.042
+      },
+      "non_engineer_rate": 0.0,
+      "non_engineer_n": 0,
+      "fail_rate": 0.0,
+      "fail_n": 0,
+      "cta": {
+        "DM言及": 1,
+        "プロフ言及": 0,
+        "URL末尾誘導": 18,
+        "リプ欄言及": 0
+      }
+    },
+    "E": {
+      "n_own": 71,
+      "n_all": 100,
+      "period_days_observed": 71,
+      "posts_per_day_own": 1.0,
+      "hour_hist": {
+        "20": 5,
+        "9": 5,
+        "8": 7,
+        "12": 5,
+        "14": 1,
+        "19": 1,
+        "16": 7,
+        "10": 4,
+        "0": 4,
+        "15": 6,
+        "18": 3,
+        "23": 6,
+        "11": 5,
+        "7": 1,
+        "22": 2,
+        "13": 3,
+        "5": 2,
+        "21": 2,
+        "1": 1,
+        "6": 1
+      },
+      "dow_hist": {
+        "5": 12,
+        "4": 8,
+        "2": 8,
+        "0": 5,
+        "6": 9,
+        "3": 12,
+        "1": 17
+      },
+      "chains_60min": 4
+    },
+    "F": {
+      "profile_cta_detected": [],
+      "has_url_in_desc": false
+    },
+    "G": {
+      "n": 71,
+      "hook_dist": {
+        "数字インパクト": 21,
+        "結論先出し": 17,
+        "Before-After数字": 2,
+        "問いかけ": 2,
+        "警告": 1,
+        "自己卑下": 2
+      },
+      "engagement_top25_avg": 0.0034,
+      "engagement_top25_cut": 0.0003,
+      "bracket_rate": 0.0,
+      "leading_len_median": 75,
+      "emoji_lead_rate": 0.0
+    },
+    "H": {
+      "n": 71,
+      "thread_dist": {
+        "1本": 65,
+        "2-3本": 3,
+        "4-7本": 0,
+        "8本以上": 0
+      },
+      "quote_rt_rate": 0.0,
+      "long_post_rate_>=1000": 0.0,
+      "bullet_rate": 0.0,
+      "bullet_emoji_rate": 0.0,
+      "url_end_rate": 0.282,
+      "url_mid_rate": 0.0,
+      "cta_end_rate": 0.014,
+      "multi_url_rate": 0.07
+    }
+  },
+  "ai_jitan": {
+    "meta": {
+      "name": "えーたん/AI×時短で仕事効率化",
+      "followers": 49143,
+      "description": "【AIで時短したい人は必見】AI×時短で残業ゼロの働き方を手に入れるためのNotebookLM活用法を配信中｜中小企業AI推進リーダー｜GPTs100超開発の実績｜公式LINEでNotebookLMのノウハウやGemを発信中｜NotebookLM個別レッスンや仕事のご相談はDMへ📩",
+      "n_all": 69,
+      "n_own": 6
+    },
+    "A": {
+      "n": 6,
+      "avg_len": 109,
+      "median_len": 105,
+      "len_dist": {
+        "<=140": 4,
+        "141-280": 2,
+        "281-1000": 0,
+        "1001-3000": 0,
+        ">=3001": 0
+      },
+      "url_rate": 0.333,
+      "emoji_post_rate": 0.667,
+      "emoji_top5": [
+        [
+          "👇",
+          4
+        ]
+      ],
+      "hashtag_rate": 0.0,
+      "hashtag_avg_count": 0,
+      "newline_density_avg": 0.017
+    },
+    "B": {
+      "n": 6,
+      "keigo_rate": 0.667,
+      "joutai_rate": 0.5,
+      "first_person": {
+        "無し": 6
+      },
+      "pos_rate": 0.167,
+      "neg_rate": 0.0,
+      "category": {
+        "業務仕組み化": 0.167,
+        "ニュース速報": 0.0,
+        "批評": 0.0,
+        "tips": 0.333
+      },
+      "non_engineer_rate": 0.0,
+      "non_engineer_n": 0,
+      "fail_rate": 0.0,
+      "fail_n": 0,
+      "cta": {
+        "DM言及": 0,
+        "プロフ言及": 0,
+        "URL末尾誘導": 2,
+        "リプ欄言及": 2
+      }
+    },
+    "E": {
+      "n_own": 6,
+      "n_all": 69,
+      "period_days_observed": 1,
+      "posts_per_day_own": 6.0,
+      "hour_hist": {
+        "8": 1,
+        "7": 2,
+        "18": 1,
+        "9": 2
+      },
+      "dow_hist": {
+        "5": 2,
+        "4": 4
+      },
+      "chains_60min": 1
+    },
+    "F": {
+      "profile_cta_detected": [
+        "DM",
+        "LINE"
+      ],
+      "has_url_in_desc": false
+    },
+    "G": {
+      "n": 6,
+      "hook_dist": {
+        "数字インパクト": 2,
+        "結論先出し": 4,
+        "問いかけ": 1
+      },
+      "engagement_top25_avg": 0.006,
+      "engagement_top25_cut": 0.006,
+      "bracket_rate": 0.0,
+      "leading_len_median": 49,
+      "emoji_lead_rate": 0.0
+    },
+    "H": {
+      "n": 6,
+      "thread_dist": {
+        "1本": 4,
+        "2-3本": 1,
+        "4-7本": 0,
+        "8本以上": 0
+      },
+      "quote_rt_rate": 0.0,
+      "long_post_rate_>=1000": 0.0,
+      "bullet_rate": 0.0,
+      "bullet_emoji_rate": 0.0,
+      "url_end_rate": 0.333,
+      "url_mid_rate": 0.0,
+      "cta_end_rate": 0.667,
+      "multi_url_rate": 0.0
+    }
+  },
+  "milbon_": {
+    "meta": {
+      "name": "みるぼん@スモビジ",
+      "followers": 44653,
+      "description": "外資コンサルと並行して副業でスモールビジネスを複数運営｜【真っ当】✖︎【ノースキル】✖︎【低労働】↪︎仕組化が得意｜【真っ当な事業】を構築する方法を発信｜【仕組化】で1日15分労働｜#スモビジ 複数運営で平均月商2,000万円｜特に #ココナラ ×【知識も経験もない】サービスで平均月商450万円、月間利益300万円",
+      "n_all": 92,
+      "n_own": 62
+    },
+    "A": {
+      "n": 62,
+      "avg_len": 116.2,
+      "median_len": 131,
+      "len_dist": {
+        "<=140": 40,
+        "141-280": 21,
+        "281-1000": 1,
+        "1001-3000": 0,
+        ">=3001": 0
+      },
+      "url_rate": 0.71,
+      "emoji_post_rate": 0.0,
+      "emoji_top5": [],
+      "hashtag_rate": 0.0,
+      "hashtag_avg_count": 0,
+      "newline_density_avg": 0.029
+    },
+    "B": {
+      "n": 62,
+      "keigo_rate": 0.097,
+      "joutai_rate": 0.097,
+      "first_person": {
+        "無し": 57,
+        "自分": 4,
+        "私": 1
+      },
+      "pos_rate": 0.032,
+      "neg_rate": 0.048,
+      "category": {
+        "業務仕組み化": 0.097,
+        "ニュース速報": 0.081,
+        "批評": 0.032,
+        "tips": 0.129
+      },
+      "non_engineer_rate": 0.177,
+      "non_engineer_n": 11,
+      "fail_rate": 0.016,
+      "fail_n": 1,
+      "cta": {
+        "DM言及": 1,
+        "プロフ言及": 1,
+        "URL末尾誘導": 44,
+        "リプ欄言及": 21
+      }
+    },
+    "E": {
+      "n_own": 62,
+      "n_all": 92,
+      "period_days_observed": 11,
+      "posts_per_day_own": 5.64,
+      "hour_hist": {
+        "22": 4,
+        "20": 5,
+        "11": 11,
+        "18": 3,
+        "12": 4,
+        "9": 3,
+        "15": 2,
+        "13": 3,
+        "10": 3,
+        "23": 4,
+        "19": 4,
+        "17": 2,
+        "16": 5,
+        "14": 1,
+        "8": 2,
+        "0": 3,
+        "21": 3
+      },
+      "dow_hist": {
+        "5": 8,
+        "4": 8,
+        "3": 10,
+        "2": 14,
+        "1": 8,
+        "0": 6,
+        "6": 8
+      },
+      "chains_60min": 7
+    },
+    "F": {
+      "profile_cta_detected": [],
+      "has_url_in_desc": false
+    },
+    "G": {
+      "n": 62,
+      "hook_dist": {
+        "数字インパクト": 43,
+        "結論先出し": 29,
+        "メタ言及": 3,
+        "問いかけ": 2
+      },
+      "engagement_top25_avg": 0.0121,
+      "engagement_top25_cut": 0.0099,
+      "bracket_rate": 0.016,
+      "leading_len_median": 31,
+      "emoji_lead_rate": 0.0
+    },
+    "H": {
+      "n": 62,
+      "thread_dist": {
+        "1本": 53,
+        "2-3本": 4,
+        "4-7本": 0,
+        "8本以上": 0
+      },
+      "quote_rt_rate": 0.0,
+      "long_post_rate_>=1000": 0.0,
+      "bullet_rate": 0.371,
+      "bullet_emoji_rate": 0.0,
+      "url_end_rate": 0.71,
+      "url_mid_rate": 0.0,
+      "cta_end_rate": 0.097,
+      "multi_url_rate": 0.0
+    }
+  }
+}
