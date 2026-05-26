@@ -27,6 +27,7 @@
 | 取得 tweets | 987 |
 | 推定コスト | ¥24 (¥27 上限) |
 | **実コスト** | **¥23 ($0.148)** |
+| (v1.4 改訂注記) | 投稿頻度・cron 頻度は **Style Guide v1.4 §3 / §2.5** を Single Source とする (X 1/日 + note 4-6/月 + IG 月 12 / 海外X 日次 cron) |
 | API calls | 50 |
 | publisher unique handles | 215 |
 | audience unique handles | 275 |
