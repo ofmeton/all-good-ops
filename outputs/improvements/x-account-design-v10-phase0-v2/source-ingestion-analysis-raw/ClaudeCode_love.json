@@ -1,0 +1,22 @@
+{
+  "handle": "ClaudeCode_love",
+  "response_text": "```json\n{\n  \"information_source\": \"海外X/公式ブログ/GitHub/Podcast/YouTube\",\n  \"publishing_lag_hours\": 6,\n  \"selection_criteria\": \"Claude Code・Anthropic関連の新機能・ツール・活用事例を中心に、海外でバズった情報や公式リリースをほぼ網羅的に収集・選別。「速報性」と「実用性（すぐ試せる）」を最優先基準としている。\",\n  \"translation_rate_pct\": 20,\n  \"paraphrase_rate_pct\": 45,\n  \"opinion_rate_pct\": 10,\n  \"citation_explicit_rate_pct\": 55,\n  \"cross_platform_intake_rate_pct\": 70,\n  \"original_rate_pct\": 25,\n  \"notes\": \"海外X投稿・公式ブログ・YouTube動画・Podcastを一次情報源として日本語に要約・再構成するパターンが主軸。完全翻訳というより「海外情報を日本語ユーザー向けに噛み砕いて紹介」するスタイルが大半で、独自解説・チートシート・図解インフォグラフィック等のオリジナル加工要素も一定数あり。自販機実験（投稿19）など一部の内容は事実確認困難な誇張・創作的要素も含む可能性があり、情報の正確性への自信度は中程度。\"\n}\n```",
+  "parsed": {
+    "information_source": "海外X/公式ブログ/GitHub/Podcast/YouTube",
+    "publishing_lag_hours": 6,
+    "selection_criteria": "Claude Code・Anthropic関連の新機能・ツール・活用事例を中心に、海外でバズった情報や公式リリースをほぼ網羅的に収集・選別。「速報性」と「実用性（すぐ試せる）」を最優先基準としている。",
+    "translation_rate_pct": 20,
+    "paraphrase_rate_pct": 45,
+    "opinion_rate_pct": 10,
+    "citation_explicit_rate_pct": 55,
+    "cross_platform_intake_rate_pct": 70,
+    "original_rate_pct": 25,
+    "notes": "海外X投稿・公式ブログ・YouTube動画・Podcastを一次情報源として日本語に要約・再構成するパターンが主軸。完全翻訳というより「海外情報を日本語ユーザー向けに噛み砕いて紹介」するスタイルが大半で、独自解説・チートシート・図解インフォグラフィック等のオリジナル加工要素も一定数あり。自販機実験（投稿19）など一部の内容は事実確認困難な誇張・創作的要素も含む可能性があり、情報の正確性への自信度は中程度。"
+  },
+  "usage": {
+    "input_tokens": 6024,
+    "output_tokens": 425,
+    "cache_read_input_tokens": 0,
+    "cache_creation_input_tokens": 0
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "handle": "masahirochaen",
+  "response_text": "```json\n{\n  \"information_source\": \"海外X/公式ブログ/GitHub/案件メモ\",\n  \"publishing_lag_hours\": 1,\n  \"selection_criteria\": \"AI・LLM領域の最新リリース・機能アップデートを中心に、自身が実際に試用・現地取材した体験を加味して選別。実務活用（動画編集・コード生成）との接点が高い情報を優先する傾向。\",\n  \"translation_rate_pct\": 10,\n  \"paraphrase_rate_pct\": 30,\n  \"opinion_rate_pct\": 25,\n  \"citation_explicit_rate_pct\": 40,\n  \"cross_platform_intake_rate_pct\": 55,\n  \"original_rate_pct\": 35,\n  \"notes\": \"Google I/O 2026へ現地参加・NVIDIA本社訪問など一次取材比率が高く、速報＋自己実験デモ（Claude Codeで動画自動編集など）を組み合わせる独自スタイル。GitHub更新をClaude Codeで独自分析するなど、ツール活用による一次加工も目立つ。translation_rate/paraphrase_rateの推定自信度はやや低い。\"\n}\n```",
+  "parsed": {
+    "information_source": "海外X/公式ブログ/GitHub/案件メモ",
+    "publishing_lag_hours": 1,
+    "selection_criteria": "AI・LLM領域の最新リリース・機能アップデートを中心に、自身が実際に試用・現地取材した体験を加味して選別。実務活用（動画編集・コード生成）との接点が高い情報を優先する傾向。",
+    "translation_rate_pct": 10,
+    "paraphrase_rate_pct": 30,
+    "opinion_rate_pct": 25,
+    "citation_explicit_rate_pct": 40,
+    "cross_platform_intake_rate_pct": 55,
+    "original_rate_pct": 35,
+    "notes": "Google I/O 2026へ現地参加・NVIDIA本社訪問など一次取材比率が高く、速報＋自己実験デモ（Claude Codeで動画自動編集など）を組み合わせる独自スタイル。GitHub更新をClaude Codeで独自分析するなど、ツール活用による一次加工も目立つ。translation_rate/paraphrase_rateの推定自信度はやや低い。"
+  },
+  "usage": {
+    "input_tokens": 5349,
+    "output_tokens": 360,
+    "cache_read_input_tokens": 0,
+    "cache_creation_input_tokens": 0
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "handle": "exploraX_",
+  "response_text": "```json\n{\n  \"information_source\": \"海外X/GitHub/公式ブログ/Podcast\",\n  \"publishing_lag_hours\": 12,\n  \"selection_criteria\": \"「無料・オープンソース・有料SaaS代替」というコスト削減フレームと、著名AI人物（Altman・Karpathy・Pichai）の発言を権威付けに使ったAIツール紹介に絞って選別している。バズりやすいリスト形式・数字見出しを優先。\",\n  \"translation_rate_pct\": 0,\n  \"paraphrase_rate_pct\": 30,\n  \"opinion_rate_pct\": 20,\n  \"original_rate_pct\": 50,\n  \"citation_explicit_rate_pct\": 35,\n  \"cross_platform_intake_rate_pct\": 40,\n  \"notes\": \"投稿の約半数は自作リポジトリ・自作コース・自作エージェントへの誘導であり『オリジナル』に分類したが、内容自体は既存ツールのキュレーションに近い。著名人の発言引用は出典URLが曖昧なケースが多く、citation_explicit_rateは低めに推定（自信度：中）。タイムラグはGitHub新着・X上のAIニュースを当日〜翌日に拾うパターンが多く12h前後と推定。\"\n}\n```",
+  "parsed": {
+    "information_source": "海外X/GitHub/公式ブログ/Podcast",
+    "publishing_lag_hours": 12,
+    "selection_criteria": "「無料・オープンソース・有料SaaS代替」というコスト削減フレームと、著名AI人物（Altman・Karpathy・Pichai）の発言を権威付けに使ったAIツール紹介に絞って選別している。バズりやすいリスト形式・数字見出しを優先。",
+    "translation_rate_pct": 0,
+    "paraphrase_rate_pct": 30,
+    "opinion_rate_pct": 20,
+    "original_rate_pct": 50,
+    "citation_explicit_rate_pct": 35,
+    "cross_platform_intake_rate_pct": 40,
+    "notes": "投稿の約半数は自作リポジトリ・自作コース・自作エージェントへの誘導であり『オリジナル』に分類したが、内容自体は既存ツールのキュレーションに近い。著名人の発言引用は出典URLが曖昧なケースが多く、citation_explicit_rateは低めに推定（自信度：中）。タイムラグはGitHub新着・X上のAIニュースを当日〜翌日に拾うパターンが多く12h前後と推定。"
+  },
+  "usage": {
+    "input_tokens": 2886,
+    "output_tokens": 403,
+    "cache_read_input_tokens": 0,
+    "cache_creation_input_tokens": 0
+  }
+}

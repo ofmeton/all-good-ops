@@ -1,0 +1,22 @@
+{
+  "handle": "tetumemo",
+  "response_text": "```json\n{\n  \"information_source\": \"海外X/公式ブログ/Podcast/案件メモ\",\n  \"publishing_lag_hours\": 6,\n  \"selection_criteria\": \"Codex・Claude・Hermes Agentなど最新AIエージェントツールの実用Tips・海外発の話題プロンプト・コスト問題など「今すぐ使える・知っておくべき」情報を優先して選別している。エンタメ要素（オリキャラ表情集）も組み込み幅広い読者層を意識している。\",\n  \"translation_rate_pct\": 20,\n  \"paraphrase_rate_pct\": 45,\n  \"opinion_rate_pct\": 20,\n  \"original_rate_pct\": 15,\n  \"citation_explicit_rate_pct\": 40,\n  \"cross_platform_intake_rate_pct\": 35,\n  \"notes\": \"海外Xアカウント（OpenAI社員・Hermes Agent開発者等）の投稿を発見→日本語で要約・解説するパターンが主軸。引用元URLを示す場合もあるが「海外で話題」程度の曖昧な言及が多く citation_explicit_rate は控えめ推定。Podcast（Spotify配信）・note/Substackへのクロスポストも確認でき cross_platform 取り込みも一定数ある。publishing_lag は数時間〜半日程度と推定だが根拠データが限られるため自信度は中程度。\"\n}\n```",
+  "parsed": {
+    "information_source": "海外X/公式ブログ/Podcast/案件メモ",
+    "publishing_lag_hours": 6,
+    "selection_criteria": "Codex・Claude・Hermes Agentなど最新AIエージェントツールの実用Tips・海外発の話題プロンプト・コスト問題など「今すぐ使える・知っておくべき」情報を優先して選別している。エンタメ要素（オリキャラ表情集）も組み込み幅広い読者層を意識している。",
+    "translation_rate_pct": 20,
+    "paraphrase_rate_pct": 45,
+    "opinion_rate_pct": 20,
+    "original_rate_pct": 15,
+    "citation_explicit_rate_pct": 40,
+    "cross_platform_intake_rate_pct": 35,
+    "notes": "海外Xアカウント（OpenAI社員・Hermes Agent開発者等）の投稿を発見→日本語で要約・解説するパターンが主軸。引用元URLを示す場合もあるが「海外で話題」程度の曖昧な言及が多く citation_explicit_rate は控えめ推定。Podcast（Spotify配信）・note/Substackへのクロスポストも確認でき cross_platform 取り込みも一定数ある。publishing_lag は数時間〜半日程度と推定だが根拠データが限られるため自信度は中程度。"
+  },
+  "usage": {
+    "input_tokens": 4971,
+    "output_tokens": 432,
+    "cache_read_input_tokens": 0,
+    "cache_creation_input_tokens": 0
+  }
+}

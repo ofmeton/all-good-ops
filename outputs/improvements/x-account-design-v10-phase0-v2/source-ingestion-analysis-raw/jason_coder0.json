@@ -1,0 +1,22 @@
+{
+  "handle": "jason_coder0",
+  "response_text": "```json\n{\n  \"information_source\": \"海外X/案件メモ\",\n  \"publishing_lag_hours\": 6,\n  \"selection_criteria\": \"バイラル性の高いAI活用Tips・健康/ウェルネス系の「リスト形式コンテンツ」を中心に選別。エンゲージメントを最大化するための汎用的トピック（AI×生産性、コルチゾール/ストレス）を好む傾向がある。\",\n  \"translation_rate_pct\": 5,\n  \"paraphrase_rate_pct\": 70,\n  \"opinion_rate_pct\": 10,\n  \"original_rate_pct\": 15,\n  \"citation_explicit_rate_pct\": 5,\n  \"cross_platform_intake_rate_pct\": 20,\n  \"notes\": \"投稿の大半は他アカウントで流通しているテンプレ的スレッド（Claude活用プロンプト集・コルチゾール症状リスト）を日本語化せずそのまま英語でパラフレーズ・転載したと推定される。引用元の明示はほぼ皆無（citation_explicit_rate≈5%）。@expertwith_AIや@DilshadAI1への返信「Excellent share」からX上の他インフルエンサーをウォッチし素材を調達している可能性が高い。original_rateの推定自信度は低い。\"\n}\n```",
+  "parsed": {
+    "information_source": "海外X/案件メモ",
+    "publishing_lag_hours": 6,
+    "selection_criteria": "バイラル性の高いAI活用Tips・健康/ウェルネス系の「リスト形式コンテンツ」を中心に選別。エンゲージメントを最大化するための汎用的トピック（AI×生産性、コルチゾール/ストレス）を好む傾向がある。",
+    "translation_rate_pct": 5,
+    "paraphrase_rate_pct": 70,
+    "opinion_rate_pct": 10,
+    "original_rate_pct": 15,
+    "citation_explicit_rate_pct": 5,
+    "cross_platform_intake_rate_pct": 20,
+    "notes": "投稿の大半は他アカウントで流通しているテンプレ的スレッド（Claude活用プロンプト集・コルチゾール症状リスト）を日本語化せずそのまま英語でパラフレーズ・転載したと推定される。引用元の明示はほぼ皆無（citation_explicit_rate≈5%）。@expertwith_AIや@DilshadAI1への返信「Excellent share」からX上の他インフルエンサーをウォッチし素材を調達している可能性が高い。original_rateの推定自信度は低い。"
+  },
+  "usage": {
+    "input_tokens": 2902,
+    "output_tokens": 410,
+    "cache_read_input_tokens": 0,
+    "cache_creation_input_tokens": 0
+  }
+}

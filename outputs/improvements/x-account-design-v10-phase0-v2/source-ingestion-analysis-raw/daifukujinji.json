@@ -1,0 +1,22 @@
+{
+  "handle": "daifukujinji",
+  "response_text": "```json\n{\n  \"information_source\": \"案件メモ/自身の実務体験\",\n  \"publishing_lag_hours\": 2,\n  \"selection_criteria\": \"Geminiを中心としたAIツールの実践的活用法（プロンプト・Canvas機能・Xmind等）に特化し、ビジネス職種の非エンジニア層が即使えるtipsを優先選定している。\",\n  \"translation_rate_pct\": 0,\n  \"paraphrase_rate_pct\": 5,\n  \"opinion_rate_pct\": 20,\n  \"citation_explicit_rate_pct\": 10,\n  \"cross_platform_intake_rate_pct\": 15,\n  \"original_rate_pct\": 75,\n  \"notes\": \"投稿の大半は自作プロンプトのコピペ提供・ユーモア投稿（都道府県ネタ）・自身の体験談で構成されており、外部情報源への明示的引用はほぼ皆無。Xmind新機能紹介（投稿10）はツール公式発表を受けた可能性があるが根拠薄く自信度低。コミュニティ（アイサロ）運営も兼ねており、自サロ誘導型のオリジナルコンテンツ発信が主軸と推定される。\"\n}\n```",
+  "parsed": {
+    "information_source": "案件メモ/自身の実務体験",
+    "publishing_lag_hours": 2,
+    "selection_criteria": "Geminiを中心としたAIツールの実践的活用法（プロンプト・Canvas機能・Xmind等）に特化し、ビジネス職種の非エンジニア層が即使えるtipsを優先選定している。",
+    "translation_rate_pct": 0,
+    "paraphrase_rate_pct": 5,
+    "opinion_rate_pct": 20,
+    "citation_explicit_rate_pct": 10,
+    "cross_platform_intake_rate_pct": 15,
+    "original_rate_pct": 75,
+    "notes": "投稿の大半は自作プロンプトのコピペ提供・ユーモア投稿（都道府県ネタ）・自身の体験談で構成されており、外部情報源への明示的引用はほぼ皆無。Xmind新機能紹介（投稿10）はツール公式発表を受けた可能性があるが根拠薄く自信度低。コミュニティ（アイサロ）運営も兼ねており、自サロ誘導型のオリジナルコンテンツ発信が主軸と推定される。"
+  },
+  "usage": {
+    "input_tokens": 4458,
+    "output_tokens": 387,
+    "cache_read_input_tokens": 0,
+    "cache_creation_input_tokens": 0
+  }
+}

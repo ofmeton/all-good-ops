@@ -1,0 +1,22 @@
+{
+  "handle": "ai_explorer25",
+  "response_text": "```json\n{\n  \"information_source\": \"海外X/公式ブログ/YouTube\",\n  \"publishing_lag_hours\": 48,\n  \"selection_criteria\": \"AI・プログラミング・データサイエンス関連の「無料学習リソースまとめ」に特化し、バズりやすいリスト形式コンテンツを優先選別。ClaudeなどAIツール活用Tips系も積極採用。\",\n  \"translation_rate_pct\": 0,\n  \"paraphrase_rate_pct\": 10,\n  \"opinion_rate_pct\": 5,\n  \"citation_explicit_rate_pct\": 15,\n  \"cross_platform_intake_rate_pct\": 40,\n  \"original_rate_pct\": 85,\n  \"notes\": \"同一コンテンツを複数日程で再投稿する行為が顕著（投稿4/6/7、投稿2/12/13、投稿3/8/10/14/19など）。実質的なオリジナリティはリスト編集作業のみで、情報鮮度より反復露出によるリーチ最大化が主戦略と推定。opinion_rateの推定自信度は低い。\"\n}\n```",
+  "parsed": {
+    "information_source": "海外X/公式ブログ/YouTube",
+    "publishing_lag_hours": 48,
+    "selection_criteria": "AI・プログラミング・データサイエンス関連の「無料学習リソースまとめ」に特化し、バズりやすいリスト形式コンテンツを優先選別。ClaudeなどAIツール活用Tips系も積極採用。",
+    "translation_rate_pct": 0,
+    "paraphrase_rate_pct": 10,
+    "opinion_rate_pct": 5,
+    "citation_explicit_rate_pct": 15,
+    "cross_platform_intake_rate_pct": 40,
+    "original_rate_pct": 85,
+    "notes": "同一コンテンツを複数日程で再投稿する行為が顕著（投稿4/6/7、投稿2/12/13、投稿3/8/10/14/19など）。実質的なオリジナリティはリスト編集作業のみで、情報鮮度より反復露出によるリーチ最大化が主戦略と推定。opinion_rateの推定自信度は低い。"
+  },
+  "usage": {
+    "input_tokens": 3725,
+    "output_tokens": 345,
+    "cache_read_input_tokens": 0,
+    "cache_creation_input_tokens": 0
+  }
+}

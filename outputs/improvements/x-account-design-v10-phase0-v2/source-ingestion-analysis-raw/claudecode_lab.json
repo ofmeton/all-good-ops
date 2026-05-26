@@ -1,0 +1,22 @@
+{
+  "handle": "claudecode_lab",
+  "response_text": "```json\n{\n  \"information_source\": \"公式ブログ/海外X/公式ドキュメント/YouTube\",\n  \"publishing_lag_hours\": 18,\n  \"selection_criteria\": \"Claude CodeおよびAnthropicの新機能・アップデートに特化し、エンジニアの生産性向上に直結する実用トピックを優先選別。競合(OpenAI)動向も補完的に取り上げる。\",\n  \"translation_rate_pct\": 25,\n  \"paraphrase_rate_pct\": 45,\n  \"opinion_rate_pct\": 20,\n  \"citation_explicit_rate_pct\": 40,\n  \"cross_platform_intake_rate_pct\": 55,\n  \"original_rate_pct\": 10,\n  \"notes\": \"投稿の大半はAnthropicの公式発表・ドキュメントを日本語で要約・箇条書き化したもの(paraphrase主体)。投稿[19]のような未確認リーク情報や、投稿[2][4]の同一トピック再投稿が見られ、情報の正確性よりもバズ重視の選別傾向が示唆される。YouTubeや海外X動画の翻訳・要約も一定数あり(投稿[20])。original_rateの推定自信度は低い。\"\n}\n```",
+  "parsed": {
+    "information_source": "公式ブログ/海外X/公式ドキュメント/YouTube",
+    "publishing_lag_hours": 18,
+    "selection_criteria": "Claude CodeおよびAnthropicの新機能・アップデートに特化し、エンジニアの生産性向上に直結する実用トピックを優先選別。競合(OpenAI)動向も補完的に取り上げる。",
+    "translation_rate_pct": 25,
+    "paraphrase_rate_pct": 45,
+    "opinion_rate_pct": 20,
+    "citation_explicit_rate_pct": 40,
+    "cross_platform_intake_rate_pct": 55,
+    "original_rate_pct": 10,
+    "notes": "投稿の大半はAnthropicの公式発表・ドキュメントを日本語で要約・箇条書き化したもの(paraphrase主体)。投稿[19]のような未確認リーク情報や、投稿[2][4]の同一トピック再投稿が見られ、情報の正確性よりもバズ重視の選別傾向が示唆される。YouTubeや海外X動画の翻訳・要約も一定数あり(投稿[20])。original_rateの推定自信度は低い。"
+  },
+  "usage": {
+    "input_tokens": 4426,
+    "output_tokens": 384,
+    "cache_read_input_tokens": 0,
+    "cache_creation_input_tokens": 0
+  }
+}

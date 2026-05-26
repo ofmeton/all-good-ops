@@ -1,0 +1,22 @@
+{
+  "handle": "ObsidianOtaku",
+  "response_text": "```json\n{\n  \"information_source\": \"海外X/公式ブログ/YouTube動画\",\n  \"publishing_lag_hours\": 12,\n  \"selection_criteria\": \"Obsidian・Claude・AI自動化系の海外コンテンツ（動画・ツイート）を中心に選別し、「記憶設計」「Vault構築」「生産性向上」の文脈で再解釈できるものを優先的に取り上げる。\",\n  \"translation_rate_pct\": 20,\n  \"paraphrase_rate_pct\": 55,\n  \"opinion_rate_pct\": 15,\n  \"citation_explicit_rate_pct\": 40,\n  \"cross_platform_intake_rate_pct\": 70,\n  \"original_rate_pct\": 10,\n  \"notes\": \"ほぼ全投稿が「海外コンテンツへのリンク＋日本語要約・解説」の定型フォーマット。独自見解は少なく、パラフレーズ（要点の日本語再構成）が主体。「記憶設計」「ここが肝」等の定型フレーズを繰り返し使用しており、テンプレ化された発信スタイルが顕著。引用元URLは貼るが出典の明示度は中程度。publishing_lagとoriginal_rateは根拠が薄く自信度低。\"\n}\n```",
+  "parsed": {
+    "information_source": "海外X/公式ブログ/YouTube動画",
+    "publishing_lag_hours": 12,
+    "selection_criteria": "Obsidian・Claude・AI自動化系の海外コンテンツ（動画・ツイート）を中心に選別し、「記憶設計」「Vault構築」「生産性向上」の文脈で再解釈できるものを優先的に取り上げる。",
+    "translation_rate_pct": 20,
+    "paraphrase_rate_pct": 55,
+    "opinion_rate_pct": 15,
+    "citation_explicit_rate_pct": 40,
+    "cross_platform_intake_rate_pct": 70,
+    "original_rate_pct": 10,
+    "notes": "ほぼ全投稿が「海外コンテンツへのリンク＋日本語要約・解説」の定型フォーマット。独自見解は少なく、パラフレーズ（要点の日本語再構成）が主体。「記憶設計」「ここが肝」等の定型フレーズを繰り返し使用しており、テンプレ化された発信スタイルが顕著。引用元URLは貼るが出典の明示度は中程度。publishing_lagとoriginal_rateは根拠が薄く自信度低。"
+  },
+  "usage": {
+    "input_tokens": 4658,
+    "output_tokens": 397,
+    "cache_read_input_tokens": 0,
+    "cache_creation_input_tokens": 0
+  }
+}
