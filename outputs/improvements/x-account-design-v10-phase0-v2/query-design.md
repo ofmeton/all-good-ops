@@ -37,7 +37,7 @@ twitterapi.io advanced_search query:
 | Q# | query (例) | 想定 hit 種類 |
 |---|---|---|
 | Q1 | `"AI" ("中小" OR "経営者" OR "1人社長") -is:retweet lang:ja min_faves:50` | 中小経営者向け AI 発信 |
-| Q2 | `"AI" ("士業" OR "税理士" OR "社労士" OR "行政書士") -is:retweet lang:ja min_faves:30` | 士業 × AI 発信 |
+| Q2 | `"AI" ("士業" OR "経理代行" OR "事務代行" OR "業務代行") -is:retweet lang:ja min_faves:30` | 士業 + 業務代行業 × AI 発信 (v1.2 改訂: 主軸ターゲットから士業格下げに伴い業務代行業全般に拡張) |
 | Q3 | `("業務効率化" OR "業務自動化") "AI" -is:retweet lang:ja min_faves:50` | 業務効率化文脈の AI 発信 |
 | Q4 | `"Claude" ("経理" OR "請求書" OR "見積") -is:retweet lang:ja min_faves:30` | 経理 × Claude 実践 |
 | Q5 | `"AI automation" ("small business" OR "non-engineer" OR "non-coder") -is:retweet lang:en min_faves:100` | 海外 非エンジニア向け AI 自動化発信 |

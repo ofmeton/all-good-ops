@@ -48,7 +48,7 @@ HANDLES_4_EXISTING = ["Shimayus", "SuguruKun_ai", "masahirochaen", "ClaudeCode_l
 # query-design.md §1.3 の Q1-Q5
 QUERIES = [
     {"id": "Q1", "query": '"AI" ("中小" OR "経営者" OR "1人社長") -is:retweet lang:ja min_faves:50'},
-    {"id": "Q2", "query": '"AI" ("士業" OR "税理士" OR "社労士" OR "行政書士") -is:retweet lang:ja min_faves:30'},
+    {"id": "Q2", "query": '"AI" ("士業" OR "経理代行" OR "事務代行" OR "業務代行") -is:retweet lang:ja min_faves:30'},  # v1.2 で改訂
     {"id": "Q3", "query": '("業務効率化" OR "業務自動化") "AI" -is:retweet lang:ja min_faves:50'},
     {"id": "Q4", "query": '"Claude" ("経理" OR "請求書" OR "見積") -is:retweet lang:ja min_faves:30'},
     {"id": "Q5", "query": '"AI automation" ("small business" OR "non-engineer" OR "non-coder") -is:retweet lang:en min_faves:100'},
