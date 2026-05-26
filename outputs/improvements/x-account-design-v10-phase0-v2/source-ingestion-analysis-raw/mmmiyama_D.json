@@ -1,0 +1,22 @@
+{
+  "handle": "mmmiyama_D",
+  "response_text": "```json\n{\n  \"information_source\": \"海外X/公式ブログ/GitHub\",\n  \"publishing_lag_hours\": 6,\n  \"selection_criteria\": \"AIツール（Gemini・ChatGPT・Codex・Antigravityなど）の新機能・実用ユースケースを自ら試用し、クリエイティブ制作（画像・動画・広告）への実務応用可能性を基準に選別。特に「日本の仕事現場で即使えるか」を重視している。\",\n  \"translation_rate_pct\": 0,\n  \"paraphrase_rate_pct\": 10,\n  \"opinion_rate_pct\": 25,\n  \"original_rate_pct\": 65,\n  \"citation_explicit_rate_pct\": 20,\n  \"cross_platform_intake_rate_pct\": 30,\n  \"notes\": \"ほぼ全投稿が自分でツールを触った一次体験ベースの完全オリジナル発信。海外情報（Google I/O発表、Antigravity海外ユーザー報告など）をパラフレーズで補足する割合はごく少数。プロンプトの具体的な開示が多く、再現性重視の実践型インフルエンサー像が強い。publishing_lagはリリース直後に反応するケースと数日かけて検証してから投稿するケースが混在しており、中央値の信頼度は中程度。\"\n}\n```",
+  "parsed": {
+    "information_source": "海外X/公式ブログ/GitHub",
+    "publishing_lag_hours": 6,
+    "selection_criteria": "AIツール（Gemini・ChatGPT・Codex・Antigravityなど）の新機能・実用ユースケースを自ら試用し、クリエイティブ制作（画像・動画・広告）への実務応用可能性を基準に選別。特に「日本の仕事現場で即使えるか」を重視している。",
+    "translation_rate_pct": 0,
+    "paraphrase_rate_pct": 10,
+    "opinion_rate_pct": 25,
+    "original_rate_pct": 65,
+    "citation_explicit_rate_pct": 20,
+    "cross_platform_intake_rate_pct": 30,
+    "notes": "ほぼ全投稿が自分でツールを触った一次体験ベースの完全オリジナル発信。海外情報（Google I/O発表、Antigravity海外ユーザー報告など）をパラフレーズで補足する割合はごく少数。プロンプトの具体的な開示が多く、再現性重視の実践型インフルエンサー像が強い。publishing_lagはリリース直後に反応するケースと数日かけて検証してから投稿するケースが混在しており、中央値の信頼度は中程度。"
+  },
+  "usage": {
+    "input_tokens": 4007,
+    "output_tokens": 416,
+    "cache_read_input_tokens": 0,
+    "cache_creation_input_tokens": 0
+  }
+}

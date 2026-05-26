@@ -1,0 +1,22 @@
+{
+  "handle": "csaba_kissi",
+  "response_text": "```json\n{\n  \"information_source\": \"海外X/GitHub/論文\",\n  \"publishing_lag_hours\": 12,\n  \"selection_criteria\": \"開発者・インディーハッカー向けの実用ツール紹介、AI/LLM技術トレンド（特にエッジAI・低ビットモデル）、SaaS構築・マーケティングに関する短評を選ぶ傾向が強い。\",\n  \"translation_rate_pct\": 0,\n  \"paraphrase_rate_pct\": 30,\n  \"opinion_rate_pct\": 40,\n  \"citation_explicit_rate_pct\": 20,\n  \"cross_platform_intake_rate_pct\": 30,\n  \"original_rate_pct\": 30,\n  \"notes\": \"投稿の多くは英語圏ネイティブ向けの短文オピニオンまたはツールキュレーション。BitCPM-CANNに関するスレッド（投稿6,9,15,16）は論文/GitHubを参照した解説で、paraphraseと自己見解の混合。publishing_lag_hrsは根拠が薄く推定自信度は低め。\"\n}\n```",
+  "parsed": {
+    "information_source": "海外X/GitHub/論文",
+    "publishing_lag_hours": 12,
+    "selection_criteria": "開発者・インディーハッカー向けの実用ツール紹介、AI/LLM技術トレンド（特にエッジAI・低ビットモデル）、SaaS構築・マーケティングに関する短評を選ぶ傾向が強い。",
+    "translation_rate_pct": 0,
+    "paraphrase_rate_pct": 30,
+    "opinion_rate_pct": 40,
+    "citation_explicit_rate_pct": 20,
+    "cross_platform_intake_rate_pct": 30,
+    "original_rate_pct": 30,
+    "notes": "投稿の多くは英語圏ネイティブ向けの短文オピニオンまたはツールキュレーション。BitCPM-CANNに関するスレッド（投稿6,9,15,16）は論文/GitHubを参照した解説で、paraphraseと自己見解の混合。publishing_lag_hrsは根拠が薄く推定自信度は低め。"
+  },
+  "usage": {
+    "input_tokens": 2347,
+    "output_tokens": 339,
+    "cache_read_input_tokens": 0,
+    "cache_creation_input_tokens": 0
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "handle": "heynavtoor",
+  "response_text": "```json\n{\n  \"information_source\": \"海外X/公式ブログ/GitHub/案件メモ\",\n  \"publishing_lag_hours\": 48,\n  \"selection_criteria\": \"テック系一般消費者向けの「知らないと損する系」トピック（節約・生産性・健康・AI活用）を中心に選別。エンゲージメントが取れるフック強めのコンテンツを優先。\",\n  \"translation_rate_pct\": 0,\n  \"paraphrase_rate_pct\": 20,\n  \"opinion_rate_pct\": 15,\n  \"citation_explicit_rate_pct\": 25,\n  \"cross_platform_intake_rate_pct\": 35,\n  \"original_rate_pct\": 65,\n  \"notes\": \"投稿の大半はGitHubスター数・Apple公式スペック・学術研究（Harvard/MIT/BCG等）を引用しつつも、内容は一般知識の再パッケージが主体。'Apple technician'や'marketing professor'など検証困難な一人称エピソードを多用するgrowth hacking的フォーマット（スレッド分割・CTAで締め）が顕著。original_rateが高いのは翻訳元がない英語圏オリジナル執筆のためだが、情報自体の新規性は低い。citation_explicit_rateの推定自信度はやや低い。\"\n}\n```",
+  "parsed": {
+    "information_source": "海外X/公式ブログ/GitHub/案件メモ",
+    "publishing_lag_hours": 48,
+    "selection_criteria": "テック系一般消費者向けの「知らないと損する系」トピック（節約・生産性・健康・AI活用）を中心に選別。エンゲージメントが取れるフック強めのコンテンツを優先。",
+    "translation_rate_pct": 0,
+    "paraphrase_rate_pct": 20,
+    "opinion_rate_pct": 15,
+    "citation_explicit_rate_pct": 25,
+    "cross_platform_intake_rate_pct": 35,
+    "original_rate_pct": 65,
+    "notes": "投稿の大半はGitHubスター数・Apple公式スペック・学術研究（Harvard/MIT/BCG等）を引用しつつも、内容は一般知識の再パッケージが主体。'Apple technician'や'marketing professor'など検証困難な一人称エピソードを多用するgrowth hacking的フォーマット（スレッド分割・CTAで締め）が顕著。original_rateが高いのは翻訳元がない英語圏オリジナル執筆のためだが、情報自体の新規性は低い。citation_explicit_rateの推定自信度はやや低い。"
+  },
+  "usage": {
+    "input_tokens": 2867,
+    "output_tokens": 402,
+    "cache_read_input_tokens": 0,
+    "cache_creation_input_tokens": 0
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "handle": "commte",
+  "response_text": "```json\n{\n  \"information_source\": \"公式ブログ/GitHub/海外X\",\n  \"publishing_lag_hours\": 6,\n  \"selection_criteria\": \"Claude Code・AIエージェント周辺の公式リリース・OSS・ベストプラクティスを中心に、日本人エンジニアの実務に即座に転用できる情報を選別している。個人開発・日本固有の法規制対応など実践性が高いものを優先する傾向がある。\",\n  \"translation_rate_pct\": 10,\n  \"paraphrase_rate_pct\": 45,\n  \"opinion_rate_pct\": 20,\n  \"citation_explicit_rate_pct\": 75,\n  \"cross_platform_intake_rate_pct\": 30,\n  \"original_rate_pct\": 25,\n  \"notes\": \"ほぼ全投稿にURLを添付し一次ソースへ誘導しているが、単純翻訳は少なく「どう使うか・なぜ効くか」の実務解釈を加えるパラフレーズが主体。オリジナル率は自身のTips投稿（[15][16]など）と日本向け独自観点（[2]個情法など）から推定しているが自信度はやや低い。\"\n}\n```",
+  "parsed": {
+    "information_source": "公式ブログ/GitHub/海外X",
+    "publishing_lag_hours": 6,
+    "selection_criteria": "Claude Code・AIエージェント周辺の公式リリース・OSS・ベストプラクティスを中心に、日本人エンジニアの実務に即座に転用できる情報を選別している。個人開発・日本固有の法規制対応など実践性が高いものを優先する傾向がある。",
+    "translation_rate_pct": 10,
+    "paraphrase_rate_pct": 45,
+    "opinion_rate_pct": 20,
+    "citation_explicit_rate_pct": 75,
+    "cross_platform_intake_rate_pct": 30,
+    "original_rate_pct": 25,
+    "notes": "ほぼ全投稿にURLを添付し一次ソースへ誘導しているが、単純翻訳は少なく「どう使うか・なぜ効くか」の実務解釈を加えるパラフレーズが主体。オリジナル率は自身のTips投稿（[15][16]など）と日本向け独自観点（[2]個情法など）から推定しているが自信度はやや低い。"
+  },
+  "usage": {
+    "input_tokens": 4247,
+    "output_tokens": 369,
+    "cache_read_input_tokens": 0,
+    "cache_creation_input_tokens": 0
+  }
+}

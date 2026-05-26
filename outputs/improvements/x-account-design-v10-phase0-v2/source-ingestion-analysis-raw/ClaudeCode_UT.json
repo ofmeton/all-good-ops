@@ -1,0 +1,22 @@
+{
+  "handle": "ClaudeCode_UT",
+  "response_text": "```json\n{\n  \"information_source\": \"海外X/公式ブログ/YouTube\",\n  \"publishing_lag_hours\": 12,\n  \"selection_criteria\": \"Claude Code・Anthropic関連の新機能・Tips・活用事例を中心に、バズ必至の「数字・権威・無料」要素を持つコンテンツを選別。スタートアップ・生産性・AI収益化など周辺トピックも包含する。\",\n  \"translation_rate_pct\": 10,\n  \"paraphrase_rate_pct\": 55,\n  \"opinion_rate_pct\": 20,\n  \"original_rate_pct\": 15,\n  \"citation_explicit_rate_pct\": 60,\n  \"cross_platform_intake_rate_pct\": 75,\n  \"notes\": \"大半は海外X投稿・YouTube動画・公式ブログを日本語に意訳・要約して箇条書き化したパラフレーズ投稿。情報源URLは概ね明示されるが、元一次ソースへのリンクか紹介者アカウント経由かは判別困難。投稿文のテンプレート（【保存版】見出し・▶︎箇条書き・煽りCTAの三段構成）が高度に標準化されており、コンテンツ量産型の運用が強く示唆される。publishing_lag_hoursはYouTube/公式ブログ公開日との突合データが不足しているため自信度低め。\"\n}\n```",
+  "parsed": {
+    "information_source": "海外X/公式ブログ/YouTube",
+    "publishing_lag_hours": 12,
+    "selection_criteria": "Claude Code・Anthropic関連の新機能・Tips・活用事例を中心に、バズ必至の「数字・権威・無料」要素を持つコンテンツを選別。スタートアップ・生産性・AI収益化など周辺トピックも包含する。",
+    "translation_rate_pct": 10,
+    "paraphrase_rate_pct": 55,
+    "opinion_rate_pct": 20,
+    "original_rate_pct": 15,
+    "citation_explicit_rate_pct": 60,
+    "cross_platform_intake_rate_pct": 75,
+    "notes": "大半は海外X投稿・YouTube動画・公式ブログを日本語に意訳・要約して箇条書き化したパラフレーズ投稿。情報源URLは概ね明示されるが、元一次ソースへのリンクか紹介者アカウント経由かは判別困難。投稿文のテンプレート（【保存版】見出し・▶︎箇条書き・煽りCTAの三段構成）が高度に標準化されており、コンテンツ量産型の運用が強く示唆される。publishing_lag_hoursはYouTube/公式ブログ公開日との突合データが不足しているため自信度低め。"
+  },
+  "usage": {
+    "input_tokens": 5631,
+    "output_tokens": 428,
+    "cache_read_input_tokens": 0,
+    "cache_creation_input_tokens": 0
+  }
+}
