@@ -1,0 +1,2283 @@
+{
+  "session_date": "2026-05-26",
+  "publisher_hits_unique": 215,
+  "audience_hits_unique": 275,
+  "merged_total_unique": 455,
+  "by_handle": [
+    {
+      "handle": "obsidianstudio9",
+      "publisher_hits": 45,
+      "audience_hits": 0
+    },
+    {
+      "handle": "ClaudeCode_love",
+      "publisher_hits": 28,
+      "audience_hits": 1
+    },
+    {
+      "handle": "SuguruKun_ai",
+      "publisher_hits": 10,
+      "audience_hits": 16
+    },
+    {
+      "handle": "ClaudeCode_UT",
+      "publisher_hits": 15,
+      "audience_hits": 0
+    },
+    {
+      "handle": "so_ainsight",
+      "publisher_hits": 12,
+      "audience_hits": 5
+    },
+    {
+      "handle": "masahirochaen",
+      "publisher_hits": 11,
+      "audience_hits": 6
+    },
+    {
+      "handle": "sora19ai",
+      "publisher_hits": 11,
+      "audience_hits": 6
+    },
+    {
+      "handle": "AIshukyaku",
+      "publisher_hits": 0,
+      "audience_hits": 25
+    },
+    {
+      "handle": "7_eito_7",
+      "publisher_hits": 8,
+      "audience_hits": 3
+    },
+    {
+      "handle": "AiAircle34052",
+      "publisher_hits": 9,
+      "audience_hits": 1
+    },
+    {
+      "handle": "kandmybike",
+      "publisher_hits": 0,
+      "audience_hits": 18
+    },
+    {
+      "handle": "kawai_design",
+      "publisher_hits": 8,
+      "audience_hits": 1
+    },
+    {
+      "handle": "genkAIjokyo",
+      "publisher_hits": 8,
+      "audience_hits": 0
+    },
+    {
+      "handle": "gagarot200",
+      "publisher_hits": 8,
+      "audience_hits": 0
+    },
+    {
+      "handle": "chanryo_eff",
+      "publisher_hits": 0,
+      "audience_hits": 16
+    },
+    {
+      "handle": "shota7180",
+      "publisher_hits": 5,
+      "audience_hits": 5
+    },
+    {
+      "handle": "Shimayus",
+      "publisher_hits": 4,
+      "audience_hits": 7
+    },
+    {
+      "handle": "ai_jitan",
+      "publisher_hits": 2,
+      "audience_hits": 10
+    },
+    {
+      "handle": "Codestudiopjbk",
+      "publisher_hits": 6,
+      "audience_hits": 2
+    },
+    {
+      "handle": "tetumemo",
+      "publisher_hits": 6,
+      "audience_hits": 1
+    },
+    {
+      "handle": "Gencoin8",
+      "publisher_hits": 6,
+      "audience_hits": 0
+    },
+    {
+      "handle": "ObsidianOtaku",
+      "publisher_hits": 6,
+      "audience_hits": 0
+    },
+    {
+      "handle": "MakeAI_CEO",
+      "publisher_hits": 5,
+      "audience_hits": 1
+    },
+    {
+      "handle": "claudecode_lab",
+      "publisher_hits": 5,
+      "audience_hits": 0
+    },
+    {
+      "handle": "taishiyade",
+      "publisher_hits": 5,
+      "audience_hits": 0
+    },
+    {
+      "handle": "makaneko_AI",
+      "publisher_hits": 5,
+      "audience_hits": 0
+    },
+    {
+      "handle": "take_ai_mkt",
+      "publisher_hits": 5,
+      "audience_hits": 0
+    },
+    {
+      "handle": "shotovim",
+      "publisher_hits": 5,
+      "audience_hits": 0
+    },
+    {
+      "handle": "ComagerTon79278",
+      "publisher_hits": 4,
+      "audience_hits": 1
+    },
+    {
+      "handle": "okuyama_ai_",
+      "publisher_hits": 3,
+      "audience_hits": 3
+    },
+    {
+      "handle": "AI_masaou",
+      "publisher_hits": 4,
+      "audience_hits": 0
+    },
+    {
+      "handle": "milbon_",
+      "publisher_hits": 4,
+      "audience_hits": 0
+    },
+    {
+      "handle": "Fujin_Metaverse",
+      "publisher_hits": 4,
+      "audience_hits": 0
+    },
+    {
+      "handle": "Suryanshti777",
+      "publisher_hits": 4,
+      "audience_hits": 0
+    },
+    {
+      "handle": "cyrilXBT",
+      "publisher_hits": 4,
+      "audience_hits": 0
+    },
+    {
+      "handle": "PrajwalTomar_",
+      "publisher_hits": 4,
+      "audience_hits": 0
+    },
+    {
+      "handle": "Naoki_GPT",
+      "publisher_hits": 2,
+      "audience_hits": 3
+    },
+    {
+      "handle": "MacopeninSUTABA",
+      "publisher_hits": 2,
+      "audience_hits": 3
+    },
+    {
+      "handle": "09pauai",
+      "publisher_hits": 3,
+      "audience_hits": 0
+    },
+    {
+      "handle": "kenn",
+      "publisher_hits": 3,
+      "audience_hits": 0
+    },
+    {
+      "handle": "madonomori",
+      "publisher_hits": 3,
+      "audience_hits": 0
+    },
+    {
+      "handle": "oikon48",
+      "publisher_hits": 3,
+      "audience_hits": 0
+    },
+    {
+      "handle": "opensourcelab9",
+      "publisher_hits": 3,
+      "audience_hits": 0
+    },
+    {
+      "handle": "Maruo_0314",
+      "publisher_hits": 3,
+      "audience_hits": 0
+    },
+    {
+      "handle": "DeRonin_",
+      "publisher_hits": 3,
+      "audience_hits": 0
+    },
+    {
+      "handle": "ClaudeCodeLog",
+      "publisher_hits": 3,
+      "audience_hits": 0
+    },
+    {
+      "handle": "RoundtableSpace",
+      "publisher_hits": 3,
+      "audience_hits": 0
+    },
+    {
+      "handle": "koumei_ai5566",
+      "publisher_hits": 2,
+      "audience_hits": 1
+    },
+    {
+      "handle": "shion_takk",
+      "publisher_hits": 2,
+      "audience_hits": 1
+    },
+    {
+      "handle": "Hoshino_Sokichi",
+      "publisher_hits": 1,
+      "audience_hits": 3
+    },
+    {
+      "handle": "ichiaimarketer",
+      "publisher_hits": 2,
+      "audience_hits": 1
+    },
+    {
+      "handle": "daifukujinji",
+      "publisher_hits": 0,
+      "audience_hits": 5
+    },
+    {
+      "handle": "h_www",
+      "publisher_hits": 0,
+      "audience_hits": 5
+    },
+    {
+      "handle": "houki_ai_keiri",
+      "publisher_hits": 0,
+      "audience_hits": 5
+    },
+    {
+      "handle": "TakeshiYonese",
+      "publisher_hits": 0,
+      "audience_hits": 5
+    },
+    {
+      "handle": "1osabori",
+      "publisher_hits": 2,
+      "audience_hits": 0
+    },
+    {
+      "handle": "kkk_cun",
+      "publisher_hits": 2,
+      "audience_hits": 0
+    },
+    {
+      "handle": "TensyokuRmla",
+      "publisher_hits": 2,
+      "audience_hits": 0
+    },
+    {
+      "handle": "saeroyi_ican",
+      "publisher_hits": 2,
+      "audience_hits": 0
+    },
+    {
+      "handle": "beku_AI",
+      "publisher_hits": 2,
+      "audience_hits": 0
+    },
+    {
+      "handle": "taiyo_ai_gakuse",
+      "publisher_hits": 2,
+      "audience_hits": 0
+    },
+    {
+      "handle": "noguryu",
+      "publisher_hits": 2,
+      "audience_hits": 0
+    },
+    {
+      "handle": "nobel_824",
+      "publisher_hits": 1,
+      "audience_hits": 2
+    },
+    {
+      "handle": "yusaku_0426",
+      "publisher_hits": 2,
+      "audience_hits": 0
+    },
+    {
+      "handle": "hanjuku_yanen",
+      "publisher_hits": 2,
+      "audience_hits": 0
+    },
+    {
+      "handle": "ai_biostat",
+      "publisher_hits": 2,
+      "audience_hits": 0
+    },
+    {
+      "handle": "chankostin",
+      "publisher_hits": 2,
+      "audience_hits": 0
+    },
+    {
+      "handle": "oreilly_japan",
+      "publisher_hits": 2,
+      "audience_hits": 0
+    },
+    {
+      "handle": "osabori_code",
+      "publisher_hits": 2,
+      "audience_hits": 0
+    },
+    {
+      "handle": "serena_ailab",
+      "publisher_hits": 2,
+      "audience_hits": 0
+    },
+    {
+      "handle": "If_CQ",
+      "publisher_hits": 2,
+      "audience_hits": 0
+    },
+    {
+      "handle": "adiix_official",
+      "publisher_hits": 2,
+      "audience_hits": 0
+    },
+    {
+      "handle": "eng_khairallah1",
+      "publisher_hits": 2,
+      "audience_hits": 0
+    },
+    {
+      "handle": "mikefutia",
+      "publisher_hits": 2,
+      "audience_hits": 0
+    },
+    {
+      "handle": "BharukaShraddha",
+      "publisher_hits": 2,
+      "audience_hits": 0
+    },
+    {
+      "handle": "KanikaBK",
+      "publisher_hits": 2,
+      "audience_hits": 0
+    },
+    {
+      "handle": "NickSpisak_",
+      "publisher_hits": 2,
+      "audience_hits": 0
+    },
+    {
+      "handle": "codewithimanshu",
+      "publisher_hits": 2,
+      "audience_hits": 0
+    },
+    {
+      "handle": "cryptopunk7213",
+      "publisher_hits": 2,
+      "audience_hits": 0
+    },
+    {
+      "handle": "hqmank",
+      "publisher_hits": 2,
+      "audience_hits": 0
+    },
+    {
+      "handle": "gippp69",
+      "publisher_hits": 2,
+      "audience_hits": 0
+    },
+    {
+      "handle": "hasantoxr",
+      "publisher_hits": 2,
+      "audience_hits": 0
+    },
+    {
+      "handle": "speranzapt",
+      "publisher_hits": 0,
+      "audience_hits": 4
+    },
+    {
+      "handle": "happyyoshigi",
+      "publisher_hits": 0,
+      "audience_hits": 4
+    },
+    {
+      "handle": "shodaiiiiii",
+      "publisher_hits": 0,
+      "audience_hits": 4
+    },
+    {
+      "handle": "yamatomo_1117",
+      "publisher_hits": 0,
+      "audience_hits": 4
+    },
+    {
+      "handle": "akihito_okura",
+      "publisher_hits": 0,
+      "audience_hits": 4
+    },
+    {
+      "handle": "inkya_sme",
+      "publisher_hits": 0,
+      "audience_hits": 4
+    },
+    {
+      "handle": "excel_niisan",
+      "publisher_hits": 0,
+      "audience_hits": 4
+    },
+    {
+      "handle": "reo_arai",
+      "publisher_hits": 0,
+      "audience_hits": 4
+    },
+    {
+      "handle": "srsakashita",
+      "publisher_hits": 0,
+      "audience_hits": 4
+    },
+    {
+      "handle": "kagero_ai",
+      "publisher_hits": 1,
+      "audience_hits": 1
+    },
+    {
+      "handle": "yuna_ai115",
+      "publisher_hits": 1,
+      "audience_hits": 1
+    },
+    {
+      "handle": "yura_ai123",
+      "publisher_hits": 1,
+      "audience_hits": 1
+    },
+    {
+      "handle": "starriver0513",
+      "publisher_hits": 1,
+      "audience_hits": 1
+    },
+    {
+      "handle": "itm_aiplus",
+      "publisher_hits": 1,
+      "audience_hits": 1
+    },
+    {
+      "handle": "SOU_BTC",
+      "publisher_hits": 1,
+      "audience_hits": 1
+    },
+    {
+      "handle": "yukimamax",
+      "publisher_hits": 1,
+      "audience_hits": 1
+    },
+    {
+      "handle": "prof_LLM",
+      "publisher_hits": 1,
+      "audience_hits": 1
+    },
+    {
+      "handle": "piranoman",
+      "publisher_hits": 1,
+      "audience_hits": 1
+    },
+    {
+      "handle": "hayakawagomi",
+      "publisher_hits": 1,
+      "audience_hits": 1
+    },
+    {
+      "handle": "hikaru_hackjpn",
+      "publisher_hits": 1,
+      "audience_hits": 1
+    },
+    {
+      "handle": "pop_ikeda",
+      "publisher_hits": 1,
+      "audience_hits": 1
+    },
+    {
+      "handle": "__BUNTA__",
+      "publisher_hits": 0,
+      "audience_hits": 3
+    },
+    {
+      "handle": "tomoyaasakura",
+      "publisher_hits": 0,
+      "audience_hits": 3
+    },
+    {
+      "handle": "omoshiro_web",
+      "publisher_hits": 0,
+      "audience_hits": 3
+    },
+    {
+      "handle": "kinoharu_k",
+      "publisher_hits": 0,
+      "audience_hits": 3
+    },
+    {
+      "handle": "Aya_snsweb",
+      "publisher_hits": 0,
+      "audience_hits": 3
+    },
+    {
+      "handle": "riki_nakatani",
+      "publisher_hits": 0,
+      "audience_hits": 3
+    },
+    {
+      "handle": "ImAI_Eruel",
+      "publisher_hits": 0,
+      "audience_hits": 3
+    },
+    {
+      "handle": "niko_tama_work",
+      "publisher_hits": 0,
+      "audience_hits": 3
+    },
+    {
+      "handle": "nekokoroconsul1",
+      "publisher_hits": 0,
+      "audience_hits": 3
+    },
+    {
+      "handle": "sharo23go",
+      "publisher_hits": 0,
+      "audience_hits": 3
+    },
+    {
+      "handle": "FurakuOffice",
+      "publisher_hits": 0,
+      "audience_hits": 3
+    },
+    {
+      "handle": "tsuchinao83",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "blog_uki",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "Shin_Engineer",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "sekine_1234",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "tsuntsun2914",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "ai_nepro",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "potatobiz1",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "catnose99",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "kenfjt",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "Kh_Yabu",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "ds_nakajima",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "hata_AI_master",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "ebikani_hasami",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "eggAIeguite",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "xjuntaro",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "sawa20200424",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "publickey",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "nemumusitocha",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "The_AGI_WAY",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "develogon0",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "kuro_affi",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "ai_hakase_",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "rimuruafi",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "kmizu",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "sbg_news",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "risu_aiafi",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "ai_lab27",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "super_bonochin",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "tsubotax",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "bioshok3",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "akihiro_genai",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "grmchn4ai",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "gyakuse",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "armadillo_ai",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "kaede_gpt",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "K_Ishi_AI",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "HimazinProducer",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "chokudai",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "usutaku_channel",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "m0370",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "moriyorihayash1",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "reina_Notionxx",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "kojika_edu",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "kas_um_i",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "worldnetworkjp",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "ctgptlb",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "webbigdata",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "yuxtukuri12092",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "TaikiYoshidaJP",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "yugen_matuni",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "ryuzo_jp",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "AIcia_Solid",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "ai_database",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "Yoshima_manga",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "sora_biz",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "__timakin__",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "ozaken_AI",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "satori_sz9",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "Majin_AppSheet",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "rakko_inc",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "daiki15036604",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "awscloud_jp",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "kgsi",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "Yametaro1983",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "Dataibridge_01",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "unity_japan",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "m_mizutani",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "yousukezan",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "kis",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "omluc_ai",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "Keisuke69",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "gdb",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "girlinAI",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "Av1dlive",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "KSimback",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "Codex_Changelog",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "shmidtqq",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "Axel_bitblaze69",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "exploraX_",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "givros",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "reach_vb",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "ctatedev",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "lawrencecchen",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "primemans",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "OpenAI",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "ihtesham2005",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "openclaw",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "n8n_io",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "zodchiii",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "TencentAI_News",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "DamiDefi",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "zenorocha",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "sickdotdev",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "WesRoth",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "kepano",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "OpenAIDevs",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "adxtyahq",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "DivyanshT91162",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "RodmanAi",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "NainsiDwiv50980",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "carverfomo",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "uday_devops",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "viktoroddy",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "cgtwts",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "HeyGen",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "selinatasnim1",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "EXM7777",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "0xMovez",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "rubenhassid",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "DAIEvolutionHub",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "AlfieJCarter",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "GithubProjects",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "sharbel",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "steipete",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "milesdeutscher",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "_avichawla",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "seelffff",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "itsalexvacca",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "higgsfield_ai",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "sukh_saroy",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "swadeshkumar_",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "VaibhavSisinty",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "InduTripat82427",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "Kappaemme1926",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "heynavtoor",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "RamSingh_369",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "PaulSolt",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "L1vsun",
+      "publisher_hits": 1,
+      "audience_hits": 0
+    },
+    {
+      "handle": "tadakabu",
+      "publisher_hits": 0,
+      "audience_hits": 2
+    },
+    {
+      "handle": "yamashi91861086",
+      "publisher_hits": 0,
+      "audience_hits": 2
+    },
+    {
+      "handle": "twelve1020",
+      "publisher_hits": 0,
+      "audience_hits": 2
+    },
+    {
+      "handle": "kumaki_otoku31",
+      "publisher_hits": 0,
+      "audience_hits": 2
+    },
+    {
+      "handle": "djnobby",
+      "publisher_hits": 0,
+      "audience_hits": 2
+    },
+    {
+      "handle": "mori_tenshoku",
+      "publisher_hits": 0,
+      "audience_hits": 2
+    },
+    {
+      "handle": "nikkei",
+      "publisher_hits": 0,
+      "audience_hits": 2
+    },
+    {
+      "handle": "ai_depression",
+      "publisher_hits": 0,
+      "audience_hits": 2
+    },
+    {
+      "handle": "tomomatsu_OB",
+      "publisher_hits": 0,
+      "audience_hits": 2
+    },
+    {
+      "handle": "n_gaicon",
+      "publisher_hits": 0,
+      "audience_hits": 2
+    },
+    {
+      "handle": "mr_grayhair",
+      "publisher_hits": 0,
+      "audience_hits": 2
+    },
+    {
+      "handle": "shiba_chihiro",
+      "publisher_hits": 0,
+      "audience_hits": 2
+    },
+    {
+      "handle": "haru_jp_teacher",
+      "publisher_hits": 0,
+      "audience_hits": 2
+    },
+    {
+      "handle": "rioka_onlinejim",
+      "publisher_hits": 0,
+      "audience_hits": 2
+    },
+    {
+      "handle": "2nd_core",
+      "publisher_hits": 0,
+      "audience_hits": 2
+    },
+    {
+      "handle": "tukushi_work",
+      "publisher_hits": 0,
+      "audience_hits": 2
+    },
+    {
+      "handle": "X07GGtOEvN8UoV2",
+      "publisher_hits": 0,
+      "audience_hits": 2
+    },
+    {
+      "handle": "14mr9",
+      "publisher_hits": 0,
+      "audience_hits": 2
+    },
+    {
+      "handle": "yusuke_m_MU",
+      "publisher_hits": 0,
+      "audience_hits": 2
+    },
+    {
+      "handle": "cpaishiwari",
+      "publisher_hits": 0,
+      "audience_hits": 2
+    },
+    {
+      "handle": "nakaaki04",
+      "publisher_hits": 0,
+      "audience_hits": 2
+    },
+    {
+      "handle": "sharoukun",
+      "publisher_hits": 0,
+      "audience_hits": 2
+    },
+    {
+      "handle": "NGjZL78snQmNyJf",
+      "publisher_hits": 0,
+      "audience_hits": 2
+    },
+    {
+      "handle": "miura_mitsukaru",
+      "publisher_hits": 0,
+      "audience_hits": 2
+    },
+    {
+      "handle": "JunichiWaki",
+      "publisher_hits": 0,
+      "audience_hits": 2
+    },
+    {
+      "handle": "kanemura_ai",
+      "publisher_hits": 0,
+      "audience_hits": 2
+    },
+    {
+      "handle": "ARK__Group",
+      "publisher_hits": 0,
+      "audience_hits": 2
+    },
+    {
+      "handle": "lklkfafa1",
+      "publisher_hits": 0,
+      "audience_hits": 2
+    },
+    {
+      "handle": "siggyyooo",
+      "publisher_hits": 0,
+      "audience_hits": 2
+    },
+    {
+      "handle": "yoshida_kota",
+      "publisher_hits": 0,
+      "audience_hits": 2
+    },
+    {
+      "handle": "nakagawa_soukei",
+      "publisher_hits": 0,
+      "audience_hits": 2
+    },
+    {
+      "handle": "Doraji29",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "haruna_xoxoxo",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "Hat_PolarBear",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "bora_gti",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "minotaursmx",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "hikasegu",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "ayumi_prperson",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "motoya2011xxx",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "yonemura2006",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "YuhiFreaker",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "shtrchkw",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "vervekubo",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "yuuuu19860221",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "skillty_nakatsu",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "nyansukestudy",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "koibuchicpa",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "marketer2031",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "fukku_ai_BD",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "mijica_akagi",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "inaba_shin_",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "AIconsultant90",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "ShinyaSaito01",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "PIVOT_inc_",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "yurunbo",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "cats_seo",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "whitestoon",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "ayaney03",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "hkinoshitaLD",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "UC_DG54",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "AnnieWorks2026",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "KahokoTsunezawa",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "gorilla0513",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "dansyu_callenge",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "comdec_ikuta",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "takapeer",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "n_kata",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "ejima_ma",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "Yutaka__Morita",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "tomita777tomita",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "dojochogo",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "Tebasaki_lab",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "salary_doctor",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "keiri_IS",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "panta0427007",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "saimin_makoto04",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "raito_ai_renai",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "IPOinfonet",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "Ara_y222",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "yukinostyle8",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "narisumashi100",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "uchita_success",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "GDNGKK",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "ronxworks",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "sudachikawaii",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "hanagasa_ai",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "kuchiki_g",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "nakajish",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "st_data_science",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "daisuke_wakui",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "yamadaman_0_0",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "JtpVm32EPe5984",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "horino_ec",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "asada23",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "mt43666320",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "yontengoP",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "hiimchoa",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "sugoi_kaizen",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "laz75n",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "takechan_lawyer",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "redish_info",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "konkeisuke",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "kinbozuu",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "BrandonKHill",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "YC_Seminar",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "horei_shuppanbu",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "tassy_youtube",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "Rinyu_DtD",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "paparaku999",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "moro_1con",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "RyahooBB",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "_aina_work",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "noppezeirishi",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "kingbiscuitSIU",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "deechsato",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "nmama13",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "Park_AI362489",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "yu1k214",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "Pepo_Info",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "yoshie_associe",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "sc_sagara",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "kurikko__work",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "AlgomaticJp",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "oinu_koinu_13",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "Tsubame33785667",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "nikkeibusiness",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "m_fujikooo",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "heiga_zen",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "1NW1581044",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "MangaNoriba",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "nhk_news",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "manami_x21",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "justwit_system",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "fumio_takano",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "shupeiman",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "ai_zaitaku",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "Kuroi_CPA",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "sugawara11",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "Chiko_root",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "ebiebi_pg",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "hiropi_fx",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "Duetousandyou",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "fukushi_real",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "2okutameo",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "commte",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "kaigai_biz_memo",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "engineer_se_ku",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "WillTheUniverse",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "110110110110",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "aqumoe1210",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "BozuTheFinal",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "tatsu__it",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "gyodon_se",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "pawami_powerpf",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "MAIKINGaPLACE",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "narukun_ai",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "nikkeibpITpro",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "tomosyaroushi",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "junchan_sim",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "awakia",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "masaru_growth",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "shubuppanpro",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "miyashin_prg",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "catel_blog",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "denfaminicogame",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "doroase_EXCEL",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "m_kumagai",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "ny_ai2",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "kaikeishiro",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "ksd_illust",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "wan_line_",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "cpa_nagi",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "kawaseaoi_AI",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "8600hiromi",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "HurashiA18104",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "shizuokagyousei",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "y_futatsugi",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "CrossoverNoCode",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "gyoenlegal",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "awaconsulting",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "noukinzeirishi",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "creditship_dx",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "ohnocpatax",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "tantansyachik",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "sr_motcii",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "mikikondo5",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "takeshi_rwld",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "keyplayers",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "Sankei_news",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "ichito827",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "sakkun_invest",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "xxxxx_girl",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "Shuhei_Ohno",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "sharoshi_ayumi",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "waniwanitax",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "jun_marke_roumu",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "r_mukai",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "innovator_nao",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "nishimura_ip",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "accessroumu",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "olana_kishimoto",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "kigyoujitsumu",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "KShigenobu",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "asakuraayumu",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "ryumin_mm",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "sakai_tax",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "taharakoichi",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "Nishimura_law",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "Takuma_Uemura_",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "HIROBA_Toru",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "Office24Ishiki",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "ryuji24guchi",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    },
+    {
+      "handle": "nicknet0828",
+      "publisher_hits": 0,
+      "audience_hits": 1
+    }
+  ]
+}
