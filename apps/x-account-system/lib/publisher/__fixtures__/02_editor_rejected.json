@@ -1,0 +1,26 @@
+{
+  "name": "02_editor_rejected",
+  "description": "EditorOutput.decision='rejected' → blocked editor_rejected",
+  "input": {
+    "draftId": "pub-02",
+    "body": "テスト本文",
+    "fmat": "short",
+    "dryRun": false,
+    "editorOutput": {
+      "draftId": "pub-02",
+      "decision": "rejected",
+      "rejectReasons": ["R3_no_enemy"],
+      "rules": [],
+      "riskLevel": "low",
+      "riskReasons": [],
+      "businessLawRiskFlag": false,
+      "businessLawKeywords": [],
+      "totalDurationMs": 100,
+      "llmCostUsd": 0
+    }
+  },
+  "expected": {
+    "status": "blocked",
+    "blockedReason": "editor_rejected"
+  }
+}

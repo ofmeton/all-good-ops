@@ -1,0 +1,32 @@
+{
+  "name": "08_token_expired",
+  "description": "token 有効期限切れ → refreshAccessToken throws → status='failed'",
+  "input": {
+    "draftId": "pub-08",
+    "body": "通常本文",
+    "fmat": "short",
+    "dryRun": false,
+    "editorOutput": {
+      "draftId": "pub-08",
+      "decision": "approved",
+      "rejectReasons": [],
+      "rules": [],
+      "riskLevel": "low",
+      "riskReasons": [],
+      "businessLawRiskFlag": false,
+      "businessLawKeywords": [],
+      "totalDurationMs": 100,
+      "llmCostUsd": 0
+    }
+  },
+  "overrides": {
+    "token": {
+      "accessToken": "expired-token",
+      "expiresAt": 100
+    }
+  },
+  "expected": {
+    "status": "failed",
+    "errorContains": "OAuth refresh not implemented"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "01_workflow_short",
+  "description": "経理向け仕組み化 short post。stub body は audience + first_hand + 仕組み化結論を含む。",
+  "idea": {
+    "id": "idea-01",
+    "topic": "請求書発行ワークフローの仕組み化",
+    "primaryHook": "first_hand",
+    "fmat": "short",
+    "contentType": "first_hand",
+    "audience": "経理担当者の方",
+    "sourceMaterialIds": ["mat-fh-001"]
+  },
+  "expected": {
+    "primaryHook": "first_hand",
+    "generator": "stub",
+    "bodyMustContain": ["仕組み化", "経理担当者の方", "私は"],
+    "bodyMaxChars": 280
+  }
+}

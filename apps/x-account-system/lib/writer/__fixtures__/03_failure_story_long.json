@@ -1,0 +1,19 @@
+{
+  "name": "03_failure_story_long",
+  "description": "失敗談 long post (X Article)。fmat=long で stub が 280 文字制限を超えないことを確認。",
+  "idea": {
+    "id": "idea-03",
+    "topic": "Notion の権限設計に 5 時間ハマった失敗",
+    "primaryHook": "failure_story",
+    "fmat": "long",
+    "contentType": "failure_story",
+    "audience": "総務担当の非エンジニア",
+    "sourceMaterialIds": ["mat-fs-003"]
+  },
+  "expected": {
+    "primaryHook": "failure_story",
+    "generator": "stub",
+    "bodyMustContain": ["仕組み化", "総務担当の非エンジニア", "私は"],
+    "bodyMaxChars": 4000
+  }
+}

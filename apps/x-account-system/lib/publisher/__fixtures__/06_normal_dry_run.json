@@ -1,0 +1,25 @@
+{
+  "name": "06_normal_dry_run",
+  "description": "全 gate pass + dryRun=true で通常 dry_run 成功",
+  "input": {
+    "draftId": "pub-06",
+    "body": "中小事業者向け。私は SOP を仕組み化した。",
+    "fmat": "short",
+    "dryRun": true,
+    "editorOutput": {
+      "draftId": "pub-06",
+      "decision": "approved",
+      "rejectReasons": [],
+      "rules": [],
+      "riskLevel": "low",
+      "riskReasons": [],
+      "businessLawRiskFlag": false,
+      "businessLawKeywords": [],
+      "totalDurationMs": 100,
+      "llmCostUsd": 0
+    }
+  },
+  "expected": {
+    "status": "dry_run"
+  }
+}

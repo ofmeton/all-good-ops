@@ -1,0 +1,25 @@
+{
+  "name": "01_dry_run",
+  "description": "通常の dryRun=true → status='dry_run'",
+  "input": {
+    "draftId": "pub-01",
+    "body": "経営者向け。私は請求書発行を仕組み化した。判断軸を 3 段階で固定すれば業務は安定する。",
+    "fmat": "short",
+    "dryRun": true,
+    "editorOutput": {
+      "draftId": "pub-01",
+      "decision": "approved",
+      "rejectReasons": [],
+      "rules": [],
+      "riskLevel": "low",
+      "riskReasons": [],
+      "businessLawRiskFlag": false,
+      "businessLawKeywords": [],
+      "totalDurationMs": 100,
+      "llmCostUsd": 0
+    }
+  },
+  "expected": {
+    "status": "dry_run"
+  }
+}
