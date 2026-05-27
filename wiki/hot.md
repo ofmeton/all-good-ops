@@ -1,7 +1,7 @@
 ---
 type: meta
 title: "Hot Cache"
-updated: 2026-05-23
+updated: 2026-05-27
 ---
 
 # Recent Context
@@ -9,30 +9,34 @@ updated: 2026-05-23
 > セッション間で保持される ~500 words のコンテキストキャッシュ。LLM はセッション開始時に最優先でこれを読む。詳細仕様: [[SCHEMA]] §ホットキャッシュ。
 
 ## Last Updated
-2026-05-22 — money-bot Phase 1 セットアップ完了 (Supabase 同居 A 案 + Vercel link + 環境変数 8 個投入 + LINE channel + Instagram Graph API) + 振り返り反映 (memory 6 / improvement-log 4 / 新規スキル 3 / CLAUDE.md スキル一覧 37→40)。前段に ai-radar v2 ピボット全 Phase 完走も並走。
+2026-05-27 — **x-account-design Phase 0.5 駆け抜け完了** (11 PR merged、main HEAD 384740c)。launch-roadmap + PR-A〜PR-E 全実装 (~12,000 LOC / 182 tests pass) + content drafts + handson + note 有料 #1 + Phase 1 Day 1 runbook。残: ofmeton ハンズオン (H-1〜H-10) のみで X+note soft launch (6/8 目標) 可能。
 
 ## Current Focus
-- **money-bot Phase 1 残タスク** — SUPABASE_SERVICE_ROLE_KEY / Vercel AI Gateway / OpenAI API key / LINE_TO_USER_ID / CLAUDE_PROJECT_ROOT / Adobe Stock コントリビューター登録。次は実装本体 (system-engineer 別セッション)
-- **ai-radar v2 安定運用観測** — Phase 1-8 + 7day 窓 + X 5 アカ稼働中。明朝 cron 観察
-- claude-obsidian の 4 機能採用作業（別 task ブランチ）
-- 発信ピボット Phase 4 進行中（X / Instagram / note の 3 媒体運用立ち上げ）
+- **ofmeton ハンズオン H-1〜H-10 進行待ち** — handson-h1-to-h10.md の Day A 〜 Day E に従い 2-3h で完了 (X Developer + Supabase + Anthropic/OpenAI + Cloudflare or launchd + LINE + note 購読 + budget 確認)
+- **Phase 1 Day 1 (2026-06-08) X+note soft launch** — phase1-day1-runbook.md §1 前日チェックリストを 6/7 実行
+- money-bot Phase 1 残タスク (Supabase / LINE / Meta / Vercel 人間タスク、別 session で着手予定)
+- ai-radar v2 安定運用観測 (Phase 1-8 + 7day 窓 + X 5 アカ稼働中)
 - terra-isshiki / minpaku-cleaning 個人案件は 2026-06 末完納
 
 ## Recently Touched
-- [[../docs/superpowers/specs/2026-05-22-money-bot-design]] (Plan-B 確定、Vercel WDK + Agent SDK + LINE 構成)
-- [[../money-bot/]] (Supabase migration 適用済、Vercel link + 8 env 投入済)
-- [[../raw/facts/situations/2026-05-22-money-bot-phase1-setup-progress]] (Phase 1 進捗の事実記録)
-- [[../outputs/retrospectives/2026-05-22-2030-money-bot-phase1-setup]] (本セッション振り返り)
-- [[domain/ai-industry/ai-radar-pointer]] (2026-05-22 v2.1 改訂、新目的 3 / 5 分類)
-- [[../raw/ai-radar/README]] (raw export 機構、毎日 21:00 launchd 実行)
-- [[../CLAUDE]] (スキル一覧 37→40、money-bot 系 3 スキル追加)
+- [[../outputs/improvements/x-account-design-consolidated/launch-roadmap]] (PR #30)
+- [[../outputs/improvements/x-account-design-consolidated/handson-h1-to-h10]] (PR #33、855 行)
+- [[../outputs/improvements/x-account-design-consolidated/phase1-day1-runbook]] (PR #39、390 行)
+- [[../outputs/improvements/x-account-design-consolidated/content-drafts/phase1-month1-initial-content]] (PR #31)
+- [[../outputs/improvements/x-account-design-consolidated/content-drafts/note-paid-1-draft]] (PR #35、4,200 字)
+- [[../apps/x-account-system/lib/editor/pipeline]] (PR #34、Editor 6+5)
+- [[../apps/x-account-system/lib/publisher/x-publisher]] (PR #36)
+- [[../apps/x-account-system/lib/optimizer/thompson]] (PR #37)
+- [[../apps/x-account-system/lib/safety/kill-switch]] (PR #38)
+- [[../apps/x-account-system/lib/visualizer/codex-image]] (PR #40)
+- [[../outputs/retrospectives/2026-05-27-1500-phase05-driven-complete]] (本セッション振り返り)
 
 ## Open Questions / Frontiers
-- ai-radar 改修完了タイミング (money-bot §6.4 連携テスト着手のトリガー)
-- money-bot 実装本体着手のタイミング (人間セットアップ残 3 項目完了後 / 別セッション)
-- Vercel Workflow DevKit (WDK) の Hobby 無料枠で money-bot 月 900 invocations が収まるか実測
-- local main の pull abort 解消 (別セッションの raw/ai-radar/ 整理待ち)
-- ai-radar 1 件 30 秒問題の根本対策（pipeline.ts の extract と score を Promise.all 並列化 / Tier ごとに cron 分割）
+- ofmeton 側 H-1〜H-10 完了タイミング (6/7 前日チェックリスト着手の trigger)
+- H-2 Supabase Free tier 2 project 上限 (民泊清掃と x-account-system 同居 → Phase 0.5 in-memory fallback で 6/7 直前 provision の方針確認)
+- H-4 Cloudflare Workers Paid vs mac launchd の最終判断
+- Phase 1 Month 1 末 (7/31) note 有料 #1 公開時の価格 (¥980 vs ¥500) と公開日確定
+- Optimizer Phase 1 起動後 30 投稿/60 投稿 posterior 反映の精度実測 (E-46 / E-47 / E-52)
 
 ## Conventions
 - ファイルサイズ目安: 500 words 以内
