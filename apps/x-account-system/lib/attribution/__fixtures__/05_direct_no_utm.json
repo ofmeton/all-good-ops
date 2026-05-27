@@ -1,0 +1,21 @@
+{
+  "name": "05_direct_no_utm",
+  "description": "UTM が付いていない直接アクセス。parse は null を返す。",
+  "input": {
+    "url": "https://note.com/ofmeton/n/xyz999",
+    "params": {
+      "source": "direct",
+      "medium": "post",
+      "campaign": "phase1_month1"
+    }
+  },
+  "expected": {
+    "trackedUrlContains": [
+      "utm_source=direct",
+      "utm_medium=post",
+      "utm_campaign=phase1_month1"
+    ],
+    "parseRoundtripMatches": true,
+    "parseRawNoUtmReturnsNull": true
+  }
+}

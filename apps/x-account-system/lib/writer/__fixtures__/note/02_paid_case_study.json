@@ -1,0 +1,26 @@
+{
+  "name": "02_paid_case_study",
+  "description": "有料 980 円 case_study (専門職×AI 型)。free 部 + paid 部の両方が必要。",
+  "request": {
+    "idea": {
+      "id": "idea-note-02",
+      "topic": "経理を Claude に任せる手順",
+      "primaryHook": "industry_sop",
+      "fmat": "article",
+      "contentType": "industry_sop",
+      "audience": "経理担当者の方",
+      "sourceMaterialIds": ["mat-sop-001"]
+    },
+    "templateId": "case_study",
+    "priceTier": 980,
+    "teaserBoundary": 1000
+  },
+  "expected": {
+    "templateId": "case_study",
+    "priceTier": 980,
+    "generator": "stub",
+    "hasPaidBody": true,
+    "freeBodyMustContain": ["経理担当者の方", "無料軽量版", "有料部"],
+    "paidBodyMustContain": ["結論", "再現手順", "CTA"]
+  }
+}

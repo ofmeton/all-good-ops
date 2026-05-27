@@ -1,0 +1,23 @@
+{
+  "name": "04_text_only_failure_story",
+  "description": "text_only モード。失敗談・主観意見では画像なしが効果的 (initial-values §3.7 SSOT)。",
+  "request": {
+    "draftId": "draft-test-04",
+    "idea": {
+      "id": "idea-txt-04",
+      "topic": "失敗談から学んだ Claude Code 運用の落とし穴",
+      "primaryHook": "failure_story",
+      "fmat": "long",
+      "contentType": "failure_story",
+      "audience": "中小事業者の方",
+      "sourceMaterialIds": ["mat-fs-001"]
+    },
+    "mode": "text_only",
+    "platform": "x"
+  },
+  "expected": {
+    "kind": "text_only",
+    "costUsd": 0,
+    "rationaleIncludes": "画像なし"
+  }
+}
