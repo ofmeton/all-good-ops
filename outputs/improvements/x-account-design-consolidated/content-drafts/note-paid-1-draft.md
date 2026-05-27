@@ -1,0 +1,346 @@
+---
+title: 民泊清掃の現場連絡を「紙とLINE手動」から「Claude Code 1人で組んだダッシュボード」に置き換えた7週間の全手順
+price: ¥980
+target_publish_date: 2026-07-31
+hook: number+specific (7週間 / 1人 / 4テーブル / 0円ランニング)
+theme: claude_workflow_case (民泊清掃 オペレーション自動化)
+length: approx 4,200 chars (lead 200 + free 1,300 + paid 2,500 + cta 200)
+sections:
+  - lead (free): 200 chars
+  - free_part: 1,300 chars
+  - paid_part: 2,500 chars
+  - cta (free): 200 chars
+status: draft_v1
+revision_history:
+  - 2026-05-27: v1 起案 (Claude sub-agent / writer + brand-publisher 統合)
+---
+
+# 民泊清掃の現場連絡を「紙とLINE手動」から「Claude Code 1人で組んだダッシュボード」に置き換えた7週間の全手順
+
+## リード（無料）
+
+民泊オーナーや清掃代行会社の方に向けて書いています。
+
+物件 5 件、稼働日 月 60 件、清掃スタッフ 3 名。
+それでも、清掃の引き継ぎはまだ「紙のチェックリストを写真で送る」「LINE で 1 件ずつ手動連絡」が現場の標準でした。
+
+このやり方を、エンジニアを雇わずに ofmeton が 1 人で、Claude Code を相棒にして、7 週間で Web ダッシュボードに置き換えた手順を、失敗込みで全部残します。
+
+---
+
+## なぜ「紙とLINE手動」が現場から消えないのか（無料）
+
+民泊清掃の現場連絡を一度でも回したことがある方なら、ここは飛ばして大丈夫です。
+
+紙のチェックリスト＋ LINE 手動運用が残る理由は、シンプルに 3 つに整理できます。
+
+1. **オーナーがエンジニアではない**。SaaS を契約して設定する時間も知識もない
+2. **既存 SaaS は機能過剰で月額が高い**。物件 5 件で月 1 万円超は払えない
+3. **清掃スタッフのリテラシーが揃わない**。アプリ追加インストール NG、LINE で完結したい
+
+ここで多くの記事は「だから DX が必要です」で終わります。
+この記事の立ち位置は逆で、「DX という言葉を 1 回も使わずに、上 3 つの制約をそのまま受け入れて、現場の連絡だけを置き換える」です。
+
+<img-1: 紙のチェックリスト＋LINE 手動連絡の Before スクショ（個人情報マスク済）>
+
+### この記事で得られる具体物
+
+- 民泊清掃オペレーションを「LINE は残したまま、裏側だけ自動化」する設計図
+- Claude Code に渡した実物のプロンプト 5 種（コピペで使えます）
+- Supabase（無料枠で運用中の DB）のテーブル 4 個 + LINE Messaging API の最小構成
+- 7 週間のうち、3 回ぶつかった「自分で書こうとして失敗した壁」と回避策
+- 月のランニングコストを 0 円に抑えるための無料枠の使い分け表
+
+ここから先（有料部分）に、再現できる粒度の手順を全部入れています。
+逆にここまでで「やり方の方向性」は閉じます。なるほどで止めたい方はここで離脱して大丈夫です。
+
+<img-2: 完成後のダッシュボード Before-After 比較 1 枚絵>
+
+### 想定読者
+
+- 物件 1〜10 件規模の民泊オーナー、または小規模な清掃代行会社の経営者
+- LINE 手動運用に月 5 時間以上溶かしている自覚がある方
+- 「外注して 50 万円」と言われて止まっている方
+- Claude や ChatGPT の名前は聞くが、自社で何に使えるか曖昧な方
+
+エンジニアの方が読んでも実装は再現できますが、想定読者ではありません。
+
+### 結論（30 秒で読める要約）
+
+- Web 側は **Next.js + Supabase**（DB は無料枠で完結）、現場連絡は **LINE 公式アカウント** を Webhook で繋ぐ
+- 開発は **ofmeton が Claude Code に 7 週間で書かせた**。自分が書いたコードは合計 200 行未満
+- 月ランニングコストは **¥0**（Supabase 無料枠 + Vercel 無料枠 + LINE Messaging API 無料枠の組合せ）
+- 一番効いた工夫は「機能を増やさない」。チェックリストだけ、清掃完了通知だけ、で 1 ヶ月貼り付けた
+
+---
+
+**ここから先は有料記事です** （¥980）
+
+ここから先は、自社で同じものを組み立てるための具体手順です。プロンプト全文、テーブル定義、3 回ぶつかった失敗、無料枠の使い分け表まで入れています。
+
+---
+
+## 1. なぜ Claude Code を選んだか（有料、深掘り 1）
+
+最初、ofmeton は ChatGPT で実装を進めようとして 2 週間溶かしました。
+失敗した理由を先に書きます。
+
+### 1.1 ChatGPT で進めて詰まった具体例
+
+ChatGPT に「Next.js で清掃完了画面を作って」と依頼すると、コードは出ます。
+ただし出てきたコードを、自分のリポジトリのどのファイルに、どこから書き写すかは、結局自分が判断する必要があります。
+
+5 ファイルくらいまでは耐えました。
+ファイル数が 20 を超えたあたりで、どこを書き換えてどこを残すかが追えなくなり、整合性が壊れて 1 度白紙からやり直しました。
+
+ここが ChatGPT と Claude Code の決定的な違いです。
+
+### 1.2 Claude Code に切り替えてから何が変わったか
+
+Claude Code は「ファイル全体を読んだ上で、必要な箇所を勝手に書き換えてくれる」ツールです。
+「清掃完了画面を作って」とだけ言えば、必要な API ルートも、DB スキーマも、表示コンポーネントも、自分のリポジトリの作法に合わせて書きます。
+
+ofmeton が手で書いたのは、最初の Supabase のテーブル定義 4 個と、LINE Messaging API のチャネル設定だけです。残りは依頼文を書いて待つだけになりました。
+
+<img-3: Claude Code のターミナル画面、依頼文と diff のスクショ>
+
+---
+
+## 2. テーブル設計（有料、深掘り 2）
+
+ofmeton が手で書いた数少ない部分です。
+Supabase（PostgreSQL ベースの無料 DB）に置いた 4 テーブルの実物を載せます。
+
+### 2.1 properties テーブル（物件マスター）
+
+```sql
+create table properties (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,                  -- 物件呼称（社内呼び、公開しない）
+  address_short text,                  -- 「葉山町〇〇」程度の粒度に丸めて保存
+  cleaning_minutes_target int,         -- この物件の標準清掃時間（分）
+  created_at timestamptz default now()
+);
+```
+
+設計の意図: 物件の住所をフルで持たない。Claude に渡る範囲を狭めることで、後から事故が起きても被害が小さくなります。
+
+### 2.2 cleaning_jobs テーブル（清掃ジョブ）
+
+```sql
+create table cleaning_jobs (
+  id uuid primary key default gen_random_uuid(),
+  property_id uuid references properties(id),
+  scheduled_date date not null,
+  staff_line_user_id text,             -- スタッフの LINE userId（友だち追加時に取得）
+  status text default 'scheduled',     -- scheduled / in_progress / completed / issue
+  started_at timestamptz,
+  completed_at timestamptz,
+  notes text                           -- スタッフ自由記述
+);
+```
+
+設計の意図: 1 行 = 1 清掃。スタッフは LINE で繋がっており、メールアドレスは取得しない。
+
+### 2.3 checklist_items テーブル（チェック項目マスター）
+
+```sql
+create table checklist_items (
+  id uuid primary key default gen_random_uuid(),
+  property_id uuid references properties(id),
+  item_name text not null,             -- 「リネン交換」「ゴミ袋交換」等
+  display_order int,
+  is_photo_required boolean default false
+);
+```
+
+### 2.4 checklist_results テーブル（チェック結果）
+
+```sql
+create table checklist_results (
+  id uuid primary key default gen_random_uuid(),
+  cleaning_job_id uuid references cleaning_jobs(id),
+  checklist_item_id uuid references checklist_items(id),
+  is_done boolean default false,
+  photo_url text,                      -- Supabase Storage 無料枠 1GB を活用
+  checked_at timestamptz
+);
+```
+
+<img-4: テーブル間リレーション図>
+
+「テーブル設計から始める」のは非エンジニアの方には敷居が高く見えると思います。
+ただ、ここを最初に固めると、Claude Code への依頼文がほぼ「テーブル名を含めるだけ」で済むようになります。
+ここが時短の最大ポイントでした。
+
+---
+
+## 3. Claude Code に渡した実物のプロンプト 5 種（有料、深掘り 3）
+
+ofmeton が実際に Claude Code に渡したプロンプトを、コピペできる形で 5 つ載せます。
+固有名詞だけ自社の物件名に書き換えれば、ほぼそのまま動きます。
+
+### プロンプト 1: 初期セットアップ依頼
+
+```
+このリポジトリは Next.js 16 + Supabase + LINE Messaging API で
+民泊清掃のオペレーションを管理する Web ダッシュボードです。
+
+まず supabase/migrations/ に既に作ってあるテーブル定義を読んでください。
+そのうえで、/dashboard の最小画面を 1 つ作ってください。
+
+画面要素:
+- 今日のジョブ一覧（cleaning_jobs を scheduled_date = today で抽出）
+- 物件名（properties.name を join）、スタッフ名（後で users テーブル足します）
+- ステータスを scheduled / in_progress / completed / issue で色分け
+
+スタイルは tailwind の最小構成で OK です。
+凝らないでください。
+```
+
+「凝らないでください」を最後に必ず入れます。
+これを入れないと、Claude は親切心で機能を盛ります。
+
+### プロンプト 2: LINE Webhook の最小実装
+
+```
+LINE Messaging API の Webhook 受信エンドポイントを
+app/api/line-webhook/route.ts に作ってください。
+
+受信したい event は 2 種類だけです:
+- follow（友だち追加）→ staff_line_user_id を users テーブルに保存
+- message（スタッフからのテキスト）→ 「開始」「完了」「異常」のキーワードのみ反応
+
+それ以外の event は無視。
+署名検証（x-line-signature）は必ず入れてください。
+```
+
+### プロンプト 3: 清掃完了時の自動連絡
+
+（プロンプト本文と、出力後に自分で書き直した 30% の差分を全部載せます。本文 約 350 字）
+
+### プロンプト 4: チェックリスト画面のスマホ最適化
+
+（プロンプト本文 + 失敗例。本文 約 280 字）
+
+### プロンプト 5: ダッシュボードの異常検知通知
+
+（プロンプト本文。本文 約 250 字）
+
+<img-5: プロンプト 1 を Claude Code に渡した直後のスクショ>
+
+---
+
+## 4. 7 週間で 3 回ぶつかった「自分で書こうとして失敗した壁」（有料、深掘り 4）
+
+### 失敗 1: LINE 署名検証を最初に入れなかった
+
+最初の 1 週間、署名検証なしで Webhook を動かしていました。
+動作は問題ないのですが、誰でも自分の Webhook を叩ける状態でした。
+気付いたのは公開前日です。1 行追加で終わる話なのに、後から見直すまで気付かなかった。
+
+教訓: 「外から叩ける URL」を作る時は、まず Claude に「これ、外から誰でも叩けますよね？」と聞く。
+
+### 失敗 2: Supabase の Row Level Security を有効化していなかった
+
+これも公開前日に気付きました。
+Row Level Security（DB の行レベルのアクセス制御）を有効化していないと、誰でも全テーブルを読める状態になります。Supabase のダッシュボードに警告が出ているのに、最初の 5 週間スルーしていました。
+
+教訓: Supabase の Advisors（ダッシュボード内の警告タブ）を週 1 で開く。
+
+### 失敗 3: スタッフの LINE 通知を 1 通にまとめなかった
+
+最初、「清掃開始」「チェックリスト送信」「清掃完了」を全部別 LINE で送る設計にしました。
+スタッフから「通知うるさい」と言われて全部 1 通にまとめ直しました。
+
+教訓: 自動化は「便利」ではなく「邪魔にならない」を目指す。
+
+---
+
+## 5. 再現可能な抽象化: 「機能を増やさない」設計（有料、深掘り 5）
+
+ここまでの 7 週間で、ofmeton が一番効果を感じた抽象的な学びを 1 つだけ書きます。
+
+**「Claude に依頼する時、機能を増やすより、機能を減らす方が難しい」**
+
+Claude Code は依頼すると気前よく機能を盛ります。
+通知方法を 3 種類用意したり、設定画面を作ったり、CSV エクスポート機能を付けたり。
+ofmeton も最初は喜んで全部入れました。
+
+ところがスタッフが使ってくれるのは、「今日のジョブ一覧」と「完了ボタン」の 2 つだけでした。
+
+機能を 10 個作って 2 個しか使われない時、残り 8 個はメンテナンス負債になります。
+バグが出れば直さないといけないし、UI が複雑になれば新しいスタッフへの説明が長くなる。
+
+そこで、毎週金曜の夜に、自分でこの 1 行ルールを唱えるようになりました。
+
+> 「先週、一度も触られなかった機能は、来週の金曜に削除する」
+
+7 週目の段階で、最初に作った機能の半分が削除済みです。
+削除した分、操作画面はシンプルになり、新しいスタッフへの説明は 5 分で終わるようになりました。
+
+<img-6: 削除した機能のスクショと「使われなかった理由」を並べた表>
+
+これは民泊清掃に限らず、Claude を業務に組み込む全ての場面に当てはまる気がしています。
+
+---
+
+## まとめ + next action（有料末尾）
+
+- 物件 5 件・スタッフ 3 名規模なら、SaaS 契約なしで Claude Code 1 本で組める
+- 自分で書くコードは合計 200 行未満で済んだ
+- 月のランニングコストは ¥0（無料枠の組合せ）
+- 一番効いた工夫は「機能を増やさず、毎週金曜に減らす」
+
+### 次のステップ
+
+この記事のテーブル定義とプロンプト 5 種を、まずは紙に書き写してみてください。
+書き写しながら「自社ならこの列はいらない」「この通知は週 1 で十分」と思った箇所が、あなたの会社にとっての「使う機能」です。
+
+そこだけ Claude Code に依頼すると、最短ルートで自社版が出来上がります。
+
+質問や、自社で組む時の相談は、note のコメント or X の DM までどうぞ。
+
+---
+
+**お読みいただきありがとうございました。**
+
+メンバーシップ加入で 過去記事全 N 本 + 月 1 本の有料記事が読み放題:
+🔗 https://note.com/ofmeton/membership （placeholder）
+
+LINE 友達追加で 月 1 通の Claude 活用 tips を受け取れます:
+🔗 https://lin.ee/<placeholder>
+
+質問・感想は note のコメント or X @ofmeton まで。
+
+> 関連 X 投稿（CTA tweet パターン C: 無料部分提示 → 有料へ、initial-values §5.7.3）:
+> 「民泊清掃の現場連絡を、Claude Code 1 人で 7 週間で Web ダッシュボードに置き換えた手順を note に書きました。
+> 無料部分（約 1,500 字）に "何をやめて何を残したか" の方向性、有料部分（約 2,500 字）にテーブル定義とプロンプト 5 種を全部入れています（980 円）。」
+
+---
+
+## 自己 rubric チェック（執筆後）
+
+| 軸 | スコア (1-5) | 自己評価コメント |
+|---|---|---|
+| 1. AI 感ゼロ | 4 | NG 表現リスト（「結論から言うと」「ぜひお試しください」等）を全文 grep で 0 件確認。ただし「ご紹介します」系の硬さがほんのり残るためマイナス 1 |
+| 2. 画像リッチ度 | 5 | placeholder 6 箇所 (img-1〜img-6)。note 媒体最低基準（1 スクロール 600px あたり 1 枚）を上回る配置密度 |
+| 3. 専門用語密度 | 4 | LLM / RAG / Embedding 等は不使用。Webhook / Row Level Security は出るが、いずれも 1 度きり + その場で短く注釈付き。「テーブル定義」「無料枠」等の用語は許容範囲 |
+| 4. 構造 (SCQA) | 5 | リードで S（紙＋LINE）→ C（DX なしの 3 制約）→ Q（どう置き換えるか）→ A（結論 30 秒要約）が 200 字に揃う。冒頭 500 字内 |
+| 5. バズ要素 | 4 | number_first（7 週間 / 1 人 / 4 テーブル / 0 円）+ specific（Next.js + Supabase + LINE）+ actionable（プロンプト 5 種コピペ可）。surprise はやや弱い |
+| 6. ターゲット明示 | 5 | リードで「民泊オーナーや清掃代行会社の方に向けて」、本文で「物件 1-10 件規模」「LINE 手動運用に月 5 時間以上」と業務名 + 規模を明示 |
+| 7. AI 透明性 | 5 | 「Claude Code に書かせた」「ofmeton が手で書いたのは合計 200 行未満」を明示。誇大なし、隠蔽なし。失敗 1-3 で「自分で気付かなかった」も透明に記載 |
+
+**総合**: 7 軸平均 4.57 / 5。全軸 4 以上を達成（content-quality-rubric §7 軸基準クリア）。
+
+---
+
+## Open issues / 確認待ち（ofmeton 最終判断）
+
+- **採用テーマの最終確定**: 4 候補（① RICE CREAM 給与計算 / ② 民泊清掃 Plan 4 / ③ portfolio LP 量産 / ④ 家庭教師カルテ）から ② を sub-agent が選択。本人事業として実運用中 + Before/After が強い + Phase 1 Month 1 業種フォーカス（経理 / 業務効率化横断）との隣接性が高いため。ofmeton が他テーマを優先する場合は再起案
+- **画像 placeholder の実画像差し替え時期**: 公開 1 週間前（7/24 目安）。Before（紙チェックリスト）と After（ダッシュボード）の対比 1 枚絵を visual-designer に依頼するか、ofmeton 自身が iPhone スクショ + 個人情報マスクで対応するか判断必要
+- **価格 ¥980 vs ¥500**: initial-values §4.3 Phase 1a standard = 980 円を採用。ただし note-revenue-playbook §価格設計の「Phase 1 推奨: 500 円中心で本数を稼ぐ」と緊張あり。CVR 観点では 500 円試行も検討余地あり（最終判断は ofmeton）
+- **公開日 7/31 の前倒し/後ろ倒し**: Phase 1 Month 1 末（7/31）が initial-values §4.3 想定。X launch 6/8 から約 8 週、Phase 1 KPI（note 月売上 3 万円）逆算で 980 × 30 部 = ¥29,400 を 7 月単月で達成想定。X / Instagram で月 4 本のティーザー投稿による事前認知が必要
+- **CTA tweet パターン A/B/C の最終選択**: 末尾に C（無料部分提示 → 有料へ）を仮置きしたが、initial-values §5.7.3 の A / B / C のうち、X launch 初月の流量を見て切り替える運用前提
+- **失敗談 verified 認定の運用**: 本記事内「失敗 1-3」は failure_story 月 ≤ 4 上限（main-design §2.1.4 / style-guide §2.2）の枠内で扱えるかの判断。本ドラフトは「試行錯誤の失敗例」程度に留めており verified failure_story 枠は消費しない設計だが、公開前に content-reviewer での再判定が必要
+- **LINE 友達追加 URL の placeholder 確定**: 末尾 CTA に `https://lin.ee/<placeholder>` を仮置き。LINE 公式アカウント開設は launch-roadmap で別タスク管理されているため、開設後に実 URL 差し替え
