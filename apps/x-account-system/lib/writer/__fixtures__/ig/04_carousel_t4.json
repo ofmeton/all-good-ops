@@ -1,0 +1,25 @@
+{
+  "name": "04_carousel_t4",
+  "description": "Instagram カルーセル T4_how_to_steps (ツール比較型 由来) 9 枚 stub。",
+  "request": {
+    "idea": {
+      "id": "idea-ig-04",
+      "topic": "Claude Code vs ChatGPT の使い分け",
+      "primaryHook": "contrast",
+      "fmat": "long",
+      "contentType": "paraphrase",
+      "audience": "中小事業者の方",
+      "sourceMaterialIds": ["mat-cmp-001"]
+    },
+    "kind": "carousel",
+    "carouselTemplateId": "T4_how_to_steps"
+  },
+  "expected": {
+    "kind": "carousel",
+    "generator": "stub",
+    "slideCount": 9,
+    "carouselTemplateId": "T4_how_to_steps",
+    "captionMustContain": ["中小事業者の方"],
+    "captionMaxChars": 200
+  }
+}

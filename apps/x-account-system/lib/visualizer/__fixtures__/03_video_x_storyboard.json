@@ -1,0 +1,24 @@
+{
+  "name": "03_video_x_storyboard",
+  "description": "X 投稿向け 15-30秒 video モード stub。動画自動生成は範囲外、撮影 SOP storyboard を返す。",
+  "request": {
+    "draftId": "draft-test-03",
+    "idea": {
+      "id": "idea-vid-03",
+      "topic": "Claude Code 自動実行のデモ",
+      "primaryHook": "first_hand",
+      "fmat": "medium",
+      "contentType": "first_hand",
+      "audience": "中小事業者の方",
+      "sourceMaterialIds": ["mat-fh-002"]
+    },
+    "mode": "video",
+    "platform": "x"
+  },
+  "expected": {
+    "kind": "video",
+    "generator": "manual_capture_required",
+    "costUsd": 0,
+    "storyboardIncludes": ["Hook", "CTA"]
+  }
+}

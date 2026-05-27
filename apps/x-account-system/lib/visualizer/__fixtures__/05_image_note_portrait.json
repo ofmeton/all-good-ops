@@ -1,0 +1,27 @@
+{
+  "name": "05_image_note_portrait",
+  "description": "note 用 1080x1350 portrait 画像 1 枚 stub。",
+  "request": {
+    "draftId": "draft-test-05",
+    "idea": {
+      "id": "idea-img-05",
+      "topic": "経理を Claude に任せる手順",
+      "primaryHook": "industry_sop",
+      "fmat": "article",
+      "contentType": "industry_sop",
+      "audience": "中小事業者の方",
+      "sourceMaterialIds": ["mat-sop-001"]
+    },
+    "mode": "image",
+    "platform": "note",
+    "imageCount": 1
+  },
+  "expected": {
+    "kind": "image",
+    "imagesCount": 1,
+    "generator": "stub",
+    "costUsd": 0,
+    "urlIncludes": "1080x1350",
+    "promptIncludes": "ofmeton"
+  }
+}

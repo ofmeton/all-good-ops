@@ -1,0 +1,24 @@
+{
+  "name": "03_reel_20s",
+  "description": "Instagram リール 20 秒 script + caption stub。",
+  "request": {
+    "idea": {
+      "id": "idea-ig-03",
+      "topic": "Claude Code 自動実行のデモ",
+      "primaryHook": "first_hand",
+      "fmat": "medium",
+      "contentType": "first_hand",
+      "audience": "中小事業者の方",
+      "sourceMaterialIds": ["mat-fh-002"]
+    },
+    "kind": "reel",
+    "reelDurationSec": 20
+  },
+  "expected": {
+    "kind": "reel",
+    "generator": "stub",
+    "reelScriptIncludes": ["Hook", "CTA"],
+    "captionMustContain": ["中小事業者の方"],
+    "captionMaxChars": 200
+  }
+}

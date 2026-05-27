@@ -1,0 +1,28 @@
+{
+  "name": "02_carousel_instagram_t1",
+  "description": "Instagram カルーセル T1_hook_evidence (9 枚) stub。",
+  "request": {
+    "draftId": "draft-test-02",
+    "idea": {
+      "id": "idea-ig-02",
+      "topic": "Claude Code 自動化の入門",
+      "primaryHook": "tips_enum",
+      "fmat": "long",
+      "contentType": "industry_sop",
+      "audience": "中小事業者の方",
+      "sourceMaterialIds": ["mat-tip-001"]
+    },
+    "mode": "image",
+    "platform": "instagram",
+    "carouselTemplateId": "T1_hook_evidence"
+  },
+  "expected": {
+    "kind": "image",
+    "imagesCount": 9,
+    "generator": "stub",
+    "costUsd": 0,
+    "urlIncludes": "1080x1350",
+    "carouselTemplateId": "T1_hook_evidence",
+    "slideCount": 9
+  }
+}

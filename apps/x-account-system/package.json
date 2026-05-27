@@ -25,7 +25,11 @@
     "safety:test": "IN_MEMORY_FALLBACK=true jest lib/safety",
     "ma:test": "IN_MEMORY_FALLBACK=true jest lib/ma",
     "digest:cli": "IN_MEMORY_FALLBACK=true tsx lib/dashboard/digest.ts",
-    "optimizer:test": "IN_MEMORY_FALLBACK=true jest lib/optimizer"
+    "optimizer:test": "IN_MEMORY_FALLBACK=true jest lib/optimizer",
+    "visualizer:test": "IN_MEMORY_FALLBACK=true jest lib/visualizer",
+    "attribution:test": "IN_MEMORY_FALLBACK=true jest lib/attribution",
+    "writer:note:test": "IN_MEMORY_FALLBACK=true jest lib/writer/writer-note.test.ts",
+    "writer:ig:test": "IN_MEMORY_FALLBACK=true jest lib/writer/writer-ig.test.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.36.0",

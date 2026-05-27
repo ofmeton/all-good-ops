@@ -1,0 +1,27 @@
+{
+  "name": "03_paid_step_by_step_500",
+  "description": "有料 500 円 step_by_step (段階型)。teaserBoundary 700 字 (短め)。",
+  "request": {
+    "idea": {
+      "id": "idea-note-03",
+      "topic": "Claude プロンプト 3 ステップ設計",
+      "primaryHook": "tips_enum",
+      "fmat": "article",
+      "contentType": "paraphrase",
+      "audience": "中小事業者の方",
+      "sourceMaterialIds": ["mat-step-001"]
+    },
+    "templateId": "step_by_step",
+    "priceTier": 500,
+    "teaserBoundary": 700
+  },
+  "expected": {
+    "templateId": "step_by_step",
+    "priceTier": 500,
+    "generator": "stub",
+    "hasPaidBody": true,
+    "freeBodyMaxChars": 700,
+    "freeBodyMustContain": ["中小事業者の方"],
+    "paidBodyMustContain": ["結論", "再現手順"]
+  }
+}
