@@ -1,0 +1,17 @@
+{
+  "name": "05_guard_clip",
+  "description": "(a) verified failure_story 月 6 観測 → cap で 4 に clip。 (b) first_hand 比率 25% → 30% に clip。 (c) AI 生成画像率 25% → 10% に clip。 (d) industry_sop 比率 10% → 16.6% (= 5/30) に clip。",
+  "scenario": "guard_clip_multi",
+  "preState_overrides": {
+    "contentAxis_alphas": [3, 6, 6, 5],
+    "visualizerImageAiGen_alpha_beta": [2.5, 7.5],
+    "industrySopRate_alpha_beta": [1, 9],
+    "failureStoryObservedCount": 6
+  },
+  "expected": {
+    "failureStoryClippedCount": 4,
+    "first_hand_mean_at_least": 0.3,
+    "visualizerImageAiGen_mean_at_most": 0.1,
+    "industrySopRate_mean_at_least": 0.166
+  }
+}

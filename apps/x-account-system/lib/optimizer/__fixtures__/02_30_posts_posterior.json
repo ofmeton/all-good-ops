@@ -1,0 +1,24 @@
+{
+  "name": "02_30_posts_posterior",
+  "description": "30 投稿後の posterior 更新。morning band に成功 9 件 / 失敗 0 件を投入すると morning Beta の mean が上昇する。",
+  "scenario": "posterior_morning_lift",
+  "signalsTemplate": {
+    "successCount": 9,
+    "timeBand": "morning",
+    "hook": "number_lead",
+    "contentAxisIndex": 3,
+    "xFormat": "short",
+    "visualizerIndex": 0,
+    "isIndustrySop": false,
+    "isFailureStoryVerified": false
+  },
+  "totalSignals": 30,
+  "expected": {
+    "morning_mean_increased": true,
+    "morning_alpha_at_least": 7,
+    "number_lead_alpha_at_least": 8,
+    "first_hand_alphas_index_3_at_least": 12,
+    "short_alpha_at_least": 8,
+    "_note": "morning_alpha_at_least=7 は guard clip (upperBound 0.4) 適用後の値。clip 前は alpha=3+9=12 だが guard が total=19 を保ったまま mean=0.4 に再正規化するため alpha=7.6 になる。"
+  }
+}
