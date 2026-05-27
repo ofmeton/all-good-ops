@@ -1,0 +1,24 @@
+{
+  "name": "05_r5_duplicate",
+  "description": "embedding mock で maxSim=0.92 を強制 → R5 fail。",
+  "input": {
+    "traceId": "trace-05",
+    "draftId": "draft-05",
+    "coreIdeaId": "core-05",
+    "platform": "x",
+    "body": "経営者向けに業務仕組み化のテンプレートを共有する。私は請求書ワークフローを自動化した。30 分 → 3 分の時短になった。判断軸を固定すると安定する。",
+    "fmat": "short",
+    "sourceMaterialIds": [],
+    "hasAffiliateLink": false
+  },
+  "mockOverrides": {
+    "embedding": {
+      "maxSim": 0.92,
+      "matchedId": "prev-draft-007"
+    }
+  },
+  "expected": {
+    "decision": "rejected",
+    "rejectReasons": ["R5_no_duplicate_14d"]
+  }
+}

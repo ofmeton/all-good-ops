@@ -1,0 +1,18 @@
+{
+  "name": "15_jp_ascii_mix",
+  "description": "日本語 + ASCII (英数字・記号) が混じる。全ルール pass。",
+  "input": {
+    "traceId": "trace-15",
+    "draftId": "draft-15",
+    "coreIdeaId": "core-15",
+    "platform": "x",
+    "body": "経営者向け、業務の仕組み化 tips。私は Notion + Zapier で請求書ワークフローを自動化した。Before: 30min After: 3min (10x faster)。判断軸を 3-step で固定すれば毎週の業務手順が安定する。これが SOP の本質だ。",
+    "fmat": "short",
+    "sourceMaterialIds": [],
+    "hasAffiliateLink": false
+  },
+  "expected": {
+    "decision": "approved",
+    "rejectReasons": []
+  }
+}

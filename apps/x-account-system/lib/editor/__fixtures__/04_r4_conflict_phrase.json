@@ -1,0 +1,18 @@
+{
+  "name": "04_r4_conflict_phrase",
+  "description": "禁止語 (時代遅れ) を含む → R4 fail。",
+  "input": {
+    "traceId": "trace-04",
+    "draftId": "draft-04",
+    "coreIdeaId": "core-04",
+    "platform": "x",
+    "body": "経営者向け業務の仕組み化の話。私は手作業の経費精算を自動化した。手作業のままは時代遅れだ。テンプレ化すれば 30 分 → 3 分。",
+    "fmat": "short",
+    "sourceMaterialIds": [],
+    "hasAffiliateLink": false
+  },
+  "expected": {
+    "decision": "rejected",
+    "rejectReasons": ["R4_no_conflict_phrase"]
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "09_x3_failure_unverified",
+  "description": "primary_hook=failure_story だが materialIds に未 verified が混じる → X3 fail。",
+  "input": {
+    "traceId": "trace-09",
+    "draftId": "draft-09",
+    "coreIdeaId": "core-09",
+    "platform": "x",
+    "body": "経営者向けに業務仕組み化の失敗談を共有。私は最初の Notion テンプレ自動化で詰まった。判断軸を 3 段階で固定したつもりが、月末の例外処理を入れていなかった。30 分 → 90 分に逆戻りした。",
+    "fmat": "short",
+    "sourceMaterialIds": ["mat-001", "mat-002"],
+    "hasAffiliateLink": false
+  },
+  "mockOverrides": {
+    "verifiedMaterialIdSet": ["mat-001"]
+  },
+  "expected": {
+    "decision": "rejected",
+    "rejectReasons": ["X3_failure_story_verified"]
+  }
+}
