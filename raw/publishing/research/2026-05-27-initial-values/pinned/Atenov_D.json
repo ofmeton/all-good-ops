@@ -1,0 +1,174 @@
+{
+  "handle": "Atenov_D",
+  "tweet_id": "2058194152077009195",
+  "body": {
+    "tweets": [
+      {
+        "type": "tweet",
+        "id": "2058194152077009195",
+        "url": "https://x.com/Atenov_D/status/2058194152077009195",
+        "twitterUrl": "https://twitter.com/Atenov_D/status/2058194152077009195",
+        "text": "https://t.co/ZujXZEaHaJ",
+        "source": "",
+        "retweetCount": 3,
+        "replyCount": 15,
+        "likeCount": 80,
+        "quoteCount": 1,
+        "viewCount": 13531,
+        "createdAt": "Sat May 23 14:31:39 +0000 2026",
+        "lang": "zxx",
+        "bookmarkCount": 75,
+        "isReply": false,
+        "inReplyToId": "",
+        "conversationId": "2058194152077009195",
+        "displayTextRange": [
+          0,
+          23
+        ],
+        "inReplyToUserId": "",
+        "inReplyToUsername": "",
+        "isPinned": false,
+        "author": {
+          "type": "user",
+          "userName": "Atenov_D",
+          "url": "https://x.com/Atenov_D",
+          "twitterUrl": "https://twitter.com/Atenov_D",
+          "id": "1577008378852802561",
+          "name": "Atenov int.",
+          "isVerified": false,
+          "isBlueVerified": true,
+          "verifiedType": null,
+          "profilePicture": "https://pbs.twimg.com/profile_images/2018766680860606464/8Omnaqqn_normal.jpg",
+          "coverPicture": "https://pbs.twimg.com/profile_banners/1577008378852802561/1764292595",
+          "description": "📚 | Part of @zscdao |  FullTime Crypto/X | @Polymarket Adept | Two master's degrees in engineering and marketing | Become part of our big family of smart-users",
+          "location": "",
+          "followers": 11938,
+          "following": 1051,
+          "status": "",
+          "canDm": true,
+          "canMediaTag": false,
+          "createdAt": "Mon Oct 03 18:51:26 +0000 2022",
+          "entities": {
+            "description": {
+              "user_mentions": [
+                {
+                  "id_str": "",
+                  "indices": [
+                    12,
+                    19
+                  ],
+                  "name": "",
+                  "screen_name": "zscdao"
+                },
+                {
+                  "id_str": "",
+                  "indices": [
+                    43,
+                    54
+                  ],
+                  "name": "",
+                  "screen_name": "Polymarket"
+                }
+              ]
+            },
+            "url": {
+              "urls": [
+                {
+                  "display_url": "t.me/+Eo3B4s34t0A3Z…",
+                  "expanded_url": "https://t.me/+Eo3B4s34t0A3ZWZi",
+                  "indices": [
+                    0,
+                    23
+                  ],
+                  "url": "https://t.co/hifsUnDmWO"
+                }
+              ]
+            }
+          },
+          "fastFollowersCount": 0,
+          "favouritesCount": 0,
+          "hasCustomTimelines": true,
+          "isTranslator": false,
+          "mediaCount": 1192,
+          "statusesCount": 27571,
+          "withheldInCountries": [],
+          "affiliatesHighlightedLabel": {},
+          "possiblySensitive": false,
+          "pinnedTweetIds": [
+            "2058194152077009195"
+          ],
+          "profile_bio": {
+            "description": "📚 | Part of @zscdao |  FullTime Crypto/X | @Polymarket Adept | Two master's degrees in engineering and marketing | Become part of our big family of smart-users",
+            "entities": {
+              "description": {
+                "user_mentions": [
+                  {
+                    "id_str": "",
+                    "indices": [
+                      12,
+                      19
+                    ],
+                    "name": "",
+                    "screen_name": "zscdao"
+                  },
+                  {
+                    "id_str": "",
+                    "indices": [
+                      43,
+                      54
+                    ],
+                    "name": "",
+                    "screen_name": "Polymarket"
+                  }
+                ]
+              },
+              "url": {
+                "urls": [
+                  {
+                    "display_url": "t.me/+Eo3B4s34t0A3Z…",
+                    "expanded_url": "https://t.me/+Eo3B4s34t0A3ZWZi",
+                    "indices": [
+                      0,
+                      23
+                    ],
+                    "url": "https://t.co/hifsUnDmWO"
+                  }
+                ]
+              }
+            }
+          },
+          "isAutomated": false,
+          "automatedBy": null
+        },
+        "extendedEntities": {},
+        "card": {
+          "rest_id": "https://t.co/ZujXZEaHaJ"
+        },
+        "place": {},
+        "entities": {
+          "urls": [
+            {
+              "display_url": "x.com/i/article/2058…",
+              "expanded_url": "http://x.com/i/article/2058181418979602432",
+              "indices": [
+                0,
+                23
+              ],
+              "url": "https://t.co/ZujXZEaHaJ"
+            }
+          ]
+        },
+        "isRetweet": false,
+        "isQuote": false,
+        "isConversationControlled": false,
+        "quoted_tweet": null,
+        "retweeted_tweet": null,
+        "isLimitedReply": false,
+        "communityInfo": null
+      }
+    ],
+    "status": "success",
+    "msg": "success",
+    "code": 0
+  }
+}

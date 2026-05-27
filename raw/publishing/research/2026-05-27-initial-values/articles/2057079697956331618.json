@@ -1,0 +1,542 @@
+{
+  "article": {
+    "id": "QXJ0aWNsZUVudGl0eToyMDU3MDQzODQ1NjgzMjE2Mzg0",
+    "author": {
+      "type": "user",
+      "userName": "mmmiyama_D",
+      "url": "https://x.com/mmmiyama_D",
+      "twitterUrl": "https://twitter.com/mmmiyama_D",
+      "id": "1326316157557592065",
+      "name": "ミヤマ",
+      "isVerified": false,
+      "isBlueVerified": true,
+      "verifiedType": null,
+      "profilePicture": "https://pbs.twimg.com/profile_images/1627120001655398400/pDN7o_Fz_normal.jpg",
+      "coverPicture": "https://pbs.twimg.com/profile_banners/1326316157557592065/1757417746",
+      "description": "デザインだけじゃ足りない！即戦力AI×マーケ×忙しい人の働き方を考える、営業部デザイナー｜双子育児＆出社のすき間で発信中｜ゆる〜く配信中の無料ニュースレターも！⇨ https://t.co/Tb5cBz9EYx",
+      "location": "",
+      "followers": 77405,
+      "following": 438,
+      "status": "",
+      "canDm": true,
+      "canMediaTag": true,
+      "createdAt": "Wed Nov 11 00:10:31 +0000 2020",
+      "entities": {
+        "description": {
+          "urls": [
+            {
+              "display_url": "mmmiyama.com/lp/miya_new/",
+              "expanded_url": "https://mmmiyama.com/lp/miya_new/",
+              "indices": [
+                82,
+                105
+              ],
+              "url": "https://t.co/Tb5cBz9EYx"
+            }
+          ]
+        }
+      },
+      "fastFollowersCount": 0,
+      "favouritesCount": 21906,
+      "hasCustomTimelines": true,
+      "isTranslator": false,
+      "mediaCount": 3089,
+      "statusesCount": 14754,
+      "withheldInCountries": [],
+      "affiliatesHighlightedLabel": {},
+      "possiblySensitive": false,
+      "pinnedTweetIds": [
+        "1804839863365382236"
+      ],
+      "profile_bio": {},
+      "isAutomated": false,
+      "automatedBy": null
+    },
+    "replyCount": 0,
+    "likeCount": 28,
+    "quoteCount": 3,
+    "viewCount": "22892",
+    "createdAt": "Wed May 20 12:43:13 +0000 2026",
+    "title": "Antigravity 2.0で設定が全部飛んだ！ケース別に復旧手順を置いときます😭",
+    "preview_text": "Antigravityを使ってる人、2.0のアップデート前に、一回止まってください。\nわたしはやらかしました。\n復旧で半日が消えました。",
+    "cover_media_img_url": "https://pbs.twimg.com/media/HIw18O0bMAEyo97.jpg",
+    "contents": [
+      {
+        "type": "unstyled",
+        "text": ""
+      },
+      {
+        "type": "unstyled",
+        "text": "Antigravityを使ってる人、2.0のアップデート前に、一回止まってください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "わたしはやらかしました。\n復旧で半日が消えました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "従来のエディタ形式で使いたいなら、ダウンロード画面の「Antigravity」じゃなくて、下の方にある「Antigravity IDE」を選ぶ必要があるんですよ。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここ、ほんとに見落とすやつです。\n以下で詳しく解説します。"
+      },
+      {
+        "type": "unstyled",
+        "text": ""
+      },
+      {
+        "type": "header-one",
+        "text": "【まず結論】"
+      },
+      {
+        "type": "unstyled",
+        "text": "困ってる人向けに、ポイントだけ先に置いておきますね。"
+      },
+      {
+        "type": "blockquote",
+        "text": "Windows\n→超高確率で壊れる。\n\nMac\n→一応壊れないけど、設定吹っ飛ぶ。"
+      },
+      {
+        "type": "unstyled",
+        "text": "です！！！"
+      },
+      {
+        "type": "unstyled",
+        "text": "回避策のポイントは５つです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ひとつ、既存ユーザーは、アップデートが始まったら高速でダイアログの「キャンセル」ボタンを押す。"
+      },
+      {
+        "type": "unstyled",
+        "text": "OKを押してはいけません！"
+      },
+      {
+        "type": "unstyled",
+        "text": "＜問答無用で自動アプデされます。アクションゲーム並みの瞬発力が必要＞",
+        "inlineStyleRanges": [
+          {
+            "length": 34,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "ふたつ、従来のエディタ形式で使いたいなら、ダウンロード画面の「Antigravity」じゃなくて、下の「Antigravity IDE」を選ぶ。\nめちゃくちゃ間違えやすいです。",
+        "inlineStyleRanges": [
+          {
+            "length": 17,
+            "offset": 51,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "みっつ、もうアップデートしてしまった人は、追加インストールだけだと直らないかもしれません。\nわたしはAntigravity関連を一回全部アンインストールして、Antigravity IDEを入れ直しました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "よっつ、設定を残したい人は、必ずUserフォルダをバックアップしてから動いてください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "いつつ、拡張機能の検索が出ない場合は、Marketplace設定を見にいきます。\nわたしの場合、消えてました⋯⋯。"
+      },
+      {
+        "type": "unstyled",
+        "text": ""
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "unstyled",
+        "text": ""
+      },
+      {
+        "type": "unstyled",
+        "text": "ということで、以下で詳細を解説していきます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "一応、わたしの環境（WindowsとMacどっちも触ってます）と、周辺で観測した範囲のまとめです。"
+      },
+      {
+        "type": "unstyled",
+        "text": ""
+      },
+      {
+        "type": "header-one",
+        "text": "【ケース1｜既存ユーザーで、まだアップデートしてない人】"
+      },
+      {
+        "type": "unstyled",
+        "text": "多分、Antigravity使用すると突如アプデが始まります。"
+      },
+      {
+        "type": "blockquote",
+        "text": "光の速さでキャンセルボタンを押してください。\nOKを押してはいけません！",
+        "inlineStyleRanges": [
+          {
+            "length": 36,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "アプデしてなかったあなたはラッキーです。\n決してアプデしてはなりません。"
+      },
+      {
+        "type": "unstyled",
+        "text": "わたしの観測だと、WindowsはIDEが起動しない・設定が消えてます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Macは起動できたんですが、設定はきれいに飛んでました。\nや〜、これはきつかったです😭"
+      },
+      {
+        "type": "unstyled",
+        "text": "移行作業が難しいと感じる人は、無理に粘らないほうがいいです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "やるなら、フォルダをテスクトップとかにバックアップしてから、いったんアンインストール → Antigravity IDEの新規導入、の流れがオススメです。\n"
+      },
+      {
+        "type": "header-one",
+        "text": "【ケース2｜もうアップデートしてしまった人】"
+      },
+      {
+        "type": "unstyled",
+        "text": "追加インストールだけだと、直らないことがあるんですよね。"
+      },
+      {
+        "type": "unstyled",
+        "text": "わたしの環境で動いた流れはこれです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ひとつ、Antigravity関連をいったん全部アンインストールします。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ふたつ、そのあと、新規としてAntigravity IDEを入れ直します。"
+      },
+      {
+        "type": "unstyled",
+        "text": "みっつ、アンインストールせずにAntigravity IDEを追加するだけだと、IDEがおかしくなるケースがあるそうです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "理由はおそらく、Antigravity 2.0とAntigravity IDE 2.0が同じフォルダを参照していて、追加インストールだけだと状態が正しく揃わないからなんじゃないかなと（推測です）。"
+      },
+      {
+        "type": "unstyled",
+        "text": "安全で行くなら、いったん完全に分けて入れ直しが良いと思います。"
+      },
+      {
+        "type": "unstyled",
+        "text": ""
+      },
+      {
+        "type": "header-one",
+        "text": "【ケース3｜アップデート前に移行したい人】"
+      },
+      {
+        "type": "unstyled",
+        "text": "順番はこの4ステップです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "1. フォルダをバックアップ！"
+      },
+      {
+        "type": "unstyled",
+        "text": "Antigravityで使ってるフォルダを、デスクトップとか完全に別の場所へコピーしてください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "2. 既存のAntigravityアプリをアンインストール"
+      },
+      {
+        "type": "unstyled",
+        "text": "3. Antigravity IDEをインストール"
+      },
+      {
+        "type": "unstyled",
+        "text": "ダウンロードはここ👇\nhttps://antigravity.google/download"
+      },
+      {
+        "type": "unstyled",
+        "text": "ダウンロード画面を下にスクロールすると「Antigravity IDE」が出てきます。\n従来のエディタ形式で使いたいなら、こっちを選んでください。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIwwe-YaQAAwi4C.jpg",
+        "width": 2940,
+        "height": 1406
+      },
+      {
+        "type": "unstyled",
+        "text": "4. 設定を戻す"
+      },
+      {
+        "type": "unstyled",
+        "text": "一度Antigravity IDEを起動すると、フォルダが再作成されます。\nアプリを完全に閉じてから、バックアップしたデータをコピーして戻します。"
+      },
+      {
+        "type": "unstyled",
+        "text": "順番が逆だと、新しく作られたフォルダに上書きされて消える可能性があるので、必ずアプリを閉じてから戻してください💦"
+      },
+      {
+        "type": "unstyled",
+        "text": ""
+      },
+      {
+        "type": "header-one",
+        "text": "【ケース4｜新規ユーザー】"
+      },
+      {
+        "type": "unstyled",
+        "text": "これからAntigravityを入れる人は、最初の選択を間違えないでくださいね。"
+      },
+      {
+        "type": "blockquote",
+        "text": "ダウンロード画面で上の「Antigravity 2.0」を選ばない。",
+        "inlineStyleRanges": [
+          {
+            "length": 34,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "従来のエディタ形式で使いたいなら、下部の「Antigravity IDE」を選ぶ。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここは、けっこう分かりにくいんですよ。\n一番下の方にあるし名前似てるし。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Google I/O後にAntigravityを触る人が増えそうなので、新規ユーザーほど最初の選択でズレないようにしてください。"
+      },
+      {
+        "type": "unstyled",
+        "text": ""
+      },
+      {
+        "type": "header-one",
+        "text": "【ケース5｜拡張機能の検索ができない人】"
+      },
+      {
+        "type": "unstyled",
+        "text": "なぜか、わたしは拡張機能が検索で出なくなって泣きました。\nなにこの不具合⋯⋯。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIwydgdawAEuAPf.jpg",
+        "width": 2114,
+        "height": 1208
+      },
+      {
+        "type": "unstyled",
+        "text": "Antigravity 2.0側に一度入れてしまった人や、Marketplace設定が原因で、拡張機能の検索がうまくいかない場合があるんですよね。"
+      },
+      {
+        "type": "unstyled",
+        "text": "設定を見にいく場所はここ。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Antigravity IDE settings \n→ Editor \n→ Marketplace",
+        "inlineStyleRanges": [
+          {
+            "length": 49,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIwzbFDbQAA-DSs.jpg",
+        "width": 2940,
+        "height": 1680
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIwyqjfbMAAICuf.jpg",
+        "width": 1810,
+        "height": 1206
+      },
+      {
+        "type": "unstyled",
+        "text": "見る項目は2つ。\nMarketplace Item URL。\nMarketplace Gallery URL。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ChatGPTに教えてもらった設定はこれ。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Marketplace Item URL｜\nhttps://marketplace.visualstudio.com/items",
+        "inlineStyleRanges": [
+          {
+            "length": 64,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Marketplace Gallery URL｜\nhttps://marketplace.visualstudio.com/_apis/public/gallery",
+        "inlineStyleRanges": [
+          {
+            "length": 82,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIwz0pIbkAAdSB8.jpg",
+        "width": 1806,
+        "height": 1202
+      },
+      {
+        "type": "unstyled",
+        "text": "このあたりは、環境差と、Marketplace切り替え自体の規約面の両方があって、不安定みたいです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "変更後はAntigravity IDEを再起動します。"
+      },
+      {
+        "type": "unstyled",
+        "text": "これでいけるはずです。\nお疲れさまでした⋯⋯。"
+      },
+      {
+        "type": "unstyled",
+        "text": ""
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "unstyled",
+        "text": ""
+      },
+      {
+        "type": "unstyled",
+        "text": "ここまで読んで、「結局これ、使うべきツールなの？」が気になってると思います。"
+      },
+      {
+        "type": "unstyled",
+        "text": "わたしの今日の判定はこれです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Antigravity IDE 2.0は、限定採用！"
+      },
+      {
+        "type": "unstyled",
+        "text": "作業基地としては強いんですよ。"
+      },
+      {
+        "type": "unstyled",
+        "text": "多分、長期的にシステムが洗練されてきたら、Googleさんが一番有利だと思うんですよね。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ま、今日は過渡期でしっちゃかめっちゃかでしたけど！"
+      },
+      {
+        "type": "unstyled",
+        "text": "アップデート・設定の消失・拡張機能・Marketplaceまわりで今回詰まると、忙しい人にはかなりしんどいです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "わたしは今日、本来やる予定だったタスクをまるごと潰しました😇"
+      },
+      {
+        "type": "unstyled",
+        "text": ""
+      },
+      {
+        "type": "header-one",
+        "text": "とにかく結論。"
+      },
+      {
+        "type": "unstyled",
+        "text": "シン・Antigravityを使うなら、この3点をセットで望んでください！"
+      },
+      {
+        "type": "unstyled",
+        "text": "ひとつ、アップデート前に一回止まる。\nふたつ、ダウンロード画面で「Antigravity IDE」を選ぶ。\nみっつ、Userフォルダをバックアップする。",
+        "inlineStyleRanges": [
+          {
+            "length": 76,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "ここから始めてみてくださいね。"
+      },
+      {
+        "type": "unstyled",
+        "text": "わたしの屍を乗り越えていってください😇"
+      },
+      {
+        "type": "unstyled",
+        "text": ""
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "unstyled",
+        "text": ""
+      },
+      {
+        "type": "unstyled",
+        "text": "初心者さん向けのAntigravityやClaude Code、Codex、ChatGPT画像生成などのお役立ちnoteをお届けしてます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "👇よかったら覗いてみてください！"
+      },
+      {
+        "type": "unstyled",
+        "text": "https://note.com/mmmiyama"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIw0VvWbcAA3Z8J.jpg",
+        "width": 2896,
+        "height": 1418
+      },
+      {
+        "type": "unstyled",
+        "text": ""
+      }
+    ]
+  },
+  "status": "success",
+  "msg": "success",
+  "_handle": "mmmiyama_D"
+}

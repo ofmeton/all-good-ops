@@ -1,0 +1,616 @@
+{
+  "article": {
+    "id": "QXJ0aWNsZUVudGl0eToyMDUwNTQ3OTg3ODYxMTk2ODAw",
+    "author": {
+      "type": "user",
+      "userName": "claudecode_lab",
+      "url": "https://x.com/claudecode_lab",
+      "twitterUrl": "https://twitter.com/claudecode_lab",
+      "id": "1807726847154847744",
+      "name": "Claude Code研究所|スパルタClaude Code塾",
+      "isVerified": false,
+      "isBlueVerified": true,
+      "verifiedType": null,
+      "profilePicture": "https://pbs.twimg.com/profile_images/2047553749867216896/_SKwpHqG_normal.jpg",
+      "coverPicture": "https://pbs.twimg.com/profile_banners/1807726847154847744/1777009967",
+      "description": "東京大学にてAI研究に従事していたエンジニアメンバーがClaude Codeに特化した最新情報をお届け。経営者・士業向け名物研修「スパルタClaude Code塾」も運営。\nnote:https://t.co/VAtJlAXlsF\n研修のご依頼などDMでも受付しております✉️",
+      "location": "東京都",
+      "followers": 19619,
+      "following": 377,
+      "status": "",
+      "canDm": true,
+      "canMediaTag": true,
+      "createdAt": "Mon Jul 01 10:45:57 +0000 2024",
+      "entities": {
+        "description": {
+          "urls": [
+            {
+              "display_url": "note.com/claudecode_lab",
+              "expanded_url": "https://note.com/claudecode_lab",
+              "indices": [
+                92,
+                115
+              ],
+              "url": "https://t.co/VAtJlAXlsF"
+            }
+          ]
+        },
+        "url": {
+          "urls": [
+            {
+              "display_url": "claude-code-lab.com",
+              "expanded_url": "https://claude-code-lab.com/",
+              "indices": [
+                0,
+                23
+              ],
+              "url": "https://t.co/8oWsTCy0do"
+            }
+          ]
+        }
+      },
+      "fastFollowersCount": 0,
+      "favouritesCount": 12964,
+      "hasCustomTimelines": false,
+      "isTranslator": false,
+      "mediaCount": 79,
+      "statusesCount": 276,
+      "withheldInCountries": [],
+      "affiliatesHighlightedLabel": {},
+      "possiblySensitive": false,
+      "pinnedTweetIds": [
+        "2059090665716552166"
+      ],
+      "profile_bio": {},
+      "isAutomated": false,
+      "automatedBy": null
+    },
+    "replyCount": 0,
+    "likeCount": 48,
+    "quoteCount": 0,
+    "viewCount": "16338",
+    "createdAt": "Sat May 02 13:31:43 +0000 2026",
+    "title": "プロンプトエンジニアリングを極めて、Claudeを完璧に使いこなそう",
+    "preview_text": "先日、以下のような投稿をしたところ、そこそこ反響がありました。\n \nClaudeを使っていて、指示した通りに動かなかった経験がある方は多いのではないでしょうか。",
+    "cover_media_img_url": "https://pbs.twimg.com/media/HHUThG_bAAAdZlg.jpg",
+    "contents": [
+      {
+        "type": "unstyled",
+        "text": "先日、以下のような投稿をしたところ、そこそこ反響がありました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Claudeを使っていて、指示した通りに動かなかった経験がある方は多いのではないでしょうか。"
+      },
+      {
+        "type": "unstyled",
+        "text": "AIツールを使いこなすためには、プロンプトの質を上げることは間違いなく重要です。エンジェル投資家でAIリサーチャーのKhairallah AL-Awady（@eng_khairallah1）が投稿した「How to Master Prompt Engineering at an Expert Level (Full Course)」は、1.9Mビューを記録した注目のX Article（長文投稿）です。初心者が犯しがちなミスから、世界トップクラスのビルダーが日常的に使うエキスパート技法まで、4段階のレベル構成で体系的に解説しています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "今回は、プロンプトの書き方を徹底的に解説します。Claude Opus 4.7のリリース以降、モデルが「ユーザーの意図を推測しなくなった」という変化もあり、プロンプトの書き方を見直すタイミングは今がまさにベストです。日本語圏でこれほど体系的にまとめられた解説は少なく、Claude CodeやChatGPTを業務で使うすべてのビジネスパーソンにとって必読の内容です。"
+      },
+      {
+        "type": "header-one",
+        "text": "AIの出力について"
+      },
+      {
+        "type": "unstyled",
+        "text": "モデルがボトルネックではありません。プロンプトがボトルネックです。",
+        "inlineStyleRanges": [
+          {
+            "length": 33,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "2人の人間がまったく同じモデルを使い、まったく同じタスクに取り組んでも、アウトプットの質は大きく異なります。悪いプロンプトを書いた人は書き直しが必要な表面的な回答しか得られず、良いプロンプトを書いた人はそのまま使える洗練された精度の高いアウトプットを得ます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "その差はモデルではなく、プロンプトです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "プロンプトエンジニアリングは流行語でも、小手先のテクニックでもありません。AIとのすべてのやり取りの質の上限を決める、今のAIにおいて最も価値のあるスキルです。"
+      },
+      {
+        "type": "header-one",
+        "text": "Level 1: 基礎"
+      },
+      {
+        "type": "unstyled",
+        "text": "高度なテクニックに進む前に、なぜほとんどのプロンプトが失敗するのかを解説します。"
+      },
+      {
+        "type": "header-one",
+        "text": "なぜ悪いプロンプトが生まれるのか"
+      },
+      {
+        "type": "unstyled",
+        "text": "LLM（大規模言語モデル）は次のトークンを予測するように訓練されています。プロンプトが曖昧だと、モデルは最も統計的に確率の高い内容でその空白を埋めます。それは定義上、最も一般的な内容です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "「AIについてブログ記事を書いて」は平均的なコンテンツを生み出します。モデルがAIについて書かれた最も確率の高いブログ記事を生成するからです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "「1,500語のブログ記事を書いて。テーマは『なぜほとんどの企業はAI導入に失敗するのか』。ターゲットは中堅SaaS企業のCTO。トーンは直接的でデータドリブン。構成は逆張りの書き出し、ケーススタディ付きの失敗パターン3つ、具体的な90日アクションプランの順で」という指示は具体的なコンテンツを生み出します。AIに出力の内容を十分に指定してあるからです。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HHUVUXLbYAEk8i7.jpg",
+        "width": 1448,
+        "height": 1086
+      },
+      {
+        "type": "unstyled",
+        "text": "根本原則：具体性は一般性に勝ります。 プロンプトに詳細を追加するたびに、モデルが平均値に合わせようとする自由度を一つ削ることができます。",
+        "inlineStyleRanges": [
+          {
+            "length": 18,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "blockquote",
+        "text": "📝 補足： Claude Opus 4.7ではこの原則がより厳格に適用されるようになりました。以前のバージョンは多少曖昧な指示でも「意図を推測して」補完してくれましたが、Opus 4.7は書かれた通りに動くように設計しています。AnthropicとOpenAIが同時期に公式プロンプティングガイドを公開し、両社とも「古いプロンプトの書き方は通用しなくなった」と明言しています。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 2,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-one",
+        "text": "エキスパートプロンプトの6要素"
+      },
+      {
+        "type": "unstyled",
+        "text": "エキスパートが書くすべてのプロンプトには、明示的か暗黙的かを問わず、以下の6つの要素が含まれています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "要素1：ロール（役割）",
+        "inlineStyleRanges": [
+          {
+            "length": 11,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "先ほどのClaudeとの会話においてClaudeは誰でしょうか？「役立つアシスタント」ではありません。具体的に「B2B SaaSで15年の経験を持つシニアプロダクトストラテジスト」のようにしましょう。ロールはすべての回答の語彙、深さ、視点を形作ります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "要素2：コンテキスト（文脈）",
+        "inlineStyleRanges": [
+          {
+            "length": 14,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Claudeがあなたの状況について知っておくべきことは何ですか？業界、ターゲット、制約、目標。コンテキストがなければ、モデルは仮定で空白を埋めます。コンテキストがあれば、関連情報で空白を埋めます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "要素3：タスク（タスク内容）",
+        "inlineStyleRanges": [
+          {
+            "length": 14,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Claudeは具体的に何をすべきですか？「マーケティングを手伝って」ではなく、「価格、機能、メッセージングの観点から、特定の3社の競合と自社のポジショニングを比較する競合分析を書いて」のように。"
+      },
+      {
+        "type": "unstyled",
+        "text": "要素4：フォーマット（出力形式）",
+        "inlineStyleRanges": [
+          {
+            "length": 16,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "アウトプットはどのような形式であるべきですか？「3社すべてを比較する表と、その後に2段落の推奨事項」のように。フォーマット指定がなければ、Claudeが推測します。"
+      },
+      {
+        "type": "unstyled",
+        "text": "要素5：制約（やってはいけないこと）",
+        "inlineStyleRanges": [
+          {
+            "length": 18,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Claudeがやってはいけないことは何ですか？「マーケティング用語を使わない。どの企業にも当てはまる一般的なアドバイスを含めない。500語を超えない」のように。ネガティブな制約は最も一般的な失敗パターンを排除します。"
+      },
+      {
+        "type": "unstyled",
+        "text": "要素6：品質基準（どこまでできれば十分か）",
+        "inlineStyleRanges": [
+          {
+            "length": 21,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "「十分に良い」とはどういう意味ですか？「分析は、プロダクトチームがフォローアップの質問なしに5分以内で優先順位の決定を下せるほど具体的であるべき」のように明確に指定しましょう。"
+      },
+      {
+        "type": "unstyled",
+        "text": "エキスパートのプロンプトはこの6要素すべてを押さえています。初心者のプロンプトは通常1〜2つ。このギャップが、プロと初心者のアウトプット品質の差の多くを占めています。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HHUVDAXbAAAVvcF.jpg",
+        "width": 1448,
+        "height": 1086
+      },
+      {
+        "type": "header-one",
+        "text": "Level 2: 構造的テクニック"
+      },
+      {
+        "type": "unstyled",
+        "text": "これらはプロンプトの組み立て方を変えるテクニックです。"
+      },
+      {
+        "type": "header-one",
+        "text": "XMLタグによる明確化"
+      },
+      {
+        "type": "unstyled",
+        "text": "ClaudeはStructuredな入力で訓練されています。XMLタグとはモデルが複数のコンポーネントを持つ複雑なプロンプトを処理するために設計された方法です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "以下がXMLの例です。"
+      },
+      {
+        "type": "markdown",
+        "text": "```xml\n<context>\nB2B SaaS企業（従業員50名）を支援しています。\n建設会社にプロジェクト管理ソフトウェアを販売しています。\n</context>\n\n<task>\n中規模の建設会社の業務担当副社長へのコールドアウトリーチメールを書いてください。\n</task>\n\n<constraints>\n- 150語以内\n- 「お役に立てれば幸いです」のような汎用的な書き出しは不可\n- 建設プロジェクト管理の具体的な課題に言及する\n- 製品の効果についての具体的で検証可能な主張を1つ含める\n- 低コミットメントなCTA（「デモを予約してください」ではない）で終わる\n</constraints>\n\n<output_format>\n件名、次にメール本文。それ以外は不要。\n</output_format>\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "各タグはその部分が担う役割をClaudeに正確に伝えます。コンテキストは背景として処理されます。タスクは指示として処理されます。制約は境界として処理されます。タグが構造を明確にするため、モデルは各セクションを適切に扱います。"
+      },
+      {
+        "type": "blockquote",
+        "text": "📝 補足： 実はClaudeのAPIドキュメントでも、複雑なプロンプトにはXMLタグを使うことが公式に推奨されています。特にシステムプロンプト（CLAUDE.mdやSKILL.mdなど）でこの構造を使うと、Claude Codeがより正確に動作します。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 2,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-one",
+        "text": "コンテキストを先に、質問を後に"
+      },
+      {
+        "type": "unstyled",
+        "text": "長い文書、データ、参考資料がある場合は、常に質問の上に配置してください。",
+        "inlineStyleRanges": [
+          {
+            "length": 1,
+            "offset": 25,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "markdown",
+        "text": "```\n<document>\n[500行の四半期財務データ]\n</document>\n\n上記の財務データをもとに、最も懸念される傾向3つを特定し、\nCFOが即座に注意を払うべき理由をそれぞれ説明してください。\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "モデルはまず文書を処理し、理解を構築してから、完全なコンテキストが読み込まれた状態で質問に遭遇します。質問を先に置くと、遡及的な再解釈が強制され、測定可能なほど悪い結果が生まれます。"
+      },
+      {
+        "type": "header-one",
+        "text": "Few-Shotの例示（少数例による学習）"
+      },
+      {
+        "type": "unstyled",
+        "text": "例を示すことはとても有用です。１つの例で10段落の説明よりもClaudeに多くの情報を教えることがあります。先ほどのXMLタグで以下のように書いてみましょう。"
+      },
+      {
+        "type": "markdown",
+        "text": "```\n<examples>\n<example>\n入力: 「今四半期の解約率が5.2%から4.1%に下がりました」\n出力: 「解約率が4.1%に改善（5.2%から）——相対的に21%の改善。\nこの水準が維持されれば、現在のベースで年間約130社の顧客を\n追加維持できる計算です。何が要因か調査する価値あり：\n3月のオンボーディング変更か、4月の価格改定かを確認してください」\n</example>\n<example>\n入力: 「今四半期にエンジニアを12名採用しました」\n出力: 「Q3に新エンジニア12名を追加。標準的な3ヶ月の立ち上がり期間を\n考慮すると、来年Q1から生産性への影響が出るはずです。\n現在のエンジニアヘッドカウント：47名。\nこれがプランニング会議で議論したチーム対機能比率を変えるか確認してください」\n</example>\n</examples>\n\nこれを分析してください:「マーケティング支出が34%増加した一方、リード件数は8%しか増えませんでした」\n```"
+      },
+      {
+        "type": "header-one",
+        "text": "Level 3: 高度なテクニック"
+      },
+      {
+        "type": "unstyled",
+        "text": "AIを使いこなしている人がよく使うテクニックを紹介します。"
+      },
+      {
+        "type": "header-one",
+        "text": "チェーン法"
+      },
+      {
+        "type": "unstyled",
+        "text": "1つのプロンプトでClaudeに複数ののことをやらせないでください。以下のようにチェーンにして分けて指示を出しましょう。"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "プロンプト1：「建設プロジェクト管理分野のトップ5競合を調査して」"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "プロンプト2：「この競合分析を使って、どの競合も占領していない最大のポジショニングギャップ3つを特定して」"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "プロンプト3：「これらのギャップをもとに、そのうち1つを明示的に主張する自社製品のポジショニングステートメントを書いて」"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "プロンプト4：「このポジショニングをもとに、ホームページのヘッドライン、サブヘッドライン、3つのサポートポイントを書いて」"
+      },
+      {
+        "type": "unstyled",
+        "text": "プロンプトを分けると、各プロンプトでは焦点が絞られています。また各段階でレビューして修正できます。１つの長いプロンプトで指示を出したらこれはできません。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HHUU06wakAAOA6q.jpg",
+        "width": 1536,
+        "height": 1024
+      },
+      {
+        "type": "header-one",
+        "text": "自己修正ループ"
+      },
+      {
+        "type": "unstyled",
+        "text": "Claudeからの最初の回答をドラフトにする手法です。Claudeに自己修正させましょう。"
+      },
+      {
+        "type": "markdown",
+        "text": "```\nあなたの回答を読み直して。正確性、具体性、実行可能性で1〜10の評価を付けて。\n8未満の次元については、何が弱いかを説明して修正して。\n改善後のバージョンのみ表示して。\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "修正されたバージョンは85〜90%よくなります。追加でかかる時間は11分ほどですが、見違えるほど良いアウトプットを生み出します。重要なタスクでは基本的に毎回使ってください。"
+      },
+      {
+        "type": "blockquote",
+        "text": "📝 補足： Claude Codeでは、コードを書かせた後に「このコードのセキュリティリスク、パフォーマンス問題、可読性の問題を1〜10で評価して改善案を提示して」と続けるだけで、より堅牢なコードに仕上がります。チェーン法と組み合わせると特に効果的です。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 2,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-one",
+        "text": "モチベーション付き制約"
+      },
+      {
+        "type": "unstyled",
+        "text": "制約の内容だけでなく、なぜその制約があるのかをClaudeに伝えてください。",
+        "inlineStyleRanges": [
+          {
+            "length": 2,
+            "offset": 11,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HHUJ0SgaQAAwdpc.jpg",
+        "width": 1750,
+        "height": 516
+      },
+      {
+        "type": "unstyled",
+        "text": "Claudeが制約の理由を理解すると、制約をより賢く適用し、単なるルールでは見逃しがちなエッジケースも処理できるようになります。"
+      },
+      {
+        "type": "header-one",
+        "text": "マルチパースペクティブ分析"
+      },
+      {
+        "type": "unstyled",
+        "text": "深い意思決定をする際には、複数の視点から分析させるのが良いでしょう。"
+      },
+      {
+        "type": "markdown",
+        "text": "```\nこの価格設定の決定を3つの視点から分析してください:\n\n1. 市場シェア最大化を目指すグロース志向のCEO\n2. 利益率とランウェイを見ているCFO\n3. 適正な価値に適正な価格を求める顧客\n\n各視点：それぞれの立場を3文で主張する。\n次に、3つすべてのバランスをとる推奨事項に統合する。\nどの視点を最も重視したか、そしてその理由を明示してください。\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "これによりClaudeは1つの要素を完璧にするのではなく、トレードオフを検討するよう強制されます。単一視点のプロンプトよりも劇的に優れた戦略的分析を生み出します。"
+      },
+      {
+        "type": "header-one",
+        "text": "メタプロンプト"
+      },
+      {
+        "type": "unstyled",
+        "text": "優れたプロンプトを書くのに苦労しているとき、Claude自身にプロンプトを書かせてしまいましょう。"
+      },
+      {
+        "type": "markdown",
+        "text": "```\n私が達成したいこと：[目標を説明]\nコンテキスト：[背景情報]\n良いアウトプットの姿：[説明または例]\n\nこの結果を得るための最も効果的なプロンプトを書いてください。\n不足しているコンテキストを追加し、曖昧さを排除し、\n最高品質のアウトプットのために構造化してください。\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "Claudeは何が良いアウトプットを生み出すかを理解しています。メタプロンプト技法はこの知識を使って、送信前にユーザーのリクエストを改善します。生成されたプロンプトは、あなたが自分で書いたものより基本的に良いことが多いです。"
+      },
+      {
+        "type": "header-one",
+        "text": "Level 4: システムレベルのマスタリー"
+      },
+      {
+        "type": "unstyled",
+        "text": "個別のプロンプトは戦術です。システムは戦略です。"
+      },
+      {
+        "type": "header-one",
+        "text": "コンテキストファイル"
+      },
+      {
+        "type": "unstyled",
+        "text": "作業フォルダに以下のMarkdownファイルを作成して毎回参照させる方法も効果的です。"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "writing-rules.md — あなたの文体、ターゲット、基準"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "analysis-framework.md — データの評価方法、重要なメトリクス"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "project-context.md — 現在のプロジェクト、ステータス、主要な決定"
+      },
+      {
+        "type": "unstyled",
+        "text": "各セッションの開始時に以下の指示を追加します。"
+      },
+      {
+        "type": "markdown",
+        "text": "```\n「始める前に[ファイル]を完全に読んでください。\nすべてのルールに従ってください。ルールを破ろうとしているときは、\n止まって教えてください。」\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "Claudeはそのファイルのルールを会話全体に適用します。自分の好みを再度説明する必要はありません。アウトプットの質に基づいてファイルを更新するにつれて、ファイルはよりスマートになっていきます。"
+      },
+      {
+        "type": "blockquote",
+        "text": "📝 補足： Claude Codeユーザーにとっては、CLAUDE.md内に書くのが一番便利です。Claude Codeはセッション開始時に自動的にこれらを読み込むため、毎回「私のコーディングスタイルは〜」と説明する必要がありません。CLAUDE.mdを充実させるほど、Claude Codeのアウトプット品質が上がります。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 2,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-one",
+        "text": "テンプレートライブラリ"
+      },
+      {
+        "type": "unstyled",
+        "text": "出力が良かったプロンプトはテンプレートとして保存しておきましょう。具体的な内容は取り除いて、変数に置き換え、構造を保持します。"
+      },
+      {
+        "type": "unstyled",
+        "text": "数ヶ月経つと、たくさんのタスクのテンプレートライブラリが出来上がります。コンテンツ作成、分析、コードレビュー、戦略、メール作成など、ゼロから始める必要がなくなります。"
+      },
+      {
+        "type": "header-one",
+        "text": "週次フィードバックループ"
+      },
+      {
+        "type": "unstyled",
+        "text": "毎週金曜日：その週のAIアウトプットを振り返ります。何が期待を外れたか？どのプロンプトの変更が修正できたか？コンテキストファイルに追加すべき新しいルールは何か？"
+      },
+      {
+        "type": "unstyled",
+        "text": "これを週次で3ヶ月続けた人のプロンプティング能力は、始めた頃と比べて別物になります。"
+      },
+      {
+        "type": "header-one",
+        "text": "まとめ"
+      },
+      {
+        "type": "unstyled",
+        "text": "プロンプトエンジニアリングは、魔法の一言を見つけることではありません。AIとのすべてのやり取りの具体性、構造、コンテキストを体系的に高めることです。"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "すべてのプロンプトに6要素を入れる"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "構造化にはXMLタグを使う"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "形容詞より例示を使う"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "単一の巨大なプロンプトよりチェーンを使う"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "重要なタスクには自己修正を使う"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "永続的な記憶のためにコンテキストファイルを使う"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "品質の複利のためにテンプレートを使う"
+      },
+      {
+        "type": "unstyled",
+        "text": "これらのテクニックを学び、毎日練習し、毎週洗練させてください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "アウトプットの質は、どんどん上がり続けるでしょう。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ほとんどの人は曖昧なプロンプトを入力し続け、平凡な結果を受け入れ続けます。プロンプティングをマスターした人は、まったく別のテクノロジーを使っているかのような結果を得るでしょう。"
+      },
+      {
+        "type": "unstyled",
+        "text": "経営者・士業・営業職等、全てのビジネスパーソンの方で、\n「Claude Codeを使いこなしたい」\n「AIを活用してもっと業務を効率化したい」\nといったお悩みをお持ちの方は、ぜひ一度ご相談ください。\n▼ スパルタClaude Code塾\nhttps://www.claude-code-lab.com"
+      },
+      {
+        "type": "unstyled",
+        "text": "#ClaudeCode #AI活用 #業務効率化 #ノーコード #AIツール #生成AI #Claude #仕事効率化 #プロンプトエンジニアリング #ChatGPT #LLM #プロンプト設計 #Claude活用"
+      }
+    ]
+  },
+  "status": "success",
+  "msg": "success",
+  "_handle": "claudecode_lab"
+}

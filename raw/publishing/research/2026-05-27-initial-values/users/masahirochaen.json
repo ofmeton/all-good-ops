@@ -1,0 +1,59 @@
+{
+  "status": "success",
+  "msg": "success",
+  "data": {
+    "id": "3120155797",
+    "name": "チャエン | デジライズ CEO《重要AIニュースを毎日最速で発信⚡️》",
+    "userName": "masahirochaen",
+    "location": "自己紹介｜問い合わせ｜メルマガ｜AIスクール｜アプリ👇",
+    "url": "https://t.co/BAL9S2Oc8d",
+    "description": "Xで一番分かりやすく最速でAI情報発信 | 法人向け AI開発・研修、500社・4万人支援 | GMO他複数上場企業顧問 | テレビ出演多数 | Gemini AI アドバイザー | 年間登壇150件以上・日本一｜Youtube4万人｜https://t.co/bU7rVyHIFU｜AI業界最速上場準備中｜ClaudeCode開発",
+    "entities": {
+      "description": {
+        "urls": [
+          {
+            "display_url": "tr.ee/youtube-ai",
+            "expanded_url": "http://tr.ee/youtube-ai",
+            "indices": [
+              118,
+              141
+            ],
+            "url": "https://t.co/bU7rVyHIFU"
+          }
+        ]
+      },
+      "url": {
+        "urls": [
+          {
+            "display_url": "linktr.ee/chaen",
+            "expanded_url": "https://linktr.ee/chaen",
+            "indices": [
+              0,
+              23
+            ],
+            "url": "https://t.co/BAL9S2Oc8d"
+          }
+        ]
+      }
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 194125,
+    "following": 471,
+    "favouritesCount": 11421,
+    "statusesCount": 18469,
+    "mediaCount": 8591,
+    "createdAt": "2015-03-31T12:40:24.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/3120155797/1767361689",
+    "profilePicture": "https://pbs.twimg.com/profile_images/1689665533929725953/fClFlzLd_normal.jpg",
+    "canDm": true,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": [
+      "2051192248503873589"
+    ]
+  }
+}

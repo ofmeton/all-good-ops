@@ -1,0 +1,674 @@
+{
+  "article": {
+    "id": "QXJ0aWNsZUVudGl0eToyMDU4NTIyMjgxMDkwMTkxMzYw",
+    "author": {
+      "type": "user",
+      "userName": "Codestudiopjbk",
+      "url": "https://x.com/Codestudiopjbk",
+      "twitterUrl": "https://twitter.com/Codestudiopjbk",
+      "id": "2048622181790470144",
+      "name": "Codex Studio",
+      "isVerified": false,
+      "isBlueVerified": true,
+      "verifiedType": null,
+      "profilePicture": "https://pbs.twimg.com/profile_images/2048623292484136960/-bDB5XH6_normal.jpg",
+      "coverPicture": "https://pbs.twimg.com/profile_banners/2048622181790470144/1777265728",
+      "description": "Codexガチ勢３人で運営｜実務レベルのCLI活用・自動化を毎日発信｜大学院生・ポスドク対象の開発プログラム参加｜賞金30万円獲得｜現在は上場企業とAIエージェントを共同開発中｜AI時代はコンテキスト/ナレッジ管理が９割｜組織全体への「 Codex × Obsidian 」の導入は下のHPからご相談ください👇",
+      "location": "サイトはこちら👉",
+      "followers": 8836,
+      "following": 10,
+      "status": "",
+      "canDm": true,
+      "canMediaTag": true,
+      "createdAt": "Mon Apr 27 04:37:22 +0000 2026",
+      "entities": {
+        "description": {},
+        "url": {
+          "urls": [
+            {
+              "display_url": "plai-ai.com",
+              "expanded_url": "http://plai-ai.com",
+              "indices": [
+                0,
+                23
+              ],
+              "url": "https://t.co/8pM3Az1DRu"
+            }
+          ]
+        }
+      },
+      "fastFollowersCount": 0,
+      "favouritesCount": 485,
+      "hasCustomTimelines": false,
+      "isTranslator": false,
+      "mediaCount": 157,
+      "statusesCount": 238,
+      "withheldInCountries": [],
+      "affiliatesHighlightedLabel": {},
+      "possiblySensitive": false,
+      "pinnedTweetIds": [
+        "2058552181763309605"
+      ],
+      "profile_bio": {},
+      "isAutomated": false,
+      "automatedBy": null
+    },
+    "replyCount": 0,
+    "likeCount": 84,
+    "quoteCount": 10,
+    "viewCount": "76241",
+    "createdAt": "Sun May 24 14:14:20 +0000 2026",
+    "title": "【保存推奨】今週のCodex公式リリース（0.131〜0.133）を\"使い方つき\"で全部まとめた",
+    "preview_text": "Codex、進化が早すぎて、正直ついていけてますか？😳毎週のように新しいバージョンが出て、コマンドが増えて、設定が変わって。気づいたら「あれ、先週まで出来てたあの操作、今どうやるんだっけ？」となる。X",
+    "cover_media_img_url": "https://pbs.twimg.com/media/HJFXKeLbgAAbfi_.jpg",
+    "contents": [
+      {
+        "type": "unstyled",
+        "text": "Codex、進化が早すぎて、正直ついていけてますか？😳毎週のように新しいバージョンが出て、コマンドが増えて、設定が変わって。気づいたら「あれ、先週まで出来てたあの操作、今どうやるんだっけ？」となる。X を開けば解説が大量に流れてくるけど、どれが本当に今週の変更で、どれが古い話なのかも分かりにくい。"
+      },
+      {
+        "type": "unstyled",
+        "text": "でも大丈夫です。この記事1本読めば、今週ぶんのCodexは全部追いつけます🔥"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HJFvhVqbwAAPw-F.jpg",
+        "width": 1536,
+        "height": 864
+      },
+      {
+        "type": "unstyled",
+        "text": "ところで皆さん、こんなこと、心当たりありませんか？"
+      },
+      {
+        "type": "unstyled",
+        "text": "・Codexのリリースが速すぎて、毎週は追いきれない"
+      },
+      {
+        "type": "unstyled",
+        "text": "・コマンドや設定がちょこちょこ変わっていて、何がどう変わったのか分からない"
+      },
+      {
+        "type": "unstyled",
+        "text": "・X の解説が多すぎて、どれが一次情報なのか判断できない"
+      },
+      {
+        "type": "unstyled",
+        "text": "・「正式版になった」と聞いても、自分の手元で何が変わるのか結局ピンとこない"
+      },
+      {
+        "type": "unstyled",
+        "text": "・アップデートのたびに公式Releasesを英語で読み込む時間が、正直ない"
+      },
+      {
+        "type": "unstyled",
+        "text": "今週（2026年5月18日〜5月24日）だけで、Codex には CLI のバージョン 0.131.0 → 0.132.0 → 0.133.0 の3本のリリースと、5月21日の「Codex Thursday」での製品側アップデート（26.519）がまとめて入りました😳 数えると、ユーザーの手元で触り方が変わる目玉だけで10個以上あります。まずは「今週どの日に何が入ったか」を、1枚の年表にまとめておきます👇"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HJFvygSa4AAp256.jpg",
+        "width": 1536,
+        "height": 864
+      },
+      {
+        "type": "unstyled",
+        "text": "{{image: images/codex-weekly/02.png}}"
+      },
+      {
+        "type": "unstyled",
+        "text": "この記事は、X でバズってる解説の寄せ集めではありません。OpenAI 公式の Releases・docs changelog・公式アカウント（@OpenAIDevs / @OpenAI / @sama）の一次情報だけを読み込んで、今週ぶんを「触り方が変わる順」に並べ直したものです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "出典：公式Releases（github.com/openai/codex/releases）／公式changelog（developers.openai.com/codex/changelog）"
+      },
+      {
+        "type": "unstyled",
+        "text": "しかも、ここに書いてあることは、ぜんぶ公式の一次情報から取ってきてます！！🔥 「たぶんこうなった」みたいな推測は一個も混ぜていません。"
+      },
+      {
+        "type": "unstyled",
+        "text": "そして、結論から先に。今週の要点をぎゅっと1枚にまとめると、こんな感じです👇"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここからは、この1枚に入っている目玉を1個ずつ、できるだけやさしく噛み砕いていきましょう👇"
+      },
+      {
+        "type": "unstyled",
+        "text": "■ goal mode（/goal）が、ついに正式版になりました"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HJFwzFjboAAGhrO.jpg",
+        "width": 1536,
+        "height": 864
+      },
+      {
+        "type": "unstyled",
+        "text": "今週いちばん大きいのは、これだと思います。"
+      },
+      {
+        "type": "unstyled",
+        "text": "これまで実験的機能（experimental）扱いだった goal mode が、5月21日のアップデートで正式版になりました。公式changelogの表現をそのまま借りると「Goal mode is no longer an experimental feature and is available in the Codex app, IDE extension, and CLI」。つまり、Codexアプリ・IDE拡張・CLI のどこからでも、普通に使える正式機能になった、ということですね。"
+      },
+      {
+        "type": "unstyled",
+        "text": "CLI 側（0.133.0）の表現だと「Goals are now enabled by default, backed by dedicated storage, and track progress across active turns」。ざっくり言うと、3つ変わっています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "・デフォルトでオン（自分で実験フラグを立てなくていい）"
+      },
+      {
+        "type": "unstyled",
+        "text": "・ゴール専用のストレージが用意された（会話とは別にゴールが保存される）"
+      },
+      {
+        "type": "unstyled",
+        "text": "・進行中のターンをまたいで「今ゴールのどこまで進んだか」を追いかけてくれる"
+      },
+      {
+        "type": "unstyled",
+        "text": "で、これの何が嬉しいかというと。これまでの「1個の指示を投げて、終わったらまた次を投げる」というやり方から、「最終的にこうしたい」というゴールを先に渡しておけば、Codex がそこに向かって複数ターンを自走しながら進捗を持ち続けてくれる、という形に変わります。長めのタスクを任せるときの体験がここで一段変わります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "使い方はシンプルで、TUI で /goal と打つだけ。ゴールを編集したいときは /goal edit も用意されています（こちらは5/18の0.131.0で history 保存まわりと合わせて入っています）。「実験的だから今はいいや」と様子見していた方は、今週から普通に解禁されたと思ってください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "■ Appshots ──「今見てる画面」をCommand-Command一発でCodexに渡せる"
+      },
+      {
+        "type": "unstyled",
+        "text": "5月21日の Codex Thursday で出てきた新機能で、個人的に今週いちばん\"未来\"を感じたのがこれです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "公式の説明はこうです。「Press both Command keys to send the frontmost app window to Codex with a screenshot and available text」。要は、Mac で Command キーを2回（両方の Command を押す＝Command-Command）押すと、いちばん手前に出ているアプリのウィンドウを、スクリーンショット＋そこから読み取れるテキストごと、まるっと Codex のスレッドに添付できる、という機能です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "上のデモ動画を見てもらうのが早いです。ブレストのメモが入ったウィンドウをそのまま渡して「clean this up and make it a google doc（これを整理してGoogleドキュメントにして）」とお願いしている場面が出てきます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "で、これの何が便利かというと。今まではエラー画面や設計メモを渡すのに、自分でスクショを撮って、必要ならテキストをコピペして…と地味に手数がかかっていました。それが「今これ見てる」という状態のまま Command-Command 一発で渡せる。コンテキストを渡す手間がほぼゼロになる、というイメージです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "■ ロック中のMacを、スマホからCodexが操作できるようになりました"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HJFw_iLaUAAkm0g.jpg",
+        "width": 1200,
+        "height": 675
+      },
+      {
+        "type": "unstyled",
+        "text": "これも Codex Thursday（5/21）の目玉です。公式changelog の表現は「Codex can use desktop apps after your Mac locks, including remotely via Codex Mobile」。"
+      },
+      {
+        "type": "unstyled",
+        "text": "つまり、Mac がロックされて画面が真っ暗になっていても、スマホ（Codex Mobile）から、その Mac 上のアプリを Codex に安全に操作させられる、ということです。@OpenAIDevs の告知でも「Now your Mac doesn't have to be unlocked for Codex to use your computer. From your phone, Codex can securely use apps on your Mac, even when the screen is off and locked.」と言っています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "上の画像が、実際のロック中の画面です。「Codex is Using Your Mac（CodexがあなたのMacを使用中）」と表示されて、キーを押せばいつでも自分が操作に戻れる、という作りになっています。外出中にスマホから「あの作業やっといて」と投げられる、というのがイメージしやすいと思います。勝手に乗っ取られるわけではなく、自分で接続を有効にして、ロック中の操作を許可したときだけ動く、という前提です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "■ Codexが ChatGPT モバイルアプリから使える＋Macは留守番（Keep this Mac awake）"
+      },
+      {
+        "type": "unstyled",
+        "text": "上のロック中操作とセットなのが、スマホ側のCodex体験です。上の動画が、まさにそのモバイルアプリからCodexを動かしているデモです。5月18日に @OpenAIDevs が「Your Mac can hold down the fort while you work from your phone」と告知していて、Codexデスクトップアプリで「リモート接続」を有効にして「Keep this Mac awake（このMacをスリープさせない）」をオンにしておくと、Mac の電源が入って給電されている間、スマホ（ChatGPTモバイルアプリ）から同じ Codex のスレッドを触れる、という流れです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "その接続の設定画面（リモート接続のオン・ロック中操作の許可・Chrome拡張）は、下の画像の通りです👇"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HJFxIohaoAEjeTK.jpg",
+        "width": 1200,
+        "height": 806
+      },
+      {
+        "type": "unstyled",
+        "text": "5月20日には「Your laptop can stay home. Work with Codex from the ChatGPT mobile app, answer questions on the go, and pick up the same thread later from your computer.」とも。外でスマホから進めて、家に帰ってPCで同じスレッドの続きをやる、という\"持ち運べるCodex\"の使い方が固まってきた1週間でした。"
+      },
+      {
+        "type": "unstyled",
+        "text": "■ codex doctor ──詰まったら、まずこれを叩く"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HJFxL69a0AAODmo.jpg",
+        "width": 1536,
+        "height": 864
+      },
+      {
+        "type": "unstyled",
+        "text": "ここからは CLI 側（バージョン 0.131.0、5月18日）の話です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "新しく codex doctor というコマンドが入りました。Releases の表現は「Added codex doctor for support-ready diagnostics across runtime, auth, terminal, network, config, and local state」。"
+      },
+      {
+        "type": "unstyled",
+        "text": "要は、Codex がうまく動かないときに「ランタイム・認証・ターミナル・ネットワーク・設定・ローカルの状態」をまとめて自己診断してくれるコマンドです。今までは「認証が切れてる？ ネットワーク？ 設定ファイルがおかしい？」と自分で当たりをつけて潰していたのが、まず codex doctor を打てば、サポートに出せるレベルの診断結果が一発で出る。トラブったとき最初に叩くやつ、として覚えておくと楽です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "■ @メンションが、files / directories / plugins / skills を1つのpickerで横断検索"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HJFxPU8bYAAjSj_.jpg",
+        "width": 1536,
+        "height": 864
+      },
+      {
+        "type": "unstyled",
+        "text": "同じく 0.131.0（5/18）。地味だけど毎日効くやつです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "公式の表現は「@ mentions now search files, directories, plugins, and skills in one picker」。これまで @ で呼べる対象がバラバラだったのが、ファイル・ディレクトリ・プラグイン・スキルを、1つのピッカーからまとめて検索して挿入できるようになりました。バックエンドは app-server のプラグインメタデータで支えられています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "で、これの何が嬉しいかというと。「あのスキル何て名前だっけ」「このファイルどこだっけ」と探す手が、@ を打ってから1か所で済む。コンテキストを差し込むときの往復が減ります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "■ Python SDK が openai-codex に改名＋first-classなログイン認証に対応"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HJFxXsqbUAAujPE.jpg",
+        "width": 1536,
+        "height": 864
+      },
+      {
+        "type": "unstyled",
+        "text": "自動化・スクリプトでCodexを使っている人向けの大きめの変更です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "まず 0.131.0（5/18）で、Python SDK のパッケージが openai-codex（import名は openai_codex）に移行しました。あわせて、ランタイム生成型のピン留め、同時ターンのルーティング、承認モードなどが入っています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "そして 0.132.0（5/20）で認証が一気に本格化しました。公式の表現は「The Python SDK now supports first-class authentication, including API key login, ChatGPT browser and device-code flows, account inspection, and logout APIs」。APIキーでのログイン、ChatGPTのブラウザ認証、デバイスコード認証、アカウント確認、ログアウトまで、SDKの中から一級市民として扱えるようになりました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "さらに使い勝手の改善も。Python のターンは、入力にただの文字列をそのまま渡せるようになり、ハンドル経由の実行は items・timing・usage まで入った TurnResult を返すようになりました。「テキストだけ投げて結果を受け取る」という一番多い使い方が、ぐっと書きやすくなっています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "■ codex remote-control が、デーモン／フォアグラウンド両対応に"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HJFxa_la4AEFNNF.jpg",
+        "width": 1536,
+        "height": 864
+      },
+      {
+        "type": "unstyled",
+        "text": "リモート実行まわりも今週で固まりました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "0.131.0（5/18）で、デーモンとして管理できる codex remote-control と、実行時の有効化／無効化API、ステータス読み取り、レジストリ連携のリモート環境が入りました。さらに 0.133.0（5/21）で、codex remote-control が「runs like a foreground command, waits for readiness, reports machine status, and keeps explicit daemon-style start/stop commands」に。"
+      },
+      {
+        "type": "unstyled",
+        "text": "つまり、フォアグラウンドのコマンドのように起動して、準備完了まで待って、マシンの状態を返す。一方で start / stop の明示的なデーモン操作も残っている。手元で軽く確認したいときはフォアグラウンドで、常駐させたいときは start / stop で、と使い分けられるようになった、というイメージです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "■ Permission profiles が大幅強化（list API・継承・requirements.toml・runtime refresh）"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HJFxfQaaEAA2Wd9.jpg",
+        "width": 1536,
+        "height": 864
+      },
+      {
+        "type": "unstyled",
+        "text": "権限まわりが 0.133.0（5/21）でまとめて強くなりました。チームでCodexを使う人ほど効く変更です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Releases を噛み砕くと、permission profiles に以下が入りました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "・一覧を取れる list API"
+      },
+      {
+        "type": "unstyled",
+        "text": "・プロファイルの継承（inheritance）"
+      },
+      {
+        "type": "unstyled",
+        "text": "・requirements.toml での「managed（管理された）」プロファイル指定"
+      },
+      {
+        "type": "unstyled",
+        "text": "・実行中にプロファイルを再読み込みする runtime refresh"
+      },
+      {
+        "type": "unstyled",
+        "text": "・Windows サンドボックスとの連携強化"
+      },
+      {
+        "type": "unstyled",
+        "text": "加えて、ファイルシステム権限のエントリでは deny が正式な（canonical）表記になりました。「どこまで触っていいか」を、チームのルールとして requirements.toml に書いて配り、継承させ、動いている最中でも更新できる。権限設計が\"ちゃんと運用できる\"形に寄せられた1週間でした。"
+      },
+      {
+        "type": "unstyled",
+        "text": "■ Plugin marketplace と plugin sharing ──バンドルで配って使う時代に"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HJFxixXagAApFmv.jpg",
+        "width": 1536,
+        "height": 864
+      },
+      {
+        "type": "unstyled",
+        "text": "プラグイン周りも今週かなり動きました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "0.131.0（5/18）で、マーケットプレイス向けのCLIコマンド、バージョンを意識した共有（version-aware sharing）、共有のチェックアウト、共有ワークスペースのバケット整理、デフォルトで有効なプラグインhookが入りました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "そして 0.133.0（5/21）で、プラグインの発見（discovery）が「marketplace-aware list output, installed versions, visible marketplace roots, and remote collection support」に。インストール済みバージョンが見える、マーケットプレイスのルートが見える、リモートのコレクションも扱える、という具合に\"探して入れる\"体験が整いました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "製品側（26.519）の表現だと「Teams can distribute reusable plugin bundles that include skills, app integrations, MCP servers, and lifecycle hooks」。スキル・アプリ統合・MCPサーバー・ライフサイクルhookをまとめた再利用可能なバンドルを、チームで配れる。社内の\"Codexの使い方\"をパッケージにして配布できる、というのが大きいです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "■ Extensions が、より多くのライフサイクルイベントを観測できるように"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HJFxno0bcAAKJmW.jpg",
+        "width": 1536,
+        "height": 864
+      },
+      {
+        "type": "unstyled",
+        "text": "0.133.0（5/21）で、拡張（extensions）が観測できるイベントが増えました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Releases の表現は「Extensions can observe more lifecycle events, including subagent start/stop, tool execution, turn metadata, and async approval/turn processing」。サブエージェントの開始・終了、ツールの実行、ターンのメタデータ、非同期の承認・ターン処理まで拾えるようになっています。具体的には SubagentStart / SubagentStop といったhookが追加されました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "で、これの何が嬉しいかというと。「サブエージェントが何をいつ始めて終えたか」「どのツールが走ったか」をフックで捕まえて、ログを取ったり、独自の処理を差し込んだりできる。Codexの動きに合わせて自前の仕組みを噛ませたい人には、観測できる範囲が広がったのは大きいです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "■ codex exec resume が --output-schema を受け付けるように"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HJFxqo-akAAqTI8.jpg",
+        "width": 1536,
+        "height": 864
+      },
+      {
+        "type": "unstyled",
+        "text": "自動化勢にうれしい小粒だけど効く変更。0.132.0（5/20）です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "公式の表現は「codex exec resume now accepts --output-schema, so resumed automations can keep session context while still enforcing structured JSON output」。要は、セッションを再開（resume）したあとでも、--output-schema を渡して構造化されたJSON出力を強制できる、ということです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "これまでは再開すると「文脈は引き継げるけど、出力の形は緩くなる」みたいな悩みがありました。これで、再開後の自動処理でも「この形のJSONで返して」を担保しながら、セッションの文脈も保てる。パイプラインに組み込むときの安心感が上がります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "■ TUI が見やすく・速くなりました（テーブル表示・トークン表示・起動高速化）"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HJFxtU9agAAYw1S.jpg",
+        "width": 1536,
+        "height": 864
+      },
+      {
+        "type": "unstyled",
+        "text": "ターミナルUI（TUI）も今週でだいぶ快適になりました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "0.131.0（5/18）では、サービスティアのコマンド、ブレンドされたトークン使用量の表示、権限／承認モードの表示、有効なワークスペースのルート表示、そして「responsive Markdown tables（折り返しに対応したMarkdownテーブル）」がステータスラインまわりに入りました。長いテーブルが崩れずに見られるのは地味に効きます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "0.132.0（5/20）では、起動が速くなりました。「Terminal capability probes are now batched」で、ターミナルの能力チェックを並べて一気にやるようにしたので、最初のインタラクティブな画面が出るまでが短くなっています。あわせて、ローカル画像を元の解像度のまま保てる image fidelity の改善も入りました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "■ diff markers 設定 ──色バー派？ +/- マーカー派？選べるようになりました"
+      },
+      {
+        "type": "unstyled",
+        "text": "5月22日に @OpenAIDevs が「Shipped papercut: new diff markers setting in Appearance」と告知した、地味だけど好みが分かれるやつ。"
+      },
+      {
+        "type": "unstyled",
+        "text": "差分（diff）の見せ方を、これまでの色分けバーだけでなく、昔ながらの + / − マーカーでも表示できるようになりました。「Prefer classic + / - markers when reviewing diffs? You can now use those instead of only color-coded diff bars.」とのこと。デフォルトは今まで通り（色バー）なので、+ / − が好きな人だけ Appearance（外観）設定で切り替える、という形です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "設定画面の場所は、上の動画の通りです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "■ /btw エイリアスと、ブラウザ／Chrome拡張まわりの細かい改善"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HJFx2SZaMAAmV1Z.jpg",
+        "width": 1536,
+        "height": 864
+      },
+      {
+        "type": "unstyled",
+        "text": "小ネタですが拾っておきます。0.133.0（5/21）で、side スラッシュコマンドに btw というエイリアスが追加されました（#23592）。本筋の会話を止めずに「ちなみに」と横に話を差し込む side を、/btw でサッと呼べる、というノリです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "製品側（26.519）では、ブラウザの画像アセット抽出・構造化データ抽出が強化され、Chrome拡張は「既存のタブを引き継ぐときにタブグループを作らない」挙動に変わりました。Codexにブラウザ操作をやらせている人は、ここの挙動が静かに整っています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "■ 黙って入った、重要な修正たち（権限・サンドボックス・状態保存）"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HJFx5IvbQAAlpLJ.jpg",
+        "width": 1536,
+        "height": 864
+      },
+      {
+        "type": "unstyled",
+        "text": "最後に、派手さはないけど「気づかないうちに直っててありがたい」系を、まとめて1セクションにしておきます。今週（0.131.0〜0.133.0）の Bug Fixes / Chores から、効くものを抜き出すとこのあたりです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "・Windowsサンドボックスの硬化（deny-readルール、書き込みルートのスコープ、ファイアウォールポリシー、PowerShellのエッジケース）"
+      },
+      {
+        "type": "unstyled",
+        "text": "・権限昇格中も「管理された読み取り制限」を保つように"
+      },
+      {
+        "type": "unstyled",
+        "text": "・ローカル状態の安全化（SQLiteデータを壊さない、状態を開けないときは fail closed＝安全側に倒す、リカバリ経路の追加）"
+      },
+      {
+        "type": "unstyled",
+        "text": "・realtime v1 websocket の互換性修正"
+      },
+      {
+        "type": "unstyled",
+        "text": "・TUIが起動時に間違った作業ディレクトリを選んでいた問題の修正"
+      },
+      {
+        "type": "unstyled",
+        "text": "・plan-mode の自由記述で Shift+Enter が誤送信されていた問題の修正"
+      },
+      {
+        "type": "unstyled",
+        "text": "セキュリティと権限まわりは、こういう「黙って直る」改善の積み重ねが効いてきます。バージョンを上げておくだけで地味に安全になっている、と思ってください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "■ 今週のアップデート出典（一次情報）"
+      },
+      {
+        "type": "unstyled",
+        "text": "・公式Releases：https://github.com/openai/codex/releases"
+      },
+      {
+        "type": "unstyled",
+        "text": "・公式changelog（日付つき）：https://developers.openai.com/codex/changelog"
+      },
+      {
+        "type": "unstyled",
+        "text": "・対象バージョン：rust-v0.131.0（5/18）〜 rust-v0.133.0（5/21）、製品側は Codex 26.519（5/21）"
+      },
+      {
+        "type": "unstyled",
+        "text": "・公式アカウント告知：@OpenAIDevs / @OpenAI / @sama（2026年5月18日〜24日）"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここまでで、今週（2026年5月第3週）のCodexは全部キャッチアップ完了です👀 来週もまた、公式の一次情報だけで総まとめします。"
+      },
+      {
+        "type": "unstyled",
+        "text": "この記事が少しでも参考になったら嬉しいです。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HJFx_YAaUAAbpVM.jpg",
+        "width": 1192,
+        "height": 920
+      },
+      {
+        "type": "unstyled",
+        "text": "この記事を出している Codex Studio（@Codestudiopjbk）は、CodexやGPT-5.5、CLI活用・自動化・AIエージェント開発などを、実務で使える形に落とし込んで発信しているアカウントです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ただ最新情報を紹介するだけではなく、実際に手を動かしながら、"
+      },
+      {
+        "type": "unstyled",
+        "text": "「どうすれば業務に使えるのか」"
+      },
+      {
+        "type": "unstyled",
+        "text": "「どうすれば開発や自動化に組み込めるのか」"
+      },
+      {
+        "type": "unstyled",
+        "text": "「どうすればAIを一時的な流行で終わらせず、組織の仕組みにできるのか」"
+      },
+      {
+        "type": "unstyled",
+        "text": "という視点で発信しています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "また、私たちは株式会社PLaiとして、CodexやClaude Code、Obsidianを活用したAIエージェント導入・ナレッジ管理設計・業務自動化の支援も行っています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "AI時代に本当に重要なのは、便利なツールを知っていること自体ではなく、社内の知識や業務フロー、過去の意思決定、顧客理解などを「AIが使える形」に整理していくことだと考えています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "そのためPLaiでは、企業やチームに対して"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HJFyHAzaIAEn-CO.jpg",
+        "width": 1365,
+        "height": 768
+      },
+      {
+        "type": "unstyled",
+        "text": "・Codex / Claude Code を活用した業務自動化"
+      },
+      {
+        "type": "unstyled",
+        "text": "・Obsidianを使った社内ナレッジ管理"
+      },
+      {
+        "type": "unstyled",
+        "text": "・AIエージェントの設計・導入・運用"
+      },
+      {
+        "type": "unstyled",
+        "text": "・AIを前提にした開発／マーケティング支援"
+      },
+      {
+        "type": "unstyled",
+        "text": "・組織全体でAIを使える状態をつくるための仕組み化"
+      },
+      {
+        "type": "unstyled",
+        "text": "などを支援しています。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HJFyL2-bMAE4slb.jpg",
+        "width": 1190,
+        "height": 978
+      },
+      {
+        "type": "unstyled",
+        "text": "姉妹アカウントとして Claude Code Studio（@ClaudeCode_love）も運用しています。Claude CodeやObsidian、ナレッジ管理まわりに興味がある方はそちらもぜひ。Codex派の方はCodex Studio、Claude Code派の方はClaude Code Studioを追っていただくと、AI開発・自動化・ナレッジ管理まわりの最新情報をキャッチアップしやすくなると思います。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HJFyPcsbAAAjZt8.jpg",
+        "width": 2362,
+        "height": 1424
+      },
+      {
+        "type": "unstyled",
+        "text": "もし、組織全体への「Codex × Obsidian」「Claude Code × Obsidian」の導入や、AIエージェント開発・業務自動化・ナレッジ管理の仕組み化についてご相談があれば、下記からお気軽にお問い合わせください👇"
+      },
+      {
+        "type": "unstyled",
+        "text": "plai-ai.com"
+      }
+    ]
+  },
+  "status": "success",
+  "msg": "success",
+  "_handle": "Codestudiopjbk"
+}

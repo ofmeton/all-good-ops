@@ -1,0 +1,59 @@
+{
+  "status": "success",
+  "msg": "success",
+  "data": {
+    "id": "1634801752695533568",
+    "name": "すぐる | ChatGPTガチ勢 𝕏",
+    "userName": "SuguruKun_ai",
+    "location": "法人AI研修 / 受託開発 / 登壇の問い合わせはこちら：",
+    "url": "https://t.co/eGUB3qCGIs",
+    "description": "著書「AIエージェント仕事術」 | AI研修・開発会社「https://t.co/5yexLMSKQq」CEO | AI連載 NewsPicks1位獲得 | 早稲田AI研究会創設 | 岩手出身 | AI顧問5社 | 仕事依頼はDMへ 📩",
+    "entities": {
+      "description": {
+        "urls": [
+          {
+            "display_url": "uravation.com",
+            "expanded_url": "https://uravation.com",
+            "indices": [
+              28,
+              51
+            ],
+            "url": "https://t.co/5yexLMSKQq"
+          }
+        ]
+      },
+      "url": {
+        "urls": [
+          {
+            "display_url": "forms.gle/j9SHVAgD1eJ8Co…",
+            "expanded_url": "https://forms.gle/j9SHVAgD1eJ8Co289",
+            "indices": [
+              0,
+              23
+            ],
+            "url": "https://t.co/eGUB3qCGIs"
+          }
+        ]
+      }
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 105230,
+    "following": 1196,
+    "favouritesCount": 39784,
+    "statusesCount": 8758,
+    "mediaCount": 4111,
+    "createdAt": "2023-03-12T06:21:33.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/1634801752695533568/1710393331",
+    "profilePicture": "https://pbs.twimg.com/profile_images/1765706549824221184/N0yR_7Sj_normal.jpg",
+    "canDm": true,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": [
+      "2053839441698185221"
+    ]
+  }
+}

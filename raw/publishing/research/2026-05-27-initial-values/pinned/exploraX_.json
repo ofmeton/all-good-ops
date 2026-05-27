@@ -1,0 +1,132 @@
+{
+  "handle": "exploraX_",
+  "tweet_id": "2039269234253934811",
+  "body": {
+    "tweets": [
+      {
+        "type": "tweet",
+        "id": "2039269234253934811",
+        "url": "https://x.com/exploraX_/status/2039269234253934811",
+        "twitterUrl": "https://twitter.com/exploraX_/status/2039269234253934811",
+        "text": "https://t.co/gxTNr2YjLT",
+        "source": "",
+        "retweetCount": 706,
+        "replyCount": 82,
+        "likeCount": 5319,
+        "quoteCount": 67,
+        "viewCount": 6514032,
+        "createdAt": "Wed Apr 01 09:10:47 +0000 2026",
+        "lang": "zxx",
+        "bookmarkCount": 23251,
+        "isReply": false,
+        "inReplyToId": "",
+        "conversationId": "2039269234253934811",
+        "displayTextRange": [
+          0,
+          23
+        ],
+        "inReplyToUserId": "",
+        "inReplyToUsername": "",
+        "isPinned": false,
+        "author": {
+          "type": "user",
+          "userName": "exploraX_",
+          "url": "https://x.com/exploraX_",
+          "twitterUrl": "https://twitter.com/exploraX_",
+          "id": "1168877404598808577",
+          "name": "m0h",
+          "isVerified": false,
+          "isBlueVerified": true,
+          "verifiedType": null,
+          "profilePicture": "https://pbs.twimg.com/profile_images/1946598926255095810/fTXuaBJp_normal.jpg",
+          "coverPicture": "https://pbs.twimg.com/profile_banners/1168877404598808577/1778581923",
+          "description": "sharing daily contents that helps you make the most from AI •",
+          "location": "multiverse",
+          "followers": 25067,
+          "following": 689,
+          "status": "",
+          "canDm": true,
+          "canMediaTag": false,
+          "createdAt": "Tue Sep 03 13:24:53 +0000 2019",
+          "entities": {
+            "description": {},
+            "url": {
+              "urls": [
+                {
+                  "display_url": "substack.com/@explorax",
+                  "expanded_url": "https://substack.com/@explorax",
+                  "indices": [
+                    0,
+                    23
+                  ],
+                  "url": "https://t.co/W8H7BI49FM"
+                }
+              ]
+            }
+          },
+          "fastFollowersCount": 0,
+          "favouritesCount": 0,
+          "hasCustomTimelines": true,
+          "isTranslator": false,
+          "mediaCount": 3874,
+          "statusesCount": 57454,
+          "withheldInCountries": [],
+          "affiliatesHighlightedLabel": {},
+          "possiblySensitive": false,
+          "pinnedTweetIds": [
+            "2039269234253934811"
+          ],
+          "profile_bio": {
+            "description": "sharing daily contents that helps you make the most from AI •",
+            "entities": {
+              "description": {},
+              "url": {
+                "urls": [
+                  {
+                    "display_url": "substack.com/@explorax",
+                    "expanded_url": "https://substack.com/@explorax",
+                    "indices": [
+                      0,
+                      23
+                    ],
+                    "url": "https://t.co/W8H7BI49FM"
+                  }
+                ]
+              }
+            }
+          },
+          "isAutomated": false,
+          "automatedBy": null
+        },
+        "extendedEntities": {},
+        "card": {
+          "rest_id": "https://t.co/gxTNr2YjLT"
+        },
+        "place": {},
+        "entities": {
+          "urls": [
+            {
+              "display_url": "x.com/i/article/2039…",
+              "expanded_url": "http://x.com/i/article/2039237787656871936",
+              "indices": [
+                0,
+                23
+              ],
+              "url": "https://t.co/gxTNr2YjLT"
+            }
+          ]
+        },
+        "isRetweet": false,
+        "isQuote": false,
+        "isConversationControlled": false,
+        "quoted_tweet": null,
+        "retweeted_tweet": null,
+        "isLimitedReply": false,
+        "communityInfo": null
+      }
+    ],
+    "status": "success",
+    "msg": "success",
+    "code": 0
+  }
+}

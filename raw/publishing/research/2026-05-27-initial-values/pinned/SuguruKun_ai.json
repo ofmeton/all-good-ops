@@ -1,0 +1,373 @@
+{
+  "handle": "SuguruKun_ai",
+  "tweet_id": "2053839441698185221",
+  "body": {
+    "tweets": [
+      {
+        "type": "tweet",
+        "id": "2053839441698185221",
+        "url": "https://x.com/SuguruKun_ai/status/2053839441698185221",
+        "twitterUrl": "https://twitter.com/SuguruKun_ai/status/2053839441698185221",
+        "text": "お待たせしました！待望の「はじめてのAIツール使い分け講座」\n「Claude Code ビジネス活用講座 実践編」開催します！！\nㅤ\n→ https://t.co/Hf2wxXBRmA\nㅤ\n4月の初回開催では2,000人超の方に参加いただき、満足度も「初級 90% / 発展 93%」と本当にありがたい反響でした\nㅤ\n「NotebooklmやChatGPTなど、Claude Code以外のAIツールの使い分け知りたい」「より実務に踏み込んだ回をやってほしい」という声がめちゃくちゃ多かったので、今回二つの講座をリリースします！！\nㅤ\n━━━━━━━━━━━━━\nㅤ\n📘 基礎編 / 5月23日（土）14:00-17:00\nㅤ\n「はじめてのAI活用講座」\nㅤ\nChatGPT・Gemini・Claude・NotebookLM・Manus を3時間で全部触る入門編\n「AI気になってるけどどこから始めれば、、」って方向けに作りました\nㅤ\n最後に「自分の業務で、どのツールをいつ使うか」のマッピングワークまでやります\nㅤ\n━━━━━━━━━━━━━\nㅤ\n🔥 実践編 / 5月24日（日）14:00-17:00\nㅤ\n「Claude Code 活用講座｜活用事例50選と業務実装テクニック」\nㅤ\n弊社オリジナルを多分に含んだ実際の50事例を駆け足でご紹介\n+ ハンズオン5本 + 応用テクニック5本（Skill連鎖 / Cronによる定期実行エージェント / 複数エージェントやLLMを組み合わせる / トークン最適化 / CLAUDE.md本格設計）\nㅤ\nClaude Codeを「知ってる」から「使いこなしてる」にする3時間です\nㅤ\n━━━━━━━━━━━━━\nㅤ\n特典もけっこう気合い入れてます\nㅤ\n基礎編 → 5ツール使い分け一覧表 + プロンプトテンプレ集\n実践編 → 50選チートシート + 実務応用Skillsテンプレ集\nㅤ\n両方とも投影資料 + アーカイブ動画も付属\nㅤ\n🎁 さらに今回、なんと...Manus社様のご厚意で、両講座申込者に「クレジット + Proプラン」のおまけ特典が付きます！！\nㅤ\n━━━━━━━━━━━━━\nㅤ\nZoom /\n基礎編：5月23日（土）14:00-17:00\n実践編：5月24日（日）14:00-17:00\nㅤ\n🔥 早割 ¥3,000（5月16日(金)23:59まで！あと 4日）\n正規 ¥4,000\nㅤ\n👉 前回同様、AI講座のなかでも破格コスパかつそれに加えてクレジット特典あるのでなかなかすごいと思います...\nㅤ\nもちろんアーカイブ撮るので、\n当日参加できなくてもOKです！\nㅤ\n事前にClaude Codeのセットアップだけ済ませてきてください！\nㅤ\n申し込み：\nhttps://t.co/Hf2wxXBRmA\nㅤ\n※ それぞれ、内容はClaude Codeのアプデなどに合わせて変わる可能性あるため、その点だけご了承ください",
+        "source": "",
+        "retweetCount": 4,
+        "replyCount": 4,
+        "likeCount": 61,
+        "quoteCount": 2,
+        "viewCount": 26234,
+        "createdAt": "Mon May 11 14:07:36 +0000 2026",
+        "lang": "ja",
+        "bookmarkCount": 0,
+        "isReply": false,
+        "inReplyToId": "",
+        "conversationId": "2053839441698185221",
+        "displayTextRange": [
+          0,
+          156
+        ],
+        "inReplyToUserId": "",
+        "inReplyToUsername": "",
+        "isPinned": false,
+        "author": {
+          "type": "user",
+          "userName": "SuguruKun_ai",
+          "url": "https://x.com/SuguruKun_ai",
+          "twitterUrl": "https://twitter.com/SuguruKun_ai",
+          "id": "1634801752695533568",
+          "name": "すぐる | ChatGPTガチ勢 𝕏",
+          "isVerified": false,
+          "isBlueVerified": true,
+          "verifiedType": null,
+          "profilePicture": "https://pbs.twimg.com/profile_images/1765706549824221184/N0yR_7Sj_normal.jpg",
+          "coverPicture": "https://pbs.twimg.com/profile_banners/1634801752695533568/1710393331",
+          "description": "著書「AIエージェント仕事術」 | AI研修・開発会社「https://t.co/5yexLMSKQq」CEO | AI連載 NewsPicks1位獲得 | 早稲田AI研究会創設 | 岩手出身 | AI顧問5社 | 仕事依頼はDMへ 📩",
+          "location": "法人AI研修 / 受託開発 / 登壇の問い合わせはこちら：",
+          "followers": 105230,
+          "following": 1196,
+          "status": "",
+          "canDm": true,
+          "canMediaTag": false,
+          "createdAt": "Sun Mar 12 06:21:33 +0000 2023",
+          "entities": {
+            "description": {
+              "urls": [
+                {
+                  "display_url": "uravation.com",
+                  "expanded_url": "https://uravation.com",
+                  "indices": [
+                    28,
+                    51
+                  ],
+                  "url": "https://t.co/5yexLMSKQq"
+                }
+              ]
+            },
+            "url": {
+              "urls": [
+                {
+                  "display_url": "forms.gle/j9SHVAgD1eJ8Co…",
+                  "expanded_url": "https://forms.gle/j9SHVAgD1eJ8Co289",
+                  "indices": [
+                    0,
+                    23
+                  ],
+                  "url": "https://t.co/eGUB3qCGIs"
+                }
+              ]
+            }
+          },
+          "fastFollowersCount": 0,
+          "favouritesCount": 0,
+          "hasCustomTimelines": true,
+          "isTranslator": false,
+          "mediaCount": 4111,
+          "statusesCount": 8758,
+          "withheldInCountries": [],
+          "affiliatesHighlightedLabel": {},
+          "possiblySensitive": false,
+          "pinnedTweetIds": [
+            "2053839441698185221"
+          ],
+          "profile_bio": {
+            "description": "著書「AIエージェント仕事術」 | AI研修・開発会社「https://t.co/5yexLMSKQq」CEO | AI連載 NewsPicks1位獲得 | 早稲田AI研究会創設 | 岩手出身 | AI顧問5社 | 仕事依頼はDMへ 📩",
+            "entities": {
+              "description": {
+                "urls": [
+                  {
+                    "display_url": "uravation.com",
+                    "expanded_url": "https://uravation.com",
+                    "indices": [
+                      28,
+                      51
+                    ],
+                    "url": "https://t.co/5yexLMSKQq"
+                  }
+                ]
+              },
+              "url": {
+                "urls": [
+                  {
+                    "display_url": "forms.gle/j9SHVAgD1eJ8Co…",
+                    "expanded_url": "https://forms.gle/j9SHVAgD1eJ8Co289",
+                    "indices": [
+                      0,
+                      23
+                    ],
+                    "url": "https://t.co/eGUB3qCGIs"
+                  }
+                ]
+              }
+            }
+          },
+          "isAutomated": false,
+          "automatedBy": null
+        },
+        "extendedEntities": {
+          "media": [
+            {
+              "display_url": "pic.twitter.com/oSARfKvRMo",
+              "expanded_url": "https://twitter.com/SuguruKun_ai/status/2053839441698185221/photo/1",
+              "ext_master_playlist_only": [],
+              "ext_media_availability": {
+                "status": "Available"
+              },
+              "ext_playlists": [],
+              "features": {
+                "large": {
+                  "faces": [
+                    {
+                      "h": 44,
+                      "w": 44,
+                      "x": 472,
+                      "y": 792
+                    },
+                    {
+                      "h": 61,
+                      "w": 61,
+                      "x": 803,
+                      "y": 520
+                    },
+                    {
+                      "h": 345,
+                      "w": 345,
+                      "x": 227,
+                      "y": 386
+                    }
+                  ]
+                },
+                "orig": {
+                  "faces": [
+                    {
+                      "h": 44,
+                      "w": 44,
+                      "x": 472,
+                      "y": 792
+                    },
+                    {
+                      "h": 61,
+                      "w": 61,
+                      "x": 803,
+                      "y": 520
+                    },
+                    {
+                      "h": 345,
+                      "w": 345,
+                      "x": 227,
+                      "y": 386
+                    }
+                  ]
+                }
+              },
+              "id_str": "2053839435381579776",
+              "indices": [
+                157,
+                180
+              ],
+              "media_key": "3_2053839435381579776",
+              "media_results": {
+                "id": "QXBpTWVkaWFSZXN1bHRzOgwAAQoAARyAtBWzm6AACgACHIC0FywbYAUAAA==",
+                "result": {
+                  "__typename": "ApiMedia",
+                  "id": "QXBpTWVkaWE6DAABCgABHIC0FbOboAAKAAIcgLQXLBtgBQAA",
+                  "media_key": "3_2053839435381579776"
+                }
+              },
+              "media_url_https": "https://pbs.twimg.com/media/HIC0FbOboAA8Cow.jpg",
+              "original_info": {
+                "focus_rects": [
+                  {
+                    "h": 702,
+                    "w": 1254,
+                    "x": 0,
+                    "y": 552
+                  },
+                  {
+                    "h": 1254,
+                    "w": 1254,
+                    "x": 0,
+                    "y": 0
+                  },
+                  {
+                    "h": 1254,
+                    "w": 1100,
+                    "x": 0,
+                    "y": 0
+                  },
+                  {
+                    "h": 1254,
+                    "w": 627,
+                    "x": 219,
+                    "y": 0
+                  },
+                  {
+                    "h": 1254,
+                    "w": 1254,
+                    "x": 0,
+                    "y": 0
+                  }
+                ],
+                "height": 1254,
+                "width": 1254
+              },
+              "sizes": {
+                "large": {
+                  "h": 1254,
+                  "w": 1254
+                }
+              },
+              "type": "photo",
+              "url": "https://t.co/oSARfKvRMo"
+            },
+            {
+              "display_url": "pic.twitter.com/oSARfKvRMo",
+              "expanded_url": "https://twitter.com/SuguruKun_ai/status/2053839441698185221/photo/1",
+              "ext_master_playlist_only": [],
+              "ext_media_availability": {
+                "status": "Available"
+              },
+              "ext_playlists": [],
+              "features": {
+                "large": {
+                  "faces": [
+                    {
+                      "h": 193,
+                      "w": 193,
+                      "x": 750,
+                      "y": 781
+                    }
+                  ]
+                },
+                "orig": {
+                  "faces": [
+                    {
+                      "h": 193,
+                      "w": 193,
+                      "x": 750,
+                      "y": 781
+                    }
+                  ]
+                }
+              },
+              "id_str": "2053839439160647680",
+              "indices": [
+                157,
+                180
+              ],
+              "media_key": "3_2053839439160647680",
+              "media_results": {
+                "id": "QXBpTWVkaWFSZXN1bHRzOgwAAQoAARyAtBaU26AACgACHIC0FywbYAUAAA==",
+                "result": {
+                  "__typename": "ApiMedia",
+                  "id": "QXBpTWVkaWE6DAABCgABHIC0FpTboAAKAAIcgLQXLBtgBQAA",
+                  "media_key": "3_2053839439160647680"
+                }
+              },
+              "media_url_https": "https://pbs.twimg.com/media/HIC0FpTboAAmg4Y.jpg",
+              "original_info": {
+                "focus_rects": [
+                  {
+                    "h": 573,
+                    "w": 1024,
+                    "x": 0,
+                    "y": 0
+                  },
+                  {
+                    "h": 1024,
+                    "w": 1024,
+                    "x": 0,
+                    "y": 0
+                  },
+                  {
+                    "h": 1024,
+                    "w": 898,
+                    "x": 126,
+                    "y": 0
+                  },
+                  {
+                    "h": 1024,
+                    "w": 512,
+                    "x": 512,
+                    "y": 0
+                  },
+                  {
+                    "h": 1024,
+                    "w": 1024,
+                    "x": 0,
+                    "y": 0
+                  }
+                ],
+                "height": 1024,
+                "width": 1024
+              },
+              "sizes": {
+                "large": {
+                  "h": 1024,
+                  "w": 1024
+                }
+              },
+              "type": "photo",
+              "url": "https://t.co/oSARfKvRMo"
+            }
+          ]
+        },
+        "card": null,
+        "place": {},
+        "entities": {
+          "hashtags": [],
+          "symbols": [],
+          "urls": [
+            {
+              "display_url": "luma.com/calendar/cal-f…",
+              "expanded_url": "https://luma.com/calendar/cal-fa2Z7teed3RVQOS",
+              "indices": [
+                69,
+                92
+              ],
+              "url": "https://t.co/Hf2wxXBRmA"
+            },
+            {
+              "display_url": "luma.com/calendar/cal-f…",
+              "expanded_url": "https://luma.com/calendar/cal-fa2Z7teed3RVQOS",
+              "indices": [
+                1160,
+                1183
+              ],
+              "url": "https://t.co/Hf2wxXBRmA"
+            }
+          ],
+          "user_mentions": []
+        },
+        "isRetweet": false,
+        "isQuote": false,
+        "isConversationControlled": false,
+        "quoted_tweet": null,
+        "retweeted_tweet": null,
+        "isLimitedReply": false,
+        "communityInfo": null
+      }
+    ],
+    "status": "success",
+    "msg": "success",
+    "code": 0
+  }
+}

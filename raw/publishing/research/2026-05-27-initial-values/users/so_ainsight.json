@@ -1,0 +1,47 @@
+{
+  "status": "success",
+  "msg": "success",
+  "data": {
+    "id": "1919729970685075456",
+    "name": "そう｜Claude Codeで始めるAI自動化",
+    "userName": "so_ainsight",
+    "location": "",
+    "url": "https://t.co/WimuO5SQFp",
+    "description": "Claude Code×n8n AIエージェント300以上構築｜ソロプレナーでAIエージェント組織企業を運営｜ 累計純利２億超 ｜ 非エンジニアでもできるClaude Codeで「異次元」業務効率化を発信｜ noteでマル㊙️コンテンツ配信中｜ フォローすればAIで「異次元」に時間を生み出す自動化手法が分かる",
+    "entities": {
+      "description": {},
+      "url": {
+        "urls": [
+          {
+            "display_url": "note.com/soh_ainsight",
+            "expanded_url": "https://note.com/soh_ainsight",
+            "indices": [
+              0,
+              23
+            ],
+            "url": "https://t.co/WimuO5SQFp"
+          }
+        ]
+      }
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 15624,
+    "following": 58,
+    "favouritesCount": 339,
+    "statusesCount": 1801,
+    "mediaCount": 379,
+    "createdAt": "2025-05-06T12:25:54.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/1919729970685075456/1757731433",
+    "profilePicture": "https://pbs.twimg.com/profile_images/1951625625455951872/pj57KIjJ_normal.jpg",
+    "canDm": true,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": [
+      "2035350663899525519"
+    ]
+  }
+}

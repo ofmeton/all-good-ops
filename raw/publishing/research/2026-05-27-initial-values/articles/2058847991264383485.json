@@ -1,0 +1,4133 @@
+{
+  "article": {
+    "id": "QXJ0aWNsZUVudGl0eToyMDU4ODIzODEwOTA0NzExMTY4",
+    "author": {
+      "type": "user",
+      "userName": "exploraX_",
+      "url": "https://x.com/exploraX_",
+      "twitterUrl": "https://twitter.com/exploraX_",
+      "id": "1168877404598808577",
+      "name": "m0h",
+      "isVerified": false,
+      "isBlueVerified": true,
+      "verifiedType": null,
+      "profilePicture": "https://pbs.twimg.com/profile_images/1946598926255095810/fTXuaBJp_normal.jpg",
+      "coverPicture": "https://pbs.twimg.com/profile_banners/1168877404598808577/1778581923",
+      "description": "sharing daily contents that helps you make the most from AI •",
+      "location": "multiverse",
+      "followers": 25067,
+      "following": 689,
+      "status": "",
+      "canDm": true,
+      "canMediaTag": false,
+      "createdAt": "Tue Sep 03 13:24:53 +0000 2019",
+      "entities": {
+        "description": {},
+        "url": {
+          "urls": [
+            {
+              "display_url": "substack.com/@explorax",
+              "expanded_url": "https://substack.com/@explorax",
+              "indices": [
+                0,
+                23
+              ],
+              "url": "https://t.co/W8H7BI49FM"
+            }
+          ]
+        }
+      },
+      "fastFollowersCount": 0,
+      "favouritesCount": 77068,
+      "hasCustomTimelines": true,
+      "isTranslator": false,
+      "mediaCount": 3874,
+      "statusesCount": 57454,
+      "withheldInCountries": [],
+      "affiliatesHighlightedLabel": {},
+      "possiblySensitive": false,
+      "pinnedTweetIds": [
+        "2039269234253934811"
+      ],
+      "profile_bio": {},
+      "isAutomated": false,
+      "automatedBy": null
+    },
+    "replyCount": 9,
+    "likeCount": 124,
+    "quoteCount": 2,
+    "viewCount": "33824",
+    "createdAt": "Mon May 25 09:49:47 +0000 2026",
+    "title": "100 free open-source github repos everyone needs to know about. ",
+    "preview_text": "in this article, I've curated 100 free open-source github repos worth knowing, the ones builders, creators, and curious people are actually using in 2026. \nhey, I'm m0h. researcher and content creator",
+    "cover_media_img_url": "https://pbs.twimg.com/media/HJJ_K6QWgAAvv0q.jpg",
+    "contents": [
+      {
+        "type": "unstyled",
+        "text": "in this article, I've curated 100 free open-source github repos worth knowing, the ones builders, creators, and curious people are actually using in 2026. ",
+        "inlineStyleRanges": [
+          {
+            "length": 155,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "blockquote",
+        "text": "hey, I'm m0h. researcher and content creator on X, 5+ years in. I write daily content like this breaking down AI, agents, and the tools shaping the new world, in a way that actually helps you use them. \n\nfollow + repost so others can see this, and bookmark it. you'll want to come back to it.",
+        "inlineStyleRanges": [
+          {
+            "length": 292,
+            "offset": 0,
+            "style": "Italic"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "the 100 repos sit inside 10 themed sections:",
+        "inlineStyleRanges": [
+          {
+            "length": 44,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "agentic & AI builder stack — claude code, codex, gemini cli skills, memory, context tools",
+        "inlineStyleRanges": [
+          {
+            "length": 26,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "self-hosted SaaS alternatives — kill the monthly bill, own your data",
+        "inlineStyleRanges": [
+          {
+            "length": 29,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "AI tools & LLM tooling — beyond agents, the LLM stack everyone uses",
+        "inlineStyleRanges": [
+          {
+            "length": 22,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "dev essentials — the boring tools you use weekly without thinking",
+        "inlineStyleRanges": [
+          {
+            "length": 14,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "learning, roadmaps & reference — the meta-resources that teach you the field",
+        "inlineStyleRanges": [
+          {
+            "length": 30,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "design & frontend — components, icons, frameworks",
+        "inlineStyleRanges": [
+          {
+            "length": 17,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "data, scraping & analytics — collection, processing, monitoring",
+        "inlineStyleRanges": [
+          {
+            "length": 26,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "security & privacy — secret scanners, hardening tools, password managers",
+        "inlineStyleRanges": [
+          {
+            "length": 18,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "web3, crypto & onchain — verified picks for builders and analysts",
+        "inlineStyleRanges": [
+          {
+            "length": 22,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "creator & content tools — what's left for indie makers and content folk",
+        "inlineStyleRanges": [
+          {
+            "length": 23,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "some you've heard of, some you haven't. all verified live. let's get into it!",
+        "inlineStyleRanges": [
+          {
+            "length": 18,
+            "offset": 59,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "header-two",
+        "text": "agentic coding & AI builder stack"
+      },
+      {
+        "type": "unstyled",
+        "text": "the section that's grown the most in the last 12 months. all of these turn claude code, codex, gemini cli, or cursor into something more — memory, skills, context, tools."
+      },
+      {
+        "type": "unstyled",
+        "text": "1. obra/superpowers",
+        "inlineStyleRanges": [
+          {
+            "length": 19,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "agentic skills framework + software development methodology. TDD, debugging, brainstorming, planning — battle-tested skills your AI agent actually uses. installs into claude code, codex cli, gemini cli, cursor, opencode, copilot cli."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: MIT",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: 200k+ stars means rapid changes. pin a version if you want stability for production work.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "2. mksglu/context-mode",
+        "inlineStyleRanges": [
+          {
+            "length": 22,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "context window optimization for AI coding agents. sandboxes tool output and ships up to 98% reduction in context usage. 15 platforms supported. if your claude code session keeps running out of tokens, this is the fix."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: MIT",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: primary platform is claude code. other platforms work but get less love.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "3. thedotmack/claude-mem",
+        "inlineStyleRanges": [
+          {
+            "length": 24,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "persistent memory across sessions. captures everything your agent does, compresses it with the claude agent SDK, injects relevant context back into future sessions. works with claude code, codex, gemini, opencode."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: apache 2.0",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: there's a $CMEM solana token \"officially embraced by the creator\" — purely cosmetic to the tool, but be aware. open core today, pro tier coming later.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "4. AgriciDaniel/claude-ads",
+        "inlineStyleRanges": [
+          {
+            "length": 26,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "comprehensive paid-ads audit and optimization skill. 250+ checks across google, meta, youtube, linkedin, tiktok, microsoft, apple ads. weighted scoring, parallel agents, AI creative generation. if you run paid ads, this audit saves hours."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: MIT",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: there's a private mirror gated behind a paid community (AI marketing hub pro). the public MIT version is fully usable. read which features are which.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "5. nowork-studio/toprank",
+        "inlineStyleRanges": [
+          {
+            "length": 24,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "open-source claude code skills for SEO, GEO, google ads, meta ads. covers technical audits, content writing, keyword research, ad management. turns your terminal into a marketing operator loop."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: MIT",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: the google ads + meta ads MCP servers route through notfair.co (the creators' service). free auth, no API key, but you're handing token storage to a third party.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "6. microsoft/playwright-mcp",
+        "inlineStyleRanges": [
+          {
+            "length": 27,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "microsoft's official MCP server for browser automation. gives any AI agent full browser control via accessibility trees (not screenshots — deterministic, token-efficient). plug into claude code, cursor, windsurf, codex."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: apache 2.0",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: runs locally. can't bypass cloudflare bot detection at scale and won't help with production scraping fleets. perfect for solo agents.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "7. danny-avila/LibreChat",
+        "inlineStyleRanges": [
+          {
+            "length": 24,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "open-source chatgpt-style frontend that lets you bring your own keys (openai, anthropic, google, openrouter, ollama, etc.) in one chat UI. plugins, agents, vision, code interpreter, voice. self-host on docker."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: MIT",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: you still pay for the API keys you bring. the UI is free; the inference isn't.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "8. ollama/ollama",
+        "inlineStyleRanges": [
+          {
+            "length": 16,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "run llama, gemma, qwen, mistral, deepseek and 100+ other models locally with one command. official model registry, REST API, gpu acceleration. the default way most people run local LLMs today."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: MIT",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: you need real hardware. a 7B model wants 8GB+ RAM minimum, a 70B model needs serious VRAM. quantized models help but cost quality.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "9. heygen-com/hyperframes",
+        "inlineStyleRanges": [
+          {
+            "length": 25,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "write HTML, render video. built specifically for AI agents. inspired by remotion but apache 2.0 instead of source-available. claude code, cursor, codex, gemini CLI can compose videos by writing HTML/CSS/JS."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: apache 2.0",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: uses headless chrome + ffmpeg under the hood. some compositions need git LFS. not a replacement for after effects.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "10. anthropics/skills",
+        "inlineStyleRanges": [
+          {
+            "length": 21,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "official claude code skills from anthropic. PDF/DOCX/XLSX/PPTX manipulation, art generation, the reference implementations. read this repo to learn how skill files actually work."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: MIT",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: demonstrates \"the official way\" — your custom skills might need more flexibility than these patterns allow.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "header-two",
+        "text": "self-hosted SaaS alternatives"
+      },
+      {
+        "type": "unstyled",
+        "text": "own your data, kill the monthly bill. these replace tools you're probably paying for right now."
+      },
+      {
+        "type": "unstyled",
+        "text": "11. n8n-io/n8n",
+        "inlineStyleRanges": [
+          {
+            "length": 14,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "workflow automation that competes with zapier and make. 400+ integrations, AI nodes, self-hosted or cloud. if you've built anything in zapier, you can rebuild it here for free."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: Sustainable Use License (fair-code, not OSI open source)",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: the sustainable use license restricts use to internal business purposes — you can self-host for yourself or your company, but you can't wrap it as a competing SaaS product. consulting and support services are allowed.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "12. calcom/cal.com",
+        "inlineStyleRanges": [
+          {
+            "length": 18,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "calendly alternative. one-on-ones, group events, round-robin, team booking, stripe payments, routing forms. integrates with google/outlook/apple calendar, zoom, meet, teams."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: AGPL-3.0 (core) + commercial license for /ee/ enterprise modules",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: open core. SAML SSO and some enterprise features live under /ee/ and require a commercial license in production.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "13. dani-garcia/vaultwarden",
+        "inlineStyleRanges": [
+          {
+            "length": 27,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "bitwarden-compatible server in rust. works with every official bitwarden client. unlimited users, full TOTP, attachments, organizations, sends. runs on a $5 VPS."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: AGPL-3.0",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: you are now your own password manager backend. if your server dies and you don't have backups, your vault dies with it. set up automated backups before you trust this with anything.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "14. bitwarden/server",
+        "inlineStyleRanges": [
+          {
+            "length": 20,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "the official bitwarden server. if you want first-party support and the corporate-blessed stack, use this instead of vaultwarden. heavier (C#, multiple containers) but officially supported."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: GPL-3.0 (core) — some enterprise components are commercially licensed",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: much heavier resource footprint than vaultwarden. vaultwarden = small. bitwarden/server = real infrastructure.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "15. plausible/analytics",
+        "inlineStyleRanges": [
+          {
+            "length": 23,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "google analytics alternative that's actually privacy-friendly. no cookies, no GDPR popup needed, lightweight script. self-host or use their hosted version."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: AGPL-3.0",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: less feature-dense than GA4. if you need ecommerce attribution, multi-touch funnels, or deep audience segmentation, you'll outgrow it.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "16. immich-app/immich",
+        "inlineStyleRanges": [
+          {
+            "length": 21,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "google photos alternative. self-hosted photo and video backup with mobile apps, facial recognition, object detection, places. iOS + android clients. genuinely the best self-hosted photo manager that exists right now."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: AGPL-3.0",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: still pre-1.0. the team explicitly tells you to keep an additional backup of your photos. don't trust it as your only copy yet.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "17. paperless-ngx/paperless-ngx",
+        "inlineStyleRanges": [
+          {
+            "length": 31,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "self-hosted document management. scans, OCRs, indexes and tags your paper documents into a searchable archive. handles tax records, invoices, contracts, receipts. once you have it, you never lose a document again."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: GPL-3.0",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: initial setup is fiddly (postgres, redis, OCR languages, mail rules). once it's running, it just works.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "18. home-assistant/core",
+        "inlineStyleRanges": [
+          {
+            "length": 23,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "the smart home OS. controls 3000+ device integrations from one local dashboard, no cloud required. zigbee, z-wave, matter, mqtt — all supported."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: apache 2.0",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: the learning curve is real. expect a weekend of YAML and automation tuning before you get anything useful working.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "19. advplyr/audiobookshelf",
+        "inlineStyleRanges": [
+          {
+            "length": 26,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "audiobook + podcast server. apple books / audible / overcast alternative. iOS + android apps, web UI, syncs progress across devices, supports m4b/mp3/flac."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: GPL-3.0",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: transcoding audiobooks for some apps eats CPU. expect one-time setup pain for library metadata matching.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "20. Stirling-Tools/Stirling-PDF",
+        "inlineStyleRanges": [
+          {
+            "length": 31,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "self-hosted PDF toolbox. merge, split, compress, OCR, convert, watermark, fill forms — all in a clean web UI. replaces ilovepdf, smallpdf, pdf24."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: MIT",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: runs locally so you don't have to upload sensitive PDFs to random websites. depends on libreoffice + tesseract — your docker image will be ~3GB.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "21. yt-dlp/yt-dlp",
+        "inlineStyleRanges": [
+          {
+            "length": 17,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "youtube-dl fork that's actually maintained. downloads video and audio from youtube and 1500+ other sites. used as a dependency by countless other tools."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: unlicense (public domain)",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: youtube fights it. expect occasional breakage during cat-and-mouse with detection — usually fixed within hours.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "22. syncthing/syncthing",
+        "inlineStyleRanges": [
+          {
+            "length": 23,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "peer-to-peer file sync. dropbox without the cloud. encrypts in transit, never touches a third-party server, runs on linux/mac/win/android."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: MPL-2.0",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: no native iOS app (apple's restrictions). real-time sync depends on both peers being online — no asynchronous cloud cache like dropbox.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "23. twentyhq/twenty",
+        "inlineStyleRanges": [
+          {
+            "length": 19,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "open-source salesforce / hubspot CRM alternative. companies, contacts, deals, pipelines, custom objects, full GraphQL API. modern stack (next.js, postgres)."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: AGPL-3.0",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: still v1.x — fewer integrations than mature CRMs. don't migrate a 50-person sales org to it yet. small teams: fine.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "24. mfts/papermark",
+        "inlineStyleRanges": [
+          {
+            "length": 18,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "docsend alternative. open-source secure document sharing with built-in analytics and custom domains. shareable links, branding, page-by-page view tracking."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: AGPL-3.0",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: the hosted version has paid tiers; the self-hosted gives you everything. the catch is you have to host it.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "25. elie222/inbox-zero",
+        "inlineStyleRanges": [
+          {
+            "length": 22,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "open-source AI personal assistant for gmail. auto-archives, drafts replies, runs rules, cold-email blocking. read by AI, decisions logged."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: AGPL-3.0",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: you give AI write access to your gmail. set the rules conservatively before flipping it to \"auto-execute\" mode.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "26. anyproto/anytype-ts",
+        "inlineStyleRanges": [
+          {
+            "length": 23,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "notion / obsidian alternative. encrypted, local-first, P2P knowledge base. blocks, relations, objects, custom types. mobile + desktop."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: anytype license (custom, not standard OSS)",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: the license is custom, not OSI-approved. read it before assuming you can self-host commercially.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "27. karakeep-app/karakeep",
+        "inlineStyleRanges": [
+          {
+            "length": 25,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "self-hosted bookmark manager (formerly hoarder). saves articles, images, videos, twitter threads with full-text search and AI auto-tagging. browser extensions, iOS, android."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: AGPL-3.0",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: AI tagging needs an LLM key (openai, ollama, etc.). free if you use ollama locally; otherwise you pay for inference.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "28. presenton/presenton",
+        "inlineStyleRanges": [
+          {
+            "length": 23,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "open-source AI presentation generator. local-first, supports ollama and openai. generates and exports .pptx files. alternative to gamma and beautiful.ai."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: apache 2.0",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: the AI quality depends entirely on the model you wire it to. local llama 3 isn't going to beat gamma's polished templates.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "29. gitroomhq/postiz-app",
+        "inlineStyleRanges": [
+          {
+            "length": 24,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "social media scheduler covering 14+ platforms (x, linkedin, instagram, threads, bluesky, mastodon, tiktok, youtube, pinterest, facebook, reddit, discord). AI captions, team workspaces, analytics."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: AGPL-3.0",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: heavier stack (postgres + redis + temporal.io). plan ~1GB RAM minimum on your VPS.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "30. Moh4696/open-source-vs-saas",
+        "inlineStyleRanges": [
+          {
+            "length": 31,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "(disclosure: this is our own repo) curated list of 10 open-source github repos that genuinely replace specific paid SaaS tools — with the honest \"what's the catch\" for each one. think of it as a smaller, deeper version of this section."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: CC0",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: it's our list. read it as one curator's opinion, not a community-graded ranking.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "header-two",
+        "text": "AI tools & LLM tooling"
+      },
+      {
+        "type": "unstyled",
+        "text": "beyond the agentic stack, these are the LLM-focused repos that everyone serious about AI ends up using."
+      },
+      {
+        "type": "unstyled",
+        "text": "31. lobehub/lobe-chat",
+        "inlineStyleRanges": [
+          {
+            "length": 21,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "open-source AI chat framework. supports openai, claude, gemini, deepseek, ollama, openrouter — pick your provider, get a clean UI. plugins, agents, voice, vision, knowledge bases."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: apache 2.0",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: the hosted version has a paid tier. self-hosted is fully featured.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "32. open-webui/open-webui",
+        "inlineStyleRanges": [
+          {
+            "length": 25,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "web UI for ollama. clean chatgpt-style interface for your local models. multi-user, RAG, voice, function calling. installs in 30 seconds."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: Open WebUI License (custom, based on BSD-3 with a branding-protection clause as of v0.6.6, April 2025)",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: if you deploy it to 50+ users, you can't remove the \"Open WebUI\" branding without an enterprise license or contributor permission. solo/small deployments: no restrictions. anything below v0.6.5 is still BSD-3 and you can fork from there freely.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "33. openai/whisper",
+        "inlineStyleRanges": [
+          {
+            "length": 18,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "openai's open-source speech-to-text. 99 languages, word-level timestamps, runs locally. powers most \"AI transcription\" SaaS products you're paying for."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: MIT",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: the original repo is slow on CPU. for production use, switch to SYSTRAN/faster-whisper or ggerganov/whisper.cpp — same model, way faster inference.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          },
+          {
+            "length": 22,
+            "offset": 71,
+            "style": "Bold"
+          },
+          {
+            "length": 21,
+            "offset": 97,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "34. langchain-ai/langchain",
+        "inlineStyleRanges": [
+          {
+            "length": 26,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "the framework that made agent and RAG patterns popular. python + javascript. document loaders, vector stores, agents, chains."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: MIT",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: infamous churn — APIs break between versions. read the migration notes carefully. some people prefer LlamaIndex, Haystack, or raw SDK calls now.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "35. run-llama/llama_index",
+        "inlineStyleRanges": [
+          {
+            "length": 25,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "RAG-focused framework. data ingestion, indexing, retrieval, response synthesis. cleaner abstraction than langchain if you're doing pure retrieval + generation."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: MIT",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: less community sprawl than langchain — fewer pre-built integrations, but more consistent APIs.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "36. comfyanonymous/ComfyUI",
+        "inlineStyleRanges": [
+          {
+            "length": 26,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "node-based stable diffusion UI. the production tool for serious image and video generation workflows. supports SD 1.5, SDXL, SD3, flux, hunyuan, wan, and most major open models."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: GPL-3.0",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: the learning curve is brutal at first. once you get the node graph mental model, nothing else matches its flexibility.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "37. AUTOMATIC1111/stable-diffusion-webui",
+        "inlineStyleRanges": [
+          {
+            "length": 40,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "the original stable diffusion web UI. easier than comfy for beginners, has plugin ecosystem, gradio-based."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: AGPL-3.0",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: development pace has slowed significantly compared to 2022-2023. flux and newer models work but with limitations. comfyui is where the cutting-edge model support tends to land first now.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "38. ggerganov/llama.cpp",
+        "inlineStyleRanges": [
+          {
+            "length": 23,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "the engine. C/C++ inference for llama, mistral, qwen, gemma, and basically every open LLM. powers ollama, lmstudio, jan, and dozens of other apps."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: MIT",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: moves fast. if you're building on top of it, pin your versions or expect breakage.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "39. mudler/LocalAI",
+        "inlineStyleRanges": [
+          {
+            "length": 18,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "drop-in replacement for openai API — but running locally. point any openai-compatible app at LocalAI and it just works."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: MIT",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: you still need a model and hardware to back it. it's a router, not a model.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "40. langfuse/langfuse",
+        "inlineStyleRanges": [
+          {
+            "length": 21,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "open-source LLM observability. traces, evals, prompt management, datasets. the langsmith alternative everyone moves to when they want to self-host."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: MIT (core), enterprise features under commercial license",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: open core. SSO, RBAC, and some enterprise features are paid.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "41. firecrawl/firecrawl",
+        "inlineStyleRanges": [
+          {
+            "length": 23,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "LLM-friendly web crawler. takes any website, returns clean markdown for RAG / agent use. handles javascript, screenshots, pagination. (formerly mendableai/firecrawl — org rebranded; old URLs auto-redirect.)"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: AGPL-3.0",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: the hosted version has paid tiers. self-host is full-featured.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "42. D4Vinci/Scrapling",
+        "inlineStyleRanges": [
+          {
+            "length": 21,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "adaptive web scraping that handles everything from a single request to a full crawl. parser relocates elements when pages change. fetchers bypass cloudflare turnstile. has an MCP server for AI integration."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: BSD-3-Clause",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: anti-bot bypass is rolling cat-and-mouse — works today, might need updates tomorrow when targets change.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "43. YouMind-OpenLab/awesome-gpt-image-2",
+        "inlineStyleRanges": [
+          {
+            "length": 39,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "the largest curated GPT image 2 prompt library — 2000+ prompts with preview images, 16 languages, updated daily. essential if you use openai's image model seriously."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: CC BY 4.0",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: prompt libraries decay fast. by 2027 a chunk of these will be tuned for an old model version.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "44. Moh4696/free-google-ai-tools",
+        "inlineStyleRanges": [
+          {
+            "length": 32,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "(disclosure: our own repo) curated list of 10 free google AI tools (notebookLM, AI studio, gemini CLI, jules, stitch, gemma, illuminate, learn about, labs FX, colab) with the honest \"what's actually free vs paid\" for each one."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: CC0",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: our own list. directional, not exhaustive.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "header-two",
+        "text": "dev essentials"
+      },
+      {
+        "type": "unstyled",
+        "text": "the boring repos. tools you use weekly without thinking. nothing flashy — just the foundations."
+      },
+      {
+        "type": "unstyled",
+        "text": "45. ohmyzsh/ohmyzsh",
+        "inlineStyleRanges": [
+          {
+            "length": 19,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "zsh shell framework. themes, plugins, autocompletion. if you've ever copied \"install oh-my-zsh\" off a stack overflow answer, this is it."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: MIT",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: can slow down shell startup if you pile on plugins. profile your .zshrc if cold-start gets painful.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "46. starship/starship",
+        "inlineStyleRanges": [
+          {
+            "length": 21,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "fast cross-shell prompt. shows git status, language versions, kubernetes context, AWS profile — but only when relevant. zero config to get started."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: ISC",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: none. just install it.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "47. nvm-sh/nvm",
+        "inlineStyleRanges": [
+          {
+            "length": 14,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "node version manager. switch between node versions per-project with a .nvmrc file. if you do any node work, this is mandatory."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: MIT",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: windows users need nvm-windows (separate project) — nvm-sh doesn't work natively on windows.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "48. pyenv/pyenv",
+        "inlineStyleRanges": [
+          {
+            "length": 15,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "the python equivalent of nvm. install and switch between python versions cleanly."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: MIT",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: doesn't manage packages — pair with poetry, uv, or pip.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "49. astral-sh/uv",
+        "inlineStyleRanges": [
+          {
+            "length": 16,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "the fastest python package manager that exists. drop-in replacement for pip and pip-tools. 10-100x faster. written in rust."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: apache 2.0 + MIT",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: still young. most workflows work, but some niche tools (older legacy packaging stuff) might trip it up.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "50. astral-sh/ruff",
+        "inlineStyleRanges": [
+          {
+            "length": 18,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "python linter and formatter, also in rust. replaces flake8, black, isort, pyupgrade — all of them combined, faster than any single one."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: MIT",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: if your team has very custom black/flake8 configs, expect a migration session.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "51. junegunn/fzf",
+        "inlineStyleRanges": [
+          {
+            "length": 16,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "the fuzzy finder. ctrl+R for shell history, file search, git branch picking, anything you can pipe. once you have it, you can't go back."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: MIT",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: none. installs cleanly via every package manager.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "52. tldr-pages/tldr",
+        "inlineStyleRanges": [
+          {
+            "length": 19,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "simplified man pages with practical examples. forgot the tar syntax? tldr tar gives you the 5 commands you actually use, no novel."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: CC-BY 4.0 (content) + MIT (clients)",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: none. genuine quality-of-life tool.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "53. BurntSushi/ripgrep",
+        "inlineStyleRanges": [
+          {
+            "length": 22,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "faster grep. searches respect .gitignore by default, parses huge codebases in milliseconds. used by every code editor's \"find in project\" you like."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: unlicense + MIT",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: none. just install it.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "54. sharkdp/bat",
+        "inlineStyleRanges": [
+          {
+            "length": 15,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "cat with syntax highlighting, line numbers, and git integration. once you see a file with bat, you don't want to use cat again."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: apache 2.0 + MIT",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: none.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "55. sharkdp/fd"
+      },
+      {
+        "type": "unstyled",
+        "text": "faster find. parallel, respects .gitignore, intuitive syntax. another small joy."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: apache 2.0 + MIT",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: none.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "header-two",
+        "text": "learning, roadmaps & reference"
+      },
+      {
+        "type": "unstyled",
+        "text": "the meta-resources. if you're learning, building toward, or curious about a field — these are the references."
+      },
+      {
+        "type": "unstyled",
+        "text": "56. Developer-Y/cs-video-courses",
+        "inlineStyleRanges": [
+          {
+            "length": 32,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "76k+ stars. every university-level CS course with video lectures, organized by topic. MIT, stanford, CMU, harvard, berkeley, IIT, ETH zurich. genuinely the best free CS education aggregator on github."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: unspecified (treat as fair-use links)",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: it's links — some old courses 404 over time. fix-PRs are welcome there.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "57. kamranahmedse/developer-roadmap",
+        "inlineStyleRanges": [
+          {
+            "length": 35,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "the visual roadmaps for frontend, backend, devops, AI engineer, blockchain, mobile, qa, and more. 300k+ stars. shows you exactly what to learn in what order."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: various (read each roadmap)",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: roadmaps are opinionated — there's no single right path. use as a checklist, not a religion.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "58. donnemartin/system-design-primer",
+        "inlineStyleRanges": [
+          {
+            "length": 36,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "how to design large-scale systems. interview prep for senior engineering roles. caching, sharding, consistency, queues — all explained with diagrams."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: CC-BY 4.0 + others",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: focused on FAANG-style interview patterns. real-world architecture is messier.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "59. EbookFoundation/free-programming-books",
+        "inlineStyleRanges": [
+          {
+            "length": 42,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "500+ programming books, freely available, organized by language and topic. PDFs, online HTML, courses."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: CC-BY 4.0",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: some links rot. PRs fix them fast.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "60. TheAlgorithms/Python",
+        "inlineStyleRanges": [
+          {
+            "length": 24,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "every common algorithm implemented in clean python. sorting, graph algorithms, ML basics, ciphers, neural nets from scratch. great for learning."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: MIT",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: these are teaching implementations. don't ship bubble_sort.py to production.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "61. trekhleb/javascript-algorithms",
+        "inlineStyleRanges": [
+          {
+            "length": 34,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "same idea but javascript. plus explanations and complexity analysis for each algo."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: MIT",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: same as above — read, don't ship.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "62. f/awesome-chatgpt-prompts",
+        "inlineStyleRanges": [
+          {
+            "length": 29,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "the original \"awesome prompts\" repo. 100+ role-prompting examples (\"act as a linux terminal\", \"act as an interviewer\", etc.). still useful as a baseline."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: CC0",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: the \"act as a...\" pattern is dated by 2026 standards. modern prompting uses skill files, MCP, and structured instructions. read for ideas, not gospel.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "63. dair-ai/Prompt-Engineering-Guide",
+        "inlineStyleRanges": [
+          {
+            "length": 36,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "academic-leaning prompt engineering guide. chain-of-thought, few-shot, RAG, self-consistency. proper citations."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: MIT",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: mostly written for completion-era models. some patterns are less critical with frontier reasoning models.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "64. anthropics/courses",
+        "inlineStyleRanges": [
+          {
+            "length": 22,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "official anthropic courses. covers prompt engineering, API fundamentals, real-world prompting, prompt evaluations, tool use. read the jupyter notebooks."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: various",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: anthropic-specific. great patterns transfer, but expect claude-shaped examples.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "65. binhnguyennus/awesome-scalability",
+        "inlineStyleRanges": [
+          {
+            "length": 37,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "the bible for systems engineers. case studies from netflix, uber, airbnb, stripe — how they actually scaled. patterns + war stories."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: CC-BY 4.0",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: none. essential reading if you want to design beyond a single server.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "header-two",
+        "text": "design & frontend"
+      },
+      {
+        "type": "unstyled",
+        "text": "design assets, component libraries, UI kits. some you'll fork into your projects, some you'll use directly."
+      },
+      {
+        "type": "unstyled",
+        "text": "66. penpot/penpot",
+        "inlineStyleRanges": [
+          {
+            "length": 17,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "figma alternative. open-source design and prototyping platform. native design tokens, CSS grid layout, components, variants. browser-based or self-hosted."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: MPL-2.0",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: smaller plugin ecosystem than figma. still a serious tool, especially if you self-host.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "67. shadcn-ui/ui",
+        "inlineStyleRanges": [
+          {
+            "length": 16,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "the component library that took over react in 2024-2025. copy-paste components built on radix + tailwind. you own the code, no npm install hell."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: MIT",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: \"you own the code\" means you also maintain it. dependencies still need updates.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "68. tailwindlabs/tailwindcss",
+        "inlineStyleRanges": [
+          {
+            "length": 28,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "utility-first CSS framework. love it or hate it — half the web is built on it now. v4.0 dropped the postCSS dependency."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: MIT",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: the only valid one ever: HTML gets noisy. component extraction (or just shadcn/ui) solves it.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "69. tailwindlabs/heroicons",
+        "inlineStyleRanges": [
+          {
+            "length": 26,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "the icon set that tailwind ships with. 300+ MIT icons, react + vue components, SVG."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: MIT",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: opinionated style. mix carefully with other icon sets.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "70. lucide-icons/lucide",
+        "inlineStyleRanges": [
+          {
+            "length": 23,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "the icon set everyone migrates to. fork of feather icons with 1000+ additional icons. react, vue, svelte, angular, flutter — every framework has a binding."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: ISC",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: none.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "71. radix-ui/primitives",
+        "inlineStyleRanges": [
+          {
+            "length": 23,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "unstyled, accessible component primitives for react. what shadcn/ui is built on. dialog, popover, dropdown, accordion, etc. — the things that are hard to get right."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: MIT",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: unstyled by design. you bring your own CSS — that's the point.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "72. magicuidesign/magicui",
+        "inlineStyleRanges": [
+          {
+            "length": 25,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "animated react components. landing-page hero sections, marquees, particles, beams. ready-to-copy."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: MIT",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: heavy on animation libraries. don't ship all of them or your bundle size explodes.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "73. unjs/h3",
+        "inlineStyleRanges": [
+          {
+            "length": 11,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "minimal HTTP framework built for portability — runs in node, bun, deno, and edge runtimes (cloudflare workers, vercel edge). it's the HTTP layer inside nitro, which powers nuxt."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: MIT",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: smaller ecosystem than express. compatible with connect/express middleware but not every middleware works out of the box.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "74. withastro/astro",
+        "inlineStyleRanges": [
+          {
+            "length": 19,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "static-first web framework with island architecture. fast by default, ships zero JS to the browser unless you ask for it. great for content sites."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: MIT",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: if you need a heavy app-style SPA, use next or remix instead. astro shines on content + light interactivity.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "75. vercel/next.js",
+        "inlineStyleRanges": [
+          {
+            "length": 18,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "react meta-framework. server components, app router, edge runtime. powers a huge chunk of modern web apps."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: MIT",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: moves fast. major-version migrations have caused pain (app router, server actions). pin your version and read the upgrade guides.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "header-two",
+        "text": "data, scraping & analytics"
+      },
+      {
+        "type": "unstyled",
+        "text": "handling data — collection, processing, visualization, monitoring."
+      },
+      {
+        "type": "unstyled",
+        "text": "76. apache/superset",
+        "inlineStyleRanges": [
+          {
+            "length": 19,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "open-source BI platform. dashboards, charts, SQL lab. replaces tableau and looker for many teams."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: apache 2.0",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: the setup is real. python, redis, postgres, celery — full infra. once it's running, it's solid.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "77. metabase/metabase",
+        "inlineStyleRanges": [
+          {
+            "length": 21,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "easier BI tool. clean UI, less infra, faster onboarding than superset. for teams that want dashboards without a data engineer."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: AGPL-3.0 (core) + commercial enterprise features",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: open core. some enterprise features (SSO, sandboxing) require paid plans.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "78. duckdb/duckdb",
+        "inlineStyleRanges": [
+          {
+            "length": 17,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "in-process SQL OLAP database. blazing fast on local files (parquet, csv, json). pandas killer for tabular analytics."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: MIT",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: in-process means single-machine. if your data is bigger than one machine, you'll outgrow it.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "79. pola-rs/polars",
+        "inlineStyleRanges": [
+          {
+            "length": 18,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "the pandas alternative. written in rust, lazy evaluation, parallel by default. 10-100x faster on big dataframes."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: MIT",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: different API from pandas. expect a learning bump if you're a heavy pandas user.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "80. PostHog/posthog",
+        "inlineStyleRanges": [
+          {
+            "length": 19,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "open-source product analytics. session replays, feature flags, experimentation, surveys, A/B tests. replaces amplitude, mixpanel, hotjar combined."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: MIT (with cloud features under separate license)",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: the self-hosted version is heavy (kafka, clickhouse, redis). small teams use the hosted free tier (1M events/mo).",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "81. grafana/grafana",
+        "inlineStyleRanges": [
+          {
+            "length": 19,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "the dashboard for everything observable. metrics, logs, traces. if you've ever seen a server metrics dashboard, you've probably seen grafana."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: AGPL-3.0 (since 2021)",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: the license switch in 2021 was controversial. fine for self-hosting, but be aware of the AGPL implications.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "82. prometheus/prometheus",
+        "inlineStyleRanges": [
+          {
+            "length": 25,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "time-series metrics database. pairs with grafana for dashboards. the de-facto open-source monitoring stack."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: apache 2.0",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: pull-based by design — your services need to expose /metrics endpoints. push-based monitoring needs the pushgateway sidecar.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "83. apache/airflow",
+        "inlineStyleRanges": [
+          {
+            "length": 18,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "workflow orchestration platform. data pipelines as code (python DAGs). standard at most data teams."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: apache 2.0",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: the operations overhead is real. simpler workflow tools (prefect, dagster) exist for smaller teams.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "84. Fincept-Corporation/FinceptTerminal",
+        "inlineStyleRanges": [
+          {
+            "length": 39,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "open-source bloomberg terminal alternative. 50+ screens for equity, portfolio, derivatives, fixed income, alternatives. native C++20 + qt6, embedded python."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: Dual: AGPL-3.0 (open source) + Fincept Commercial License",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: commercial use requires a paid commercial license. personal use, learning, and academic research stay free. read the license clause carefully if you're a business — including for forks that replace fincept's data sources with your own.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          },
+          {
+            "length": 50,
+            "offset": 7,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "85. HKUDS/Vibe-Trading",
+        "inlineStyleRanges": [
+          {
+            "length": 22,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "natural-language finance research agent. 7 backtest engines, 75 specialist skills, 29 multi-agent presets. exposes 22 MCP tools to claude desktop / cursor."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: MIT",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: research infrastructure, not financial advice. the multi-agent swarm tool needs an LLM API key. and never blow up your portfolio on a backtest.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "header-two",
+        "text": "security & privacy"
+      },
+      {
+        "type": "unstyled",
+        "text": "password managers, secret scanners, hardening tools."
+      },
+      {
+        "type": "unstyled",
+        "text": "86. trufflesecurity/trufflehog",
+        "inlineStyleRanges": [
+          {
+            "length": 30,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "finds secrets that leaked into git history. AWS keys, API tokens, private keys — over 800 secret types detected. essential pre-commit."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: AGPL-3.0",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: false positives happen. tune the regex packs for your codebase.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "87. gitleaks/gitleaks",
+        "inlineStyleRanges": [
+          {
+            "length": 21,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "similar to trufflehog. detects secrets in git history. lighter, less complete, faster."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: MIT",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: less thorough than trufflehog. pair them, don't pick.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "88. OWASP/CheatSheetSeries",
+        "inlineStyleRanges": [
+          {
+            "length": 26,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "the OWASP cheat sheets. authentication, session management, SQL injection prevention, XSS, secure coding. read this before you launch a public API."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: CC-BY 4.0",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: none — just read.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "89. anchore/syft",
+        "inlineStyleRanges": [
+          {
+            "length": 16,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "software bill of materials (SBOM) generator. lists every package in your container or binary. mandatory if you ship software to enterprises that ask for SBOMs."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: apache 2.0",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: none.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "90. aquasecurity/trivy",
+        "inlineStyleRanges": [
+          {
+            "length": 22,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "all-in-one security scanner. containers, filesystem, git repos, kubernetes. finds vulnerabilities, misconfigs, secrets. industry standard."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: apache 2.0",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: false positive triage takes time. set baselines so devs don't drown in noise.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "header-two",
+        "text": "web3, crypto & onchain"
+      },
+      {
+        "type": "unstyled",
+        "text": "verified picks for builders, traders, and analysts. open-source, no paid gating in the core."
+      },
+      {
+        "type": "unstyled",
+        "text": "91. ethereum/go-ethereum",
+        "inlineStyleRanges": [
+          {
+            "length": 24,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "the reference ethereum client (geth). if you run an ethereum node, you probably run geth."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: GPL-3.0 / LGPL-3.0",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: running a mainnet node needs ~1.5TB+ SSD and 24/7 uptime. not for casual experimentation.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "92. foundry-rs/foundry",
+        "inlineStyleRanges": [
+          {
+            "length": 22,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "the smart contract development toolkit that replaced hardhat for most serious solidity devs. fast, written in rust, scriptable with solidity."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: apache 2.0 + MIT",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: if you started on hardhat, expect a few hours to relearn the tooling. worth it.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "93. OpenZeppelin/openzeppelin-contracts",
+        "inlineStyleRanges": [
+          {
+            "length": 39,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "the audited smart contract library. ERC-20, ERC-721, ERC-1155, governance, access control, upgrades. every reputable contract pulls from here."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: MIT",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: none — but pin your version. major releases between v4 and v5 changed APIs significantly.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "94. duneanalytics/spellbook",
+        "inlineStyleRanges": [
+          {
+            "length": 27,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "the open dune analytics SQL spellbook. every public query, every spell, every dashboard contributed by the community. learn dune by reading other people's queries."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: apache 2.0",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: the SQL is dialect-specific (dune SQL / DuneSQL v2). docs help. expect a learning curve.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "95. crytic/slither",
+        "inlineStyleRanges": [
+          {
+            "length": 18,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "solidity static analyzer. finds common smart contract bugs before audit. used by every serious security firm."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: AGPL-3.0",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: false positives — tune your detectors. doesn't replace a manual audit for production-bound code.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "header-two",
+        "text": "creator & content tools"
+      },
+      {
+        "type": "unstyled",
+        "text": "the leftovers — repos that don't fit cleanly elsewhere but matter to creators, content builders, and indie hackers."
+      },
+      {
+        "type": "unstyled",
+        "text": "96. AntonOsika/gpt-engineer",
+        "inlineStyleRanges": [
+          {
+            "length": 27,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "codebase scaffolding from a single prompt. less relevant since claude code and codex exist, but historically important."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: MIT",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: mostly historical interest now. use claude code or codex for real work.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          },
+          {
+            "length": 23,
+            "offset": 14,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "97. firecrawl/firecrawl-mcp-server",
+        "inlineStyleRanges": [
+          {
+            "length": 34,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "the firecrawl MCP. drop it into claude desktop or cursor and your agent gains web research powers. (formerly under mendableai/, the org rebranded to firecrawl/ — old URLs auto-redirect.)"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: MIT",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: firecrawl's API key. free tier exists, heavy use bills.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "98. browser-use/browser-use",
+        "inlineStyleRanges": [
+          {
+            "length": 27,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "let your AI agent control a real browser. python-first, works with playwright. essentially the open-source version of what perplexity-comet does."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: MIT",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: runs locally — same trade-off as playwright-MCP. local = fast and free, but no IP rotation or anti-detection at scale.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "99. Anil-matcha/Open-Higgsfield-AI",
+        "inlineStyleRanges": [
+          {
+            "length": 34,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "open-source AI image and cinema studio. 20+ models (flux, SDXL, midjourney via proxy, ideogram). self-host, MIT."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: MIT",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: requires a muapi.ai API key to actually generate anything — that's a paid third-party gateway. the wrapper is free; the inference isn't.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          },
+          {
+            "length": 16,
+            "offset": 18,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "100. obra/superpowers-marketplace",
+        "inlineStyleRanges": [
+          {
+            "length": 33,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "the marketplace where claude code skills live. browse, install, fork. if you're going to use anything from this section, start here."
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "license: MIT",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "catch: as a marketplace, quality varies. read each skill's repo before installing into your agent.",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "header-two",
+        "text": "a few honest notes before you go"
+      },
+      {
+        "type": "unstyled",
+        "text": "on licenses. \"open-source\" covers a lot. MIT lets you fork and ship commercial products freely. AGPL says if you serve it over a network, you have to share your modifications. apache adds patent grants. unlicense / CC0 are basically public domain. read the license on anything you fork.",
+        "inlineStyleRanges": [
+          {
+            "length": 12,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "on maintenance status. software rots. by the time you read this, some of the picks above may be in maintenance mode (or worse). check the \"last commit\" date before adopting anything new.",
+        "inlineStyleRanges": [
+          {
+            "length": 22,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "on stars. stars are an unreliable signal of quality — they show attention, not value. a 1k-star tool you use every day beats a 50k-star tool nobody actually uses.",
+        "inlineStyleRanges": [
+          {
+            "length": 9,
+            "offset": 0,
+            "style": "Bold"
+          },
+          {
+            "length": 9,
+            "offset": 64,
+            "style": "Italic"
+          },
+          {
+            "length": 5,
+            "offset": 79,
+            "style": "Italic"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "on the \"free\" part. every tool here is free to start using. some have a hosted SaaS upsell. some have enterprise-feature paywalls. that's not a contradiction with \"open-source\" — it's just the dominant funding model now. if a free tier covers your needs, no guilt — that's how open core is supposed to work.",
+        "inlineStyleRanges": [
+          {
+            "length": 19,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "100 repos is a lot. nobody uses all of them. pick the 5 from your category, star them, install two this week. that's the real win."
+      },
+      {
+        "type": "unstyled",
+        "text": "found a repo that belongs here? reply  @exploraX_ — open to swapping in better picks. honest \"what's the catch\" reasoning required.",
+        "inlineStyleRanges": [
+          {
+            "length": 131,
+            "offset": 0,
+            "style": "Italic"
+          },
+          {
+            "length": 131,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      }
+    ]
+  },
+  "status": "success",
+  "msg": "success",
+  "_handle": "exploraX_"
+}

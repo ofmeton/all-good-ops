@@ -1,0 +1,581 @@
+{
+  "article": {
+    "id": "QXJ0aWNsZUVudGl0eToyMDUzNzQzNjQwMjI5NTk3MTg0",
+    "author": {
+      "type": "user",
+      "userName": "claudecode_lab",
+      "url": "https://x.com/claudecode_lab",
+      "twitterUrl": "https://twitter.com/claudecode_lab",
+      "id": "1807726847154847744",
+      "name": "Claude Code研究所|スパルタClaude Code塾",
+      "isVerified": false,
+      "isBlueVerified": true,
+      "verifiedType": null,
+      "profilePicture": "https://pbs.twimg.com/profile_images/2047553749867216896/_SKwpHqG_normal.jpg",
+      "coverPicture": "https://pbs.twimg.com/profile_banners/1807726847154847744/1777009967",
+      "description": "東京大学にてAI研究に従事していたエンジニアメンバーがClaude Codeに特化した最新情報をお届け。経営者・士業向け名物研修「スパルタClaude Code塾」も運営。\nnote:https://t.co/VAtJlAXlsF\n研修のご依頼などDMでも受付しております✉️",
+      "location": "東京都",
+      "followers": 19619,
+      "following": 377,
+      "status": "",
+      "canDm": true,
+      "canMediaTag": true,
+      "createdAt": "Mon Jul 01 10:45:57 +0000 2024",
+      "entities": {
+        "description": {
+          "urls": [
+            {
+              "display_url": "note.com/claudecode_lab",
+              "expanded_url": "https://note.com/claudecode_lab",
+              "indices": [
+                92,
+                115
+              ],
+              "url": "https://t.co/VAtJlAXlsF"
+            }
+          ]
+        },
+        "url": {
+          "urls": [
+            {
+              "display_url": "claude-code-lab.com",
+              "expanded_url": "https://claude-code-lab.com/",
+              "indices": [
+                0,
+                23
+              ],
+              "url": "https://t.co/8oWsTCy0do"
+            }
+          ]
+        }
+      },
+      "fastFollowersCount": 0,
+      "favouritesCount": 12964,
+      "hasCustomTimelines": false,
+      "isTranslator": false,
+      "mediaCount": 79,
+      "statusesCount": 276,
+      "withheldInCountries": [],
+      "affiliatesHighlightedLabel": {},
+      "possiblySensitive": false,
+      "pinnedTweetIds": [
+        "2059090665716552166"
+      ],
+      "profile_bio": {},
+      "isAutomated": false,
+      "automatedBy": null
+    },
+    "replyCount": 0,
+    "likeCount": 217,
+    "quoteCount": 7,
+    "viewCount": "180271",
+    "createdAt": "Mon May 11 08:39:31 +0000 2026",
+    "title": "スクリーンショットをClaudeに渡すだけで、アニメーション付きの操作動画が完成する神skillを解説",
+    "preview_text": "スマホアプリの課金率を上げたいなら「課金画面の前に操作動画を見せろ」という話は、開発者の間でよく語られるようになりました。とはいえ「そうは言っても、簡単じゃない」と感じる方も多いはずです。モーション編",
+    "cover_media_img_url": "https://pbs.twimg.com/media/HIBobI4bEAAZ4uO.jpg",
+    "contents": [
+      {
+        "type": "unstyled",
+        "text": "スマホアプリの課金率を上げたいなら「課金画面の前に操作動画を見せろ」という話は、開発者の間でよく語られるようになりました。とはいえ「そうは言っても、簡単じゃない」と感じる方も多いはずです。モーション編集、ポインターアニメーション、タイミング調整など、動画制作には専門スキルが必要だ、というのがこれまでの常識だったからです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "React NativeエンジニアのROFI（@bidah）が2026年5月に投稿したX Articleでは、その前提を覆すClaude Codeスキル「create-onboarding-video」が公開されています。スクリーンショットを順番に渡すだけで、ポインターアニメーション付きの初回案内動画が自動生成される——つまり動画制作ツールも、モーションスキルも、一切不要というわけです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "私自身もこのスキルを使って、デモとして、Claude Codeのskill管理アプリと株式銘柄比較アプリの紹介動画を実際に制作しました。この記事では元記事の内容を翻訳しながら、実際の制作プロセスと使ってわかったことをお伝えします。"
+      },
+      {
+        "type": "header-one",
+        "text": "課金画面の「前」に価値を見せることが、課金率を左右する最大のポイント"
+      },
+      {
+        "type": "unstyled",
+        "text": "モバイルアプリの課金率を改善する手段はいくつもありますが、@bidahが「これが一番効く」と断言するのは、課金画面の前に、アプリの初回案内中に、アプリの機能を動画で見せることです。",
+        "inlineStyleRanges": [
+          {
+            "length": 34,
+            "offset": 53,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "大事なのは「前」という部分です。課金画面を通過した後でもなく、課金画面の背景アニメーションとしてでもなく、「前」です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "理由は2つあります。"
+      },
+      {
+        "type": "header-one",
+        "text": "1. 信頼は、お金を払う前に決まっている"
+      },
+      {
+        "type": "unstyled",
+        "text": "モバイルユーザーは、アプリを購入するときに、最悪を想定することが多いです。魅力的なApp Storeページを見て期待したのに、課金したら的外れなアプリでお金を無駄にした、という経験をしてきたからです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ユーザーがサブスクの申込画面にたどり着いた時点で、アプリを信頼してもらう必要があります。静止画のスクリーンショットや箇条書きでは、その判断を覆せません。有効なのは、製品が「実際に動いているところ」を見てもらうことだけです。"
+      },
+      {
+        "type": "header-one",
+        "text": "2. 「このアプリが何をするか」は、意外と伝わっていない"
+      },
+      {
+        "type": "unstyled",
+        "text": "当たり前のように聞こえますが、アプリが何をするアプリか分かりにくいことが多いです。開発者は製品に近すぎて気づきにくいのですが、初めてアプリを開いたユーザーは、このアプリで何ができるのか、どう使うものなのかを、まったく把握していません。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ユーザーが「このアプリ、自分に必要だ」と心から理解した瞬間に、はじめて購入しようと思います。操作方法や詳細な機能が支払いの後に理解できる設計では、ほとんどのユーザーはすでに離脱してしまっています。だからアプリを使ってもらえないのです。"
+      },
+      {
+        "type": "header-one",
+        "text": "動画編集の重要性"
+      },
+      {
+        "type": "unstyled",
+        "text": "無編集の録画では「見せる」ことしかできません。実際の操作はスクロール速度も速く、どこをタップしたかも分かりにくいです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "具体的には、動画編集をして、次の3つの点で機能や利点を「教える」動画を作ります。"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "ポインターアニメーション：はっきり動くポインターを使うことで、画面のどこで何が起きているかを見落とさずに追えます",
+        "inlineStyleRanges": [
+          {
+            "length": 12,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "タップ前のハイライト：操作が起きる前に次のタップ位置を予告することで、「変化」ではなく「意図」が伝わります。ユーザーは「何かが起きた」ではなく「ここを押せばこうなる」と理解できます",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "重要な画面でのポーズ（間）：情報量が多い画面や新しい機能が登場する場面で自然に止まることで、ユーザーが内容を整理してから次に進めます",
+        "inlineStyleRanges": [
+          {
+            "length": 13,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "この3つが揃うことで、ユーザーは「誰かが使っている映像」を眺める状態から、アプリの使い方を「教わっている」状態に変わります。「見せるだけ」の動画はスキップされ、「教える」動画は「自分でもできそう」という確信につながります。その確信こそが、課金の意思決定を後押しします。"
+      },
+      {
+        "type": "header-one",
+        "text": "動画制作のハードルをゼロにする：create-onboarding-video スキル"
+      },
+      {
+        "type": "unstyled",
+        "text": "このクオリティの動画を作るには、デザインやモーションスキルなど動画編集の技術が必要です。編集ソフトの使い方を理解するには膨大な時間がかかります。ほとんどのソロ開発者や小規模チームにはその余裕がなく、結果として、生の画面録画で妥協するか、動画自体をあきらめて課金率の低下を受け入れるかの二択になります。"
+      },
+      {
+        "type": "header-two",
+        "text": "create-onboarding-video スキルを使えば、動画編集をClaudeで自動化できます",
+        "inlineStyleRanges": [
+          {
+            "length": 51,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "使い方はシンプルです。機能のスクリーンショットを順番に渡すだけで、あとはスキルがすべてやってくれます。"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "指の動きとタップアクションに合わせて生成されるポインターアニメーション",
+        "inlineStyleRanges": [
+          {
+            "length": 12,
+            "offset": 23,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "フラットなスクリーンキャプチャではなく、重要なステップを一時停止・ハイライト・強調できる再構築されたUI",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 44,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "課金画面前の初回案内フローにそのまま組み込める完成品の動画",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 23,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "「いつかやろう」と後回しにしてきた方には、これが一番の近道です。スキルはOSSとして公開されています。"
+      },
+      {
+        "type": "header-one",
+        "text": "実際に試してみた"
+      },
+      {
+        "type": "header-two",
+        "text": "インストール方法"
+      },
+      {
+        "type": "unstyled",
+        "text": "このスキルは2つのコンポーネントで動作します。順番通りにインストールしてください。",
+        "inlineStyleRanges": [
+          {
+            "length": 18,
+            "offset": 23,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Step 1：remotion-best-practicesをインストール",
+        "inlineStyleRanges": [
+          {
+            "length": 37,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "動画レンダリングに使うRemotionフレームワークの知識をClaudeに与えるスキルです。create-onboarding-videoより先にインストールが必要です。"
+      },
+      {
+        "type": "markdown",
+        "text": "```\nnpx skills add https://github.com/remotion-dev/skills --skill remotion-best-practices\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "上のコマンドでskillを追加できますが、claudeに追加するように指示を出すのが良いでしょう。"
+      },
+      {
+        "type": "unstyled",
+        "text": "プロンプト例："
+      },
+      {
+        "type": "markdown",
+        "text": "```\nこれでremotion-best-practicesのスキルを追加して。\nnpx skills add https://github.com/remotion-dev/skills\n--skill remotion-best-practices\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "Step 2：create-onboarding-videoをインストール（resourcesフォルダ込み）",
+        "inlineStyleRanges": [
+          {
+            "length": 54,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "スキル本体と、カーソルコンポーネントなどが含まれるresourcesフォルダをあわせてインストールします。 先ほどと同じようにclaudeにお願いしましょう！"
+      },
+      {
+        "type": "unstyled",
+        "text": "プロンプト例："
+      },
+      {
+        "type": "markdown",
+        "text": "```\nこれでskillとresourcesフォルダを追加して。\nnpx skills add https://github.com/bidah/skill-set\n--skill create-onboarding-video\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "インストール元：https://github.com/bidah/skill-set/tree/main/skills/create-onboarding-video"
+      },
+      {
+        "type": "header-two",
+        "text": "制作の流れ"
+      },
+      {
+        "type": "unstyled",
+        "text": "スキルを起動すると、まず「紹介したいオンボーディング画面は何画面ありますか？」とインタラクティブに質問してきます。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIBelhwa8AAbK2s.jpg",
+        "width": 1352,
+        "height": 946
+      },
+      {
+        "type": "unstyled",
+        "text": "フォルダを指定するとスクリーンショットを自動検出し、内容を読み込んで構成案を提案してくれます。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIBerkDb0AAeuYs.jpg",
+        "width": 1278,
+        "height": 300
+      },
+      {
+        "type": "unstyled",
+        "text": "続いて「この動画でどの機能を一番見せたいですか？」と質問してきます。ここが重要で、スクリーンショットの内容を分析した上で、見せるべき機能のシーン候補を番号付きで提案してくれます。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIBe1fMasAAOgK3.jpg",
+        "width": 1394,
+        "height": 716
+      },
+      {
+        "type": "unstyled",
+        "text": ""
+      },
+      {
+        "type": "unstyled",
+        "text": "このスキルでは、スクリーンショットの座標を把握して動画を作成するので、微調整するのも簡単に短時間でできます。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIBfSctbQAALLA7.jpg",
+        "width": 1290,
+        "height": 1182
+      },
+      {
+        "type": "header-two",
+        "text": "実際に作った動画"
+      },
+      {
+        "type": "unstyled",
+        "text": "今回はClaude Codeのリファレンスアプリ（コマンド・スキル一覧アプリ）の紹介動画を制作しました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "使用したスクリーンショット（入力）(6つを１つにして紹介します)",
+        "inlineStyleRanges": [
+          {
+            "length": 32,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIBj6e2a4AA85P0.jpg",
+        "width": 4096,
+        "height": 1212
+      },
+      {
+        "type": "unstyled",
+        "text": "出力された動画（出力）",
+        "inlineStyleRanges": [
+          {
+            "length": 11,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "株式銘柄を比較するアプリについても操作動画を作りました。",
+        "inlineStyleRanges": [
+          {
+            "length": 28,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-one",
+        "text": "使ってわかったこと"
+      },
+      {
+        "type": "unstyled",
+        "text": "実際に試してみて、知っておくと便利な点がいくつかありました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "スクショが見切れる場合は「フレームごとに縦の長さを変えて良い」と指示する",
+        "inlineStyleRanges": [
+          {
+            "length": 36,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "デフォルトでは全シーンの縦幅を揃えようとするため、内容が見切れることがあります。「フレームごとに縦の長さを変えて構いません」と一言添えるだけで、各シーンが表示したいコンテンツに合わせたサイズに自動調整されます。"
+      },
+      {
+        "type": "header-two",
+        "text": "作成後の修正が簡単",
+        "inlineStyleRanges": [
+          {
+            "length": 9,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "このスキルはUI上の座標を把握してアニメーションを生成するため、位置やタイミングの微調整が直感的にできます。「もう少し右寄りに」「タップのタイミングを少し遅く」といった日本語の指示で、作成後でもすぐ修正できます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "スクリーンショットを渡すだけでシーン数と構成を提案してくれる",
+        "inlineStyleRanges": [
+          {
+            "length": 30,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "フォルダを指定すると画像を自動で読み取り、「この機能を見せるには4シーン構成にしましょう」のように具体的な構成を提案してくれます。ゼロから構成を考える手間がなく、スタート地点として非常に助かりました。"
+      },
+      {
+        "type": "header-two",
+        "text": "複数機能がある場合は、箇条書きで構成を渡すと安定する",
+        "inlineStyleRanges": [
+          {
+            "length": 26,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "1枚のスクリーンショットに複数の機能が映り込んでいる場合など、「1.〜を見せる、2.モードを変える」と箇条書きで構成だけ指定すると、出力が安定します。内容はすでにclaudeが把握しているので、構成は細かく必要はありません。"
+      },
+      {
+        "type": "header-one",
+        "text": "全体的な感想"
+      },
+      {
+        "type": "header-two",
+        "text": "「元の画像をそのまま使う」設計が新鮮",
+        "inlineStyleRanges": [
+          {
+            "length": 18,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "AIが映像を一から生成するわけではなく、自分のスクリーンショットをベースにアニメーションを加えるという設計が面白いです。生成AI特有の「なんか違う」という感覚がなく、自分のアプリのUIがそのまま動く安心感があります。"
+      },
+      {
+        "type": "header-two",
+        "text": "他のツールが一切いらない",
+        "inlineStyleRanges": [
+          {
+            "length": 12,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "After Effects、ScreenFlow、Canvaなど、動画制作ツールは何も不要です。Claude Codeだけで完結するため、自作アプリやサービスの紹介動画を「一本だけ作りたい」というシーンに特に向いています。一本の動画のためだけに有料ツールを契約する必要がないのは、ソロ開発者にとって大きなメリットです。"
+      },
+      {
+        "type": "header-two",
+        "text": "実行時間が長いシーンでも対応しやすい",
+        "inlineStyleRanges": [
+          {
+            "length": 18,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "実行時間が長くなるシーンでも、動きの「前」と「後」の状態をスクリーンショットで渡すだけで対応できます。すべての中間フレームを用意する必要はないので、長い操作フローを紹介したい場合でも手間がかかりません。"
+      },
+      {
+        "type": "header-two",
+        "text": "アプリ以外でも使えそう",
+        "inlineStyleRanges": [
+          {
+            "length": 11,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "「スマホを操作する場面」ならアプリに限らず幅広く活用できます。skillを調整すれば、PCの操作する画面にも応用できるでしょう。Claudeのスキルや機能の使い方、Webサービスの操作手順など、画面を見せながら何かを説明したい場面なら、そのままこの仕組みが使えそうです。アプリ開発者以外にも、ツールの使い方を伝えたい人にとって選択肢になるかもしれません。特にClaudeのスキルを紹介する場合は、Claudeの実行を待つ時間をスクショでスキップできるので、相性がいいかと思います。"
+      },
+      {
+        "type": "header-two",
+        "text": "ステップ数が多い操作ほど、相性が良い",
+        "inlineStyleRanges": [
+          {
+            "length": 18,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "手動で録画・撮り直しをするコストは、操作ステップが増えるほど膨らみます。逆に言えば、ステップ数が多い操作ほどAIで自動化したときの旨みが大きくなります。複数画面にわたる操作フローを伝えるコンテンツは特に向いていると感じました。「操作手順を教える動画」のニーズは今後増えてきそうです。"
+      },
+      {
+        "type": "unstyled",
+        "text": ""
+      },
+      {
+        "type": "unstyled",
+        "text": "経営者・士業・営業職等、全てのビジネスパーソンの方で、\n「Claude Codeを使いこなしたい」\n「AIを活用してもっと業務を効率化したい」\nといったお悩みをお持ちの方は、ぜひ一度ご相談ください。\n▼ スパルタClaude Code塾\nhttps://www.claude-code-lab.com"
+      },
+      {
+        "type": "unstyled",
+        "text": "#ClaudeCode #AI活用 #業務効率化 #ノーコード #AIツール #生成AI #Claude #仕事効率化 #モバイルアプリ #アプリ開発 #オンボーディング #Remotion #インディー開発"
+      }
+    ]
+  },
+  "status": "success",
+  "msg": "success",
+  "_handle": "claudecode_lab"
+}

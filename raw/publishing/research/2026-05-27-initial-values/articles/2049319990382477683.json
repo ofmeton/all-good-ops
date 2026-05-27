@@ -1,0 +1,578 @@
+{
+  "article": {
+    "id": "QXJ0aWNsZUVudGl0eToyMDQ4Njg4MDM1Njk3NjU1ODA4",
+    "author": {
+      "type": "user",
+      "userName": "claudecode_lab",
+      "url": "https://x.com/claudecode_lab",
+      "twitterUrl": "https://twitter.com/claudecode_lab",
+      "id": "1807726847154847744",
+      "name": "Claude Code研究所|スパルタClaude Code塾",
+      "isVerified": false,
+      "isBlueVerified": true,
+      "verifiedType": null,
+      "profilePicture": "https://pbs.twimg.com/profile_images/2047553749867216896/_SKwpHqG_normal.jpg",
+      "coverPicture": "https://pbs.twimg.com/profile_banners/1807726847154847744/1777009967",
+      "description": "東京大学にてAI研究に従事していたエンジニアメンバーがClaude Codeに特化した最新情報をお届け。経営者・士業向け名物研修「スパルタClaude Code塾」も運営。\nnote:https://t.co/VAtJlAXlsF\n研修のご依頼などDMでも受付しております✉️",
+      "location": "東京都",
+      "followers": 19619,
+      "following": 377,
+      "status": "",
+      "canDm": true,
+      "canMediaTag": true,
+      "createdAt": "Mon Jul 01 10:45:57 +0000 2024",
+      "entities": {
+        "description": {
+          "urls": [
+            {
+              "display_url": "note.com/claudecode_lab",
+              "expanded_url": "https://note.com/claudecode_lab",
+              "indices": [
+                92,
+                115
+              ],
+              "url": "https://t.co/VAtJlAXlsF"
+            }
+          ]
+        },
+        "url": {
+          "urls": [
+            {
+              "display_url": "claude-code-lab.com",
+              "expanded_url": "https://claude-code-lab.com/",
+              "indices": [
+                0,
+                23
+              ],
+              "url": "https://t.co/8oWsTCy0do"
+            }
+          ]
+        }
+      },
+      "fastFollowersCount": 0,
+      "favouritesCount": 12964,
+      "hasCustomTimelines": false,
+      "isTranslator": false,
+      "mediaCount": 79,
+      "statusesCount": 276,
+      "withheldInCountries": [],
+      "affiliatesHighlightedLabel": {},
+      "possiblySensitive": false,
+      "pinnedTweetIds": [
+        "2059090665716552166"
+      ],
+      "profile_bio": {},
+      "isAutomated": false,
+      "automatedBy": null
+    },
+    "replyCount": 0,
+    "likeCount": 0,
+    "quoteCount": 0,
+    "viewCount": "5581",
+    "createdAt": "Wed Apr 29 02:48:54 +0000 2026",
+    "title": "【skill大解剖】100のベストskillを逆分析して分かった：Claude Codeスキルが完璧に機能する6つのポイント",
+    "preview_text": "Claude Codeのスキル（Skill）機能を使いこなせていますか？「自分で作ったスキルがなかなか発動しない」「出力が毎回バラバラで一貫性がない」そんな悩みを抱えているエンジニアは多いはずです。",
+    "cover_media_img_url": "https://pbs.twimg.com/media/HHCehZ2bwAAXrKy.jpg",
+    "contents": [
+      {
+        "type": "unstyled",
+        "text": "Claude Codeのスキル（Skill）機能を使いこなせていますか？「自分で作ったスキルがなかなか発動しない」「出力が毎回バラバラで一貫性がない」そんな悩みを抱えているエンジニアは多いはずです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "AIとファイナンスの起業家として複数のプロダクト（@polymarketeye・@zscdao）を開発するdarkzodchi（@zodchiii）がXに投稿した「The Anatomy of a Perfect Skill: Reverse-Engineered from 100 Best Examples」では、100を超える優良スキルを逆分析して導き出した「機能するスキルが持つ6つの共通パターン」を詳しく解説しています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "この記事は投稿から1日も経たないうちに147Kビューを獲得し、Claude Codeコミュニティ内で大きな反響を呼びました。スキルの設計で迷っているエンジニア・開発者はもちろん、業務自動化でClaude Codeを活用したいビジネスパーソンにも、実践的なヒントが詰まった必読コンテンツです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ほとんどのスキルは機能しません。機能するスキルは、同じ6つのパターンに従っています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "実際に日常的に使われているスキルの実例を挙げながら、それぞれを解説していきます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "読み終わる頃には、自作のスキルが発動しない理由と、その修正方法が正確に分かるようになります！"
+      },
+      {
+        "type": "header-one",
+        "text": "30秒でおさらい"
+      },
+      {
+        "type": "unstyled",
+        "text": "~/.claude/skills/skill-name/SKILL.md に置くことで、コンテキストが説明文と一致したときにClaudeが自動で読み込みます。または /skill-name で手動起動することもできます。"
+      },
+      {
+        "type": "blockquote",
+        "text": "📝 補足： Claude Codeのスキル（Skill）機能は、繰り返し行う作業をマークダウンファイルに定義してClaudeに読み込ませる仕組みです。ファイルを所定の場所（~/.claude/skills/）に置くだけで、Claude CodeのCLIがスキルとして認識します。日本ではまだ知名度が低いですが、Claude Codeを本格活用する上で非常に重要な機能です。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 2,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HHCdJBiasAA3Jvv.png",
+        "width": 858,
+        "height": 230
+      },
+      {
+        "type": "unstyled",
+        "text": "これがアーキテクチャの全てです。難しいのは SKILL.md の中身です。"
+      },
+      {
+        "type": "header-one",
+        "text": "パターン1：descriptionはClaudeに「いつ」を伝える"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HHCeGfAb0AAEkMT.jpg",
+        "width": 1536,
+        "height": 1024
+      },
+      {
+        "type": "unstyled",
+        "text": "これが最も重要なフィールドです。Claudeはどのスキルを読み込むかを決める前に、全スキルのdescriptionをスキャンします。descriptionに「何をするか」しか書いていなければ、Claudeは「いつ使うか」を判断できません。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ダメなdescription："
+      },
+      {
+        "type": "markdown",
+        "text": "```\ndescription: コードレビューツール\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "良いdescription："
+      },
+      {
+        "type": "markdown",
+        "text": "```\ndescription: バグ、セキュリティ上の問題、\n保守性についてコードをレビューします。\npullリクエストのレビュー、コード品質のチェック、\n差分分析、またはユーザーが「レビュー」「PR」\n「コード品質」「ベストプラクティス」といった\nキーワードを使用した場合に使用します。\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "良い例はClaudeに「スキルが何をするか＋いつ発動するか＋どのキーワードに反応するか」を伝えています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "50文字未満のdescriptionを持つスキルは、適切なトリガーコンテキストを持つスキルと比べて3〜5倍発動しにくくなります。最初の250文字がClaudeのコンテキスト予算に含まれる全てなので、ユースケースを冒頭に配置しましょう。"
+      },
+      {
+        "type": "header-one",
+        "text": "パターン2：会話的ではなく、指示的に書く"
+      },
+      {
+        "type": "unstyled",
+        "text": "スキルはチャットではなく指示文です。命令形の動詞を使いましょう。"
+      },
+      {
+        "type": "unstyled",
+        "text": "会話的（弱い）："
+      },
+      {
+        "type": "markdown",
+        "text": "```\nコードを確認していただけますか？バグがないかチェックしていただけると助かります。\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "指示的（強い）："
+      },
+      {
+        "type": "markdown",
+        "text": "```\n現在の差分を確認してください。以下の項目をチェックしてください。\n1. セキュリティ脆弱性（OWASP Top 10）\n2. パフォーマンスの問題\n3. コードスタイルの違反\n重要度評価付きのチェックリストとして出力してください。\n```"
+      },
+      {
+        "type": "blockquote",
+        "text": "📝 補足： 「OWASP Top 10」とは、Open Web Application Security Project（OWASP）が定期的に発表するWebアプリケーションの重大なセキュリティリスクトップ10のことです。SQLインジェクション、認証の不備、クロスサイトスクリプティング（XSS）など、業界標準のセキュリティチェックリストとして世界中で参照されています。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 2,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Claudeは、質問や丁寧なお願いよりも命令形の指示を格段に忠実に実行します。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Anthropicのオフィシャルリポジトリにあるスキルはどれも同じパターンを使っています：直接的な動詞、番号付きのステップ、明示的な出力フォーマット。"
+      },
+      {
+        "type": "header-one",
+        "text": "パターン3：出力フォーマットを明示する"
+      },
+      {
+        "type": "unstyled",
+        "text": "ほとんどのカスタムスキルが失敗するのはここです。Claudeに何をするかは伝えても、出力の見た目を伝えていません。Claudeは毎回フォーマットを独自に作るので、結果が一定しません。"
+      },
+      {
+        "type": "unstyled",
+        "text": "出力フォーマットなし："
+      },
+      {
+        "type": "markdown",
+        "text": "```\nこれらの変更に対するコミットメッセージを生成します。\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "これだと、1行だったり、段落だったり、プレフィックスありだったり、なしだったりします。"
+      },
+      {
+        "type": "unstyled",
+        "text": "出力フォーマットあり："
+      },
+      {
+        "type": "markdown",
+        "text": "```\nコミットメッセージは、以下の形式で生成してください。\n\nタイプ(スコープ): 短い説明\n- 変更内容の箇条書き\n- 変更理由の箇条書き\n\nタイプは、feat、fix、refactor、docs、test、chore のいずれかである必要があります。\n\nスコープは、影響を受けるモジュール名です。\n短い説明は、50文字以内、現在形、小文字で記述してください。\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "これで毎回同じ出力構造が得られます。スキルが再利用可能になります。"
+      },
+      {
+        "type": "header-one",
+        "text": "パターン4：「最初に読む」ステップを入れる"
+      },
+      {
+        "type": "unstyled",
+        "text": "優れたスキルは、Claudeがプロジェクトを知っていると仮定しません。まず確認するよう指示します。"
+      },
+      {
+        "type": "unstyled",
+        "text": "awesome-claude-skillsリポジトリの /test スキルを例に取ります。「テストを書いて」とするのではなく、このようにします："
+      },
+      {
+        "type": "markdown",
+        "text": "```\nテストを作成する前に：\n1. 対象ファイルを読み、関数のシグネチャと型を理解する\n2. 既存のテストディレクトリを見つけ、既存のテストを1～2個読む\n3. テストフレームワーク（Jest、Vitest、Pytestなど）を特定する\n4. インポートスタイルとアサーションパターンをメモする\n\n次に、以下の項目を網羅するテストを作成する：\n- 正常系\n- エッジケース（空、null、ゼロ、最大値）\n- エラーケース\n- 非同期動作（該当する場合）\n\n既存のテストのインポートスタイルとパターンに完全に一致させる\n\nテストを作成したら実行し、完了前にエラーを修正する。\n```"
+      },
+      {
+        "type": "blockquote",
+        "text": "📝 補足： 「awesome-claude-skills」はGitHub上のコミュニティリポジトリで、Claude Code向けの高品質なスキルを集めたキュレーションリストです。commit、code-review、testなどの実用的なスキルが公開されており、自作スキルの参考として非常に役立ちます。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 2,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "「最初に読む」ステップこそが、プロジェクトのコードに合ったコードを生成するスキルと、リンターを壊すような汎用的なコードを生成するスキルを分けるものです。"
+      },
+      {
+        "type": "header-one",
+        "text": "パターン5：スキルが「しないこと」を定義する"
+      },
+      {
+        "type": "unstyled",
+        "text": "直感に反しますが、強力なパターンです。優れたスキルは明示的にスコープ外を列挙します。"
+      },
+      {
+        "type": "unstyled",
+        "text": "AnthropicのオフィシャルPDFスキルから："
+      },
+      {
+        "type": "markdown",
+        "text": "```\n## 対象外\n\nこのスキルでは以下の操作はしない：\n- スキャンされたPDFの処理（OCRスキルを使用してください）\n- PDFの新規作成（文書生成スキルを使用してください）\n- パスワードで保護されたファイルの処理\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "なぜ重要かというと：ユーザーがスキルのできないことを頼んだとき、Claudeは試みて失敗するのではなく、別のスキルを選ぶか、確認を求めます。壊れた出力が減り、正しいルーティングが増えます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "このパターンは高品質スキルの70%に見られますが、低品質スキルにはほとんど登場しません。"
+      },
+      {
+        "type": "header-one",
+        "text": "パターン6：500行以内に収める"
+      },
+      {
+        "type": "unstyled",
+        "text": "スキルはすべて起動時にClaudeのコンテキストに読み込まれます。2000行のスキルは何もする前に5000トークン以上を消費します。スキルが長ければ長いほど、Claudeが途中で集中を失い、後半の指示を無視し始める可能性が高まります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "AnthropicのオフィシャルスキルはすべてAnthropic（frontend-design、code-review、security-guidance）300行以内です。インストール数の多いコミュニティスキル（Superpowers、Context7、mcp-builder）も同様にコンパクトです。"
+      },
+      {
+        "type": "blockquote",
+        "text": "📝 補足： 「Superpowers」「Context7」「mcp-builder」はClaude Code向けの有名なコミュニティスキルです。Superpowersはよく使う操作をまとめたスキルセット、Context7はコードのコンテキスト管理を強化するスキル、mcp-builderはMCPサーバー構築を補助するスキルです。いずれも300行以内のコンパクトな設計が特徴です。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 2,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "スキルが長くなってきたら、分割しましょう。プログレッシブ・ディスクロージャーパターンを使います："
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HHCc_3WbYAEVqKe.png",
+        "width": 990,
+        "height": 194
+      },
+      {
+        "type": "blockquote",
+        "text": "📝 補足： 「プログレッシブ・ディスクロージャー（Progressive Disclosure）」とは、必要な情報だけを段階的に表示するUI/UXデザインの原則です。ここではスキルの設計に応用されており、コアの指示はメインファイルに、詳細や参考情報は別ファイルに分けることで、コンテキスト使用量を最小化します。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 2,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "SKILL.md内で他のファイルを参照します："
+      },
+      {
+        "type": "markdown",
+        "text": "```\n複雑なフォーム入力については、[FORMS.md](FORMS.md)を参照してください。\nAPIリファレンスの全文については、[REFERENCE.md](REFERENCE.md)を参照してください。\nその他の例については、[EXAMPLES.md](EXAMPLES.md)を参照してください。\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "Claudeは必要なタスクが実際に必要とするときだけ、サポートファイルを読み込みます。"
+      },
+      {
+        "type": "header-one",
+        "text": "実例：/commitスキルの解剖"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HHCllO2akAAgpP7.jpg",
+        "width": 1536,
+        "height": 1024
+      },
+      {
+        "type": "unstyled",
+        "text": "6つのパターンすべてに従った /commit スキルを紹介します。これが「良いスキル」の形です："
+      },
+      {
+        "type": "markdown",
+        "text": "```\n---\nname: commit\ndescription: 現在の変更から構造化されたGitコミットを作成します。ユーザーが「コミット」「変更を保存」「コミット」などの操作を行った際、または機能開発が完了した後に使用します。変更を論理的に分割し、明確なメッセージを表示します。\n---\n\n今のgitのstatusからcommitをしてください。\n## プロセス\n1. `git status` と `git diff` を実行して、すべての変更を確認します。\n2. 関連する変更を論理的な単位（1つの機能＝1つのコミット）にグループ化します。\n3. 各単位について、以下の形式でコミットメッセージを生成します。\nタイプ（スコープ）：簡単な説明\n- 変更内容\n- 変更理由（明らかでない場合）\n4. `git add` と `git commit` を使用して、各単位を個別にステージングしてコミットします。\n5. 要約を表示します。「N個のコミットを作成しました：[タイトルのリスト]」\n\n## ルール\n- タイプは、feat、fix、refactor、docs、test、chore のいずれかである必要があります。\n- 説明は 50 文字以内、小文字、現在形です。\n- 箇条書きは簡潔に、冗長な表現は避けてください。\n- 関連性のない変更を 1 つのコミットにまとめないでください\n\n## 対象外\n- remoteへのpush（/push または git push を手動で使用）\n- プルリクエストの作成（/pr スキルを使用）\n- ブランチのマージ\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "注目ポイント："
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "descriptionがClaudeに「いつ」を伝えている"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "指示が命令形（命令動詞、番号付きステップ）"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "出力フォーマットが明示されている（コミットメッセージの構造）"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "「最初に読む」ステップが組み込まれている（git status、git diff）"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "スコープ外が定義されている"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "合計50行以内"
+      },
+      {
+        "type": "unstyled",
+        "text": "このスキルはあらゆるプロジェクト・あらゆる言語・毎回機能します。"
+      },
+      {
+        "type": "header-one",
+        "text": "スキルを壊すもの"
+      },
+      {
+        "type": "unstyled",
+        "text": "機能しないスキルには、共通の失敗パターンがあります："
+      },
+      {
+        "type": "unstyled",
+        "text": "descriptionの失敗：",
+        "inlineStyleRanges": [
+          {
+            "length": 15,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "50文字未満"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "視点が一貫していない（“I help” vs “You can use this”）"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "トリガーキーワードがない"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "ユースケースのコンテキストがない"
+      },
+      {
+        "type": "unstyled",
+        "text": "コンテンツの失敗：",
+        "inlineStyleRanges": [
+          {
+            "length": 9,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "会話的で指示的でない"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "出力フォーマットが指定されていない"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "「最初に読む」ステップがない"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "スコープ外のセクションがない"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "1000行以上"
+      },
+      {
+        "type": "unstyled",
+        "text": "設計の失敗：",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "1つのスキルで5つのことをしようとしている"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "特定のプロジェクト仕様にハードコードされている"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "スキル自体のバージョン管理をしていない"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "最初に書いた後に一度も更新していない"
+      },
+      {
+        "type": "unstyled",
+        "text": "カスタムスキルがこれらのうち3つ以上に該当するなら、おそらく発動していないか、悪い出力を出しています。"
+      },
+      {
+        "type": "header-one",
+        "text": "既存スキルの修正方法"
+      },
+      {
+        "type": "unstyled",
+        "text": "最も弱いスキル（Claudeが一番発動しないもの）を開きましょう。このチェックリストを実行してください："
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "descriptionにトリガーキーワードが3つ以上あるか？"
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "descriptionの最初の250文字以内にユースケースがあるか？"
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "指示は番号付きステップの命令形動詞になっているか？"
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "出力フォーマットが明示的に指定されているか？"
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "プロジェクト認識：既存ファイルを最初に読むようClaudeに指示しているか？"
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "スコープ：スキルが「しないこと」を列挙しているか？"
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "長さ：SKILL.mdが500行以内か？"
+      },
+      {
+        "type": "unstyled",
+        "text": "失敗した項目を修正してください。そして手動で起動せず、スキルが処理すべきことをClaudeに頼んでテストしましょう。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Claudeが正しいスキルを選べば、descriptionが機能しています。別のスキルまたは何も選ばなければ、descriptionにより多くのトリガーコンテキストが必要です。"
+      },
+      {
+        "type": "header-one",
+        "text": "複利効果"
+      },
+      {
+        "type": "unstyled",
+        "text": "悪いスキルはClaudeを遅くし（コンテキストを無駄に消費）、一貫性のない出力を生み（フォーマットなし）、誤ったルーティングをします（曖昧なdescription）。"
+      },
+      {
+        "type": "unstyled",
+        "text": "良いスキルは逆方向に複利をもたらします。"
+      },
+      {
+        "type": "unstyled",
+        "text": "よく書かれたスキルが増えるほど、Claudeはあらゆるタスクに対して正しいスキルを選べるようになります。スキルは単なるコレクションではなく、システムになります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "お読みいただきありがとうございました🙏🏼"
+      },
+      {
+        "type": "unstyled",
+        "text": "経営者・士業・営業職等、全てのビジネスパーソンの方で、\n「Claude Codeを使いこなしたい」\n「AIを活用してもっと業務を効率化したい」\nといったお悩みをお持ちの方は、ぜひ一度ご相談ください。\n▼ スパルタClaude Code塾\nhttps://www.claude-code-lab.com"
+      },
+      {
+        "type": "unstyled",
+        "text": "#ClaudeCode #AI活用 #業務効率化 #ノーコード #AIツール #生成AI #Claude #仕事効率化 #スキル設計 #プロンプトエンジニアリング #AI開発 #バイブコーディング"
+      }
+    ]
+  },
+  "status": "success",
+  "msg": "success",
+  "_handle": "claudecode_lab"
+}

@@ -1,0 +1,132 @@
+{
+  "handle": "Shimayus",
+  "tweet_id": "2029419109562433750",
+  "body": {
+    "tweets": [
+      {
+        "type": "tweet",
+        "id": "2029419109562433750",
+        "url": "https://x.com/Shimayus/status/2029419109562433750",
+        "twitterUrl": "https://twitter.com/Shimayus/status/2029419109562433750",
+        "text": "https://t.co/phlZyqMOav",
+        "source": "",
+        "retweetCount": 20,
+        "replyCount": 2,
+        "likeCount": 369,
+        "quoteCount": 0,
+        "viewCount": 112673,
+        "createdAt": "Thu Mar 05 04:49:55 +0000 2026",
+        "lang": "zxx",
+        "bookmarkCount": 0,
+        "isReply": false,
+        "inReplyToId": "",
+        "conversationId": "2029419109562433750",
+        "displayTextRange": [
+          0,
+          23
+        ],
+        "inReplyToUserId": "",
+        "inReplyToUsername": "",
+        "isPinned": false,
+        "author": {
+          "type": "user",
+          "userName": "Shimayus",
+          "url": "https://x.com/Shimayus",
+          "twitterUrl": "https://twitter.com/Shimayus",
+          "id": "137353984",
+          "name": "shimayuz ⤴️ AI影分身構築",
+          "isVerified": false,
+          "isBlueVerified": true,
+          "verifiedType": null,
+          "profilePicture": "https://pbs.twimg.com/profile_images/2018684367116328960/SOl0Qt1M_normal.jpg",
+          "coverPicture": "https://pbs.twimg.com/profile_banners/137353984/1771422394",
+          "description": "AIエージェント専門家 | 株式会社quai CEO 医師免許を持つ起業家 | 複雑な業務をAIエージェントで自動化するノウハウを公開 | 始動10期SV選抜 | AGI研究所主催AIエージェントハッカソン2026優勝 | 誰でも使えるAI活用術と最新AIエージェント情報をお届け | フォローで生産性が変わります📝",
+          "location": "日本 東京",
+          "followers": 11940,
+          "following": 989,
+          "status": "",
+          "canDm": true,
+          "canMediaTag": true,
+          "createdAt": "Mon Apr 26 14:24:40 +0000 2010",
+          "entities": {
+            "description": {},
+            "url": {
+              "urls": [
+                {
+                  "display_url": "quai.new",
+                  "expanded_url": "https://www.quai.new/",
+                  "indices": [
+                    0,
+                    23
+                  ],
+                  "url": "https://t.co/pMbg2fQiVH"
+                }
+              ]
+            }
+          },
+          "fastFollowersCount": 0,
+          "favouritesCount": 0,
+          "hasCustomTimelines": true,
+          "isTranslator": false,
+          "mediaCount": 2024,
+          "statusesCount": 9143,
+          "withheldInCountries": [],
+          "affiliatesHighlightedLabel": {},
+          "possiblySensitive": false,
+          "pinnedTweetIds": [
+            "2029419109562433750"
+          ],
+          "profile_bio": {
+            "description": "AIエージェント専門家 | 株式会社quai CEO 医師免許を持つ起業家 | 複雑な業務をAIエージェントで自動化するノウハウを公開 | 始動10期SV選抜 | AGI研究所主催AIエージェントハッカソン2026優勝 | 誰でも使えるAI活用術と最新AIエージェント情報をお届け | フォローで生産性が変わります📝",
+            "entities": {
+              "description": {},
+              "url": {
+                "urls": [
+                  {
+                    "display_url": "quai.new",
+                    "expanded_url": "https://www.quai.new/",
+                    "indices": [
+                      0,
+                      23
+                    ],
+                    "url": "https://t.co/pMbg2fQiVH"
+                  }
+                ]
+              }
+            }
+          },
+          "isAutomated": false,
+          "automatedBy": null
+        },
+        "extendedEntities": {},
+        "card": {
+          "rest_id": "https://t.co/phlZyqMOav"
+        },
+        "place": {},
+        "entities": {
+          "urls": [
+            {
+              "display_url": "x.com/i/article/2029…",
+              "expanded_url": "http://x.com/i/article/2029408862332436480",
+              "indices": [
+                0,
+                23
+              ],
+              "url": "https://t.co/phlZyqMOav"
+            }
+          ]
+        },
+        "isRetweet": false,
+        "isQuote": false,
+        "isConversationControlled": false,
+        "quoted_tweet": null,
+        "retweeted_tweet": null,
+        "isLimitedReply": false,
+        "communityInfo": null
+      }
+    ],
+    "status": "success",
+    "msg": "success",
+    "code": 0
+  }
+}

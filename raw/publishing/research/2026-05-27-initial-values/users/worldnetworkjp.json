@@ -1,0 +1,57 @@
+{
+  "status": "success",
+  "msg": "success",
+  "data": {
+    "id": "1869195747503304704",
+    "name": "World日本公式（World Japan）",
+    "userName": "worldnetworkjp",
+    "location": "",
+    "url": "https://t.co/YnsOqKCbWl",
+    "description": "Worldの日本公式アカウントです。\n現在、世界160カ国以上で、AI時代に必要な『人間のネットワーク』を構築中です。\nWorldの最新情報を日本語でお伝えいたします。\nお問い合わせ：@worldappsupport",
+    "entities": {
+      "description": {
+        "user_mentions": [
+          {
+            "id_str": "",
+            "indices": [
+              92,
+              108
+            ],
+            "name": "",
+            "screen_name": "worldappsupport"
+          }
+        ]
+      },
+      "url": {
+        "urls": [
+          {
+            "display_url": "world.org/ja-jp",
+            "expanded_url": "https://world.org/ja-jp",
+            "indices": [
+              0,
+              23
+            ],
+            "url": "https://t.co/YnsOqKCbWl"
+          }
+        ]
+      }
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": "Business",
+    "followers": 1761,
+    "following": 19,
+    "favouritesCount": 4,
+    "statusesCount": 130,
+    "mediaCount": 38,
+    "createdAt": "2024-12-18T01:39:41.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/1869195747503304704/1772782063",
+    "profilePicture": "https://pbs.twimg.com/profile_images/2029825950234595332/CvlCix9Q_normal.jpg",
+    "canDm": false,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": []
+  }
+}

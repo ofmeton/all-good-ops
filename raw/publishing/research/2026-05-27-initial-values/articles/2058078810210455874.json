@@ -1,0 +1,1913 @@
+{
+  "article": {
+    "id": "QXJ0aWNsZUVudGl0eToyMDU1MTA2MzE3NjU2OTczMzEy",
+    "author": {
+      "type": "user",
+      "userName": "Codestudiopjbk",
+      "url": "https://x.com/Codestudiopjbk",
+      "twitterUrl": "https://twitter.com/Codestudiopjbk",
+      "id": "2048622181790470144",
+      "name": "Codex Studio",
+      "isVerified": false,
+      "isBlueVerified": true,
+      "verifiedType": null,
+      "profilePicture": "https://pbs.twimg.com/profile_images/2048623292484136960/-bDB5XH6_normal.jpg",
+      "coverPicture": "https://pbs.twimg.com/profile_banners/2048622181790470144/1777265728",
+      "description": "Codexガチ勢３人で運営｜実務レベルのCLI活用・自動化を毎日発信｜大学院生・ポスドク対象の開発プログラム参加｜賞金30万円獲得｜現在は上場企業とAIエージェントを共同開発中｜AI時代はコンテキスト/ナレッジ管理が９割｜組織全体への「 Codex × Obsidian 」の導入は下のHPからご相談ください👇",
+      "location": "サイトはこちら👉",
+      "followers": 8836,
+      "following": 10,
+      "status": "",
+      "canDm": true,
+      "canMediaTag": true,
+      "createdAt": "Mon Apr 27 04:37:22 +0000 2026",
+      "entities": {
+        "description": {},
+        "url": {
+          "urls": [
+            {
+              "display_url": "plai-ai.com",
+              "expanded_url": "http://plai-ai.com",
+              "indices": [
+                0,
+                23
+              ],
+              "url": "https://t.co/8pM3Az1DRu"
+            }
+          ]
+        }
+      },
+      "fastFollowersCount": 0,
+      "favouritesCount": 485,
+      "hasCustomTimelines": false,
+      "isTranslator": false,
+      "mediaCount": 157,
+      "statusesCount": 238,
+      "withheldInCountries": [],
+      "affiliatesHighlightedLabel": {},
+      "possiblySensitive": false,
+      "pinnedTweetIds": [
+        "2058552181763309605"
+      ],
+      "profile_bio": {},
+      "isAutomated": false,
+      "automatedBy": null
+    },
+    "replyCount": 3,
+    "likeCount": 220,
+    "quoteCount": 10,
+    "viewCount": "140963",
+    "createdAt": "Sat May 23 06:53:20 +0000 2026",
+    "title": "【保存版】たった3分でCodex に \"無限メモリー\" を後付けする方法 ",
+    "preview_text": "Codexに“第２の脳”を追加して、話が切れても文脈を残せるようにする仕組みを知ってますか？その名もAgentmemory。それの導入手順、設定方法、ハマりどころまで全部まとめました。毎回同じ説明をするのが面倒な人、ト",
+    "cover_media_img_url": "https://pbs.twimg.com/media/HI529FObMAAQxAU.jpg",
+    "contents": [
+      {
+        "type": "unstyled",
+        "text": "Codexに“第２の脳”を追加して、話が切れても文脈を残せるようにする仕組みを知ってますか？その名もAgentmemory。それの導入手順、設定方法、ハマりどころまで全部まとめました。毎回同じ説明をするのが面倒な人、トークンを無駄にしたくない人は必見です。",
+        "inlineStyleRanges": [
+          {
+            "length": 12,
+            "offset": 50,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "毎朝Claude Codeを立ち上げて「昨日の続きから」と入力すると、返ってくるのは「前回のセッションの内容を教えてください」。なんなら毎日起きてる現象なんですよ。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HI2greMaAAAcs8X.jpg",
+        "width": 1199,
+        "height": 675
+      },
+      {
+        "type": "unstyled",
+        "text": "セッションが切れた瞬間、プロジェクトの文脈はリセットされる。CLAUDE.md に書いてあることは読まれるけど、3日前にバグった原因の議論とか先週決めた設計方針の理由とか、そういう「文脈の重み」は丸ごと消える。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ある開発者がこう書いてました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "only 30 days of your Claude Code session history is saved on your computer by default, you have to set that longer if you want to have memory over all of them.",
+        "inlineStyleRanges": [
+          {
+            "length": 159,
+            "offset": 0,
+            "style": "Italic"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "セッション履歴のデフォルト保持期限は30日。しかも保存されてるのは「文字列としての記録」であって、文脈として呼び出される仕組みじゃない。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Codex側でも基本同じです。GPT-5.5 のコンテキストは API で 1M token、Codex CLI では 400K。物理的なサイズは十分に見えるんですが、実運用では200K前後で精度が落ち始めます。",
+        "inlineStyleRanges": [
+          {
+            "length": 9,
+            "offset": 96,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "そこに、4,000Star突破で速報が走ったAgentmemory が降ってきた。ガチで使い倒して 1 週間。結論から書きます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Codex/Claude Code に「無限メモリ」を後付けするという表現は、半分は誇大広告で、半分は本当です。",
+        "inlineStyleRanges": [
+          {
+            "length": 55,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "本当の方を最大化する設定の仕方、誇大広告の方を引き当てた時の回避策を、この記事で全部書きます。"
+      },
+      {
+        "type": "header-two",
+        "text": "1. なぜ Codex/Claude Code は「記憶喪失」するのか",
+        "inlineStyleRanges": [
+          {
+            "length": 35,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Agentmemory の前に、「なぜ既存ツールでは無理なのか」を整理させてください。ここを抜かすと「便利なメモリツールを足しました」で終わって、本質を取り違えます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "コンテキストウィンドウが大きくても、実運用では使い切れない",
+        "inlineStyleRanges": [
+          {
+            "length": 29,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HI2greObIAEChfD.jpg",
+        "width": 1199,
+        "height": 675
+      },
+      {
+        "type": "unstyled",
+        "text": "2026年5月時点で、主要モデルのコンテキストウィンドウはこう。"
+      },
+      {
+        "type": "unstyled",
+        "text": "● Claude Opus 4.7: 1M token（200K から拡張）",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 19,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "● GPT-5.5: 1M token（API）/ Codex CLI では 400K 制限",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 39,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "● Gemini 3.1 Pro: 1M token"
+      },
+      {
+        "type": "unstyled",
+        "text": "日本語換算で約141万字。本一冊どころかシリーズもの全巻入る容量です。数字だけ見ると「全部入るやん」と思える。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ただ、Anthropic 自身が公式エンジニアリングブログでこう書いてます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "コンテキストウィンドウ内のトークン数が増えるにつれて、モデルがそのコンテキストから情報を正確に想起する能力は低下する。",
+        "inlineStyleRanges": [
+          {
+            "length": 59,
+            "offset": 0,
+            "style": "Italic"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "物理的に入る ≠ 精度を保てる、なんですよね。経験的には200K〜400K あたりから「Claude さっき言ったこと忘れてない？」が始まる。これが俗に言う context rot（コンテキスト腐敗） です。",
+        "inlineStyleRanges": [
+          {
+            "length": 21,
+            "offset": 79,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude Code 本家でも起きた「思考の崩壊」",
+        "inlineStyleRanges": [
+          {
+            "length": 26,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "実例を出しておきます。2026年4月23日、Anthropic が公式にpostmortem を出しました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "3月26日にロールアウトされたバグで、「1時間アイドル後の古い思考をクリアする機能」が、セッション再開後も毎ターン発火する状態になっていた。",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 53,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "結果、median の visible thinking 長さがこう変化した。"
+      },
+      {
+        "type": "unstyled",
+        "text": "● 1月: 2,200字"
+      },
+      {
+        "type": "unstyled",
+        "text": "● 3月: 600字"
+      },
+      {
+        "type": "unstyled",
+        "text": "73% collapse。Claude Code 公式が自分の文脈を勝手に削っていた期間が約1ヶ月続いたわけです。",
+        "inlineStyleRanges": [
+          {
+            "length": 12,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "これが何で大事かというと、context rot は「使う側のミス」じゃなくて、サービス側の都合でも起きる、という話。CLAUDE.md をどれだけ綺麗に書いても、ツール側のチューニングひとつで「先週の文脈」は紙くずになる。",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 40,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "既存の対処（CLAUDE.md / auto-memory）の限界",
+        "inlineStyleRanges": [
+          {
+            "length": 33,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Anthropic も対策は打ってます。Claude Code の auto-memory 機能は、セッション間で学んだことを記憶して再開時に呼び出してくれる仕組み。Claude Code チームが5月にアナウンスしてました。",
+        "inlineStyleRanges": [
+          {
+            "length": 14,
+            "offset": 34,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "ただ、これは compaction とセットで動く構造になってます。「コンテキストを圧縮する → 重要な情報だけメモリに退避する」というフローを内部でやってて、圧縮のたびに「何を残すか」を AI 側が判断するわけですが、ここの判断ロジックはユーザーが触れない。",
+        "inlineStyleRanges": [
+          {
+            "length": 20,
+            "offset": 7,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "しかも auto-memory は Claude Code 専用です。Codex / Cursor / Cline / Hermes など他のエージェントから読みに行く API はない。複数エージェント使ってる人ほど「同じ前提を3回説明する」が常態化していくわけです。"
+      },
+      {
+        "type": "header-two",
+        "text": "2. Agentmemory は何が違うのか",
+        "inlineStyleRanges": [
+          {
+            "length": 22,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "ここから本題。Agentmemory（公式リポは rohitg00/agentmemory）は、2026年5月15日時点で 8.8k Star に達したオープンソースのメモリエンジンです。@Codestudiopjbk の速報時点では「4,000+ Star」でしたが、その後2倍以上に伸びてる。ライセンスは Apache 2.0、TypeScript ベース、最新リリースは v0.9.12（5月13日）。完全 self-hosted で、外部 SaaS への送信ゼロ。",
+        "inlineStyleRanges": [
+          {
+            "length": 9,
+            "offset": 62,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "開発者の思想",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "リード開発者 Rohit Ghumare 氏（@ghumare64）が、Agentmemory の本質を一言でまとめてます。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HI2gredaQAAMPj2.jpg",
+        "width": 1199,
+        "height": 675
+      },
+      {
+        "type": "unstyled",
+        "text": "Built this 6 months ago with agentmemory: persistent memory for AI coding agents. Same core idea: stop re-deriving, start compiling.",
+        "inlineStyleRanges": [
+          {
+            "length": 132,
+            "offset": 0,
+            "style": "Italic"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "「再導出をやめて、コンパイルし始める」。ここが既存ツールとの哲学的な差なんですよ。"
+      },
+      {
+        "type": "unstyled",
+        "text": "CLAUDE.md は「毎回再導出するためのインプット」でした。プロジェクト構造、規約、過去の決定。それを毎セッション AI が読み直して、再解釈して、また忘れる。Agentmemory が変えるのは、この「再導出ループ」を「コンパイル済みの記憶層」に置き換えるという発想です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "3層アーキテクチャ（README から要約）",
+        "inlineStyleRanges": [
+          {
+            "length": 22,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "公式 README に書いてある内部構造は、3 段に分かれてます。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HI2greNasAAena9.jpg",
+        "width": 1199,
+        "height": 675
+      },
+      {
+        "type": "unstyled",
+        "text": "1 つ目が Capture（取り込み）。12 個の Claude Code ライフサイクル hooks で自動キャプチャしてくれるので、手動で memory_save する必要はない。",
+        "inlineStyleRanges": [
+          {
+            "length": 13,
+            "offset": 6,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "2 つ目が Pipeline（処理）。重複排除 → privacy filter（API キー・PII 自動除去）→ AI ベースの圧縮、というフローで観測を整理する。",
+        "inlineStyleRanges": [
+          {
+            "length": 12,
+            "offset": 6,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "3 つ目が Retrieval（検索）。3 系統のハイブリッド検索（BM25 / vector / graph）を RRF k=60 で融合してます。BM25 が語幹化キーワード+類義語拡張、vector が密埋め込みの cosine 類似度、graph がナレッジグラフの traversal。Reciprocal Rank Fusion で融合するので、片方の手法で取りこぼしてももう片方が拾う。結果はセッション分散（max 3 per session）で返すので、同じセッションの結果ばかり並ぶ問題も解消されてます。",
+        "inlineStyleRanges": [
+          {
+            "length": 13,
+            "offset": 6,
+            "style": "Bold"
+          },
+          {
+            "length": 8,
+            "offset": 58,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "4-tier memory（Ebbinghaus 着想）",
+        "inlineStyleRanges": [
+          {
+            "length": 28,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "もうひとつ面白いのが、メモリを 4 階層に分けて時間と共に「育てる」設計です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "最下層が Working で、ツール実行の生観測・エラーログ・コマンド履歴のような短期記憶。Episodic に上がると「何が起きたか」のセッション要約になる。Semantic に上がると「自分が知っていること」、抽出された知識やパターンに変わる。最上位が Procedural で、「どう進めるか」のワークフロー化された手順。"
+      },
+      {
+        "type": "unstyled",
+        "text": "頻繁にアクセスされた記憶は強化され、参照されない記憶は Ebbinghaus 忘却曲線で減衰する。人間の記憶構造に似せた仕組みです。これが「再導出をやめてコンパイル」の正体。"
+      },
+      {
+        "type": "unstyled",
+        "text": "競合との位置づけ",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "ここは正直に書きます。GitHub Star だけ見ると、Agentmemory は競合に対してまだ小さい。",
+        "inlineStyleRanges": [
+          {
+            "length": 5,
+            "offset": 48,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HI2greUaQAAJUgj.jpg",
+        "width": 1199,
+        "height": 675
+      },
+      {
+        "type": "unstyled",
+        "text": "● Mem0: 55.7k Star、汎用メモリレイヤー、API/Cloud first"
+      },
+      {
+        "type": "unstyled",
+        "text": "● Letta（旧 MemGPT）: 22.7k Star、エージェント OS、virtual context management"
+      },
+      {
+        "type": "unstyled",
+        "text": "● Agentmemory: 8.8k Star、coding agent 特化、ローカル SQLite"
+      },
+      {
+        "type": "unstyled",
+        "text": "数で勝負しに行くと負けます。ただ Agentmemory が刺さるのは coding agent 特化と decoupled 設計です。Rohit 氏自身がこう書いてる。",
+        "inlineStyleRanges": [
+          {
+            "length": 29,
+            "offset": 36,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "If you want actual extended memory architecture, cross-agent, portable, not locked to a particular agent, check out agentmemory. It's designed as a decoupled memory layer that works across harnesses.",
+        "inlineStyleRanges": [
+          {
+            "length": 199,
+            "offset": 0,
+            "style": "Italic"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Cursor、Cline、Claude Code、Codex、Hermes、どれにも同じメモリで接続できる。これが Mem0 や Letta との差別化軸です。Mem0 は汎用すぎて coding 文脈の自動キャプチャ機構が弱く、Letta はエージェント OS なのでメモリ層だけ取り出しにくい。"
+      },
+      {
+        "type": "unstyled",
+        "text": "「コードエージェントを複数併用してる開発者」というニッチに、Agentmemory はど真ん中で刺してます。",
+        "inlineStyleRanges": [
+          {
+            "length": 20,
+            "offset": 1,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "3. 3分で始める ― インストールと初期設定",
+        "inlineStyleRanges": [
+          {
+            "length": 23,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "ここから手を動かしていきます。Mac / Linux / Windows どれでも基本フローは同じ、Node.js 環境さえあれば走ります。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HI2grePasAAlZhp.jpg",
+        "width": 1199,
+        "height": 675
+      },
+      {
+        "type": "unstyled",
+        "text": "ステップ 1: メモリサーバーを起動",
+        "inlineStyleRanges": [
+          {
+            "length": 18,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "ターミナルを 1 枚開いてこれを叩くだけ。"
+      },
+      {
+        "type": "unstyled",
+        "text": "# メモリサーバー起動（常駐させる）"
+      },
+      {
+        "type": "unstyled",
+        "text": "npx @agentmemory/agentmemory"
+      },
+      {
+        "type": "unstyled",
+        "text": "初回は依存パッケージのダウンロードで 1〜2 分。起動成功すると http://localhost:3111 で REST API が立ち上がります。ヘルスチェックはこれ。"
+      },
+      {
+        "type": "unstyled",
+        "text": "curl http://localhost:3111/agentmemory/health"
+      },
+      {
+        "type": "unstyled",
+        "text": "# → {\"status\":\"ok\",\"version\":\"0.9.12\"}"
+      },
+      {
+        "type": "unstyled",
+        "text": "ビューアもセットで起動するので、ブラウザで http://localhost:3113 を開けばメモリの中身が可視化されてます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ステップ 2: デモデータを入れてみる",
+        "inlineStyleRanges": [
+          {
+            "length": 19,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "中身がカラだとイメージしにくいので、サンプルデータを入れます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "# 別ターミナルでデモ投入"
+      },
+      {
+        "type": "unstyled",
+        "text": "npx @agentmemory/agentmemory demo"
+      },
+      {
+        "type": "unstyled",
+        "text": "これでダミーのセッション履歴が SQLite に書き込まれて、ビューアで観測できる状態になる。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ステップ 3: Claude Code に組み込む",
+        "inlineStyleRanges": [
+          {
+            "length": 25,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude Code 側からはプラグインマーケットプレイス経由で入れるのが最短。"
+      },
+      {
+        "type": "unstyled",
+        "text": "# Claude Code 内で実行"
+      },
+      {
+        "type": "unstyled",
+        "text": "/plugin marketplace add rohitg00/agentmemory"
+      },
+      {
+        "type": "unstyled",
+        "text": "/plugin install agentmemory"
+      },
+      {
+        "type": "unstyled",
+        "text": "これだけで以下が自動登録されます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "● 12 個の hooks（SessionStart / PostToolUse / Stop など全ライフサイクル）",
+        "inlineStyleRanges": [
+          {
+            "length": 11,
+            "offset": 2,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "● 4 個の skills（recall / consolidate / export / governance）",
+        "inlineStyleRanges": [
+          {
+            "length": 11,
+            "offset": 2,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "● 51 個の MCP tools（AGENTMEMORY_TOOLS=all で全部、デフォルトはコア 15 個）",
+        "inlineStyleRanges": [
+          {
+            "length": 15,
+            "offset": 2,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "ステップ 4: Codex CLI に組み込む",
+        "inlineStyleRanges": [
+          {
+            "length": 23,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Codex 側もほぼ同じ流儀。"
+      },
+      {
+        "type": "unstyled",
+        "text": "codex plugin marketplace add rohitg00/agentmemory"
+      },
+      {
+        "type": "unstyled",
+        "text": "codex plugin install agentmemory"
+      },
+      {
+        "type": "unstyled",
+        "text": "Codex の場合 AGENTMEMORY_URL=http://localhost:3111 が環境変数として自動セットされる。注意点として、Codex は MCP の同期性がClaude Code より厳しいので、サーバーが落ちてると即座にエラーになります。常駐起動を忘れずに。",
+        "inlineStyleRanges": [
+          {
+            "length": 26,
+            "offset": 80,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "ステップ 5: Cursor / Cline などに繋ぐ",
+        "inlineStyleRanges": [
+          {
+            "length": 28,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Cursor 経由で使う場合は ~/.cursor/mcp.json に追記する形。"
+      },
+      {
+        "type": "unstyled",
+        "text": "{"
+      },
+      {
+        "type": "unstyled",
+        "text": "\"mcpServers\": {"
+      },
+      {
+        "type": "unstyled",
+        "text": "\"agentmemory\": {"
+      },
+      {
+        "type": "unstyled",
+        "text": "\"command\": \"npx\","
+      },
+      {
+        "type": "unstyled",
+        "text": "\"args\": [\"-y\", \"@agentmemory/mcp\"],"
+      },
+      {
+        "type": "unstyled",
+        "text": "\"env\": { \"AGENTMEMORY_URL\": \"http://localhost:3111\" }"
+      },
+      {
+        "type": "unstyled",
+        "text": "}"
+      },
+      {
+        "type": "unstyled",
+        "text": "}"
+      },
+      {
+        "type": "unstyled",
+        "text": "}"
+      },
+      {
+        "type": "unstyled",
+        "text": "Cline、Hermes、その他 MCP 対応エディタも同じパターンで繋がります。Cursor の MCP 設定は「閉じて開き直す」だけだと反映されない罠があって、これは後の「ハマりどころ 5 選」で詳しく書きます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ステップ 6: ヘルスチェックの儀式",
+        "inlineStyleRanges": [
+          {
+            "length": 18,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "セットアップ完了後、必ずやっておくチェックリストはこれ。"
+      },
+      {
+        "type": "unstyled",
+        "text": "# 1. メモリサーバー疎通"
+      },
+      {
+        "type": "unstyled",
+        "text": "curl http://localhost:3111/agentmemory/health"
+      },
+      {
+        "type": "unstyled",
+        "text": "# 2. iii-engine バージョン確認（v0.11.2 必須）"
+      },
+      {
+        "type": "unstyled",
+        "text": "iii --version"
+      },
+      {
+        "type": "unstyled",
+        "text": "# 3. ビューアでメモリ確認"
+      },
+      {
+        "type": "unstyled",
+        "text": "open http://localhost:3113"
+      },
+      {
+        "type": "unstyled",
+        "text": "3 番目のビューアで「観測が記録されてる」状態が見えれば、セットアップ成功。Node.js が入ってる前提なら 3 分かかりません。"
+      },
+      {
+        "type": "header-two",
+        "text": "4. 基本の 3 アクション ― 保存・検索・自動圧縮",
+        "inlineStyleRanges": [
+          {
+            "length": 27,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Agentmemory の使い方は、大きく 3 つのアクションに整理できます。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HI2greSaQAAXsn_.jpg",
+        "width": 1199,
+        "height": 675
+      },
+      {
+        "type": "unstyled",
+        "text": "アクション 1: 保存（自動キャプチャが基本）",
+        "inlineStyleRanges": [
+          {
+            "length": 23,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Mem0 や Letta だと memory_add(...) のような手動コマンドで保存するのが普通。Agentmemory は思想が違って、12 個の hooks で全部自動キャプチャします。",
+        "inlineStyleRanges": [
+          {
+            "length": 22,
+            "offset": 72,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HI2greabEAAYvAY.jpg",
+        "width": 1199,
+        "height": 675
+      },
+      {
+        "type": "unstyled",
+        "text": "たとえばこんな観測が、何もしなくても記録される。"
+      },
+      {
+        "type": "unstyled",
+        "text": "● Bash ツール実行時のコマンドと出力（PostToolUse hook）"
+      },
+      {
+        "type": "unstyled",
+        "text": "● ファイル編集の前後 diff（PreToolUse / PostToolUse hook）"
+      },
+      {
+        "type": "unstyled",
+        "text": "● セッション開始時の関連メモリ自動注入（SessionStart hook）"
+      },
+      {
+        "type": "unstyled",
+        "text": "● セッション終了時の要約圧縮（Stop hook）"
+      },
+      {
+        "type": "unstyled",
+        "text": "「何を保存するかをユーザーが判断する負荷」がゼロになるのが最大の体感価値。CLAUDE.md だと「ここは大事だから書いておこう」「ここは消そう」を毎回考えてたわけですが、その判断ロジック自体を AI 側に任せる発想です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "手動保存もできます。MCP tool 経由で memory_save を呼べば「これは大事」と明示打刻できるので、重要な設計判断は自動キャプチャに任せず明示保存するのが安全。"
+      },
+      {
+        "type": "unstyled",
+        "text": "アクション 2: 検索（3 系統ハイブリッド + RRF）",
+        "inlineStyleRanges": [
+          {
+            "length": 29,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "検索は MCP tool 経由か REST API 直叩きの 2 通り。代表的な MCP tool はこのあたり。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HI2gremakAAwVbL.jpg",
+        "width": 1199,
+        "height": 675
+      },
+      {
+        "type": "unstyled",
+        "text": "● memory_recall ― 自然言語で関連メモリを取得"
+      },
+      {
+        "type": "unstyled",
+        "text": "● memory_smart_search ― ハイブリッド検索のフル機能版"
+      },
+      {
+        "type": "unstyled",
+        "text": "● memory_sessions ― セッション単位でリスト"
+      },
+      {
+        "type": "unstyled",
+        "text": "● memory_timeline ― 時系列で並び替え"
+      },
+      {
+        "type": "unstyled",
+        "text": "● memory_relations ― 関連エンティティのグラフ traversal"
+      },
+      {
+        "type": "unstyled",
+        "text": "REST API 直叩きならこう。"
+      },
+      {
+        "type": "unstyled",
+        "text": "# 「Supabase の auth まわりで前にやった修正」を探す"
+      },
+      {
+        "type": "unstyled",
+        "text": "curl -X POST http://localhost:3111/agentmemory/search \\"
+      },
+      {
+        "type": "unstyled",
+        "text": "-H \"Content-Type: application/json\" \\"
+      },
+      {
+        "type": "unstyled",
+        "text": "-d '{\"query\": \"supabase auth fix\", \"limit\": 5}'"
+      },
+      {
+        "type": "unstyled",
+        "text": "返ってくるのは BM25 / vector / graph の3 系統が RRF k=60 で融合された結果。レイテンシは P50 で 20ms 未満（ローカルSQLite なので速い）。",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 37,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "公式ベンチマーク（LongMemEval-S、500 問、ICLR 2025）での精度はこれ。"
+      },
+      {
+        "type": "unstyled",
+        "text": "● R@5: 95.2%（Top 5 候補に正解が入る確率）",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 2,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "● R@10: 98.6%",
+        "inlineStyleRanges": [
+          {
+            "length": 11,
+            "offset": 2,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "● MRR: 88.2%",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 2,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "注意点として、これは「検索精度」で「end-to-end のQA 精度」ではないです。「正解が候補のどこかに入ってる確率」なので、Claude がそれを使ってちゃんと答えるかは別の問題。ここを混同すると過信します。"
+      },
+      {
+        "type": "unstyled",
+        "text": "アクション 3: 自動圧縮（4 階層を時間と共に育てる）",
+        "inlineStyleRanges": [
+          {
+            "length": 28,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Stop hook が動くたびに、3 段の圧縮が順に走ります。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HI2grepaUAEf8Dt.jpg",
+        "width": 1199,
+        "height": 675
+      },
+      {
+        "type": "unstyled",
+        "text": "まず Working → Episodic で生のツール実行ログをセッション要約に畳む。次に Episodic → Semantic で複数セッションの出来事から「パターン」「知識」を抽出。最後に Semantic → Procedural で、よく繰り返される手順を「ワークフロー」として固める、という流れ。"
+      },
+      {
+        "type": "unstyled",
+        "text": "これで「全部保存し続けて検索のノイズになる」問題が自動的に解消されます。セッション開始時に注入されるトークンバジェットは、デフォルト 2,000 tokens。これだけで「前回までの文脈」が必要十分な形で復元される設計です。"
+      },
+      {
+        "type": "header-two",
+        "text": "5. Codex / Claude Code 二刀流のワークフロー",
+        "inlineStyleRanges": [
+          {
+            "length": 33,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "ここからは実運用の話。Codex も Claude Code もガチで併用してる人向けに、3 つのワークフローパターンを書きます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "パターン 1: 個人開発の 1 日フロー",
+        "inlineStyleRanges": [
+          {
+            "length": 20,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "agentmemory サーバーを常駐させておくと、Claude Code 起動時に SessionStart hook が発火して前日の Episodic memory が自動注入されます。「昨日の続きから」と言わなくても「Supabase の RLS まわりで詰まってた話の続きやろう」と Claude 側が把握した状態で会話が始まる。"
+      },
+      {
+        "type": "unstyled",
+        "text": "コーディング中は PostToolUse hook がコマンド・出力・差分を SQLite に書き続け、セッションを閉じると Stop hook が Working を Episodic に圧縮する。翌朝それが自動で読み込まれて、ループ完成です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "パターン 2: 複数プロジェクトの使い分け",
+        "inlineStyleRanges": [
+          {
+            "length": 21,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Agentmemory はメモリを 3 スコープに分けられます。user スコープは個人全体に紐づく層で、コーディング規約の好みや命名の癖など「自分の癖」が入る場所。project スコープはプロジェクトごとに別管理で、SQLite ファイルも別。local スコープはそのマシンだけに残って、チーム共有モードでも外に出ない。"
+      },
+      {
+        "type": "unstyled",
+        "text": "プロジェクト切り替え時に AGENTMEMORY_PROJECT=foo-app と環境変数を変えれば別の SQLite ファイルが参照される。複数プロジェクトを並行してる人にはここがガチで効きます。A プロジェクトの設計判断が B プロジェクトの議論に混ざってくる現象が、CLAUDE.md 運用だとよく起きてた。Agentmemory なら物理的に分離されるので混線しない。"
+      },
+      {
+        "type": "unstyled",
+        "text": "パターン 3: チーム共有・上場企業との共同開発",
+        "inlineStyleRanges": [
+          {
+            "length": 24,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "うちは現在、上場企業の方々と AI エージェントを共同開発してるんですが、ここで地味に効くのが MCP server 共有モード。collab=true のフラグを立てると、複数の Codex / Claude Code インスタンスが同じメモリサーバーを参照できる。"
+      },
+      {
+        "type": "unstyled",
+        "text": "# サーバー側"
+      },
+      {
+        "type": "unstyled",
+        "text": "AGENTMEMORY_COLLAB=true npx @agentmemory/agentmemory --bind 0.0.0.0"
+      },
+      {
+        "type": "unstyled",
+        "text": "チーム内 VPN 経由で参照すれば、複数人が「同じプロジェクトの記憶」を共有しながら作業できる。ただし privacy filter は強めに効かせる必要があります。API キーや個人情報が混入したらチーム全員に共有されるので、.agentmemoryignore での除外設定は必須。これも後の「ハマりどころ」で触れます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "二刀流ならではの落とし穴",
+        "inlineStyleRanges": [
+          {
+            "length": 12,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Codex と Claude Code を同じプロジェクトで切り替えながら使う場合、メモリは共有されますがプロンプト構文は別物です。Claude Code の /plugin コマンドは Codex では効かない、Codex の codex plugin install は Claude Code では効かない。「両方使えるツール」と言っても設定は別個に必要。ここを勘違いして初週ハマる人が多いです。",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 53,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "6. ベンチマークの読み方 ― 数字を「体感」に翻訳する",
+        "inlineStyleRanges": [
+          {
+            "length": 28,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "公式に書いてある数字を、実運用の感覚に翻訳します。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HI2greqaMAAkAQ7.jpg",
+        "width": 1199,
+        "height": 675
+      },
+      {
+        "type": "unstyled",
+        "text": "「92% トークン削減」の正体",
+        "inlineStyleRanges": [
+          {
+            "length": 15,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "速報や Medium 記事で踊ってる「92% 削減」は per-session ベースの話です。",
+        "inlineStyleRanges": [
+          {
+            "length": 15,
+            "offset": 28,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "● 従来の CLAUDE.md 手動運用: 1 セッション約 22,000 tokens 消費",
+        "inlineStyleRanges": [
+          {
+            "length": 13,
+            "offset": 31,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "● Agentmemory 経由: 1 セッション約 1,900 tokens 消費",
+        "inlineStyleRanges": [
+          {
+            "length": 12,
+            "offset": 27,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "● 削減率: 約 91-92%",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 7,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "セッション開始時の文脈注入トークンがガッツリ減るわけです。年間ベースだと数字が変わって、README の Token Savings table にはこう書いてある。"
+      },
+      {
+        "type": "unstyled",
+        "text": "● LLM-summarized 運用: 約 650K tokens / yr（約 $500 / yr）",
+        "inlineStyleRanges": [
+          {
+            "length": 16,
+            "offset": 23,
+            "style": "Bold"
+          },
+          {
+            "length": 9,
+            "offset": 42,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "● Agentmemory: 約 170K tokens / yr（約 $10 / yr）",
+        "inlineStyleRanges": [
+          {
+            "length": 16,
+            "offset": 17,
+            "style": "Bold"
+          },
+          {
+            "length": 8,
+            "offset": 36,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "トークン数だと約 74% 減ですが、コスト換算では98% 削減。$500 が $10 になる計算です。差が出る理由は、Agentmemory がローカル SQLite + ローカル埋め込みで動くから。LLM ベースの圧縮を毎回走らせる Mem0 や Letta と違って、運用コストが極小になる構造です。",
+        "inlineStyleRanges": [
+          {
+            "length": 13,
+            "offset": 18,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "「LongMemEval-S R@5 95.2%」の意味",
+        "inlineStyleRanges": [
+          {
+            "length": 28,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "LongMemEval-S は ICLR 2025 で出された長期メモリのベンチマーク（500 問、各問題で約 48 セッション、約 115K tokens の文脈）。主要ツールで並べるとこう。"
+      },
+      {
+        "type": "unstyled",
+        "text": "| ツール | R@5 |"
+      },
+      {
+        "type": "unstyled",
+        "text": "|---|---|"
+      },
+      {
+        "type": "unstyled",
+        "text": "| Agentmemory | 95.2% |",
+        "inlineStyleRanges": [
+          {
+            "length": 5,
+            "offset": 16,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "| Mem0（2026年4月の新アルゴリズム） | 94.8% |"
+      },
+      {
+        "type": "unstyled",
+        "text": "| Letta | 83.2% |"
+      },
+      {
+        "type": "unstyled",
+        "text": "| Cognee | 72.5% |"
+      },
+      {
+        "type": "unstyled",
+        "text": "| Zep | 71.0% |"
+      },
+      {
+        "type": "unstyled",
+        "text": "| Mem0（旧アルゴリズム） | 68.5% |"
+      },
+      {
+        "type": "unstyled",
+        "text": "Mem0 は新アルゴリズムで肉薄してきてるので、数字単独で「圧勝」と書くと公平じゃない。ただ Agentmemory は coding agent 特化の自動キャプチャ機構と組み合わせての 95.2% なので、「精度 × 運用負荷ゼロ」のトレードオフがいい位置にいる、というのが現時点の評価です。",
+        "inlineStyleRanges": [
+          {
+            "length": 28,
+            "offset": 105,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "繰り返しますが R@5 は検索精度で、Claude や Codex が最終的に正しい答えを出す確率ではない。ここを混同すると過大評価につながります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Codex 400K vs Opus 4.7 1M の「物理 vs 実用」",
+        "inlineStyleRanges": [
+          {
+            "length": 37,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "ベンチマーク数字を眺めてて、もうひとつ大事な気づきがありました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude Opus 4.7 は context 1M token に拡張された。GPT-5.5 も API では 1M token。これだけ見ると「もうメモリツール要らないんじゃ？」と思える。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ただ Codex CLI は実際には 400K に制限されてる。物理上限と実運用上限はズレてるんですよね。しかも Anthropic 自身が「コンテキストが増えると想起精度が下がる」と書いてる通り、200K〜400K で context rot が始まる。",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 19,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "つまり物理サイズが増えても、メモリエンジンの必要性は減らない。むしろ「広い context window をどう効率的に使うか」が新しい技術課題になってる、という現状です。",
+        "inlineStyleRanges": [
+          {
+            "length": 27,
+            "offset": 3,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "7. ハマりどころ 5 選― 実際にやって踏んだ地雷",
+        "inlineStyleRanges": [
+          {
+            "length": 26,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "ここからは正直に書きます。公式 README やインフルエンサーの紹介ツイートには出てこない、実際に入れて運用したら踏んだ地雷を 5 個。GitHub Issues を辿って再現性のあるものだけ拾いました。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HI2gretaMAAutdy.jpg",
+        "width": 1199,
+        "height": 675
+      },
+      {
+        "type": "unstyled",
+        "text": "ハマり 1: iii-engine v0.11.2 バージョン不一致",
+        "inlineStyleRanges": [
+          {
+            "length": 34,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "セットアップ直後、こんなエラーが出る人が一定数います。"
+      },
+      {
+        "type": "unstyled",
+        "text": "iii: command not found"
+      },
+      {
+        "type": "unstyled",
+        "text": "# あるいは"
+      },
+      {
+        "type": "unstyled",
+        "text": "Version mismatch: expected v0.11.2, got v0.11.0"
+      },
+      {
+        "type": "unstyled",
+        "text": "Agentmemory は内部で iii-engine というバイナリに依存していて、バージョンが v0.11.2 にピン留めされてる。別バージョンが既に入ってると起動段階でこける。回避策は OS 別に release から固定バージョンを取ってくる方法。",
+        "inlineStyleRanges": [
+          {
+            "length": 20,
+            "offset": 43,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "# macOS arm64"
+      },
+      {
+        "type": "unstyled",
+        "text": "curl -fsSL https://github.com/iii-hq/iii/releases/download/iii/v0.11.2/iii-aarch64-apple-darwin.tar.gz \\"
+      },
+      {
+        "type": "unstyled",
+        "text": "| tar -xz -C ~/.local/bin"
+      },
+      {
+        "type": "unstyled",
+        "text": "chmod +x ~/.local/bin/iii"
+      },
+      {
+        "type": "unstyled",
+        "text": "# Linux x64"
+      },
+      {
+        "type": "unstyled",
+        "text": "curl -fsSL https://github.com/iii-hq/iii/releases/download/iii/v0.11.2/iii-x86_64-unknown-linux-gnu.tar.gz \\"
+      },
+      {
+        "type": "unstyled",
+        "text": "| tar -xz -C ~/.local/bin"
+      },
+      {
+        "type": "unstyled",
+        "text": "# 確認"
+      },
+      {
+        "type": "unstyled",
+        "text": "iii --version # v0.11.2 が出ればOK"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここをスキップするとあとから全部が動かなくなるので、最初に通しておきます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ハマり 2: Issue #181 ― 無限ループでゴーストセッション量産",
+        "inlineStyleRanges": [
+          {
+            "length": 37,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "これがガチでヤバいやつ。v0.9.1 で報告された致命的バグで、API キー未設定の状態で Stop hook が /summarize を呼ぶと、子セッションが無限生成される。",
+        "inlineStyleRanges": [
+          {
+            "length": 12,
+            "offset": 32,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Stop hook → /summarize → 子セッション生成"
+      },
+      {
+        "type": "unstyled",
+        "text": "↓"
+      },
+      {
+        "type": "unstyled",
+        "text": "子セッションの Stop hook も発火 → /summarize → さらに子セッション"
+      },
+      {
+        "type": "unstyled",
+        "text": "↓"
+      },
+      {
+        "type": "unstyled",
+        "text": "(無限ループ)"
+      },
+      {
+        "type": "unstyled",
+        "text": "数分で約 579 個のゴーストセッションが生成された、という報告が GitHub Issue #181 に残ってます。回避策は 3 つ。"
+      },
+      {
+        "type": "unstyled",
+        "text": "# 案1: agent-sdk モードを無効化（推奨）"
+      },
+      {
+        "type": "unstyled",
+        "text": "export AGENTMEMORY_ALLOW_AGENT_SDK=false"
+      },
+      {
+        "type": "unstyled",
+        "text": "# 案2: フェイク API キーで強制エラー"
+      },
+      {
+        "type": "unstyled",
+        "text": "export AGENTMEMORY_ANTHROPIC_API_KEY=\"fake-key\""
+      },
+      {
+        "type": "unstyled",
+        "text": "# 案3: 実 API キーを設定"
+      },
+      {
+        "type": "unstyled",
+        "text": "export AGENTMEMORY_ANTHROPIC_API_KEY=\"sk-ant-...\""
+      },
+      {
+        "type": "unstyled",
+        "text": "本番運用するなら案 1 か案 3 が安全。案 2 は「とりあえず動かしたい」初日だけ。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ハマり 3: Issue #159 ― MCP と REST API が別 KV で動いてる",
+        "inlineStyleRanges": [
+          {
+            "length": 46,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "これも知らないと首を傾げる現象。MCP tool（memory_search 等）を呼ぶと毎回空結果が返ってくるのに、REST API（POST /agentmemory/search）には同じデータでヒットがある。"
+      },
+      {
+        "type": "unstyled",
+        "text": "REST API: GET /agentmemory/sessions → 69 observations"
+      },
+      {
+        "type": "unstyled",
+        "text": "MCP tool: memory_sessions → [] (empty)"
+      },
+      {
+        "type": "unstyled",
+        "text": "原因は @agentmemory/mcp パッケージと Agentmemory サーバーが完全に別の KV store を持ってる設計になってること（Issue #159）。MCP は「ローカル KV」、サーバーは「別の KV」で、相互通信のコードパスがない。2026年5月時点で Issue は open のまま。回避策はこう。",
+        "inlineStyleRanges": [
+          {
+            "length": 20,
+            "offset": 45,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "● 案 1: REST API を直接使う（MCP tool 経由じゃなくて curl や fetch で）"
+      },
+      {
+        "type": "unstyled",
+        "text": "● 案 2: /mcp hook を一旦 disable して、サーバー専用運用にする"
+      },
+      {
+        "type": "unstyled",
+        "text": "将来的に直る予定はあるみたいですが、当面はこの仕様前提で組むしかないです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ハマり 4: Cursor / VSCode 系で MCP が反映されない",
+        "inlineStyleRanges": [
+          {
+            "length": 37,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "~/.cursor/mcp.json を編集してCursor を再起動したのに、/mcp list に Agentmemory が出てこない。Cursor だけじゃなく Windows ストアアプリ全般で起きる現象です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "GUI の「×」ボタンで閉じても、WindowsApps のバックグラウンドプロセスが残るのが default 挙動。古いプロセスが古い設定をメモリ保持したまま走り続ける。完全終了の儀式が必要。",
+        "inlineStyleRanges": [
+          {
+            "length": 28,
+            "offset": 17,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "# macOS"
+      },
+      {
+        "type": "unstyled",
+        "text": "pkill -9 Cursor"
+      },
+      {
+        "type": "unstyled",
+        "text": "open /Applications/Cursor.app"
+      },
+      {
+        "type": "unstyled",
+        "text": "# Windows (PowerShell)"
+      },
+      {
+        "type": "unstyled",
+        "text": "Get-Process -Name Cursor | Stop-Process -Force"
+      },
+      {
+        "type": "unstyled",
+        "text": "# → 再起動"
+      },
+      {
+        "type": "unstyled",
+        "text": "設定ファイル側を疑う前にまず「プロセス残留チェック」を default にすると、ここでハマる時間が消えます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ハマり 5: privacy filter で観測が勝手にdrop される",
+        "inlineStyleRanges": [
+          {
+            "length": 37,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "「サーバー動いてるのに、ビューアに観測が出てこない」現象も初週によく起きます。ログを見るとこんなwarning が並んでる。"
+      },
+      {
+        "type": "unstyled",
+        "text": "[warn] observation dropped: private_tag detected"
+      },
+      {
+        "type": "unstyled",
+        "text": "[warn] observation dropped: private_email detected"
+      },
+      {
+        "type": "unstyled",
+        "text": "これ、バグじゃなくて仕様です。Agentmemory の privacy filter は API キー・パスワード・メールアドレス・PII を自動検出して、そういう観測を記録せずに捨てる。セキュリティ上は嬉しい挙動ですが、知らないと「動いてない」と勘違いする。共存策はこう。",
+        "inlineStyleRanges": [
+          {
+            "length": 2,
+            "offset": 10,
+            "style": "Bold"
+          },
+          {
+            "length": 8,
+            "offset": 86,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "# .agentmemoryignore でファイル単位の除外"
+      },
+      {
+        "type": "unstyled",
+        "text": "echo \".env\" >> .agentmemoryignore"
+      },
+      {
+        "type": "unstyled",
+        "text": "echo \".env.local\" >> .agentmemoryignore"
+      },
+      {
+        "type": "unstyled",
+        "text": "echo \"**/*.key\" >> .agentmemoryignore"
+      },
+      {
+        "type": "unstyled",
+        "text": "echo \"**/*password*\" >> .agentmemoryignore"
+      },
+      {
+        "type": "unstyled",
+        "text": "特に API キーを観測に含む実験コードを動かす時は、事前にこのファイルを置いておく運用が安全です。"
+      },
+      {
+        "type": "header-two",
+        "text": "8. まとめ ― 「無限メモリ」は context window の拡張じゃない",
+        "inlineStyleRanges": [
+          {
+            "length": 40,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Agentmemory を 1 週間ガチで使ってみて、いちばん腹落ちした感覚はこれ。「無限メモリ」って表現はcontext window の物理的拡張のことじゃない。",
+        "inlineStyleRanges": [
+          {
+            "length": 40,
+            "offset": 42,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "1M token に増えたって、200K で精度が落ちるなら結局意味がない。物理サイズ競争はもう勝負がついてる気がします。そうじゃなくて、Agentmemory が手に入れさせてくれるのは意味的な外部脳です。",
+        "inlineStyleRanges": [
+          {
+            "length": 7,
+            "offset": 94,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "セッションの中ではなくセッションの外に、構造化された記憶を置いておく。必要な時に必要な分だけ呼び出して、終わったら閉じる。覚えとくべきものは時間と共に育って、忘れていいものは静かに減衰していく。人間の記憶の使い方と同じ構造なんですよね。"
+      },
+      {
+        "type": "unstyled",
+        "text": "開発者の頭の中で起きる変化を一言で書くと、「セッション切れたら終了」から「セッション間で記憶が育つ」への遷移です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "業界全体もこの方向に動いてます。DeepLearning.AI のエージェントメモリコース、Mem0 の「stateless agents を stateful にする」メッセージ、MemGPT 論文の「LLMs as Operating Systems」──結局はどれも外部メモリの話で、Agentmemory はその coding agent 文脈での 1 個の解です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Mem0 でも Letta でもいいし、自分で実装してもいい。ただガチで Codex / Claude Code を使ってる人にとって、現時点で最短で「無限メモリの感覚」を試せるツールではあると思います。率直に言って、入れる価値はあります。",
+        "inlineStyleRanges": [
+          {
+            "length": 20,
+            "offset": 72,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "9. このアカウントについて",
+        "inlineStyleRanges": [
+          {
+            "length": 14,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "ここまで読んでいただいた方へ。このアカウント @Codestudiopjbk は Codex ガチ勢 3 人で運営してます。",
+        "inlineStyleRanges": [
+          {
+            "length": 16,
+            "offset": 41,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HI2gre2bgAAAbj_.jpg",
+        "width": 1194,
+        "height": 928
+      },
+      {
+        "type": "unstyled",
+        "text": "● 大学院生・ポスドク対象の開発プログラム参加"
+      },
+      {
+        "type": "unstyled",
+        "text": "● 賞金 30 万円獲得"
+      },
+      {
+        "type": "unstyled",
+        "text": "● 現在、上場企業様と AI エージェントを共同開発中"
+      },
+      {
+        "type": "unstyled",
+        "text": "普段の発信内容はこんな感じ。"
+      },
+      {
+        "type": "unstyled",
+        "text": "● GPT-5.5 / OpenAI Codex を使った実装事例"
+      },
+      {
+        "type": "unstyled",
+        "text": "● Codex 活用・CLI 自動化・開発トレンド"
+      },
+      {
+        "type": "unstyled",
+        "text": "● 海外の GPT-5.5 / Codex 最新情報の翻訳と検証"
+      },
+      {
+        "type": "unstyled",
+        "text": "● Claude Code との実用比較（数百時間使い込みベース）"
+      },
+      {
+        "type": "unstyled",
+        "text": "● 上場企業との共同開発で得た学び"
+      },
+      {
+        "type": "unstyled",
+        "text": "開発思想から設計・実装・改善まで、動くプロダクトを世に出すまでの全工程を毎日発信してます。ご関心のある方はぜひフォローしてチェックしてみてください。有益だと思います。"
+      },
+      {
+        "type": "unstyled",
+        "text": "開発系のご相談はDMまで。 Codex 導入・自動化設計・AI エージェント実装のご相談、お気軽にどうぞ。",
+        "inlineStyleRanges": [
+          {
+            "length": 13,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "参考・引用",
+        "inlineStyleRanges": [
+          {
+            "length": 5,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "● [Rohit Ghumare (rohitg00/agentmemory)] (2026-05-13) [Agentmemory v0.9.12 — Memory Engine for Coding Agents](https://github.com/rohitg00/agentmemory) — 公式リポ、Apache-2.0、8.8k Stars、TypeScript"
+      },
+      {
+        "type": "unstyled",
+        "text": "● [Rohit Ghumare] (2026-04) [\"Built this 6 months ago with agentmemory: persistent memory for AI coding agents\"](https://x.com/ghumare64/status/2040733536496279885) — 開発者思想"
+      },
+      {
+        "type": "unstyled",
+        "text": "● [GitHub Issue #181] [Stop-hook → /summarize → agent-sdk infinite recursion](https://github.com/rohitg00/agentmemory/issues/181) — ハマり2 一次ソース"
+      },
+      {
+        "type": "unstyled",
+        "text": "● [GitHub Issue #159] [Standalone MCP tools don't proxy to running agentmemory server](https://github.com/rohitg00/agentmemory/issues/159) — ハマり3 一次ソース"
+      },
+      {
+        "type": "unstyled",
+        "text": "● [Anthropic Engineering] [Effective Context Engineering for AI Agents](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) — context engineering の公式ガイダンス"
+      },
+      {
+        "type": "unstyled",
+        "text": "● [Anthropic] (2026-04-23) [April 23 Postmortem](https://www.anthropic.com/engineering/april-23-postmortem) — Claude Code thinking length collapse 事件の社会証明"
+      },
+      {
+        "type": "unstyled",
+        "text": "● [Mem0] [Introducing Mem0](https://mem0.ai/blog/introducing-mem0) — Mem0 思想と Taranjeet Singh 引用"
+      },
+      {
+        "type": "unstyled",
+        "text": "● [Letta] [Benchmarking AI Agent Memory](https://www.letta.com/blog/benchmarking-ai-agent-memory) — Letta ベンチマーク数字の出典"
+      },
+      {
+        "type": "unstyled",
+        "text": "● [Charles Packer et al.] (2023-10) [MemGPT: Towards LLMs as Operating Systems](https://arxiv.org/abs/2310.08560) — virtual context management 論文、Agentmemory の理論先行研究"
+      },
+      {
+        "type": "unstyled",
+        "text": "● [DeepLearning.AI] [Agent Memory: Building Memory-Aware Agents](https://www.deeplearning.ai/short-courses/agent-memory-building-memory-aware-agents/) — Andrew Ng / Oracle コース"
+      }
+    ]
+  },
+  "status": "success",
+  "msg": "success",
+  "_handle": "Codestudiopjbk"
+}

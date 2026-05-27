@@ -1,0 +1,1721 @@
+{
+  "session_date": "2026-05-27",
+  "wrapper_version": "0.2.0",
+  "total_calls": 151,
+  "total_tweets_returned": 1022,
+  "estimated_cost_usd": 0.1533,
+  "estimated_cost_jpy": 24,
+  "calls": [
+    {
+      "ts": "2026-05-27T03:04:58.229770+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "ClaudeCode_love"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:05:00.866413+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "Shimayus"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:05:06.076649+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "SuguruKun_ai"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:05:08.945274+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "masahirochaen"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:05:11.837538+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "Atenov_D"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:05:14.390531+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "ClaudeCode_UT"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:05:17.454014+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "Codestudiopjbk"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:05:19.802044+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "Fluyeporlaweb"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:05:22.235036+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "MakeAI_CEO"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:05:24.824491+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "ObsidianOtaku"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:05:27.272270+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "ai_explorer25"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:05:29.655359+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "claudecode_lab"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:05:33.104055+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "commte"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:05:35.493635+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "csaba_kissi"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:05:38.023540+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "cyrilXBT"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:05:40.497861+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "daifukujinji"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:05:42.867088+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "ethancoder0"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:05:45.210237+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "exploraX_"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:05:47.552890+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "heynavtoor"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:05:50.056783+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "jason_coder0"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:05:55.924480+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "mmmiyama_D"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:05:59.022455+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "obsidianstudio9"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:06:01.316638+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "so_ainsight"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:06:04.135696+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "tetumemo"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:06:06.555945+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "ebikani_hasami"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:06:09.015115+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "saeroyi_ican"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:06:11.379716+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "sekine_1234"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:06:13.964947+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "yura_ai123"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:06:16.425471+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "Kh_Yabu"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:06:18.844468+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "carverfomo"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:06:21.267632+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "kenfjt"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:06:23.705538+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "TensyokuRmla"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:06:26.075482+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "hqmank"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:06:28.707791+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "worldnetworkjp"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:06:31.736990+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:ebikani_hasami since:2026-02-26",
+        "queryType": "Latest"
+      },
+      "cursor_in": "",
+      "cursor_out": "DAADDAABCgABHJSYHkZaEJQKAAIcjkZ9thoBJgAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUclLY6FoAnEAoABhyUtjoWf9jwAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-27T03:06:35.386738+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:ebikani_hasami since:2026-02-26",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJSYHkZaEJQKAAIcjkZ9thoBJgAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUclLY6FoAnEAoABhyUtjoWf9jwAAA",
+      "cursor_out": "DAADDAABCgABHJSYHkZaEJQKAAIcirDmMZrhSwAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUclLY6FoAnEAoABhyUtjoWf7HgAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-27T03:06:41.722674+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:ebikani_hasami since:2026-02-26",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJSYHkZaEJQKAAIcirDmMZrhSwAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUclLY6FoAnEAoABhyUtjoWf7HgAAA",
+      "cursor_out": "DAADDAABCgABHJSYHkZaEJQKAAIch6KcWdrxCQAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUclLY6FoAnEAoABhyUtjoWf4rQAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-27T03:06:44.818630+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:ebikani_hasami since:2026-02-26",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJSYHkZaEJQKAAIch6KcWdrxCQAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUclLY6FoAnEAoABhyUtjoWf4rQAAA",
+      "cursor_out": "DAADDAABCgABHJSYHkZaEJQKAAIcgToYVloRJQAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUclLY6FoAnEAoABhyUtjoWf2PAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-27T03:06:48.206257+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:ebikani_hasami since:2026-02-26",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJSYHkZaEJQKAAIcgToYVloRJQAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUclLY6FoAnEAoABhyUtjoWf2PAAAA",
+      "cursor_out": "DAADDAABCgABHJSYHkZaEJQKAAIcfWCRO1pAaQAIAAIAAAACCAADAAAAAAgABAAAAAQKAAUclLY6FoAnEAoABhyUtjoWfzywAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-27T03:06:52.079284+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:saeroyi_ican since:2026-02-26",
+        "queryType": "Latest"
+      },
+      "cursor_in": "",
+      "cursor_out": "DAADDAABCgABHJRnu8xb0cUKAAIck_jemNoR2wAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUclLZNWcAnEAoABhyUtk1Zv9jwAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-27T03:06:54.952718+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:saeroyi_ican since:2026-02-26",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJRnu8xb0cUKAAIck_jemNoR2wAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUclLZNWcAnEAoABhyUtk1Zv9jwAAA",
+      "cursor_out": "DAADDAABCgABHJRnu8xb0cUKAAIck9-RBRpBtAAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUclLZNWcAnEAoABhyUtk1Zv7HgAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-27T03:06:58.205385+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:saeroyi_ican since:2026-02-26",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJRnu8xb0cUKAAIck9-RBRpBtAAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUclLZNWcAnEAoABhyUtk1Zv7HgAAA",
+      "cursor_out": "DAADDAABCgABHJRnu8xb0cUKAAIck6w3ZJuwqQAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUclLZNWcAnEAoABhyUtk1Zv4rQAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-27T03:07:01.277682+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:saeroyi_ican since:2026-02-26",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJRnu8xb0cUKAAIck6w3ZJuwqQAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUclLZNWcAnEAoABhyUtk1Zv4rQAAA",
+      "cursor_out": "DAADDAABCgABHJRnu8xb0cUKAAIck3h_VxrwHwAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUclLZNWcAnEAoABhyUtk1Zv2PAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-27T03:07:04.679979+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:saeroyi_ican since:2026-02-26",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJRnu8xb0cUKAAIck3h_VxrwHwAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUclLZNWcAnEAoABhyUtk1Zv2PAAAA",
+      "cursor_out": "DAADDAABCgABHJRnu8xb0cUKAAIck15gkxpA1QAIAAIAAAACCAADAAAAAAgABAAAAAQKAAUclLZNWcAnEAoABhyUtk1ZvzywAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-27T03:07:08.367239+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:sekine_1234 since:2026-02-26",
+        "queryType": "Latest"
+      },
+      "cursor_in": "",
+      "cursor_out": "DAADDAABCgABHJSTYQDboakKAAIci9OeBRox5QAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUclLZdQAAnEAoABhyUtl0__9jwAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-27T03:07:11.425967+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:sekine_1234 since:2026-02-26",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJSTYQDboakKAAIci9OeBRox5QAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUclLZdQAAnEAoABhyUtl0__9jwAAA",
+      "cursor_out": "DAADDAABCgABHJSTYQDboakKAAIciQGA7JoRvQAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUclLZdQAAnEAoABhyUtl0__7HgAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-27T03:07:14.798518+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:sekine_1234 since:2026-02-26",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJSTYQDboakKAAIciQGA7JoRvQAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUclLZdQAAnEAoABhyUtl0__7HgAAA",
+      "cursor_out": "DAADDAABCgABHJSTYQDboakKAAIcgXwkEZrwQQAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUclLZdQAAnEAoABhyUtl0__4rQAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-27T03:07:18.477887+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:sekine_1234 since:2026-02-26",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJSTYQDboakKAAIcgXwkEZrwQQAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUclLZdQAAnEAoABhyUtl0__4rQAAA",
+      "cursor_out": "DAADDAABCgABHJSTYQDboakKAAIcfNRHgdoAUwAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUclLZdQAAnEAoABhyUtl0__2PAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-27T03:07:21.898708+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:sekine_1234 since:2026-02-26",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJSTYQDboakKAAIcfNRHgdoAUwAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUclLZdQAAnEAoABhyUtl0__2PAAAA",
+      "cursor_out": "DAADDAABCgABHJSTYQDboakKAAIcdmVyMttQpwAIAAIAAAACCAADAAAAAAgABAAAAAQKAAUclLZdQAAnEAoABhyUtl0__zywAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-27T03:07:25.323723+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:yura_ai123 since:2026-02-26",
+        "queryType": "Latest"
+      },
+      "cursor_in": "",
+      "cursor_out": "DAADDAABCgABHJSI5UCb0TkKAAIclFjpBFsBKwAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUclLZt8cAnEAoABhyUtm3xv9jwAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-27T03:07:28.649087+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:yura_ai123 since:2026-02-26",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJSI5UCb0TkKAAIclFjpBFsBKwAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUclLZt8cAnEAoABhyUtm3xv9jwAAA",
+      "cursor_out": "DAADDAABCgABHJSI5UCb0TkKAAIck9bOENvQAAAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUclLZt8cAnEAoABhyUtm3xv7HgAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-27T03:07:32.095878+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:yura_ai123 since:2026-02-26",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJSI5UCb0TkKAAIck9bOENvQAAAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUclLZt8cAnEAoABhyUtm3xv7HgAAA",
+      "cursor_out": "DAADDAABCgABHJSI5UCb0TkKAAIck5vXgxpxzgAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUclLZt8cAnEAoABhyUtm3xv4rQAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-27T03:07:35.376805+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:yura_ai123 since:2026-02-26",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJSI5UCb0TkKAAIck5vXgxpxzgAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUclLZt8cAnEAoABhyUtm3xv4rQAAA",
+      "cursor_out": "DAADDAABCgABHJSI5UCb0TkKAAIck00wNNohmQAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUclLZt8cAnEAoABhyUtm3xv2PAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-27T03:07:38.767122+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:yura_ai123 since:2026-02-26",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJSI5UCb0TkKAAIck00wNNohmQAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUclLZt8cAnEAoABhyUtm3xv2PAAAA",
+      "cursor_out": "DAADDAABCgABHJSI5UCb0TkKAAIckyooeltBYQAIAAIAAAACCAADAAAAAAgABAAAAAQKAAUclLZt8cAnEAoABhyUtm3xvzywAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-27T03:07:41.666407+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:Kh_Yabu since:2026-02-26",
+        "queryType": "Latest"
+      },
+      "cursor_in": "",
+      "cursor_out": "DAADDAABCgABHJMdYVDbEA8KAAIcdS8YBVrAVQAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUclLZ-3cAnEAoABhyUtn7dv9jwAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-27T03:07:45.803981+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:Kh_Yabu since:2026-02-26",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJMdYVDbEA8KAAIcdS8YBVrAVQAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUclLZ-3cAnEAoABhyUtn7dv9jwAAA",
+      "cursor_out": "DAADDAABCgABHJMdYVDbEA8KAAIcX3tgQRsQ6QAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUclLZ-3cAnEAoABhyUtn7dv7HgAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-27T03:07:49.049130+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:Kh_Yabu since:2026-02-26",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJMdYVDbEA8KAAIcX3tgQRsQ6QAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUclLZ-3cAnEAoABhyUtn7dv7HgAAA",
+      "cursor_out": "DAADDAABCgABHJMdYVDbEA8KAAIcT6hFcJsxdwAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUclLZ-3cAnEAoABhyUtn7dv4rQAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-27T03:07:53.006845+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:Kh_Yabu since:2026-02-26",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJMdYVDbEA8KAAIcT6hFcJsxdwAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUclLZ-3cAnEAoABhyUtn7dv4rQAAA",
+      "cursor_out": "DAADDAABCgABHJMdYVDbEA8KAAIcTARqgxrR3QAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUclLZ-3cAnEAoABhyUtn7dv2PAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-27T03:07:56.600646+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:Kh_Yabu since:2026-02-26",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJMdYVDbEA8KAAIcTARqgxrR3QAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUclLZ-3cAnEAoABhyUtn7dv2PAAAA",
+      "cursor_out": "DAADDAABCgABHJMdYVDbEA8KAAIcRql88dqABQAIAAIAAAACCAADAAAAAAgABAAAAAQKAAUclLZ-3cAnEAoABhyUtn7dvzywAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-27T03:07:59.318897+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:carverfomo since:2026-02-26",
+        "queryType": "Latest"
+      },
+      "cursor_in": "",
+      "cursor_out": "DAADDAABCgABHJSMnJCXkI8KAAIcg9nRl5eRBQAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUclLaPdIAnEAoABhyUto90f9jwAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-27T03:08:03.381783+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:carverfomo since:2026-02-26",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJSMnJCXkI8KAAIcg9nRl5eRBQAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUclLaPdIAnEAoABhyUto90f9jwAAA",
+      "cursor_out": "DAADDAABCgABHJSMnJCXkI8KAAIcdvCOmlZAhwAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUclLaPdIAnEAoABhyUto90f7HgAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-27T03:08:07.324869+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:carverfomo since:2026-02-26",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJSMnJCXkI8KAAIcdvCOmlZAhwAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUclLaPdIAnEAoABhyUto90f7HgAAA",
+      "cursor_out": "DAADDAABCgABHJSMnJCXkI8KAAIcaaBo_1fQgAAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUclLaPdIAnEAoABhyUto90f4rQAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-27T03:08:11.048489+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:carverfomo since:2026-02-26",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJSMnJCXkI8KAAIcaaBo_1fQgAAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUclLaPdIAnEAoABhyUto90f4rQAAA",
+      "cursor_out": "DAADDAABCgABHJSMnJCXkI8KAAIcXQRNd9eQGQAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUclLaPdIAnEAoABhyUto90f2PAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-27T03:08:17.321095+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:carverfomo since:2026-02-26",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJSMnJCXkI8KAAIcXQRNd9eQGQAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUclLaPdIAnEAoABhyUto90f2PAAAA",
+      "cursor_out": "DAADDAABCgABHJSMnJCXkI8KAAIcTomuw5chNgAIAAIAAAACCAADAAAAAAgABAAAAAQKAAUclLaPdIAnEAoABhyUto90fzywAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-27T03:08:21.459806+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:kenfjt since:2026-02-26",
+        "queryType": "Latest"
+      },
+      "cursor_in": "",
+      "cursor_out": "DAADDAABCgABHJSKxz7a0D4KAAIchEZ2SNuQhQAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUclLalToAnEAoABhyUtqVOf9jwAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-27T03:08:25.269677+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:kenfjt since:2026-02-26",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJSKxz7a0D4KAAIchEZ2SNuQhQAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUclLalToAnEAoABhyUtqVOf9jwAAA",
+      "cursor_out": "DAADDAABCgABHJSKxz7a0D4KAAIcdM7YdlqwqgAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUclLalToAnEAoABhyUtqVOf7HgAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-27T03:08:28.680612+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:kenfjt since:2026-02-26",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJSKxz7a0D4KAAIcdM7YdlqwqgAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUclLalToAnEAoABhyUtqVOf7HgAAA",
+      "cursor_out": "DAADDAABCgABHJSKxz7a0D4KAAIcaCzAbNtwGQAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUclLalToAnEAoABhyUtqVOf4rQAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-27T03:08:31.791117+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:kenfjt since:2026-02-26",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJSKxz7a0D4KAAIcaCzAbNtwGQAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUclLalToAnEAoABhyUtqVOf4rQAAA",
+      "cursor_out": "DAADDAABCgABHJSKxz7a0D4KAAIcYbT9SdtgHQAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUclLalToAnEAoABhyUtqVOf2PAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-27T03:08:35.275647+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:kenfjt since:2026-02-26",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJSKxz7a0D4KAAIcYbT9SdtgHQAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUclLalToAnEAoABhyUtqVOf2PAAAA",
+      "cursor_out": "DAADDAABCgABHJSKxz7a0D4KAAIcVyyrypsx-wAIAAIAAAACCAADAAAAAAgABAAAAAQKAAUclLalToAnEAoABhyUtqVOfzywAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-27T03:08:39.563941+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:TensyokuRmla since:2026-02-26",
+        "queryType": "Latest"
+      },
+      "cursor_in": "",
+      "cursor_out": "DAADDAABCgABHJRiVf1bEeMKAAIck8JfHRshtwAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUclLa2KgAnEAoABhyUtrYp_9jwAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-27T03:08:42.649088+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:TensyokuRmla since:2026-02-26",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJRiVf1bEeMKAAIck8JfHRshtwAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUclLa2KgAnEAoABhyUtrYp_9jwAAA",
+      "cursor_out": "DAADDAABCgABHJRiVf1bEeMKAAIckxi9sRewPAAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUclLa2KgAnEAoABhyUtrYp_7HgAAA",
+      "has_next_page": true,
+      "tweets_returned": 12
+    },
+    {
+      "ts": "2026-05-27T03:08:45.622709+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:TensyokuRmla since:2026-02-26",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJRiVf1bEeMKAAIckxi9sRewPAAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUclLa2KgAnEAoABhyUtrYp_7HgAAA",
+      "cursor_out": "DAADDAABCgABHJRiVf1bEeMKAAIcks_WStoA_wAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUclLa2KgAnEAoABhyUtrYp_4rQAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-27T03:08:48.797345+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:TensyokuRmla since:2026-02-26",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJRiVf1bEeMKAAIcks_WStoA_wAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUclLa2KgAnEAoABhyUtrYp_4rQAAA",
+      "cursor_out": "DAADDAABCgABHJRiVf1bEeMKAAIckCmaVhsxCgAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUclLa2KgAnEAoABhyUtrYp_2PAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-27T03:08:52.381227+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:TensyokuRmla since:2026-02-26",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJRiVf1bEeMKAAIckCmaVhsxCgAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUclLa2KgAnEAoABhyUtrYp_2PAAAA",
+      "cursor_out": "DAADDAABCgABHJRiVf1bEeMKAAIcjmPVgdrAFgAIAAIAAAACCAADAAAAAAgABAAAAAQKAAUclLa2KgAnEAoABhyUtrYp_zywAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-27T03:08:55.445871+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:hqmank since:2026-02-26",
+        "queryType": "Latest"
+      },
+      "cursor_in": "",
+      "cursor_out": "DAADDAABCgABHJSo1peboBYKAAIck3ynPNrQkgAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUclLbFlQAnEAoABhyUtsWU_9jwAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-27T03:08:58.354765+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:hqmank since:2026-02-26",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJSo1peboBYKAAIck3ynPNrQkgAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUclLbFlQAnEAoABhyUtsWU_9jwAAA",
+      "cursor_out": "DAADDAABCgABHJSo1peboBYKAAIckk9AdpsA6wAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUclLbFlQAnEAoABhyUtsWU_7HgAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-27T03:09:02.069435+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:hqmank since:2026-02-26",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJSo1peboBYKAAIckk9AdpsA6wAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUclLbFlQAnEAoABhyUtsWU_7HgAAA",
+      "cursor_out": "DAADDAABCgABHJSo1peboBYKAAIckiWsVJshwwAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUclLbFlQAnEAoABhyUtsWU_4rQAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-27T03:09:05.708624+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:hqmank since:2026-02-26",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJSo1peboBYKAAIckiWsVJshwwAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUclLbFlQAnEAoABhyUtsWU_4rQAAA",
+      "cursor_out": "DAADDAABCgABHJSo1peboBYKAAIckX55khpAqQAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUclLbFlQAnEAoABhyUtsWU_2PAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-27T03:09:09.835643+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:hqmank since:2026-02-26",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJSo1peboBYKAAIckX55khpAqQAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUclLbFlQAnEAoABhyUtsWU_2PAAAA",
+      "cursor_out": "DAADDAABCgABHJSo1peboBYKAAIckTjc6ZqR7AAIAAIAAAACCAADAAAAAAgABAAAAAQKAAUclLbFlQAnEAoABhyUtsWU_zywAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-27T03:09:13.998914+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:worldnetworkjp since:2026-02-26",
+        "queryType": "Latest"
+      },
+      "cursor_in": "",
+      "cursor_out": "DAADDAABCgABHJPCSK0bYeEKAAIchZgEBFsx3wAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUclLbYJ8AnEAoABhyUttgnv9jwAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-27T03:09:17.223197+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:worldnetworkjp since:2026-02-26",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJPCSK0bYeEKAAIchZgEBFsx3wAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUclLbYJ8AnEAoABhyUttgnv9jwAAA",
+      "cursor_out": "DAADDAABCgABHJPCSK0bYeEKAAIcb7OZtprQCwAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUclLbYJ8AnEAoABhyUttgnv7HgAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-27T03:09:20.219973+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:worldnetworkjp since:2026-02-26",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJPCSK0bYeEKAAIcb7OZtprQCwAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUclLbYJ8AnEAoABhyUttgnv7HgAAA",
+      "cursor_out": "DAADDAABCgABHJPCSK0bYeEKAAIcYDx2pdpRtQAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUclLbYJ8AnEAoABhyUttgnv4rQAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-27T03:09:24.132008+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:worldnetworkjp since:2026-02-26",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJPCSK0bYeEKAAIcYDx2pdpRtQAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUclLbYJ8AnEAoABhyUttgnv4rQAAA",
+      "cursor_out": "DAADDAABCgABHJPCSK0bYeEKAAIcTPI0L5vQjQAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUclLbYJ8AnEAoABhyUttgnv2PAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-27T03:09:27.599609+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:worldnetworkjp since:2026-02-26",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHJPCSK0bYeEKAAIcTPI0L5vQjQAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUclLbYJ8AnEAoABhyUttgnv2PAAAA",
+      "cursor_out": "DAADDAABCgABHJPCSK0bYeEKAAIcPA12P9owggAIAAIAAAACCAADAAAAAAgABAAAAAQKAAUclLbYJ8AnEAoABhyUttgnvzywAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-05-27T03:09:31.052230+00:00",
+      "path": "/twitter/tweets",
+      "params": {
+        "tweet_ids": "2058496124047249708"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 1
+    },
+    {
+      "ts": "2026-05-27T03:09:33.642467+00:00",
+      "path": "/twitter/tweets",
+      "params": {
+        "tweet_ids": "2029419109562433750"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 1
+    },
+    {
+      "ts": "2026-05-27T03:09:36.413577+00:00",
+      "path": "/twitter/tweets",
+      "params": {
+        "tweet_ids": "2053839441698185221"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 1
+    },
+    {
+      "ts": "2026-05-27T03:09:39.175180+00:00",
+      "path": "/twitter/tweets",
+      "params": {
+        "tweet_ids": "2051192248503873589"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 1
+    },
+    {
+      "ts": "2026-05-27T03:09:41.412642+00:00",
+      "path": "/twitter/tweets",
+      "params": {
+        "tweet_ids": "2058194152077009195"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 1
+    },
+    {
+      "ts": "2026-05-27T03:09:43.781932+00:00",
+      "path": "/twitter/tweets",
+      "params": {
+        "tweet_ids": "2058664601085157559"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 1
+    },
+    {
+      "ts": "2026-05-27T03:09:46.549024+00:00",
+      "path": "/twitter/tweets",
+      "params": {
+        "tweet_ids": "2058552181763309605"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 1
+    },
+    {
+      "ts": "2026-05-27T03:09:49.031966+00:00",
+      "path": "/twitter/tweets",
+      "params": {
+        "tweet_ids": "2056664440573939915"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 1
+    },
+    {
+      "ts": "2026-05-27T03:09:51.515073+00:00",
+      "path": "/twitter/tweets",
+      "params": {
+        "tweet_ids": "2035275751852048492"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 1
+    },
+    {
+      "ts": "2026-05-27T03:09:53.848571+00:00",
+      "path": "/twitter/tweets",
+      "params": {
+        "tweet_ids": "2058665087876165671"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 1
+    },
+    {
+      "ts": "2026-05-27T03:09:56.329593+00:00",
+      "path": "/twitter/tweets",
+      "params": {
+        "tweet_ids": "2059124869351055451"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 1
+    },
+    {
+      "ts": "2026-05-27T03:09:58.834125+00:00",
+      "path": "/twitter/tweets",
+      "params": {
+        "tweet_ids": "2059090665716552166"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 1
+    },
+    {
+      "ts": "2026-05-27T03:10:01.304913+00:00",
+      "path": "/twitter/tweets",
+      "params": {
+        "tweet_ids": "2001851242683994177"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 1
+    },
+    {
+      "ts": "2026-05-27T03:10:05.899635+00:00",
+      "path": "/twitter/tweets",
+      "params": {
+        "tweet_ids": "2011775185037234627"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 1
+    },
+    {
+      "ts": "2026-05-27T03:10:08.359183+00:00",
+      "path": "/twitter/tweets",
+      "params": {
+        "tweet_ids": "2058373087330959829"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 1
+    },
+    {
+      "ts": "2026-05-27T03:10:11.438481+00:00",
+      "path": "/twitter/tweets",
+      "params": {
+        "tweet_ids": "2028032559657947312"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 1
+    },
+    {
+      "ts": "2026-05-27T03:10:13.902530+00:00",
+      "path": "/twitter/tweets",
+      "params": {
+        "tweet_ids": "2058842151371641182"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 1
+    },
+    {
+      "ts": "2026-05-27T03:10:17.265112+00:00",
+      "path": "/twitter/tweets",
+      "params": {
+        "tweet_ids": "2039269234253934811"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 1
+    },
+    {
+      "ts": "2026-05-27T03:10:19.751451+00:00",
+      "path": "/twitter/tweets",
+      "params": {
+        "tweet_ids": "2044433988312560051"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 1
+    },
+    {
+      "ts": "2026-05-27T03:10:22.453637+00:00",
+      "path": "/twitter/tweets",
+      "params": {
+        "tweet_ids": "2059303346876633266"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 1
+    },
+    {
+      "ts": "2026-05-27T03:10:24.982218+00:00",
+      "path": "/twitter/tweets",
+      "params": {
+        "tweet_ids": "1804839863365382236"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 1
+    },
+    {
+      "ts": "2026-05-27T03:10:27.271762+00:00",
+      "path": "/twitter/tweets",
+      "params": {
+        "tweet_ids": "2058424814637809933"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 1
+    },
+    {
+      "ts": "2026-05-27T03:10:29.804406+00:00",
+      "path": "/twitter/tweets",
+      "params": {
+        "tweet_ids": "2035350663899525519"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 1
+    },
+    {
+      "ts": "2026-05-27T03:10:32.933994+00:00",
+      "path": "/twitter/tweets",
+      "params": {
+        "tweet_ids": "2059353577551012134"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 1
+    },
+    {
+      "ts": "2026-05-27T03:10:36.012731+00:00",
+      "path": "/twitter/tweets",
+      "params": {
+        "tweet_ids": "2017983833023635467"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 1
+    },
+    {
+      "ts": "2026-05-27T03:10:39.390132+00:00",
+      "path": "/twitter/tweets",
+      "params": {
+        "tweet_ids": "2050154802555027778"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 1
+    },
+    {
+      "ts": "2026-05-27T03:10:41.730439+00:00",
+      "path": "/twitter/tweets",
+      "params": {
+        "tweet_ids": "2059248282078253395"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 1
+    },
+    {
+      "ts": "2026-05-27T03:10:44.004203+00:00",
+      "path": "/twitter/tweets",
+      "params": {
+        "tweet_ids": "2042624568880197650"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 1
+    },
+    {
+      "ts": "2026-05-27T03:10:46.448662+00:00",
+      "path": "/twitter/tweets",
+      "params": {
+        "tweet_ids": "1918941584164261910"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 1
+    },
+    {
+      "ts": "2026-05-27T03:10:48.796818+00:00",
+      "path": "/twitter/tweets",
+      "params": {
+        "tweet_ids": "2058404814036652186"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 1
+    },
+    {
+      "ts": "2026-05-27T03:10:51.372989+00:00",
+      "path": "/twitter/article",
+      "params": {
+        "tweet_id": "2058664601085157559"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:10:54.073914+00:00",
+      "path": "/twitter/article",
+      "params": {
+        "tweet_id": "2057374678893973755"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:10:56.696217+00:00",
+      "path": "/twitter/article",
+      "params": {
+        "tweet_id": "2055760601000153343"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:10:59.976901+00:00",
+      "path": "/twitter/article",
+      "params": {
+        "tweet_id": "2054691480728674326"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:11:03.146311+00:00",
+      "path": "/twitter/article",
+      "params": {
+        "tweet_id": "2058552181763309605"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:11:05.814694+00:00",
+      "path": "/twitter/article",
+      "params": {
+        "tweet_id": "2058078810210455874"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:11:08.586565+00:00",
+      "path": "/twitter/article",
+      "params": {
+        "tweet_id": "2055041039313035454"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:11:11.337773+00:00",
+      "path": "/twitter/article",
+      "params": {
+        "tweet_id": "2058839596826612188"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:11:15.329604+00:00",
+      "path": "/twitter/article",
+      "params": {
+        "tweet_id": "2058512425683701771"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:11:18.098784+00:00",
+      "path": "/twitter/article",
+      "params": {
+        "tweet_id": "2058154826211766296"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:11:21.944466+00:00",
+      "path": "/twitter/article",
+      "params": {
+        "tweet_id": "2058665087876165671"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:11:24.666639+00:00",
+      "path": "/twitter/article",
+      "params": {
+        "tweet_id": "2057268284651934069"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:11:28.227922+00:00",
+      "path": "/twitter/article",
+      "params": {
+        "tweet_id": "2056138801467232577"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:11:30.717612+00:00",
+      "path": "/twitter/article",
+      "params": {
+        "tweet_id": "2053600927123451939"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:11:33.291073+00:00",
+      "path": "/twitter/article",
+      "params": {
+        "tweet_id": "2057356324388937879"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:11:35.675017+00:00",
+      "path": "/twitter/article",
+      "params": {
+        "tweet_id": "2055642076164104212"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:11:38.676987+00:00",
+      "path": "/twitter/article",
+      "params": {
+        "tweet_id": "2053756880326140355"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:11:41.677377+00:00",
+      "path": "/twitter/article",
+      "params": {
+        "tweet_id": "2053290657788391819"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:11:44.821972+00:00",
+      "path": "/twitter/article",
+      "params": {
+        "tweet_id": "2051635938590380362"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:11:47.277038+00:00",
+      "path": "/twitter/article",
+      "params": {
+        "tweet_id": "2051288441091219716"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:11:49.966216+00:00",
+      "path": "/twitter/article",
+      "params": {
+        "tweet_id": "2050568924115218822"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:11:52.501899+00:00",
+      "path": "/twitter/article",
+      "params": {
+        "tweet_id": "2049479144384459134"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:11:54.892593+00:00",
+      "path": "/twitter/article",
+      "params": {
+        "tweet_id": "2049319990382477683"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:11:57.418948+00:00",
+      "path": "/twitter/article",
+      "params": {
+        "tweet_id": "2047837100389876200"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:12:00.180842+00:00",
+      "path": "/twitter/article",
+      "params": {
+        "tweet_id": "2058749052712276332"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:12:02.632864+00:00",
+      "path": "/twitter/article",
+      "params": {
+        "tweet_id": "2058373087330959829"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:12:05.290934+00:00",
+      "path": "/twitter/article",
+      "params": {
+        "tweet_id": "2058040699300241828"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:12:07.844157+00:00",
+      "path": "/twitter/article",
+      "params": {
+        "tweet_id": "2058847991264383485"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:12:10.318961+00:00",
+      "path": "/twitter/article",
+      "params": {
+        "tweet_id": "2058862328620483069"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:12:12.775461+00:00",
+      "path": "/twitter/article",
+      "params": {
+        "tweet_id": "2057079697956331618"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:12:15.872391+00:00",
+      "path": "/twitter/article",
+      "params": {
+        "tweet_id": "2058424814637809933"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:12:18.619042+00:00",
+      "path": "/twitter/article",
+      "params": {
+        "tweet_id": "2054849745248776318"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:12:21.107285+00:00",
+      "path": "/twitter/article",
+      "params": {
+        "tweet_id": "2055219882875343135"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:12:23.839698+00:00",
+      "path": "/twitter/article",
+      "params": {
+        "tweet_id": "2052688010911834597"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:12:26.598551+00:00",
+      "path": "/twitter/article",
+      "params": {
+        "tweet_id": "2043714955388874798"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:12:29.263389+00:00",
+      "path": "/twitter/article",
+      "params": {
+        "tweet_id": "2059240406370656268"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-05-27T03:12:31.733705+00:00",
+      "path": "/twitter/article",
+      "params": {
+        "tweet_id": "2042545653201670569"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    }
+  ]
+}

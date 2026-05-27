@@ -1,0 +1,273 @@
+{
+  "handle": "csaba_kissi",
+  "tweet_id": "2011775185037234627",
+  "body": {
+    "tweets": [
+      {
+        "type": "tweet",
+        "id": "2011775185037234627",
+        "url": "https://x.com/csaba_kissi/status/2011775185037234627",
+        "twitterUrl": "https://twitter.com/csaba_kissi/status/2011775185037234627",
+        "text": "5 cool sites for web developers.\n\nhttps://t.co/C0fnRJ3pFF - Open source Real-time Vision AI agents\n\nhttps://t.co/Flbkctg86S - Connect APIs fast. Free for developers.\n\nhttps://t.co/QfIg7QXA2P - Full-stack web hosting for JavaScript, Python, PHP, Go..\n\nhttps://t.co/xLmRIhGtJR - Sandbox for Claude Code, Codex, or any AI coding agent\n\nhttps://t.co/iSOL6VzNYU - Free PDF toolkit",
+        "source": "",
+        "retweetCount": 57,
+        "replyCount": 35,
+        "likeCount": 369,
+        "quoteCount": 2,
+        "viewCount": 41450,
+        "createdAt": "Thu Jan 15 12:19:15 +0000 2026",
+        "lang": "en",
+        "bookmarkCount": 0,
+        "isReply": false,
+        "inReplyToId": "",
+        "conversationId": "2011775185037234627",
+        "displayTextRange": [
+          0,
+          276
+        ],
+        "inReplyToUserId": "",
+        "inReplyToUsername": "",
+        "isPinned": false,
+        "author": {
+          "type": "user",
+          "userName": "csaba_kissi",
+          "url": "https://x.com/csaba_kissi",
+          "twitterUrl": "https://twitter.com/csaba_kissi",
+          "id": "703528675271176192",
+          "name": "Csaba Kissi",
+          "isVerified": false,
+          "isBlueVerified": true,
+          "verifiedType": null,
+          "profilePicture": "https://pbs.twimg.com/profile_images/1454861068233228289/6sn9BYOf_normal.jpg",
+          "coverPicture": "https://pbs.twimg.com/profile_banners/703528675271176192/1645535474",
+          "description": "Coding Dinosaur • Entrepreneur • 200 projects • DM for collabs ➡️ https://t.co/fvuWg2duU6",
+          "location": "Home →",
+          "followers": 255118,
+          "following": 1149,
+          "status": "",
+          "canDm": true,
+          "canMediaTag": true,
+          "createdAt": "Sat Feb 27 10:34:41 +0000 2016",
+          "entities": {
+            "description": {
+              "urls": [
+                {
+                  "display_url": "invoicegenerator.io",
+                  "expanded_url": "https://invoicegenerator.io",
+                  "indices": [
+                    66,
+                    89
+                  ],
+                  "url": "https://t.co/fvuWg2duU6"
+                }
+              ]
+            },
+            "url": {
+              "urls": [
+                {
+                  "display_url": "folll.io/csabakissi",
+                  "expanded_url": "https://folll.io/csabakissi",
+                  "indices": [
+                    0,
+                    23
+                  ],
+                  "url": "https://t.co/ihXKTT63el"
+                }
+              ]
+            }
+          },
+          "fastFollowersCount": 0,
+          "favouritesCount": 0,
+          "hasCustomTimelines": true,
+          "isTranslator": false,
+          "mediaCount": 6926,
+          "statusesCount": 132504,
+          "withheldInCountries": [],
+          "affiliatesHighlightedLabel": {},
+          "possiblySensitive": false,
+          "pinnedTweetIds": [
+            "2011775185037234627"
+          ],
+          "profile_bio": {
+            "description": "Coding Dinosaur • Entrepreneur • 200 projects • DM for collabs ➡️ https://t.co/fvuWg2duU6",
+            "entities": {
+              "description": {
+                "urls": [
+                  {
+                    "display_url": "invoicegenerator.io",
+                    "expanded_url": "https://invoicegenerator.io",
+                    "indices": [
+                      66,
+                      89
+                    ],
+                    "url": "https://t.co/fvuWg2duU6"
+                  }
+                ]
+              },
+              "url": {
+                "urls": [
+                  {
+                    "display_url": "folll.io/csabakissi",
+                    "expanded_url": "https://folll.io/csabakissi",
+                    "indices": [
+                      0,
+                      23
+                    ],
+                    "url": "https://t.co/ihXKTT63el"
+                  }
+                ]
+              }
+            }
+          },
+          "isAutomated": false,
+          "automatedBy": null
+        },
+        "extendedEntities": {
+          "media": [
+            {
+              "additional_media_info": {
+                "monetizable": true
+              },
+              "allow_download_status": {
+                "allow_download": true
+              },
+              "display_url": "pic.twitter.com/6MkP3Xp4DK",
+              "expanded_url": "https://twitter.com/csaba_kissi/status/2011775185037234627/video/1",
+              "ext_master_playlist_only": [],
+              "ext_media_availability": {
+                "status": "Available"
+              },
+              "ext_playlists": [],
+              "id_str": "2011774738436403200",
+              "indices": [
+                277,
+                300
+              ],
+              "media_key": "13_2011774738436403200",
+              "media_results": {
+                "id": "QXBpTWVkaWFSZXN1bHRzOgwABAoAARvrQnc8mzAAAAA=",
+                "result": {
+                  "__typename": "ApiMedia",
+                  "id": "QXBpTWVkaWE6DAAECgABG+tCdzybMAAAAA==",
+                  "media_key": "13_2011774738436403200"
+                }
+              },
+              "media_url_https": "https://pbs.twimg.com/amplify_video_thumb/2011774738436403200/img/pA_w6cwHyCv0zdGB.jpg",
+              "original_info": {
+                "focus_rects": [],
+                "height": 1080,
+                "width": 1518
+              },
+              "sizes": {
+                "large": {
+                  "h": 1080,
+                  "w": 1518
+                }
+              },
+              "type": "video",
+              "url": "https://t.co/6MkP3Xp4DK",
+              "video_info": {
+                "aspect_ratio": [
+                  253,
+                  180
+                ],
+                "duration_millis": 30975,
+                "variants": [
+                  {
+                    "content_type": "application/x-mpegURL",
+                    "url": "https://video.twimg.com/amplify_video/2011774738436403200/pl/szLHJTeDP-hfXKay.m3u8?tag=21&v=ef5"
+                  },
+                  {
+                    "bitrate": 256000,
+                    "content_type": "video/mp4",
+                    "url": "https://video.twimg.com/amplify_video/2011774738436403200/vid/avc1/378x270/OwNErfRa5YwG3O1v.mp4?tag=21"
+                  },
+                  {
+                    "bitrate": 832000,
+                    "content_type": "video/mp4",
+                    "url": "https://video.twimg.com/amplify_video/2011774738436403200/vid/avc1/506x360/jCeZRTfAssVsOtk9.mp4?tag=21"
+                  },
+                  {
+                    "bitrate": 2176000,
+                    "content_type": "video/mp4",
+                    "url": "https://video.twimg.com/amplify_video/2011774738436403200/vid/avc1/1012x720/DWpV-2Iq_ZxFoy1j.mp4?tag=21"
+                  },
+                  {
+                    "bitrate": 10368000,
+                    "content_type": "video/mp4",
+                    "url": "https://video.twimg.com/amplify_video/2011774738436403200/vid/avc1/1518x1080/lcKw-DlUzJ-Md4k1.mp4?tag=21"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "card": null,
+        "place": {},
+        "entities": {
+          "hashtags": [],
+          "symbols": [],
+          "timestamps": [],
+          "urls": [
+            {
+              "display_url": "github.com/GetStream/Visi…",
+              "expanded_url": "http://github.com/GetStream/Vision-Agents",
+              "indices": [
+                34,
+                57
+              ],
+              "url": "https://t.co/C0fnRJ3pFF"
+            },
+            {
+              "display_url": "pipedream.com",
+              "expanded_url": "http://pipedream.com",
+              "indices": [
+                100,
+                123
+              ],
+              "url": "https://t.co/Flbkctg86S"
+            },
+            {
+              "display_url": "sevalla.com",
+              "expanded_url": "http://sevalla.com",
+              "indices": [
+                167,
+                190
+              ],
+              "url": "https://t.co/QfIg7QXA2P"
+            },
+            {
+              "display_url": "github.com/finbarr/yolobox",
+              "expanded_url": "http://github.com/finbarr/yolobox",
+              "indices": [
+                251,
+                274
+              ],
+              "url": "https://t.co/xLmRIhGtJR"
+            },
+            {
+              "display_url": "pdfcraft.devtoolcafe.com",
+              "expanded_url": "http://pdfcraft.devtoolcafe.com",
+              "indices": [
+                333,
+                356
+              ],
+              "url": "https://t.co/iSOL6VzNYU"
+            }
+          ],
+          "user_mentions": []
+        },
+        "isRetweet": false,
+        "isQuote": false,
+        "isConversationControlled": false,
+        "quoted_tweet": null,
+        "retweeted_tweet": null,
+        "isLimitedReply": false,
+        "communityInfo": null
+      }
+    ],
+    "status": "success",
+    "msg": "success",
+    "code": 0
+  }
+}

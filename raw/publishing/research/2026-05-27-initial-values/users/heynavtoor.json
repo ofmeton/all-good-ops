@@ -1,0 +1,47 @@
+{
+  "status": "success",
+  "msg": "success",
+  "data": {
+    "id": "1916904726295453696",
+    "name": "Nav Toor",
+    "userName": "heynavtoor",
+    "location": "Free Products + Sponsorships →",
+    "url": "https://t.co/b36GQWSNBh",
+    "description": "Helping you master AI daily with step-by-step AI guides, latest news, & practical tools • DM for Collabs",
+    "entities": {
+      "description": {},
+      "url": {
+        "urls": [
+          {
+            "display_url": "linktr.ee/navtoor",
+            "expanded_url": "https://linktr.ee/navtoor",
+            "indices": [
+              0,
+              23
+            ],
+            "url": "https://t.co/b36GQWSNBh"
+          }
+        ]
+      }
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 140848,
+    "following": 251,
+    "favouritesCount": 5357,
+    "statusesCount": 6195,
+    "mediaCount": 937,
+    "createdAt": "2025-04-28T17:18:09.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/1916904726295453696/1769272939",
+    "profilePicture": "https://pbs.twimg.com/profile_images/2017556052938788865/3E6CcSFP_normal.jpg",
+    "canDm": true,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": [
+      "2044433988312560051"
+    ]
+  }
+}

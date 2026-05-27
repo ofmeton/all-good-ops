@@ -1,0 +1,385 @@
+{
+  "article": {
+    "id": "QXJ0aWNsZUVudGl0eToyMDQyNTM5ODg1MDY4OTg0MzIw",
+    "author": {
+      "type": "user",
+      "userName": "worldnetworkjp",
+      "url": "https://x.com/worldnetworkjp",
+      "twitterUrl": "https://twitter.com/worldnetworkjp",
+      "id": "1869195747503304704",
+      "name": "World日本公式（World Japan）",
+      "isVerified": false,
+      "isBlueVerified": true,
+      "verifiedType": "Business",
+      "profilePicture": "https://pbs.twimg.com/profile_images/2029825950234595332/CvlCix9Q_normal.jpg",
+      "coverPicture": "https://pbs.twimg.com/profile_banners/1869195747503304704/1772782063",
+      "description": "Worldの日本公式アカウントです。\n現在、世界160カ国以上で、AI時代に必要な『人間のネットワーク』を構築中です。\nWorldの最新情報を日本語でお伝えいたします。\nお問い合わせ：@worldappsupport",
+      "location": "",
+      "followers": 1761,
+      "following": 19,
+      "status": "",
+      "canDm": false,
+      "canMediaTag": true,
+      "createdAt": "Wed Dec 18 01:39:41 +0000 2024",
+      "entities": {
+        "description": {},
+        "url": {
+          "urls": [
+            {
+              "display_url": "world.org/ja-jp",
+              "expanded_url": "https://world.org/ja-jp",
+              "indices": [
+                0,
+                23
+              ],
+              "url": "https://t.co/YnsOqKCbWl"
+            }
+          ]
+        }
+      },
+      "fastFollowersCount": 0,
+      "favouritesCount": 4,
+      "hasCustomTimelines": false,
+      "isTranslator": false,
+      "mediaCount": 38,
+      "statusesCount": 130,
+      "withheldInCountries": [],
+      "affiliatesHighlightedLabel": {},
+      "possiblySensitive": false,
+      "pinnedTweetIds": [],
+      "profile_bio": {},
+      "isAutomated": false,
+      "automatedBy": null
+    },
+    "replyCount": 0,
+    "likeCount": 32,
+    "quoteCount": 0,
+    "viewCount": "2471",
+    "createdAt": "Fri Apr 10 10:10:07 +0000 2026",
+    "title": "【日本で世界初実装。World IDの「認証ヒューマンバッジ」を解説】",
+    "preview_text": "この記事を読むだけで、World IDの新機能「認証ヒューマンバッジ」の仕組み・必要性・取得方法を、ゼロから理解できます。\n \n【問題提起】インターネットから\"人間\"が見えなくなりつつある",
+    "cover_media_img_url": "https://pbs.twimg.com/media/HFiPwlFakAEzXlg.jpg",
+    "contents": [
+      {
+        "type": "unstyled",
+        "text": "この記事を読むだけで、World IDの新機能「認証ヒューマンバッジ」の仕組み・必要性・取得方法を、ゼロから理解できます。"
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "header-two",
+        "text": "【問題提起】インターネットから\"人間\"が見えなくなりつつある",
+        "inlineStyleRanges": [
+          {
+            "length": 30,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "AIが生成するコンテンツやアカウントは、急速に普及しています。利便性が高まる一方で、その弊害も広がりつつあります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "複数アカウントやボットを悪用した世論操作、フェイクニュースの拡散、ディープフェイクによる高度ななりすまし、詐欺の巧妙化、さらにはデジタル広告におけるアドフラウドなど、インターネットのあらゆる領域で、その影響は広がりつつあります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "そうした中、「スクリーンの向こうにいる相手が一人の人間なのか、それともAIやボットなのか」を見極めることは、これまで以上に難しくなっています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "また、オンラインプラットフォームには悪質な行為を制限する手段が現状限られているため、悪意ある人物は誰にも止められることなく、新しいアカウントを作成することができます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "こうした課題に対し、Worldは「ヒューマンバッジ」の提供を開始しました。"
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "header-two",
+        "text": "【基本解説①】ヒューマンバッジとは何か",
+        "inlineStyleRanges": [
+          {
+            "length": 19,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "ヒューマンバッジは、インターネット上で「AIではなく、一人の人間」であることを示す認証マークです。",
+        "inlineStyleRanges": [
+          {
+            "length": 49,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "さまざまなサービスと認証済みのWorld IDの連携により、そのアカウントが「一人の人間」によって利用されていることを示すマークとなります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "複数アカウントやボットを悪用して偽アカウントやなりすましを行うような悪意ある人物・団体にとっては取得が難しいため、ヒューマンバッジが付与されたアカウントは、少なくとも信頼しやすい存在といえます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "これにより、ユーザー同士の信頼構築が促進され、なりすましリスクの低減にもつながることが期待されます。"
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "header-two",
+        "text": "【基本解説②】前提として知っておきたい—World IDとは",
+        "inlineStyleRanges": [
+          {
+            "length": 30,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "ヒューマンバッジの取得には、まず認証済みのWorld IDが必要です。",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 21,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "World IDは、ユーザーが「AIではなく、一人の人間である」ことをオンライン上で証明する新しい仕組みです。",
+        "inlineStyleRanges": [
+          {
+            "length": 55,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "プライバシーを担保しながら、「AIではなく一人の人間である」という事実のみを証明する点が、従来の本人確認との大きな違いです。"
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "header-two",
+        "text": "【実用事例】世界初—マッチングアプリTinderとのパートナーシップ",
+        "inlineStyleRanges": [
+          {
+            "length": 34,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Worldは2025年のイベント「At Last」にて、Tinderを運営する「Match Group」とのパートナーシップを発表しました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "その中で、日本のTinderにおけるヒューマンバッジの実用化は世界初の事例となり、2026年4月より日本のユーザー向けに提供が開始されています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "マッチングアプリにおいては、「相手が複数アカウントやAIではなく、一人の人間であるかどうか」は、ユーザーにとって非常に重要なポイントです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ヒューマンバッジがプロフィールに表示されることで、「一人の人間であることを示している」という誠実さの証しとなり、安心感につながることが期待されています。"
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "header-two",
+        "text": "【取得手順】Tinder上でヒューマンバッジを手に入れる3ステップ",
+        "inlineStyleRanges": [
+          {
+            "length": 33,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HFiSCzNakAAI_pB.jpg",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "type": "unstyled",
+        "text": "ステップ1：OrbでWorld IDを認証する",
+        "inlineStyleRanges": [
+          {
+            "length": 23,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "World IDは、Worldが提供する専用デバイス「Orb」にて認証できます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Orbは、目や顔の画像を撮影し、「他の人とは異なる一人の人間」であることを認証するカメラデバイスです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "World IDについての詳細は以下より↓"
+      },
+      {
+        "type": "unstyled",
+        "text": "https://world.org/ja-jp/world-id"
+      },
+      {
+        "type": "unstyled",
+        "text": "ステップ2：World IDとTinderプロフィールを連携する",
+        "inlineStyleRanges": [
+          {
+            "length": 32,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "日本のTinderユーザーで、Orbによる認証を完了した方は、World IDとTinderアカウントを連携することができます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "連携の手順は、各サービスの案内に従って進める形となります。両アプリを最新版にアップデートのうえ、ヒューマンバッジを取得いただけます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "なお、現時点（4月10日）では、AndroidにおいてTinderアプリ側からのヒューマンバッジ取得は開発中です。World Appのホーム画面バナーからご取得ください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ステップ3：プロフィールにヒューマンバッジを表示する",
+        "inlineStyleRanges": [
+          {
+            "length": 26,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "連携が完了すると、Tinder プロフィールにヒューマンバッジが表示されます。"
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "header-two",
+        "text": "【期待される効果①】使い捨てアカウントの抑制",
+        "inlineStyleRanges": [
+          {
+            "length": 22,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "「1人の人間に対して1つのアカウント」という紐づけを可能にするため、使い捨てアカウントの作成が難しくなります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "従来は、コミュニティガイドライン違反でアカウント停止となっても、新しいアカウントを作成して再び利用を始めることが技術的には可能でした。"
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "header-two",
+        "text": "【期待される効果②】責任あるオンライン行動の促進",
+        "inlineStyleRanges": [
+          {
+            "length": 24,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "ヒューマンバッジは、単なる認証マークにとどまりません。"
+      },
+      {
+        "type": "unstyled",
+        "text": "バッジの有無がアカウントの信頼性に直結することで、責任あるオンライン行動を促す効果も期待されています。",
+        "inlineStyleRanges": [
+          {
+            "length": 16,
+            "offset": 25,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "アカウントに「人間であることの証明」が紐づくことで、行動への責任意識が生まれる可能性があります。"
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "header-two",
+        "text": "【まとめ】ヒューマンバッジが示す、インターネットの次の姿",
+        "inlineStyleRanges": [
+          {
+            "length": 28,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "ヒューマンバッジは、人間であることの証明をオンライン上で可能にする認証マークです。\n\n世界初の実用事例として、日本のTinderとのパートナーシップがスタートしています。\n\nAIとの共存が進む時代において、「自分がAIではなく一人の人間であること」をユーザー側の負担なく証明する手段は、社会のスタンダードとして今後ますます重要になる可能性があります。"
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "unstyled",
+        "text": "この記事が参考になった方は、ぜひ保存してご活用ください。",
+        "inlineStyleRanges": [
+          {
+            "length": 28,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      }
+    ]
+  },
+  "status": "success",
+  "msg": "success",
+  "_handle": "worldnetworkjp"
+}

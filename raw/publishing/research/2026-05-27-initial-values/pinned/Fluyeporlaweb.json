@@ -1,0 +1,132 @@
+{
+  "handle": "Fluyeporlaweb",
+  "tweet_id": "2056664440573939915",
+  "body": {
+    "tweets": [
+      {
+        "type": "tweet",
+        "id": "2056664440573939915",
+        "url": "https://x.com/Fluyeporlaweb/status/2056664440573939915",
+        "twitterUrl": "https://twitter.com/Fluyeporlaweb/status/2056664440573939915",
+        "text": "https://t.co/Md6L6Ur0U3",
+        "source": "",
+        "retweetCount": 1,
+        "replyCount": 3,
+        "likeCount": 18,
+        "quoteCount": 1,
+        "viewCount": 3781,
+        "createdAt": "Tue May 19 09:13:08 +0000 2026",
+        "lang": "zxx",
+        "bookmarkCount": 18,
+        "isReply": false,
+        "inReplyToId": "",
+        "conversationId": "2056664440573939915",
+        "displayTextRange": [
+          0,
+          23
+        ],
+        "inReplyToUserId": "",
+        "inReplyToUsername": "",
+        "isPinned": false,
+        "author": {
+          "type": "user",
+          "userName": "Fluyeporlaweb",
+          "url": "https://x.com/Fluyeporlaweb",
+          "twitterUrl": "https://twitter.com/Fluyeporlaweb",
+          "id": "1009364234491387904",
+          "name": "PA13L0",
+          "isVerified": false,
+          "isBlueVerified": true,
+          "verifiedType": null,
+          "profilePicture": "https://pbs.twimg.com/profile_images/1919353130182959104/Jy1MsO1c_normal.jpg",
+          "coverPicture": "https://pbs.twimg.com/profile_banners/1009364234491387904/1771409731",
+          "description": "Dev y SEO • Creando activos digitales con IA",
+          "location": "Grupo de Telegram →",
+          "followers": 21961,
+          "following": 1843,
+          "status": "",
+          "canDm": true,
+          "canMediaTag": true,
+          "createdAt": "Wed Jun 20 09:16:01 +0000 2018",
+          "entities": {
+            "description": {},
+            "url": {
+              "urls": [
+                {
+                  "display_url": "t.me/fluyeporlaweb",
+                  "expanded_url": "https://t.me/fluyeporlaweb",
+                  "indices": [
+                    0,
+                    23
+                  ],
+                  "url": "https://t.co/4p5sQIe3Iz"
+                }
+              ]
+            }
+          },
+          "fastFollowersCount": 0,
+          "favouritesCount": 0,
+          "hasCustomTimelines": true,
+          "isTranslator": false,
+          "mediaCount": 2871,
+          "statusesCount": 25210,
+          "withheldInCountries": [],
+          "affiliatesHighlightedLabel": {},
+          "possiblySensitive": false,
+          "pinnedTweetIds": [
+            "2056664440573939915"
+          ],
+          "profile_bio": {
+            "description": "Dev y SEO • Creando activos digitales con IA",
+            "entities": {
+              "description": {},
+              "url": {
+                "urls": [
+                  {
+                    "display_url": "t.me/fluyeporlaweb",
+                    "expanded_url": "https://t.me/fluyeporlaweb",
+                    "indices": [
+                      0,
+                      23
+                    ],
+                    "url": "https://t.co/4p5sQIe3Iz"
+                  }
+                ]
+              }
+            }
+          },
+          "isAutomated": false,
+          "automatedBy": null
+        },
+        "extendedEntities": {},
+        "card": {
+          "rest_id": "https://t.co/Md6L6Ur0U3"
+        },
+        "place": {},
+        "entities": {
+          "urls": [
+            {
+              "display_url": "x.com/i/article/2056…",
+              "expanded_url": "http://x.com/i/article/2056645770162397184",
+              "indices": [
+                0,
+                23
+              ],
+              "url": "https://t.co/Md6L6Ur0U3"
+            }
+          ]
+        },
+        "isRetweet": false,
+        "isQuote": false,
+        "isConversationControlled": false,
+        "quoted_tweet": null,
+        "retweeted_tweet": null,
+        "isLimitedReply": false,
+        "communityInfo": null
+      }
+    ],
+    "status": "success",
+    "msg": "success",
+    "code": 0
+  }
+}

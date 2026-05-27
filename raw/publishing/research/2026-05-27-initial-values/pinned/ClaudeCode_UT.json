@@ -1,0 +1,130 @@
+{
+  "handle": "ClaudeCode_UT",
+  "tweet_id": "2058664601085157559",
+  "body": {
+    "tweets": [
+      {
+        "type": "tweet",
+        "id": "2058664601085157559",
+        "url": "https://x.com/ClaudeCode_UT/status/2058664601085157559",
+        "twitterUrl": "https://twitter.com/ClaudeCode_UT/status/2058664601085157559",
+        "text": "https://t.co/QnxfpRyVrW",
+        "source": "",
+        "retweetCount": 2,
+        "replyCount": 1,
+        "likeCount": 72,
+        "quoteCount": 9,
+        "viewCount": 63987,
+        "createdAt": "Sun May 24 21:41:03 +0000 2026",
+        "lang": "zxx",
+        "bookmarkCount": 197,
+        "isReply": false,
+        "inReplyToId": "",
+        "conversationId": "2058664601085157559",
+        "displayTextRange": [
+          0,
+          23
+        ],
+        "inReplyToUserId": "",
+        "inReplyToUsername": "",
+        "isPinned": false,
+        "author": {
+          "type": "user",
+          "userName": "ClaudeCode_UT",
+          "url": "https://x.com/ClaudeCode_UT",
+          "twitterUrl": "https://twitter.com/ClaudeCode_UT",
+          "id": "2045207585574539264",
+          "name": "東大ClaudeCode研究所",
+          "isVerified": false,
+          "isBlueVerified": true,
+          "verifiedType": null,
+          "profilePicture": "https://pbs.twimg.com/profile_images/2045968105172766720/_u891Zxq_normal.jpg",
+          "coverPicture": "https://pbs.twimg.com/profile_banners/2045207585574539264/1776499582",
+          "description": "Claude Codeを極めた現役東大生集団が運営｜実務で使えるノウハウと最新情報を毎日発信｜大手企業とのAIエージェント開発で現場導入実績あり｜研究レベルの技術を応用して社会実装｜AIエージェントの導入相談はDMまでお願いします📩｜独自ニュースと活用法はLINEで：https://t.co/078j7qOKUH",
+          "location": "実務で使えるClaudeCodeならここ一択！",
+          "followers": 19704,
+          "following": 10,
+          "status": "",
+          "canDm": false,
+          "canMediaTag": true,
+          "createdAt": "Fri Apr 17 18:29:47 +0000 2026",
+          "entities": {
+            "description": {
+              "urls": [
+                {
+                  "display_url": "lin.ee/quYxNMc",
+                  "expanded_url": "https://lin.ee/quYxNMc",
+                  "indices": [
+                    134,
+                    157
+                  ],
+                  "url": "https://t.co/078j7qOKUH"
+                }
+              ]
+            }
+          },
+          "fastFollowersCount": 0,
+          "favouritesCount": 0,
+          "hasCustomTimelines": true,
+          "isTranslator": false,
+          "mediaCount": 213,
+          "statusesCount": 351,
+          "withheldInCountries": [],
+          "affiliatesHighlightedLabel": {},
+          "possiblySensitive": false,
+          "pinnedTweetIds": [
+            "2058664601085157559"
+          ],
+          "profile_bio": {
+            "description": "Claude Codeを極めた現役東大生集団が運営｜実務で使えるノウハウと最新情報を毎日発信｜大手企業とのAIエージェント開発で現場導入実績あり｜研究レベルの技術を応用して社会実装｜AIエージェントの導入相談はDMまでお願いします📩｜独自ニュースと活用法はLINEで：https://t.co/078j7qOKUH",
+            "entities": {
+              "description": {
+                "urls": [
+                  {
+                    "display_url": "lin.ee/quYxNMc",
+                    "expanded_url": "https://lin.ee/quYxNMc",
+                    "indices": [
+                      134,
+                      157
+                    ],
+                    "url": "https://t.co/078j7qOKUH"
+                  }
+                ]
+              }
+            }
+          },
+          "isAutomated": false,
+          "automatedBy": null
+        },
+        "extendedEntities": {},
+        "card": {
+          "rest_id": "https://t.co/QnxfpRyVrW"
+        },
+        "place": {},
+        "entities": {
+          "urls": [
+            {
+              "display_url": "x.com/i/article/2058…",
+              "expanded_url": "http://x.com/i/article/2058654280492658688",
+              "indices": [
+                0,
+                23
+              ],
+              "url": "https://t.co/QnxfpRyVrW"
+            }
+          ]
+        },
+        "isRetweet": false,
+        "isQuote": false,
+        "isConversationControlled": false,
+        "quoted_tweet": null,
+        "retweeted_tweet": null,
+        "isLimitedReply": false,
+        "communityInfo": null
+      }
+    ],
+    "status": "success",
+    "msg": "success",
+    "code": 0
+  }
+}

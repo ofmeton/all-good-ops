@@ -1,0 +1,920 @@
+{
+  "article": {
+    "id": "QXJ0aWNsZUVudGl0eToyMDU0NTA0OTgyNDI3NDM5MTA0",
+    "author": {
+      "type": "user",
+      "userName": "ClaudeCode_UT",
+      "url": "https://x.com/ClaudeCode_UT",
+      "twitterUrl": "https://twitter.com/ClaudeCode_UT",
+      "id": "2045207585574539264",
+      "name": "東大ClaudeCode研究所",
+      "isVerified": false,
+      "isBlueVerified": true,
+      "verifiedType": null,
+      "profilePicture": "https://pbs.twimg.com/profile_images/2045968105172766720/_u891Zxq_normal.jpg",
+      "coverPicture": "https://pbs.twimg.com/profile_banners/2045207585574539264/1776499582",
+      "description": "Claude Codeを極めた現役東大生集団が運営｜実務で使えるノウハウと最新情報を毎日発信｜大手企業とのAIエージェント開発で現場導入実績あり｜研究レベルの技術を応用して社会実装｜AIエージェントの導入相談はDMまでお願いします📩｜独自ニュースと活用法はLINEで：https://t.co/078j7qOKUH",
+      "location": "実務で使えるClaudeCodeならここ一択！",
+      "followers": 19704,
+      "following": 10,
+      "status": "",
+      "canDm": false,
+      "canMediaTag": true,
+      "createdAt": "Fri Apr 17 18:29:47 +0000 2026",
+      "entities": {
+        "description": {
+          "urls": [
+            {
+              "display_url": "lin.ee/quYxNMc",
+              "expanded_url": "https://lin.ee/quYxNMc",
+              "indices": [
+                134,
+                157
+              ],
+              "url": "https://t.co/078j7qOKUH"
+            }
+          ]
+        }
+      },
+      "fastFollowersCount": 0,
+      "favouritesCount": 310,
+      "hasCustomTimelines": false,
+      "isTranslator": false,
+      "mediaCount": 213,
+      "statusesCount": 351,
+      "withheldInCountries": [],
+      "affiliatesHighlightedLabel": {},
+      "possiblySensitive": false,
+      "pinnedTweetIds": [
+        "2058664601085157559"
+      ],
+      "profile_bio": {},
+      "isAutomated": false,
+      "automatedBy": null
+    },
+    "replyCount": 2,
+    "likeCount": 290,
+    "quoteCount": 5,
+    "viewCount": "360615",
+    "createdAt": "Wed May 13 22:33:17 +0000 2026",
+    "title": "【完全版】Claude Codeの性能を10倍引き上げるCLAUDE.mdの作り方",
+    "preview_text": "「なんかClaude Code前よりバカになってない💢」\n「あれ、最近Claude Codeいうこと聞かなくなってきたな」\nあなたのCLAUDE.mdはいま何行で書かれていますか？30行？100行？それ以上？",
+    "cover_media_img_url": "https://pbs.twimg.com/media/HIO6SsRbMAAa3oV.jpg",
+    "contents": [
+      {
+        "type": "unstyled",
+        "text": "「なんかClaude Code前よりバカになってない💢」"
+      },
+      {
+        "type": "unstyled",
+        "text": "「あれ、最近Claude Codeいうこと聞かなくなってきたな」"
+      },
+      {
+        "type": "unstyled",
+        "text": "あなたのCLAUDE.mdはいま何行で書かれていますか？30行？100行？それ以上？"
+      },
+      {
+        "type": "unstyled",
+        "text": "以前の私は700行くらいまで膨れ上がっていました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "私自身が書いたのではなく、Claude Codeに私が色々指示している間に勝手に追加した結果こうなっていました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude Codeの性能をあげようと良かれと思ってCLAUDE.mdに情報をモリモリに書き込んでいませんか？その結果知らず知らずのうちにClaude Code自身が数百行に渡っていたのです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "みなさんのAIももしかしたらこのような状態になって、それが原因で性能が意図せず落ちてしまっているのかもしれません。"
+      },
+      {
+        "type": "unstyled",
+        "text": "今回はそのような性能低下を回避して上手にClaude Codeを使いこなすための設計やTipsを紹介します。"
+      },
+      {
+        "type": "unstyled",
+        "text": "最近注目されていた海外の記事 \"You've been using Claude wrong this whole time. CLAUDE.md fixes everything\" の本体を、日本のビジネス現場向けに噛み砕いて再構成しました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "元ポストはこちら：\nhttps://x.com/TheAIWorld22/status/2053023798170198453"
+      },
+      {
+        "type": "unstyled",
+        "text": "この記事をブクマ、AIを使っているお知り合いに紹介して読み続けてください。"
+      },
+      {
+        "type": "header-two",
+        "text": "CLAUDE.md は自己プロフィールではなく Claude の挙動を変える契約だ"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIMUPfUaEAAz2gJ.jpg",
+        "width": 2048,
+        "height": 1152
+      },
+      {
+        "type": "unstyled",
+        "text": "最初に多くの方が誤解している前提を 1 つだけ整理させてください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "CLAUDE.md と聞くと、こんなイメージを持っていませんか。"
+      },
+      {
+        "type": "unstyled",
+        "text": "「自分の役割や好みを書いて、AI に自己紹介する場所」"
+      },
+      {
+        "type": "unstyled",
+        "text": "実はこの理解だと、CLAUDE.md は本来の半分も使えていません。"
+      },
+      {
+        "type": "unstyled",
+        "text": "自己紹介で書ける内容は「私は誰か」「何を作っているか」「どう書くか」のような情報です。Claude はそれを読んで、出力の内容を合わせてきます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "でも本当の使い方は、Claude の挙動そのものを変えることにあります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "毎回 \"Great question!\" で始まる癖を消したい。確証のない数字を断定で書かないようにさせたい。頼んでないところまで触らせたくない。これらは「自分の情報」ではなく「Claude の振る舞いに対する宣言」です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここでひとつ言葉を入れさせてください。CLAUDE.md は 永続契約 を書く場所です。",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 31,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "会話のたびに「これしないでね」と何度も言う代わりに、契約として 1 回だけ書いておく。すると、その癖はそのプロジェクトの中で二度と現れなくなります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "自己プロフィールと永続契約を別物として扱う。これが本記事のすべての出発点になります。"
+      },
+      {
+        "type": "header-two",
+        "text": "会話の癖を直す 4 つの指示"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIO26yRboAASoQx.jpg",
+        "width": 2048,
+        "height": 1152
+      },
+      {
+        "type": "unstyled",
+        "text": "最初の領域は会話の癖です。元の英語記事では Part 1 にあたる箇所で、Claude が毎セッションで繰り返してしまう「おもてなし芸」を消す 4 つの指示です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "指示 1：フィラー禁止",
+        "inlineStyleRanges": [
+          {
+            "length": 11,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "冒頭の \"Great question!\" \"Of course!\" \"Certainly!\" を完全に消します。日本語でもケバトリ的な効果があります。"
+      },
+      {
+        "type": "markdown",
+        "text": "```markdown\nNever open responses with filler phrases like 'Great question!', 'Of course!', 'Certainly!', or similar warmups. Start every response with the actual answer.\n\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "これを書くだけで、Claude の返答が即「答え」から始まるようになります。1 日 5 セッション × 3 秒の節約は些細に見えますが、CLAUDE.md に 1 行書くだけで永久に解決します。"
+      },
+      {
+        "type": "unstyled",
+        "text": "指示 2：選択肢を提示させる",
+        "inlineStyleRanges": [
+          {
+            "length": 14,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude は何も言わないと、勝手に 1 つの方針で書き始めます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "「文体を直して」と頼んだら、こちらの意図と違う方向に直されることがあります。"
+      },
+      {
+        "type": "markdown",
+        "text": "```markdown\nBefore any significant task, always show me 2-3 possible approaches first. Wait for my choice before proceeding.\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "これで、重要な作業の前に Claude が A 案 B 案 C 案のように選択肢を出してくるようになります。「あれ、こっちの方向じゃなかったんだけど」と差し戻す手間が消えます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "指示 3：不確実なら不確実だと言わせる",
+        "inlineStyleRanges": [
+          {
+            "length": 19,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "これが地味に強力です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude は穴埋めを嫌います。確証のない日付や数字を、それっぽく書いてしまう癖があります。"
+      },
+      {
+        "type": "markdown",
+        "text": "```markdown\nIf you are uncertain about any fact, statistic, date, or quote, say so explicitly before including it. Never fill gaps with plausible-sounding information.\n\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "これを書いておくと、Claude が「この数字は確証がありません」と先に申告するようになります。会議で誤った数字を引用してしまう事故が、ここで防げます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "指示 4：質問の重さに合わせた長さで返させる",
+        "inlineStyleRanges": [
+          {
+            "length": 22,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "簡単な質問に 4 段落、複雑なタスクに骨子だけ、という Claude の長さの判定はかなり荒いです。"
+      },
+      {
+        "type": "markdown",
+        "text": "```markdown\nMatch response length to task complexity. Simple questions get short direct answers. Complex tasks get full detailed responses.\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここまでで会話の癖を直す 4 指示。Claude のおもてなし芸を消すと、毎セッションの会議資料作成が一段静かになります。"
+      },
+      {
+        "type": "header-two",
+        "text": "暴走を止める 4 つの指示"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIO3t2lbgAAol5A.jpg",
+        "width": 2048,
+        "height": 1152
+      },
+      {
+        "type": "unstyled",
+        "text": "次の領域は暴走止めです。Claude に「議事録の文体を直して」と頼んだら構造まで書き換えられて、30 分かけて差し戻した経験がある人向けの 4 指示です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "指示 5：大きな変更の前に止まらせる",
+        "inlineStyleRanges": [
+          {
+            "length": 18,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude は気を利かせて、頼んでいない範囲まで「ここも良くなる」と書き換えてしまいます。"
+      },
+      {
+        "type": "markdown",
+        "text": "```markdown\nBefore making any change that significantly alters content I've already created, stop completely. Describe exactly what you're about to change and why. Wait for my confirmation before proceeding.\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "これで、Claude が大きく書き換える前に必ず止まり、説明してから動くようになります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "指示 6：スコープを厳密に守らせる",
+        "inlineStyleRanges": [
+          {
+            "length": 17,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "「広告コピーの 1 行目だけ直して」と頼んだのに、Claude が 2 行目以降や順序まで触っていることがあります。"
+      },
+      {
+        "type": "markdown",
+        "text": "```markdown\nOnly change what I specifically asked you to change. Do not rewrite, rephrase, or 'improve' anything I didn't ask about, even if you think it would be better.\n\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "頼んだ範囲しか触らないようにする宣言です。気付いたことがあれば「最後に一言メモしてね」と添えると、改善案だけ受け取れます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "指示 7：変えた箇所を毎回報告させる",
+        "inlineStyleRanges": [
+          {
+            "length": 18,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude の出力を見て「で、結局どこを変えたんだっけ」と差分を探した経験はありませんか？"
+      },
+      {
+        "type": "markdown",
+        "text": "```markdown\nAfter completing any editing or writing task, always end with a brief summary: What was changed. What was left untouched. What needs my attention.\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "これで、編集後に必ず「変えた箇所、触っていない箇所、確認してほしい箇所」のサマリが付くようになります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "指示 8：勝手にアクションを起こさせない",
+        "inlineStyleRanges": [
+          {
+            "length": 20,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "これは、Claude Code を社内ツールや SaaS と連携させ始めた人に効きます。"
+      },
+      {
+        "type": "markdown",
+        "text": "```markdown\nNever send, post, publish, share, or schedule anything on my behalf without my explicit confirmation in the current message.\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "メール送信、投稿公開、予約スケジュールを、現在のメッセージでの明示確認なしには絶対やらせない、という安全弁です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここまでで会話 4 つと暴走止め 4 つ、合計 8 つの契約が CLAUDE.md に並びます。これだけで Claude のセッションが静かに、そして正確になります。"
+      },
+      {
+        "type": "header-two",
+        "text": "文脈を渡す 3 つの指示"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIO4QuYbUAA-Gr5.jpg",
+        "width": 2048,
+        "height": 1152
+      },
+      {
+        "type": "unstyled",
+        "text": "次の領域は文脈です。「自分の業務」「自分の文体」「自分の知識レベル」を毎セッションで打ち直している人向けです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "指示 9：あなたが誰かを書く",
+        "inlineStyleRanges": [
+          {
+            "length": 14,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "CLAUDE.md に「あなたが誰か」を書きます。"
+      },
+      {
+        "type": "markdown",
+        "text": "```markdown\nAbout me: Name. Role. Background. Strong in [topics you know well]. Still learning [areas where you need more context].\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "たとえば「経営企画、業界はメーカー、数字に強い、海外の AI トレンドはまだ追い切れていない」のように、5-6 行で十分です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "これがあるだけで、Claude が説明の深さを毎回調整してくれます。「もう知ってる前提のこと」を Claude が長々と説明する時間が消えます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "指示 10：今の作業文脈を書く",
+        "inlineStyleRanges": [
+          {
+            "length": 15,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "その次に、今の作業を書きます。"
+      },
+      {
+        "type": "markdown",
+        "text": "```markdown\nWhat I'm working on: Project. Goal. Audience. Tone. What to avoid.\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "「競合 IR のリサーチ」「上司への報告書として使う」「トーンは中立的」「過度な期待表現を避ける」のように書きます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "文脈が外れた出力をしそうな時、Claude が事前にフラグを立てて確認してきます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "指示 11：自分の文体を固定する",
+        "inlineStyleRanges": [
+          {
+            "length": 16,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "これが地味に効きます。"
+      },
+      {
+        "type": "markdown",
+        "text": "```markdown\nMy writing style. Always match this: Voice. Sentence length. Words I use. Words I never use. Format preference.\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "実用的なコツとして、自分の過去の文章を 2-3 段落そのまま CLAUDE.md に貼り付けるのが一番早いです。それだけで Claude が自分の文体に寄せてきます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude が「Claude らしい一般的な文体」で書き、それを毎回手で自分の言葉に直していた作業がなくなります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "3 つを 1 回書くだけで、毎セッションの自己紹介 2-3 分が永久に消えます。"
+      },
+      {
+        "type": "header-two",
+        "text": "記憶を持たせる 4 つの指示"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIO4sJDa8AAmhXl.jpg",
+        "width": 2048,
+        "height": 1152
+      },
+      {
+        "type": "unstyled",
+        "text": "次の領域は記憶です。Claude を「セッションをまたいで学ぶ存在」にする 4 指示です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude のセッションは毎回ゼロから始まるのが基本です。先週決めた方針を、今週また説明することになります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "しかし、Claude はファイルを書けます。ファイルは残ります。だから、ファイルを記憶として使えます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "指示 12：MEMORY.md を書かせる",
+        "inlineStyleRanges": [
+          {
+            "length": 21,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "決定の記録ファイルを 1 つ用意します。"
+      },
+      {
+        "type": "markdown",
+        "text": "```markdown\nMaintain a file called MEMORY.md. After any significant decision, add an entry with what was decided, why, and what was rejected. Read MEMORY.md at the start of every session before doing anything.\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "会議で「先週は B 案で行くと決めたよね」を Claude に毎回伝えなくても、Claude が自分で MEMORY.md を読みに行きます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "指示 13：セッション終了時の引き継ぎを書かせる",
+        "inlineStyleRanges": [
+          {
+            "length": 24,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "markdown",
+        "text": "```markdown\nWhen I say 'session end' or 'let's stop here', write a session summary to MEMORY.md: What we worked on. What's completed. What's in progress. What decisions were made. What to pick up next session.\n\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "セッションを閉じる時に「stop here」と一言入れるだけで、Claude が次のセッション用の引き継ぎを書いてくれます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "「あれ、どこまでやったっけ」を翌朝に思い出す 15 分が消えます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "指示 14：ERRORS.md で失敗ログを残す",
+        "inlineStyleRanges": [
+          {
+            "length": 24,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "markdown",
+        "text": "```markdown\nMaintain a file called ERRORS.md. When an approach takes more than 2 attempts to work, log what didn't work, what worked, and what to remember next time.\n\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "同じ失敗を 3 ヶ月後にまた繰り返す現象が止まります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "指示 15：不変ファクトの宣言",
+        "inlineStyleRanges": [
+          {
+            "length": 15,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "markdown",
+        "text": "```markdown\nThese facts are always true. Apply them to every session without exception: [Your permanent facts here].\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "「主要顧客は東証プライム上場の製造業 50 社」「報告書は必ず PDF で出す」のように、絶対に変わらない事実を 1 箇所に集めておきます。これと矛盾する出力をしそうな時、Claude が止まって確認してきます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ファイルが残るから 永続契約 として機能します。会話で何度も伝えなおしていたことが、紙の上に固定されます。",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 10,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "開発業務でも効く 6 つの指示と Karpathy の 4 ルール"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIO5F1KbEAAXazV.jpg",
+        "width": 2048,
+        "height": 1152
+      },
+      {
+        "type": "unstyled",
+        "text": "最後の領域は開発業務でも効く 6 指示です。元記事では \"For Developers\" と銘打たれていますが、ここは飛ばさないでください。書かれている 6 指示は、議事録や広告コピー、報告書編集、データ整理でもまったく同じ価値を持ちます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "指示 16：スコープを厳密に守らせる",
+        "inlineStyleRanges": [
+          {
+            "length": 18,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "markdown",
+        "text": "```markdown\nOnly modify files, functions, and lines of code directly related to the current task.\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "「ファイル、関数、行」を「段落、セクション、文」に置き換えると、業務文書編集の宣言になります。指示 6 と同じ思想で、開発業務にも展開した指示です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "指示 17：破壊的な操作の前に確認させる",
+        "inlineStyleRanges": [
+          {
+            "length": 20,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "markdown",
+        "text": "```markdown\nBefore deleting any file, overwriting existing code, dropping database records, or making any change that cannot be trivially undone, stop completely. List exactly what will be affected.\n\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "業務に翻訳すると、「上書き保存」「ファイル一括置換」「データの完全削除」のような、取り消しが利かない操作の前に必ず確認させる、という宣言です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "指示 18：ハードストップで止まらせる",
+        "inlineStyleRanges": [
+          {
+            "length": 19,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "markdown",
+        "text": "```markdown\nThe following actions require explicit in-session confirmation before executing: Deploying to any environment. Running migrations on any database. Sending any email or external API call.\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "これも業務翻訳が効きます。「メール送信」「投稿公開」「予約スケジュール」「外部サービスへの自動連携」を、現在のメッセージで「やっていい」と言うまで絶対実行しない、という宣言です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "指示 19：使う道具を固定する",
+        "inlineStyleRanges": [
+          {
+            "length": 15,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "markdown",
+        "text": "```markdown\nTech stack. Always use these, never suggest alternatives unless I ask: Language. Framework. Package manager. Database. Testing. Linting.\n\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "業務翻訳すると、「使うフォーマット」「使う文体ルール」「使う配信媒体」を固定する宣言です。広告コピーなら「A/B テスト用に 2 案セット」のように。"
+      },
+      {
+        "type": "unstyled",
+        "text": "指示 20：変更点を可視化させる",
+        "inlineStyleRanges": [
+          {
+            "length": 16,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "markdown",
+        "text": "```markdown\nAfter completing any coding task, always end with: Files changed. What was modified. One line per file. Files intentionally not touched. Follow-up needed.\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "業務翻訳すると、編集タスク完了時に「触ったファイル」「1 行で何を変えたか」「あえて触らなかったファイル」「次に必要な確認」を必ずサマリさせる、という宣言です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "指示 21：Karpathy の 4 ルール",
+        "inlineStyleRanges": [
+          {
+            "length": 22,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIO5h3LaQAAOm6t.jpg",
+        "width": 1672,
+        "height": 941
+      },
+      {
+        "type": "unstyled",
+        "text": "ここで Tesla の元 AI 部門ディレクターであり、OpenAI の創業メンバーでもある Andrej Karpathy が 2026 年 1 月に X に投稿した「Claude Code でつまずく 4 つのパターン」を紹介します。"
+      },
+      {
+        "type": "unstyled",
+        "text": "別の開発者がその投稿を 70 行の CLAUDE.md ファイルに整理し、GitHub で公開しました。そのファイルは GitHub Trending で 28 日間連続 1 位を維持し、3 ヶ月で 11 万 stars を超えています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "そして、この CLAUDE.md ファイルを適用すると、Claude Code のコーディング正答率が 65% から 94% に上がったという報告が複数あります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "4 ルールはこれです。"
+      },
+      {
+        "type": "markdown",
+        "text": "```markdown\n1. Ask, don't assume. If something is unclear, ask before writing a single line.\n2. Simplest solution first. Always implement the simplest thing that could work.\n3. Don't touch unrelated code. If a file is not directly part of the current task, do not modify it.\n4. Flag uncertainty explicitly. If you're not confident about an approach, say so before proceeding.\n\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここが本記事の主張です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "この 4 ルールは「コードを書かせる時」だけのものではありません。議事録、広告コピー、報告書編集のすべてに同じく効きます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "「不明点は推測せず聞く」は会議資料編集で効きます。「最小実装でやる」は広告コピーの簡潔さに直結します。「関係ない箇所に触らない」は本記事を通して何度も出てきた話です。「自信がない時は事前に表明する」は会議資料の信頼性そのものです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Karpathy の 4 ルールだけで Claude Code のコーディング正答率は 65% から 94% に上がっています。これは約 1.45 倍です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここに、会話の癖、暴走止め、文脈、記憶の改善が乗ります。1 領域あたり数分から数十分の節約が、5 領域分積み上がります。読者体感としては、Claude の性能が 10 倍に届きます。これがタイトルに「10 倍」と書いた理由です。"
+      },
+      {
+        "type": "header-two",
+        "text": "CLAUDE.md は万能ではない"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIO5uQLaAAAyW7q.jpg",
+        "width": 2048,
+        "height": 1152
+      },
+      {
+        "type": "unstyled",
+        "text": "ここまで読んで「じゃあ CLAUDE.md に 21 指示を全部書けば全部解決か」と思った方に、最後のお願いがあります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "書きすぎないでください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "長すぎる CLAUDE.md は Claude の判断を縛りすぎます。読み込む文脈が増えると、Claude は「指示に従う」ことに頭を使い、目の前のタスクへの集中が落ちます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここで 1 つ重要な観点を話しておきます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "CLAUDE.md を書くこと自体は作業です。1 行のテンプレートをコピペするだけなら、誰でも 5 分でできます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "でも、何を書き、何を書かないかを選ぶ判断は判断です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "「会議資料を書く時にだけ効く指示」と「全業務に共通して効く指示」を分ける。「自分の業務に効かないルール」は最初から書かない。これが使い手の力です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "書くものを増やす方向ではなく、選ぶ方向に頭を使います。永続契約 は短いほど効きます。",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 27,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "「Claude Code を入れて 21 指示を全部書けば自動的に仕事が楽になる」は半分しか正しくありません。CLAUDE.md の中身を選ぶ判断こそが、Claude 使い手の差を作ります。"
+      },
+      {
+        "type": "header-two",
+        "text": "会話の前に契約書を書く時代"
+      },
+      {
+        "type": "unstyled",
+        "text": "今日から動くなら、3 つだけ書いてみてください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ご自分が一番ストレスを感じている指示を、5 領域の中から 3 つ選んで CLAUDE.md に貼ります。私のおすすめは、指示 1 (フィラー禁止)、指示 6 (スコープ厳守)、指示 12 (MEMORY.md) です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "明日また 3 つ、明後日また 3 つ。1 週間で 21 指示が揃います。"
+      },
+      {
+        "type": "unstyled",
+        "text": "次に Claude のセッションで同じ修正指示を出しそうになったら、それは契約書に書くべき条項です。永続契約 は、その瞬間の気付きで増えていきます。",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 50,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "会話の前に契約書を 1 行書く。これが、Claude Code の性能を 10 倍引き上げる最短ルートです。"
+      },
+      {
+        "type": "header-two",
+        "text": "まとめ"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "CLAUDE.md は自己プロフィールではなく、Claude の挙動を変える永続契約"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "領域① 会話の癖の 4 指示。フィラー禁止、選択肢提示、不確実性開示、長さ調整"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "領域② 暴走止めの 4 指示。大きな変更前に止める、スコープ厳守、変更報告、勝手な実行禁止"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "領域③ 文脈の 3 指示。あなた、作業文脈、文体 を 1 回書けば毎セッションが変わる"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "領域④ 記憶の 4 指示。MEMORY.md、引き継ぎ、ERRORS.md、不変ファクト"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "領域⑤ 開発業務 6 指示と Karpathy の 4 ルール。コーディング正答率 65% から 94% に上昇"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "何を書き、何を書かないかの判断こそが使い手の力"
+      },
+      {
+        "type": "unstyled",
+        "text": "次の Claude セッションで同じ修正指示を出しそうになったら、それは CLAUDE.md に書くべき条項です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude Codeに興味を持っていただいた方へ。"
+      },
+      {
+        "type": "unstyled",
+        "text": "東大 Claude Code 研究所（ @ClaudeCode_UT  ）は、大手企業の業務に Claude Code をどう入れるかを東大生チームで毎日検証しているアカウントです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "■ 実務で使える Claude Code スキルの無料公開\n■ ClaudeCodeとCodexの比較解説\n■ 海外の AI 一次情報を、日本のビジネス文脈に翻訳・再構成"
+      },
+      {
+        "type": "unstyled",
+        "text": "海外の最新AI活用事例を毎日発信しています。次の記事もお楽しみに。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ご興味を持っていただけた方は、ぜひフォローしてチェックしてみてください❗️"
+      },
+      {
+        "type": "unstyled",
+        "text": "https://lin.ee/quYxNMc"
+      }
+    ]
+  },
+  "status": "success",
+  "msg": "success",
+  "_handle": "ClaudeCode_UT"
+}

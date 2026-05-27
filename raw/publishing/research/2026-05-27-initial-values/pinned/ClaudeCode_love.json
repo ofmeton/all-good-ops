@@ -1,0 +1,132 @@
+{
+  "handle": "ClaudeCode_love",
+  "tweet_id": "2058496124047249708",
+  "body": {
+    "tweets": [
+      {
+        "type": "tweet",
+        "id": "2058496124047249708",
+        "url": "https://x.com/ClaudeCode_love/status/2058496124047249708",
+        "twitterUrl": "https://twitter.com/ClaudeCode_love/status/2058496124047249708",
+        "text": "https://t.co/ezTelwu0XY",
+        "source": "",
+        "retweetCount": 12,
+        "replyCount": 1,
+        "likeCount": 130,
+        "quoteCount": 8,
+        "viewCount": 219464,
+        "createdAt": "Sun May 24 10:31:35 +0000 2026",
+        "lang": "zxx",
+        "bookmarkCount": 245,
+        "isReply": false,
+        "inReplyToId": "",
+        "conversationId": "2058496124047249708",
+        "displayTextRange": [
+          0,
+          23
+        ],
+        "inReplyToUserId": "",
+        "inReplyToUsername": "",
+        "isPinned": false,
+        "author": {
+          "type": "user",
+          "userName": "ClaudeCode_love",
+          "url": "https://x.com/ClaudeCode_love",
+          "twitterUrl": "https://twitter.com/ClaudeCode_love",
+          "id": "2042103180478001153",
+          "name": "Claude Code Studio",
+          "isVerified": false,
+          "isBlueVerified": true,
+          "verifiedType": null,
+          "profilePicture": "https://pbs.twimg.com/profile_images/2042404213943386115/05hqEdJl_normal.jpg",
+          "coverPicture": "https://pbs.twimg.com/profile_banners/2042103180478001153/1775787273",
+          "description": "Claude Codeガチ勢３人で運営｜実務レベルのCLI活用・自動化を毎日発信｜開発プログラム参加｜賞金30万円獲得｜現在は上場企業とAIエージェントを共同開発中｜AI時代はコンテキスト/ナレッジ管理が９割｜組織全体への「 ClaudeCode × Obsidian 」の導入は下のHPからご相談ください👇",
+          "location": "自社サイトはこちら👉",
+          "followers": 31075,
+          "following": 14,
+          "status": "",
+          "canDm": true,
+          "canMediaTag": true,
+          "createdAt": "Thu Apr 09 04:52:16 +0000 2026",
+          "entities": {
+            "description": {},
+            "url": {
+              "urls": [
+                {
+                  "display_url": "plai-ai.com",
+                  "expanded_url": "http://plai-ai.com",
+                  "indices": [
+                    0,
+                    23
+                  ],
+                  "url": "https://t.co/qiB5ZBtLZo"
+                }
+              ]
+            }
+          },
+          "fastFollowersCount": 0,
+          "favouritesCount": 0,
+          "hasCustomTimelines": true,
+          "isTranslator": false,
+          "mediaCount": 256,
+          "statusesCount": 463,
+          "withheldInCountries": [],
+          "affiliatesHighlightedLabel": {},
+          "possiblySensitive": false,
+          "pinnedTweetIds": [
+            "2058496124047249708"
+          ],
+          "profile_bio": {
+            "description": "Claude Codeガチ勢３人で運営｜実務レベルのCLI活用・自動化を毎日発信｜開発プログラム参加｜賞金30万円獲得｜現在は上場企業とAIエージェントを共同開発中｜AI時代はコンテキスト/ナレッジ管理が９割｜組織全体への「 ClaudeCode × Obsidian 」の導入は下のHPからご相談ください👇",
+            "entities": {
+              "description": {},
+              "url": {
+                "urls": [
+                  {
+                    "display_url": "plai-ai.com",
+                    "expanded_url": "http://plai-ai.com",
+                    "indices": [
+                      0,
+                      23
+                    ],
+                    "url": "https://t.co/qiB5ZBtLZo"
+                  }
+                ]
+              }
+            }
+          },
+          "isAutomated": false,
+          "automatedBy": null
+        },
+        "extendedEntities": {},
+        "card": {
+          "rest_id": "https://t.co/ezTelwu0XY"
+        },
+        "place": {},
+        "entities": {
+          "urls": [
+            {
+              "display_url": "x.com/i/article/2058…",
+              "expanded_url": "http://x.com/i/article/2058465041028968448",
+              "indices": [
+                0,
+                23
+              ],
+              "url": "https://t.co/ezTelwu0XY"
+            }
+          ]
+        },
+        "isRetweet": false,
+        "isQuote": false,
+        "isConversationControlled": false,
+        "quoted_tweet": null,
+        "retweeted_tweet": null,
+        "isLimitedReply": false,
+        "communityInfo": null
+      }
+    ],
+    "status": "success",
+    "msg": "success",
+    "code": 0
+  }
+}

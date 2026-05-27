@@ -1,0 +1,34 @@
+{
+  "status": "success",
+  "msg": "success",
+  "data": {
+    "id": "1736320457488711680",
+    "name": "ゆら",
+    "userName": "yura_ai123",
+    "location": "",
+    "url": "",
+    "description": "AI✖︎SNS→noteとアフィリエイトで毎月500-1,000万円\n自動で集客するだけでサイドFIRE達成\n20代昼寝が趣味",
+    "entities": {
+      "description": {}
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 1319,
+    "following": 124,
+    "favouritesCount": 6495,
+    "statusesCount": 3019,
+    "mediaCount": 8,
+    "createdAt": "2023-12-17T09:40:49.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/1736320457488711680/1773968209",
+    "profilePicture": "https://pbs.twimg.com/profile_images/2031408108103413762/_O-B9Uph_normal.png",
+    "canDm": false,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": [
+      "2059248282078253395"
+    ]
+  }
+}
