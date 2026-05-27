@@ -1,0 +1,229 @@
+{
+  "handle": "commte",
+  "tweet_id": "2001851242683994177",
+  "body": {
+    "tweets": [
+      {
+        "type": "tweet",
+        "id": "2001851242683994177",
+        "url": "https://x.com/commte/status/2001851242683994177",
+        "twitterUrl": "https://twitter.com/commte/status/2001851242683994177",
+        "text": "Claude 公式のブログがめちゃ参考になったので、分かりやすくまとめる。\n\n「Claude は本来めちゃ賢い。でも Skill の書き方を間違えると、実力を自分で潰してる」という話\n\nClaude は基本、かなり賢い前提で設計されている\nだから人間向けの丁寧すぎる説明とか、背景知識の講義みたいなのを書くと、無駄なトークンが増えて判断精度が落ちるらしい\n\nここがまず重要な前提\n\nSkill って「知識を教える場所」じゃなくて「行動を成功させるための設計図」なんよね。で、よくある失敗がこれ\n\nClaude に不安になって、「念のため説明しとこ」「一応ここも書いとこ」ってやると、Skill が太って、コンテキストを圧迫して、結果として性能が下がる\n\n公式が言ってるのはかなりドライで、\n\n- Claude はもう十分賢い\n- 本当に知らないことだけ書け\n- 1 トークンごとに価値を疑え\n\nという思想。次に出てくるのが「自由度」の話。タスクには性質があって、\n\n- 壊れやすい処理\n- 順序や正確さが命の処理\n\nこういうのは、自由度を極限まで下げて「これを、そのまま、絶対にこの順でやれ」と書くべき\n\n逆に、\n\n- レビュー\n- 分析\n- 方針決め\n\nみたいなやつは、ガチガチに縛ると逆に弱くなる。このへんは「判断の余地」をちゃんと残す。この自由度設計が、Skill の出来をほぼ決める\n\n公式のたとえが面白くて、Claude を「道を進むロボット」に例えてる。崖だらけの細い橋なら、ガードレール必須。何もない草原なら、方向だけ示して放置でいい\n\nSkill はこのガードレール設計の話\n\nあと、めちゃ大事なのが name と description\n\nClaude は起動時に、全 Skill の「名前と説明」だけをまとめて読み込む。つまり、\n\n- ここで選ばれなかった Skill は\n- SKILL .md がどれだけ良くても\n- 一生読まれない\n\ndescription には『何をするか』だけじゃなく『どんなときに使うか』まで書け、と強調している。ここが弱いと、そもそも Skill 候補に上がらない\n\nで、SKILL .md 本体について\n\n全部を書こうとするな、が原則。\nSKILL .md は README じゃない。\n目次であり、ナビゲーション。\n\n必要になったら、\n\n- reference .md\n- examples .md\n- forms .md\n\nみたいな別ファイルを読ませる。これが Progressive Disclosure という考え方\n\nファイルは読まれない限りコンテキストを消費しない、という前提があるからこそ、目次に徹して、必要になった瞬間だけ別ファイルを読ませる設計が効く\n\n全部最初から読ませるのは最悪。必要なときに、必要な分だけ。ただし注意点があって、「参照の参照」はやるな。\n\nSKILL .md → A .md → B .md みたいな構造にすると、Claude が部分読みして事故る\n\nSKILL .md から直接リンクする 1 段構造が安全。\n\n次にワークフロー。複雑な作業は、文章で説明するな。チェックリストにしろ。\n\nClaude 自身が「今どこまで終わったか」「次に何をやるか」を自己管理できる形がベスト。\n\nさらに重要なのが、一発成功を前提にするな、という思想\n\n実行 → 検証 → 修正 このループを最初から Skill に組み込む\n\n特に Skill に含める処理については、Claude にコードを生成させるより、あらかじめ用意したスクリプトを実行させる方がいい、と言い切っている\n\n理由は単純で、\n\n- 再現性が高い\n- 速い\n- トークンを食わない\n\nから。Skill に含めるスクリプトは「生成させるため」じゃなく「実行させるため」に置く\n\nあと地味だけど重要なのが、時間依存の情報を書くな。「◯ 年 ◯ 月以降は〜」みたいなのは Skill を腐らせる。古い情報は Old patterns として隔離しろ、という設計\n\n最後に一番思想的なところ\n\nSkill は、評価から作れ。\n\nまず Claude が失敗した実例を集める\nそれをテストケースにする\nそれを通すために、最小限の Skill を書く\n\n想像で書いた Skill は、だいたい使われないってことらしい\n\nまとめると、このページが言ってるのはこれ\n\n- Claude を「何も分かってない新人」として扱うな\n- 「めちゃ優秀だけど、事故るときは事故る同僚」として扱え\n- Skill は知識集じゃない。判断ミスしやすい場所にだけ置くガードレール",
+        "source": "",
+        "retweetCount": 222,
+        "replyCount": 1,
+        "likeCount": 1983,
+        "quoteCount": 40,
+        "viewCount": 319852,
+        "createdAt": "Fri Dec 19 03:05:03 +0000 2025",
+        "lang": "ja",
+        "bookmarkCount": 2288,
+        "isReply": false,
+        "inReplyToId": "",
+        "conversationId": "2001851242683994177",
+        "displayTextRange": [
+          0,
+          119
+        ],
+        "inReplyToUserId": "",
+        "inReplyToUsername": "",
+        "isPinned": false,
+        "author": {
+          "type": "user",
+          "userName": "commte",
+          "url": "https://x.com/commte",
+          "twitterUrl": "https://twitter.com/commte",
+          "id": "187929218",
+          "name": "コムテ",
+          "isVerified": false,
+          "isBlueVerified": true,
+          "verifiedType": null,
+          "profilePicture": "https://pbs.twimg.com/profile_images/1921356481682624512/mP4IV2A7_normal.jpg",
+          "coverPicture": "https://pbs.twimg.com/profile_banners/187929218/1737018269",
+          "description": "Claude Code 速報・実践テク | AI駆動開発 | 個人開発者がプロダクト登録や技術記事を投稿できるSEO/AEOに強い https://t.co/2M7oeDl2xQ 運営 | ビジョン：無名のプロダクトに光をあてる",
+          "location": "日本",
+          "followers": 10440,
+          "following": 1962,
+          "status": "",
+          "canDm": true,
+          "canMediaTag": true,
+          "createdAt": "Tue Sep 07 14:22:11 +0000 2010",
+          "entities": {
+            "description": {
+              "urls": [
+                {
+                  "display_url": "izanami.dev",
+                  "expanded_url": "https://izanami.dev",
+                  "indices": [
+                    66,
+                    89
+                  ],
+                  "url": "https://t.co/2M7oeDl2xQ"
+                }
+              ]
+            },
+            "url": {
+              "urls": [
+                {
+                  "display_url": "izanami.dev",
+                  "expanded_url": "https://izanami.dev",
+                  "indices": [
+                    0,
+                    23
+                  ],
+                  "url": "https://t.co/2M7oeDl2xQ"
+                }
+              ]
+            }
+          },
+          "fastFollowersCount": 0,
+          "favouritesCount": 0,
+          "hasCustomTimelines": true,
+          "isTranslator": false,
+          "mediaCount": 727,
+          "statusesCount": 8830,
+          "withheldInCountries": [],
+          "affiliatesHighlightedLabel": {},
+          "possiblySensitive": false,
+          "pinnedTweetIds": [
+            "2001851242683994177"
+          ],
+          "profile_bio": {
+            "description": "Claude Code 速報・実践テク | AI駆動開発 | 個人開発者がプロダクト登録や技術記事を投稿できるSEO/AEOに強い https://t.co/2M7oeDl2xQ 運営 | ビジョン：無名のプロダクトに光をあてる",
+            "entities": {
+              "description": {
+                "urls": [
+                  {
+                    "display_url": "izanami.dev",
+                    "expanded_url": "https://izanami.dev",
+                    "indices": [
+                      66,
+                      89
+                    ],
+                    "url": "https://t.co/2M7oeDl2xQ"
+                  }
+                ]
+              },
+              "url": {
+                "urls": [
+                  {
+                    "display_url": "izanami.dev",
+                    "expanded_url": "https://izanami.dev",
+                    "indices": [
+                      0,
+                      23
+                    ],
+                    "url": "https://t.co/2M7oeDl2xQ"
+                  }
+                ]
+              }
+            }
+          },
+          "isAutomated": false,
+          "automatedBy": null
+        },
+        "extendedEntities": {
+          "media": [
+            {
+              "allow_download_status": {
+                "allow_download": true
+              },
+              "display_url": "pic.twitter.com/EOCYQmylHN",
+              "expanded_url": "https://twitter.com/commte/status/2001851242683994177/photo/1",
+              "ext_master_playlist_only": [],
+              "ext_media_availability": {
+                "status": "Available"
+              },
+              "ext_playlists": [],
+              "features": {
+                "large": {
+                  "faces": []
+                },
+                "orig": {
+                  "faces": []
+                }
+              },
+              "id_str": "2001851157669699585",
+              "indices": [
+                120,
+                143
+              ],
+              "media_key": "3_2001851157669699585",
+              "media_results": {
+                "id": "QXBpTWVkaWFSZXN1bHRzOgwAAQoAARvIAQWKG2ABCgACG8gBGVVakEEAAA==",
+                "result": {
+                  "__typename": "ApiMedia",
+                  "id": "QXBpTWVkaWE6DAABCgABG8gBBYobYAEKAAIbyAEZVVqQQQAA",
+                  "media_key": "3_2001851157669699585"
+                }
+              },
+              "media_url_https": "https://pbs.twimg.com/media/G8gBBYobYAEWtpP.png",
+              "original_info": {
+                "focus_rects": [
+                  {
+                    "h": 630,
+                    "w": 1125,
+                    "x": 0,
+                    "y": 0
+                  },
+                  {
+                    "h": 630,
+                    "w": 630,
+                    "x": 15,
+                    "y": 0
+                  },
+                  {
+                    "h": 630,
+                    "w": 553,
+                    "x": 54,
+                    "y": 0
+                  },
+                  {
+                    "h": 630,
+                    "w": 315,
+                    "x": 173,
+                    "y": 0
+                  },
+                  {
+                    "h": 630,
+                    "w": 1200,
+                    "x": 0,
+                    "y": 0
+                  }
+                ],
+                "height": 630,
+                "width": 1200
+              },
+              "sizes": {
+                "large": {
+                  "h": 630,
+                  "w": 1200
+                }
+              },
+              "type": "photo",
+              "url": "https://t.co/EOCYQmylHN"
+            }
+          ]
+        },
+        "card": null,
+        "place": {},
+        "entities": {
+          "hashtags": [],
+          "symbols": [],
+          "urls": [],
+          "user_mentions": []
+        },
+        "isRetweet": false,
+        "isQuote": false,
+        "isConversationControlled": false,
+        "quoted_tweet": null,
+        "retweeted_tweet": null,
+        "isLimitedReply": true,
+        "communityInfo": null
+      }
+    ],
+    "status": "success",
+    "msg": "success",
+    "code": 0
+  }
+}

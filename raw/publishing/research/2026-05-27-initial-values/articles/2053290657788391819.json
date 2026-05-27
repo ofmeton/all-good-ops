@@ -1,0 +1,569 @@
+{
+  "article": {
+    "id": "QXJ0aWNsZUVudGl0eToyMDUzMjgyNjcyMjIzNjQ1Njk2",
+    "author": {
+      "type": "user",
+      "userName": "claudecode_lab",
+      "url": "https://x.com/claudecode_lab",
+      "twitterUrl": "https://twitter.com/claudecode_lab",
+      "id": "1807726847154847744",
+      "name": "Claude Code研究所|スパルタClaude Code塾",
+      "isVerified": false,
+      "isBlueVerified": true,
+      "verifiedType": null,
+      "profilePicture": "https://pbs.twimg.com/profile_images/2047553749867216896/_SKwpHqG_normal.jpg",
+      "coverPicture": "https://pbs.twimg.com/profile_banners/1807726847154847744/1777009967",
+      "description": "東京大学にてAI研究に従事していたエンジニアメンバーがClaude Codeに特化した最新情報をお届け。経営者・士業向け名物研修「スパルタClaude Code塾」も運営。\nnote:https://t.co/VAtJlAXlsF\n研修のご依頼などDMでも受付しております✉️",
+      "location": "東京都",
+      "followers": 19619,
+      "following": 377,
+      "status": "",
+      "canDm": true,
+      "canMediaTag": true,
+      "createdAt": "Mon Jul 01 10:45:57 +0000 2024",
+      "entities": {
+        "description": {
+          "urls": [
+            {
+              "display_url": "note.com/claudecode_lab",
+              "expanded_url": "https://note.com/claudecode_lab",
+              "indices": [
+                92,
+                115
+              ],
+              "url": "https://t.co/VAtJlAXlsF"
+            }
+          ]
+        },
+        "url": {
+          "urls": [
+            {
+              "display_url": "claude-code-lab.com",
+              "expanded_url": "https://claude-code-lab.com/",
+              "indices": [
+                0,
+                23
+              ],
+              "url": "https://t.co/8oWsTCy0do"
+            }
+          ]
+        }
+      },
+      "fastFollowersCount": 0,
+      "favouritesCount": 12964,
+      "hasCustomTimelines": false,
+      "isTranslator": false,
+      "mediaCount": 79,
+      "statusesCount": 276,
+      "withheldInCountries": [],
+      "affiliatesHighlightedLabel": {},
+      "possiblySensitive": false,
+      "pinnedTweetIds": [
+        "2059090665716552166"
+      ],
+      "profile_bio": {},
+      "isAutomated": false,
+      "automatedBy": null
+    },
+    "replyCount": 4,
+    "likeCount": 207,
+    "quoteCount": 13,
+    "viewCount": "45078",
+    "createdAt": "Sun May 10 01:46:55 +0000 2026",
+    "title": "Claude CodeはHTMLをMarkdownの代わりに使うべきか？実際に試して徹底比較",
+    "preview_text": "Claude Codeの出力フォーマットをめぐって、興味深い議論が起きています。きっかけはClaude Code創設者のThariq（@trq212）の「The Unreasonable Effectiveness of HTML」という投稿。",
+    "cover_media_img_url": "https://pbs.twimg.com/media/HH7AtLSacAALIb1.jpg",
+    "contents": [
+      {
+        "type": "unstyled",
+        "text": "Claude Codeの出力フォーマットをめぐって、興味深い議論が起きています。きっかけはClaude Code創設者のThariq（@trq212）の「The Unreasonable Effectiveness of HTML」という投稿。"
+      },
+      {
+        "type": "unstyled",
+        "text": "「Markdownは100行を超えると読まれなくなる」「HTMLなら色・表・インタラクションをすべて1ファイルに収められる」という主張で、5.1Mビューを記録しました。Claude Codeチーム内でもHTMLへの移行が進んでいると言います。この記事では、その主張を詳しく紹介しながら、実際にHTMLとMarkdownの両フォーマットでドキュメントを作成し、生成時間・トークン数・読みやすさを数値で比較しました。単純な「どちらが良いか」ではなく、それぞれが向いている場面を見極めることを目指します。",
+        "inlineStyleRanges": [
+          {
+            "length": 63,
+            "offset": 143,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-one",
+        "text": "Claude Codeチームが「HTMLに切り替えた」理由"
+      },
+      {
+        "type": "unstyled",
+        "text": "Markdownはこれまで、AIとのやり取りで生成されるドキュメントの主役でした。シンプルで、どこでも開けて、編集もしやすい。Claude自身もMarkdownファイルの中でテキストだけで図を描けるほど上達しています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ただ、問題もあります。100行を超えたMarkdownファイルは、正直なところあまり読まれません。仕様書も計画書もPRの説明文も、ざっと流し読みされるか、最悪そもそも開かれないまま終わることが多いです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "HTMLに切り替えることで変わるのは、この「読まれない問題」です。Thariqは「私はこれらのファイルを自分で編集することが減り、仕様書・参照ファイル・ブレインストーミングの出力として使うようになっている。編集するときもClaudeに任せることが多く、それによってMarkdownの最大のメリットの一つが失われている」と述べています。"
+      },
+      {
+        "type": "header-one",
+        "text": "HTMLが持つ6つの優位性"
+      },
+      {
+        "type": "header-two",
+        "text": "1.情報密度（Information Density）"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HH66xLDbcAAow5z.jpg",
+        "width": 1200,
+        "height": 700
+      },
+      {
+        "type": "unstyled",
+        "text": "HTMLが1ファイルで扱える情報の種類は、Markdownの比ではありません。"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "テーブルを使った表形式データ"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "CSSを使ったデザイン"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "SVGで描いた図解・イラスト"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "scriptタグを使ったコード例"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "JavaScriptとCSSによるインタラクション"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "SVGとHTMLを使ったワークフロー図"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "絶対位置指定とcanvasを使った空間データ"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "imageタグを使った画像"
+      },
+      {
+        "type": "unstyled",
+        "text": "Claudeが扱える情報であれば、ほぼすべてをHTMLで表現できます。しかし、Markdownで色を表現するのはほぼ不可能です。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HH67b0AbIAAhWhq.jpg",
+        "width": 1200,
+        "height": 615
+      },
+      {
+        "type": "unstyled",
+        "text": "視覚的な差は一目瞭然です。同じ情報が、片方は「読まなければわからない」状態で、もう片方は「見ればわかる」状態で出てきます。"
+      },
+      {
+        "type": "header-two",
+        "text": "2.視覚的な明瞭さ"
+      },
+      {
+        "type": "unstyled",
+        "text": "Claudeがより複雑な作業をこなせるようになるにつれ、より大きな仕様書や計画書を書くようになっています。しかし、100行を超えるMarkdownファイルは読まれない傾向があり、組織内の他の人に読んでもらうことも難しいです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "HTMLドキュメントはタブ、イラスト、リンクを使って視覚的に最適な構造を組み立てられます。モバイルレスポンシブにすることもでき、フォームファクターに応じた読み方が可能です。"
+      },
+      {
+        "type": "header-two",
+        "text": "3.共有のしやすさ"
+      },
+      {
+        "type": "unstyled",
+        "text": "Markdownファイルはほとんどのブラウザがネイティブにレンダリングしないため、共有が難しいです。メールに添付したり、GitHubに上げたりしてようやく読んでもらえる状態になります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "HTMLならS3にアップロードするだけでURLが生まれ、誰でもどこからでも開けます。仕様書、レポート、PRの説明書を実際に読んでもらえる可能性が格段に上がります。"
+      },
+      {
+        "type": "header-two",
+        "text": "4.双方向インタラクション"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HH67nQIbwAAZ2QS.jpg",
+        "width": 1200,
+        "height": 632
+      },
+      {
+        "type": "unstyled",
+        "text": "HTMLはドキュメントとのインタラクションを可能にします。スライダーを動かしてアニメーションパラメータを調整したり、異なるアルゴリズムのオプションをビジュアルで試したりできます。「調整した内容をClaude Codeに貼り戻す」ボタンも追加できます。これにより、人間とAIが1つのHTMLファイルを介して共同作業できます。「テキストでどう伝えればいいかわからない」という状況を、インタラクティブなUIが解決します。"
+      },
+      {
+        "type": "header-two",
+        "text": "5.データの取り込み（Claude Code特有の強み）"
+      },
+      {
+        "type": "unstyled",
+        "text": "なぜClaude AIやClaude Designではなく、Claude CodeでHTMLを作るのか。最大の理由は、Claude Codeが取り込めるコンテキストの豊かさにあります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ファイルシステム上のコードはもちろん、MCP（Slack、Linearなど）、Webブラウザ、gitの履歴も使って追加のコンテキストを見つけられます。Thariqはこのアーティクル自身を書くとき、Claude Codeにコードフォルダを読み込ませ、生成したすべてのHTMLファイルを見つけ、グループ化・カテゴリ化させました。記事に掲載されているすべての図は、その直接の成果物です。"
+      },
+      {
+        "type": "header-two",
+        "text": "6.楽しさ"
+      },
+      {
+        "type": "unstyled",
+        "text": "ClaudeでHTMLドキュメントを作るのは単純に楽しく、より深く関与している感覚になれます。Thariqはこれ自体を、HTMLを使い続ける十分な理由として挙げています。"
+      },
+      {
+        "type": "header-one",
+        "text": "実際に試してみた"
+      },
+      {
+        "type": "unstyled",
+        "text": "同じ内容（Claude Codeのコマンドとスキルの一覧）をMarkdownとHTMLの両方でClaudeに生成させてみました。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HH683BDaIAA2NwO.jpg",
+        "width": 1976,
+        "height": 1210
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HH68ia4aQAA3idA.jpg",
+        "width": 2210,
+        "height": 1394
+      },
+      {
+        "type": "unstyled",
+        "text": "同じ「Claude Codeコマンド一覧」というコンテンツでも、見た目の差は大きいです。Markdownはテーブルを上から順に読むしかありませんが、HTMLはコマンド名をクリックするだけでクリップボードにコピーでき、「設定系だけ見たい」「使用頻度が高いものだけ見たい」という絞り込みも一瞬でできます。"
+      },
+      {
+        "type": "header-one",
+        "text": "生成コストを実測した"
+      },
+      {
+        "type": "unstyled",
+        "text": "生成にかかった時間・ファイルサイズ・トークン数を記録しました。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HH69PskbsAAwDtJ.jpg",
+        "width": 940,
+        "height": 368
+      },
+      {
+        "type": "unstyled",
+        "text": "今回は2.44倍でした。ファイルサイズは3.56倍になりましたが、トークン数の差は1.56倍に留まっています。HTMLタグ（<div>・<span>・class=）は繰り返しパターンが多く、AIが文字を処理する際に効率よく圧縮されるためです。"
+      },
+      {
+        "type": "header-one",
+        "text": "Claudeに読み込ませるときのコストも計測した"
+      },
+      {
+        "type": "unstyled",
+        "text": "生成した両ファイルをClaudeに渡して「内容を説明してください」と依頼し、消費トークンと処理時間を計測しました。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HH69S9pbwAAPbcD.jpg",
+        "width": 926,
+        "height": 278
+      },
+      {
+        "type": "unstyled",
+        "text": "予想より差が小さかったです。ファイルサイズは3.56倍違うのに、Claudeが読む処理時間は1.33倍（8.7秒増）で済みました。23,730トークンは、Claudeの100万トークンウィンドウのわずか2.4%です。今回の実験では「HTMLは重すぎる」と感じるほどの差は出ませんでした。"
+      },
+      {
+        "type": "header-one",
+        "text": "試してわかったこと"
+      },
+      {
+        "type": "unstyled",
+        "text": "正直に言うと、HTMLの見やすさは想像以上でした。同じ情報でも、検索・フィルタ・カラーコーディングがあるだけで、目的の情報を探す時間が体感で全然違います。"
+      },
+      {
+        "type": "unstyled",
+        "text": "一方、Markdownの方が修正は簡単です。1行直したいときに、テキストエディタで開いてそのまま書き換えられるのは快適です。HTMLファイルの該当箇所を探して編集するのは、どうしても手間がかかります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ただ、「修正もClaudeに頼む」ようにすれば、この差は消えます。「この項目の説明を書き直して」とClaudeに伝えれば、HTMLもMarkdownも同じ手間です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "議論の中で印象に残った一文がありました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "「Markdownの暗黙の前提は『人間が最初から最後まで読む』こと。HTMLの暗黙の前提は『人間はハイライトをスキャンして触りたいだけ』ということだ。後者こそが、AI時代の人間とマシンの協働の実態に合っている。」"
+      },
+      {
+        "type": "unstyled",
+        "text": "Markdownが生まれた時代、文書は人間が書いて人間が読んでいました。Claudeが書き、Claudeが直す時代になるなら、読みやすさで勝るHTMLに傾いていくのは自然な流れかもしれません。"
+      },
+      {
+        "type": "unstyled",
+        "text": "視覚的にリッチなドキュメントは、人間が実際に読み、触り、判断する機会を増やします。AIに委任しながらも、自分が考え続けるための形式。それがHTMLです。"
+      },
+      {
+        "type": "header-one",
+        "text": "具体的な5つのユースケース"
+      },
+      {
+        "type": "unstyled",
+        "text": "「HTMLファイルを作って」または「HTMLアーティファクトを作って」と伝えるだけで始められます。特別なスキルや設定は不要です。コツは、そのファイルに何をしてほしいか・どう使うかをイメージしてから依頼することです。"
+      },
+      {
+        "type": "header-two",
+        "text": "1.仕様・計画・探索"
+      },
+      {
+        "type": "unstyled",
+        "text": "Markdownの計画書ではなく、複数の方向性をビジュアルで横並び比較するHTMLを出発点にします。"
+      },
+      {
+        "type": "unstyled",
+        "text": "プロンプト例："
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "「オンボーディング画面の方向性を決めかねています。レイアウト、トーン、情報密度を変えた6つの異なるアプローチを生成し、1つのHTMLファイルにグリッド表示して比較できるようにしてください」"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "「詳細な実装計画をHTMLファイルで作成してください。モックアップ、データフロー図、重要なコード例を含め、読みやすくしてください」"
+      },
+      {
+        "type": "header-two",
+        "text": "2.コードレビューと理解"
+      },
+      {
+        "type": "unstyled",
+        "text": "HTMLでDiff、アノテーション、フローチャートをレンダリングすると、GitHubのデフォルトdiffより格段に読みやすくなります。PRのすべてにHTMLで説明を添えることも現実的になります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "プロンプト例："
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "「このPRを説明するHTMLアーティファクトを作成してください。ストリーミング/バックプレッシャーのロジックに馴染みがないので、そこを重点的に説明し、実際のDiffをインラインアノテーションで表示してください」"
+      },
+      {
+        "type": "header-two",
+        "text": "3.デザインとプロトタイプ"
+      },
+      {
+        "type": "unstyled",
+        "text": "ReactやSwiftに入る前に、まずHTMLでインタラクションのプロトタイプを作ることができます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "プロンプト例："
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "「新しいチェックアウトボタンをプロトタイプしたいです。クリック時のアニメーションをスライダーで調整できるHTMLファイルを作成し、気に入ったパラメータをコピーできるボタンも追加してください」"
+      },
+      {
+        "type": "header-two",
+        "text": "4.レポート・リサーチ・学習"
+      },
+      {
+        "type": "unstyled",
+        "text": "Slack、コードベース、gitの履歴を読み込んで、インサイトをインタラクティブなドキュメントにまとめられます。1つの図がMarkdownの200行より分かりやすいことは珍しくありません。"
+      },
+      {
+        "type": "unstyled",
+        "text": "プロンプト例："
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "「レートリミッターの仕組みが分かりません。関連するコードを読んで、トークンバケットのフロー図、3〜4つの重要なコード例の解説、注意点セクションを含む1ページのHTML解説を作成してください」"
+      },
+      {
+        "type": "header-two",
+        "text": "5.カスタム編集インターフェース"
+      },
+      {
+        "type": "unstyled",
+        "text": "作業中の内容に特化したワンショット用エディタを作ることができます。使い終わったら捨ててもいい。このスタンスがポイントです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "プロンプト例："
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "「30件のLinearチケットを優先順位付けしたいです。各チケットをNow/Next/Later/Cutの列間でドラッグできるHTMLファイルを作り、最終的な並びをMarkdownでエクスポートする『コピー』ボタンを追加してください」"
+      },
+      {
+        "type": "header-one",
+        "text": "よくある質問（FAQ）"
+      },
+      {
+        "type": "unstyled",
+        "text": "Q. トークン効率が悪くない？",
+        "inlineStyleRanges": [
+          {
+            "length": 15,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Markdownの方がトークン数は少ないです。ただし、HTMLの豊かな表現力と実際に読まれるという事実を考えると、全体的なアウトプットの質は向上します。Opus 4.7の100万トークンのコンテキストウィンドウでは、増加したトークン使用量はほとんど問題になりません（本記事の実測でも確認しました）。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Q. 今でもMarkdownを使う場面は？",
+        "inlineStyleRanges": [
+          {
+            "length": 21,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Thariq自身は「正直ほぼ使わなくなった」と言いつつも、「私はHTML寄りかもしれない」と補足しています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Q. HTMLファイルはどうやって見る？",
+        "inlineStyleRanges": [
+          {
+            "length": 20,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "ローカルでブラウザで開くか（Claudeに開いてもらうことも可能）、S3にアップロードして共有リンクを使います。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Q. Markdownより生成に時間がかかる？",
+        "inlineStyleRanges": [
+          {
+            "length": 23,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "2〜4倍の時間がかかりますが、結果はその価値があります（本記事の実測では2.44倍でした）。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Q. バージョン管理は？",
+        "inlineStyleRanges": [
+          {
+            "length": 12,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "HTMLのDiffはMarkdownに比べてノイズが多く、レビューしにくいのが最大のデメリットです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Q. 見た目を自社スタイルに合わせるには？",
+        "inlineStyleRanges": [
+          {
+            "length": 21,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "コードベースを参照させてデザインシステムHTMLファイルを1つ作り、それを他のHTMLファイルの参照に使います。"
+      },
+      {
+        "type": "header-one",
+        "text": "Markdownを支持する声も根強い"
+      },
+      {
+        "type": "unstyled",
+        "text": "HTMLへの移行に対しては、反論もあります。議論の中から出てきた整理が鋭いです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "「MARKDOWN：書きやすく、読みにくい。HTML：書きにくく、読みやすい。」"
+      },
+      {
+        "type": "unstyled",
+        "text": "人間がHTMLをゼロから書くのは手間がかかります。生のHTMLをテキストエディタで直接編集するのはMarkdownより格段に難しく、バージョン管理のdiffもノイズが多い。これは実際のデメリットです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "しかし、2026年のClaude Codeを使っている文脈では、「書くのが難しい」という前提が変わっています。HTMLを書くのはClaudeです。「HTMLファイルを作って」と一言伝えれば、Claudeが書いてくれます。"
+      },
+      {
+        "type": "header-two",
+        "text": "CSSを外部化するとトークン数を最大44%削減できる"
+      },
+      {
+        "type": "unstyled",
+        "text": "HTMLがMarkdownよりトークン数が増えるという懸念に対して、実用的な解決策があります。CSSを<link rel=\"stylesheet\" href=\"/styles.css\">で外部ファイルに切り出すことで、LLMはCSSを毎回出力しなくて済みます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "実測データとして、12,115トークンのHTMLアーティクルが6,723トークンまで削減された（44%減）という報告があります。スタイルを一度定義してしまえば、その後のHTMLはずっと軽くなります。"
+      },
+      {
+        "type": "header-two",
+        "text": "Markdownは「AIを駆動する中間言語」として残り続ける"
+      },
+      {
+        "type": "unstyled",
+        "text": "一方で、Markdownが完全になくなるとは考えにくいという意見もあります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "「mdはAIを駆動する新世代のプログラミング言語であり、プログラマーが読み書きする中間言語。一般ユーザーに渡すドキュメントはそれをHTMLへとお任せコンパイルしたartifactである。」"
+      },
+      {
+        "type": "unstyled",
+        "text": "これは面白い見方です。Markdownはエンジニアやプロンプトを書く側が扱う「ソースコード」として残り、ユーザーが実際に読むのはHTMLに「コンパイル」された成果物になる、という考え方です。「AIへの指示やCLAUDE.mdの記述はMarkdownで行い、その出力として人間に見せるドキュメントはHTMLで作る」という役割分担が自然な落としどころかもしれません。"
+      },
+      {
+        "type": "unstyled",
+        "text": "経営者・士業・営業職等、全てのビジネスパーソンの方で、\n「Claude Codeを使いこなしたい」\n「AIを活用してもっと業務を効率化したい」\nといったお悩みをお持ちの方は、ぜひ一度ご相談ください。\n▼ スパルタClaude Code塾\nhttps://www.claude-code-lab.com"
+      },
+      {
+        "type": "unstyled",
+        "text": "#ClaudeCode #AI活用 #業務効率化 #ノーコード #AIツール #生成AI #Claude #仕事効率化 #HTML #Markdown #出力フォーマット #ワークフロー #プロンプトエンジニアリング"
+      }
+    ]
+  },
+  "status": "success",
+  "msg": "success",
+  "_handle": "claudecode_lab"
+}

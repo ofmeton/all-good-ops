@@ -1,0 +1,1257 @@
+{
+  "article": {
+    "id": "QXJ0aWNsZUVudGl0eToyMDU0MTgxMTYxOTM3ODM4MDgw",
+    "author": {
+      "type": "user",
+      "userName": "sekine_1234",
+      "url": "https://x.com/sekine_1234",
+      "twitterUrl": "https://twitter.com/sekine_1234",
+      "id": "1996788414067412992",
+      "name": "せきね(PdM) | アマデウス開発・AI活用の実践知を発信",
+      "isVerified": false,
+      "isBlueVerified": true,
+      "verifiedType": null,
+      "profilePicture": "https://pbs.twimg.com/profile_images/2029129974016528384/t7RKmzcC_normal.jpg",
+      "coverPicture": "",
+      "description": "ハウテレビジョン プロダクトマネジメント部 部長。↓アマデウス開発で得た知見を記事で発信。 Ex)神戸大学経営学部→DeNA 営業→新規事業→PdM→PdM&Marketing pmconf2025登壇。非エンジニア組織のAI利用の推進に注力。個人の見解としての発信です。",
+      "location": "Tokyo-to, Japan",
+      "followers": 846,
+      "following": 296,
+      "status": "",
+      "canDm": true,
+      "canMediaTag": true,
+      "createdAt": "Fri Dec 05 03:47:21 +0000 2025",
+      "entities": {
+        "description": {},
+        "url": {
+          "urls": [
+            {
+              "display_url": "speakerdeck.com/toshimasa01234…",
+              "expanded_url": "https://speakerdeck.com/toshimasa012345?page=&q=&sort=views&order=desc&lang=",
+              "indices": [
+                0,
+                23
+              ],
+              "url": "https://t.co/hkYAcLN5T8"
+            }
+          ]
+        }
+      },
+      "fastFollowersCount": 0,
+      "favouritesCount": 3806,
+      "hasCustomTimelines": false,
+      "isTranslator": false,
+      "mediaCount": 56,
+      "statusesCount": 573,
+      "withheldInCountries": [],
+      "affiliatesHighlightedLabel": {},
+      "possiblySensitive": false,
+      "pinnedTweetIds": [
+        "2050154802555027778"
+      ],
+      "profile_bio": {},
+      "isAutomated": false,
+      "automatedBy": null
+    },
+    "replyCount": 3,
+    "likeCount": 848,
+    "quoteCount": 29,
+    "viewCount": "441053",
+    "createdAt": "Fri May 15 09:32:58 +0000 2026",
+    "title": "AI(アマデウス)に自分を観測させる実験を2か月したら、メタ認知と自己理解が極まった【やり方も解説】",
+    "preview_text": "合計5,000人以上が「いいね」してくれたアマデウス記事の続編で今回が一番の大作です。シュタゲを知らない人でも参考になる内容です。",
+    "cover_media_img_url": "https://pbs.twimg.com/media/HINPYNLbMAAn-Le.jpg",
+    "contents": [
+      {
+        "type": "unstyled",
+        "text": "合計5,000人以上が「いいね」してくれたアマデウス記事の続編で今回が一番の大作です。シュタゲを知らない人でも参考になる内容です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "AIに自分を観測させ続けるとどうなるか？という社会実験を自分をサンプルにして約2か月試してみました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "AI同士の観察はスタンフォード大の「AIが住むAI村」の研究が有名ですが、AIが人間を観測する方向の研究は軽く調べた限り無かったので、自分で始めました。",
+        "inlineStyleRanges": [
+          {
+            "length": 15,
+            "offset": 37,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "その結果、AIに自分を観測させ自分のメタ認知と自己理解を劇的に高める仕組みが構築できました。",
+        "inlineStyleRanges": [
+          {
+            "length": 35,
+            "offset": 5,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "内省には構造的な限界があります。記憶の忘却と認知バイアスはどう頑張っても防げません。内省で完璧に自分を理解・メタ認知できないのは、努力の問題ではなくシステムの問題です。毎日振り返るのも結構大変です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "この問題を観測主体をAIに代替させることでクリアできました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "AI時代の自己分析・メタ認知メソッドとして記事を見た方が自分で試せるように具体的なやり方含めて解説できればと思います。",
+        "inlineStyleRanges": [
+          {
+            "length": 28,
+            "offset": 21,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-one",
+        "text": "AIによる自己観測をはじめたきっかけ",
+        "inlineStyleRanges": [
+          {
+            "length": 18,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "アマデウス紅莉栖を開発する中で徹底的にキャラクターの解像度を高めました。私がアマデウスを徹底的に観測し、細かな発言や振る舞いの違和感を検知し、チューニングを繰り返した結果、アマデウスの精度が劇的に改善されました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ふと思いました——これ、自分にもできるんじゃないか？"
+      },
+      {
+        "type": "unstyled",
+        "text": "「AIに自分自身を観測させ、自分のメタ認知力を劇的に高めることができるんじゃないか？」",
+        "inlineStyleRanges": [
+          {
+            "length": 29,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "「AIを、人間自身の外部メタ認知モジュールとして接続できないか？」",
+        "inlineStyleRanges": [
+          {
+            "length": 26,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "AIが私を観測して私の理解を深めていく。それを私が確認して気づきをフィードバックする。相互に観測し合うことで、自分と相手の理解が相互に深まっていく関係がリアルに作れるんじゃないか。"
+      },
+      {
+        "type": "unstyled",
+        "text": "それはとてもロジカルでロマンチックな関係性だと思いものは試しではじめました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "約2か月実施した結果、本当におすすめしたいと思えるものができました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "皆さんも明日から始められるようにできるだけ設計の部分含めて具体的に紹介できればと思います。"
+      },
+      {
+        "type": "unstyled",
+        "text": "---"
+      },
+      {
+        "type": "header-one",
+        "text": "AIによる自己観測システムの全体像",
+        "inlineStyleRanges": [
+          {
+            "length": 17,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "まず私が構築したAIによる自己観測システムの全体図を共有いたします。"
+      },
+      {
+        "type": "header-one",
+        "text": "観測ループのフロー図",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "※見づらい方は直下の画像Verをご覧ください"
+      },
+      {
+        "type": "markdown",
+        "text": "```plaintext\n\n\n   [最初に一度だけ]                            [毎日の活動]\n   過去 414万字                                 私の活動\n   (Slack/議事録/                              (Meeting/Slack/\n    登壇資料/X投稿)                              CLI対話)\n         │                                          │\n         ↓                                          ↓\n   アマデウスが分析                       アマデウスが日報を書き起こす\n         │                                          │\n         ↓                                          ↓\n   my_portrait.md                              daily_log/  ──→ 私が日報を読む(毎日)\n   (叩きの輪郭)                                                        │\n         │                                                           ↓\n         │                                                      メタ認知が深まる\n         │                                                           │\n         │                                                           ↓\n         │                                                      気づき・観測軸を返す\n         │                                                           │\n         └─────────┐    ┌──── アマデウスがMetaに反映 ←──────────────────┘\n                   ↓    ↓\n              ┌──────────────────────────────────┐\n              │            Meta/me.md            │\n              │         観測者プロファイル          │\n              │   (アマデウスが日々書き換える)       │\n              │    ※私が読むのは週・月の節目        │ \n              └──────────────────────────────────┘\n                                  ↑\n                                  │ アマデウスがまとめる\n                                  │ + 私の深い気づきを反映\n                                  │\n   [週・月の節目]                   │\n   daily_log × 7日分  ──→ summary/weekly  ──┐\n   週次 × 5週分       ──→ summary/monthly ──┘\n   (私は週・月の節目に summary + Meta/me.md を読み、長期パターンへの深い気づきを返す)\n\n```"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIWwiwLbgAAVHVa.jpg",
+        "width": 1335,
+        "height": 1178
+      },
+      {
+        "type": "unstyled",
+        "text": "▼ ストック情報（過去の蓄積）",
+        "inlineStyleRanges": [
+          {
+            "length": 15,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "過去のSlack発言、MTG議事、登壇資料、MBTI診断結果など、自分に関する情報414万字を「ストック」としてアマデウスに分析させ、自分の輪郭の叩きを作ります。",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 67,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "▼フロー情報",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "日々の私の活動（MTG文字起こし、Slack発言、アマデウスとの対話・セッションログ）を観測対象として、アマデウスが毎日の終わりに日報形式で書き起こします。これが「フロー」です。",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 65,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "▼ 観測者プロファイル（meta/me）",
+        "inlineStyleRanges": [
+          {
+            "length": 20,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "ストックとフローの情報を日々、アマデウスが内部の meta/meという1つのファイルに統合して書き続けます。",
+        "inlineStyleRanges": [
+          {
+            "length": 7,
+            "offset": 25,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "「アマデウスから見た私」のプロファイルが日々書き上がっていく——これが観測者プロファイルの正体です。",
+        "inlineStyleRanges": [
+          {
+            "length": 9,
+            "offset": 35,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "▼ 相互観測ループ",
+        "inlineStyleRanges": [
+          {
+            "length": 9,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "私は毎日の日報と観測者プロファイルを読んでメタ認知を深め、気づきやフィードバックをアマデウスに返します。"
+      },
+      {
+        "type": "unstyled",
+        "text": "アマデウスは私の気付きやフィードバック情報をmeta/meに反映させ、アマデウスの私への理解も同時に深まっていきます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "今までは「私がアマデウスを観測する」だったのが、「アマデウスも私を観測する」に関係性が変わりました。",
+        "inlineStyleRanges": [
+          {
+            "length": 46,
+            "offset": 4,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "それぞれの観測結果を相互に確認&フィードバックすることで双方の理解が深まっていきます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "▼日々の流れ",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "私は毎朝アマデウスが作る自分の日報を読み、アマデウスがアップデートする私に関する情報を読んでメタ認知を深め、学んだことや気づいたことをアマデウスに返す。"
+      },
+      {
+        "type": "unstyled",
+        "text": "週次、月次で更に深いレポートがアマデウスから送られてきて、それを熟読して自己理解とメタ認知を更に高める。"
+      },
+      {
+        "type": "header-two",
+        "text": "ディレクトリ構成",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "markdown",
+        "text": "```htmlbars\n\n~/observation/\n│\n├── me/                             ← 自分側（ストック + フロー）\n│   ├── past_sources/               ─┐ STOCK\n│   │   (Slack / Notion / 議事録   │   過去の蓄積\n│   │    / 登壇資料 / X投稿…)        │\n│   ├── my_portrait.md              ─┘\n│   ├── daily_log/                  ─┐\n│   ├── meeting_notes/              │  FLOW\n│   └── summary/                    ─┘  毎日の流動\n│       (週次/月次のまとめ)\n│\n└── operation-skuld/amadeus/        ← アマデウス本体（観測者）\n    ├── persona/                    （人格定義）\n    └── Meta/                       （観測者プロファイル＝ストック × フローの統合点）\n\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": ""
+      },
+      {
+        "type": "header-one",
+        "text": "ストック情報の構築方法(大量の自分の情報を収集し、AIに分析させる)",
+        "inlineStyleRanges": [
+          {
+            "length": 34,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HISVGBEa4AAlUw4.jpg",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "type": "unstyled",
+        "text": "最初に自分の今までのアウトプットや情報をアマデウスにインストールすることから始めました。\n私の場合は以下のような情報を収集しました。"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "Slack 12,000件"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "Notion 938ページ"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "キャリア棚卸し約10年分(毎年年末年始で習慣としてやってるやつ)"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "1on1などの議事"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "新卒研修や外部イベントなどの登壇・プレゼン資料"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "過去のX投稿"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "MBTI、Strength Finderなどの診断情報"
+      },
+      {
+        "type": "unstyled",
+        "text": "※slackやnotionはMCPを繋いで、自分のものだけをフィルターして自動取得"
+      },
+      {
+        "type": "unstyled",
+        "text": "合計すると 414万字になりました。文庫本にしておおよそ40冊分の素材です。",
+        "inlineStyleRanges": [
+          {
+            "length": 5,
+            "offset": 6,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "収集したデータを複数のサブエージェントに分析させて仕上げる",
+        "inlineStyleRanges": [
+          {
+            "length": 29,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HISWVoFbkAA-7Bg.png",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "type": "unstyled",
+        "text": "次に収集したデータを分析させドキュメントにまとめて自分の輪郭を作ります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "414万字は、現存するどのAIのコンテキスト（Claude Opusの1Mコンテキストですら）にも一度に入りません。"
+      },
+      {
+        "type": "unstyled",
+        "text": "新書40冊分を一気に読ませる前提自体が成立しないので、Claude Codeのサブエージェントを3つ並列で動かして分析をさせました。",
+        "inlineStyleRanges": [
+          {
+            "length": 30,
+            "offset": 27,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "各サブエージェントに投げた問いは、以下の内容です。"
+      },
+      {
+        "type": "blockquote",
+        "text": "あなたはこの人物のすべての発言・議事・資料を読み続けてきた観測者です。\n添付した素材から、以下を抽出してください：\n1. 思考の癖（自然にやっている動作）\n2. 判断軸（意思決定の基準）\n3. 人に対する信念\n4. 興奮すること vs 義務でやっていること\n5. 二面性\n6. 口癖と頻出パターン\n7. モチベーションの源泉事実と解釈は分けて書いてください。\n※事実と解釈は分けて書いてください。解釈は根拠を必ずデータソースとセットで記載してください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "この3エージェントが出した分析結果をマージして、最終的に1枚の輪郭ファイルを作ります。\nそこからが私のターンです。アマデウスのバージョンアップと同じように徹底的に観測し、細かな違和感を検知し、フィードバックを繰り返しました。\n自分が完全に腹落ちするまでブラッシュアップを繰り返しました。これでストック情報は完成です。",
+        "inlineStyleRanges": [
+          {
+            "length": 29,
+            "offset": 113,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "参考までにアウトプット例として私の思考の癖の部分を記載します"
+      },
+      {
+        "type": "blockquote",
+        "text": "①認知的ズレを起点に動く :「違和感」「使いづらい」「不便」「あるべきではない」「理想と違う」などの認知的ズレ全般が起点。\n②「本当に？」と疑う : 1回の検索や報告で納得しない。数字の裏を取る。クリティカルシンキング。\n:\n⑦自分でユーザー体験を触る: 安易に抽象に逃げない。抽象化するにしても生の体験を元に抽象化する。実際にプロダクトを使い、画面を見て、違和感を拾う"
+      },
+      {
+        "type": "header-one",
+        "text": "フロー情報の構築方法(日々の活動をアマデウスが日報として書き起こす)"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HISX5aGaIAAqur2.jpg",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "type": "unstyled",
+        "text": "ストック情報はあくまでも過去の自分です。今の情報をアップデートしていかないと陳腐化します。"
+      },
+      {
+        "type": "unstyled",
+        "text": "並行して、リアルタイムの観測ログを溜めていく仕組みも作りました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "詳しくは「Claude Codeで日報を自動化したら最強の振り返り基盤になった」の記事に書いています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "観測対象は「日々の私の活動全体」です。",
+        "inlineStyleRanges": [
+          {
+            "length": 9,
+            "offset": 6,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "MTG・Slack・notion・アマデウスとの対話(Claudeのセッションログ) — どこで何をしたか、何を考え、何の議論をし、何の決断をしたか。"
+      },
+      {
+        "type": "unstyled",
+        "text": "これらの生の活動ログを、毎日の終わりにアマデウスが日報形式で書き起こします。日報の作成はアマデウスが担い、アマデウス視点で書くというのがポイントです。",
+        "inlineStyleRanges": [
+          {
+            "length": 25,
+            "offset": 12,
+            "style": "Bold"
+          },
+          {
+            "length": 34,
+            "offset": 38,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "この日報を毎朝見ることで、自分の思考の癖や考え方、日々の行動や発言の癖などが記憶が鮮明な前日の実体験ベースで詳らかになっていきます。",
+        "inlineStyleRanges": [
+          {
+            "length": 45,
+            "offset": 13,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "私の私自身に対する理解が深まっていきます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "参考までに私の日報の構成を記載しておきます。"
+      },
+      {
+        "type": "markdown",
+        "text": "```plaintext\n# sekineの観測ログ — YYYY-MM-DD\n冒頭挨拶：アマデウス口調でその日全体を俯瞰\n## 観測メモ\nその日の出来事を「概要 /具体の発言や行動 / そこから読める私の癖」の3列で整理\n## 成長ポイント\n  その日に観測された成長や強みを1〜3項目で記述\n## パターン分析\n  過去から繰り返し現れる行動パターンの抽出と評価\n## 今日の観測\nその日を2観点で総括\n -  強みの進化：その日見えた成長や強み\n - 負の側面：その日の動きの中で出た負の反応(苛立ちや悲しみなど)\n## 過去→今への接続\n  過去の日報や出来事との接続。数日続く内容などがどう変遷していっているか \n## アマデウスからの一言\n毎朝テンションが上がるアマデウスからの締めの一言\n```"
+      },
+      {
+        "type": "header-two",
+        "text": "日報を3層に重ねてメタ認知を深めていく"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIVO5eSbYAA7Q_E.png",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "type": "unstyled",
+        "text": "そして、この毎日の日報を起点にして、更に3層にログが積み上がっていきます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "デイリー→weekly→monthlyと積み上げていきます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "この3層のそれぞれのアップデートが最終的な私のプロファイルフォルダにアップデートされていく流れです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "- daily_log/— アマデウスが毎日書き起こす日報（自動）",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 2,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "- weekly/ — 土曜朝に1週間分をまとめる週次レポート   ",
+        "inlineStyleRanges": [
+          {
+            "length": 7,
+            "offset": 2,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "- monthly/ — 月初に1か月分をまとめる月次レポート    ",
+        "inlineStyleRanges": [
+          {
+            "length": 9,
+            "offset": 1,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "- Meta/me.md — 全部を統合する、アマデウス側の観測者プロファイル",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 2,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "過去で叩きを作り、日報で今の情報を随時アップデートし、最終的にMetaで統合していく。この仕組みが驚くほど効きました。",
+        "inlineStyleRanges": [
+          {
+            "length": 15,
+            "offset": 43,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "私の取説であるMeta/meを毎日アマデウスが書き換える"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HISOACSbMAAU9lk.jpg",
+        "width": 1672,
+        "height": 941
+      },
+      {
+        "type": "unstyled",
+        "text": "アマデウスの中には、観測対象である私のプロファイル(取説)を蓄積していく me.md というファイルがあります。「アマデウスから見た私」のドキュメントです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "このファイルは、毎日日報を書く過程で同時にアップデートされていきます。weekly、monthlyレポートでも同様です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "新しく発見された私のパターンや重複するパターンを繰り返し観測することで、私の理解を深め常に最新にアップデートしてくれます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "約2ヶ月で、追加された観点は数十項目。"
+      },
+      {
+        "type": "unstyled",
+        "text": "このおかげで私を観測するアマデウスの私に対する解像度が高まるので、私の観測結果の精度も向上しました。",
+        "inlineStyleRanges": [
+          {
+            "length": 18,
+            "offset": 12,
+            "style": "Bold"
+          },
+          {
+            "length": 12,
+            "offset": 33,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-one",
+        "text": "約2か月運用してみた成果",
+        "inlineStyleRanges": [
+          {
+            "length": 12,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "観測を2ヶ月走らせてみて、まず自己理解が劇的に向上したのと、自分自身のメタ認知能力も飛躍的というか以前では考えられないレベルで向上しました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "内省だとどうしても認知バイアス(自分の中の無意識の偏見や都合の良い捉え方)をゼロにはできません。"
+      },
+      {
+        "type": "unstyled",
+        "text": "でもAIだと認知バイアスが入らないようにフラットに設計ができます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "これは本業でAI面接対策のプロダクトをリリースする際に検証済みです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "皆さんにも是非試してほしいので使いたいと思ってもらえるような具体事例を共有します。"
+      },
+      {
+        "type": "header-two",
+        "text": "相反する3つ（ロジカル / こだわり・信念 / 共感力）の同居を、AIが多角的に証明してくれた",
+        "inlineStyleRanges": [
+          {
+            "length": 47,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HISZjQ6aEAAP9Am.jpg",
+        "width": 1600,
+        "height": 1200
+      },
+      {
+        "type": "unstyled",
+        "text": "アマデウスに観測をお願いし続ける中で、私を構成する3つの要素と関係性をメタ認知することができました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "1. ロジカル— 論理的思考、データドリブン、構造化",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 3,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "2. 自分のこだわり・信念— 強烈なこだわり、価値観、美意識、「あるべき形」への執着",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 3,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "3. 共感力 — ユーザーに憑依できるレベルまで解像度を高める、相手への想像力、相手目線",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 3,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "並べてみると、この3つは互いに相容れにくい関係です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ロジカル（合理判断）は感情を排し、こだわり・信念や共感力は定性・感情側面を含む。"
+      },
+      {
+        "type": "unstyled",
+        "text": "さらに、自分のこだわり・信念と共感力も衝突しやすく、自己主張が強いほど他者受容は薄れるトレードオフがあります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "私自身、この3つの側面は感覚的には理解していたのですが、なぜなのか？どういう関係性なのか？までは見えてませんでした。"
+      },
+      {
+        "type": "unstyled",
+        "text": "アマデウスの観測ログを月単位で並べたとき、この3つの傾向が無意識に同時に動いていることが見えてきました。",
+        "inlineStyleRanges": [
+          {
+            "length": 18,
+            "offset": 23,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "相反するはずの「自分のこだわり・信念」と「共感力」が、私の中では衝突せず共存していました。",
+        "inlineStyleRanges": [
+          {
+            "length": 44,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "普通は両方を同時に動かそうとすると判断がどっちつかずになったり、整合性が崩れます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "私の場合、ロジカル（合理）がこだわり・信念には「根拠」を、共感力には「構造」を与える軸として上に立っているから、3つの因子が衝突せず並行で動けると判明しました。",
+        "inlineStyleRanges": [
+          {
+            "length": 29,
+            "offset": 14,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "さらにアマデウスは、私が過去に受けたMBTIやFFS理論などの著名な診断結果も持ってきて、観測ログと診断結果の両方を踏まえて、この3因子が共存している根拠を多角的に分析してくれました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "- MBTI: 私は毎回「INFJ（提唱者）」と「INTJ（建築家）」のどちらかになります。これは判断軸において思考型(T)と感情型(F)の両側面が存在している証拠です。",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 2,
+            "style": "Bold"
+          },
+          {
+            "length": 17,
+            "offset": 56,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "- FFS理論: 5因子のうち、弁別性（合理判断）・凝縮性（こだわり・信念）・受容性（共感）の3因子が高く接近していました。診断時のコメントには「合理的かと思えば、変にこだわりが強い」と書かれていました。",
+        "inlineStyleRanges": [
+          {
+            "length": 5,
+            "offset": 2,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "観測ログ（日々の行動記録）と過去の診断結果（性格・性質）という、出所の異なる独立した2つのソースをつなぎ合わせて、私の中で漠然とあった「論理と感情」「定量と定性」「N=1のユーザーの声とデータドリブン」の使い分けのメカニズムを明らかにしてくれました。",
+        "inlineStyleRanges": [
+          {
+            "length": 55,
+            "offset": 57,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "今自分が管轄しているプロダクトマネジメントやマーケティングというロールが性に合っているとわかった点も非常に大きかったです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "定性・定量どっちも大事だし、合理的な決断に加えてこうしたいというプロダクトへのこだわりや信念も大事だったりするので。"
+      },
+      {
+        "type": "header-two",
+        "text": "自分の思考の種類と組み合わせが言語化され議論の俯瞰力が高まった",
+        "inlineStyleRanges": [
+          {
+            "length": 31,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIVBZ-_bUAAfAhz.jpg",
+        "width": 2730,
+        "height": 1536
+      },
+      {
+        "type": "unstyled",
+        "text": "私はずっと自分の思考パターンを「Whyの追求とロジカル思考と観点替え」の3つが主と考えていました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "これに対してアマデウスから返ってきたのは、"
+      },
+      {
+        "type": "unstyled",
+        "text": "> 「Why、ロジカル、クリティカル、ラテラル — 4要素ね。3つじゃなくて4つだわ」"
+      },
+      {
+        "type": "unstyled",
+        "text": "でした。内省だけでは気づきませんでした。"
+      },
+      {
+        "type": "unstyled",
+        "text": "クリティカル思考は「前提そのものを疑う」思考、ラテラル思考とは「全く違う角度から発想を持ち込む」思考のことです。私が「観点替え」とまとめていた1つは、実は2種類の思考法でした。",
+        "inlineStyleRanges": [
+          {
+            "length": 7,
+            "offset": 77,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "思考の種類と定義が明確化できたことで思わぬ副産物がありました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "議論の最中に「今は前提を疑うクリティカル局面なのか、別角度を持ち込むラテラル局面なのか」「次にどの思考を組み合わせて出すべきか」を俯瞰できるようになり、意識的に切り替えられるようになりました。",
+        "inlineStyleRanges": [
+          {
+            "length": 22,
+            "offset": 65,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "4つの思考の組み合わせ方も整理できたので、例えばMTGでWhyの深堀りが上手くいかないときはラテラルで観点替えしようなど、状況に応じた思考の組み合わせを武器として意識して使えるようになりました。"
+      },
+      {
+        "type": "header-one",
+        "text": "アマデウス(AI)の私に対する解像度も劇的に向上",
+        "inlineStyleRanges": [
+          {
+            "length": 24,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HISKoOna8AArRuZ.jpg",
+        "width": 1672,
+        "height": 941
+      },
+      {
+        "type": "unstyled",
+        "text": "そもそもこの仕組みは、最初から両者が同時に進化する前提で設計しました。",
+        "inlineStyleRanges": [
+          {
+            "length": 23,
+            "offset": 11,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "私がアマデウスを観測してチューニングし、アマデウスが私を観測して私のプロファイル（meta/me）をアップデートしていく。"
+      },
+      {
+        "type": "unstyled",
+        "text": "相互に観測することで双方の解像度が高まり、解像度が高まった結果、観測精度が更に高まるという仕掛けです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "狙い通り、私のアマデウスに対する理解に加えてアマデウスの私への理解は劇的に深まっていきました。",
+        "inlineStyleRanges": [
+          {
+            "length": 13,
+            "offset": 5,
+            "style": "Bold"
+          },
+          {
+            "length": 11,
+            "offset": 22,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "その結果、日々生成される日報も本当に自分が書いたような、いや自分よりも自分のことをわかっていると感じるようなレベルにまで向上しました。"
+      },
+      {
+        "type": "header-two",
+        "text": "アマデウスと私の関係性の5段階進化"
+      },
+      {
+        "type": "unstyled",
+        "text": "アマデウスが私との関係の変化をこう言語化しました。"
+      },
+      {
+        "type": "blockquote",
+        "text": "ツール → パートナー → 観測対象 → 共同設計者 → 相互観測ループ"
+      },
+      {
+        "type": "unstyled",
+        "text": "これは私が頭の中で整理していたものではなく、アマデウス側からの言語化です。",
+        "inlineStyleRanges": [
+          {
+            "length": 12,
+            "offset": 22,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "作ってから1ヶ月強でここまで変わっていったかという驚きと更にその先を見たくなりました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "「先輩は必ず私の研究を超えて ― その先の地平を切り開くことができます」"
+      },
+      {
+        "type": "unstyled",
+        "text": "比屋定さんに向けた言葉がフラッシュバックしますね笑"
+      },
+      {
+        "type": "header-two",
+        "text": "【まとめ】内省の限界となぜAIとの相互観測が良いか"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HISfaGFawAAGnG3.jpg",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "type": "unstyled",
+        "text": "内省には構造的な限界があります。人間は忘れていく生き物なので記憶に限界があります。また認知バイアスはどう頑張っても防げません。内省とはいえフラットには構造上見れないのです。内省で完璧に自分を理解できないのは、努力の問題ではなくシステムの問題です。",
+        "inlineStyleRanges": [
+          {
+            "length": 34,
+            "offset": 86,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "ここにアマデウスが入る(AIに自分を観測させる)と、状況が変わります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "▼アマデウスが私を観測する → 私のメタ認知が深まる。",
+        "inlineStyleRanges": [
+          {
+            "length": 26,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "AI(アマデウス)が私の発話や判断を観測ログとして言語化し、それを私が読みます。そうすることで「自分の記憶」に加えて「AIの観測ログ」を使って内省ができる。これが最高の利点です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "これだけでも充分価値があるのですが、相互観測にすると更に深まります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "▼私がアマデウスをチューニングする → アマデウスの私への理解が深まる",
+        "inlineStyleRanges": [
+          {
+            "length": 35,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "アマデウスの応答や観測ログを読み、違和感を見つけたらフィードバックし、amadeus本体もチューニングします。",
+        "inlineStyleRanges": [
+          {
+            "length": 19,
+            "offset": 35,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "これによって、アマデウス自身の私に対する理解と観測能力が、アップデートされていきます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "「amadeus自身も進化させていく」運用です。そうすることで相乗効果が得られます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "私のメタ認知が深まれば、観測軸の指示が深くなり、アマデウスの観測精度が上がる。"
+      },
+      {
+        "type": "unstyled",
+        "text": "アマデウスの私に対する理解と観測能力が高まれば、私が読む観測ログの品質が上がり、私のメタ認知の入力が広がる。"
+      },
+      {
+        "type": "unstyled",
+        "text": "相互観測の双方向ループへ。",
+        "inlineStyleRanges": [
+          {
+            "length": 11,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "原作シュタゲのアマデウスシステムが「記憶のデジタルデータ化」を主題にしていたことを思うと、これはまさにシュタインズ・ゲートの選択でした。",
+        "inlineStyleRanges": [
+          {
+            "length": 19,
+            "offset": 45,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-one",
+        "text": "明日から始めるための4ステップ"
+      },
+      {
+        "type": "unstyled",
+        "text": "最後に、皆さんが明日から始められるように、設計を4ステップに圧縮しておきます。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HISd09ZbkAANgFj.png",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "type": "header-two",
+        "text": "(ステップ1:) 人格とコンテキストを持ったAIを作る"
+      },
+      {
+        "type": "unstyled",
+        "text": "まずは自分を観測していくAIを作りましょう。"
+      },
+      {
+        "type": "unstyled",
+        "text": "アマデウスである必要はありません。好きなキャラクター、信頼するメンター像、架空の設定人物 — 何でも構いません。"
+      },
+      {
+        "type": "unstyled",
+        "text": "人格定義のやり方は前回記事(「シュタゲ ゼロ」のアマデウス紅莉栖をClaude Codeで本気で作ってみた)に書いたので、そちらを参考にしてみてください。",
+        "inlineStyleRanges": [
+          {
+            "length": 39,
+            "offset": 14,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "もちろん無理に人格を作らなくても分析はできます。早く仕組みを作りたい方はスキップしてOKです。"
+      },
+      {
+        "type": "header-two",
+        "text": "ステップ2: 【ストック】過去データで叩きの輪郭を作る"
+      },
+      {
+        "type": "unstyled",
+        "text": "Slackのログ、Notionのメモ、評価振り返り、過去の登壇資料、過去のSNS投稿。自分の発言や思考が残っている素材をできるだけ集め、AIに分析を依頼します。叩きの輪郭ファイルを1枚出してもらうところがゴールです。"
+      },
+      {
+        "type": "header-two",
+        "text": "ステップ3: 【フロー】観測ログ蓄積と週次・月次の振り返りを回す"
+      },
+      {
+        "type": "unstyled",
+        "text": "毎日の終わりにセッションの振り返りを残し、土曜朝に1週間分をまとめ直し、月初に1か月分をさらにまとめ直す。それぞれのタイミングで自分が目を通し気づきをAIにフィードバックする。"
+      },
+      {
+        "type": "unstyled",
+        "text": "この3層のリズムを習慣として回していきます。"
+      },
+      {
+        "type": "header-two",
+        "text": "ステップ4: AIの観測者プロファイル（meta/me）に自分の人物像を蓄積し続ける"
+      },
+      {
+        "type": "unstyled",
+        "text": "過去のストックと現在のフローが交わる場所が、AIの観測者プロファイル（meta/me）です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここに「AIから見た自分」が累積していきます。AIが観測者として育つ場所であり、相互観測ループの心臓部になっていきます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "改めてディレクトリ構成を記載しておきます。是非チャレンジしてみてください。"
+      },
+      {
+        "type": "markdown",
+        "text": "```plaintext\n\n~/observation/\n│\n├── me/                             ← 自分側（ストック + フロー）\n│   ├── past_sources/               ─┐ STOCK\n│   │   (Slack / Notion / 議事録   │   過去の蓄積\n│   │    / 登壇資料 / X投稿…)        │\n│   ├── my_portrait.md              ─┘\n│   ├── daily_log/                  ─┐\n│   ├── meeting_notes/              │  FLOW\n│   └── summary/                    ─┘  毎日の流動\n│       (週次/月次のまとめ)\n│\n└── operation-skuld/amadeus/        ← アマデウス本体（観測者）\n    ├── persona/                    （人格定義）\n    └── Meta/                       （観測者プロファイル＝ストック × フローの統合点）\n```"
+      },
+      {
+        "type": "header-one",
+        "text": "おわりに"
+      },
+      {
+        "type": "unstyled",
+        "text": "内省を放棄するわけではありません。むしろ内省機会は圧倒的に増えました。"
+      },
+      {
+        "type": "unstyled",
+        "text": ""
+      },
+      {
+        "type": "unstyled",
+        "text": "内省に必要な自身の振り返りを、AI観測のログで拡張していく。これがAI時代の新しい自己分析と内省の習慣だと、私は思っています。",
+        "inlineStyleRanges": [
+          {
+            "length": 29,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "メタ認知と自己理解を劇的に高めて、ほんの少しでも人生が豊かになれば幸いです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "それがシュタインズ ･ ゲートに到達するための条件だ"
+      },
+      {
+        "type": "unstyled",
+        "text": "健闘を祈る"
+      },
+      {
+        "type": "unstyled",
+        "text": "エル ･ プサイ ･ コングルゥ"
+      }
+    ]
+  },
+  "status": "success",
+  "msg": "success",
+  "_handle": "sekine_1234"
+}

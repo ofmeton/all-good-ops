@@ -1,0 +1,47 @@
+{
+  "status": "success",
+  "msg": "success",
+  "data": {
+    "id": "1315135582977228802",
+    "name": "藤田拳｜株式会社ピネアルCTO｜『マーケ領域で実践されている生成系AIの技術』著",
+    "userName": "kenfjt",
+    "location": "東京 墨田区",
+    "url": "https://t.co/5igvKGpcoJ",
+    "description": "株式会社ピネアルCTO｜AIの社会実装を通じて、日本を製造業から元気にします🦾｜『宣伝会議』AI講師｜生成AI「やってみる」コミュニティオーナー｜AITech ハッカソン優勝🏆｜東京大→AGC→現職",
+    "entities": {
+      "description": {},
+      "url": {
+        "urls": [
+          {
+            "display_url": "pineal-inc.notion.site/fujita-ken",
+            "expanded_url": "https://pineal-inc.notion.site/fujita-ken",
+            "indices": [
+              0,
+              23
+            ],
+            "url": "https://t.co/5igvKGpcoJ"
+          }
+        ]
+      }
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 2133,
+    "following": 651,
+    "favouritesCount": 18686,
+    "statusesCount": 5353,
+    "mediaCount": 515,
+    "createdAt": "2020-10-11T03:42:24.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/1315135582977228802/1751035301",
+    "profilePicture": "https://pbs.twimg.com/profile_images/1750105010283892736/9mGGnbAE_normal.jpg",
+    "canDm": true,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": [
+      "1918941584164261910"
+    ]
+  }
+}

@@ -1,0 +1,885 @@
+{
+  "article": {
+    "id": "QXJ0aWNsZUVudGl0eToyMDU3NTY4NjI0MzQ1NTYzMTM2",
+    "author": {
+      "type": "user",
+      "userName": "cyrilXBT",
+      "url": "https://x.com/cyrilXBT",
+      "twitterUrl": "https://twitter.com/cyrilXBT",
+      "id": "1373665408193036293",
+      "name": "CyrilXBT",
+      "isVerified": false,
+      "isBlueVerified": true,
+      "verifiedType": null,
+      "profilePicture": "https://pbs.twimg.com/profile_images/2035229727414534145/aWap3Jbq_normal.jpg",
+      "coverPicture": "https://pbs.twimg.com/profile_banners/1373665408193036293/1775621295",
+      "description": "AI • Tech • Crypto | Sharing what I see before everyone else does.",
+      "location": "",
+      "followers": 180822,
+      "following": 442,
+      "status": "",
+      "canDm": true,
+      "canMediaTag": false,
+      "createdAt": "Sun Mar 21 15:58:58 +0000 2021",
+      "entities": {
+        "description": {},
+        "url": {
+          "urls": [
+            {
+              "display_url": "linktr.ee/cyrilxbt",
+              "expanded_url": "https://linktr.ee/cyrilxbt",
+              "indices": [
+                0,
+                23
+              ],
+              "url": "https://t.co/mO8iEkuR3J"
+            }
+          ]
+        }
+      },
+      "fastFollowersCount": 0,
+      "favouritesCount": 35443,
+      "hasCustomTimelines": true,
+      "isTranslator": false,
+      "mediaCount": 7238,
+      "statusesCount": 40324,
+      "withheldInCountries": [],
+      "affiliatesHighlightedLabel": {},
+      "possiblySensitive": false,
+      "pinnedTweetIds": [
+        "2058373087330959829"
+      ],
+      "profile_bio": {},
+      "isAutomated": false,
+      "automatedBy": null
+    },
+    "replyCount": 23,
+    "likeCount": 1024,
+    "quoteCount": 21,
+    "viewCount": "6769689",
+    "createdAt": "Sun May 24 02:22:41 +0000 2026",
+    "title": "How to Organize Your Obsidian Vault So You Can Always Find What You Need ( Full course)",
+    "preview_text": "Most Obsidian users have the same problem six months after they start.\nThey have hundreds of notes. They know the information they need is in there somewhere. They cannot find it quickly enough to be",
+    "cover_media_img_url": "https://pbs.twimg.com/media/HJDHaPrWYAEVzOO.jpg",
+    "contents": [
+      {
+        "type": "unstyled",
+        "text": "Most Obsidian users have the same problem six months after they start."
+      },
+      {
+        "type": "unstyled",
+        "text": "They have hundreds of notes. They know the information they need is in there somewhere. They cannot find it quickly enough to be useful."
+      },
+      {
+        "type": "unstyled",
+        "text": "The search returns too many results. The folder structure they designed in week one no longer makes sense for the notes they are creating in month six. The tags they applied inconsistently are worse than no tags at all."
+      },
+      {
+        "type": "unstyled",
+        "text": "The vault that was supposed to make them more organized has become another thing to manage."
+      },
+      {
+        "type": "unstyled",
+        "text": "This happens not because Obsidian is poorly designed."
+      },
+      {
+        "type": "unstyled",
+        "text": "It happens because most people organize their vault the way they organize a filing cabinet rather than the way they organize a thinking system."
+      },
+      {
+        "type": "unstyled",
+        "text": "A filing cabinet is optimized for storage."
+      },
+      {
+        "type": "unstyled",
+        "text": "A thinking system is optimized for retrieval."
+      },
+      {
+        "type": "unstyled",
+        "text": "The difference between those two goals produces completely different organizational architectures."
+      },
+      {
+        "type": "unstyled",
+        "text": "This article is the complete guide to organizing your Obsidian vault so you can find anything in under 30 seconds regardless of how many notes you have."
+      },
+      {
+        "type": "header-two",
+        "text": "The Retrieval-First Principle"
+      },
+      {
+        "type": "unstyled",
+        "text": "Before the structure understand the principle that should drive every organizational decision."
+      },
+      {
+        "type": "unstyled",
+        "text": "You do not organize a vault to put things away neatly."
+      },
+      {
+        "type": "unstyled",
+        "text": "You organize a vault to get things back quickly."
+      },
+      {
+        "type": "unstyled",
+        "text": "Every folder you create, every tag you apply, every naming convention you adopt should be evaluated against one question: does this make retrieval faster or slower."
+      },
+      {
+        "type": "unstyled",
+        "text": "Most organizational systems fail because they are designed for the moment of capture rather than the moment of retrieval."
+      },
+      {
+        "type": "unstyled",
+        "text": "You create a folder called \"Ideas\" because that is what the note contains when you create it."
+      },
+      {
+        "type": "unstyled",
+        "text": "Six months later you are looking for a note about a business idea you had. You do not remember whether you filed it in Ideas, Projects, Business, or your daily note from the day you had the thought."
+      },
+      {
+        "type": "unstyled",
+        "text": "The folder name made sense at capture time."
+      },
+      {
+        "type": "unstyled",
+        "text": "It tells you nothing at retrieval time."
+      },
+      {
+        "type": "unstyled",
+        "text": "The organizational system in this guide is designed from the retrieval end."
+      },
+      {
+        "type": "unstyled",
+        "text": "Every structural decision is made by asking: when I need this information in the future, what will I know about it that I can use to find it."
+      },
+      {
+        "type": "header-two",
+        "text": "The Four Things You Always Know About a Note"
+      },
+      {
+        "type": "unstyled",
+        "text": "When you are looking for a note in the future you will reliably know one or more of four things about it."
+      },
+      {
+        "type": "unstyled",
+        "text": "What type of content it is. Is it a project, a reference, a daily note, a task, a meeting record, a book summary, an idea?",
+        "inlineStyleRanges": [
+          {
+            "length": 27,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "When you created or used it. Was it this week? This month? Last year? Associated with a specific event or date?",
+        "inlineStyleRanges": [
+          {
+            "length": 28,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "What topic it relates to. What subject area, person, project, or concept is it about?",
+        "inlineStyleRanges": [
+          {
+            "length": 25,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "What status it currently has. Is it active, completed, archived, in progress, waiting?",
+        "inlineStyleRanges": [
+          {
+            "length": 29,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "A well-organized vault makes it possible to filter by any one of these four dimensions or any combination of them in seconds."
+      },
+      {
+        "type": "unstyled",
+        "text": "The organizational system that follows is built on these four dimensions."
+      },
+      {
+        "type": "header-two",
+        "text": "The Folder Structure"
+      },
+      {
+        "type": "unstyled",
+        "text": "Folders are the coarsest organizational layer. They should reflect the broadest categories of content type."
+      },
+      {
+        "type": "unstyled",
+        "text": "The mistake most people make is creating too many folders and making them too specific."
+      },
+      {
+        "type": "unstyled",
+        "text": "A folder called \"Python Programming Notes\" seems useful when you create it."
+      },
+      {
+        "type": "unstyled",
+        "text": "When you have fifteen such specific folders navigating between them becomes its own problem."
+      },
+      {
+        "type": "unstyled",
+        "text": "The correct folder structure has between five and eight top-level folders. Each one represents a genuinely different type of content with different retrieval patterns."
+      },
+      {
+        "type": "unstyled",
+        "text": "00 - INBOX/\n01 - NOTES/\n    daily/\n    meetings/\n    books/\n    courses/\n02 - PROJECTS/\n    [active-project-name]/\n03 - AREAS/\n    health/\n    finances/\n    relationships/\n    career/\n    learning/\n04 - RESOURCES/\n    topics/\n    people/\n    places/\n    tools/\n05 - ARCHIVE/\n06 - SYSTEM/\n    templates/\n    MOCs/"
+      },
+      {
+        "type": "unstyled",
+        "text": "00 - INBOX is where everything lands when you are not sure where it belongs. The number prefix keeps it at the top of your file browser. Nothing lives in INBOX permanently. It is a processing queue.",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "01 - NOTES contains time-stamped captures. Daily notes, meeting notes, book notes, and course notes all have a clear time association. You find them by knowing roughly when the thing happened.",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "02 - PROJECTS contains one subfolder per active project. Projects have a defined outcome and an end date. When a project is complete it moves to ARCHIVE.",
+        "inlineStyleRanges": [
+          {
+            "length": 13,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "03 - AREAS contains ongoing responsibilities that do not have an end date. Health, finances, relationships, and career are areas you are always responsible for. They never complete.",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "04 - RESOURCES contains reference material organized by what it is about. This is your personal Wikipedia. You go here when you need information on a topic, person, place, or tool.",
+        "inlineStyleRanges": [
+          {
+            "length": 14,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "05 - ARCHIVE contains everything that is no longer active. Completed projects. Outdated references. Old daily notes older than one year. Archive everything rather than deleting. Storage is cheap. Accidentally deleting something important is not.",
+        "inlineStyleRanges": [
+          {
+            "length": 12,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "06 - SYSTEM contains the infrastructure of your vault. Templates. Maps of Content. Configuration files. Things that make the vault work rather than things the vault contains.",
+        "inlineStyleRanges": [
+          {
+            "length": 11,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "The Naming Convention That Makes Search Reliable"
+      },
+      {
+        "type": "unstyled",
+        "text": "Folder structure handles the broadest organizational layer."
+      },
+      {
+        "type": "unstyled",
+        "text": "The naming convention handles everything underneath it."
+      },
+      {
+        "type": "unstyled",
+        "text": "A consistent file naming convention means you can find any note by typing a partial match into the search bar and getting the right result immediately."
+      },
+      {
+        "type": "unstyled",
+        "text": "The convention that works best for most vaults:"
+      },
+      {
+        "type": "unstyled",
+        "text": "YYYY-MM-DD-[TYPE]-[TOPIC].md"
+      },
+      {
+        "type": "unstyled",
+        "text": "Examples:"
+      },
+      {
+        "type": "unstyled",
+        "text": "2026-05-20-daily-wednesday.md\n2026-05-18-project-website-launch.md\n2026-05-15-meeting-client-quarterly-review.md\n2026-05-10-book-thinking-fast-and-slow.md\n2026-04-28-resource-claude-prompting-techniques.md\n2026-04-20-area-finances-q2-review.md"
+      },
+      {
+        "type": "unstyled",
+        "text": "The date prefix does three things."
+      },
+      {
+        "type": "unstyled",
+        "text": "It sorts files chronologically automatically so your most recent notes always appear at the top."
+      },
+      {
+        "type": "unstyled",
+        "text": "It gives you a way to find notes by roughly when you created them when you cannot remember the specific name."
+      },
+      {
+        "type": "unstyled",
+        "text": "It prevents naming conflicts because two notes on the same topic created on different dates have different names."
+      },
+      {
+        "type": "unstyled",
+        "text": "The type identifier tells you what the note contains before you open it. Combined with the topic identifier you can often tell whether a note is what you need from the filename alone."
+      },
+      {
+        "type": "header-two",
+        "text": "The Properties System That Makes Filtering Instant"
+      },
+      {
+        "type": "unstyled",
+        "text": "The naming convention is the retrieval layer for search."
+      },
+      {
+        "type": "unstyled",
+        "text": "The properties system is the retrieval layer for filtering."
+      },
+      {
+        "type": "unstyled",
+        "text": "Every note has a YAML frontmatter block at the top with structured properties. These properties are what Dataview queries read to build live dashboards and filtered views."
+      },
+      {
+        "type": "unstyled",
+        "text": "The universal properties every note should have:"
+      },
+      {
+        "type": "unstyled",
+        "text": "---\ntype: [daily/meeting/project/area/resource/book/course/idea/task]\nstatus: [active/complete/archived/reference/waiting]\ndate: 2026-05-20\ntags: [topic1, topic2, topic3]\n---"
+      },
+      {
+        "type": "unstyled",
+        "text": "Additional properties by note type:"
+      },
+      {
+        "type": "unstyled",
+        "text": "For project notes:"
+      },
+      {
+        "type": "unstyled",
+        "text": "deadline: 2026-06-15\npriority: high\nnext_action: Write the project brief\ncompletion: 35"
+      },
+      {
+        "type": "unstyled",
+        "text": "For book notes:"
+      },
+      {
+        "type": "unstyled",
+        "text": "author: [Author Name]\nfinished: 2026-05-10\nrating: 4\nkey_insight: [One sentence summary of the most important idea]"
+      },
+      {
+        "type": "unstyled",
+        "text": "For meeting notes:"
+      },
+      {
+        "type": "unstyled",
+        "text": "attendees: [Name1, Name2]\ndecisions: [Key decisions made]\nactions: [Action items with owners]"
+      },
+      {
+        "type": "unstyled",
+        "text": "For resource notes:"
+      },
+      {
+        "type": "unstyled",
+        "text": "topic: [Primary topic]\nsource: [Where this information came from]\nreliability: [high/medium/low]"
+      },
+      {
+        "type": "unstyled",
+        "text": "The status property is the most important one for retrieval."
+      },
+      {
+        "type": "unstyled",
+        "text": "When you are looking for your active projects you filter by type=project AND status=active."
+      },
+      {
+        "type": "unstyled",
+        "text": "When you are looking for completed book summaries you filter by type=book AND status=complete."
+      },
+      {
+        "type": "unstyled",
+        "text": "When you are looking for everything related to a specific topic you filter by tags containing that topic."
+      },
+      {
+        "type": "unstyled",
+        "text": "Four properties. Infinite filtering combinations."
+      },
+      {
+        "type": "header-two",
+        "text": "The Tagging System That Actually Works"
+      },
+      {
+        "type": "unstyled",
+        "text": "Most Obsidian users either use no tags or use too many tags with no system."
+      },
+      {
+        "type": "unstyled",
+        "text": "Both produce the same result at retrieval time: tags that do not help you find anything."
+      },
+      {
+        "type": "unstyled",
+        "text": "The tagging system that works uses three tag categories with a consistent prefix for each."
+      },
+      {
+        "type": "unstyled",
+        "text": "Topic tags identify what the note is about. No prefix. Just the topic name.",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "#productivity\n#machine-learning\n#real-estate\n#stoicism"
+      },
+      {
+        "type": "unstyled",
+        "text": "Status tags identify where the note is in a workflow. Use the prefix \"status/\" to separate these from topic tags.",
+        "inlineStyleRanges": [
+          {
+            "length": 11,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "#status/active\n#status/waiting\n#status/someday\n#status/complete"
+      },
+      {
+        "type": "unstyled",
+        "text": "Project tags link a note to a specific project. Use the prefix \"project/\" to separate these from topic tags.",
+        "inlineStyleRanges": [
+          {
+            "length": 12,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "#project/website-launch\n#project/book-writing\n#project/client-acme"
+      },
+      {
+        "type": "unstyled",
+        "text": "The three-category system means when you search by tag you know which category you are filtering by based on the prefix."
+      },
+      {
+        "type": "unstyled",
+        "text": "Searching #productivity returns all notes about productivity topics regardless of status."
+      },
+      {
+        "type": "unstyled",
+        "text": "Searching #status/active returns every active note regardless of topic."
+      },
+      {
+        "type": "unstyled",
+        "text": "Searching #project/website-launch returns every note associated with that project regardless of type."
+      },
+      {
+        "type": "unstyled",
+        "text": "The rule that keeps the tag system from bloating: only create a new tag if you will use it on at least five notes. Tags that appear on one or two notes are not searchable patterns. They are noise."
+      },
+      {
+        "type": "header-two",
+        "text": "Maps of Content: The Navigation Layer"
+      },
+      {
+        "type": "unstyled",
+        "text": "As your vault grows from hundreds to thousands of notes the flat search and filter approach becomes insufficient for some use cases."
+      },
+      {
+        "type": "unstyled",
+        "text": "You are not looking for a specific note. You are trying to orient yourself in a topic you have accumulated significant knowledge about."
+      },
+      {
+        "type": "unstyled",
+        "text": "Maps of Content are the solution."
+      },
+      {
+        "type": "unstyled",
+        "text": "A Map of Content is a note whose primary purpose is to link to other notes rather than to contain original ideas. It is an index for a cluster of related notes."
+      },
+      {
+        "type": "unstyled",
+        "text": "A Map of Content for a topic you think about frequently:"
+      },
+      {
+        "type": "unstyled",
+        "text": "# Productivity MOC\n\n## Core Framework Notes\n[[The PARA Method Explained]]\n[[Why Most Productivity Systems Fail]]\n[[Energy Management vs Time Management]]\n\n## Tool Notes\n[[Obsidian Setup and Workflow]]\n[[Claude Code for Productivity]]\n[[N8N Automation Workflows]]\n\n## Book Notes\n[[Getting Things Done - Key Ideas]]\n[[Deep Work - Key Ideas]]\n[[Atomic Habits - Key Ideas]]\n\n## Project Applications\n[[Q2 2026 Productivity Audit]]\n[[Content Production System Build]]\n\n## Open Questions\nWhat is the relationship between energy and deep work?\nHow does AI change the productivity calculus?"
+      },
+      {
+        "type": "unstyled",
+        "text": "A Map of Content is not a folder. You do not move notes into it. You link to notes from it."
+      },
+      {
+        "type": "unstyled",
+        "text": "The MOC becomes a hub that makes an entire cluster of related knowledge navigable from a single starting point."
+      },
+      {
+        "type": "unstyled",
+        "text": "Create a Map of Content when a topic has accumulated more than twenty notes and navigation through backlinks alone becomes difficult."
+      },
+      {
+        "type": "header-two",
+        "text": "The Inbox Processing Habit"
+      },
+      {
+        "type": "unstyled",
+        "text": "The organizational system described above only works if new notes end up in the right place."
+      },
+      {
+        "type": "unstyled",
+        "text": "The INBOX folder handles the most common organizational failure: the note that you captured quickly without filing properly."
+      },
+      {
+        "type": "unstyled",
+        "text": "Every note that does not have an obvious home at capture time goes to INBOX."
+      },
+      {
+        "type": "unstyled",
+        "text": "The inbox processing habit converts chaos into organized knowledge."
+      },
+      {
+        "type": "unstyled",
+        "text": "Set a specific time each day or week to process your inbox. For most people fifteen minutes at the end of each workday is sufficient."
+      },
+      {
+        "type": "unstyled",
+        "text": "For each note in INBOX ask three questions:"
+      },
+      {
+        "type": "unstyled",
+        "text": "What type of content is this? This tells you which top-level folder it belongs in."
+      },
+      {
+        "type": "unstyled",
+        "text": "Does it already have a home? If you have a project or topic note it connects to, link it there or file it in the relevant subfolder."
+      },
+      {
+        "type": "unstyled",
+        "text": "Does it need its own note or should it be added to an existing note? A single thought that expands on an existing note is better added to that note than given its own file."
+      },
+      {
+        "type": "unstyled",
+        "text": "After processing update the properties. Add the correct type, status, and tags. Update the filename to match the naming convention."
+      },
+      {
+        "type": "unstyled",
+        "text": "Move it from INBOX to the correct folder."
+      },
+      {
+        "type": "unstyled",
+        "text": "The inbox is empty. The vault is organized."
+      },
+      {
+        "type": "header-two",
+        "text": "The Search Strategy"
+      },
+      {
+        "type": "unstyled",
+        "text": "Even with perfect organization there will be moments when you are not sure which folder a note is in or what you named it."
+      },
+      {
+        "type": "unstyled",
+        "text": "Obsidian's search has three modes worth knowing."
+      },
+      {
+        "type": "unstyled",
+        "text": "Full text search: Type any phrase or keyword from the content of the note. Obsidian searches every character of every note in your vault. The most powerful mode for finding notes when you remember something specific they said.",
+        "inlineStyleRanges": [
+          {
+            "length": 17,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Property search: Filter by properties directly from the search bar. Type type:project status:active and Obsidian returns every note with those exact property values.",
+        "inlineStyleRanges": [
+          {
+            "length": 16,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Tag search: Type the tag with the hash symbol. #productivity returns every note tagged with that topic.",
+        "inlineStyleRanges": [
+          {
+            "length": 11,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "The search combination that covers almost every retrieval scenario:"
+      },
+      {
+        "type": "unstyled",
+        "text": "When you remember what the note was about: full text search for a distinctive phrase."
+      },
+      {
+        "type": "unstyled",
+        "text": "When you remember what type of note it was and roughly when: combine a type filter with a date range."
+      },
+      {
+        "type": "unstyled",
+        "text": "When you remember what project or topic it belonged to: search by the project tag or topic tag."
+      },
+      {
+        "type": "unstyled",
+        "text": "When you remember roughly when you created it: sort by creation date within the relevant folder."
+      },
+      {
+        "type": "unstyled",
+        "text": "Four search strategies. Almost every note findable in under thirty seconds."
+      },
+      {
+        "type": "header-two",
+        "text": "The Quarterly Vault Review"
+      },
+      {
+        "type": "unstyled",
+        "text": "Organization degrades over time without maintenance."
+      },
+      {
+        "type": "unstyled",
+        "text": "Tags accumulate that no longer reflect how you actually think."
+      },
+      {
+        "type": "unstyled",
+        "text": "Folder structures that made sense in January do not reflect the projects you are running in October."
+      },
+      {
+        "type": "unstyled",
+        "text": "Notes in ARCHIVE could be deleted entirely to reduce noise."
+      },
+      {
+        "type": "unstyled",
+        "text": "The quarterly vault review is the maintenance habit that keeps the organizational system accurate."
+      },
+      {
+        "type": "unstyled",
+        "text": "The quarterly review covers four things."
+      },
+      {
+        "type": "unstyled",
+        "text": "Folder audit: Does every folder still represent a category of content you actively use? Are there folders with fewer than five notes that could be merged?",
+        "inlineStyleRanges": [
+          {
+            "length": 13,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Tag audit: Are all tags still relevant? Are there tags appearing on only one or two notes that should be removed? Are there topics that have accumulated enough notes to deserve their own Map of Content?",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Archive sweep: Are there notes in active folders that should be archived? Projects marked complete but still sitting in 02 - PROJECTS? References that are outdated?",
+        "inlineStyleRanges": [
+          {
+            "length": 14,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Naming inconsistencies: Are all notes following the naming convention? A batch rename to fix inconsistencies takes five minutes and dramatically improves search reliability.",
+        "inlineStyleRanges": [
+          {
+            "length": 23,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "The quarterly review takes between thirty minutes and two hours depending on vault size."
+      },
+      {
+        "type": "unstyled",
+        "text": "The investment pays back every time you find a note instantly rather than spending ten minutes searching."
+      },
+      {
+        "type": "header-two",
+        "text": "The Claude Integration That Makes Retrieval Intelligent"
+      },
+      {
+        "type": "unstyled",
+        "text": "The organizational system above produces a vault you can navigate manually."
+      },
+      {
+        "type": "unstyled",
+        "text": "Connected to Claude Code via the Filesystem MCP the same vault becomes searchable in natural language."
+      },
+      {
+        "type": "unstyled",
+        "text": "Instead of constructing a Dataview query you ask Claude a question:"
+      },
+      {
+        "type": "unstyled",
+        "text": "\"Find all notes about pricing strategy I created in the last six months.\""
+      },
+      {
+        "type": "unstyled",
+        "text": "\"What have I written about managing energy versus managing time?\""
+      },
+      {
+        "type": "unstyled",
+        "text": "\"Show me every project note that is currently active and has a deadline before July.\""
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude reads your vault structure, your properties, and your content and returns the relevant notes with context about why they matched your query."
+      },
+      {
+        "type": "unstyled",
+        "text": "The combination of a well-organized vault and Claude's natural language retrieval produces a system where you can find anything you have ever written in under thirty seconds regardless of whether you remember the exact filename, the folder, or the tag."
+      },
+      {
+        "type": "unstyled",
+        "text": "The organizational system makes Claude's retrieval accurate."
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude's intelligence makes the organizational system's power accessible without requiring you to know the exact right query."
+      },
+      {
+        "type": "header-two",
+        "text": "Starting From Where You Are"
+      },
+      {
+        "type": "unstyled",
+        "text": "If your current vault is disorganized the path forward is not starting over."
+      },
+      {
+        "type": "unstyled",
+        "text": "It is progressive reorganization."
+      },
+      {
+        "type": "unstyled",
+        "text": "Week one: Create the eight folders. Do not move anything yet. Just create the structure."
+      },
+      {
+        "type": "unstyled",
+        "text": "Week two: Start filing new notes into the correct folder from the moment you create them. Apply the naming convention to every new note. Add properties to every new note."
+      },
+      {
+        "type": "unstyled",
+        "text": "Week three: Process your INBOX backlog. Work through old notes and refile them into the correct folder with correct naming and properties."
+      },
+      {
+        "type": "unstyled",
+        "text": "Month two: Begin applying tags retroactively to your most important notes. Create your first Map of Content for the topic you write about most frequently."
+      },
+      {
+        "type": "unstyled",
+        "text": "Month three: Run your first quarterly vault review."
+      },
+      {
+        "type": "unstyled",
+        "text": "The vault does not become perfectly organized on the day you implement the system."
+      },
+      {
+        "type": "unstyled",
+        "text": "It becomes progressively more organized every week you use the system."
+      },
+      {
+        "type": "unstyled",
+        "text": "After six months the vault that used to be a source of frustration becomes a system you can trust."
+      },
+      {
+        "type": "unstyled",
+        "text": "Every note findable. Every information need met. Every retrieval taking under thirty seconds."
+      },
+      {
+        "type": "unstyled",
+        "text": "That is what an organized vault actually feels like."
+      },
+      {
+        "type": "unstyled",
+        "text": "Build the structure this weekend."
+      },
+      {
+        "type": "unstyled",
+        "text": "The retrieval improvements start from the first note you file correctly."
+      },
+      {
+        "type": "unstyled",
+        "text": "Follow @cyrilXBT for every Obsidian system, Claude Code integration, and vault architecture that makes your knowledge compound over time."
+      }
+    ]
+  },
+  "status": "success",
+  "msg": "success",
+  "_handle": "cyrilXBT"
+}

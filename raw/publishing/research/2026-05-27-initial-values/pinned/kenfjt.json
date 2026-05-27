@@ -1,0 +1,200 @@
+{
+  "handle": "kenfjt",
+  "tweet_id": "1918941584164261910",
+  "body": {
+    "tweets": [
+      {
+        "type": "tweet",
+        "id": "1918941584164261910",
+        "url": "https://x.com/kenfjt/status/1918941584164261910",
+        "twitterUrl": "https://twitter.com/kenfjt/status/1918941584164261910",
+        "text": "【生成AIの技術解説本を出版しました！】\n企業の生成AI活用を支援してきたピネアルの知見を一冊に凝縮しました📘💡\nLLM／RAG／Vision／API連携まで、実案件のワークフロー事例でAI要素技術と周辺技術をまるごと理解できます！\n\n購入リンクはリプ欄↓ https://t.co/DwKoVPhnzR",
+        "source": "",
+        "retweetCount": 12,
+        "replyCount": 5,
+        "likeCount": 182,
+        "quoteCount": 0,
+        "viewCount": 44292,
+        "createdAt": "Sun May 04 08:11:40 +0000 2025",
+        "lang": "ja",
+        "bookmarkCount": 0,
+        "isReply": false,
+        "inReplyToId": "",
+        "conversationId": "1918941584164261910",
+        "displayTextRange": [
+          0,
+          128
+        ],
+        "inReplyToUserId": "",
+        "inReplyToUsername": "",
+        "isPinned": false,
+        "author": {
+          "type": "user",
+          "userName": "kenfjt",
+          "url": "https://x.com/kenfjt",
+          "twitterUrl": "https://twitter.com/kenfjt",
+          "id": "1315135582977228802",
+          "name": "藤田拳｜株式会社ピネアルCTO｜『マーケ領域で実践されている生成系AIの技術』著",
+          "isVerified": false,
+          "isBlueVerified": true,
+          "verifiedType": null,
+          "profilePicture": "https://pbs.twimg.com/profile_images/1750105010283892736/9mGGnbAE_normal.jpg",
+          "coverPicture": "https://pbs.twimg.com/profile_banners/1315135582977228802/1751035301",
+          "description": "株式会社ピネアルCTO｜AIの社会実装を通じて、日本を製造業から元気にします🦾｜『宣伝会議』AI講師｜生成AI「やってみる」コミュニティオーナー｜AITech ハッカソン優勝🏆｜東京大→AGC→現職",
+          "location": "東京 墨田区",
+          "followers": 2133,
+          "following": 651,
+          "status": "",
+          "canDm": true,
+          "canMediaTag": true,
+          "createdAt": "Sun Oct 11 03:42:24 +0000 2020",
+          "entities": {
+            "description": {},
+            "url": {
+              "urls": [
+                {
+                  "display_url": "pineal-inc.notion.site/fujita-ken",
+                  "expanded_url": "https://pineal-inc.notion.site/fujita-ken",
+                  "indices": [
+                    0,
+                    23
+                  ],
+                  "url": "https://t.co/5igvKGpcoJ"
+                }
+              ]
+            }
+          },
+          "fastFollowersCount": 0,
+          "favouritesCount": 0,
+          "hasCustomTimelines": true,
+          "isTranslator": false,
+          "mediaCount": 515,
+          "statusesCount": 5353,
+          "withheldInCountries": [],
+          "affiliatesHighlightedLabel": {},
+          "possiblySensitive": false,
+          "pinnedTweetIds": [
+            "1918941584164261910"
+          ],
+          "profile_bio": {
+            "description": "株式会社ピネアルCTO｜AIの社会実装を通じて、日本を製造業から元気にします🦾｜『宣伝会議』AI講師｜生成AI「やってみる」コミュニティオーナー｜AITech ハッカソン優勝🏆｜東京大→AGC→現職",
+            "entities": {
+              "description": {},
+              "url": {
+                "urls": [
+                  {
+                    "display_url": "pineal-inc.notion.site/fujita-ken",
+                    "expanded_url": "https://pineal-inc.notion.site/fujita-ken",
+                    "indices": [
+                      0,
+                      23
+                    ],
+                    "url": "https://t.co/5igvKGpcoJ"
+                  }
+                ]
+              }
+            }
+          },
+          "isAutomated": false,
+          "automatedBy": null
+        },
+        "extendedEntities": {
+          "media": [
+            {
+              "allow_download_status": {
+                "allow_download": true
+              },
+              "display_url": "pic.twitter.com/DwKoVPhnzR",
+              "expanded_url": "https://twitter.com/kenfjt/status/1918941584164261910/photo/1",
+              "ext_master_playlist_only": [],
+              "ext_media_availability": {
+                "status": "Available"
+              },
+              "ext_playlists": [],
+              "features": {
+                "large": {
+                  "faces": []
+                },
+                "orig": {
+                  "faces": []
+                }
+              },
+              "id_str": "1918940617604059136",
+              "indices": [
+                129,
+                152
+              ],
+              "media_key": "3_1918940617604059136",
+              "media_results": {
+                "id": "QXBpTWVkaWFSZXN1bHRzOgwAAQoAARqhclMhW9AACgACGqFzNCzWEBYAAA==",
+                "result": {
+                  "__typename": "ApiMedia",
+                  "id": "QXBpTWVkaWE6DAABCgABGqFyUyFb0AAKAAIaoXM0LNYQFgAA",
+                  "media_key": "3_1918940617604059136"
+                }
+              },
+              "media_url_https": "https://pbs.twimg.com/media/GqFyUyFb0AA9FyI.png",
+              "original_info": {
+                "focus_rects": [
+                  {
+                    "h": 206,
+                    "w": 368,
+                    "x": 0,
+                    "y": 316
+                  },
+                  {
+                    "h": 368,
+                    "w": 368,
+                    "x": 0,
+                    "y": 154
+                  },
+                  {
+                    "h": 420,
+                    "w": 368,
+                    "x": 0,
+                    "y": 102
+                  },
+                  {
+                    "h": 522,
+                    "w": 261,
+                    "x": 54,
+                    "y": 0
+                  },
+                  {
+                    "h": 522,
+                    "w": 368,
+                    "x": 0,
+                    "y": 0
+                  }
+                ],
+                "height": 522,
+                "width": 368
+              },
+              "sizes": {
+                "large": {
+                  "h": 522,
+                  "w": 368
+                }
+              },
+              "type": "photo",
+              "url": "https://t.co/DwKoVPhnzR"
+            }
+          ]
+        },
+        "card": null,
+        "place": {},
+        "entities": {},
+        "isRetweet": false,
+        "isQuote": false,
+        "isConversationControlled": false,
+        "quoted_tweet": null,
+        "retweeted_tweet": null,
+        "isLimitedReply": false,
+        "communityInfo": null
+      }
+    ],
+    "status": "success",
+    "msg": "success",
+    "code": 0
+  }
+}

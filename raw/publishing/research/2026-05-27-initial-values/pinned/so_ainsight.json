@@ -1,0 +1,205 @@
+{
+  "handle": "so_ainsight",
+  "tweet_id": "2035350663899525519",
+  "body": {
+    "tweets": [
+      {
+        "type": "tweet",
+        "id": "2035350663899525519",
+        "url": "https://x.com/so_ainsight/status/2035350663899525519",
+        "twitterUrl": "https://twitter.com/so_ainsight/status/2035350663899525519",
+        "text": "【Claude Code完全攻略ロードマップ】非エンジニア向けClaude Codeを丸ごと完全理解する、完全無料で公開します！\n\nこのnote、\n元々19,800円の有料教材にする予定でした。\n\n約42,000文字超、画像90枚、全45章構成の超大作。\n\nプログラミング知識ゼロでも、\n挫折ポイントゼロで、\nコードを1行も書かずに自動化が、\n\nたった1日で習得できるようになります！\n\n⬇️【完全無料公開中】\nClaude Codeを使った実践的な自動化構築の経験に基づいて作成しました。\n\n・第1章：Claude Codeとは何か\n・第2章：他のツールとの違い\n・第3章：エージェントとコンテキストの重要性\n・第4章：VS Codeのインストール\n・第5章：Claude Code拡張機能のインストール\n・第6章：プラン選択（Pro vs Max）\n・第7章：初回プロジェクトの立ち上げ\n・第8章：CLAUDE.mdファイルとは\n・第9章：ドキュメント・データ・分析活用\n・第10章：非エンジニアが最初に試すべき5つのこと\n・第11章：コンテキストの3種類\n・第12章：ファイルをコンテキストに追加する\n・第13章：画像をコンテキストに追加する\n・第14章：コンテキストのクリーンアップ\n・第15章：Context Rot（コンテキスト腐敗）とは\n・第16章：コンテキスト戦略: 探索→計画→実装の分離\n・第17章：ビルトインツールとは\n・第18章：パーミッションの仕組み\n・第19章：Bypass Permissions Modeの設定\n・第20章：検証の仕組みを与える\n・第21章：Plan Modeとは\n・第22章：Thinking Modeとは\n・第23章：自己改善ループの仕組み\n・第24章：スラッシュコマンド一覧\n・第25章：カスタムコマンドとは\n・第26章：カスタムコマンドの作成方法\n・第27章：MCPサーバーとは\n・第28章：Context7で最新ドキュメントを取得\n・第29章：Playwrightでブラウザ操作\n・第30章：MCPサーバーのインストール方法\n・第31章：Skillsとは（ワークフロー定義）\n・第32章：Hooksとは（自動化トリガー）\n・第33章：拡張機能の整理（MCP・Skills・Hooks）\n・第34章：Subagentsとは（専門エージェント）\n・第35章：Subagentsの作成方法\n・第36章：サブエージェント活用の実例\n・第37章：Tasksとは（セッション超えタスク管理）\n・第38章：自分専用Todoアプリを作ろう\n・第39章：毎朝届く天気予報メールを作ろう\n・第40章：スケジュール実行（cron）\n・第41章：Modalへのデプロイ\n・第42章：Webhook実行\n・第43章：セキュリティレビュー\n・第44章：よくある失敗パターンとエラー対処法\n・第45章：まとめ\n\nぜーんぶ無料で学べます！\n\n日本語で指示するだけでExcel分析・レポート自動生成・画像処理をこなせるようになります。\n\nClaude Codeの凄さがより多くの人に広がって欲しい。\n\nそんな思いから、特別に完全無料で公開することを決めました。\n\nロードマップが欲しい人？\n📍私をフォロー\n📍いいね＆リプで\"クロードコード\"",
+        "source": "",
+        "retweetCount": 320,
+        "replyCount": 2140,
+        "likeCount": 3457,
+        "quoteCount": 65,
+        "viewCount": 254506,
+        "createdAt": "Sat Mar 21 13:39:47 +0000 2026",
+        "lang": "ja",
+        "bookmarkCount": 2799,
+        "isReply": false,
+        "inReplyToId": "",
+        "conversationId": "2035350663899525519",
+        "displayTextRange": [
+          0,
+          154
+        ],
+        "inReplyToUserId": "",
+        "inReplyToUsername": "",
+        "isPinned": false,
+        "author": {
+          "type": "user",
+          "userName": "so_ainsight",
+          "url": "https://x.com/so_ainsight",
+          "twitterUrl": "https://twitter.com/so_ainsight",
+          "id": "1919729970685075456",
+          "name": "そう｜Claude Codeで始めるAI自動化",
+          "isVerified": false,
+          "isBlueVerified": true,
+          "verifiedType": null,
+          "profilePicture": "https://pbs.twimg.com/profile_images/1951625625455951872/pj57KIjJ_normal.jpg",
+          "coverPicture": "https://pbs.twimg.com/profile_banners/1919729970685075456/1757731433",
+          "description": "Claude Code×n8n AIエージェント300以上構築｜ソロプレナーでAIエージェント組織企業を運営｜ 累計純利２億超 ｜ 非エンジニアでもできるClaude Codeで「異次元」業務効率化を発信｜ noteでマル㊙️コンテンツ配信中｜ フォローすればAIで「異次元」に時間を生み出す自動化手法が分かる",
+          "location": "",
+          "followers": 15624,
+          "following": 58,
+          "status": "",
+          "canDm": true,
+          "canMediaTag": true,
+          "createdAt": "Tue May 06 12:25:54 +0000 2025",
+          "entities": {
+            "description": {},
+            "url": {
+              "urls": [
+                {
+                  "display_url": "note.com/soh_ainsight",
+                  "expanded_url": "https://note.com/soh_ainsight",
+                  "indices": [
+                    0,
+                    23
+                  ],
+                  "url": "https://t.co/WimuO5SQFp"
+                }
+              ]
+            }
+          },
+          "fastFollowersCount": 0,
+          "favouritesCount": 0,
+          "hasCustomTimelines": true,
+          "isTranslator": false,
+          "mediaCount": 379,
+          "statusesCount": 1801,
+          "withheldInCountries": [],
+          "affiliatesHighlightedLabel": {},
+          "possiblySensitive": false,
+          "pinnedTweetIds": [
+            "2035350663899525519"
+          ],
+          "profile_bio": {
+            "description": "Claude Code×n8n AIエージェント300以上構築｜ソロプレナーでAIエージェント組織企業を運営｜ 累計純利２億超 ｜ 非エンジニアでもできるClaude Codeで「異次元」業務効率化を発信｜ noteでマル㊙️コンテンツ配信中｜ フォローすればAIで「異次元」に時間を生み出す自動化手法が分かる",
+            "entities": {
+              "description": {},
+              "url": {
+                "urls": [
+                  {
+                    "display_url": "note.com/soh_ainsight",
+                    "expanded_url": "https://note.com/soh_ainsight",
+                    "indices": [
+                      0,
+                      23
+                    ],
+                    "url": "https://t.co/WimuO5SQFp"
+                  }
+                ]
+              }
+            }
+          },
+          "isAutomated": false,
+          "automatedBy": null
+        },
+        "extendedEntities": {
+          "media": [
+            {
+              "allow_download_status": {
+                "allow_download": true
+              },
+              "display_url": "pic.twitter.com/6LZo8CbkRu",
+              "expanded_url": "https://twitter.com/so_ainsight/status/2035350663899525519/photo/1",
+              "ext_master_playlist_only": [],
+              "ext_media_availability": {
+                "status": "Available"
+              },
+              "ext_playlists": [],
+              "features": {
+                "large": {
+                  "faces": []
+                },
+                "orig": {
+                  "faces": []
+                }
+              },
+              "id_str": "2035350655637024768",
+              "indices": [
+                155,
+                178
+              ],
+              "media_key": "3_2035350655637024768",
+              "media_results": {
+                "id": "QXBpTWVkaWFSZXN1bHRzOgwAAQoAARw/BKM2mnAACgACHD8EpSMWMY8AAA==",
+                "result": {
+                  "__typename": "ApiMedia",
+                  "id": "QXBpTWVkaWE6DAABCgABHD8EozaacAAKAAIcPwSlIxYxjwAA",
+                  "media_key": "3_2035350655637024768"
+                }
+              },
+              "media_url_https": "https://pbs.twimg.com/media/HD8EozaacAALKH2.jpg",
+              "original_info": {
+                "focus_rects": [
+                  {
+                    "h": 636,
+                    "w": 1136,
+                    "x": 64,
+                    "y": 0
+                  },
+                  {
+                    "h": 636,
+                    "w": 636,
+                    "x": 564,
+                    "y": 0
+                  },
+                  {
+                    "h": 636,
+                    "w": 558,
+                    "x": 642,
+                    "y": 0
+                  },
+                  {
+                    "h": 636,
+                    "w": 318,
+                    "x": 768,
+                    "y": 0
+                  },
+                  {
+                    "h": 636,
+                    "w": 1200,
+                    "x": 0,
+                    "y": 0
+                  }
+                ],
+                "height": 636,
+                "width": 1200
+              },
+              "sizes": {
+                "large": {
+                  "h": 636,
+                  "w": 1200
+                }
+              },
+              "type": "photo",
+              "url": "https://t.co/6LZo8CbkRu"
+            }
+          ]
+        },
+        "card": null,
+        "place": {},
+        "entities": {
+          "hashtags": [],
+          "symbols": [],
+          "urls": [],
+          "user_mentions": []
+        },
+        "isRetweet": false,
+        "isQuote": false,
+        "isConversationControlled": false,
+        "quoted_tweet": null,
+        "retweeted_tweet": null,
+        "isLimitedReply": false,
+        "communityInfo": null
+      }
+    ],
+    "status": "success",
+    "msg": "success",
+    "code": 0
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "status": "success",
+  "msg": "success",
+  "data": {
+    "id": "1947941249455198208",
+    "name": "Mr. Jason💡",
+    "userName": "jason_coder0",
+    "location": "Australia",
+    "url": "",
+    "description": "AI & Tech Strategist | Elevating Brands with Advanced AI Innovation | Expert Ghostwriter | Email : leocoder56@gmail.com | 📥 |",
+    "entities": {
+      "description": {}
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 21878,
+    "following": 522,
+    "favouritesCount": 67309,
+    "statusesCount": 41873,
+    "mediaCount": 706,
+    "createdAt": "2025-07-23T08:46:19.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/1947941249455198208/1763396796",
+    "profilePicture": "https://pbs.twimg.com/profile_images/1962130802738941952/PLUJ7ETX_normal.jpg",
+    "canDm": true,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": [
+      "2059303346876633266"
+    ]
+  }
+}

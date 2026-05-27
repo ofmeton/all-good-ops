@@ -1,0 +1,935 @@
+{
+  "article": {
+    "id": "QXJ0aWNsZUVudGl0eToyMDUzNzI2OTIxMDEyNDk0MzM2",
+    "author": {
+      "type": "user",
+      "userName": "ClaudeCode_UT",
+      "url": "https://x.com/ClaudeCode_UT",
+      "twitterUrl": "https://twitter.com/ClaudeCode_UT",
+      "id": "2045207585574539264",
+      "name": "東大ClaudeCode研究所",
+      "isVerified": false,
+      "isBlueVerified": true,
+      "verifiedType": null,
+      "profilePicture": "https://pbs.twimg.com/profile_images/2045968105172766720/_u891Zxq_normal.jpg",
+      "coverPicture": "https://pbs.twimg.com/profile_banners/2045207585574539264/1776499582",
+      "description": "Claude Codeを極めた現役東大生集団が運営｜実務で使えるノウハウと最新情報を毎日発信｜大手企業とのAIエージェント開発で現場導入実績あり｜研究レベルの技術を応用して社会実装｜AIエージェントの導入相談はDMまでお願いします📩｜独自ニュースと活用法はLINEで：https://t.co/078j7qOKUH",
+      "location": "実務で使えるClaudeCodeならここ一択！",
+      "followers": 19704,
+      "following": 10,
+      "status": "",
+      "canDm": false,
+      "canMediaTag": true,
+      "createdAt": "Fri Apr 17 18:29:47 +0000 2026",
+      "entities": {
+        "description": {
+          "urls": [
+            {
+              "display_url": "lin.ee/quYxNMc",
+              "expanded_url": "https://lin.ee/quYxNMc",
+              "indices": [
+                134,
+                157
+              ],
+              "url": "https://t.co/078j7qOKUH"
+            }
+          ]
+        }
+      },
+      "fastFollowersCount": 0,
+      "favouritesCount": 310,
+      "hasCustomTimelines": false,
+      "isTranslator": false,
+      "mediaCount": 213,
+      "statusesCount": 351,
+      "withheldInCountries": [],
+      "affiliatesHighlightedLabel": {},
+      "possiblySensitive": false,
+      "pinnedTweetIds": [
+        "2058664601085157559"
+      ],
+      "profile_bio": {},
+      "isAutomated": false,
+      "automatedBy": null
+    },
+    "replyCount": 1,
+    "likeCount": 275,
+    "quoteCount": 9,
+    "viewCount": "430965",
+    "createdAt": "Sat May 16 21:21:36 +0000 2026",
+    "title": "【保存版】Claudeの可能性を解放するための完全マニュアル",
+    "preview_text": "Claude を毎日のように開いている方なら、こんな経験はありませんか？\n朝の会議準備で「うちは SaaS で社員 12 人で、ターゲットは中小企業の経理担当で…」と背景説明を打ち直している。Claude",
+    "cover_media_img_url": "https://pbs.twimg.com/media/HIdxS1PbEAA23lz.jpg",
+    "contents": [
+      {
+        "type": "unstyled",
+        "text": "Claude を毎日のように開いている方なら、こんな経験はありませんか？"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "朝の会議準備で「うちは SaaS で社員 12 人で、ターゲットは中小企業の経理担当で…」と背景説明を打ち直している。Claude はその場では理解してくれるが、翌日の新しいチャットでは何も覚えていない"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "「Claude は ChatGPT より深く考えてくれる」とよく聞くが、自分が使うと違いがほとんど分からない。同じような質問をして、同じような答えが返ってくる"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "Projects というサイドバーのボタンは気になっているが、1 回クリックしたきりで放置している。何を書けばいいか分からなくて手が止まっている"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "ブックマーク欄に英語の Claude 攻略記事が 5 本溜まっている。気付けば情報を集めるばかりで、自分の Claude の使い方は何も変わっていない"
+      },
+      {
+        "type": "unstyled",
+        "text": "これらすべて、Claude を 1 度設定すれば全部消えます。手順は 18 個、しかもコピペで実装できる範囲です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "今回は海外でめちゃくちゃ注目されていた記事を日本のビジネス層向けに噛み砕いて再構成して解説します。さらに具体的なプロンプトもセットで解説するのでぜひ学んでみてください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "出典：\nhttps://x.com/AnatoliKopadze/status/2054568935274549597"
+      },
+      {
+        "type": "unstyled",
+        "text": "経営者・事業責任者・マーケ責任者の方が、明日からそのまま使える形でお届けします。"
+      },
+      {
+        "type": "header-two",
+        "text": "Claude は \"質問する窓口\" として使うものじゃない"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIdxwc1bAAAzGLd.jpg",
+        "width": 1672,
+        "height": 941
+      },
+      {
+        "type": "unstyled",
+        "text": "ここから先の 18 個のステップを 1 個も実装する前に、1 つだけ前提を整えさせてください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude を「質問を投げる窓口」として使っている限り、Claude の本来の力の 90% は眠ったままです。これは大袈裟ではなく、Claude を設計した思想の話です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "多くの方はClaudeをGoogle検索の代替かチャット相手としか使ってません。"
+      },
+      {
+        "type": "unstyled",
+        "text": "質問を投げて、答えを受け取って、次の質問を投げる。これは ChatGPT の使い方の延長です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "情報を引き出すという意味では確かに動きますが、Claude が本来想定している使い方とは違います。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude は最初から 思考パートナー として設計されています。",
+        "inlineStyleRanges": [
+          {
+            "length": 7,
+            "offset": 13,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "あなたが質問する側、Claude が答える側、という固定された関係ではなく、双方向で前提を確認し、視点を出し合い、結論を一緒に詰めていく相棒です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "文章を整えるだけのアシスタントではありません。",
+        "inlineStyleRanges": [
+          {
+            "length": 23,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "「思考パートナーって、ChatGPT でもできるんじゃない？」と思った方がいるかもしれません。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここに違いがあります。Claude の場合、思考パートナーとして起動するための具体的な設定が機能として用意されています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Projects、Custom Instructions、Extended Thinking、Style cloning、Sparring。これら 5 個の機能を組み合わせると、Claude は「あなたを知っている相棒」に変わります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "つまり、Claude を思考パートナーにするのは才能やセンスではなく、設定の話です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "そして設定の手順が 18 個。本記事ではこれを 5 つの領域に整理してお届けします。"
+      },
+      {
+        "type": "unstyled",
+        "text": "土台 (Step 1-3) / 思想転換 (Step 4-5) / 機能 (Step 6-9) / 節約 (Step 10-13) / プロンプト (Step 14-18) の 5 つです。土台の 3 個から始めれば、最初の 30 分で Claude の挙動が体感レベルで変わります。"
+      },
+      {
+        "type": "header-two",
+        "text": "領域① 土台：Claudeを\"あなた専用\"にする3個の設定"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIdyKF5aEAAaxyg.jpg",
+        "width": 1672,
+        "height": 941
+      },
+      {
+        "type": "unstyled",
+        "text": "ここからは具体的な設定に入ります。最初の領域は土台です。3 個のステップで、Claude が「あなたが誰か」を 1 度覚えれば毎セッション思い出す状態を作ります。所要時間は合計 15 分程度です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Step 1：Project を作る",
+        "inlineStyleRanges": [
+          {
+            "length": 18,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude.ai の左サイドバーに「Projects」というメニューがあります。クリックして「New Project」を選んでください。名前は「業務」「経営」「マーケティング」など、自分の用途で分かりやすいものを 1 つつけます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Project とは何かを 1 行で言うと、永続的なワークスペースです。普通の chat は毎回ゼロから始まり、Claude は前回の会話を覚えていません。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Project の中で chat を作ると、その Project に保存された情報を Claude が毎回読み込んでから応答します。前回までの context が継承される、と言い換えてもよいです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Project 機能は Claude Pro 以上のプランで使えます。Claude Pro は月 20 ドル、日本円で約 3,000 円です。これから先のすべての設定はこの Project の中で行います。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Step 2：自己紹介テンプレートを Project Knowledge に貼る",
+        "inlineStyleRanges": [
+          {
+            "length": 40,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Project を作ったら、次は Claude にあなたが誰か教えます。Project 画面の右側に「Knowledge」というセクションがあるので、ここにテキストを追加します。"
+      },
+      {
+        "type": "unstyled",
+        "text": "そのまま貼ってお使いください。"
+      },
+      {
+        "type": "markdown",
+        "text": "```markdown\n私について\n名前: [氏名]\n役職: [役職]\n業界: [業界]\n会社規模: [社員数 / 月商規模]\n主な業務:\n- [業務 1]\n- [業務 2]\n- [業務 3]\n専門領域 (詳しい分野):\n- [分野 1]\n- [分野 2]\n弱い領域 (まだ学習中):\n- [分野 1]\n- [分野 2]\nコミュニケーション好み:\n- 結論先出し / 箇条書き / 数字根拠付き\n- 前置き (「ご質問ありがとうございます」等) は不要\n- 不確実な情報は推測せず「分からない」と明示する\n求める Claude のトーン:\n- 上司ではなく、知識豊富な同僚として接する\n- 反対意見は遠慮せず述べる\n- 業界用語はそのまま使ってよい (噛み砕き不要)\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここで重要なのは、すべての項目を 正直に 埋めることです。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 17,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "「弱い領域」を空欄にすると、Claude はあなたを完璧だと思って応答します。結果として、本当は説明が必要な箇所でも省略されて返ってきます。逆に「専門領域」が薄いと、Claude は何度も基礎説明をしてきます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "5 分かけて埋めてください。これが Claude 専用の自己紹介になります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Step 3：Custom Instructions に変換する",
+        "inlineStyleRanges": [
+          {
+            "length": 32,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "自己紹介を貼っただけでは、Claude はあなたについて知っている状態ですが、「あなたに合わせて挙動を変える」状態ではありません。次の 1 行のプロンプトを Claude に投げて、Custom Instructions を生成してもらいます。"
+      },
+      {
+        "type": "markdown",
+        "text": "```markdown\n上の自己紹介を読みました。\n私が Claude を最も効率的に使うための Custom Instructions を作成してください。\n私の業務文脈・好み・避けるべき表現を踏まえて、Claude が毎回守るべきルールセットを生成してください。\n出力形式:\n- 「あなたは [トーン] で応答してください」のような命令文の集合体\n- 10-15 行程度\n- Project Instructions にコピペできる完成形\nルールに含めるべき項目:\n1. 私が誰でどう接するべきか\n2. 応答スタイル (前置き禁止 / 結論先出し / etc)\n3. 不確実性の扱い方\n4. 私が嫌う表現の禁止\n5. 私の業界用語の取り扱い\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude が生成した Custom Instructions を、Project 画面の「Instructions」セクションにコピペします。これで設定完了です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "これ以降、この Project の中で立てるすべての chat は、Claude が最初にあなたの自己紹介と Custom Instructions を読んでから応答するようになります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "「うちは SaaS で社員 12 人で」を毎回打ち直す必要はもうありません。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここまでで Claude はあなたを 1 度知った思考パートナーの卵になりました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "なお、Claude Code (ターミナルで動く CLI 版) を使っている方は、同じ内容をプロジェクトディレクトリの CLAUDE.md ファイルに書くと、Web UI と CLI で Claude の挙動が揃います。"
+      },
+      {
+        "type": "unstyled",
+        "text": "本記事のテーマからは外れるので深掘りはしませんが、両方使う方は揃えておくと混乱が減ります。"
+      },
+      {
+        "type": "header-two",
+        "text": "領域② 思想転換：Claudeを\"答える側\"から\"聞く側\"にする2個の設定"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIdysORaQAAMs80.jpg",
+        "width": 1672,
+        "height": 941
+      },
+      {
+        "type": "unstyled",
+        "text": "土台を設定しただけでは、出力品質はそこまで大きく変わりません。「あなたが誰か」を Claude が知っている状態にしただけだからです。ここからが本質的な変化を作る 2 個のステップです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Step 4：検索エンジンとして使うのをやめる"
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude を Google のように使うのが最も低い使い方です。具体的に何が違うか、例を見ていきましょう。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Before (質問窓口として使う場合)",
+        "inlineStyleRanges": [
+          {
+            "length": 20,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "markdown",
+        "text": "```markdown\nChatGPT との違いって何？\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "このプロンプトでは、Claude は「ChatGPT と Claude の一般的な機能比較」を返します。あなたの会社の状況とは無関係な、汎用的な回答です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "After (思考パートナーとして使う場合)",
+        "inlineStyleRanges": [
+          {
+            "length": 22,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "markdown",
+        "text": "```markdown\nうちの会社で ChatGPT から Claude に乗り換えるべきか、判断材料を整理してください。\n会社状況:\n- 業種: SaaS\n- 社員数: 12 人\n- 月商: 8,000 万円\n- 主な利用: 提案資料作成、議事録要約、月次 PL 分析\n判断の軸:\n- 既存の業務フロー再構築のコスト\n- 出力品質の差 (実際の業務で出る差)\n- 月額課金の体感価値\n- 全社員に展開した場合のオペレーション\n社内決裁を取れるレベルの判断材料に整理してください。\n\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "同じ「Claude と ChatGPT を比較する」というテーマでも、出てくる答えが完全に変わります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "後者は「あなたの会社で意思決定するための判断材料」が返ってきます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここでやっているのは、Claude に「思考するための材料を渡す」作業です。前提条件、判断軸、求める出力形式。"
+      },
+      {
+        "type": "unstyled",
+        "text": "これを最初に渡すと、Claude は答えるのではなく考え始めます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Step 5：まず Claude に質問させてから始めさせる",
+        "inlineStyleRanges": [
+          {
+            "length": 30,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "これはほとんどの方が使っていない、でも 1 度知ると手放せなくなる設定です。複雑なタスクを依頼する前に、Claude から先に質問させてください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "そのまま使えるプロンプトです。"
+      },
+      {
+        "type": "markdown",
+        "text": "```markdown\n以下のタスクを依頼する前に、まずあなたから私に必要な情報を質問してください。\nタスク: [タスク内容]\n質問の出し方:\n- 5-10 個まとめて投げる (1 回 1 個ずつではなく)\n- 質問は番号付き\n- 私の業界 / 会社規模 / ターゲット / 制約 / 期限を必ず含める\n- 私が回答した後にタスクに着手する\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "これを使うと、Claude が「来期の予算計画のたたき台を作って」のような依頼に対して、いきなり作り始めるのではなく、「①対象期間は ②全社か部門単位か ③前年比成長率の前提は ④投資テーマがあるか ⑤上限予算は ⑥社外発表のものか社内検討用か ⑦リスクシナリオを含めるか…」と質問を返してくれます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "質問に答えてからタスクに着手するので、的外れな出力が来ません。「やり直し」のループが消えます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude に質問させた瞬間、Claude は答える機械から思考パートナーに変わります。"
+      },
+      {
+        "type": "header-two",
+        "text": "領域③ 機能：Claudeにしかない4個の使い方"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIdzFKabQAA-WX7.jpg",
+        "width": 2048,
+        "height": 1152
+      },
+      {
+        "type": "unstyled",
+        "text": "ここからは Claude にしかない、または Claude が ChatGPT より明らかに得意な 4 個の使い方です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "土台ができ、思想転換ができた状態でこの 4 個を使うと、出力の体感差が一気に出ます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Step 6：Style cloning (文体クローニング)",
+        "inlineStyleRanges": [
+          {
+            "length": 31,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude に文章を書かせると、デフォルトで Claude 風の文体になります。「ご検討のほどよろしくお願いいたします」のような丁寧すぎる定型句、英語っぽい論理展開、過度に整った構造。これらは AI が書いたと分かる特徴です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "3-5 個の自分の文章サンプルを渡すと、Claude はあなたの文体を分析してから書き始めるようになります。"
+      },
+      {
+        "type": "markdown",
+        "text": "```markdown\n以下に私が書いた社内向け文章 3 個を貼ります (議事録 / 経営会議資料 / 全社メール)。\n私の文体パターン (語彙 / 文長 / トーン / リズム / 避ける表現) を分析してください。\nサンプル 1 (議事録):\n[サンプル文章 1]\nサンプル 2 (経営会議資料):\n[サンプル文章 2]\nサンプル 3 (全社メール):\n[サンプル文章 3]\n分析が終わったら、これ以降の私のための文章は全て私の文体で書いてください。\nClaude のデフォルト調 (「ご検討のほどよろしくお願いいたします」等) は使わないでください。\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "これを Project Knowledge に保存しておくと、毎回貼り直す必要がありません。"
+      },
+      {
+        "type": "unstyled",
+        "text": "社内向けメールや議事録のドラフトを Claude に書かせる時、Claude のデフォルト文体ではなく、あなたの文体で書き出してくれるようになります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Step 7：Sparring (反論役の Claude)",
+        "inlineStyleRanges": [
+          {
+            "length": 29,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "ほとんどの方は Claude を「アイデアを補強してくれる相棒」として使っています。「このアイデアどう思う？」と聞くと、Claude は良い点を並べて、改善案を 2-3 個提示してくれます。気持ちのいい体験です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "これは思考パートナーとしては片手落ちです。Claude を本気で活用するなら、攻撃役として使ってください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここで重要なのが、critique (批評) と attack (攻撃) の違いです。critique は「ここが良くてここが悪い」で終わります。attack は「これは成立しない」「前提が間違っている」「これでは顧客は動かない」と本気で潰しにきます。後者がストレステストです。"
+      },
+      {
+        "type": "markdown",
+        "text": "```markdown\n以下のビジネス計画 / 提案を attack してください。\nあなたは私の最も厳しい審査員です。\n計画:\n[計画内容]\n前提:\n[前提]\n期待する成果:\n[成果]\nあなたの役割:\n- 前提が間違っている箇所を指摘する\n- 顧客が動かない理由を 3 個以上挙げる\n- 競合に負ける理由を 2 個以上挙げる\n- 3 年後に成り立たない理由を 1 個以上挙げる\n- 賛同・補強は一切しない (それは別の Claude に頼んだ時にやってもらう)\n最も厳しい立場から、本気で計画を潰しにかかってください。\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "Sparring は思考パートナーの本領発揮です。あなたのアイデアを本気で攻撃してくれる相棒は、現実では得難い存在です。意見を遠慮する取引先や、波風を立てたくない部下からは出てこない反論が、Claude からは出てきます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Step 8：Extended Thinking (思考モード)",
+        "inlineStyleRanges": [
+          {
+            "length": 32,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude.ai の chat 入力欄をよく見ると、脳のアイコンがあります。これをクリックして有効化すると、Claude は応答する前に推論に時間をかけるモードに切り替わります。「think step by step before responding」と入力に含めても同じことができます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "シンプルな質問には不要です。「明日の天気は？」「この単語の意味は？」レベルの質問でこのモードを使うとレスポンスが遅くなるだけです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "このモードが効くのは、複雑な経営判断、戦略分析、矛盾する複数の要因がある問題、難しい質問。元記事の表現を借りると「難しい質問での出力品質の差は significant (= 顕著)」です。難問への回答品質が体感レベルで違います。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude Code を使っている読者向け補足：Claude Code では plan モード (Shift+Tab で切替) や think harder というキーワードで同等の挙動になります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Step 9：Claude に Claude 用のプロンプトを書かせる",
+        "inlineStyleRanges": [
+          {
+            "length": 35,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "効果的なプロンプトの書き方が分からないとき、Claude 自身に書かせるのが最速です。Claude は自分自身を最大限に活用するプロンプトの設計方法を、私たちより詳しく知っています。"
+      },
+      {
+        "type": "markdown",
+        "text": "```markdown\n私が達成したい業務目標は以下です。\nあなたから最高の出力を引き出すためのプロンプトを設計してください。\n業務目標:\n[目標]\n頻度:\n[週次 / 月次 / 案件ベース]\n求める出力フォーマット:\n[フォーマット]\nこのプロンプトを私が日次でコピペできる定型プロンプトとして整形してください。\n変数 (毎回変わる部分) は [角括弧] で示してください。\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "「毎月の月次定例で使うプロンプト」「毎週の競合動向リサーチで使うプロンプト」「四半期ごとの戦略レビューで使うプロンプト」のように、定型業務をプロンプト化してストックすると、Claude を呼び出す心理的コストが下がります。"
+      },
+      {
+        "type": "header-two",
+        "text": "領域④ 節約：同じ課金で出力を1.5倍にする4個の設定"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIdzoM-bgAA3JWr.jpg",
+        "width": 1672,
+        "height": 941
+      },
+      {
+        "type": "unstyled",
+        "text": "ここからの 4 個は、出力品質を落とさずに Claude の使用量を抑える設定です。Claude Pro の月 3,000 円が体感では 4,500 円分以上の出力に変わります。Max プラン (月 15,000 円から 30,000 円) を使っている方ならもっと余裕が出ます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Step 10：出力の長さを指定する",
+        "inlineStyleRanges": [
+          {
+            "length": 18,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude のデフォルトは「適切と思う長さ」で書いてくれます。これは大体の場合、必要以上に長いです。読む時間、待つ時間、料金、すべて余分にかかります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "最初に長さを指定するだけで、トークン使用量は元記事の数字で 40% から 60% 削減されます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "「3 行で結論を」「500 字以内で」「箇条書き 5 つで」のように先に伝えるだけです。質問を書く前に、出力の上限を 1 行付け加える習慣をつけてください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Step 11：前置きを消す",
+        "inlineStyleRanges": [
+          {
+            "length": 14,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude のデフォルトは前置きから始まります。「Great question!」「Of course!」「ご質問ありがとうございます」「以下にご説明いたします」。本題ではないこれらの文字列を、毎回読まされています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Custom Instructions に次の 1 段落を追加してください。"
+      },
+      {
+        "type": "markdown",
+        "text": "```markdown\n応答ルール:\n1. 前置きを一切入れない (「Great question」「Of course」「Certainly」「ご質問ありがとうございます」「以下にご説明いたします」など全て禁止)\n2. 質問の言い換え (「つまり [質問の繰り返し] というご質問ですね」) は禁止\n3. 末尾の要約 (「以上をまとめると」「ご検討のほどよろしくお願いいたします」) は禁止\n4. 本題から始めて、本題で終わる\n5. 質問への回答は最初の 1 文で結論を出し、残りで根拠と補足を述べる\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "これを Project Instructions に追加すると、この Project 内のすべての応答が即答スタイルになります。1 回設定すれば永続します。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Step 12：毎回背景説明を打ち直さない",
+        "inlineStyleRanges": [
+          {
+            "length": 21,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "これは Step 1-3 (土台) の再強調です。もし毎回新しい chat で「うちは SaaS で社員 12 人で…」と打ち直しているなら、それは Project Knowledge と Custom Instructions に書くべき情報です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "すでに土台を設定した方は次の Step へ進んでください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "まだの方は領域① に戻って 15 分を投資してください。日次で生まれる「自己紹介を打ち直す時間」が、それ以降ゼロになります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Step 13：話題が変わったら新しいチャットを始める",
+        "inlineStyleRanges": [
+          {
+            "length": 27,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "1 つの chat の中で全く違う話題に切り替えると、Claude は前の会話を全部読みながら処理します。トークンを浪費しますし、前の話題の文脈が新しい話題に混入することもあります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "午前は会議資料、午後は採用面接準備、夜はビジョン策定、というように複数の業務がある場合は、それぞれ別の chat で立ち上げてください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Project は同じで構いません。Project Knowledge と Custom Instructions は全 chat に継承されるので、土台はそのまま使えます。"
+      },
+      {
+        "type": "header-two",
+        "text": "領域⑤ プロンプト：今日からコピペで使える5個のプロンプト"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIdz148bwAAjZl5.jpg",
+        "width": 2048,
+        "height": 1152
+      },
+      {
+        "type": "unstyled",
+        "text": "ここまでの 13 個のステップは、Claude を「思考パートナー化」するための環境設定でした。最後の 5 個は、その環境で今日から走らせる完成済みのプロンプトです。コピペして空欄を埋めるだけで動きます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Step 14：何でも理解する Feynman 法",
+        "inlineStyleRanges": [
+          {
+            "length": 25,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "難解な概念を、誰でも分かるレベルまで噛み砕いて理解したい時のプロンプトです。Feynman 法 (米国の物理学者 Richard Feynman が広めた学習法) は「アナロジーで説明できないものは理解していない」という考え方が出発点です。"
+      },
+      {
+        "type": "markdown",
+        "text": "```markdown\n私は [業界] の経営者です。\n以下の概念を、私が小学校 5 年生に説明できるレベルまで噛み砕いて教えてください。\n概念: [概念名]\n条件:\n- アナロジーを最低 2 個使う (日常生活の例で)\n- 専門用語を使う場合は必ず日常語に言い換える\n- 「結局これは○○のことだ」と 1 文で要約する\n- 私が翌日の経営会議で部下に説明できるレベルに整える\n───\n技術トレンド、新しい会計基準、競合の新サービスの仕組み、業界用語。どれも 5 分で「自分の言葉で説明できる」状態になります。\nStep 15：自分の旅行スタイルに合わせた旅行プラン\n出張、出張兼観光、家族旅行。テンプレ的な旅行プランではなく、自分の旅行スタイルに合わせた個別プランを作らせます。\n\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "技術トレンド、新しい会計基準、競合の新サービスの仕組み、業界用語。どれも 5 分で「自分の言葉で説明できる」状態になります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Step 15：自分の旅行スタイルに合わせた旅行プラン",
+        "inlineStyleRanges": [
+          {
+            "length": 27,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "出張、出張兼観光、家族旅行。テンプレ的な旅行プランではなく、自分の旅行スタイルに合わせた個別プランを作らせます。"
+      },
+      {
+        "type": "markdown",
+        "text": "```markdown\n私は [年齢] 歳の [職業]、[出張慣れ度合い]。\n以下の条件で出張兼観光プランを作ってください。\n日程: [出発日] から [日数] 日間\n行き先: [都市候補]\n予算: [予算] (フライト・宿込み)\n優先したいこと:\n- [優先事項 1]\n- [優先事項 2]\n- [優先事項 3]\n避けたいこと:\n- [回避事項 1]\n- [回避事項 2]\n出力形式:\n1. 推奨フライト + 宿のタイプ (5 つ星 / ビジネスホテル / etc)\n2. 日別タイムライン (移動時間を含む。詰め込みすぎない)\n3. 推奨レストラン 5 件 (1 食あたりの予算明示)\n4. 出張先で短時間で行ける観光スポット 3 件\n5. 想定外の事態への代替案 1 個\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "「Google 検索 → 旅行ブログ → 旅行サイト」の往復が消えます。1 個のプロンプトで、自分用に最適化された旅程が返ってきます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Step 16：月次 PL 分析",
+        "inlineStyleRanges": [
+          {
+            "length": 16,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "ここが本記事で経営者・事業責任者の方に最も使ってほしいプロンプトです。元記事は個人の家計分析の例で書かれていましたが、本記事では中小企業の月次 PL 分析に書き換えました。"
+      },
+      {
+        "type": "markdown",
+        "text": "```markdown\n添付の月次 PL データを分析してください。\n私の事業:\n- 事業内容: [事業内容]\n- 社員数: [社員数]\n- 月商規模: [月商]\n- 主要コスト構造: [主要コスト]\n分析項目:\n1. 各費目の前月比 + 異常値の特定\n2. 売上構成 (顧客セグメント別) の変化\n3. 利益率トレンド (粗利率 / 営業利益率 / 当期純利益率)\n4. キャッシュフローへの影響\n5. 来月の優先打ち手 (具体的なアクション 3 個、それぞれ影響額の見積もり付き)\n数字の表面だけでなく、「なぜそうなったか」の仮説まで踏み込んでください。\n確証がない数字には「推定」のマーカーを付けてください。\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "CSV を添付して送るだけで、経営会議のたたき台が 5 分でできあがります。経理担当者の作業時間が浮き、経営者は仮説検証に時間を使えるようになります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Step 17：個人的な思考パートナー",
+        "inlineStyleRanges": [
+          {
+            "length": 19,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "決断に迷っている時、人に相談すると相手の主観が混ざります。Claude は中立で、急かさず、判断軸を整理するのを手伝ってくれます。"
+      },
+      {
+        "type": "markdown",
+        "text": "```markdown\nあなたは私の思考パートナーです。\n私が今迷っていること:\n[迷っている内容]\n背景:\n[背景情報]\nこれまで検討した選択肢:\n- 選択肢 A: [説明]\n- 選択肢 B: [説明]\n気になっている点:\n[気になっている点]\nあなたの役割:\n- アドバイスを押し付けない\n- 私が見落としている前提・視点・選択肢を質問形式で引き出す\n- 質問は 1 回に 1 個。私の回答を待ってから次の質問へ\n- 最終的に自分で決断するための判断軸を整理する手伝いをする\n- 「あなたならどうする?」と聞かれた時のみ意見を述べる\n\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "これが思考パートナーの本来の使い方です。Claude が代わりに判断するのではなく、あなたが判断するための材料を整理する役を担います。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Step 18：ビジネスアイデアのストレステスト",
+        "inlineStyleRanges": [
+          {
+            "length": 24,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "新規事業、M&A、大型投資、組織変更。本格コミットの前に、最も厳しい立場から自分のアイデアを攻撃させてください。Sparring (Step 7) の応用です。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HId0RdebsAAEHxV.jpg",
+        "width": 1672,
+        "height": 941
+      },
+      {
+        "type": "unstyled",
+        "text": "このプロンプトは、社内ではなかなか出てこない反論を引き出してくれます。「KO 級のリスク」「想定外シナリオ」を事前に潰しておくと、本格投資後の後悔が減ります。"
+      },
+      {
+        "type": "header-two",
+        "text": "思考パートナーにしても、判断は手放さない"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HId0X6rbgAATAcc.jpg",
+        "width": 1672,
+        "height": 941
+      },
+      {
+        "type": "unstyled",
+        "text": "ここまで 18 個のステップを見てきました。最後に 1 つだけ境界を設けさせてください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude が思考パートナーになると、出力の説得力が一気に上がります。Sparring で反論を聞き、Extended Thinking で深く考えさせ、月次 PL 分析で仮説まで踏み込む。これらをやっていると、Claude の出した結論をそのまま採用したくなる瞬間が来ます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここが落とし穴です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "思考の補強と判断の代替は別物です。",
+        "inlineStyleRanges": [
+          {
+            "length": 17,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude は仮説生成、反論提示、視点拡張、データ整理で価値を出します。けれど最終判断はあなたが下します。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude が「来期は SaaS 領域から撤退すべき」と分析しても、その決定をするのはあなたであり、責任を負うのもあなたです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude が思考パートナーになるほど、判断の重みは増します。これまで自分で考えていた時は、考える時間がそのままブレーキでした。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude を使うと考える時間が短縮されます。短縮された時間で別のことに使う、というのが理想です。が、現実には「Claude がそう言ったから」で意思決定を流す方向に圧力がかかります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "意思決定の責任、リスクの引き受け、社員や取引先や家族への影響、これらは Claude には引き受けられません。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude が判断材料を整理する作業を担い、判断という行為そのものはあなたが担う。この役割分担を意識しないと、Claude の出力に流された経営判断が起きます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "思考パートナーは「考えなくていい代行業者」ではなく「考える時間を増やす相棒」です。"
+      },
+      {
+        "type": "header-two",
+        "text": "1度設定する人と毎回ゼロから話しかける人の差"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここまで 18 個のステップを駆け抜けてきました。明日から具体的に何をするか、最後に整理します。"
+      },
+      {
+        "type": "unstyled",
+        "text": "今日まず Project を 1 個作って、自己紹介テンプレートを Knowledge に貼ってください。所要時間は 15 分です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "明日 Custom Instructions を生成して Instructions に貼ってください。これで土台 (Step 1-3) が完了します。1 週間で思想転換 (Step 4-5) が習慣になり、1 か月で 18 個全部が手に入ります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "次に Claude を開いた時に、また自分の背景を打ち直そうとしたら、それは Custom Instructions に書くべき情報です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude を思考パートナーにできた人と、毎回ゼロから話しかける人で、同じ Claude Pro の月 3,000 円でも出力品質が桁違いに変わります。違いは才能でもセンスでもなく、1 度の設定だけです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここまでお読みいただきありがとうございました。最後に本記事の要点をまとめます。"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "Claude は「質問する窓口」ではなく「思考パートナー」として設計されている。質問するだけで使うと本来の力の 90% が眠ったままになる"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "領域① 土台：Project 作成 + 自己紹介 + Custom Instructions の 3 個で、Claude が「あなたが誰か」を毎セッション思い出す"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "領域② 思想転換：Claude を検索エンジンではなく思考パートナーとして使う / まず Claude に質問させる、の 2 個で出力品質が変わる"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "領域③ 機能：Style cloning / Sparring / Extended Thinking / Claude に Claude 用プロンプトを書かせる、の 4 個で ChatGPT との差が出る"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "領域④ 節約：出力長指定 / 前置き削除 / Project 活用 / 新チャット、の 4 個で同じ課金でトークン 40% から 60% 削減"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "領域⑤ コピペプロンプト 5 個：Feynman 法 / 旅行プラン / 月次 PL 分析 / 思考パートナー / ビジネスアイデア審査。今日からそのまま動く"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "ただし思考の補強と判断の代替は別物。判断は手放さない"
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "unstyled",
+        "text": "この記事が少しでも参考になった方へ。"
+      },
+      {
+        "type": "unstyled",
+        "text": "東大 Claude Code 研究所（ @ClaudeCode_UT ）は、大手企業の業務に Claude Code をどう入れるかを東大生チームで毎日検証しているアカウントです。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HId1MWVbgAA3S3r.jpg",
+        "width": 1194,
+        "height": 1046
+      },
+      {
+        "type": "unstyled",
+        "text": "■ 実務で使える Claude Code スキルの無料公開\n■ ClaudeCodeとCodexの比較解説\n■ 海外の AI 一次情報を、日本のビジネス文脈に翻訳・再構成"
+      },
+      {
+        "type": "unstyled",
+        "text": "海外の最新AI活用事例を毎日発信しています。次の記事もお楽しみに。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ご興味を持っていただけた方は、ぜひフォローしてチェックしてみてください❗️"
+      }
+    ]
+  },
+  "status": "success",
+  "msg": "success",
+  "_handle": "ClaudeCode_UT"
+}

@@ -1,0 +1,1065 @@
+{
+  "article": {
+    "id": "QXJ0aWNsZUVudGl0eToyMDU4ODQ1MTY3MjczMzM2ODMy",
+    "author": {
+      "type": "user",
+      "userName": "heynavtoor",
+      "url": "https://x.com/heynavtoor",
+      "twitterUrl": "https://twitter.com/heynavtoor",
+      "id": "1916904726295453696",
+      "name": "Nav Toor",
+      "isVerified": false,
+      "isBlueVerified": true,
+      "verifiedType": null,
+      "profilePicture": "https://pbs.twimg.com/profile_images/2017556052938788865/3E6CcSFP_normal.jpg",
+      "coverPicture": "https://pbs.twimg.com/profile_banners/1916904726295453696/1769272939",
+      "description": "Helping you master AI daily with step-by-step AI guides, latest news, & practical tools • DM for Collabs",
+      "location": "Free Products + Sponsorships →",
+      "followers": 140851,
+      "following": 251,
+      "status": "",
+      "canDm": true,
+      "canMediaTag": true,
+      "createdAt": "Mon Apr 28 17:18:09 +0000 2025",
+      "entities": {
+        "description": {},
+        "url": {
+          "urls": [
+            {
+              "display_url": "linktr.ee/navtoor",
+              "expanded_url": "https://linktr.ee/navtoor",
+              "indices": [
+                0,
+                23
+              ],
+              "url": "https://t.co/b36GQWSNBh"
+            }
+          ]
+        }
+      },
+      "fastFollowersCount": 0,
+      "favouritesCount": 5357,
+      "hasCustomTimelines": false,
+      "isTranslator": false,
+      "mediaCount": 937,
+      "statusesCount": 6195,
+      "withheldInCountries": [],
+      "affiliatesHighlightedLabel": {},
+      "possiblySensitive": false,
+      "pinnedTweetIds": [
+        "2044433988312560051"
+      ],
+      "profile_bio": {},
+      "isAutomated": false,
+      "automatedBy": null
+    },
+    "replyCount": 9,
+    "likeCount": 78,
+    "quoteCount": 0,
+    "viewCount": "10079",
+    "createdAt": "Mon May 25 10:46:45 +0000 2026",
+    "title": "How to Run Claude Code on Your Laptop Completely Free ",
+    "preview_text": "Most coding tools want your credit card before they let you type one line.\nSave this :)\nYou can run the real Claude Code CLI on your laptop right now. No API key. No paid plan. No internet after the",
+    "cover_media_img_url": "https://pbs.twimg.com/media/HJKMV1ZbIAAnGXS.jpg",
+    "contents": [
+      {
+        "type": "unstyled",
+        "text": "Most coding tools want your credit card before they let you type one line."
+      },
+      {
+        "type": "unstyled",
+        "text": "Save this :)"
+      },
+      {
+        "type": "unstyled",
+        "text": "You can run the real Claude Code CLI on your laptop right now. No API key. No paid plan. No internet after the first download. Same Claude Code you already know. Same file editing. Same tool calls. Same CLAUDE.md support. But the brain runs on your machine."
+      },
+      {
+        "type": "unstyled",
+        "text": "In January 2026, Ollama shipped native support for the Anthropic Messages API. That means Claude Code can talk straight to any model running on your laptop. No proxy. No hack. Official."
+      },
+      {
+        "type": "unstyled",
+        "text": "You get 80 to 90 percent of the quality of Claude Opus at zero percent of the cost."
+      },
+      {
+        "type": "unstyled",
+        "text": "This guide is the full setup from scratch. Ten minutes. Five steps. By the end you will have Claude Code running free, forever."
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "header-two",
+        "text": "Phase 0: The Forbidden Frame",
+        "inlineStyleRanges": [
+          {
+            "length": 28,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Nobody in the AI world wants you to know this."
+      },
+      {
+        "type": "unstyled",
+        "text": "Anthropic wants you on Claude Max at one hundred to two hundred dollars a month. Heavy API users spend sixty to two hundred a month on tokens. Every file read burns money. Every tool call costs. The meter is always running."
+      },
+      {
+        "type": "unstyled",
+        "text": "Then in January, Ollama shipped the one update that changed it all. Native Anthropic API support. Suddenly Claude Code, the official CLI from Anthropic, could point at a free local model."
+      },
+      {
+        "type": "unstyled",
+        "text": "The math is wild. Twelve months of Claude Max is two thousand four hundred dollars. The local stack costs zero. And you keep using the exact same tool."
+      },
+      {
+        "type": "unstyled",
+        "text": "You are not paying for the CLI. You are paying for the brain on the other end. Swap the brain and your bill drops to zero."
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "header-two",
+        "text": "Phase 1: The Stack",
+        "inlineStyleRanges": [
+          {
+            "length": 18,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Three pieces. That is all you need."
+      },
+      {
+        "type": "unstyled",
+        "text": "Piece 1: Ollama. The engine that runs models on your laptop. One command installs it. You need version 0.14 or later. That is the version with native Claude Code support.",
+        "inlineStyleRanges": [
+          {
+            "length": 16,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Piece 2: Claude Code. The real, official CLI from Anthropic. You install it once with npm. It looks the same. It works the same.",
+        "inlineStyleRanges": [
+          {
+            "length": 21,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Piece 3: A free coding model. Five strong picks in 2026:",
+        "inlineStyleRanges": [
+          {
+            "length": 29,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "- Qwen 3 Coder 30B. Best overall. Needs 32GB RAM or more.",
+        "inlineStyleRanges": [
+          {
+            "length": 17,
+            "offset": 2,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "- Qwen 3 Coder 14B. The sweet spot. Runs on 16GB.",
+        "inlineStyleRanges": [
+          {
+            "length": 17,
+            "offset": 2,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "- GLM 4.7 Flash. 128K context. Great tool calling. 16GB.",
+        "inlineStyleRanges": [
+          {
+            "length": 14,
+            "offset": 2,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "- DeepSeek Coder V2. Trained for code. Strong privacy pick. 16GB.",
+        "inlineStyleRanges": [
+          {
+            "length": 18,
+            "offset": 2,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "- Gemma 4 12B. Light and fast. Runs on 8GB.",
+        "inlineStyleRanges": [
+          {
+            "length": 12,
+            "offset": 2,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "If you are not sure, pick Qwen 3 Coder 14B. It works on most machines.",
+        "inlineStyleRanges": [
+          {
+            "length": 16,
+            "offset": 26,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "IMAGE 1   The Stack: Ollama + Local Coding CLI + Free Model",
+        "inlineStyleRanges": [
+          {
+            "length": 59,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HJKDFJlaYAAzAKi.jpg",
+        "width": 1254,
+        "height": 1254
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "header-two",
+        "text": "Phase 2: The 10-Minute Setup",
+        "inlineStyleRanges": [
+          {
+            "length": 28,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Open your terminal. Copy these commands."
+      },
+      {
+        "type": "unstyled",
+        "text": "Step 1. Install Ollama.",
+        "inlineStyleRanges": [
+          {
+            "length": 23,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "On Mac you can also grab the app from ollama.com. On Windows, download the installer."
+      },
+      {
+        "type": "unstyled",
+        "text": "Check the version:"
+      },
+      {
+        "type": "markdown",
+        "text": "```\nollama --version\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "You need 0.14 or higher. If yours is older, run the install command again to update."
+      },
+      {
+        "type": "unstyled",
+        "text": "Step 2. Pull a model.",
+        "inlineStyleRanges": [
+          {
+            "length": 21,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "markdown",
+        "text": "```\nollama pull qwen3-coder:14b\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "This downloads about ten gigabytes. Get a coffee. After this, you never need internet again."
+      },
+      {
+        "type": "unstyled",
+        "text": "Step 3. Install Claude Code.",
+        "inlineStyleRanges": [
+          {
+            "length": 28,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "markdown",
+        "text": "```\nnpm install -g @anthropic-ai/claude-code\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "Check it:"
+      },
+      {
+        "type": "markdown",
+        "text": "```\nclaude --version\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "Step 4. Point Claude Code at your local model.",
+        "inlineStyleRanges": [
+          {
+            "length": 46,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Set three things:"
+      },
+      {
+        "type": "markdown",
+        "text": "```\nexport ANTHROPIC_BASE_URL=\"http://localhost:11434\"\nexport ANTHROPIC_AUTH_TOKEN=\"ollama\"\nexport ANTHROPIC_API_KEY=\"\"\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "Then run Claude Code with your model:"
+      },
+      {
+        "type": "markdown",
+        "text": "```\ncd ~/your-project\nclaude --model qwen3-coder:14b\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "That is it. Claude Code opens. It looks the same. But the brain is now your laptop."
+      },
+      {
+        "type": "unstyled",
+        "text": "To make this stick forever, add the three lines to your shell config:"
+      },
+      {
+        "type": "markdown",
+        "text": "```\necho 'export ANTHROPIC_BASE_URL=\"http://localhost:11434\"' >> ~/.zshrc\necho 'export ANTHROPIC_AUTH_TOKEN=\"ollama\"' >> ~/.zshrc\necho 'export ANTHROPIC_API_KEY=\"\"' >> ~/.zshrc\nsource ~/.zshrc\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "Use `.bashrc` if you are on bash instead of zsh."
+      },
+      {
+        "type": "unstyled",
+        "text": "Step 5. Test it.",
+        "inlineStyleRanges": [
+          {
+            "length": 16,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "In any project folder, run Claude Code. Then ask:"
+      },
+      {
+        "type": "unstyled",
+        "text": "- \"Read the README and tell me what this project does.\""
+      },
+      {
+        "type": "unstyled",
+        "text": "- \"Find all TODO comments in this codebase.\""
+      },
+      {
+        "type": "unstyled",
+        "text": "- \"Write a unit test for the main function.\""
+      },
+      {
+        "type": "unstyled",
+        "text": "- \"Create a new file called hello.py with a small Flask app.\""
+      },
+      {
+        "type": "unstyled",
+        "text": "If it reads files, writes code, and runs commands, you are done."
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HJKDq6qbEAATTzj.jpg",
+        "width": 1086,
+        "height": 1448
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "header-two",
+        "text": "Phase 3: Hardware Check",
+        "inlineStyleRanges": [
+          {
+            "length": 23,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Your laptop tells you which model to run. Be honest with yourself."
+      },
+      {
+        "type": "unstyled",
+        "text": "8GB RAM (older laptop). Run Gemma 4 12B at q4. Fast but limited. Good for small edits.",
+        "inlineStyleRanges": [
+          {
+            "length": 23,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "16GB RAM (most laptops). Run Qwen 3 Coder 14B or GLM 4.7 Flash. The sweet spot. Real coding work.",
+        "inlineStyleRanges": [
+          {
+            "length": 24,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "32GB RAM (M2 Pro, M3 Pro, M4 Pro). Run Qwen 3 Coder 30B. Best local quality. Handles long sessions.",
+        "inlineStyleRanges": [
+          {
+            "length": 34,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "64GB or more (M3 Max, M4 Max, workstation). Run the biggest models. Nearly cloud quality.",
+        "inlineStyleRanges": [
+          {
+            "length": 43,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "NVIDIA GPU with 24GB VRAM. Same models, way faster. A 3090 or 4090 is the dream rig.",
+        "inlineStyleRanges": [
+          {
+            "length": 26,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "If your machine feels slow, try a quantized model:"
+      },
+      {
+        "type": "markdown",
+        "text": "```\nollama pull qwen3-coder:14b-q4_K_M\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "Quantized models trade a tiny bit of quality for a big speed boost. Most people cannot tell."
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HJKEUpyaEAA4xTI.jpg",
+        "width": 1586,
+        "height": 992
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "header-two",
+        "text": "Phase 4: The 5 Daily Workflows",
+        "inlineStyleRanges": [
+          {
+            "length": 30,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "This is where local actually wins. Five jobs to hand to your local Claude every day."
+      },
+      {
+        "type": "unstyled",
+        "text": "Workflow 1: Codebase questions.",
+        "inlineStyleRanges": [
+          {
+            "length": 31,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "You join a new repo. You have no idea what does what. Open Claude Code in the folder. Ask plain questions. \"Where does login happen? What does this function do? Why is this file so big?\""
+      },
+      {
+        "type": "unstyled",
+        "text": "Local is great at this. It reads. It explains. You learn a new codebase in an hour, not a week. And it costs zero."
+      },
+      {
+        "type": "unstyled",
+        "text": "Workflow 2: Multi-file refactor.",
+        "inlineStyleRanges": [
+          {
+            "length": 32,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Ask for a clean rename or extract across many files. Claude Code edits them all. Auto-commits to Git. If the change is bad, one `git reset` rolls it back."
+      },
+      {
+        "type": "unstyled",
+        "text": "Grunt work that used to eat hours. Now it takes minutes. Free."
+      },
+      {
+        "type": "unstyled",
+        "text": "Workflow 3: Test writing.",
+        "inlineStyleRanges": [
+          {
+            "length": 25,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Point Claude at a file. \"Write unit tests for every public function.\" It does. Then run them. It fixes the failures."
+      },
+      {
+        "type": "unstyled",
+        "text": "This is the single biggest win for local. Test writing is repetitive, boring, and high volume. Perfect for an unlimited free model."
+      },
+      {
+        "type": "unstyled",
+        "text": "Workflow 4: Overnight runs.",
+        "inlineStyleRanges": [
+          {
+            "length": 27,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Long jobs. Big test suites. Boring data tasks. Write a one-shot prompt. Press enter. Go to sleep. Wake up. Work is done."
+      },
+      {
+        "type": "unstyled",
+        "text": "You cannot do this on Claude Max. The rate limits cut you off. Local has no rate limit. Ever."
+      },
+      {
+        "type": "unstyled",
+        "text": "Workflow 5: Sensitive code.",
+        "inlineStyleRanges": [
+          {
+            "length": 27,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Client work. Patents. Internal tools. NDA files. You should never upload these to a cloud model. With local, the code never leaves your machine. Privacy by default."
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "header-two",
+        "text": "Phase 5: The Hybrid Workflow",
+        "inlineStyleRanges": [
+          {
+            "length": 28,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "The smartest devs do not pick local OR cloud. They use both. This is the play that drops your bill 90 percent."
+      },
+      {
+        "type": "unstyled",
+        "text": "Local (free) for the 80 percent. Reading code, writing tests, simple edits, bug fixes, doc writing, code review. Most of your day.",
+        "inlineStyleRanges": [
+          {
+            "length": 32,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Cloud (paid) for the 20 percent. Big architecture calls, large multi-file refactors, frontier reasoning. The hard stuff.",
+        "inlineStyleRanges": [
+          {
+            "length": 32,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "To switch is one command. Run local Claude:"
+      },
+      {
+        "type": "markdown",
+        "text": "```\nclaude --model qwen3-coder:14b\n\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "When you need cloud Claude, unset the local vars in a new terminal:"
+      },
+      {
+        "type": "markdown",
+        "text": "```\nunset ANTHROPIC_BASE_URL\nunset ANTHROPIC_AUTH_TOKEN\nclaude\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "Now you are back on Anthropic servers with full Opus power. Two tabs. Two brains. One CLI."
+      },
+      {
+        "type": "unstyled",
+        "text": "This hybrid cuts a heavy user from two hundred a month to about twenty. Same quality on the tasks that matter. Zero quality loss on the tasks that do not."
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "header-two",
+        "text": "Phase 6: When Local Beats Cloud",
+        "inlineStyleRanges": [
+          {
+            "length": 31,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Five tasks where local wins flat out."
+      },
+      {
+        "type": "unstyled",
+        "text": "Privacy. Client work, NDA files, internal code. Local never touches the internet.",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Offline. Plane, train, coffee shop with bad Wi-Fi. Local keeps coding.",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Unlimited. No rate limits. No daily caps. No \"you are sending too many requests\" walls. Run it all night.",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Batch jobs. Cleaning data, renaming files, mass refactors, test sweeps. Cloud bills per token. Local is free.",
+        "inlineStyleRanges": [
+          {
+            "length": 11,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Speed for small tasks. Local first token is one to two seconds. Cloud on a busy day can take nine to thirty-five seconds. Local feels snappier for quick fixes.",
+        "inlineStyleRanges": [
+          {
+            "length": 22,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HJKE4NHbYAAOra7.jpg",
+        "width": 1161,
+        "height": 1355
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "header-two",
+        "text": "Phase 7: When You Still Want Claude",
+        "inlineStyleRanges": [
+          {
+            "length": 35,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "I still pay for Claude. Here is when cloud wins."
+      },
+      {
+        "type": "unstyled",
+        "text": "Long open-ended runs. A 14B or 32B local model can lose the thread after a long back and forth. Opus holds it better.",
+        "inlineStyleRanges": [
+          {
+            "length": 21,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Very long context. Anything over 80K tokens degrades on local. Opus is sharper at 200K.",
+        "inlineStyleRanges": [
+          {
+            "length": 18,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Hardest reasoning. Math proofs. Tricky bugs. Multi-hop logic. Opus still wins.",
+        "inlineStyleRanges": [
+          {
+            "length": 18,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Vision. Local vision is getting close but still trails Claude on screenshots and diagrams.",
+        "inlineStyleRanges": [
+          {
+            "length": 7,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "The smart play is hybrid. Local by default. Escalate to cloud when stuck."
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "header-two",
+        "text": "The Zero-Hardware Escape Hatch",
+        "inlineStyleRanges": [
+          {
+            "length": 30,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "If your laptop is too small to run a real model, there is one more option. Ollama now supports cloud-hosted open source models. You still use Claude Code. You still pay zero. But the model runs on a remote server."
+      },
+      {
+        "type": "markdown",
+        "text": "```\nollama launch claude --model qwen3.5:cloud\n\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "These rival Claude Sonnet in quality. The trade-off: your code does leave your machine, so this does not solve the privacy use case. But for pure savings, it is the easiest path. Claude Code in under five minutes. Zero hardware needed."
+      },
+      {
+        "type": "blockquote",
+        "text": "Cloud models are renting. Local models are owning."
+      },
+      {
+        "type": "unstyled",
+        "text": "The Math",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Let me show you the dollar lens."
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude Max: $100 to $200 a month. $1,200 to $2,400 a year.",
+        "inlineStyleRanges": [
+          {
+            "length": 11,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude Code with API for a heavy user: $60 to $200 a month. $720 to $2,400 a year.",
+        "inlineStyleRanges": [
+          {
+            "length": 38,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Cursor Pro: $40 a month. $480 a year.",
+        "inlineStyleRanges": [
+          {
+            "length": 11,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Your local stack: $0 a month. $0 a year.",
+        "inlineStyleRanges": [
+          {
+            "length": 17,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "A used Mac mini with 24GB sells for under one thousand bucks. It pays for itself in five months versus Max alone. After that, every dollar is yours."
+      },
+      {
+        "type": "unstyled",
+        "text": "Even if you keep cloud Claude for the hard 20 percent, the hybrid drops a heavy user from two hundred a month to about twenty. That is a ninety percent cut."
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HJKFbp7aEAAthib.jpg",
+        "width": 1355,
+        "height": 1161
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "header-two",
+        "text": "Before and After",
+        "inlineStyleRanges": [
+          {
+            "length": 16,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Before this setup, every tool call burned tokens. You hesitated to let Claude explore your repo because each look cost money."
+      },
+      {
+        "type": "unstyled",
+        "text": "After, exploration is free. Let Claude read every file. Let it run every test. Let it search the whole codebase. No meter."
+      },
+      {
+        "type": "unstyled",
+        "text": "Before, rate limits broke long sessions. You hit the cap mid-task and lost context."
+      },
+      {
+        "type": "unstyled",
+        "text": "After, no rate limits. Run Claude Code for twelve hours straight. Nobody stops you."
+      },
+      {
+        "type": "unstyled",
+        "text": "Before, your code went to Anthropic servers. Every file Claude read was sent to the cloud."
+      },
+      {
+        "type": "unstyled",
+        "text": "After, nothing leaves your machine. Your code stays on your laptop. Full privacy."
+      },
+      {
+        "type": "unstyled",
+        "text": "That is the real change. Not just free. Free, unlimited, private, and offline."
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "header-two",
+        "text": "The Persona Block",
+        "inlineStyleRanges": [
+          {
+            "length": 17,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "You are not the user the AI labs want."
+      },
+      {
+        "type": "unstyled",
+        "text": "You are the builder who does not want to be milked for two hundred a month forever. You read README files. You like terminals. You see a GitHub repo and think \"I can run this myself.\""
+      },
+      {
+        "type": "unstyled",
+        "text": "This guide is for you. Not the casual user. Not the manager. For the maker."
+      },
+      {
+        "type": "unstyled",
+        "text": "If that sounds right, the local stack is your edge. While other people pay rent on a brain, you own one."
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "header-two",
+        "text": "The Uncomfortable Truth",
+        "inlineStyleRanges": [
+          {
+            "length": 23,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Open-source coding models are closing the gap fast."
+      },
+      {
+        "type": "unstyled",
+        "text": "In 2023, the best local model was a joke next to GPT-4. In 2024, it was decent. In 2025, Qwen 2.5 Coder got within five percent of Claude. In 2026, Qwen 3 Coder and DeepSeek V3 hit 80 to 90 percent of Opus on real work."
+      },
+      {
+        "type": "unstyled",
+        "text": "By 2027, local will match frontier on most daily tasks. By 2028, the gap will be tiny."
+      },
+      {
+        "type": "unstyled",
+        "text": "You have about 18 months. That is the window where running local is still a slight edge, not the default. After that, everyone will do it. The clout you get from being early will be gone."
+      },
+      {
+        "type": "unstyled",
+        "text": "Open your terminal. Install Ollama. Pull a model. Set three variables. Run Claude Code."
+      },
+      {
+        "type": "unstyled",
+        "text": "Ten minutes from now, you will have the same tool that costs other people two hundred a month running for zero. Forever."
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HJKGFQXawAE2kG4.jpg",
+        "width": 1355,
+        "height": 1161
+      },
+      {
+        "type": "unstyled",
+        "text": "hope this was useful. Nav ❤️\n\nDo follow\n\nThanks!"
+      }
+    ]
+  },
+  "status": "success",
+  "msg": "success",
+  "_handle": "heynavtoor"
+}

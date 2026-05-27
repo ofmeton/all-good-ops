@@ -1,0 +1,1065 @@
+{
+  "article": {
+    "id": "QXJ0aWNsZUVudGl0eToyMDU1MDMxNzIxNDgyMTQxNjk2",
+    "author": {
+      "type": "user",
+      "userName": "Codestudiopjbk",
+      "url": "https://x.com/Codestudiopjbk",
+      "twitterUrl": "https://twitter.com/Codestudiopjbk",
+      "id": "2048622181790470144",
+      "name": "Codex Studio",
+      "isVerified": false,
+      "isBlueVerified": true,
+      "verifiedType": null,
+      "profilePicture": "https://pbs.twimg.com/profile_images/2048623292484136960/-bDB5XH6_normal.jpg",
+      "coverPicture": "https://pbs.twimg.com/profile_banners/2048622181790470144/1777265728",
+      "description": "Codexガチ勢３人で運営｜実務レベルのCLI活用・自動化を毎日発信｜大学院生・ポスドク対象の開発プログラム参加｜賞金30万円獲得｜現在は上場企業とAIエージェントを共同開発中｜AI時代はコンテキスト/ナレッジ管理が９割｜組織全体への「 Codex × Obsidian 」の導入は下のHPからご相談ください👇",
+      "location": "サイトはこちら👉",
+      "followers": 8836,
+      "following": 10,
+      "status": "",
+      "canDm": true,
+      "canMediaTag": true,
+      "createdAt": "Mon Apr 27 04:37:22 +0000 2026",
+      "entities": {
+        "description": {},
+        "url": {
+          "urls": [
+            {
+              "display_url": "plai-ai.com",
+              "expanded_url": "http://plai-ai.com",
+              "indices": [
+                0,
+                23
+              ],
+              "url": "https://t.co/8pM3Az1DRu"
+            }
+          ]
+        }
+      },
+      "fastFollowersCount": 0,
+      "favouritesCount": 485,
+      "hasCustomTimelines": false,
+      "isTranslator": false,
+      "mediaCount": 157,
+      "statusesCount": 238,
+      "withheldInCountries": [],
+      "affiliatesHighlightedLabel": {},
+      "possiblySensitive": false,
+      "pinnedTweetIds": [
+        "2058552181763309605"
+      ],
+      "profile_bio": {},
+      "isAutomated": false,
+      "automatedBy": null
+    },
+    "replyCount": 2,
+    "likeCount": 179,
+    "quoteCount": 16,
+    "viewCount": "130333",
+    "createdAt": "Thu May 14 21:42:19 +0000 2026",
+    "title": "【保存版】Codexをスマホで使うための設定方法",
+    "preview_text": "今日、開発環境の常識が変わりました。ついに、Codexがスマホから使えるようになりました。これによって、外出先でも、移動中でも、ベッドの上でも、スマホから自分のPC上で動くCodexに指示を出し、ビジネス開発・ア",
+    "cover_media_img_url": "https://pbs.twimg.com/media/HITzmwlaoAE54Mt.jpg",
+    "contents": [
+      {
+        "type": "unstyled",
+        "text": "今日、開発環境の常識が変わりました。ついに、Codexがスマホから使えるようになりました。これによって、外出先でも、移動中でも、ベッドの上でも、スマホから自分のPC上で動くCodexに指示を出し、ビジネス開発・アプリ開発・修正作業・レビューまで進められるようになりました。ただし、実際に触ってみると、最初の設定で詰まる人がかなり出そうです。しかも現時点では、公式の説明もそこまで細かくありません。",
+        "inlineStyleRanges": [
+          {
+            "length": 18,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "なので今回、誰でも迷わずCodexをスマホで使い始められるように、初期設定の流れを爆速で記事にまとめました👇"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIT0Ecya0AAvEH5.jpg",
+        "width": 1920,
+        "height": 1080
+      },
+      {
+        "type": "unstyled",
+        "text": "この記事を見ながら進めれば、最短でスマホからCodexを操作できる状態まで持っていけます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "では、さっそく設定していきましょう。"
+      },
+      {
+        "type": "unstyled",
+        "text": "結論から言うと、条件が揃っていればCodex Mobileは今から使えます。",
+        "inlineStyleRanges": [
+          {
+            "length": 30,
+            "offset": 8,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "でも、通常Codex Mobileを使おうとしたときに、ChatGPTアプリ側で"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HITzuiKbQAANl0-.jpg",
+        "width": 1170,
+        "height": 2532
+      },
+      {
+        "type": "unstyled",
+        "text": "「デスクトップアプリを待っています」\n\nのような画面が出て、そこからどうしたらいいの😱ってなる人が一定数いると思ったので作りました。"
+      },
+      {
+        "type": "header-two",
+        "text": "まず大前提：Codex Mobileはスマホ単体で動くものではない"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIT2WRkb0AASamU.jpg",
+        "width": 1672,
+        "height": 941
+      },
+      {
+        "type": "unstyled",
+        "text": "最初にここを理解しておくと、かなり迷いにくくなります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Codex Mobileは、スマホの中だけでCodexを動かす機能ではありません。"
+      },
+      {
+        "type": "unstyled",
+        "text": "イメージとしては、"
+      },
+      {
+        "type": "unstyled",
+        "text": "スマホのChatGPTアプリ\n↓\nMac上で動いているCodexアプリに接続\n↓\nMacの中の作業をスマホから操作する\n"
+      },
+      {
+        "type": "unstyled",
+        "text": "という仕組みです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "つまり、スマホ側にCodex Mobileの画面が出ていても、Mac側にCodexのデスクトップアプリが入っていないと接続できません。",
+        "inlineStyleRanges": [
+          {
+            "length": 36,
+            "offset": 31,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-one",
+        "text": "最初の分岐：Codexのデスクトップアプリを入れているか"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIT1U-ebIAAA6L7.png",
+        "width": 590,
+        "height": 332
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIT2bW8bYAAcTEU.jpg",
+        "width": 1672,
+        "height": 941
+      },
+      {
+        "type": "unstyled",
+        "text": "まず、ここを確認してください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "MacにCodexのデスクトップアプリを入れていますか？\n"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここで手順が分かれます。"
+      },
+      {
+        "type": "header-two",
+        "text": "パターンA：Codexのデスクトップアプリをまだ入れていない人"
+      },
+      {
+        "type": "unstyled",
+        "text": "この場合は、まずMacにCodexのデスクトップアプリをダウンロードする必要があります。",
+        "inlineStyleRanges": [
+          {
+            "length": 36,
+            "offset": 8,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "スマホ側でCodexを開いても、Mac側に接続先がなければ、"
+      },
+      {
+        "type": "unstyled",
+        "text": "デスクトップアプリを待っています\n"
+      },
+      {
+        "type": "unstyled",
+        "text": "の画面から進みません。"
+      },
+      {
+        "type": "unstyled",
+        "text": "そのため、まずやることはこれです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "1. MacでCodexのデスクトップアプリをダウンロードする\n2. Macにインストールする\n3. Codexアプリを開く\n4. ChatGPTアカウントでログインする\n5. 作業したいフォルダを選ぶ\n"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここまでできたら、次の手順に進みます。"
+      },
+      {
+        "type": "header-two",
+        "text": "パターンB：すでにCodexのデスクトップアプリを入れている人"
+      },
+      {
+        "type": "unstyled",
+        "text": "すでにCodexアプリを入れている人は、次にアプリが最新版かどうかを確認してください。",
+        "inlineStyleRanges": [
+          {
+            "length": 11,
+            "offset": 22,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "MacのCodexアプリを開いたとき、右上に"
+      },
+      {
+        "type": "unstyled",
+        "text": "更新\n"
+      },
+      {
+        "type": "unstyled",
+        "text": "という表示が出ている場合があります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "これが出ている場合は、必ずその「更新」ボタンを押してください。",
+        "inlineStyleRanges": [
+          {
+            "length": 20,
+            "offset": 11,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "ここを押していないと、Codex Mobileの接続機能がうまく反映されず、スマホ側で"
+      },
+      {
+        "type": "unstyled",
+        "text": "デスクトップアプリを待っています\n"
+      },
+      {
+        "type": "unstyled",
+        "text": "のまま止まる可能性があります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "かなり見落としやすいですが、ここが重要です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Mac版Codexアプリ右上に「更新」が出ていたら、まず押す\n"
+      },
+      {
+        "type": "unstyled",
+        "text": "これをやってから次に進んでください。"
+      },
+      {
+        "type": "header-one",
+        "text": "ここから実際の接続手順"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここからは、Codexアプリをすでに入れている人も、今インストールした人も共通です。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIT2jLWagAAGMG9.jpg",
+        "width": 1672,
+        "height": 941
+      },
+      {
+        "type": "header-two",
+        "text": "手順1：スマホのChatGPTアプリを最新版にする"
+      },
+      {
+        "type": "unstyled",
+        "text": "まず、スマホ側のChatGPTアプリを最新版にしてください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "App StoreでChatGPTを開き、アップデートが出ている場合は更新します。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Codex MobileはChatGPTアプリの中から使うので、アプリが古いとCodexの項目が出なかったり、接続画面から進まなかったりする可能性があります。"
+      },
+      {
+        "type": "header-two",
+        "text": "手順2：スマホ側で「Codex」を開く"
+      },
+      {
+        "type": "unstyled",
+        "text": "ChatGPTアプリを最新版にしたら、スマホ側でChatGPTアプリを開きます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "その中にある"
+      },
+      {
+        "type": "unstyled",
+        "text": "Codex\n"
+      },
+      {
+        "type": "unstyled",
+        "text": "を押してください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Codexの画面に入ると、Codex Mobileを接続するための案内が出ます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "そこで、"
+      },
+      {
+        "type": "unstyled",
+        "text": "Codex Mobileを接続する\n"
+      },
+      {
+        "type": "unstyled",
+        "text": "のようなボタンを押します。"
+      },
+      {
+        "type": "header-two",
+        "text": "手順3：「デスクトップアプリを待っています」と表示される"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIT1chqaAAAtqca.jpg",
+        "width": 1170,
+        "height": 2532
+      },
+      {
+        "type": "unstyled",
+        "text": "ここで、多くの人がこの画面になります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "デスクトップアプリを待っています\n"
+      },
+      {
+        "type": "unstyled",
+        "text": "この表示が出たら、スマホ側で待ち続けるのではなく、Mac側に移動してください。",
+        "inlineStyleRanges": [
+          {
+            "length": 14,
+            "offset": 25,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "ここが一番重要です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "スマホ側で待つ\n↓\nではなく\n↓\nMac側のCodexアプリに行く\n"
+      },
+      {
+        "type": "header-two",
+        "text": "手順4：Mac側の左メニューに出ている「Codex mobileを設定」を押す"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIT1gHZaoAAivSG.jpg",
+        "width": 2910,
+        "height": 1828
+      },
+      {
+        "type": "unstyled",
+        "text": "MacのCodexアプリを開くと、左側のメニューに"
+      },
+      {
+        "type": "unstyled",
+        "text": "Codex mobileを設定\n"
+      },
+      {
+        "type": "unstyled",
+        "text": "という項目が表示されているはずです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "これを押してください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "この画面が、Codex Mobileの接続設定を進める場所です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "もしここが表示されていない場合は、以下を確認してください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "・Codexアプリを最新版にしているか\n・右上の「更新」ボタンを押したか\n・スマホと同じChatGPTアカウントでログインしているか\n・Codexアプリを再起動したか\n"
+      },
+      {
+        "type": "header-two",
+        "text": "手順5：Mac側で「始める」を押す"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIT1q27b0AALabs.jpg",
+        "width": 2910,
+        "height": 1828
+      },
+      {
+        "type": "unstyled",
+        "text": "「Codex mobileを設定」を押すと、Mac側に"
+      },
+      {
+        "type": "unstyled",
+        "text": "Codex mobileをセットアップ\n"
+      },
+      {
+        "type": "unstyled",
+        "text": "という画面が表示されます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "中央あたりに"
+      },
+      {
+        "type": "unstyled",
+        "text": "始める\n"
+      },
+      {
+        "type": "unstyled",
+        "text": "というボタンがあるので、それを押してください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "この画面では、Codex Mobileでできることとして、たとえば以下のような説明が表示されます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "・スマホからCodexの作業を続けられる\n・Codexの完了通知や確認通知を受け取れる\n・スマホから新しい作業を開始できる\n"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここはそのまま「始める」で大丈夫です。"
+      },
+      {
+        "type": "header-two",
+        "text": "手順6：Mac側で「許可」を押す"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIT1tzcbsAA3xS-.jpg",
+        "width": 2894,
+        "height": 1814
+      },
+      {
+        "type": "unstyled",
+        "text": "次に、Mac側で"
+      },
+      {
+        "type": "unstyled",
+        "text": "お使いのスマートフォンでこのコンピュータを操作できるようにする\n"
+      },
+      {
+        "type": "unstyled",
+        "text": "という画面が出ます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここでは、スマホからこのMac上のCodexを操作できるようにするための許可を求められます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "中央に"
+      },
+      {
+        "type": "unstyled",
+        "text": "許可\n"
+      },
+      {
+        "type": "unstyled",
+        "text": "というボタンが出るので、これを押してください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "この許可をしないと、スマホからMac側のCodexにアクセスできません。"
+      },
+      {
+        "type": "header-two",
+        "text": "手順7：QRコードをスマホで読み取る"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIT1zldaYAAWr0H.jpg",
+        "width": 2894,
+        "height": 1818
+      },
+      {
+        "type": "unstyled",
+        "text": "許可を押すと、Mac側にQRコードが表示されます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "画面には"
+      },
+      {
+        "type": "unstyled",
+        "text": "モバイル端末で承認\n"
+      },
+      {
+        "type": "unstyled",
+        "text": "のような表示が出ます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここで、スマホ側のChatGPTアプリからQRコードを読み取ります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "iOSとAndroidの選択が出る場合は、自分のスマホに合わせて選んでください。"
+      },
+      {
+        "type": "header-two",
+        "text": "手順8：スマホ側で「続ける」を押す"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIT15ilbwAAdMmE.jpg",
+        "width": 1170,
+        "height": 2532
+      },
+      {
+        "type": "unstyled",
+        "text": "QRコードを読み取ると、スマホ側に"
+      },
+      {
+        "type": "unstyled",
+        "text": "サインインするか？\n"
+      },
+      {
+        "type": "unstyled",
+        "text": "という画面が出ます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "続ける　を押してください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "これを押すことで、スマホとMacのCodexが接続されます。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIT2JAMaMAATLSQ.jpg",
+        "width": 1170,
+        "height": 2532
+      },
+      {
+        "type": "header-two",
+        "text": "手順9：「接続されました」と出たら成功"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIT2OVJbwAAB3LF.jpg",
+        "width": 2896,
+        "height": 1814
+      },
+      {
+        "type": "unstyled",
+        "text": "スマホ側で承認すると、Mac側に"
+      },
+      {
+        "type": "unstyled",
+        "text": "接続されました\n"
+      },
+      {
+        "type": "unstyled",
+        "text": "と表示されます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここまで来れば、Codex Mobileの接続は成功です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "この状態になると、スマホのChatGPTアプリからCodexを開いたときに、Mac上のCodexプロジェクトや作業を操作できるようになります。"
+      },
+      {
+        "type": "header-one",
+        "text": "接続後に出てくる3つの設定"
+      },
+      {
+        "type": "unstyled",
+        "text": "接続が完了すると、Mac側に追加設定が表示されます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "主に以下の3つです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "1. このコンピューターをスリープさせない\n2. パソコンでの利用を有効にする\n3. Chrome拡張機能をインストール\n"
+      },
+      {
+        "type": "unstyled",
+        "text": "基本的には、自分のMacで使う場合はすべて有効にするのがおすすめです。",
+        "inlineStyleRanges": [
+          {
+            "length": 29,
+            "offset": 6,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "それぞれ簡単に説明します。"
+      },
+      {
+        "type": "header-two",
+        "text": "1. このコンピューターをスリープさせない"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIT2xc4a4AA_whU.jpg",
+        "width": 1672,
+        "height": 941
+      },
+      {
+        "type": "unstyled",
+        "text": "これは、Codexが作業している途中でMacがスリープしないようにする設定です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Codex Mobileは、スマホ単体で動いているわけではなく、Mac側のCodexをスマホから操作する仕組みです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "そのため、Macがスリープすると、スマホ側から操作できなくなる可能性があります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "外出先からCodexを動かしたい人や、長めの作業を任せたい人は、ここは有効にしておくのがおすすめです。"
+      },
+      {
+        "type": "header-two",
+        "text": "2. パソコンでの利用を有効にする"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIT2y8xb0AAXF_8.jpg",
+        "width": 1672,
+        "height": 941
+      },
+      {
+        "type": "unstyled",
+        "text": "これは、CodexがMac上のアプリを操作できるようにする設定です。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIT20ZZagAA3PCa.jpg",
+        "width": 1672,
+        "height": 941
+      },
+      {
+        "type": "unstyled",
+        "text": "Codexにパソコン上で作業させたい場合は、この設定を有効にしておく必要があります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "たとえば、アプリを開いたり、操作したり、Mac上の環境を使って作業させたい場合に関係します。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Codex Mobileをしっかり使いたいなら、ここも有効にしておくのがおすすめです。"
+      },
+      {
+        "type": "header-two",
+        "text": "3. Chrome拡張機能をインストール"
+      },
+      {
+        "type": "unstyled",
+        "text": "これは、CodexにWebサイトの操作やフォーム入力などを任せたい場合に使います。"
+      },
+      {
+        "type": "unstyled",
+        "text": "たとえば、ブラウザ上で何かを確認したり、Webサービスにアクセスして操作したりする場合に便利です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Codexを開発だけでなく、調査やWeb操作にも使いたい人は、Chrome拡張機能も入れておくのがおすすめです。"
+      },
+      {
+        "type": "header-one",
+        "text": "基本的には全部許可でOK"
+      },
+      {
+        "type": "unstyled",
+        "text": "接続後に出てくる設定は、基本的にはすべて有効にするのがおすすめです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "・このコンピューターをスリープさせない\n・パソコンでの利用を有効にする\n・Chrome拡張機能をインストール\n"
+      },
+      {
+        "type": "unstyled",
+        "text": "この3つを有効にしておくことで、Codex Mobileをかなり使いやすくなります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ただし、注意点もあります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "共有PCや会社の管理端末ではなく、自分が所有している信頼できるMacで使う場合に限って、全部許可がおすすめです。",
+        "inlineStyleRanges": [
+          {
+            "length": 36,
+            "offset": 17,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Codexはパソコン内のファイル、アプリ、ブラウザにアクセスする可能性があるため、他人と共有している端末や、会社のセキュリティルールが厳しい端末では、設定内容を確認してから有効化してください。"
+      },
+      {
+        "type": "header-one",
+        "text": "よくある詰まりポイント"
+      },
+      {
+        "type": "header-two",
+        "text": "1. スマホ側で待っているだけ"
+      },
+      {
+        "type": "unstyled",
+        "text": "一番多いのがこれです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "スマホ側で"
+      },
+      {
+        "type": "unstyled",
+        "text": "デスクトップアプリを待っています\n"
+      },
+      {
+        "type": "unstyled",
+        "text": "と出たら、スマホで待ち続けるのではなく、Mac側に行ってください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Mac側の左メニューにある"
+      },
+      {
+        "type": "unstyled",
+        "text": "Codex mobileを設定\n"
+      },
+      {
+        "type": "unstyled",
+        "text": "を押す必要があります。"
+      },
+      {
+        "type": "header-two",
+        "text": "2. MacにCodexアプリを入れていない"
+      },
+      {
+        "type": "unstyled",
+        "text": "Codex Mobileは、Mac上のCodexアプリに接続する機能です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "そのため、MacにCodexのデスクトップアプリを入れていない場合は、まずダウンロードが必要です。"
+      },
+      {
+        "type": "header-two",
+        "text": "3. Mac版Codexアプリを更新していない"
+      },
+      {
+        "type": "unstyled",
+        "text": "Mac版Codexアプリ右上に"
+      },
+      {
+        "type": "unstyled",
+        "text": "更新\n"
+      },
+      {
+        "type": "unstyled",
+        "text": "と出ている場合は、必ず押してください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここを押していないだけで、Codex Mobileの設定がうまく表示されない可能性があります。"
+      },
+      {
+        "type": "header-two",
+        "text": "4. スマホとMacで違うアカウントにログインしている"
+      },
+      {
+        "type": "unstyled",
+        "text": "スマホのChatGPTアプリと、MacのCodexアプリで、同じChatGPTアカウントにログインしているか確認してください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "個人アカウントとWorkspaceアカウントを使い分けている人は、ここでズレやすいです。"
+      },
+      {
+        "type": "header-two",
+        "text": "5. Macがスリープしている"
+      },
+      {
+        "type": "unstyled",
+        "text": "Codex Mobileは、Mac側のCodexをスマホから操作する仕組みです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "そのため、Macがスリープすると使えなくなる可能性があります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "接続後は、"
+      },
+      {
+        "type": "unstyled",
+        "text": "このコンピューターをスリープさせない\n"
+      },
+      {
+        "type": "unstyled",
+        "text": "を有効にしておくのがおすすめです。"
+      },
+      {
+        "type": "header-one",
+        "text": "最短手順まとめ"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIT26WxaUAAknA7.jpg",
+        "width": 1672,
+        "height": 941
+      },
+      {
+        "type": "unstyled",
+        "text": "最後に、最短手順をまとめます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "1. スマホのChatGPTアプリを最新版にする\n2. スマホ側で「Codex」を押す\n3. 「Codex Mobileを接続する」を押す\n4. 「デスクトップアプリを待っています」と出たらMac側へ行く\n5. MacにCodexアプリがない人はダウンロードする\n6. MacのCodexアプリを開く\n7. 右上に「更新」が出ていたら押す\n8. Mac左側の「Codex mobileを設定」を押す\n9. 「始める」を押す\n10. 「許可」を押す\n11. 表示されたQRコードをスマホで読み取る\n12. スマホ側で「Authorize this phone」を押す\n13. Mac側に「接続されました」と出たら成功\n14. 接続後の設定は、基本的に全部有効にする\n"
+      },
+      {
+        "type": "header-one",
+        "text": "まとめ"
+      },
+      {
+        "type": "unstyled",
+        "text": "Codex Mobileで詰まりやすいポイントは、スマホ側ではなくMac側にあります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "特に重要なのはこの3つです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "・MacにCodexのデスクトップアプリを入れる\n・Mac版Codexアプリを最新版に更新する\n・Mac側の「Codex mobileを設定」から接続を進める\n"
+      },
+      {
+        "type": "unstyled",
+        "text": "スマホ側で「デスクトップアプリを待っています」と出たら、そこで止まったわけではありません。"
+      },
+      {
+        "type": "unstyled",
+        "text": "そのタイミングでMac側に移動して、左メニューの"
+      },
+      {
+        "type": "unstyled",
+        "text": "Codex mobileを設定\n"
+      },
+      {
+        "type": "unstyled",
+        "text": "を押してください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "そこから"
+      },
+      {
+        "type": "unstyled",
+        "text": "始める\n↓\n許可\n↓\nQRコード読み取り\n↓\nスマホ側で承認\n↓\n接続完了\n"
+      },
+      {
+        "type": "unstyled",
+        "text": "の流れで進めれば、Codex Mobileを使えるようになります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "接続後は、最大限活用するために"
+      },
+      {
+        "type": "unstyled",
+        "text": "・このコンピューターをスリープさせない\n・パソコンでの利用を有効にする\n・Chrome拡張機能をインストール\n"
+      },
+      {
+        "type": "unstyled",
+        "text": "も基本的には有効にしておくのがおすすめです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "これで、外出先でもスマホからCodexに指示を出して、Mac上の作業を進められるようになります！！！！"
+      },
+      {
+        "type": "unstyled",
+        "text": "ぜひ！！！！！設定してみてくださいね！！！！"
+      },
+      {
+        "type": "header-two",
+        "text": "この記事が少しでも参考になった方へ"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIT3k5Lb0AAQpeJ.jpg",
+        "width": 1194,
+        "height": 928
+      },
+      {
+        "type": "unstyled",
+        "text": "この記事を出しているCodex Studio（@Codestudiopjbk）は、CodexやGPT-5.5、CLI活用、自動化、AIエージェント開発などを、実務で使える形に落とし込んで発信しているアカウントです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ただ最新情報を紹介するだけではなく、実際に手を動かしながら、"
+      },
+      {
+        "type": "unstyled",
+        "text": "「どうすれば業務に使えるのか」"
+      },
+      {
+        "type": "unstyled",
+        "text": "「どうすれば開発や自動化に組み込めるのか」"
+      },
+      {
+        "type": "unstyled",
+        "text": "「どうすればAIを一時的な流行で終わらせず、組織の仕組みにできるのか」"
+      },
+      {
+        "type": "unstyled",
+        "text": "という視点で発信しています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "また、私たちは株式会社PLaiとして、CodexやClaude Code、Obsidianを活用したAIエージェント導入、ナレッジ管理設計、業務自動化の支援も行っています。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIT4s5bawAEAeWg.jpg",
+        "width": 1365,
+        "height": 768
+      },
+      {
+        "type": "unstyled",
+        "text": "AI時代に本当に重要なのは、単に便利なツールを知っていることではなく、社内の知識や業務フロー、過去の意思決定、顧客理解などを、AIが使える形に整理していくことだと考えています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "そのためPLaiでは、企業やチームに対して、"
+      },
+      {
+        "type": "unstyled",
+        "text": "・Codex / Claude Codeを活用した業務自動化"
+      },
+      {
+        "type": "unstyled",
+        "text": "・Obsidianを使った社内ナレッジ管理"
+      },
+      {
+        "type": "unstyled",
+        "text": "・AIエージェントの設計、導入、運用"
+      },
+      {
+        "type": "unstyled",
+        "text": "・AIを前提にした開発・マーケティング支援"
+      },
+      {
+        "type": "unstyled",
+        "text": "・組織全体でAIを使える状態を作るための仕組み化"
+      },
+      {
+        "type": "unstyled",
+        "text": "などを支援しています。"
+      },
+      {
+        "type": "unstyled",
+        "text": ""
+      },
+      {
+        "type": "unstyled",
+        "text": "また、姉妹アカウントとしてClaude Code Studio（@ClaudeCode_love）も運用しています。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIT4v5zaIAAck-c.jpg",
+        "width": 1192,
+        "height": 996
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude CodeやObsidian、ナレッジ管理まわりに興味がある方は、こちらもぜひフォローしてみてください。"
+      },
+      {
+        "type": "unstyled",
+        "text": ""
+      },
+      {
+        "type": "unstyled",
+        "text": "Codex派の方はCodex Studio、Claude Code派の方はClaude Code Studioを追っていただくと、AI開発・自動化・ナレッジ管理まわりの情報をかなりキャッチアップしやすくなると思います。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIT4ysjagAA4s0P.jpg",
+        "width": 2314,
+        "height": 1324
+      },
+      {
+        "type": "unstyled",
+        "text": "またもし、組織全体への「Codex × Obsidian」「Claude Code × Obsidian」の導入や、AIエージェント開発、業務自動化、ナレッジ管理の仕組み化についてご相談があれば、下記URLよりお気軽にお問い合わせください！ぜひお待ちしています！"
+      },
+      {
+        "type": "unstyled",
+        "text": "plai-ai.com"
+      }
+    ]
+  },
+  "status": "success",
+  "msg": "success",
+  "_handle": "Codestudiopjbk"
+}

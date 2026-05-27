@@ -1,0 +1,346 @@
+{
+  "article": {
+    "id": "QXJ0aWNsZUVudGl0eToyMDQ5NDU5MTkwMjE4MDI3MDA4",
+    "author": {
+      "type": "user",
+      "userName": "claudecode_lab",
+      "url": "https://x.com/claudecode_lab",
+      "twitterUrl": "https://twitter.com/claudecode_lab",
+      "id": "1807726847154847744",
+      "name": "Claude Code研究所|スパルタClaude Code塾",
+      "isVerified": false,
+      "isBlueVerified": true,
+      "verifiedType": null,
+      "profilePicture": "https://pbs.twimg.com/profile_images/2047553749867216896/_SKwpHqG_normal.jpg",
+      "coverPicture": "https://pbs.twimg.com/profile_banners/1807726847154847744/1777009967",
+      "description": "東京大学にてAI研究に従事していたエンジニアメンバーがClaude Codeに特化した最新情報をお届け。経営者・士業向け名物研修「スパルタClaude Code塾」も運営。\nnote:https://t.co/VAtJlAXlsF\n研修のご依頼などDMでも受付しております✉️",
+      "location": "東京都",
+      "followers": 19619,
+      "following": 377,
+      "status": "",
+      "canDm": true,
+      "canMediaTag": true,
+      "createdAt": "Mon Jul 01 10:45:57 +0000 2024",
+      "entities": {
+        "description": {
+          "urls": [
+            {
+              "display_url": "note.com/claudecode_lab",
+              "expanded_url": "https://note.com/claudecode_lab",
+              "indices": [
+                92,
+                115
+              ],
+              "url": "https://t.co/VAtJlAXlsF"
+            }
+          ]
+        },
+        "url": {
+          "urls": [
+            {
+              "display_url": "claude-code-lab.com",
+              "expanded_url": "https://claude-code-lab.com/",
+              "indices": [
+                0,
+                23
+              ],
+              "url": "https://t.co/8oWsTCy0do"
+            }
+          ]
+        }
+      },
+      "fastFollowersCount": 0,
+      "favouritesCount": 12964,
+      "hasCustomTimelines": false,
+      "isTranslator": false,
+      "mediaCount": 79,
+      "statusesCount": 276,
+      "withheldInCountries": [],
+      "affiliatesHighlightedLabel": {},
+      "possiblySensitive": false,
+      "pinnedTweetIds": [
+        "2059090665716552166"
+      ],
+      "profile_bio": {},
+      "isAutomated": false,
+      "automatedBy": null
+    },
+    "replyCount": 0,
+    "likeCount": 0,
+    "quoteCount": 0,
+    "viewCount": "24513",
+    "createdAt": "Wed Apr 29 13:21:20 +0000 2026",
+    "title": "【今すぐ見直すべき】生産性を10倍にしたCLAUDE.mdファイル（プロンプト付き）",
+    "preview_text": "Claude Codeを使い始めたとき、「なぜClaudeは毎回同じミスをするんだろう？」と感じたことはありませんか？ 実は、その答えはCLAUDE.mdファイルの書き方にあります。",
+    "cover_media_img_url": "https://pbs.twimg.com/media/HHE2FoaaQAA-_Ky.jpg",
+    "contents": [
+      {
+        "type": "unstyled",
+        "text": "Claude Codeを使い始めたとき、「なぜClaudeは毎回同じミスをするんだろう？」と感じたことはありませんか？ 実は、その答えはCLAUDE.mdファイルの書き方にあります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "AI・金融・バイブコーディングを日々発信するdarkzodchi（@zodchiii）がXに投稿した「The CLAUDE.md File That 10x’d My Output (Full File Included)」では、1.2Mビュー・1.1Kいいねを集めた実践的なCLAUDE.md構築術を公開しています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "オープンソースプロジェクト・Anthropicの公式ドキュメント・コミュニティのベストプラクティスを徹底調査した上で導き出した「5つのセクション」と、60行以内の完全テンプレートが含まれています。CLAUDE.mdをまだ持っていない方も、すでに作っているけど効果を感じられない方も、今日から使えるノウハウが詰まっています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "すべてのClaude Codeセッションは、CLAUDE.mdを読み込むことから始まります。最初のプロンプトの前に、コードの前に、何が起きる前にも、Claudeはこのファイルを大前提として読み込みます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "良いCLAUDE.mdと悪いCLAUDE.mdの違いは、優秀なシニアエンジニアをオンボーディングするのか、ドキュメントもなく新人をコードベースに放り込むのかと同じぐらい違います。"
+      },
+      {
+        "type": "unstyled",
+        "text": "実際に機能するCLAUDE.mdの書き方を解説します👇"
+      },
+      {
+        "type": "header-one",
+        "text": "なぜほとんどのCLAUDE.mdは機能しないのか"
+      },
+      {
+        "type": "unstyled",
+        "text": "3つの理由があります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "長すぎる。モデルが確実に従える指示は約150〜200個です。Claude Codeのシステムプロンプトにはすでに約50個の指示が含まれています。つまり、CLAUDE.mdには100〜150個の指示が通る余地しかありません。ファイルが200行以上になると、Claudeは理解してくれないことが多くなります。",
+        "inlineStyleRanges": [
+          {
+            "length": 5,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HHEyJeua8AAEIH9.jpg",
+        "width": 1536,
+        "height": 1024
+      },
+      {
+        "type": "unstyled",
+        "text": "内容が間違っている。ほとんどの人はClaudeが自力で把握できることでCLAUDE.mdを埋めています。「シニアエンジニアになれ」「ステップバイステップで考えろ」といった性格指示や、Claudeの行動を変えない一般的なアドバイスです。特定のミスを防ぐことのない指示は、無駄な指示です。",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "階層がない。CLAUDE.mdは指示を置く唯一の場所ではありません。3つのレベルがあり、ほとんどの人がすべてを1つにまとめてしまいます。",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "~/.claude/CLAUDE.md       → グローバル（すべてのプロジェクト共通）\n.claude/CLAUDE.md         → プロジェクト（チームと共有、gitに含める）  \n./CLAUDE.local.md         → ローカル（個人の設定、gitignore対象）"
+      },
+      {
+        "type": "unstyled",
+        "text": "グローバルはすべてのプロジェクトで繰り返すルール用です。プロジェクトはチームが必要とするスタック固有のコンテキスト用です。ローカルはあなた個人の好み用です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "3つをすべて使うことで、各ファイルを短くフォーカスした状態に保てます。"
+      },
+      {
+        "type": "header-one",
+        "text": "本当に重要な5つのセクション"
+      },
+      {
+        "type": "unstyled",
+        "text": "オープンソースプロジェクト、Anthropicの公式ドキュメント、コミュニティのベストプラクティスリポジトリから数十のCLAUDE.mdファイルを調査した結果、効果的なファイルはすべてこの5つをカバーしていることが分かりました。"
+      },
+      {
+        "type": "header-one",
+        "text": "1. 重要なコマンド"
+      },
+      {
+        "type": "unstyled",
+        "text": "Claudeはあなたのプロジェクトのビルドやテストのやり方を知りません。CLAUDE.mdで教えましょう。"
+      },
+      {
+        "type": "markdown",
+        "text": "```\n## コマンド\n- ビルド: `npm run build`\n- 開発: `npm run dev`  \n- 単一ファイルテスト: `npm test -- path/to/file`\n- Lint + 修正: `npm run lint:fix`\n- 型チェック: `npx tsc --noEmit`\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "短く具体的に。Claudeは推測する代わりにこれらを実行します。このセクションがないと、あなたのプロジェクトがpnpm vitestを使っているのにnpm testを試して、3ターン分を本来うまくいくはずのないコマンドのデバッグに費やすことになります。"
+      },
+      {
+        "type": "header-one",
+        "text": "2. アーキテクチャマップ"
+      },
+      {
+        "type": "unstyled",
+        "text": "Claudeはセッションのたびにコードベースの知識ゼロからスタートします。マップを渡しましょう。"
+      },
+      {
+        "type": "markdown",
+        "text": "```\n## アーキテクチャ  \n- src/lib/services/ → すべてのビジネスロジック\n- src/components/ → ステートレスなUIコンポーネントのみ\n- src/lib/store/ → グローバルステート（Zustand）\n- src/app/api/ → APIルート、ビジネスロジックはここに置かない\n- データベースアクセスはServer ActionまたはAPIルートのみ経由\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "完全なディレクトリ一覧は不要です。Claudeがどこに何があって、どこに何を置くべきかが分かる程度で十分です。"
+      },
+      {
+        "type": "header-one",
+        "text": "3. Claudeがいつも間違えること"
+      },
+      {
+        "type": "unstyled",
+        "text": "これが最も重要なセクションです。ここにある各ルールは「この行を削除するとClaudeはミスをするか？」という問いに答えられなければなりません。"
+      },
+      {
+        "type": "markdown",
+        "text": "```\n## ルール\n- .envファイルや秘密情報は絶対にコミットしない\n- すべての非同期呼び出しにtry/catchを使う\n- 関数コンポーネントのみ使用、クラスコンポーネントは不可\n- コミットのプレフィックス: feat:, fix:, docs:, refactor:\n- すべてのPRはマージ前に`npm run verify`を通すこと\n- 静的エクスポートのみ、SSRなし（S3へデプロイ）\n- 必須: コード変更後は必ず型チェックを実行すること\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "注目すべき点が2つあります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "否定ルール（「.envをコミットするな」）は肯定ルールと同じくらい重要です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "「IMPORTANT（重要）」「YOU MUST（必須）」のような強調マーカーは実際に機能します。Anthropicの公式ドキュメントも「IMPORTANT」や「YOU MUST」の追加が遵守率を向上させることを確認しています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "このセクションは15ルール以内に収めましょう。"
+      },
+      {
+        "type": "header-one",
+        "text": "4. ワークフローの好み"
+      },
+      {
+        "type": "unstyled",
+        "text": "Claudeにどのように作業してほしいですか？これが「1行の修正を頼んだのにClaudeがファイル全体を書き直す」問題を防ぎます。"
+      },
+      {
+        "type": "markdown",
+        "text": "```\n## ワークフロー\n- 複雑なタスクを始める前に確認の質問をすること\n- 最小限の変更にとどめ、関係のないコードをリファクタリングしない\n- 変更のたびにテストを実行し、失敗が出たら先に進む前に修正する\n- 1つの大きなコミットではなく、論理的な変更ごとに個別のコミットを作る\n- 2つのアプローチで迷ったら、両方説明して私に選ばせること\n```"
+      },
+      {
+        "type": "header-one",
+        "text": "5. CLAUDE.mdに書くべきでないもの"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HHEziyUacAAPRkt.jpg",
+        "width": 1536,
+        "height": 1024
+      },
+      {
+        "type": "unstyled",
+        "text": "同様に重要なのが、省くことです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "## 含めないこと\n- 性格指示（「シニアエンジニアになれ」など）\n- Linterがすでに処理しているコードフォーマットルール\n- すべてのセッションにドキュメント全体を埋め込む@のインポート\n- 重複するルール\n（グローバルに「テストを実行せよ」とあれば、プロジェクトで繰り返さない）\n- Claudeが自動メモリで自ら学ぶことになること"
+      },
+      {
+        "type": "unstyled",
+        "text": "自動メモリは見過ごされがちです。Claudeは~/.claude/projects/<project>/memory/に独自のメモを保持しています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "/memoryを実行してClaudeがすでにあなたのプロジェクトについて学んだことを確認してみましょう。"
+      },
+      {
+        "type": "blockquote",
+        "text": "📝 補足： Claude Codeの「自動メモリ（auto memory）」機能は、会話の中でプロジェクト固有の情報（使っているライブラリや設定など）を自動的に記録・保持する仕組みです。/memoryコマンドで現在記憶している内容を確認できます。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 2,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-one",
+        "text": "完全なテンプレート"
+      },
+      {
+        "type": "unstyled",
+        "text": "コピーして適応できる実稼働レベルのCLAUDE.mdです。これはエンジニア向けのものですので、他業種の方は適宜修正して使ってみてください。"
+      },
+      {
+        "type": "markdown",
+        "text": "```\n# CLAUDE.md\n\n## プロジェクト\n[1行で：このプロジェクトが何をするか、誰が使うか]\n\n## スタック  \n[フレームワーク、言語、データベース、デプロイ先]\n\n## コマンド\n- 開発: `[command]`\n- ビルド: `[command]`\n- 単一テスト: `[command] -- [path]`\n- 全テスト: `[command]`\n- Lint: `[command]`\n- 型チェック: `[command]`\n\n## アーキテクチャ\n- [フォルダ]→ [ここにあるものと役割]\n- [フォルダ]→ [ここにあるものと役割]\n- [フォルダ]→ [ここにあるものと役割]\n- [フォルダ]→ [ここにあるものと役割]\n\n## ルール\n- [特定のミスを防ぐルール]\n- [特定のミスを防ぐルール]\n- [特定のミスを防ぐルール]\n- IMPORTANT: [Claudeがいつも破るルール1つ]\n\n## ワークフロー\n- [タスクへのアプローチ方法]\n- [コミット規約]\n- [テストへの期待]\n- [いつ確認するか・いつ実行するか]\n\n## スコープ外\n- [Claudeが触ってはいけないもの]\n- [手動で管理しているファイル]\n- [Claudeが変更すべきでない統合]\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "該当しないセクションは削除してください。"
+      },
+      {
+        "type": "header-one",
+        "text": "変化をもたらすルール"
+      },
+      {
+        "type": "unstyled",
+        "text": "数十のCLAUDE.md設定をテストした結果、出力の品質に最も大きな違いをもたらした行がこれです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "# 最も効果の高い行:\n\n- IMPORTANT: コード変更後は必ず型チェックを実行すること\n  （Claudeが壊れた型をリリースするのを防ぐ）\n\n- 最小限の変更にとどめ、関係のないコードをリファクタリングしない  \n  （Claudeがファイル全体を書き直すのを防ぐ）\n\n- 論理的な変更ごとに個別のコミットを作る\n  （47ファイルの巨大コミットを防ぐ）\n\n- 迷ったら両方のアプローチを説明して私に選ばせること\n  （Claudeがアーキテクチャの決定を勝手に行うのを防ぐ）\n\n- 静的エクスポートのみ、SSRなし\n  （Claudeが静的サイトにサーバーサイドコードを追加するのを防ぐ）"
+      },
+      {
+        "type": "unstyled",
+        "text": "これらはそれぞれ、特定のよくあるミスを防ぎます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "これがCLAUDE.mdの各行のテストです：その行を削除するとClaudeが間違ったことをしますか？"
+      },
+      {
+        "type": "header-one",
+        "text": "よくあるミス"
+      },
+      {
+        "type": "unstyled",
+        "text": "人々はCLAUDE.mdをウィッシュリストのように扱っています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "CLAUDE.mdは技術的なブリーフィングであるべきで、モチベーショナルスピーチではありません。スタック、コマンド、アーキテクチャ、ルール、ワークフロー。それ以外はすべて、本当に重要な指示の注意を奪うノイズです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "80行以内に収めましょう。Claudeが何か間違えたらレビューしましょう。"
+      },
+      {
+        "type": "unstyled",
+        "text": "このファイルは時間とともに複利効果で価値を高めます。月1でCLAUDE.mdを見直して、繰り返し説明する手間を省きましょう。"
+      },
+      {
+        "type": "unstyled",
+        "text": "経営者・士業・営業職等、全てのビジネスパーソンの方で、\n「Claude Codeを使いこなしたい」\n「AIを活用してもっと業務を効率化したい」\nといったお悩みをお持ちの方は、ぜひ一度ご相談ください。\n▼ スパルタClaude Code塾\nhttps://www.claude-code-lab.com"
+      },
+      {
+        "type": "unstyled",
+        "text": "#ClaudeCode #AI活用 #業務効率化 #ノーコード #AIツール #生成AI #Claude #仕事効率化 #CLAUDE_md #プロンプトエンジニアリング #開発効率化 #AIエンジニア"
+      }
+    ]
+  },
+  "status": "success",
+  "msg": "success",
+  "_handle": "claudecode_lab"
+}

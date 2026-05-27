@@ -1,0 +1,92 @@
+{
+  "handle": "yura_ai123",
+  "tweet_id": "2059248282078253395",
+  "body": {
+    "tweets": [
+      {
+        "type": "tweet",
+        "id": "2059248282078253395",
+        "url": "https://x.com/yura_ai123/status/2059248282078253395",
+        "twitterUrl": "https://twitter.com/yura_ai123/status/2059248282078253395",
+        "text": "炎上覚悟で書きます。\n「ChatGPT」「Claude」「Gemini」を触ってる人の9割は、AIの使い方をミスってる。\n\n「〜教えて」「〜して」で投げてる時点で、もう負け。\n今この瞬間から、この型以外は封印してください。\n勝てる指示出しを全部教えます！",
+        "source": "",
+        "retweetCount": 87,
+        "replyCount": 22,
+        "likeCount": 1506,
+        "quoteCount": 3,
+        "viewCount": 764841,
+        "createdAt": "Tue May 26 12:20:24 +0000 2026",
+        "lang": "ja",
+        "bookmarkCount": 2415,
+        "isReply": false,
+        "inReplyToId": "",
+        "conversationId": "2059248282078253395",
+        "displayTextRange": [
+          0,
+          127
+        ],
+        "inReplyToUserId": "",
+        "inReplyToUsername": "",
+        "isPinned": false,
+        "author": {
+          "type": "user",
+          "userName": "yura_ai123",
+          "url": "https://x.com/yura_ai123",
+          "twitterUrl": "https://twitter.com/yura_ai123",
+          "id": "1736320457488711680",
+          "name": "ゆら",
+          "isVerified": false,
+          "isBlueVerified": true,
+          "verifiedType": null,
+          "profilePicture": "https://pbs.twimg.com/profile_images/2031408108103413762/_O-B9Uph_normal.png",
+          "coverPicture": "https://pbs.twimg.com/profile_banners/1736320457488711680/1773968209",
+          "description": "AI✖︎SNS→noteとアフィリエイトで毎月500-1,000万円\n自動で集客するだけでサイドFIRE達成\n20代昼寝が趣味",
+          "location": "",
+          "followers": 1320,
+          "following": 124,
+          "status": "",
+          "canDm": false,
+          "canMediaTag": true,
+          "createdAt": "Sun Dec 17 09:40:49 +0000 2023",
+          "entities": {
+            "description": {}
+          },
+          "fastFollowersCount": 0,
+          "favouritesCount": 0,
+          "hasCustomTimelines": true,
+          "isTranslator": false,
+          "mediaCount": 8,
+          "statusesCount": 3022,
+          "withheldInCountries": [],
+          "affiliatesHighlightedLabel": {},
+          "possiblySensitive": false,
+          "pinnedTweetIds": [
+            "2059248282078253395"
+          ],
+          "profile_bio": {
+            "description": "AI✖︎SNS→noteとアフィリエイトで毎月500-1,000万円\n自動で集客するだけでサイドFIRE達成\n20代昼寝が趣味",
+            "entities": {
+              "description": {}
+            }
+          },
+          "isAutomated": false,
+          "automatedBy": null
+        },
+        "extendedEntities": {},
+        "card": null,
+        "place": {},
+        "entities": {},
+        "isRetweet": false,
+        "isQuote": false,
+        "isConversationControlled": false,
+        "quoted_tweet": null,
+        "retweeted_tweet": null,
+        "isLimitedReply": false,
+        "communityInfo": null
+      }
+    ],
+    "status": "success",
+    "msg": "success",
+    "code": 0
+  }
+}

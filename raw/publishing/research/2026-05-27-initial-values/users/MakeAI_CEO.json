@@ -1,0 +1,47 @@
+{
+  "status": "success",
+  "msg": "success",
+  "data": {
+    "id": "1912080237028114432",
+    "name": "mana｜株式会社MakeAI CEO",
+    "userName": "MakeAI_CEO",
+    "location": "無料のAI相談はこちら→",
+    "url": "https://t.co/M2Xp3xsVWe",
+    "description": "法人向けAI研修・業務自動化の設計〜実装まで一気通貫で支援｜導入企業で残業ゼロ・離職率低下の実績あり｜中小企業のAI活用を「分かる」から「回る」に変える｜研修/導入支援のご相談はDMまたは公式LINEから↓",
+    "entities": {
+      "description": {},
+      "url": {
+        "urls": [
+          {
+            "display_url": "lin.ee/Z3bEb8N",
+            "expanded_url": "https://lin.ee/Z3bEb8N",
+            "indices": [
+              0,
+              23
+            ],
+            "url": "https://t.co/M2Xp3xsVWe"
+          }
+        ]
+      }
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 23175,
+    "following": 158,
+    "favouritesCount": 5150,
+    "statusesCount": 3822,
+    "mediaCount": 225,
+    "createdAt": "2025-04-15T09:47:16.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/1912080237028114432/1779532367",
+    "profilePicture": "https://pbs.twimg.com/profile_images/2004460966822727680/x2wh_2kc_normal.jpg",
+    "canDm": true,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": [
+      "2035275751852048492"
+    ]
+  }
+}

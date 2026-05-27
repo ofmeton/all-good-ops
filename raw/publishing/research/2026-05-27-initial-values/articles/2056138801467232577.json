@@ -1,0 +1,931 @@
+{
+  "article": {
+    "id": "QXJ0aWNsZUVudGl0eToyMDU2MTEyNDIxNzg2NTA1MjE2",
+    "author": {
+      "type": "user",
+      "userName": "ObsidianOtaku",
+      "url": "https://x.com/ObsidianOtaku",
+      "twitterUrl": "https://twitter.com/ObsidianOtaku",
+      "id": "2045403336451710976",
+      "name": "東大Obsidianオタク｜仕事で使える第2の脳構築",
+      "isVerified": false,
+      "isBlueVerified": true,
+      "verifiedType": null,
+      "profilePicture": "https://pbs.twimg.com/profile_images/2045403747116081152/ICOUL3T2_normal.jpg",
+      "coverPicture": "https://pbs.twimg.com/profile_banners/2045403336451710976/1776497381",
+      "description": "東大卒メンバーによるObsidianの活用術を毎日発信｜仕事で使えるObsidianを学べるメディア｜Claude CodeやCodexと組み合わせて使うノウハウを学びたい人はフォロー必須！",
+      "location": "Obsidianで第二の脳を作りたいならフォロー❗️",
+      "followers": 1069,
+      "following": 4,
+      "status": "",
+      "canDm": false,
+      "canMediaTag": true,
+      "createdAt": "Sat Apr 18 07:26:24 +0000 2026",
+      "entities": {
+        "description": {}
+      },
+      "fastFollowersCount": 0,
+      "favouritesCount": 12,
+      "hasCustomTimelines": false,
+      "isTranslator": false,
+      "mediaCount": 41,
+      "statusesCount": 55,
+      "withheldInCountries": [],
+      "affiliatesHighlightedLabel": {},
+      "possiblySensitive": false,
+      "pinnedTweetIds": [
+        "2058665087876165671"
+      ],
+      "profile_bio": {},
+      "isAutomated": false,
+      "automatedBy": null
+    },
+    "replyCount": 0,
+    "likeCount": 42,
+    "quoteCount": 3,
+    "viewCount": "47973",
+    "createdAt": "Sun May 17 22:24:26 +0000 2026",
+    "title": "【保存版】Obsidian×Claude Skillsで第二の脳を勝手に構築する方法 ",
+    "preview_text": "Slack を開くと未読のチャンネルで溢れいてる。その中にあなた宛の依頼や質問が混じっているが埋もれて気がついたら忘れてしまっている。",
+    "cover_media_img_url": "https://pbs.twimg.com/media/HIjfOY2bMAAqnvB.jpg",
+    "contents": [
+      {
+        "type": "unstyled",
+        "text": "Slack を開くと未読のチャンネルで溢れいてる。その中にあなた宛の依頼や質問が混じっているが埋もれて気がついたら忘れてしまっている。"
+      },
+      {
+        "type": "unstyled",
+        "text": "自分にとって必要な情報がどこにどのようにまとまっているかがわからない状態です。日々の仕事はどんどん押し寄せてくるので整理する時間もなく日が経つほどにどんどん整理してない情報が溜まっていく。辛い状況です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "新しい Claude のセッションを開くたびに、自分の仕事の前提を 5 分かけて説明し直しています。「私はこういう業界で、こういう案件を抱えていて、こういう判断基準で動いている」と。これを何度も繰り返している自分がいます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "このよくない状況を一緒に打ち破りませんか？最近はAIエージェントの波がすごいですが、うまく活用して成果に繋げている人とちょっとだけ触って離脱してしまう人で二分しています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "前者は1%以下レベルで、使いこなすだけでかなりの先行者利益を獲得できます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "もちろん情報の散乱からあなたを救いつつ、自分の代わりに仕事を進めてくれるパートナーまでおまけで誕生します。まさに一石二鳥ですね..."
+      },
+      {
+        "type": "unstyled",
+        "text": "今回は、元 OpenAI / Tesla AI の Andrej Karpathy が示した方法論についてまとめら得た記事を中心に、独自の運用知見も掛け合わせながら噛み砕いて解説をします。"
+      },
+      {
+        "type": "unstyled",
+        "text": "出典：\nhttps://x.com/polydao/status/2042203352054771748"
+      },
+      {
+        "type": "unstyled",
+        "text": "LLM を「賢い Google の代わり」として使うのをやめ、ファイルシステム上で知識を書き直し続ける装置として動かす設計が、Obsidian の 3 フォルダと Claude Skills だけで今日から組み立てられるところまで降ろしてまとめました。"
+      },
+      {
+        "type": "header-two",
+        "text": "①議事録もSlackも死蔵されていくのは AI を Google の代わりに使っているから"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIjdtPSbAAA6x5L.jpg",
+        "width": 2048,
+        "height": 1152
+      },
+      {
+        "type": "unstyled",
+        "text": "業務記録が死蔵されていく感覚は、おそらく多くの方が共有していると思います。会議で書いた議事録、Slack でスターを付けた投稿、商談中に走り書きした iOS Notes、メールで受け取った RFP の PDF が、気がつくとひと月で 50 本を超えて積み上がる。"
+      },
+      {
+        "type": "unstyled",
+        "text": "あとから参照したいと思ったとき、どのアプリのどのフォルダに何を書いたかを思い出すコストが毎回かかるようになっています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "同じ構造が AI とのやり取りでも起きています。Claude や ChatGPT を開くたびに、自分の仕事の文脈をゼロから説明し直している方が大多数です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "「今、こういう案件を抱えていて」「先週こんな議論があって」「今日はこの論点を整理したい」を毎回打ち込む 5 分が、週単位で積み上がると相当な時間になります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "なぜこうなるのか。"
+      },
+      {
+        "type": "unstyled",
+        "text": "理由は AI ツールの性能ではありません。AI を「賢い検索エンジン」として使っている設計のままだからです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "タブを閉じた瞬間に記憶がリセットされる設計で動かしている限り、Vault を整えても「いつか役に立つはずの議事録置き場」が増えるだけで終わります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "先日扱った Obsidian 記事と、その続編で紹介した Vault 設計をすでに組んだ方も、おそらくここで詰まっています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "フォルダ階層を作ったところまでは進んだが、それが業務の中で「動き始める」感覚が手に入らない。ここが今日の出発点です。"
+      },
+      {
+        "type": "header-two",
+        "text": "②ほとんどの第二の脳がただのクリップ置き場で止まる理由"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIjd4Yya4AAACLE.jpg",
+        "width": 2048,
+        "height": 1152
+      },
+      {
+        "type": "unstyled",
+        "text": "第二の脳が育たない理由を、もう少し構造で言語化させてください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "私たちは AI を 2 通りの使い方で動かせます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "1 つ目は「賢い Google モード」です。",
+        "inlineStyleRanges": [
+          {
+            "length": 23,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "質問する、答えが返ってくる、タブを閉じる、次の質問でゼロからやり直す。会話履歴は残っても、それは AI 側の記憶ではなく、私たちが見返せる過去ログにすぎません。次に同じ業務文脈を扱うとき、AI は私たちのことを覚えていません。"
+      },
+      {
+        "type": "unstyled",
+        "text": "2 つ目は、ファイルシステムの上で記憶を積んでいくモードです。",
+        "inlineStyleRanges": [
+          {
+            "length": 31,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "質問するたびに答えがマークダウンファイルとして Vault に残り、その答えが次の質問の素材になります。1 ヶ月後の質問は、1 ヶ月分の答えを参照しながら作られます。半年後の質問は、半年分の業務文脈を持った答えになります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "問題はここです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Obsidian を入れる方の多くは、1 つ目のモードのまま 2 つ目の容れ物だけを増やします。フォルダを 5 個作って、ブックマーク拡張を入れて、これでセットアップ完了と感じる。"
+      },
+      {
+        "type": "unstyled",
+        "text": "けれど、肝心の AI が Vault を読み、書き、整える仕組みがありません。だから半年経っても Vault は単なる会議メモ置き場のままです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここで世界中の知識労働者が一斉に反応した発信が出てきます。元 OpenAI 共同創業者で Tesla AI ディレクター、現在 Eureka Labs を率いる Andrej Karpathy が示した方法論です。"
+      },
+      {
+        "type": "header-two",
+        "text": "③LLMをcompilerと図書館係として動かすKarpathy方式"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIjeCFWaMAAB8GB.jpg",
+        "width": 2048,
+        "height": 1152
+      },
+      {
+        "type": "unstyled",
+        "text": "Karpathy の発信は短いものでした。要点はこうです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "LLM に、雑多な素材を構造化する「コンパイラ」と、蓄積された知識を横断引用する「図書館係」の役割を持たせると本領が出ます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "チャット画面で問答を繰り返すよりも、ファイルシステム上で読み書きさせる動かし方の方が、AI の力が時間軸で効きます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "コンパイラというのは、雑多な素材を構造化されたものに変える存在です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "私たちが raw のフォルダに記事 PDF や会議メモやスクリプト出力をどんどん放り込むと、LLM がそれらを読み、概念ごとのマークダウンページに編集し、関連ページへのリンクを張り、索引を作ります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "人間は素材を投げ込むだけで、整理は LLM が引き受ける形です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "図書館係というのは、蓄積された知識から必要なページを横断引用する存在です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Vault に 50 ページ、100 ページと wiki が育ってきたら、私たちは「私の Vault だけを使って、この案件で押さえるべき論点を整理して」と問います。LLM は wiki 全体を読み、関連ページを集め、新しい答えを reports というフォルダにマークダウンファイルとして書きます。その答えは次の問いの素材になります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Karpathy 自身がはっきり言っています。「整理するな、リネームするな、ただクリップしろ」。Vault のフォルダ階層を細かく設計しようとした人ほど Obsidian を 2 週間で挫折します。本当に必要な構造は 3 つです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "下のディレクトリが、Karpathy 方式で動く Vault の最小形です。"
+      },
+      {
+        "type": "markdown",
+        "text": "```bash\n~/Vault/\n├── raw/                  # 整理しない、リネームしない、ただ放り込む場所\n│   ├── 2026-05-15_karpathy-llm-wiki.md       (Web Clipper で保存した記事)\n│   ├── 2026-05-16_client-A-kickoff.md         (会議のメモ)\n│   ├── 2026-05-16_voice-memo-monday.md        (音声メモの書き起こし)\n│   ├── 2026-05-17_competitor-deck.pdf         (PDF そのまま)\n│   └── 2026-05-17_zoom-transcript.txt         (議事録ベタ貼り)\n│\n├── wiki/                 # LLM が読んで書く、構造化された知識ベース\n│   ├── concepts/\n│   │   ├── llm-wiki.md                        (raw を読んだ LLM が生成)\n│   │   ├── client-A-context.md                (案件全体像)\n│   │   ├── competitor-positioning.md          (競合分析)\n│   │   └── proposal-pattern-2026.md           (提案パターン)\n│   ├── people/\n│   │   └── client-A-stakeholders.md\n│   └── index.md                               (LLM が自動メンテ)\n│\n├── reports/              # 問いに対する答えがここに溜まる\n│   ├── 2026-05-17_client-A-next-step.md\n│   ├── 2026-05-18_proposal-draft-v1.md\n│   └── 2026-05-19_competitor-deep-dive.md\n│\n├── CLAUDE.md             # Vault 全体のルールを記述する 1 ファイル\n└── .claude/\n└── skills/           # 業務の型を再利用可能にする SKILL.md 群\n├── kb-compile/\n├── kb-report/\n├── kb-lint/\n├── kb-onboard/\n└── kb-slide/\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "ファイル名の日付やトピック名は、自分の業務に合わせて自由に変えて構いません。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Karpathy の元発信では予測市場 (prediction markets) や LLM アーキテクチャの研究例が中心に使われていますが、これは「中に入れるデータの例」であって「構造そのもの」ではありません。"
+      },
+      {
+        "type": "unstyled",
+        "text": "raw / wiki / reports の 3 フォルダ + CLAUDE.md という 構造そのもの はデータに依存しません。研究者なら論文 PDF とカンファ動画書き起こし、業務知識労働者なら議事録と Slack と商談メモ、経営者なら取締役会資料と投資家面談メモ、研究室マネージャーなら学生面談記録と論文ドラフト、いずれも raw に入れる素材が違うだけで、Vault が動く仕組みは同じです。",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 46,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "3 フォルダで足ります。これが本記事で最も伝えたい意外性です。先日紹介した Vault 設計では 5 フォルダ、その続編では 8 フォルダまで広げましたが、Karpathy 方式は「最小単位に戻る」設計です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここで構造の用語を 1 つ整理させてください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "raw / wiki / reports の 3 フォルダと CLAUDE.md が core structure (最小骨格) です。SKILL.md と MCP for Obsidian は、core structure の上に乗る 運用拡張レイヤー で、なくても Vault は動きますが、入れると LLM の動き方を毎回プロンプトで書き直す手間が消えます。",
+        "inlineStyleRanges": [
+          {
+            "length": 14,
+            "offset": 43,
+            "style": "Bold"
+          },
+          {
+            "length": 8,
+            "offset": 119,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "本記事では core structure を第 4 章までで組み立て、運用拡張レイヤーを第 5-6 章で積み上げます。フォルダを増やすよりも、CLAUDE.md と SKILL.md で「LLM がこの 3 フォルダをどう扱うか」を書いたほうが、Vault は動き始めます。"
+      },
+      {
+        "type": "header-two",
+        "text": "④Karpathy方式で動かす6ステップの最小実装"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIjeJSUbMAA15uV.jpg",
+        "width": 2048,
+        "height": 1152
+      },
+      {
+        "type": "unstyled",
+        "text": "3 フォルダで動かす流れは、6 ステップに分解できます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Step 1 - Capture を圧倒的に楽にする",
+        "inlineStyleRanges": [
+          {
+            "length": 26,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "最初の関門は capture です。情報を保存するのが面倒なら、システムは 1 日でもちません。なので最初にここを片付けます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "用意する入口は 3 つです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Obsidian 本体、Obsidian Web Clipper というブラウザ拡張、そして Vault 内に raw / wiki / reports の 3 フォルダ。raw/ に入れる主役は業務記録です。具体的には、会議の議事録、Slack でスターを付けた重要発言、商談のメモ、顧客や競合に関する資料、メールで受け取った RFP の PDF。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Web Clipper はそのうち「外部記事や公開資料」を raw/ に流し込む入口として使います。記事だけを集めるのではなく、後で判断に使う業務記録が raw/ に入る状態を先に作ってください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Karpathy の助言は「整理するな、リネームするな、ただ raw に放り込め」です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "フォルダ階層を考える時間が長い人ほど、Vault は早死にします。今この瞬間にやることは 1 つだけ、「会議が終わったら議事録を raw/ に置く」「Slack で重要だと感じた投稿はスターを付けて週末に raw/ に書き出す」「面白い外部記事を見つけたら Web Clipper でクリップする」を続けることです。週 20-30 件の素材が raw/ に積み上がり始めれば、後段の LLM がそれを材料に wiki を書き始めます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Step 2 - LLM に wiki を書かせる",
+        "inlineStyleRanges": [
+          {
+            "length": 25,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "raw に素材が溜まり始めたら、ここから LLM の仕事です。Claude Code に「raw/ をスキャンして wiki/ に概念ごとのマークダウンページを作って」と指示します。具体的な指示は後で SKILL.md として固定化しますが、最初は単発のプロンプトでも構いません。"
+      },
+      {
+        "type": "unstyled",
+        "text": "LLM は raw/ を読み、繰り返し登場する概念ごとに、定義 + キーインサイト + raw への参照リンク + 関連ページへのバックリンク + 索引ページ、を持つマークダウンファイルを wiki/ に生成します。業務向けに何を生成させるかの具体例は、「クライアント A の意思決定軸」「競合 X のポジショニング」「商品企画 2026 Q3 の論点整理」「採用基準: ミッド層」のように、業務固有の概念に置き換えてください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここで重要なのは、私たちは wiki/ をほとんど触らないということです。書くのは LLM の仕事です。Karpathy が言うように、人間は読むのが中心で、書くのは LLM が引き受けます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Step 3 - Obsidian は知識の IDE として使う",
+        "inlineStyleRanges": [
+          {
+            "length": 32,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "ここで Obsidian の本領が出てきます。Obsidian を「マークダウン編集アプリ」だと思っている方が多いですが、Karpathy 方式では「知識の IDE」として使います。"
+      },
+      {
+        "type": "unstyled",
+        "text": "バックリンクは、ある概念がほかのページからどう参照されているかを横断で見せます。グラフビューは、知識のクラスタと孤立ノード (まだ埋まっていない論点) を視覚的に教えてくれます。Dataview プラグインを入れると、Vault 全体をデータベースのように問い合わせられます。Marp プラグインを入れると、マークダウンファイルがそのままスライドデッキとして書き出せます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "人間の役割は「読む、軽く修正する、新しい問いを投げる」です。2008 年のように手作業で wiki ページを書いていく時代ではありません。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Step 4 - Q&A を Vault の上で動かす",
+        "inlineStyleRanges": [
+          {
+            "length": 27,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "wiki/ が 50 から 100 ページに達したあたりから、本当の価値が出始めます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "問いの形は、自分の業務ドメインに合わせて作ります。「クライアント A の今期の論点を、過去 3 ヶ月の議事録と競合分析を踏まえて出して」「来月の商品企画レビューに向けて、過去 6 ヶ月の顧客フィードバックから繰り返し出てくる pain を抽出して」「先月の経営会議で出た採用方針を、過去 1 年の採用面接記録と照らして整合チェックして」のように、業務上で本当に時間を奪われている問いを言語化して投げます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "裏側で LLM は、wiki/ から関連ページを集め、現代の 1M トークンのコンテキストウィンドウで全部読み、新しいマークダウンレポートを reports/ に書きます。出典として使った wiki ページへのリンクも自動で張られます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "問いを 1 つ立てるたびに、答えが Vault の中に資産として残ります。チャット履歴に流れて消えていく回答とは性質が違います。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Step 5 - 答えはチャットでなくファイルに",
+        "inlineStyleRanges": [
+          {
+            "length": 24,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Vault が育つかどうかは、この習慣で決まります。AI に問うときは必ず「ファイルとして答えて」と指示します。"
+      },
+      {
+        "type": "unstyled",
+        "text": "良い出力フォーマットは 3 種類あります。1 つ目は reports/ に書かれるマークダウンレポート。これがあなたの一番の思考の蓄積になります。2 つ目は Marp スライドデッキ。社内ピッチや週次同期で使えるスライドがマークダウン 1 枚から書き出せます。3 つ目は images/ に保存される図表や PNG。wiki/ のページに埋め込めます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "書かれたファイルは、関連する wiki/ のページからリンクします。次の問いを立てるとき、過去のレポートが自動で素材になります。問いを重ねるたびに、未来の答えが速く・深くなる構造です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Step 6 - LLM Health Check で Vault が腐るのを防ぐ",
+        "inlineStyleRanges": [
+          {
+            "length": 41,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "ここが、ほとんどの方がスキップする最大の論点です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "私たちは「追加する」ことばかり考えます。raw に放り込む、wiki に書かせる、reports に蓄積する。けれど Vault は時間が経つと、必ず矛盾と重複が溜まります。同じ概念が違うページに微妙に違う定義で書かれる、頻繁に出てくる固有名詞なのに専用ページがない、似たような内容のページが 2-3 個できる、数値の根拠が古いまま残る、といったことが起きます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Karpathy が示した最大のレバーは、ここを LLM に週次で清掃させる仕組みです。「私の wiki/ を全部スキャンして、(a) 矛盾する記述、(b) 頻出するのに専用ページがない概念、(c) 統合すべき重複ページ、(d) 数値の不整合、(e) 新しいページ候補、をリストアップして」と週 1 で投げます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "このひと手間で、Vault は時間経過とともに「より高い整合性」「より少ない混沌」へと収束します。手作業の整理は不要です。複利が効くのは、ただ追加するからではなく、追加と整理を両輪で回すからです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "6 ステップを毎回プロンプトで書き直すのは、率直に面倒です。そこで Claude Skills が「秘伝のタレを再利用可能にする装置」として効いてきます。"
+      },
+      {
+        "type": "header-two",
+        "text": "⑤Claude Skillsで秘伝のタレを再利用可能にする"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIjeSG2asAA75oh.jpg",
+        "width": 2048,
+        "height": 1152
+      },
+      {
+        "type": "unstyled",
+        "text": "Anthropic が数ヶ月前に公開した Claude Skills は、「Claude にいつ・何を・どう実行させるか」を 1 ファイルにまとめて再利用可能にする装置です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Skills の中身は SKILL.md という設計書 (内部的にはマークダウンファイル) と、必要に応じてスクリプトや参照資料がセットになったフォルダです。一度書けば、Claude Code でも、Web の Claude でも、API 経由でも同じ振る舞いで動きます。要するに、業務スタイルそのものを器具化する作業です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "これが何を意味するか。同じ Claude を使っても、SKILL.md の質によって出力の質は桁違いに変わります。プロンプトを毎回書き直す人と、業務の型を SKILL.md として育てている人では、半年後のレバレッジに大きな差が出ます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここからが本記事の独自部分です。Karpathy 方式に必要な Vault レベルの設定 (CLAUDE.md) と、最初に入れたい SKILL.md 5 本を、コピペで使える形で書き出します。自分の業務ドメインに合わせて 5-10 行書き換えるだけで動きます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "まず、Vault 全体のルールを書く CLAUDE.md です。これは Vault のトップに 1 個だけ置きます。"
+      },
+      {
+        "type": "markdown",
+        "text": "```markdown\n# CLAUDE.md (Vault Operating Manual)\nこのファイルは Claude Code に対する Vault 全体の指示書です。\n新しいセッションを開いたら、まずこのファイルが自動で読まれます。\n## Owner\n- 氏名: 自分の名前\n- 業務ドメイン: (例) 営業案件管理 / 競合リサーチ / 商品企画 / クライアント文脈の蓄積\n- 言語: 日本語で書く。引用や固有名詞のみ英語可\n## Vault Layout\n- raw/      ← 整理しない、リネームしない、私が放り込むだけの場所\n- wiki/     ← あなた (Claude) が書く、構造化された知識ベース\n- reports/  ← 問いに対する答えがファイルとして残る場所\nraw/ は読み取り専用扱い (削除・改名禁止)。\nwiki/ と reports/ はあなたが自由に編集してよい。\n## Compile Rules (wiki/ への書き方)\n- 1 概念につき 1 ファイル (kebab-case、例: client-a-context.md)\n- frontmatter に sources: [raw/xxx.md, raw/yyy.md] と書く\n- 必ず 1 段落以内の定義から始める\n- 関連ページへの [[wikilink]] を最低 2 つ\n- 索引: wiki/index.md に概念名と 1 行サマリを追記\n## Report Rules (reports/ への書き方)\n- ファイル名: {YYYY-MM-DD}_{topic-slug}.md\n- frontmatter に used_wiki_pages: [...] を必ず書く\n- 結論を冒頭に置く (リード)\n- 出典として参照した wiki ページへのリンクを末尾に列挙\n## Style\n- 体言止めと「ですます」を混ぜすぎない\n- 箇条書きと散文のリズムをつける\n- 業務固有の用語 (案件名、製品名) はそのまま使う\n- 抽象論より具体例を優先する\n## Lint Rules (週次の Health Check で確認)\n- 矛盾する記述があれば issues.md に列挙\n- 出典なしの数値があれば指摘\n- 3 個以上の raw で言及されている概念に専用ページがなければ作成提案\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "このファイルは、新しい Claude Code セッションを開くたびに自動で読まれます。Vault 全体の「憲法」のような役割です。Vault に Claude が触れるすべての動きが、この 1 ファイルの定義に従います。"
+      },
+      {
+        "type": "unstyled",
+        "text": "次に、Karpathy 方式の 6 ステップを動かす SKILL.md 5 本です。最初は 3 本 (kb-compile / kb-report / kb-lint) だけで十分動きます。残りの 2 本は Vault が育ってきてから追加してください。"
+      },
+      {
+        "type": "markdown",
+        "text": "```markdown\n---\nname: kb-compile\ndescription: raw/ をスキャンして wiki/ に概念ごとのマークダウンページを作る\n---\n# kb-compile\n## いつ使うか\n- raw/ に 10 件以上の新規ファイルが溜まったとき\n- 週末に Vault を整える時間が取れたとき\n- 「最近の素材を体系化したい」と感じたとき\n## 何をするか\n1. raw/ のすべてのファイルを Read する\n2. 繰り返し登場する概念 (3 ファイル以上で言及) を列挙する\n3. 各概念について、wiki/concepts/{concept-name}.md を生成する\n- frontmatter に sources: を必ず書く\n- 定義 (1 段落)、キーインサイト (3-5 点)、関連ページへの [[wikilink]] を含める\n4. wiki/index.md に新しい概念を 1 行サマリ付きで追記\n5. 生成・更新したファイル一覧を私に報告\n## 出力フォーマット\n- 報告: 生成 N 件、更新 M 件、スキップ K 件 (理由: 既存と内容変化なし)\n- 各ファイルへの絶対パス\n- 次回の優先タスク提案 (例: 「raw/2026-05-15_*.md 系の素材から competitor-positioning ページの作成を推奨」)\n```"
+      },
+      {
+        "type": "markdown",
+        "text": "```markdown\n---\nname: kb-report\ndescription: 私の問いに対して wiki/ を読み、reports/ に答えをマークダウンファイルとして書く\n---\n# kb-report\n## いつ使うか\n- 「私の Vault だけを使って〜を整理して」と問うとき\n- クライアントコール前の論点整理\n- 提案書ドラフトのリード生成\n- 週次の自分宛サマリ作成\n## 何をするか\n1. 問いを受け取る\n2. wiki/index.md を読み、関連しそうな概念ページを列挙\n3. 関連 wiki ページを Read する (5-15 ページ)\n4. reports/{YYYY-MM-DD}_{topic-slug}.md を新規作成\n- frontmatter に used_wiki_pages: を必ず書く\n- 結論を冒頭に置く (3 行リード)\n- 根拠を構造化して並べる\n- 末尾に出典 wiki ページへのリンクを列挙\n5. ファイルパスを私に返す\n## 出力フォーマット\n- reports/ のファイルパス\n- リードの 3 行 (チャットにも貼り出す)\n- 使用した wiki ページの一覧\n## 制約\n- raw/ のファイルは直接引用しない (必ず wiki/ 経由)\n- 出典のない断定をしない\n- 数値は wiki 上の根拠と合致しているか確認してから書く\n```"
+      },
+      {
+        "type": "markdown",
+        "text": "```markdown\n---\nname: kb-lint\ndescription: 週次で wiki/ をスキャンし、矛盾・重複・欠落・新規候補を洗い出す\n---\n# kb-lint\n## いつ使うか\n- 週に 1 度、自分の決めた時間に実行する (例: 週末)\n- 大量に raw/ を流し込んだ直後の品質確認\n## 何をするか\n1. wiki/ のすべてのファイルを Read する\n2. 以下の 5 観点で issues を列挙する\na. **矛盾**: 同じ概念が異なるページで違う定義 / 数値を持っている\nb. **欠落**: 3 ファイル以上で言及される固有名詞 / 概念に専用ページがない\nc. **重複**: 似た内容のページが複数あり、統合候補\nd. **数値不整合**: 数値の根拠が古い / 出典 raw が削除済み\ne. **新規候補**: 既存ページから派生して 1 ページ立てる価値のあるトピック\n3. wiki/issues.md を上書き生成 (フォーマットは下記)\n4. 私に対して「優先度高 3 件」を提案\n## 出力フォーマット (wiki/issues.md)\n# Lint Issues ({YYYY-MM-DD})\n## 矛盾\n- [ ] {issue 説明} (関連: [[page-a]], [[page-b]])\n## 欠落\n- [ ] {concept-name}: {N} ファイルで言及、専用ページなし\n## 重複\n- [ ] [[page-x]] と [[page-y]] の統合検討\n## 数値不整合\n- [ ] [[page-z]] の数値が raw/old.md (削除済) に依存\n## 新規候補\n- [ ] {new-topic}: {既存ページからの派生理由}\n```"
+      },
+      {
+        "type": "markdown",
+        "text": "```markdown\n---\nname: kb-onboard\ndescription: raw/ に新規ファイルが流入したとき、初期分類とサマリ生成を行う\n---\n# kb-onboard\n(略: kb-compile より小さい単位で raw/ 個別ファイルにサマリ frontmatter を追加する Skill。\nraw/{file}.md の冒頭に「topic / date / source_url / 1-line-summary」を frontmatter で追記し、\n後段の kb-compile が概念抽出をやりやすくする)\n───\n─── markdown ───\n---\nname: kb-slide\ndescription: reports/ の任意レポートを Marp 形式のスライドデッキに変換する\n---\n# kb-slide\n(略: reports/{file}.md を入力に、Marp 互換のマークダウン形式で\nslides/{YYYY-MM-DD}_{topic}.md を生成する Skill。\nセクションごとに 1 スライド、各スライド 5 行以内、画像は images/ 配下から引く)\n\n```"
+      },
+      {
+        "type": "markdown",
+        "text": "```markdown\n---\nname: kb-slide\ndescription: reports/ の任意レポートを Marp 形式のスライドデッキに変換する\n---\n# kb-slide\n(略: reports/{file}.md を入力に、Marp 互換のマークダウン形式で\nslides/{YYYY-MM-DD}_{topic}.md を生成する Skill。\nセクションごとに 1 スライド、各スライド 5 行以内、画像は images/ 配下から引く)\n\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "5 本のうち、業務で先に効くのは kb-compile と kb-report です。",
+        "inlineStyleRanges": [
+          {
+            "length": 43,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "残りの 3 本は Vault が育ち、週次運用が定着してから追加してください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Skill で動かす Vault は十分強力ですが、もう一段進むと「Claude のチャットから Vault に直接書き込む」世界に入れます。それを実現するのが、次に紹介する MCP for Obsidian です。"
+      },
+      {
+        "type": "header-two",
+        "text": "⑥MCP for ObsidianでチャットからVaultを直接編集する"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIjefW2bcAA0LCc.jpg",
+        "width": 2048,
+        "height": 1152
+      },
+      {
+        "type": "unstyled",
+        "text": "MCP (Model Context Protocol) for Obsidian は、Claude が Obsidian Vault の中身を直接 read / write できるようにする OSS の仕組みです。コピー & ペーストでもエクスポートでもなく、Claude がチャットの中から Vault のファイルを開き、編集し、特定の見出しの下に新しい内容を差し込めます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "OSS として実装が固まっており、海外の Obsidian × AI 系発信者の間では標準セットアップに近い扱いです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Vault に対して Claude ができることの代表は以下です。"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "任意のディレクトリ配下のファイル一覧を見る"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "任意のファイルの中身を読む"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "Vault 全体を検索する"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "既存ファイルの特定の見出しの下に内容を挿入する"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "既存ファイルの末尾に内容を追記する"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "ファイルやフォルダを削除する"
+      },
+      {
+        "type": "unstyled",
+        "text": "業務で使うときの問いの例を 3 つだけ挙げます。"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "「先週のクライアントコールのメモを全部探して、共通の論点を 3 つに整理して新しいファイル 2026-W20-client-themes.md を作って」"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "「直前の議事録を 5 行に要約して、メール文面を送れる形にして」"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "「この新しい示唆を、既存の competitor-positioning.md の #リスク 見出しの下に追記して」"
+      },
+      {
+        "type": "unstyled",
+        "text": "セットアップは 3 ステップです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Step 1 - Obsidian にプラグインを入れる",
+        "inlineStyleRanges": [
+          {
+            "length": 28,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Obsidian の Settings → Community Plugins → Browse から「Local REST API」を検索し、install + enable します。プラグイン設定画面で API key をコピーしておきます。Vault 全体に対する API アクセスのキーになるので、外部に漏らさないでください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Step 2 - Claude Desktop の設定ファイルを開く",
+        "inlineStyleRanges": [
+          {
+            "length": 34,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "設定ファイルは OS ごとに場所が違います。"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "Mac: ~/Library/Application Support/Claude/claude_desktop_config.json"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "Windows: %APPDATA%/Claude/claude_desktop_config.json"
+      },
+      {
+        "type": "unstyled",
+        "text": "Step 3 - 設定 JSON にブロックを追加する",
+        "inlineStyleRanges": [
+          {
+            "length": 27,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "下のブロックを claude_desktop_config.json に追記します。OBSIDIAN_API_KEY の値だけ、自分が Step 1 でコピーしたキーに置き換えてください。"
+      },
+      {
+        "type": "markdown",
+        "text": "```json\n{\n    \"mcpServers\": {\n        \"mcp-obsidian\": {\n            \"command\": \"uvx\",\n            \"args\": [\"mcp-obsidian\"],\n            \"env\": {\n                \"OBSIDIAN_API_KEY\": \"ここにLocal REST API pluginで発行したキーを貼る\",\n                \"OBSIDIAN_HOST\": \"127.0.0.1\",\n                \"OBSIDIAN_PORT\": \"27124\"\n            }\n        }\n    }\n}\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "追記したら Claude Desktop を再起動します。これで完了です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "設定でよく詰まる箇所を 4 つだけ整理しておきます。"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "Claude が uvx を見つけられない場合は、ターミナルで which uvx を実行して絶対パスを取得し、上記 JSON の \"command\": \"uvx\" をその絶対パスに置き換えてください"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "デフォルトのポートは 27124、ホストは 127.0.0.1 です。Local REST API の設定を変えていなければそのままで動きます"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "Claude が Vault に触っている間、Obsidian は開いたままにしておく必要があります。Local REST API プラグインは Obsidian が動作中のときだけ起動しています"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "最初の問いは「Use Obsidian to ...」で始めると、Claude がすぐに Vault モードで動き始めます (例: 「Use Obsidian to list all notes mentioning client A」)"
+      },
+      {
+        "type": "unstyled",
+        "text": "Vault が育ち、Skills と MCP がセットアップされた状態を続けると、何が起きるか。最後に時間軸で見ておきます。"
+      },
+      {
+        "type": "header-two",
+        "text": "⑦複利の正体は週次のLLM Health Checkにある"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIjepAnbcAAHsmR.jpg",
+        "width": 2048,
+        "height": 1152
+      },
+      {
+        "type": "unstyled",
+        "text": "最初の 30 日。Vault には 30-50 ページの wiki が育ちます。新しい問いを立てると、過去 1 ヶ月の自分の問いと答えが引用される感覚が出てきます。週次の Health Check で issues がリストアップされ、欠落していた概念ページが少しずつ埋まっていきます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "3 ヶ月後。wiki 全体を 1M トークンのコンテキストに乗せて問うと、業務固有のニュアンスを持った答えが返ってくるようになります。クライアントの呼び方、業界固有の論点、自分の判断基準、過去の意思決定の理由が、回答の前提として自然に織り込まれています。新しい案件の壁打ち相手が、自分の隣に座っている感覚に近づきます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "12 ヶ月後。Vault は 100-300 ページ規模に育ち、特定のトピックでは 10 万語クラスの専門コーパスになります。Karpathy 自身が示した実例では、1 つの研究テーマで 100 記事、約 40 万語に到達したとされています。博士論文より長い分量です。本人が 1 ワードも書かずに。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここまで来ると、次の段階の選択肢が見えてきます。Vault を fine-tuning コーパスとして使い、自分の業務文脈に最適化された専用モデルを作る、という道です。個人なら「あなた風モデル」、チームなら「組織風モデル」が成立します。fine-tuning までやらなくても、コンパイル済みの wiki と Skills だけで、十分なレバレッジが手に入ります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここで強調したいのが、複利の正体です。多くの解説は「Vault を作る」「Skills を入れる」までしか書きません。けれど、本当に効くのは Step 6 の LLM Health Check です。週次で矛盾と重複と欠落をスキャンし、Vault の構造を時間軸で守る装置を持っているかどうかが、半年後の差を決めます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ただ追加するだけの Vault は、時間と共に腐ります。週次で整理し続ける Vault は、時間と共に賢くなります。同じ Claude を使っていても、ここで差がつきます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "12 ヶ月後の Vault を持つには、今週末の初日から始めます。残り 1 章で、具体的なコマンドまで降ろします。"
+      },
+      {
+        "type": "header-two",
+        "text": "⑧2日間でまず動かしてみよう"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIje_cwaUAAaPt1.jpg",
+        "width": 2048,
+        "height": 1152
+      },
+      {
+        "type": "unstyled",
+        "text": "最初に効果を実感するために2日分確保してください。Claude CodeやCodexに慣れている方はこの記事自体を読み込ませてやってもらうのでもいいと思います。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ただ個人的には仕組みを理解するためにも最初は手動でやってみることをお勧めします。"
+      },
+      {
+        "type": "unstyled",
+        "text": "初日 - Capture セットアップ",
+        "inlineStyleRanges": [
+          {
+            "length": 19,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "午前中に Obsidian をインストールします。Obsidian の公式サイト (obsidian.md) からダウンロードして、Vault を 1 つ作ります。Vault の保存先は ~/Vault/ あたりが扱いやすいと思います。"
+      },
+      {
+        "type": "unstyled",
+        "text": "次に Obsidian Web Clipper ブラウザ拡張を入れます (Chrome / Firefox / Safari いずれも対応)。設定で保存先を raw/ に向けます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここまで来たら、ターミナルで 3 フォルダを作ります。"
+      },
+      {
+        "type": "markdown",
+        "text": "```bash\n# Vault 内に必要なフォルダを作成\ncd ~/Vault\nmkdir -p raw wiki reports\nmkdir -p wiki/concepts wiki/people\nmkdir -p .claude/skills/{kb-compile,kb-report,kb-lint}\ntouch CLAUDE.md\ntouch wiki/index.md\n# 確認\ntree -L 3 ~/Vault\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "次に、自分の業務ドメインから 1 つだけテーマを選びます (例: 「現在の主要案件」「いま深掘りたい技術領域」「来月の商談準備」など)。"
+      },
+      {
+        "type": "unstyled",
+        "text": "そのテーマに関連する素材を 20-30 件、raw/ に集めます。目安は、議事録 5 件、Slack の保存投稿 5 件、提案や顧客資料 5 件、業界記事や競合分析 5-15 件です。整理は一切しないでください。リネームもしないでください。ただ放り込みます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "これで初日は終了です。所要時間は、Obsidian インストールと拡張設定で 30 分、3 フォルダ作成で 5 分、クリップで 1-2 時間といったところです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "2 日目 - Skills 投入と初回 Q&A",
+        "inlineStyleRanges": [
+          {
+            "length": 23,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "2 日目は、Vault に CLAUDE.md と SKILL.md を入れて、最初の Q&A を動かします。"
+      },
+      {
+        "type": "unstyled",
+        "text": "CLAUDE.md は、本記事の第 5 章で書き出した内容を ~/Vault/CLAUDE.md にそのまま貼り付け、業務ドメインのところだけ自分のものに書き換えます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "SKILL.md は、最初は kb-compile と kb-report の 2 本だけで十分です。下のコマンドで設定します。"
+      },
+      {
+        "type": "markdown",
+        "text": "```\n# kb-compile の SKILL.md を配置\ncat &#x3C;&#x3C; 'EOF' > ~/Vault/.claude/skills/kb-compile/SKILL.md\n---\nname: kb-compile\ndescription: raw/ をスキャンして wiki/ に概念ごとのマークダウンページを作る\n---\n(本記事第 5 章の kb-compile.md の本文をここに貼る)\nEOF\n# kb-report の SKILL.md を配置\ncat &#x3C;&#x3C; 'EOF' > ~/Vault/.claude/skills/kb-report/SKILL.md\n---\nname: kb-report\ndescription: 私の問いに対して wiki/ を読み、reports/ に答えをマークダウンファイルとして書く\n---\n(本記事第 5 章の kb-report.md の本文をここに貼る)\nEOF\n# Vault のルートで Claude Code を起動\ncd ~/Vault\nclaude\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude Code が起動したら、最初のコマンドを叩きます。"
+      },
+      {
+        "type": "markdown",
+        "text": "```bash\n/kb-compile\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude が raw/ をスキャンし、wiki/concepts/ にマークダウンページを生成し始めます。10-30 分ほどで完了します。生成された wiki ページを Obsidian で開いて、グラフビューを見てみてください。20-30 本の raw から、いくつかの概念のクラスタが浮かび上がっているはずです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "次に kb-report を試します。"
+      },
+      {
+        "type": "markdown",
+        "text": "```bash\n/kb-report 「raw/ に集めた今回の素材 (議事録・Slack 投稿・顧客資料・業界記事) をもとに、次回の主要案件で押さえるべき論点を 5 つにまとめて」\n\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "reports/ に答えのマークダウンファイルが書かれます。これが Vault の中で動く最初の Q&A です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "これで MVP 完了です。ここから、raw/ に週 20-30 本クリップする習慣と、週に 1 度 kb-lint を回す習慣がつけば、3 ヶ月後の Vault は別物になっています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "第二の脳がただのクリップ置き場で止まる構造から抜け出し、LLM がコンパイラと図書館係として動く参謀本部に変わる流れは、ここまでです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "12 ヶ月後の Vault は、自分より自分の業務を知っている存在になります。それを手に入れるためにやることは、今週末は初日の 3 フォルダ作成と Web Clipper だけで十分です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "今回の記事の要点をまとめます："
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "LLM にファイルシステム上で知識を書き直し続ける compiler と図書館係の役割を与える"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "Vault は raw / wiki / reports の 3 フォルダで足りる。整理もリネームもしない、ただ raw に放り込む"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "Capture → Wiki 生成 → IDE 活用 → Q&A → 答えはファイル化 → 週次の LLM Health Check、の 6 ステップで動く"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "Claude Skills (SKILL.md という設計書) で kb-compile / kb-report / kb-lint の 3 本を入れれば、毎回プロンプトを書き直す手間が消える"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "MCP for Obsidian を入れると Claude がチャットから Vault に直接書き込めるようになる"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "複利の正体は週次の LLM Health Check で Vault の整合性を保ち続けること (追加と整理を両輪で回すこと)"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "今週末は初日 (3 フォルダ + Web Clipper) と 2 日目 (CLAUDE.md + SKILL.md 2 本投入と初回 Q&A) だけで MVP が完成する"
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "unstyled",
+        "text": "この記事が少しでも参考になった方へ。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIjMbE_awAAObXm.jpg",
+        "width": 1196,
+        "height": 998
+      },
+      {
+        "type": "unstyled",
+        "text": "東大Obsidianオタク（ @ObsidianOtaku  ）はObsidianとAIを組み合わせて自分自身やチームの分身を作る取り組みを研究しているチームです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "AIエージェントと組み合わせてあらゆる仕事の品質を向上させるための手法を実践しています👇"
+      },
+      {
+        "type": "unstyled",
+        "text": "■ AI記憶設計の実装パターンの公開\n■ Obsidian活用のトレンドとノウハウ解説\n■ 独自構築した今日から使えるObsidian設計情報のシェア"
+      },
+      {
+        "type": "unstyled",
+        "text": "今後も実践的な情報を積極的に発信していきます！フォローをお願いします^^"
+      }
+    ]
+  },
+  "status": "success",
+  "msg": "success",
+  "_handle": "ObsidianOtaku"
+}

@@ -1,0 +1,602 @@
+{
+  "article": {
+    "id": "QXJ0aWNsZUVudGl0eToyMDUxMjk2MDM0ODk5NTY2NTky",
+    "author": {
+      "type": "user",
+      "userName": "claudecode_lab",
+      "url": "https://x.com/claudecode_lab",
+      "twitterUrl": "https://twitter.com/claudecode_lab",
+      "id": "1807726847154847744",
+      "name": "Claude Code研究所|スパルタClaude Code塾",
+      "isVerified": false,
+      "isBlueVerified": true,
+      "verifiedType": null,
+      "profilePicture": "https://pbs.twimg.com/profile_images/2047553749867216896/_SKwpHqG_normal.jpg",
+      "coverPicture": "https://pbs.twimg.com/profile_banners/1807726847154847744/1777009967",
+      "description": "東京大学にてAI研究に従事していたエンジニアメンバーがClaude Codeに特化した最新情報をお届け。経営者・士業向け名物研修「スパルタClaude Code塾」も運営。\nnote:https://t.co/VAtJlAXlsF\n研修のご依頼などDMでも受付しております✉️",
+      "location": "東京都",
+      "followers": 19619,
+      "following": 377,
+      "status": "",
+      "canDm": true,
+      "canMediaTag": true,
+      "createdAt": "Mon Jul 01 10:45:57 +0000 2024",
+      "entities": {
+        "description": {
+          "urls": [
+            {
+              "display_url": "note.com/claudecode_lab",
+              "expanded_url": "https://note.com/claudecode_lab",
+              "indices": [
+                92,
+                115
+              ],
+              "url": "https://t.co/VAtJlAXlsF"
+            }
+          ]
+        },
+        "url": {
+          "urls": [
+            {
+              "display_url": "claude-code-lab.com",
+              "expanded_url": "https://claude-code-lab.com/",
+              "indices": [
+                0,
+                23
+              ],
+              "url": "https://t.co/8oWsTCy0do"
+            }
+          ]
+        }
+      },
+      "fastFollowersCount": 0,
+      "favouritesCount": 12964,
+      "hasCustomTimelines": false,
+      "isTranslator": false,
+      "mediaCount": 79,
+      "statusesCount": 276,
+      "withheldInCountries": [],
+      "affiliatesHighlightedLabel": {},
+      "possiblySensitive": false,
+      "pinnedTweetIds": [
+        "2059090665716552166"
+      ],
+      "profile_bio": {},
+      "isAutomated": false,
+      "automatedBy": null
+    },
+    "replyCount": 0,
+    "likeCount": 19,
+    "quoteCount": 0,
+    "viewCount": "4606",
+    "createdAt": "Tue May 05 12:11:39 +0000 2026",
+    "title": "Claude・Coworkで「現在のセッション」の制限に引っかからないためにできること",
+    "preview_text": "Claudeを使い込んでいると、rate limitのメッセージに直面する経験をした方は多いはずです。Maxプランを契約していても、この制限の壁は容赦なく現れます。\nAIコンテンツクリエイターのMiles",
+    "cover_media_img_url": "https://pbs.twimg.com/media/HHjgAIoaMAAFg3Q.jpg",
+    "contents": [
+      {
+        "type": "unstyled",
+        "text": "Claudeを使い込んでいると、rate limitのメッセージに直面する経験をした方は多いはずです。Maxプランを契約していても、この制限の壁は容赦なく現れます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "AIコンテンツクリエイターのMiles Deutscher（@milesdeutscher）がXに投稿した「Never Hit Claude Usage Limits Ever Again」では、その根本原因が「Claudeの使い方そのものが間違っていた」ことにあると指摘し、5ステップのフレームワークで解決する方法を紹介しています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "著者は月額200ドル（約3万円）のプランでも制限に引っかかっていたと告白していますが、この記事の方法を実装してから3週間、一度もトークン制限に引っかかっていないとのことです。5M（500万）ビューを超えた人気記事を、日本語で完全翻訳してお届けします。"
+      },
+      {
+        "type": "unstyled",
+        "text": "10分後、あなたはClaudeのトークン使用制限に引っかからなくなります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Claudeを使い込んでいると、tokenを使い切ることがしばしばあるかと思います。Claudeのセッションで深く作業を進めていると、突然アカウントの使用制限に達して、次の数時間は使えなくなります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "以下で説明する戦略を実装する前は、私も頻繁にこの経験をしていました（月額200ドルのプランでも）。レート制限は私の生産性を大きく阻害していました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "使用制限が仕事の大きな妨げになっていたので、私は深く調査しました。まずClaudeが実際にどのように動作するか、次になぜ制限に常に引っかかっていたかを理解しました。"
+      },
+      {
+        "type": "blockquote",
+        "text": "📝 補足： 「トークン」とはClaudeのようなAIが文章を処理する単位です。入力した質問・アップロードした画像・コードの生成、すべてトークンを消費します。Anthropicの料金プランには月ごとのトークン上限があり、使い方を誤ると思ったより早く上限に達してしまいます。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 2,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "私が発見したのは、Claudeを完全に間違った方法で使っていたということです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "良いニュースとしては、Claudeを正しく使う方法を学んでから使用制限の問題を解決し、過去3週間で一度もトークンのレート制限に引っかかっていません。"
+      },
+      {
+        "type": "header-one",
+        "text": "ステップ1：計画を立てる"
+      },
+      {
+        "type": "unstyled",
+        "text": "最初のClaudeプロンプトを送る前に、自分が何をしたいかを正確に把握することをオススメします。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Claudeの履歴を遡ると、試行錯誤に費やした大量の無駄なプロンプトが見つかる可能性がほぼ確実にあります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Claudeはブレインストーミングにも良いですが、そこにOpusを使うのは間違いです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "代わりに、ブレインストーミング専用に安いモデル（Haiku）を使い、何がしたいか分かってから高価なモデルに切り替えることを強くおすすめします。"
+      },
+      {
+        "type": "blockquote",
+        "text": "📝 補足： AnthropicのAIモデルにはいくつかのランクがあります。2026年5月時点では、「Haiku」（軽量・高速・安価）→「Sonnet」（中間）→「Opus」（最高性能・最高コスト）の3段階があります。Claudeのプランでは使えるモデルのトークン量が共有されており、高性能モデルを使うほど消費が早まります。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 2,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "ワークフローを修正する"
+      },
+      {
+        "type": "unstyled",
+        "text": "モデル選択については後でさらに詳しく解説します。"
+      },
+      {
+        "type": "unstyled",
+        "text": "まず、Claudeが実際にどう動くかを理解する必要があります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "シンプルなテキストチャットを送るだけではトークンは大して消費されません。"
+      },
+      {
+        "type": "unstyled",
+        "text": "描画・コーディング・構築こそがアカウントを消耗させます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "だからこそ最大のポイントは、（できれば安いモデルを使いながら）計画に時間をかけ、構築する段階になってからOpusに切り替えることです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "例：2人が財務追跡アプリをvibe-codeしようとしています"
+      },
+      {
+        "type": "blockquote",
+        "text": "📝 補足： 「vibe-code（バイブコーディング）」とは、細かい仕様を事前に固めずに、AIに「なんとなくこんな感じ」のイメージで指示しながらコードを生成させていく開発スタイルのことです。2025年頃から広まった言葉で、スピーディーな一方、計画不足によるやり直しが多くなりがちです。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 2,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Aさん：計画に2分かけて、アプリを3回作り直す。 \nBさん：計画に20分かけて、アプリを1回だけ作る。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Bさんはこのタスク単体で約67%（約1.50ドル）節約できます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "さらに一歩進めるなら、Claude Code内の専用「Plan Mode（計画モード）」を使うことができます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Plan ModeはClaudeに計画に集中するよう明示的に指示します。"
+      },
+      {
+        "type": "blockquote",
+        "text": "📝 補足： Plan ModeはClaude Codeのターミナルツールに組み込まれた機能で、コード生成に進む前に実装計画だけを立案させるモードです。このモードでは実際にコードを書かず、何をどう作るかの設計だけを行います。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 2,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "まとめ：計画にもっと時間をかけ、このPlan Modeには安いモデルを使いましょう。"
+      },
+      {
+        "type": "header-one",
+        "text": "ステップ2：セッションの長さ"
+      },
+      {
+        "type": "unstyled",
+        "text": "長いセッション(チャット)は最悪です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "同じタスクに同じセッションを延々と使い続けている場合、長いセッションが悪さをしていることが多くあります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "長いセッションを使うことは、Claudeに古いコンテキストを読み直し続けるよう命令しているのと同じです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "これはより多くのトークンを使い時間もかかるだけでなく、不要な情報で出力品質が低下します。"
+      },
+      {
+        "type": "unstyled",
+        "text": "良い解決策がいくつかあります！"
+      },
+      {
+        "type": "header-two",
+        "text": "プロジェクト機能を使う"
+      },
+      {
+        "type": "unstyled",
+        "text": "繰り返しのタスクに単一セッションを使う代わりに、複数セッションを管理するプロジェクトを設定しましょう。"
+      },
+      {
+        "type": "unstyled",
+        "text": "タスクを新しくさせる際はいつでも、このプロジェクト内で新しいセッションを開きます。私の指示をすべて理解した状態でスタートできます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "プロのヒント：これらのプロジェクト内で、Claudeにトークン使用量を節約しようとしていることを伝えるだけでOKです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "指示の中に次のような文章を入れましょう："
+      },
+      {
+        "type": "unstyled",
+        "text": "アカウントの使用量を節約しようとしていることを意識してください。回答は簡潔にし、適宜、新しいセッションを始めるべきタイミングや、トークン使用量を減らすのに役立つヒントをアドバイスしてください。"
+      },
+      {
+        "type": "header-two",
+        "text": "メガプロンプトを活用する"
+      },
+      {
+        "type": "unstyled",
+        "text": "次に、同じタスクに同じセッションを繰り返し使っている場合、Claudeに次のように伝えることができます："
+      },
+      {
+        "type": "markdown",
+        "text": "```\n新しいセッションに移行します。この会話のコンテキストを失わずに\nセッションを再開するために使えるプロンプトを作ってください。\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "この2つの方法で、一つの長いチャットに頼る必要がなくなります。"
+      },
+      {
+        "type": "header-one",
+        "text": "ステップ3：適切なメモリ"
+      },
+      {
+        "type": "unstyled",
+        "text": "Claudeの最大の問題の一つは、コンテキストを忘れることが多く、Claudeが実際に何を覚えているかをほとんど制御できないことです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "これにより、自分で再説明しなければならなくなり、必要以上にトークンを消費します。"
+      },
+      {
+        "type": "unstyled",
+        "text": "この問題を修正する方法（3つの戦略）についての詳細なガイドを書いていますが、今は最も手軽な戦略を要約します。"
+      },
+      {
+        "type": "blockquote",
+        "text": "📝 補足： 著者Miles Deutscherが運営するAI Edgeニュースレター（@aiedge_）では、Claude完全記憶ガイドが公開されています。Xの投稿によると「Claudeのメモリはデフォルトでは基本的に役に立たない」と述べており、文脈をよく忘れ、説明を繰り返す必要がある問題を3つの戦略で解決しています。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 2,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "デスクトップに新しいフォルダを作り、2つのMarkdownファイルを入れましょう："
+      },
+      {
+        "type": "header-two",
+        "text": "Instructions.md"
+      },
+      {
+        "type": "unstyled",
+        "text": "このファイルはClaudeへのすべてのルールと指示を記述します："
+      },
+      {
+        "type": "unstyled",
+        "text": "記述例："
+      },
+      {
+        "type": "markdown",
+        "text": "```\n## あなたについて\n\n## あなたの仕事\n\n## ルール\nこのファイルに必ず含めること：\n「時間とともにMemory.MDに私の好みを更新してください。」\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "最後の一行が重要です。これがClaudeに2つ目のMarkdownファイルに自分のデータの継続的なメモリログを作成させる方法です。"
+      },
+      {
+        "type": "header-two",
+        "text": "Memory.md"
+      },
+      {
+        "type": "unstyled",
+        "text": "これはClaudeの「脳」であり、時間とともに継続的に更新されます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "記述例："
+      },
+      {
+        "type": "markdown",
+        "text": "```\n## 好み\n\n## 修正事項\n\n## パターン\n\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "「ですます調で文章を作らないで」のようなことを言うと、ClaudeはInstructionsファイルを読んでMemoryファイルに更新しに行くようになります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "必ずフォルダをClaude Code/Coworkに添付して、これらのファイルにアクセスできるようにしてください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "これらのファイルの作成に困っている場合は、Claudeに助けを求めましょう。"
+      },
+      {
+        "type": "header-one",
+        "text": "ステップ4：モデルの積み上げと選択"
+      },
+      {
+        "type": "unstyled",
+        "text": "モデル選択については先ほど少し触れましたが、より詳しく見ていきましょう。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Opus 4.7をすべてに使うのは完全な無駄です。タスクの90%に他のモデルを使い、最後の10%にOpusを頼ることができます。"
+      },
+      {
+        "type": "blockquote",
+        "text": "📝 補足： 「Opus 4.7」は2026年時点でAnthropicが提供する最も高性能なモデルです。複雑な推論・創造的な作業・高度なコーディングに優れますが、消費トークン量も最大です。コスト対効果を考えると、単純なタスクにはOverkill（過剰スペック）です。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 2,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "私は「エスカレート」システムを使っており、最も安いモデルから始めて、必要なときだけOpusに上げていきます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Haiku（軽いタスク）から始める → Sonnet（中程度のタスク）→ Opus（重いタスクと最終的なキュレーション/実行）"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HHe6YwDasAAngMn.jpg",
+        "width": 1988,
+        "height": 1082
+      },
+      {
+        "type": "header-two",
+        "text": "モデル選択のさらなるヒント"
+      },
+      {
+        "type": "unstyled",
+        "text": "Adaptive Thinking（アダプティブ思考）",
+        "inlineStyleRanges": [
+          {
+            "length": 27,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "ほとんどの場合、これはオフにしておきましょう。"
+      },
+      {
+        "type": "blockquote",
+        "text": "📝 補足： 「Adaptive Thinking（アダプティブ思考）」はClaudeが回答を出す前に、長時間の「内部思考」を行う機能です。複雑な数学問題・多段階の推論・深い分析に有効ですが、大量のトークンを消費します。日常的なタスクには不要なことがほとんどです。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 2,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HHex8afbEAEKQv3.jpg",
+        "width": 980,
+        "height": 714
+      },
+      {
+        "type": "unstyled",
+        "text": "スタイル機能",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "ほとんどの人が知らないのですが、ClaudeのChat とCoworkには「スタイル」機能があります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "スタイルを「簡潔」に切り替えることで、使用中のモデルに短く簡潔な返答をするよう伝えることができます。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HHeyVNZa0AA7bhA.jpg",
+        "width": 1444,
+        "height": 864
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HHey7XDbsAADTLr.jpg",
+        "width": 1008,
+        "height": 466
+      },
+      {
+        "type": "unstyled",
+        "text": "低工程モード",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude Codeでは、工程を「Low（低）」に選択できます。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HHey-plagAA3zvr.jpg",
+        "width": 1060,
+        "height": 634
+      },
+      {
+        "type": "header-one",
+        "text": "ステップ5：ツールの分割と最適化"
+      },
+      {
+        "type": "unstyled",
+        "text": "ほとんどの人は、Claudeのさまざまなツールが異なる使用パラメーターを持っていることに気づいていません。"
+      },
+      {
+        "type": "unstyled",
+        "text": "例えば、Claude Code/ChatはあなたのプランのすべてのClaudeモデルの全体的な使用量の下で同じ使用量を使いますが、Claude Designは完全に別物です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Claudeツール間を適切に切り替えることで、トークン使用量を調整できます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "アカウントを最大限に活用するために、各ツールがそれが構築された目的に使うことに集中しましょう。"
+      },
+      {
+        "type": "unstyled",
+        "text": "例えば、使っていないClaude Designのトークンがあるのに、Claude Codeのトークンを使ってビジュアルをデザインするのは避けてください。逆に Claude Designのトークンを使い切った場合は、ダウンロードして、CoworkやClaude Codeでも作業することもできます。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HHezwBNaIAAZJQ0.jpg",
+        "width": 1562,
+        "height": 428
+      },
+      {
+        "type": "header-one",
+        "text": "最後のヒント"
+      },
+      {
+        "type": "unstyled",
+        "text": "追加クレジットの購入：新しいプランにアップグレードする（20ドル→100ドル、または100ドル→200ドル）代わりに、少額の従量課金のクレジットを購入するのも、費用を抑えつつもClaudeの使用制限にかからないようにする効果的な方法なこともあります。",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HHez32AaIAA5r-6.jpg",
+        "width": 1562,
+        "height": 592
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude Skillsの構築：繰り返しのタスクを自動化するためにClaude skillsを構築しましょう。",
+        "inlineStyleRanges": [
+          {
+            "length": 16,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "使用量のトラッキング：不意打ちを食らわないよう、定期的に使用量を確認しましょう。制限に近づいていることを知っているだけで、プロンプトの習慣を変えたり、ここで紹介したヒントを活用したりするきっかけになります。",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "/Usageコマンド：Claude Codeで/Usageを実行すると使用量を確認できます。また、設定(setting)の「Overview」セクションでも確認できます。",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-one",
+        "text": "まとめ"
+      },
+      {
+        "type": "unstyled",
+        "text": "AIの使用コストが安くなるとは思っていません。"
+      },
+      {
+        "type": "unstyled",
+        "text": "だからこそ、長期的にコストを節約したいなら、今すぐアカウントの使用量を正しく最大化する方法を学ぶことが重要です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "経営者・士業・営業職等、全てのビジネスパーソンの方で、\n「Claude Codeを使いこなしたい」\n「AIを活用してもっと業務を効率化したい」\nといったお悩みをお持ちの方は、ぜひ一度ご相談ください。\n▼ スパルタClaude Code塾\nhttps://www.claude-code-lab.com"
+      },
+      {
+        "type": "unstyled",
+        "text": "#ClaudeCode #AI活用 #業務効率化 #ノーコード #AIツール #生成AI #Claude #仕事効率化 #プロンプトエンジニアリング #LLM #コスト削減 #Cowork "
+      }
+    ]
+  },
+  "status": "success",
+  "msg": "success",
+  "_handle": "claudecode_lab"
+}

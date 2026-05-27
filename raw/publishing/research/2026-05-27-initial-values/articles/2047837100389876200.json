@@ -1,0 +1,521 @@
+{
+  "article": {
+    "id": "QXJ0aWNsZUVudGl0eToyMDQ3Mjk1NTU3MDY1MTk5NjE2",
+    "author": {
+      "type": "user",
+      "userName": "claudecode_lab",
+      "url": "https://x.com/claudecode_lab",
+      "twitterUrl": "https://twitter.com/claudecode_lab",
+      "id": "1807726847154847744",
+      "name": "Claude Code研究所|スパルタClaude Code塾",
+      "isVerified": false,
+      "isBlueVerified": true,
+      "verifiedType": null,
+      "profilePicture": "https://pbs.twimg.com/profile_images/2047553749867216896/_SKwpHqG_normal.jpg",
+      "coverPicture": "https://pbs.twimg.com/profile_banners/1807726847154847744/1777009967",
+      "description": "東京大学にてAI研究に従事していたエンジニアメンバーがClaude Codeに特化した最新情報をお届け。経営者・士業向け名物研修「スパルタClaude Code塾」も運営。\nnote:https://t.co/VAtJlAXlsF\n研修のご依頼などDMでも受付しております✉️",
+      "location": "東京都",
+      "followers": 19619,
+      "following": 377,
+      "status": "",
+      "canDm": true,
+      "canMediaTag": true,
+      "createdAt": "Mon Jul 01 10:45:57 +0000 2024",
+      "entities": {
+        "description": {
+          "urls": [
+            {
+              "display_url": "note.com/claudecode_lab",
+              "expanded_url": "https://note.com/claudecode_lab",
+              "indices": [
+                92,
+                115
+              ],
+              "url": "https://t.co/VAtJlAXlsF"
+            }
+          ]
+        },
+        "url": {
+          "urls": [
+            {
+              "display_url": "claude-code-lab.com",
+              "expanded_url": "https://claude-code-lab.com/",
+              "indices": [
+                0,
+                23
+              ],
+              "url": "https://t.co/8oWsTCy0do"
+            }
+          ]
+        }
+      },
+      "fastFollowersCount": 0,
+      "favouritesCount": 12964,
+      "hasCustomTimelines": false,
+      "isTranslator": false,
+      "mediaCount": 79,
+      "statusesCount": 276,
+      "withheldInCountries": [],
+      "affiliatesHighlightedLabel": {},
+      "possiblySensitive": false,
+      "pinnedTweetIds": [
+        "2059090665716552166"
+      ],
+      "profile_bio": {},
+      "isAutomated": false,
+      "automatedBy": null
+    },
+    "replyCount": 2,
+    "likeCount": 355,
+    "quoteCount": 7,
+    "viewCount": "61771",
+    "createdAt": "Sat Apr 25 00:36:26 +0000 2026",
+    "title": "Claude Designの使い方ガイド完全版",
+    "preview_text": "Claude Designがリリースされてから1週間ほど経ちました。",
+    "cover_media_img_url": "https://pbs.twimg.com/media/HGrUL9cakAAcVKY.jpg",
+    "contents": [
+      {
+        "type": "unstyled",
+        "text": "Claude Designがリリースされてから1週間ほど経ちました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "1週間ほど使ってみて、とうとうデザインでもAIが人間を超えてきたと感じています。マーケティングキャンペーン、プレゼンテーション、インフォグラフィック、提案書など、文字通り何でもデザインすることができます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "この記事ではClaude Designをマスターして実際にさまざまなものをデザインできるようになることを目的としています。実際に手を動かしながら読んでくだされば幸いです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "本記事は、AI Edge（@aiedge_）の「Claude Design: The Ultimate Guide」を参考にしました。"
+      },
+      {
+        "type": "header-one",
+        "text": "セクションI：Claude Designの概要"
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude DesignはAnthropic Labsが開発中のデザインアプリです。デザイン特化版のAIと考えてもらって差し支えないです。"
+      },
+      {
+        "type": "atomic",
+        "text": "1:15"
+      },
+      {
+        "type": "unstyled",
+        "text": "文字通り数分で何でもビジュアルを作れます。デザイン、プロトタイプ、スライド、サムネイル画像など、あらゆるものに対応していますし、作成後Canvaに送信して、Canva上で微調整などもできます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Figmaのような従来のデザインツールには、ある程度使い方やデザインを学ぶといった共通の参入障壁があります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Canvaやパワポでいつも適当に済ませてはいるが、ちゃんとした使い方がわかっていない方も多いのではないでしょうか？"
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude Designでは、欲しいものを自然な文章で説明するだけで自動で作ってくれます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude Designは他のすべてのClaudeツールとは完全に別のプラットフォームと考えて良いです（独自の使用制限があります）。始め方をご説明します。"
+      },
+      {
+        "type": "header-one",
+        "text": "セクションII：Claude Designにアクセスする"
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude Designはデスクトップ版やCLI版では動かず、web版のみリリースされています。https://claude.ai/design に直接アクセスするか、web上でClaudeを開いて、左サイドバーにある「Design」のタブをクリックします。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HGl-RDMbsAA6tem.png",
+        "width": 562,
+        "height": 638
+      },
+      {
+        "type": "unstyled",
+        "text": "以上です！Claude Designの中に入り、作成を始める準備ができました。"
+      },
+      {
+        "type": "header-two",
+        "text": "使用制限"
+      },
+      {
+        "type": "unstyled",
+        "text": "一度使用制限について理解しておきましょう。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude Designは独自の別の使用枠で動いています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "通常のClaudeチャットやClaude Codeの制限にはカウントされません。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HGl_CdEbMAAvMV5.jpg",
+        "width": 1574,
+        "height": 408
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude Designの使用制限は週単位でリセットされることに注意してください。数時間ごとにリセットされる通常のClaudeチャットとは異なります。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 19,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Designのクレジットは慎重に使いましょう！"
+      },
+      {
+        "type": "header-one",
+        "text": "セクションIII：Claude Designの使い方"
+      },
+      {
+        "type": "unstyled",
+        "text": "英語なのでClaude Designの使い方は非常に簡単です。"
+      },
+      {
+        "type": "header-two",
+        "text": "インターフェース"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HGmAhMZaoAATHdJ.jpg",
+        "width": 2736,
+        "height": 1144
+      },
+      {
+        "type": "unstyled",
+        "text": "これが最初にアクセスすると出てくるダッシュボードです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "左のサイドバーでは、新しいプロジェクトを始める時に欲しいものを説明し、Claudeに方向性を与えます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "右側は今まで作成したプロジェクトのフォルダと理解してもらって差し障りありません。"
+      },
+      {
+        "type": "header-two",
+        "text": "デザインを始める"
+      },
+      {
+        "type": "unstyled",
+        "text": "左サイドバーには、デザインを始めるための4つのオプションが表示されます："
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "Prototype（プロトタイプ）： 実際のHPなどのプロトタイプを作ってシミュレーションする。",
+        "inlineStyleRanges": [
+          {
+            "length": 18,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "Slide Deck（スライドデッキ）： スライドごとに構築するプレゼンテーションを作る。",
+        "inlineStyleRanges": [
+          {
+            "length": 20,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "From Template（テンプレートから）： 事前構築済みのスターティングポイントから作る。",
+        "inlineStyleRanges": [
+          {
+            "length": 24,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "Other（その他）： その他すべてのもの",
+        "inlineStyleRanges": [
+          {
+            "length": 11,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "作りたいものに基づいて、4つのオプションのどれかを選択してください。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HGmC767aoAE_HOI.png",
+        "width": 724,
+        "height": 578
+      },
+      {
+        "type": "unstyled",
+        "text": "このサムネの画像はOtherから作成したプロジェクトで作りました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "作成すると、新しいProject Design Canvasが表示されます："
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HGmDTknagAAKyrG.jpg",
+        "width": 2692,
+        "height": 1438
+      },
+      {
+        "type": "unstyled",
+        "text": "ここでリアルタイムで構築を始めることができます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Chatに指示を書いてデザインさせます。コンテキストを追加することもできます（データ、Figmaファイル、コードベース、スクリーンショット、ロゴ画像などをインポート）。"
+      },
+      {
+        "type": "unstyled",
+        "text": "AIプロンプティング全般と同様に、コンテキストが多いほど良い結果が得られることが多いです。"
+      },
+      {
+        "type": "header-two",
+        "text": "Design Systems（デザインシステム）"
+      },
+      {
+        "type": "unstyled",
+        "text": "特定のビジュアルのガイドラインとルールを設定した上でプロジェクトを始めることもできます。それがDesign Systemsです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude Skillsに似ていますが、そのデザイン版だと考えてください。Claudeがあらかじめ設定したガイドライン/指示を把握している場所です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "例えば、新しいDesign Systemにブランドカラーを追加すると、Claudeはブランドのビジュアルを作成するための正確なガイドラインを把握します。"
+      },
+      {
+        "type": "unstyled",
+        "text": "「Design Systems」の下で「Create New」をクリックしてください。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HGmEw6fbcAAkzA7.jpg",
+        "width": 2066,
+        "height": 1170
+      },
+      {
+        "type": "unstyled",
+        "text": "データ入力フィールドの入力を求められます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "すべてを入力する必要はありませんが、より多くのコンテキストを提供するほど良い結果が得られます。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HGmE8GkaEAAcMCB.jpg",
+        "width": 974,
+        "height": 1396
+      },
+      {
+        "type": "unstyled",
+        "text": "フォント、コードベース、ノートなどを追加できます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "アドバイス： ClaudeでClaude.mdに会社などの情報を入れている方は、その.MDテキストをコピーして「Notes」セクションに貼り付けただけで、Claude Designはこれ以降ブランドのすべてのクリエイティブデザインコンポーネントを把握してくれます。",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Design Systemを作成したら、左サイドバーのメインメニューに戻り、プロジェクトで選択できます。(作成には5分ほどかかります。)"
+      },
+      {
+        "type": "unstyled",
+        "text": "繰り返しになりますが、これはClaude Skillsに似ていますが、デザイン向けです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "デザインのイメージを伝えるのが非常に簡単で、繰り返しやすくなります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "まとめると、新しいデザインを作成するには2つの方法があります："
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "New Project（新規プロジェクト）： ゼロから始める",
+        "inlineStyleRanges": [
+          {
+            "length": 22,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "Design Systems（デザインシステム）： 事前読み込みされた指示セット",
+        "inlineStyleRanges": [
+          {
+            "length": 25,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "それでは、実際のデザイン例をいくつかご紹介します！"
+      },
+      {
+        "type": "header-one",
+        "text": "セクションIV：修正を加える"
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude Designでは主に３つの修正方法があります。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HGrP-ucbUAARhwz.jpg",
+        "width": 1646,
+        "height": 648
+      },
+      {
+        "type": "header-two",
+        "text": "Tweaks（微調整）",
+        "inlineStyleRanges": [
+          {
+            "length": 11,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "デザイン全体のスタイルすばやく変更するためのパネルです。文字・カラー・余白などを即座に反映されるのが特徴です。最初はどの要素を微調整するのか説明する必要があります。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HGrR0k7bcAAREjK.png",
+        "width": 480,
+        "height": 200
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HGrR74FbkAAdWS2.jpg",
+        "width": 1616,
+        "height": 1154
+      },
+      {
+        "type": "header-two",
+        "text": "Edit（編集）"
+      },
+      {
+        "type": "unstyled",
+        "text": "キャンバス上の要素をクリックすると、テキストや画像を直接編集できるモードに入ります。Claudeに頼まず、自分で細部を手直ししたいときに使います。ダブルクリックでテキスト編集、ドラッグで位置調整など、FigmaやCanvaに近い操作感です。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HGrST-1bIAAH33U.jpg",
+        "width": 2658,
+        "height": 1398
+      },
+      {
+        "type": "header-two",
+        "text": "Draw（描画）"
+      },
+      {
+        "type": "unstyled",
+        "text": "マウスや Apple Pencilでキャンバスに手書きのスケッチを描けます。「こんな配置にしたい」というラフを描いて、Claudeに「このスケッチをもとにデザインして」とClaudeに指示を出す使い方が効果的です。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HGrTSRhaIAEp3hc.jpg",
+        "width": 1622,
+        "height": 1158
+      },
+      {
+        "type": "header-one",
+        "text": "セクションV：共有保存する",
+        "inlineStyleRanges": [
+          {
+            "length": 13,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "右上にあるShareのボタンからさまざまな形式(PDF,パワーポイントなど)で保存したり、他のユーザーと共有、Canvaに送信したりすることができます。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HGrUDQvawAAtTiQ.jpg",
+        "width": 1644,
+        "height": 764
+      },
+      {
+        "type": "header-one",
+        "text": "最後に",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "以上が、新しいClaude Designの使い方ガイドです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "この新しいツールがいかに強力であるか、理解いただけたかと思います。今後は、デザイナー、非デザイナーともにClaude Codeをうまく使ってさまざまな資料のデザインをすることになると確信しています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここまで読んでいただきありがとうございます。この記事が価値あるものだったと感じていただければ嬉しいです。また、他の方にも見ていただけるよう、この記事にいいね/リポストしていただけますと幸いです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "経営者・士業・営業職等、全てのビジネスパーソンの方で、\n「Claude Codeを使いこなしたい」\n「AIを活用してもっと業務を効率化したい」\nといったお悩みをお持ちの方は、ぜひ一度ご相談ください。\n▼ スパルタClaude Code塾\nhttps://www.claude-code-lab.com"
+      },
+      {
+        "type": "unstyled",
+        "text": "#ClaudeCode #AI活用 #業務効率化 #ノーコード #AIツール #生成AI #Claude #仕事効率化 #ClaudeDesign #AIデザイン #デザイン自動化 #Figma #プロンプトエンジニアリング"
+      }
+    ]
+  },
+  "status": "success",
+  "msg": "success",
+  "_handle": "claudecode_lab"
+}

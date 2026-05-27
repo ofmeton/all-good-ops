@@ -1,0 +1,47 @@
+{
+  "status": "success",
+  "msg": "success",
+  "data": {
+    "id": "1996788414067412992",
+    "name": "せきね(PdM) | アマデウス開発・AI活用の実践知を発信",
+    "userName": "sekine_1234",
+    "location": "Tokyo-to, Japan",
+    "url": "https://t.co/hkYAcLN5T8",
+    "description": "ハウテレビジョン プロダクトマネジメント部 部長。↓アマデウス開発で得た知見を記事で発信。 Ex)神戸大学経営学部→DeNA 営業→新規事業→PdM→PdM&Marketing pmconf2025登壇。非エンジニア組織のAI利用の推進に注力。個人の見解としての発信です。",
+    "entities": {
+      "description": {},
+      "url": {
+        "urls": [
+          {
+            "display_url": "speakerdeck.com/toshimasa01234…",
+            "expanded_url": "https://speakerdeck.com/toshimasa012345?page=&q=&sort=views&order=desc&lang=",
+            "indices": [
+              0,
+              23
+            ],
+            "url": "https://t.co/hkYAcLN5T8"
+          }
+        ]
+      }
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 846,
+    "following": 296,
+    "favouritesCount": 3806,
+    "statusesCount": 573,
+    "mediaCount": 56,
+    "createdAt": "2025-12-05T03:47:21.000000Z",
+    "coverPicture": "",
+    "profilePicture": "https://pbs.twimg.com/profile_images/2029129974016528384/t7RKmzcC_normal.jpg",
+    "canDm": true,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": [
+      "2050154802555027778"
+    ]
+  }
+}

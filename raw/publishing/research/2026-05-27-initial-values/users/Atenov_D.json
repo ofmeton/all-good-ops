@@ -1,0 +1,68 @@
+{
+  "status": "success",
+  "msg": "success",
+  "data": {
+    "id": "1577008378852802561",
+    "name": "Atenov int.",
+    "userName": "Atenov_D",
+    "location": "",
+    "url": "https://t.co/hifsUnDmWO",
+    "description": "📚 | Part of @zscdao |  FullTime Crypto/X | @Polymarket Adept | Two master's degrees in engineering and marketing | Become part of our big family of smart-users",
+    "entities": {
+      "description": {
+        "user_mentions": [
+          {
+            "id_str": "",
+            "indices": [
+              12,
+              19
+            ],
+            "name": "",
+            "screen_name": "zscdao"
+          },
+          {
+            "id_str": "",
+            "indices": [
+              43,
+              54
+            ],
+            "name": "",
+            "screen_name": "Polymarket"
+          }
+        ]
+      },
+      "url": {
+        "urls": [
+          {
+            "display_url": "t.me/+Eo3B4s34t0A3Z…",
+            "expanded_url": "https://t.me/+Eo3B4s34t0A3ZWZi",
+            "indices": [
+              0,
+              23
+            ],
+            "url": "https://t.co/hifsUnDmWO"
+          }
+        ]
+      }
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 11938,
+    "following": 1051,
+    "favouritesCount": 34806,
+    "statusesCount": 27571,
+    "mediaCount": 1192,
+    "createdAt": "2022-10-03T18:51:26.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/1577008378852802561/1764292595",
+    "profilePicture": "https://pbs.twimg.com/profile_images/2018766680860606464/8Omnaqqn_normal.jpg",
+    "canDm": true,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": [
+      "2058194152077009195"
+    ]
+  }
+}
