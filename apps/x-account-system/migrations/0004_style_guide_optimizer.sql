@@ -6,7 +6,7 @@
 -- ---------------------------------------------------------------------------
 -- style_guide : v1 / v2 / v3 ... の YAML を版管理 (v10.2 C-3)
 -- ---------------------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS public.style_guide (
+CREATE TABLE IF NOT EXISTS xad.style_guide (
   id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
   created_at timestamptz NOT NULL DEFAULT now(),
 
@@ -24,14 +24,14 @@ CREATE TABLE IF NOT EXISTS public.style_guide (
   UNIQUE (version)
 );
 
-CREATE INDEX IF NOT EXISTS idx_style_guide_active ON public.style_guide(retired_at)
+CREATE INDEX IF NOT EXISTS idx_style_guide_active ON xad.style_guide(retired_at)
   WHERE retired_at IS NULL;
 
 -- 「現行 active style guide」を返す helper
-CREATE OR REPLACE FUNCTION public.active_style_guide()
+CREATE OR REPLACE FUNCTION xad.active_style_guide()
 RETURNS TABLE (version text, yaml_blob text, yaml_sha256 text) AS $$
   SELECT version, yaml_blob, yaml_sha256
-  FROM public.style_guide
+  FROM xad.style_guide
   WHERE retired_at IS NULL
     AND effective_from <= now()
   ORDER BY effective_from DESC
@@ -41,7 +41,7 @@ $$ LANGUAGE sql STABLE;
 -- ---------------------------------------------------------------------------
 -- optimizer_proposal : Phase 2 Opus の提案ナレッジベース (v10.2 §4.8 + Codex 11-2)
 -- ---------------------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS public.optimizer_proposal (
+CREATE TABLE IF NOT EXISTS xad.optimizer_proposal (
   id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
   created_at timestamptz NOT NULL DEFAULT now(),
 
@@ -67,13 +67,13 @@ CREATE TABLE IF NOT EXISTS public.optimizer_proposal (
   meta jsonb DEFAULT '{}'::jsonb
 );
 
-CREATE INDEX IF NOT EXISTS idx_optimizer_rank ON public.optimizer_proposal(rank, accepted);
-CREATE INDEX IF NOT EXISTS idx_optimizer_type ON public.optimizer_proposal(proposal_type);
+CREATE INDEX IF NOT EXISTS idx_optimizer_rank ON xad.optimizer_proposal(rank, accepted);
+CREATE INDEX IF NOT EXISTS idx_optimizer_type ON xad.optimizer_proposal(proposal_type);
 
 -- ---------------------------------------------------------------------------
 -- cost_ledger : 月予算と実コストの差を観測 (v10.2 §3.3.4 brownout)
 -- ---------------------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS public.cost_ledger (
+CREATE TABLE IF NOT EXISTS xad.cost_ledger (
   id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
   created_at timestamptz NOT NULL DEFAULT now(),
 
@@ -85,23 +85,23 @@ CREATE TABLE IF NOT EXISTS public.cost_ledger (
   meta jsonb DEFAULT '{}'::jsonb
 );
 
-CREATE INDEX IF NOT EXISTS idx_cost_month ON public.cost_ledger(month, category);
+CREATE INDEX IF NOT EXISTS idx_cost_month ON xad.cost_ledger(month, category);
 
 -- 月次集計 view (brownout 判定用)
-CREATE OR REPLACE VIEW public.cost_monthly_summary AS
+CREATE OR REPLACE VIEW xad.cost_monthly_summary AS
   SELECT
     month,
     SUM(cost_jpy) AS total_cost_jpy,
     SUM(cost_jpy) FILTER (WHERE category LIKE 'writer%' OR category LIKE 'editor%') AS llm_cost_jpy,
     SUM(cost_jpy) FILTER (WHERE category = 'image') AS image_cost_jpy,
     SUM(cost_jpy) FILTER (WHERE category LIKE 'x_api%') AS x_api_cost_jpy
-  FROM public.cost_ledger
+  FROM xad.cost_ledger
   GROUP BY month;
 
 -- ---------------------------------------------------------------------------
 -- daily_digest_log : LINE Daily Digest / Weekly Brief 配信ログ (v10.2 §5.2)
 -- ---------------------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS public.daily_digest_log (
+CREATE TABLE IF NOT EXISTS xad.daily_digest_log (
   id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
   created_at timestamptz NOT NULL DEFAULT now(),
 
@@ -116,4 +116,4 @@ CREATE TABLE IF NOT EXISTS public.daily_digest_log (
   status text NOT NULL DEFAULT 'sent' CHECK (status IN ('sent', 'failed', 'acked'))
 );
 
-CREATE INDEX IF NOT EXISTS idx_digest_type ON public.daily_digest_log(digest_type, sent_at);
+CREATE INDEX IF NOT EXISTS idx_digest_type ON xad.daily_digest_log(digest_type, sent_at);

@@ -7,7 +7,7 @@
 -- ---------------------------------------------------------------------------
 -- core_ideas : 投稿の核アイデア = 1 個 = 1 レコード
 -- ---------------------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS public.core_ideas (
+CREATE TABLE IF NOT EXISTS xad.core_ideas (
   id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
   created_at timestamptz NOT NULL DEFAULT now(),
   trace_id uuid NOT NULL DEFAULT uuid_generate_v4(),
@@ -44,18 +44,18 @@ CREATE TABLE IF NOT EXISTS public.core_ideas (
   meta jsonb DEFAULT '{}'::jsonb
 );
 
-CREATE INDEX IF NOT EXISTS idx_core_ideas_trace ON public.core_ideas(trace_id);
-CREATE INDEX IF NOT EXISTS idx_core_ideas_category ON public.core_ideas(category);
+CREATE INDEX IF NOT EXISTS idx_core_ideas_trace ON xad.core_ideas(trace_id);
+CREATE INDEX IF NOT EXISTS idx_core_ideas_category ON xad.core_ideas(category);
 
 -- ---------------------------------------------------------------------------
 -- post_drafts : 1 核アイデア × プラットフォーム × バリエーション
 -- ---------------------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS public.post_drafts (
+CREATE TABLE IF NOT EXISTS xad.post_drafts (
   id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
   created_at timestamptz NOT NULL DEFAULT now(),
   trace_id uuid NOT NULL,
 
-  core_idea_id uuid NOT NULL REFERENCES public.core_ideas(id) ON DELETE CASCADE,
+  core_idea_id uuid NOT NULL REFERENCES xad.core_ideas(id) ON DELETE CASCADE,
   platform text NOT NULL CHECK (platform IN ('x', 'instagram', 'note')),
   variant_index int NOT NULL DEFAULT 0,
 
@@ -98,20 +98,20 @@ CREATE TABLE IF NOT EXISTS public.post_drafts (
   risk_reasons text[] DEFAULT '{}'  -- 'has_numbers' / 'client_derived' / 'paid_route' / 'business_law'
 );
 
-CREATE INDEX IF NOT EXISTS idx_drafts_core ON public.post_drafts(core_idea_id);
-CREATE INDEX IF NOT EXISTS idx_drafts_status ON public.post_drafts(editor_status, human_approval_status);
-CREATE INDEX IF NOT EXISTS idx_drafts_trace ON public.post_drafts(trace_id);
-CREATE INDEX IF NOT EXISTS idx_drafts_risk ON public.post_drafts(risk_level);
+CREATE INDEX IF NOT EXISTS idx_drafts_core ON xad.post_drafts(core_idea_id);
+CREATE INDEX IF NOT EXISTS idx_drafts_status ON xad.post_drafts(editor_status, human_approval_status);
+CREATE INDEX IF NOT EXISTS idx_drafts_trace ON xad.post_drafts(trace_id);
+CREATE INDEX IF NOT EXISTS idx_drafts_risk ON xad.post_drafts(risk_level);
 
 -- ---------------------------------------------------------------------------
 -- posted_records : 実際に投稿されたレコード
 -- ---------------------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS public.posted_records (
+CREATE TABLE IF NOT EXISTS xad.posted_records (
   id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
   created_at timestamptz NOT NULL DEFAULT now(),
   trace_id uuid NOT NULL,
 
-  draft_id uuid NOT NULL REFERENCES public.post_drafts(id),
+  draft_id uuid NOT NULL REFERENCES xad.post_drafts(id),
   platform text NOT NULL,
   platform_post_id text NOT NULL,  -- X tweet_id / IG media_id / note article_id
 
@@ -125,17 +125,17 @@ CREATE TABLE IF NOT EXISTS public.posted_records (
   UNIQUE (platform, platform_post_id)
 );
 
-CREATE INDEX IF NOT EXISTS idx_posted_trace ON public.posted_records(trace_id);
-CREATE INDEX IF NOT EXISTS idx_posted_platform ON public.posted_records(platform, posted_at);
+CREATE INDEX IF NOT EXISTS idx_posted_trace ON xad.posted_records(trace_id);
+CREATE INDEX IF NOT EXISTS idx_posted_platform ON xad.posted_records(platform, posted_at);
 
 -- ---------------------------------------------------------------------------
 -- performance_metrics : 投稿 × 時系列の計測値
 -- ---------------------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS public.performance_metrics (
+CREATE TABLE IF NOT EXISTS xad.performance_metrics (
   id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
   created_at timestamptz NOT NULL DEFAULT now(),
 
-  posted_record_id uuid NOT NULL REFERENCES public.posted_records(id) ON DELETE CASCADE,
+  posted_record_id uuid NOT NULL REFERENCES xad.posted_records(id) ON DELETE CASCADE,
   measured_at timestamptz NOT NULL,
 
   -- v10.2 §1.3 真の北極星指標
@@ -161,12 +161,12 @@ CREATE TABLE IF NOT EXISTS public.performance_metrics (
   ))
 );
 
-CREATE INDEX IF NOT EXISTS idx_metrics_posted ON public.performance_metrics(posted_record_id, measured_at);
+CREATE INDEX IF NOT EXISTS idx_metrics_posted ON xad.performance_metrics(posted_record_id, measured_at);
 
 -- ---------------------------------------------------------------------------
 -- interview_records : LINE 完結インタビュー (v10.2 §4.1)
 -- ---------------------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS public.interview_records (
+CREATE TABLE IF NOT EXISTS xad.interview_records (
   id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
   created_at timestamptz NOT NULL DEFAULT now(),
   trace_id uuid NOT NULL DEFAULT uuid_generate_v4(),
@@ -191,18 +191,18 @@ CREATE TABLE IF NOT EXISTS public.interview_records (
   total_cost_usd numeric(10,6)
 );
 
-CREATE INDEX IF NOT EXISTS idx_interview_trace ON public.interview_records(trace_id);
-CREATE INDEX IF NOT EXISTS idx_interview_session ON public.interview_records(ma_session_id);
+CREATE INDEX IF NOT EXISTS idx_interview_trace ON xad.interview_records(trace_id);
+CREATE INDEX IF NOT EXISTS idx_interview_session ON xad.interview_records(ma_session_id);
 
 -- ---------------------------------------------------------------------------
 -- hook_unknown_candidates : 未知 Hook 候補 (v10.2 §4.7.4)
 -- HDBSCAN は Phase 2 以降、Phase 1 は人手ラベル
 -- ---------------------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS public.hook_unknown_candidates (
+CREATE TABLE IF NOT EXISTS xad.hook_unknown_candidates (
   id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
   created_at timestamptz NOT NULL DEFAULT now(),
 
-  posted_record_id uuid REFERENCES public.posted_records(id),
+  posted_record_id uuid REFERENCES xad.posted_records(id),
   text text NOT NULL,
   max_similarity_to_known numeric(3,2),
   proposed_label text,           -- 人手 or Opus 提案
@@ -211,4 +211,4 @@ CREATE TABLE IF NOT EXISTS public.hook_unknown_candidates (
   approved_at timestamptz
 );
 
-CREATE INDEX IF NOT EXISTS idx_unknown_cluster ON public.hook_unknown_candidates(cluster_id);
+CREATE INDEX IF NOT EXISTS idx_unknown_cluster ON xad.hook_unknown_candidates(cluster_id);

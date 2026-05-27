@@ -8,14 +8,16 @@
 -- 適用方法: Supabase Dashboard → SQL Editor or `supabase db push`
 -- ============================================================================
 
--- 拡張機能
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-CREATE EXTENSION IF NOT EXISTS "pgvector";
+-- schema (xad: x-account-system 専用、ofmeton-apps project 集約方針 2026-05-27)
+CREATE SCHEMA IF NOT EXISTS xad;
+
+-- 拡張機能 (uuid-ossp / pgcrypto は project 全体で既に installed)
+CREATE EXTENSION IF NOT EXISTS vector WITH SCHEMA extensions;
 
 -- ---------------------------------------------------------------------------
 -- materials_store : 投稿生成の原料 = 1 件 = 1 レコード
 -- ---------------------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS public.materials_store (
+CREATE TABLE IF NOT EXISTS xad.materials_store (
   id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
@@ -63,15 +65,15 @@ CREATE TABLE IF NOT EXISTS public.materials_store (
   permitted_storage text DEFAULT 'redacted_full',  -- 'url_only' / 'title_only' / 'redacted_full'
   derived_use_policy text DEFAULT 'paraphrase_required',  -- 'paraphrase_required' / 'structure_only'
 
-  -- embedding (pgvector)
-  embedding vector(1536),
+  -- embedding (pgvector、extensions schema 明示で search_path 非依存)
+  embedding extensions.vector(1536),
 
   -- meta
   meta jsonb DEFAULT '{}'::jsonb
 );
 
 -- expires_at の自動計算トリガー (retention に基づく)
-CREATE OR REPLACE FUNCTION public.compute_materials_expires_at()
+CREATE OR REPLACE FUNCTION xad.compute_materials_expires_at()
 RETURNS TRIGGER AS $$
 BEGIN
   NEW.expires_at := CASE NEW.retention
@@ -85,31 +87,31 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-DROP TRIGGER IF EXISTS materials_store_expires_at ON public.materials_store;
+DROP TRIGGER IF EXISTS materials_store_expires_at ON xad.materials_store;
 CREATE TRIGGER materials_store_expires_at
-  BEFORE INSERT OR UPDATE OF retention ON public.materials_store
-  FOR EACH ROW EXECUTE FUNCTION public.compute_materials_expires_at();
+  BEFORE INSERT OR UPDATE OF retention ON xad.materials_store
+  FOR EACH ROW EXECUTE FUNCTION xad.compute_materials_expires_at();
 
 -- インデックス
-CREATE INDEX IF NOT EXISTS idx_materials_consent ON public.materials_store(publication_consent);
-CREATE INDEX IF NOT EXISTS idx_materials_source ON public.materials_store(source_type, source_ref);
-CREATE INDEX IF NOT EXISTS idx_materials_expires ON public.materials_store(expires_at);
-CREATE INDEX IF NOT EXISTS idx_materials_pii ON public.materials_store(pii) WHERE pii = true;
-CREATE INDEX IF NOT EXISTS idx_materials_confidential ON public.materials_store(client_confidential)
+CREATE INDEX IF NOT EXISTS idx_materials_consent ON xad.materials_store(publication_consent);
+CREATE INDEX IF NOT EXISTS idx_materials_source ON xad.materials_store(source_type, source_ref);
+CREATE INDEX IF NOT EXISTS idx_materials_expires ON xad.materials_store(expires_at);
+CREATE INDEX IF NOT EXISTS idx_materials_pii ON xad.materials_store(pii) WHERE pii = true;
+CREATE INDEX IF NOT EXISTS idx_materials_confidential ON xad.materials_store(client_confidential)
   WHERE client_confidential = true;
 
 -- pgvector index (cos 類似度用、Phase 1 ingest 後の実利用)
-CREATE INDEX IF NOT EXISTS idx_materials_embedding ON public.materials_store
-  USING ivfflat (embedding vector_cosine_ops) WITH (lists = 100);
+CREATE INDEX IF NOT EXISTS idx_materials_embedding ON xad.materials_store
+  USING ivfflat (embedding extensions.vector_cosine_ops) WITH (lists = 100);
 
 -- ---------------------------------------------------------------------------
 -- consent_requests : 顧客同意取得の履歴 (v10.2 §10.7.3)
 -- ---------------------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS public.consent_requests (
+CREATE TABLE IF NOT EXISTS xad.consent_requests (
   id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
   created_at timestamptz NOT NULL DEFAULT now(),
 
-  material_id uuid NOT NULL REFERENCES public.materials_store(id) ON DELETE CASCADE,
+  material_id uuid NOT NULL REFERENCES xad.materials_store(id) ON DELETE CASCADE,
   client_name text NOT NULL,        -- 案件 client (例: "T 社")
   request_channel text NOT NULL,    -- 'line' / 'email' / 'phone' / 'in_person'
   request_message text,             -- 送った文面
@@ -120,5 +122,5 @@ CREATE TABLE IF NOT EXISTS public.consent_requests (
   notes text
 );
 
-CREATE INDEX IF NOT EXISTS idx_consent_material ON public.consent_requests(material_id);
-CREATE INDEX IF NOT EXISTS idx_consent_response ON public.consent_requests(response);
+CREATE INDEX IF NOT EXISTS idx_consent_material ON xad.consent_requests(material_id);
+CREATE INDEX IF NOT EXISTS idx_consent_response ON xad.consent_requests(response);
