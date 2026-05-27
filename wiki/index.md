@@ -37,7 +37,7 @@
 - [techniques](domain/image-processing/techniques.md) — 画像処理ノウハウ（MPS タイル推論・グリッド切り出し・Playwright 状態観測）
 
 ### ai-industry
-- [ai-radar-pointer](domain/ai-industry/ai-radar-pointer.md) — ai-radar（外部スポーク）への外部参照ポインタ
+- [ai-radar-pointer](domain/ai-industry/ai-radar-pointer.md) — ~~ai-radar（外部スポーク）への外部参照ポインタ~~ **(archived 2026-05-27)** ai-radar 撤廃済み・履歴のため pointer は残置
 
 ## people
 
