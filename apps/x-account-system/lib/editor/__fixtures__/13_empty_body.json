@@ -1,0 +1,23 @@
+{
+  "name": "13_empty_body",
+  "description": "body 空文字列 → 多数 fail (R1/R2/X1/X4 最低限)。",
+  "input": {
+    "traceId": "trace-13",
+    "draftId": "draft-13",
+    "coreIdeaId": "core-13",
+    "platform": "x",
+    "body": "",
+    "fmat": "short",
+    "sourceMaterialIds": [],
+    "hasAffiliateLink": false
+  },
+  "expected": {
+    "decision": "rejected",
+    "rejectReasonsAtLeast": [
+      "R1_workflow_theme",
+      "R2_first_hand_line",
+      "X1_hook_strength",
+      "X4_audience_line"
+    ]
+  }
+}

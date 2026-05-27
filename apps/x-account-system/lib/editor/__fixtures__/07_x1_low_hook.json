@@ -1,0 +1,25 @@
+{
+  "name": "07_x1_low_hook",
+  "description": "classifyHook mock で confidence=0.2 (< 0.4) を強制 → X1 fail。",
+  "input": {
+    "traceId": "trace-07",
+    "draftId": "draft-07",
+    "coreIdeaId": "core-07",
+    "platform": "x",
+    "body": "経営者向け業務の仕組み化を共有する。私はテンプレート化した。30 分が 3 分になった。判断軸を 3 段階で固定。これが基本だ。",
+    "fmat": "short",
+    "sourceMaterialIds": [],
+    "hasAffiliateLink": false
+  },
+  "mockOverrides": {
+    "hook": {
+      "primary_hook": "tips_enum",
+      "devices": [],
+      "confidence": 0.2
+    }
+  },
+  "expected": {
+    "decision": "rejected",
+    "rejectReasons": ["X1_hook_strength"]
+  }
+}

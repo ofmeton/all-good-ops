@@ -1,0 +1,18 @@
+{
+  "name": "08_x2_affiliate_no_disclosure",
+  "description": "hasAffiliateLink=true だが本文に #PR/#広告/アフィリエイト なし → X2 fail。",
+  "input": {
+    "traceId": "trace-08",
+    "draftId": "draft-08",
+    "coreIdeaId": "core-08",
+    "platform": "x",
+    "body": "経営者向けに業務仕組み化のツールを紹介。私は Notion テンプレを購入して自動化を進めた。30 分 → 3 分の時短になった。判断軸を 3 段階で固定すると毎週の業務が安定する。",
+    "fmat": "short",
+    "sourceMaterialIds": [],
+    "hasAffiliateLink": true
+  },
+  "expected": {
+    "decision": "rejected",
+    "rejectReasons": ["X2_stealth_disclosure"]
+  }
+}
