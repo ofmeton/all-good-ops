@@ -1,16 +1,18 @@
 ---
 type: entity
 created: 2026-05-15
-updated: 2026-05-22
+updated: 2026-05-27
 sources: []
 related: [[streams]]
-tags: [external, ai-industry, ai-radar]
-status: active
+tags: [external, ai-industry, ai-radar, archived]
+status: archived
+archived_at: 2026-05-27
+archive_reason: ai-radar プロジェクト完全撤廃。LaunchAgents 停止 + Supabase project 削除 + GitHub repo archive 化済み。設計・素材は outputs/documents/ai-radar/ と raw/ai-radar/ に保存し、今後の発信ネタ集めに転用予定（手動）
 ---
 
 # ai-radar（外部スポーク・ポインタ）
 
-> このページは **ポインタ**。実体は別リポジトリにあり、本 wiki には詳細を持ち込まない。
+> **⚠ ARCHIVED 2026-05-27**: ai-radar は完全撤廃済み。以下は履歴記録。
 
 ## 概要 (v2.1 改訂)
 
@@ -52,8 +54,8 @@ Next.js / Supabase / Vercel + Codex MCP worker で常時稼働。
 
 → 結果は articles.codex_drafts_x / _ig / _note / codex_tip_recipe に保存
 
-## all-good-ops との関係
+## all-good-ops との関係（archived 時点の記録）
 
-- ハブ・スポーク構造のスポーク。秘書が `ai-radar` エージェントに委譲
-- MCP: Supabase / Vercel (`apply_migration` / 書き込み系 SQL / `deploy_*` は人間確認必須)
+- ハブ・スポーク構造のスポーク。秘書が `ai-radar` エージェントに委譲（**撤廃済み**）
+- MCP: Supabase / Vercel（**Supabase project は 2026-05-27 削除済み**）
 - 関連 wiki: [[claude-usage|wiki/domain/claude-usage]] (Claude Tips の蓄積先)

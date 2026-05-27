@@ -209,8 +209,8 @@ source: session
 | メール、LINE、文面、返信、挨拶文 | communication | message-crafter |
 | 調べて、リサーチ、比較 | learning-creative | researcher |
 | 記事、執筆、ブログ記事、企画書 | learning-creative | writer |
-| スクリプト、開発、バグ、デプロイ、Vercel、ビルドログ、ランタイムログ、プレビューURL | dev-automation | system-engineer（ai-radar は ai-radar 本体） |
-| DB、Supabase、マイグレーション、SQL、RLS、スキーマ、Edge Function | dev-automation | system-engineer（ai-radar DB は ai-radar 本体へ） |
+| スクリプト、開発、バグ、デプロイ、Vercel、ビルドログ、ランタイムログ、プレビューURL | dev-automation | system-engineer |
+| DB、Supabase、マイグレーション、SQL、RLS、スキーマ、Edge Function | dev-automation | system-engineer |
 | E2E、ブラウザ自動化、Playwright、スクショ、動作確認、リグレッション | dev-automation | system-engineer |
 | Liquid、Polaris、Hydrogen、Shopify GraphQL、Shopify CLI、theme、Admin API | business-ops | shopify-operator（実装は system-engineer） |
 | MCP、連携、API、Codex | dev-automation | system-engineer（`mcp-integration.md` skill 参照） |
@@ -238,7 +238,6 @@ source: session
 | note 有料記事、メンバーシップ、price、ティーザー設計 | business-ops | brand-publisher（`note-revenue-playbook.md` 参照） |
 | デザイン方向性、DESIGN.md、OUTLINE.md、トンマナ、AIっぽい、毎回同じデザイン、個性的、デザインテンプレ、デザイン統括 | 横断 | design-director（守り） |
 | LP 訴求、ファーストビュー、FV、CVR、LP潮流、ユーザー心理、コピー訴求、視線誘導、オファー強度、LPレビュー | 横断 | conversion-designer（攻め。design-director とペア起動） |
-| AI動向、AI業界、新モデル、Anthropic動向、Claude Tips、Claude活用ネタ、発信ネタ（AI由来）、市況シグナル、vertical_surge、bm_shift、r1_risk、ai-radar、ダッシュボード | **外部スポーク: ai-radar** | ai-radar |
 | はぐりん、persona、Threads 投稿、note 記事、有料記事、メンバーシップ、収益化コンテンツ、topic-seeds、competitor-watch、90日計画（発信系） | **外部スポーク: monetize-os** | monetize-os/growth-lead |
 | 公開前チェック、規約確認、アフィリエイト開示、景表法、薬機法、ステマ | **外部スポーク: monetize-os** | monetize-os/compliance |
 | 工務店、HP 制作、クライアントサイト、Vercel、サンプルサイト、ポートフォリオサイト | **外部スポーク: portfolio** | (秘書が business-ops/client-manager 起動 + portfolio/ 作業ディレクトリへ移動) |
@@ -256,7 +255,7 @@ source: session
 
 - **monetize-os**（`/Users/rikukudo/Projects/monetize-os/`）: 収益化特化の運用 OS。秘書は growth-lead に委譲し、実行結果を受け取って統合する。persona 配下エージェント（hagurin/hook-writer 等）を秘書が直接呼ばない。詳細は `monetize-os/CLAUDE.md` 参照
 - **portfolio**（`/Users/rikukudo/Projects/portfolio/`）: 既存制作物・進行中個人案件（terra-isshiki / minpaku-cleaning）のリポジトリ。BSA 撤退に伴い新規 HP 受注用途は停止。発信戦略の「制作事例」コンテンツ柱の作例集としても活用
-- **ai-radar**（`/Users/rikukudo/Projects/ai-radar/`）: **v2 ピボット (2026-05-22)** 後の目的は (1) Claude 活用ネタ集め (2) 3 媒体発信ネタ集め (3) 市況シグナル監視 (vertical_surge / bm_shift / r1_risk の縮小 3 種)。Next.js/Supabase/Vercel + Codex MCP worker (3 モード: deep_dive / content_seed_drafts / claude_tip_recipe) で稼働。62 ソース (Anthropic 公式 8 / Claude RSS 3 / Reddit 13 / X 海外 24 / X 日本 10 / 他 4)。秘書は ai-radar エージェントに委譲。実装コード改修は system-engineer。計画書 v2.1: `outputs/documents/ai-radar/09-pivot-plan.md` / 旧計画 archived: `outputs/documents/ai-radar/01-implementation-plan.md`
+- ~~**ai-radar**~~ **(archived 2026-05-27)**: 外部スポークとしての運用を停止。Supabase project 削除、LaunchAgents 停止済み。設計資料・素材は `outputs/documents/ai-radar/` / `raw/ai-radar/` に保存し、今後の発信ネタ集めに転用予定（手動）
 - **brand-publisher（business-ops）と monetize-os/growth-lead の境界**: brand-publisher は **ofmeton 名義の発信**、growth-lead は **persona（はぐりん等）名義の発信** を担当。役割の重複を避けるため persona 系の依頼は growth-lead に委譲する
 
 ### Step 3: エージェントを起動
@@ -288,7 +287,6 @@ source: session
 | 戦略参謀 | `strategic-advisor.md` | 仮説思考、ブレスト、次の一手 |
 | データアナリスト | `data-analyst.md` | データ分析専門。他エージェントからの分析依頼を受ける |
 | プレゼンレビュアー | `presentation-reviewer.md` | PPTX品質チェック。全パワポの納品前レビュー必須 |
-| AIレーダー | `ai-radar.md` | **v2 (2026-05-22)**: Claude 活用ネタ + 3 媒体発信ネタ + 市況シグナル監視。`/Users/rikukudo/Projects/ai-radar/` の独立プロジェクトを運用 |
 | デザインディレクター | `design-director.md` | LP/HP制作のデザイン方向性統括。DESIGN.md/OUTLINE.md 確定、Do's & Don'ts 判断、AIっぽさチェック（**守り**） |
 | コンバージョンデザイナー | `conversion-designer.md` | LP の訴求力・CVR・ファーストビュー・最新潮流採用・ユーザー心理。design-director と対の**攻め**役 |
 | コンテンツレビュアー | `content-reviewer.md` | 3媒体（X/Instagram/note）の品質を rubric でチェック。AI感ゼロ、画像リッチ度、専門用語密度等 |
@@ -399,11 +397,11 @@ source: session
 ### `superpowers`（開発・戦略支援）
 | スキル | 主な用途 | 主な利用エージェント |
 |---|---|---|
-| `superpowers:brainstorming` | 創造作業前のユーザー意図・要件・デザイン探索 | strategic-advisor / brand-publisher / writer / ai-radar / conversion-designer / content-reviewer / visual-designer |
+| `superpowers:brainstorming` | 創造作業前のユーザー意図・要件・デザイン探索 | strategic-advisor / brand-publisher / writer / conversion-designer / content-reviewer / visual-designer |
 | `superpowers:writing-plans` | スペックから実装・作業計画を書く | brand-publisher / system-engineer / org-designer / writer |
 | `superpowers:executing-plans` | 書いた計画を別セッションで実行 | system-engineer |
 | `superpowers:test-driven-development` | TDD の実践 | system-engineer |
-| `superpowers:systematic-debugging` | バグ・テスト失敗の体系的な診断 | system-engineer / ai-radar |
+| `superpowers:systematic-debugging` | バグ・テスト失敗の体系的な診断 | system-engineer |
 | `superpowers:verification-before-completion` | 完了宣言・コミット・PR作成前の検証 | system-engineer / brand-publisher / content-reviewer / presentation-reviewer |
 | `superpowers:requesting-code-review` / `receiving-code-review` | コードレビューの依頼・受領 | system-engineer |
 | `superpowers:using-git-worktrees` | 並行作業の隔離 | system-engineer |
@@ -519,8 +517,8 @@ source: session
 - **freee**（npm`freee-mcp`, ツール `mcp__freee__*`）: 請求書発行・取引先管理・会計参照。担当: `invoice-manager` / 認証・障害対応は `system-engineer`。**送付処理 / `create_partner` / `update_invoice` / `delete_invoice` は人間確認必須**。事業所は `currentCompanyId=12426988` 単一運用
 
 ### 現在稼働中（開発・運用）
-- **Vercel**（プラグイン`mcp__plugin_vercel_vercel__*`）: portfolio / ai-radar のデプロイ・ランタイムログ・ビルドログ取得。担当: `client-manager` / `ai-radar` / `system-engineer`。**`deploy_to_vercel` は人間確認必須**
-- **Supabase**（プラグイン`mcp__plugin_supabase_supabase__*`）: ai-radar の DB 操作（読み取りSQL・マイグレーション・ログ・Advisors）。担当: `ai-radar` / `system-engineer`。**`apply_migration` / `execute_sql`（書き込み系）/ `create_project` / `deploy_edge_function` は人間確認必須**
+- **Vercel**（プラグイン`mcp__plugin_vercel_vercel__*`）: portfolio のデプロイ・ランタイムログ・ビルドログ取得。担当: `client-manager` / `system-engineer`。**`deploy_to_vercel` は人間確認必須**
+- **Supabase**（プラグイン`mcp__plugin_supabase_supabase__*`）: DB 操作（読み取りSQL・マイグレーション・ログ・Advisors）。担当: `system-engineer`。**`apply_migration` / `execute_sql`（書き込み系）/ `create_project` / `deploy_edge_function` は人間確認必須**
 - **Playwright**（プラグイン）: 競合サイト・クライアント納品物の動作確認、スクショ、E2E。担当: `system-engineer` / `client-manager`
 - **Firecrawl**（CLI `firecrawl`）: Web スクレイプ。**無料枠のみ使用・課金しない方針**。WebFetch/gh CLI を第一選択とし、JS 重いサイトで WebFetch が使えない時だけ使用。使う前に `firecrawl --status` で残 credits 確認
 - **Shopify AI Toolkit**（プラグイン・MCP 無し）+ **Shopify CLI**（`shopify`）: Shopify ストア運営・アプリ開発（GraphQL / Liquid / Polaris / Admin API）。担当: `shopify-operator` / `system-engineer`

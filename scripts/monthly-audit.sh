@@ -27,7 +27,6 @@ check_spoke_freshness() {
   local spokes=(
     "/Users/rikukudo/Projects/monetize-os/ops/agent-harness-eval.md"
     "/Users/rikukudo/Projects/monetize-os/ops/organization-harness-eval.md"
-    "/Users/rikukudo/Projects/ai-radar/ops/dashboard-health.md"
   )
   for f in "${spokes[@]}"; do
     [ ! -f "$f" ] && continue
