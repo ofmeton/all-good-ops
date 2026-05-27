@@ -1,0 +1,37 @@
+[
+  {
+    "step": "kickoff",
+    "pattern_id": "quick_recap",
+    "question_text": "📝 今日の振り返り、行きましょう。\n\nテーマ: 「レジ締め自動化」\nこの業務 (在庫管理・レジ締め・シフト あたり) で、今週やってみたことを 2-3 行で教えてください。",
+    "answer_text": "レジ締めを Claude にお願いして毎日 18 時に売上日報を自動生成するようにした。手作業 30 分 → 自動化後は 0 分。",
+    "received_at": "2026-05-27T10:00:00.000Z"
+  },
+  {
+    "step": "dig_attempt",
+    "pattern_id": "failure_recall",
+    "question_text": "その中で「うまくいかなかった」「想定外だった」シーンはありましたか？\n失敗談を 1 つだけ具体的に教えてください (時系列でも OK)。",
+    "answer_text": "最初 ChatGPT に頼んだら売上 CSV の列ズレで合計が狂った。Claude に変えて Vision で領収書直接読ませたら解決。",
+    "received_at": "2026-05-27T10:01:00.000Z"
+  },
+  {
+    "step": "dig_metrics",
+    "pattern_id": "metrics_quant",
+    "question_text": "Before / After を数字で言うと、どうなりましたか？",
+    "answer_text": "30 分 → 0 分。月にして 15 時間削減。",
+    "received_at": "2026-05-27T10:02:00.000Z"
+  },
+  {
+    "step": "consent_gate",
+    "pattern_id": "client_redact",
+    "question_text": "この話を投稿に使う場合、クライアント名 / 個人名は伏せても文脈伝わりますか？",
+    "answer_text": "はい、店名は伏せて大丈夫です。",
+    "received_at": "2026-05-27T10:03:00.000Z"
+  },
+  {
+    "step": "consent_gate",
+    "pattern_id": "consent_explicit",
+    "question_text": "投稿として公開して問題ないか、最終確認です。",
+    "answer_text": "はい、公開してください。",
+    "received_at": "2026-05-27T10:04:00.000Z"
+  }
+]
