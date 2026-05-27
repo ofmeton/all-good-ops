@@ -397,7 +397,7 @@ PCR は **クリック前指標**、qualified_lead は **収益直結指標**。
 
 ---
 
-### 2.6 投稿フロー / 自動化 (Editor 6+4 ルール、Optimizer、Visualizer 廃止)
+### 2.6 投稿フロー / 自動化 (Editor 6+5 ルール、Optimizer、Visualizer 廃止)
 
 *Version History*: v9 (Editor 6+1 ルール、Visualizer 3 モード + PSM 自動切替) → v10.1 (Editor 6+4 ルール、+3 失敗談スロット / +4 読者像 1 行明示 を追加) → v10.2 (Editor 6+5、+5 公開許諾 + DLP redaction、CR-2) → v10.3 (Editor 6+5、+3 改訂 = primary_hook='failure_story' 限定 + verified、+5 改訂 = DLP redaction + 固有名詞 mask に一本化、Visualizer PSM 廃止 → ランダム + switchback)
 
@@ -2169,7 +2169,7 @@ sampling:
 | Agent | runs/month | input_tok/run | output_tok/run | retry_rate | model | unit cost (in/out) | 月額 (JPY) |
 |---|---:|---:|---:|---:|---|---|---:|
 | **Writer (核アイデア → 媒体派生 8 個)** | 30 core × 8 platform = 240 | 4,500 (Style Guide + 履歴) | 3,000 (投稿草案) | 30% (Editor reject) | Sonnet 4.6 | $3/$15 per MTok | **¥1,840** |
-| **Editor (6+4 ルール判定)** | 240 × 1.3 retry = 312 | 1,500 (投稿 + ルール) | 500 (判定 + 理由) | 5% (LLM 自体 retry) | Sonnet 4.6 | $3/$15 per MTok | **¥321** |
+| **Editor (6+5 ルール判定)** | 240 × 1.3 retry = 312 | 1,500 (投稿 + ルール) | 500 (判定 + 理由) | 5% (LLM 自体 retry) | Sonnet 4.6 | $3/$15 per MTok | **¥321** |
 | **Hook Analyzer (類型分類 + 新候補検出)** | 312 + 月 30 (新候補) = 342 | 800 | 300 | 5% | Sonnet 4.6 (Haiku 4.5 でも可) | $3/$15 per MTok | **¥234** |
 | **Visualizer 制御 (画像生成プロンプト)** | 月 150 枚 × 1.2 retry = 180 | 1,200 | 200 | 20% (画像 retry) | Sonnet 4.6 | $3/$15 per MTok | **¥130** |
 | **Interviewer (月 60 セッション)** | 60 | 2,000 (cache) | 1,500 (1 ターン) × 平均 8 ターン = 12,000 | 5% (素材不在) | Sonnet 4.6 | $3/$15 per MTok | **¥1,140** |
