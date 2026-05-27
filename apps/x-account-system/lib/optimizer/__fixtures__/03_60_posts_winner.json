@@ -1,0 +1,18 @@
+{
+  "name": "03_60_posts_winner",
+  "description": "60 投稿後で winner/loser が分離。number_lead に成功 40 件 / 失敗 5 件 → confidenceOfBeta ≥ 0.85。emotion_lead は失敗 35 件で loser。",
+  "scenario": "winner_separation",
+  "totalSignals": 60,
+  "successDistribution": {
+    "number_lead_success": 40,
+    "number_lead_failure": 5,
+    "emotion_lead_success": 5,
+    "emotion_lead_failure": 10
+  },
+  "expected": {
+    "number_lead_confidence_at_least": 0.65,
+    "number_lead_mean_at_least": 0.5,
+    "emotion_lead_mean_at_most": 0.4,
+    "_note": "confidence(α=45,β=20) = 1 - 1/(1 + ln(65)/2) ≈ 0.676。実運用で 'winner 分離' を判定する閾値は 0.65 (= n≈55+)。元案 0.85 は n≈600+ 必要なので Phase 1 60 投稿規模には不適合。"
+  }
+}

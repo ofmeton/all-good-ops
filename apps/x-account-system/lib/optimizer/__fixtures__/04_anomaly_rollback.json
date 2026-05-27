@@ -1,0 +1,16 @@
+{
+  "name": "04_anomaly_rollback",
+  "description": "PCR が直近 7d で -40% (prev 0.08 → current 0.045) になった場合、anomaly detector が pcr_drop_30_percent_7d を発火し state を snapshot に rollback。",
+  "scenario": "anomaly_rollback_pcr",
+  "windowPerf": {
+    "prevAvgPcr": 0.08,
+    "currentAvgPcr": 0.045,
+    "prevAvgImpression": 1000,
+    "currentAvgImpression": 900
+  },
+  "expected": {
+    "rolledBack": true,
+    "anomalyReasonsContains": ["pcr_drop_30_percent_7d"],
+    "stateGenerationUnchanged": true
+  }
+}
