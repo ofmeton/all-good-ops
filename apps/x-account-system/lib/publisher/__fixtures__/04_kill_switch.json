@@ -1,0 +1,29 @@
+{
+  "name": "04_kill_switch",
+  "description": "kill-switch on → blocked kill_switch (override で kill-switch ON)",
+  "input": {
+    "draftId": "pub-04",
+    "body": "通常本文",
+    "fmat": "short",
+    "dryRun": false,
+    "editorOutput": {
+      "draftId": "pub-04",
+      "decision": "approved",
+      "rejectReasons": [],
+      "rules": [],
+      "riskLevel": "low",
+      "riskReasons": [],
+      "businessLawRiskFlag": false,
+      "businessLawKeywords": [],
+      "totalDurationMs": 100,
+      "llmCostUsd": 0
+    }
+  },
+  "overrides": {
+    "killSwitch": true
+  },
+  "expected": {
+    "status": "blocked",
+    "blockedReason": "kill_switch"
+  }
+}

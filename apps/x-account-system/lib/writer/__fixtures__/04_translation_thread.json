@@ -1,0 +1,20 @@
+{
+  "name": "04_translation_thread",
+  "description": "海外記事 translation thread。citationSource あり、primaryHook=translation。",
+  "idea": {
+    "id": "idea-04",
+    "topic": "Anthropic 公式 docs の prompt caching を日本語要約",
+    "primaryHook": "translation",
+    "fmat": "thread",
+    "contentType": "translation",
+    "citationSource": "https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching",
+    "audience": "非エンジニアの開発リード",
+    "sourceMaterialIds": ["mat-tr-004"]
+  },
+  "expected": {
+    "primaryHook": "translation",
+    "generator": "stub",
+    "bodyMustContain": ["仕組み化", "非エンジニアの開発リード"],
+    "bodyMaxChars": 280
+  }
+}

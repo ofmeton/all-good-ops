@@ -16,7 +16,10 @@
     "dlp:lint": "tsx lib/dlp/lint.ts",
     "test": "IN_MEMORY_FALLBACK=true jest",
     "editor:test": "IN_MEMORY_FALLBACK=true jest lib/editor",
-    "editor:cli": "tsx lib/editor/cli.ts"
+    "editor:cli": "tsx lib/editor/cli.ts",
+    "publisher:test": "IN_MEMORY_FALLBACK=true jest lib/publisher",
+    "writer:test": "IN_MEMORY_FALLBACK=true jest lib/writer",
+    "pipeline:dryrun": "IN_MEMORY_FALLBACK=true tsx lib/pipeline/e2e-dryrun.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.36.0",

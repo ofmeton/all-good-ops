@@ -1,0 +1,33 @@
+{
+  "name": "07_retry_max_out",
+  "description": "fetch mock で 3 連続 500 を返す → status='failed' / retryCount=3",
+  "input": {
+    "draftId": "pub-07",
+    "body": "通常本文",
+    "fmat": "short",
+    "dryRun": false,
+    "noBackoff": true,
+    "editorOutput": {
+      "draftId": "pub-07",
+      "decision": "approved",
+      "rejectReasons": [],
+      "rules": [],
+      "riskLevel": "low",
+      "riskReasons": [],
+      "businessLawRiskFlag": false,
+      "businessLawKeywords": [],
+      "totalDurationMs": 100,
+      "llmCostUsd": 0
+    }
+  },
+  "overrides": {
+    "token": {
+      "accessToken": "test-token-aaa"
+    },
+    "fetchScenario": "always_500"
+  },
+  "expected": {
+    "status": "failed",
+    "retryCount": 3
+  }
+}

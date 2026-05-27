@@ -1,0 +1,19 @@
+{
+  "name": "02_tips_enum_medium",
+  "description": "経営者向け tips_enum medium。stub の deterministic 構造をテスト。",
+  "idea": {
+    "id": "idea-02",
+    "topic": "Claude で日次レポートを自動生成する手順",
+    "primaryHook": "tips_enum",
+    "fmat": "medium",
+    "contentType": "industry_sop",
+    "audience": "中小事業者の経営者",
+    "sourceMaterialIds": ["mat-sop-002"]
+  },
+  "expected": {
+    "primaryHook": "tips_enum",
+    "generator": "stub",
+    "bodyMustContain": ["仕組み化", "中小事業者の経営者"],
+    "bodyMaxChars": 280
+  }
+}
