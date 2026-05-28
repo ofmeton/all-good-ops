@@ -1,0 +1,5 @@
+node_modules/
+output/recordings/
+output/seed-result.json
+output/demo.mp4
+*.log
