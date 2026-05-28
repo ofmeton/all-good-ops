@@ -23,14 +23,20 @@
  *   # Step 5: refresh 失敗 → auth_blocked 通知 dry-run
  *   tsx lib/oauth/pkce-test.ts --step=auth-blocked-dry-run
  */
-import "dotenv/config";
+import dotenv from "dotenv";
 import { createHash, randomBytes } from "node:crypto";
+
+// .env.local を優先、無ければ .env (Next.js/Vite 風の 2 段読み込み)
+dotenv.config({ path: ".env.local" });
+dotenv.config();
 
 const X_CLIENT_ID = process.env.X_CLIENT_ID ?? "";
 const X_CLIENT_SECRET = process.env.X_CLIENT_SECRET ?? "";
 const X_REDIRECT_URI = process.env.X_REDIRECT_URI ?? "http://localhost:3000/oauth/x/callback";
 const X_OAUTH_SCOPES =
   process.env.X_OAUTH_SCOPES ?? "tweet.read tweet.write users.read offline.access";
+// 運用上 .env.local に書き戻す時のみ full 値を出力。default は preview のみで漏洩防止。
+const PRINT_FULL = process.env.X_PKCE_PRINT_FULL === "true";
 
 const TOKEN_URL = "https://api.x.com/2/oauth2/token";
 const AUTHORIZE_URL = "https://x.com/i/oauth2/authorize";
@@ -122,14 +128,16 @@ async function step_token(code: string, verifier: string) {
     process.exit(1);
   }
   const ok = "refresh_token" in data && Boolean(data.refresh_token);
+  const t = data as TokenResponse;
   console.log(JSON.stringify({
     step: "token",
     ok,
     hasRefreshToken: ok,
-    scopes: (data as TokenResponse).scope,
-    expiresIn: (data as TokenResponse).expires_in,
-    accessTokenPreview: (data as TokenResponse).access_token?.slice(0, 16) + "...",
-    refreshTokenPreview: ok ? (data as TokenResponse).refresh_token!.slice(0, 16) + "..." : null,
+    scopes: t.scope,
+    expiresIn: t.expires_in,
+    accessToken: PRINT_FULL ? t.access_token : t.access_token?.slice(0, 16) + "...",
+    refreshToken: ok ? (PRINT_FULL ? t.refresh_token : t.refresh_token!.slice(0, 16) + "...") : null,
+    tokenExpiresAt: t.expires_in ? new Date(Date.now() + t.expires_in * 1000).toISOString() : null,
     next: ok ? "次は --step=refresh --refresh-token=<value>" : "offline.access scope が無いか確認",
   }, null, 2));
   process.exit(ok ? 0 : 2);
@@ -141,6 +149,7 @@ async function step_token(code: string, verifier: string) {
 async function step_refresh(refreshToken: string, rounds = 2) {
   const basic = Buffer.from(`${X_CLIENT_ID}:${X_CLIENT_SECRET}`).toString("base64");
   let current = refreshToken;
+  let currentAccess: string | null = null;
   const trail: Array<{
     round: number; ok: boolean; newRefresh: string | null; expiresIn: number | null;
   }> = [];
@@ -174,19 +183,27 @@ async function step_refresh(refreshToken: string, rounds = 2) {
     trail.push({
       round: r,
       ok: true,
-      newRefresh: t.refresh_token.slice(0, 16) + "...",
+      newRefresh: PRINT_FULL ? t.refresh_token : t.refresh_token.slice(0, 16) + "...",
       expiresIn: t.expires_in,
     });
     current = t.refresh_token;
+    currentAccess = t.access_token;
   }
 
   const allOk = trail.length === rounds && trail.every((t) => t.ok);
+  const expiresAt = trail.at(-1)?.expiresIn
+    ? new Date(Date.now() + (trail.at(-1)!.expiresIn as number) * 1000).toISOString()
+    : null;
   console.log(JSON.stringify({
     step: "refresh",
     rounds,
     allOk,
     trail,
-    finalRefreshTokenPreview: allOk ? current.slice(0, 16) + "..." : null,
+    finalRefreshToken: allOk ? (PRINT_FULL ? current : current.slice(0, 16) + "...") : null,
+    finalAccessToken: allOk && currentAccess
+      ? (PRINT_FULL ? currentAccess : currentAccess.slice(0, 16) + "...")
+      : null,
+    finalTokenExpiresAt: allOk ? expiresAt : null,
   }, null, 2));
   process.exit(allOk ? 0 : 3);
 }
