@@ -97,6 +97,15 @@ async function main() {
     .single();
   if (ownerErr) throw ownerErr;
 
+  const checklistLabels = [
+    "玄関・廊下の掃き掃除",
+    "リビング 床清掃 / 家具拭き上げ",
+    "ベッドメイク（シーツ / 枕カバー交換）",
+    "浴室・洗面台のクリーニング",
+    "キッチン 排水口・コンロ清掃",
+    "トイレ清掃 / 備品補充",
+    "ゴミ集約 / 室温セット",
+  ];
   const { data: property, error: propErr } = await db
     .from("properties")
     .insert({
@@ -104,15 +113,7 @@ async function main() {
       name: "渋谷ベイサイドハウス 301",
       address: "東京都渋谷区神南 1-2-3",
       access_info_note: "鍵は玄関ポスト内のキーボックス（暗証番号別途共有）",
-      checklist_template: [
-        { label: "玄関・廊下の掃き掃除" },
-        { label: "リビング 床清掃 / 家具拭き上げ" },
-        { label: "ベッドメイク（シーツ / 枕カバー交換）" },
-        { label: "浴室・洗面台のクリーニング" },
-        { label: "キッチン 排水口・コンロ清掃" },
-        { label: "トイレ清掃 / 備品補充" },
-        { label: "ゴミ集約 / 室温セット" },
-      ],
+      checklist_template: checklistLabels.map((label) => ({ label })),
     })
     .select()
     .single();
@@ -150,7 +151,11 @@ async function main() {
     seededAt: new Date().toISOString(),
     admin: { id: adminId, email: ADMIN_EMAIL, password: ADMIN_PASSWORD },
     owner: { id: owner!.id, name: owner!.name },
-    property: { id: property!.id, name: property!.name },
+    property: {
+      id: property!.id,
+      name: property!.name,
+      checklistLabels,
+    },
     staff: { id: staff!.id, name: staff!.name, token: staffToken },
     ownerToken,
   };

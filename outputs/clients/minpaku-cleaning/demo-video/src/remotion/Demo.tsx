@@ -1,15 +1,14 @@
 import React from "react";
 import { AbsoluteFill, OffthreadVideo, Sequence, staticFile } from "remotion";
 import { FPS, SCENES, type Scene } from "../scenes";
-import { readTimingsSafe, sceneDurationFrames } from "./timings";
+import { sceneDurationFrames, type Timings } from "./timings";
 import { Intro } from "./Intro";
 import { Outro } from "./Outro";
 import { LineNotifyMock } from "./LineNotifyMock";
 import { OwnerViewMock } from "./OwnerViewMock";
 import { SceneCard } from "./SceneCard";
 
-function RecordedSlice({ scene }: { scene: Scene }) {
-  const timings = readTimingsSafe();
+function RecordedSlice({ scene, timings }: { scene: Scene; timings: Timings }) {
   const t = timings[scene.id];
   if (!t) {
     return (
@@ -39,7 +38,7 @@ function RecordedSlice({ scene }: { scene: Scene }) {
   );
 }
 
-function SceneBody({ scene }: { scene: Scene }) {
+function SceneBody({ scene, timings }: { scene: Scene; timings: Timings }) {
   switch (scene.id) {
     case "intro":
       return <Intro />;
@@ -50,12 +49,11 @@ function SceneBody({ scene }: { scene: Scene }) {
     case "owner-view":
       return <OwnerViewMock />;
     default:
-      return <RecordedSlice scene={scene} />;
+      return <RecordedSlice scene={scene} timings={timings} />;
   }
 }
 
-export const Demo: React.FC = () => {
-  const timings = readTimingsSafe();
+export const Demo: React.FC<{ timings: Timings }> = ({ timings }) => {
   let cursor = 0;
   return (
     <AbsoluteFill style={{ backgroundColor: "#0b1220" }}>
@@ -68,8 +66,7 @@ export const Demo: React.FC = () => {
             durationInFrames={duration}
             name={scene.id}
           >
-            <SceneBody scene={scene} />
-            {/* 字幕オーバーレイは intro/outro 以外で表示 */}
+            <SceneBody scene={scene} timings={timings} />
             {scene.id !== "intro" && scene.id !== "outro" && (
               <SceneCard scene={scene} />
             )}

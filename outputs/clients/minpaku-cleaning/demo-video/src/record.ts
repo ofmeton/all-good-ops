@@ -28,7 +28,7 @@ const seed = JSON.parse(
   readFileSync(join(outDir, "seed-result.json"), "utf-8"),
 ) as {
   admin: { email: string; password: string };
-  property: { name: string };
+  property: { name: string; checklistLabels: string[] };
   staff: { token: string };
 };
 
@@ -78,52 +78,54 @@ async function adminCreateRequest(page: Page) {
   await sleep(300);
   await page.click('button:has-text("依頼を作成")');
   await page.waitForLoadState("networkidle");
-  await page.locator("li", { hasText: seed.property.name }).first().waitFor();
+  // 新 UI は table row。row に property name が含まれるまで待つ
+  await page.locator("tr", { hasText: seed.property.name }).first().waitFor();
 }
 
 async function staffAcceptAndStart(page: Page) {
   await page.goto(`${BASE_URL}/staff/${seed.staff.token}`);
   await page.waitForLoadState("networkidle");
   await sleep(800);
-  await page.click('button:has-text("この依頼を承認する")');
+  // 未割当セクションの「承認する」ボタン
+  await page.click('button:has-text("承認する")');
   await page.waitForLoadState("networkidle");
-  await sleep(600);
-  // 詳細を開いて開始
+  await sleep(800);
+  // 承認後、自分の割当セクションに card (Link wrap) として現れる → 押下で詳細遷移
   await page.click(`a:has-text("${seed.property.name}")`);
   await page.waitForLoadState("networkidle");
   await sleep(400);
   await page.click('button:has-text("清掃を開始する")');
   await page.waitForLoadState("networkidle");
   await page
-    .locator("h2", { hasText: "チェックリスト" })
+    .locator("h3", { hasText: "作業チェックリスト" })
     .waitFor();
 }
 
 async function staffSubmitReport(page: Page) {
-  // チェックリストの全項目を順にチェック（視覚的に進捗を見せる）
-  const checkboxes = page.locator('input[type="checkbox"]');
-  const count = await checkboxes.count();
-  for (let i = 0; i < count; i++) {
-    await checkboxes.nth(i).check();
+  // 新 UI のチェックリストは <input type=checkbox> ではなく <button> なので label テキストで click
+  for (const label of seed.property.checklistLabels) {
+    await page.getByRole("button", { name: label }).click();
     await sleep(220);
   }
   await sleep(400);
-  await page.click('button:has-text("完了報告を提出する")');
+  // 全項目チェック完了で送信ボタンが有効化される
+  await page.click('button:has-text("報告を送信する")');
   await page.waitForLoadState("networkidle");
-  await page.locator("text=報告済み").waitFor();
+  await page.locator("text=完了報告を送信しました").waitFor();
 }
 
 async function adminConfirm(page: Page) {
   await page.goto(`${BASE_URL}/admin/requests`);
   await page.waitForLoadState("networkidle");
   await sleep(500);
-  await page.click(`a:has-text("${seed.property.name}")`);
+  // table row 右端の「詳細 →」リンクで遷移
+  await page.locator('a:has-text("詳細")').first().click();
   await page.waitForLoadState("networkidle");
   await sleep(400);
-  await page.locator("h2", { hasText: "完了報告" }).waitFor();
+  await page.locator("h3", { hasText: "完了報告" }).first().waitFor();
   await page.click('button:has-text("内容を確認済みにする")');
   await page.waitForLoadState("networkidle");
-  await page.locator("text=確認済み").waitFor();
+  await page.locator("text=確認済み").first().waitFor();
 }
 
 async function adminLogin(page: Page) {
@@ -189,7 +191,13 @@ async function main() {
     join(recordingsDir, "timings.json"),
     JSON.stringify(timings, null, 2),
   );
+  // Remotion 側に input props として渡す形（{timings: ...} で wrap）
+  writeFileSync(
+    join(recordingsDir, "demoProps.json"),
+    JSON.stringify({ timings }, null, 2),
+  );
   console.log(`[record] timings saved -> ${join(recordingsDir, "timings.json")}`);
+  console.log(`[record] demo props -> ${join(recordingsDir, "demoProps.json")}`);
 }
 
 main().catch((e) => {

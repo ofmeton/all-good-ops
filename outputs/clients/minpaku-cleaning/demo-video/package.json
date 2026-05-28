@@ -7,8 +7,8 @@
   "scripts": {
     "seed": "tsx src/seed.ts",
     "record": "tsx src/record.ts",
-    "render": "remotion render src/remotion/index.ts Demo output/demo.mp4",
-    "preview": "remotion studio src/remotion/index.ts",
+    "render": "remotion render src/remotion/index.ts Demo output/demo.mp4 --props=./output/recordings/demoProps.json",
+    "preview": "remotion studio src/remotion/index.ts --props=./output/recordings/demoProps.json",
     "demo": "npm run seed && npm run record && npm run render"
   },
   "dependencies": {
