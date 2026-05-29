@@ -104,7 +104,7 @@ CR-1〜CR-5 の Claude 側実装は **本 PR で完了**。残りは `HUMAN_TASK
 1. `HUMAN_TASKS.md` H-1〜H-5 + H-8 + H-10 を完了
 2. `npm run oauth:test -- --step=authorize` から始まる Step 1-5 を全て ✅
 3. `npm run budget` で `expected ≤ ¥10,000` を確認
-4. (任意) Cloudflare Workers + Anthropic Managed Agents 実装は次フェーズ PR
+4. Cloudflare Workers 反映は `DEPLOY.md` 参照 (`wrangler.toml` + `src/worker.ts` scaffold 済。各 job の lib 配線は次フェーズ)
 5. **人間承認つき 1 投稿/日** から開始 (Phase 1 KPI: note 月売上 3 万円 / X 500 / IG 300)
 
 ## 設計書参照

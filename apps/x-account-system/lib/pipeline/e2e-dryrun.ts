@@ -105,9 +105,10 @@ async function main() {
   const ideaIdArg = process.argv
     .find((a) => a.startsWith("--idea-id="))
     ?.split("=")[1];
+  const flagIdx = process.argv.indexOf("--idea-id");
   const ideaId =
     ideaIdArg ??
-    process.argv[process.argv.indexOf("--idea-id") + 1] ??
+    (flagIdx !== -1 ? process.argv[flagIdx + 1] : undefined) ??
     "sample-01";
   const idea = SAMPLE_IDEAS[ideaId];
   if (!idea) {
