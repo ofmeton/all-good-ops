@@ -29,7 +29,10 @@
     "visualizer:test": "IN_MEMORY_FALLBACK=true jest lib/visualizer",
     "attribution:test": "IN_MEMORY_FALLBACK=true jest lib/attribution",
     "writer:note:test": "IN_MEMORY_FALLBACK=true jest lib/writer/writer-note.test.ts",
-    "writer:ig:test": "IN_MEMORY_FALLBACK=true jest lib/writer/writer-ig.test.ts"
+    "writer:ig:test": "IN_MEMORY_FALLBACK=true jest lib/writer/writer-ig.test.ts",
+    "worker:typecheck": "tsc -p src/tsconfig.json --noEmit",
+    "worker:dev": "wrangler dev",
+    "worker:deploy": "wrangler deploy"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.36.0",
@@ -41,12 +44,14 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^4.20260529.1",
     "@types/jest": "^29.5.12",
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^22.7.0",
     "jest": "^29.7.0",
     "ts-jest": "^29.2.5",
     "tsx": "^4.19.1",
-    "typescript": "^5.6.0"
+    "typescript": "^5.6.0",
+    "wrangler": "^4.14.0"
   }
 }

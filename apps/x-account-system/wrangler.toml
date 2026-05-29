@@ -1,0 +1,76 @@
+# ====================================================================
+# Cloudflare Workers 設定 — x-account-system Phase 1 deploy 準備
+#
+# 設計 SSOT: outputs/improvements/x-account-design-consolidated/main-design-all-versions.md
+#   - L783  runtime = MA (Anthropic Managed Agents) + Cloudflare Workers
+#   - L1098 LINE Webhook → Cloudflare Worker → MA Interviewer Session → LINE reply
+#   - L556-582 Phase 1 投稿タイムテーブル
+#
+# Phase 1 方針:
+#   - 「人間承認つき 1 投稿/日」。scheduled() は draft 生成 + LINE 承認依頼まで。
+#     自律 live 投稿はしない (承認後 fetch ハンドラ経由で publish)。
+#   - Python ジョブ (fetch-github-trending.py / relabel-tweets.py) は Workers では
+#     動かないため launchd or GitHub Actions で別運用 → DEPLOY.md 参照。
+#
+# 反映手順 / secret 投入: apps/x-account-system/DEPLOY.md
+# ====================================================================
+
+name = "ofmeton-x-account"
+main = "src/worker.ts"
+compatibility_date = "2026-05-01"
+compatibility_flags = ["nodejs_compat"]
+
+# 観測性 (設計 §observability、cron run を root span として記録)
+[observability]
+enabled = true
+
+# --------------------------------------------------------------------
+# Cron Triggers (Cloudflare は UTC 指定。JST = UTC+9)
+# --------------------------------------------------------------------
+# | JST       | UTC          | ジョブ                                   |
+# |-----------|--------------|------------------------------------------|
+# | 06:00 月-日 | 21:00 (前日) | 海外X buzz 日次 ingest (v10.3 日次化)     |
+# | 07:00     | 22:00 (前日) | 朝投稿: 失敗談先行型 (導線A, URLなし)      |
+# | 12:00     | 03:00        | 昼投稿: ROI Before-After (導線A)         |
+# | 17:00     | 08:00        | 夕投稿: note 送客告知 (導線B, URL末尾)    |
+# | 17:30     | 08:30        | 夕: 17:00 引用RT + 補足 (導線B派生)       |
+# | 21:00     | 12:00        | 夜: 17:00 引用RT + 別角度 (導線C)         |
+# | 22:00     | 13:00        | Daily Digest (LINE 配信)                 |
+# | 23:00     | 14:00        | Optimizer posterior 更新                 |
+# | 月曜 09:00 | 00:00 (Mon)  | inspirations 週次 ingest                 |
+# | 毎月1日0:00 | 15:00 (1日) | 月次 token rotation 通知 (§10.6)         |
+[triggers]
+crons = [
+  "0 21 * * *",    # 海外X buzz 日次 ingest
+  "0 22 * * *",    # 朝 7:00 投稿
+  "0 3 * * *",     # 昼 12:00 投稿
+  "0 8 * * *",     # 夕 17:00 投稿 (note 送客)
+  "30 8 * * *",    # 夕 17:30 引用RT
+  "0 12 * * *",    # 夜 21:00 引用RT
+  "0 13 * * *",    # Daily Digest
+  "0 14 * * *",    # Optimizer 更新
+  "0 0 * * 1",     # 月曜 inspirations ingest
+  "0 15 1 * *",    # 月次 rotation 通知
+]
+
+# --------------------------------------------------------------------
+# 環境変数 (非機密のみ。機密は `wrangler secret put` で投入 → DEPLOY.md)
+# --------------------------------------------------------------------
+[vars]
+NODE_ENV = "production"
+LOG_LEVEL = "info"
+OPENAI_IMAGE_MODEL = "gpt-image-2"
+ANTHROPIC_ZDR_ENABLED = "false"
+BUDGET_MONTHLY_LIMIT_JPY = "10000"
+BUDGET_BROWNOUT_THRESHOLD_JPY = "11500"
+# Phase 1 は人間承認必須。自律 live 投稿を恒久ブロックするフラグ。
+PHASE = "1"
+AUTONOMOUS_PUBLISH = "false"
+
+# 機密 (wrangler secret put で投入。ここには値を書かない):
+#   ANTHROPIC_API_KEY / OPENAI_API_KEY
+#   X_CLIENT_ID / X_CLIENT_SECRET / X_ACCESS_TOKEN / X_REFRESH_TOKEN
+#   TWITTERAPI_IO_KEY
+#   META_APP_ID / META_APP_SECRET / IG_ACCESS_TOKEN / IG_BUSINESS_ACCOUNT_ID
+#   SUPABASE_URL / SUPABASE_ANON_KEY / SUPABASE_SERVICE_ROLE_KEY
+#   LINE_CHANNEL_ACCESS_TOKEN / LINE_CHANNEL_SECRET / LINE_USER_ID_OFMETON
