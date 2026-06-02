@@ -1,5 +1,7 @@
 # Phase 1 Month 1 初期コンテンツドラフト
 
+> **⚠️ 2026-06-02 名義更新**: 発信名義 ofmeton → **はぐりん**（note=`https://note.com/hagurin__`）。note URL は全て hagurin__ に置換済。本文・分析メモ中に残る "ofmeton" 表記は **「はぐりん」と読み替え**、公開前 content-reviewer pass で最終確定する（分析ラベル＝採用率/-fit/§参照 等はそのまま）。§1 Pinned post + bio は `h8-owned-channel-copy.md §7` の確定版（案A / 設定済bio）が SSOT。X @handle は実アカウント名を要確認。
+
 > 起案: 2026-05-27 by Claude (writer + brand-publisher 統合)
 > 上流: launch-roadmap.md §2.3 トラック C, initial-values §3.2 / §3.4 / §3.8 / §4.1 / §5.5 / §5.6
 > SSOT: main-design-all-versions.md §2.1〜§2.4 / style-guide-all-versions.md §2.1〜§2.6
@@ -36,7 +38,7 @@
 
 無料の note にも詳しい手順をまとめています。
 👇 こちらから
-https://note.com/ofmeton
+https://note.com/hagurin__
 ```
 
 文字数: 約 215 字 (改行込み 240 字)
@@ -57,7 +59,7 @@ https://note.com/ofmeton
 
 失敗した手順も含めて、note に詳細をまとめています。
 👇
-https://note.com/ofmeton
+https://note.com/hagurin__
 ```
 
 文字数: 約 200 字 (改行込み 225 字)
@@ -78,7 +80,7 @@ https://note.com/ofmeton
 
 具体的な手順は note にまとめています。
 👇
-https://note.com/ofmeton
+https://note.com/hagurin__
 ```
 
 文字数: 約 215 字 (改行込み 235 字)
@@ -93,7 +95,7 @@ https://note.com/ofmeton
 
 ## 2. Bio (C-4)
 
-> initial-values §5.6.3 SSOT (bio URL = note プロフィール直リンク `https://note.com/ofmeton`)。
+> initial-values §5.6.3 SSOT (bio URL = note プロフィール直リンク `https://note.com/hagurin__`)。
 > 上限 160 字 (X 仕様)。構成: ① 肩書 + 実績数値 → ② 発信テーマ 3 つ → ③ CTA。
 > 採用案 1 つ + AB テスト予備案 2 つ。ofmeton 起動後 30 日経過時点で profile_clicks / follower_growth を比較し、低い方を入れ替える運用を §4 に記載。
 
@@ -103,7 +105,7 @@ https://note.com/ofmeton
 業務自動化を 5 年。今は Claude Code で経理・請求・議事録を組み直しています。
 非エンジニアの経営者向けに、毎日 1 投稿で実例と失敗談を。
 詳細は note 👇
-https://note.com/ofmeton
+https://note.com/hagurin__
 ```
 
 文字数: 約 110 字 (URL 込み)
@@ -122,7 +124,7 @@ https://note.com/ofmeton
 独立 5 年、Python / GAS / VBA で会社の自動化を書いてきました。
 Claude Code に置き換えて、3 ヶ月で 100 回失敗した過程を残しています。
 非エンジニア向けの note 👇
-https://note.com/ofmeton
+https://note.com/hagurin__
 ```
 
 文字数: 約 115 字 (URL 込み)
@@ -135,7 +137,7 @@ https://note.com/ofmeton
 「ChatGPT、結局自社で何に使えるの？」を、非エンジニアの経営者向けに毎日 1 投稿で書いています。
 経理・請求書・議事録から始めて、月 30 件の実例を残す予定です。
 note 👇
-https://note.com/ofmeton
+https://note.com/hagurin__
 ```
 
 文字数: 約 130 字 (URL 込み)
@@ -144,7 +146,7 @@ https://note.com/ofmeton
 
 ### Bio URL placeholder の扱い
 
-- 現状 `https://note.com/ofmeton` で 3 案全て統一 (採用案 + 予備案 A/B)
+- 現状 `https://note.com/hagurin__` で 3 案全て統一 (採用案 + 予備案 A/B)
 - ofmeton.com 取得時に bio URL を差し替える。Pinned post 内の URL も同タイミングで差し替え
 
 ---
@@ -256,7 +258,7 @@ ChatGPT に "仮説出し" だけ任せて、判断は人間が残す構造。
 
 詳細手順とプロンプト全文は note に置いています。
 👇
-https://note.com/ofmeton
+https://note.com/hagurin__
 ```
 
 文字数: 約 510 字
@@ -307,7 +309,7 @@ Claude は仕訳候補を 3-5 個出すのは得意。
 
 詳しいワークフロー図は note にあります。
 👇
-https://note.com/ofmeton
+https://note.com/hagurin__
 ```
 
 合計文字数: 約 580 字 (4 投稿の合計、各 ≤ 280 字に収まっている)
