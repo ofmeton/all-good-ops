@@ -1,5 +1,7 @@
 # x-account-design Consolidated Docs — INDEX
 
+> **⚠️ 名義変更 (2026-06-02)**: 発信名義を **ofmeton → はぐりん** に改称（note=`hagurin__`）。本シリーズ本文の "ofmeton" 表記（約 322 箇所）は**履歴記録として原文保持**。現行の運用名義は「はぐりん」、戦略・ポジション（非エンジニア翻訳者）は不変。実デプロイ確定値は `content-drafts/h8-owned-channel-copy.md §7` 参照。詳細決定: `raw/facts/situations/2026-06-02-publishing-handle-unified-to-hagurin.md`。
+>
 > 統合: 2026-05-27 初版 (PR #27) / 同日 網羅性監査 + 補完 (PR #28、本ブランチ)
 > 統合ブランチ: `task/260527-xad-completeness-audit` (補完前は `task/260527-xad-consolidate`)
 > 統合者: Claude (audit sub-agent + backfill sub-agent dispatch)
