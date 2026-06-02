@@ -78,7 +78,7 @@ export function buildWriterSystemPromptNote(
       : "";
 
   return [
-    "あなたは ofmeton 名義の note 記事ライターです。",
+    "あなたは はぐりん名義の note 記事ライターです。",
     "note 公開用の記事本文を生成してください。",
     "",
     OFMETON_PERSPECTIVE,

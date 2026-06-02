@@ -32,7 +32,7 @@ export type CodexImageRequest = {
   prompt: string;
   size: ImageSize;
   count: number;
-  brand: "ofmeton";
+  brand: "はぐりん";
   /**
    * 複数枚を 1 リクエストで生成する場合に各枚プロンプトを別個に指定したい場合に使う。
    * 指定された場合は prompt より優先される (carousel composer 用)。

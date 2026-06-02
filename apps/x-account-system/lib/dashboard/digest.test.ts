@@ -123,7 +123,7 @@ describe("formatDigest", () => {
       },
       "U_test",
     );
-    expect(payload.text).toContain("ofmeton Daily Digest 2026-05-27");
+    expect(payload.text).toContain("はぐりん Daily Digest 2026-05-27");
     expect(payload.text).toContain("◆ 当日");
     expect(payload.text).toContain("◆ 7 日累計");
     expect(payload.text).toContain("◆ コスト");

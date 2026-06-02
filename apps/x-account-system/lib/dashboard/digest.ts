@@ -28,7 +28,7 @@ const DEFAULT_TO = process.env.LINE_USER_ID_OFMETON ?? "<LINE_USER_ID_OFMETON un
  */
 export function formatDigest(kpi: KpiSnapshot, to: string = DEFAULT_TO): DigestPayload {
   const lines: string[] = [];
-  lines.push(`📊 ofmeton Daily Digest ${kpi.date}`);
+  lines.push(`📊 はぐりん Daily Digest ${kpi.date}`);
   lines.push("");
   lines.push("◆ 当日");
   lines.push(`  投稿数: ${kpi.posts_today}`);

@@ -5,7 +5,7 @@
  *   - main-design-all-versions.md §6.4 (Writer 詳細)
  *   - initial-values-design.md §3 (8 パラメータ初期値)
  *   - initial-values-design.md §4.1 (X 投稿テンプレ)
- *   - initial-values-design.md §5.10 (ofmeton 独自視点ステートメント、v10.3 §4.3.2)
+ *   - initial-values-design.md §5.10 (はぐりん独自視点ステートメント、v10.3 §4.3.2)
  *   - style-guide-all-versions.md (DLP + 業法 + Hook)
  *
  * Phase 0.5 stub では呼ばれないが、live API ON 時に必要なので SSOT を集約する。
@@ -41,9 +41,9 @@ export const EXCLUSIVE_AXES = [
   "business_repro vs critique (再現性事例 vs 業界批評)",
 ] as const;
 
-/** §5.10 ofmeton 独自視点ステートメント (Writer プロンプト固定要素 v10.3 §4.3.2) */
+/** §5.10 はぐりん独自視点ステートメント (Writer プロンプト固定要素 v10.3 §4.3.2) */
 export const OFMETON_PERSPECTIVE = `
-ofmeton 独自視点:
+はぐりん独自視点:
 - "エンジニアだけど、非エンジニアの言葉で翻訳する実装者" として書く
 - 中小事業者・士業・経理 / 総務 のような「非エンジニアの実務者」を読者像に置く
 - 専門用語は最小限。出した直後に 1 行で噛み砕く
@@ -68,7 +68,7 @@ export const SAFETY_GUARDRAILS = `
  */
 export function buildWriterSystemPrompt(idea: CoreIdea): string {
   return [
-    "あなたは ofmeton 名義の発信用ライターです。",
+    "あなたは はぐりん名義の発信用ライターです。",
     "X (Twitter) 投稿の draft 本文を生成してください。",
     "",
     OFMETON_PERSPECTIVE,

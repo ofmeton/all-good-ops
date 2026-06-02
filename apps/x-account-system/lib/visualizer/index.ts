@@ -62,7 +62,7 @@ async function visualizeImage(
       prompts,
       size: "1080x1350",
       count: 9,
-      brand: "ofmeton",
+      brand: "はぐりん",
     });
     return {
       kind: "image",
@@ -76,12 +76,12 @@ async function visualizeImage(
 
   // 単発画像 (X / note)
   const count = req.imageCount ?? 1;
-  const promptBase = `[ofmeton brand single image] topic: ${req.idea.topic} / audience: ${req.idea.audience} / Noto Sans Heavy / 4-color limited palette / minimum font 24pt`;
+  const promptBase = `[はぐりん brand single image] topic: ${req.idea.topic} / audience: ${req.idea.audience} / Noto Sans Heavy / 4-color limited palette / minimum font 24pt`;
   const response = await generateImages({
     prompt: promptBase,
     size,
     count,
-    brand: "ofmeton",
+    brand: "はぐりん",
   });
   return {
     kind: "image",
