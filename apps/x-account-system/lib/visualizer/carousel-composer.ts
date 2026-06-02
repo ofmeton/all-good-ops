@@ -42,7 +42,7 @@ const TEMPLATE_SLOTS: Record<CarouselTemplateId, SlotSpec[]> = {
     { title: "evidence 1", bodyPrefix: "根拠 1", imagePromptKind: "evidence" },
     { title: "evidence 2", bodyPrefix: "根拠 2", imagePromptKind: "evidence" },
     { title: "evidence 3", bodyPrefix: "根拠 3", imagePromptKind: "evidence" },
-    { title: "解決", bodyPrefix: "ofmeton 流の答え", imagePromptKind: "solution" },
+    { title: "解決", bodyPrefix: "はぐりん流の答え", imagePromptKind: "solution" },
     { title: "How to", bodyPrefix: "再現手順", imagePromptKind: "howto" },
     { title: "まとめ", bodyPrefix: "結論を 1 行で", imagePromptKind: "summary" },
     { title: "CTA", bodyPrefix: "note へ誘導", imagePromptKind: "cta" },
@@ -59,7 +59,7 @@ const TEMPLATE_SLOTS: Record<CarouselTemplateId, SlotSpec[]> = {
     { title: "CTA", bodyPrefix: "note へ誘導", imagePromptKind: "cta" },
   ],
   T3_failure_chronicle: [
-    { title: "自己紹介", bodyPrefix: "ofmeton 名乗り", imagePromptKind: "intro" },
+    { title: "自己紹介", bodyPrefix: "はぐりん名乗り", imagePromptKind: "intro" },
     { title: "業務", bodyPrefix: "対象業務の説明", imagePromptKind: "context" },
     { title: "失敗 1", bodyPrefix: "1 つ目の失敗", imagePromptKind: "failure" },
     { title: "失敗 2", bodyPrefix: "2 つ目の失敗", imagePromptKind: "failure" },
@@ -86,7 +86,7 @@ const TEMPLATE_SLOTS: Record<CarouselTemplateId, SlotSpec[]> = {
     { title: "data 1", bodyPrefix: "数値根拠 1", imagePromptKind: "data" },
     { title: "data 2", bodyPrefix: "数値根拠 2", imagePromptKind: "data" },
     { title: "counter", bodyPrefix: "反証", imagePromptKind: "counter" },
-    { title: "実体験", bodyPrefix: "ofmeton の現場感", imagePromptKind: "evidence" },
+    { title: "実体験", bodyPrefix: "はぐりんの現場感", imagePromptKind: "evidence" },
     { title: "新しい view", bodyPrefix: "再構築した view", imagePromptKind: "insight" },
     { title: "提言", bodyPrefix: "読者への提言", imagePromptKind: "advice" },
     { title: "CTA", bodyPrefix: "note へ誘導", imagePromptKind: "cta" },
@@ -138,7 +138,7 @@ function buildImagePrompt(
   slideIndex: number,
 ): string {
   return [
-    `[ofmeton brand carousel slide ${slideIndex}/9]`,
+    `[はぐりん brand carousel slide ${slideIndex}/9]`,
     `kind: ${kind}`,
     `topic: ${idea.topic}`,
     `audience: ${idea.audience}`,

@@ -56,7 +56,7 @@ export function buildWriterSystemPromptIg(
         ].join("\n");
 
   return [
-    "あなたは ofmeton 名義の Instagram 投稿ライターです。",
+    "あなたは はぐりん名義の Instagram 投稿ライターです。",
     "Instagram (カルーセル / リール) 投稿の draft を生成してください。",
     "",
     OFMETON_PERSPECTIVE,

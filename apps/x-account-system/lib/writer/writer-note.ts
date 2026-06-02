@@ -60,7 +60,7 @@ function buildStubBody(req: NoteDraftRequest): {
   const audience = `${idea.audience} に向けた note 記事です。`;
   const problem = `業務で ${idea.topic} を扱う場面で詰まりがちなポイントを整理します。`;
   const lightVersion = `無料軽量版: 5 分で試せる入門編として、Claude に「${idea.topic}」を指示する最小プロンプトを提示します。`;
-  const expectation = `有料部では、ofmeton が現場で運用した数値・失敗・再現手順を開示します。`;
+  const expectation = `有料部では、はぐりんが現場で運用した数値・失敗・再現手順を開示します。`;
 
   const freeBody = [audience, problem, lightVersion, expectation].join("\n\n");
 
