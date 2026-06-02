@@ -1,5 +1,7 @@
 # H-8 owned channel 導線 copy 案 + 人間アクション手順
 
+> **⚠️ 2026-06-02 更新**: 発信名義を **ofmeton → はぐりん** に改称（`note.com/hagurin__`）。本文 §1-2 の旧 ofmeton ドラフトは **superseded**。実際にデプロイした確定値・確定コピーは末尾 **§7「確定版（2026-06-02 デプロイ）」** を参照。
+>
 > 起案: 2026-05-30 by Claude (brand-publisher)
 > 上流: handson-h1-to-h10.md §8 (H-8) / launch-roadmap.md トラック C
 > SSOT: main-design-all-versions.md (funnel = X 投稿 → プロフィール → note) / style-guide-all-versions.md
@@ -164,3 +166,50 @@ LINE_FRIEND_ADD_URL=https://line.me/R/ti/p/@<basic-id>
 ```
 
 → 上記が揃えば、Claude が各媒体への実 link 埋め込み版（bio / 固定ポスト / note プロフィール最終形）を確定する。
+
+---
+
+## 7. 確定版（2026-06-02 デプロイ）
+
+> 名義 = **はぐりん** / note = `https://note.com/hagurin__` / LINE = `https://lin.ee/QQWV0yD`
+> §1-2 の ofmeton ドラフトは superseded。以下がユーザー設定済 or 採用確定の実コピー。
+
+### 7.1 X bio（✅ ユーザー設定済）
+```
+非エンジニアの経営者が Claude Code / Codex で一人でも生産を爆上げするための情報を発信。
+業務自動化を5年（Python / GAS / VBA）。
+今はClaude Codeを活用してHP制作、飲食店MGR業務自動化、WEB広告周り、アプリ開発を行っています。
+詳しくは固定ポストの note。
+```
+
+### 7.2 X 固定ポスト（採用: 案 A / launch 6/8 投稿）
+```
+はぐりんです。
+非エンジニアの経営者が、Claude Code や Codex で「一人でも生産を爆上げする」ための実例を、毎日1投稿で残していきます。
+
+業務自動化を5年（Python / GAS / VBA）。
+今は Claude Code で、HP制作・飲食店マネージャー業務の自動化・WEB広告まわり・アプリ開発を、コードを一から書かずに回しています。
+
+その手順を、失敗込みで note にまとめています。
+👇
+https://note.com/hagurin__
+```
+
+### 7.3 note プロフィール（✅ ユーザー設定済 / 140字制限）
+```
+はぐりんです。非エンジニアの経営者が、ClaudeなどのAIで業務効率化や「できなかったことをできるように」する実例を発信。メンバーシップでは収益につながる詳細な手順をまとめます。
+```
+
+### 7.4 確定値
+| key | value | 状態 |
+|---|---|---|
+| 名義 | はぐりん | ✅ |
+| NOTE_TOP_URL | `https://note.com/hagurin__` | ✅ |
+| NOTE_MEMBERSHIP_URL | `https://note.com/hagurin__/membership` | ✅ |
+| LINE_FRIEND_ADD_URL | `https://lin.ee/QQWV0yD` | ✅ |
+| DOMAIN | hagurin 系（`hagurin.dev` 等）で取得予定。`hagurin.com` は要空き確認 | ⏸ 未取得 |
+
+### 7.5 残タスク
+- [ ] ドメイン: Cloudflare で `hagurin.dev` / `.blog` / `.me` の空き確認 → 取得（年¥1,500前後、人間）
+- [ ] note プロフィール / 記事末尾に LINE 導線（`https://lin.ee/QQWV0yD`）を任意配置
+- [ ] X 固定ポスト（§7.2）を launch 6/8 に投稿
