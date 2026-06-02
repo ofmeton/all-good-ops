@@ -29,15 +29,20 @@ npx wrangler login     # ブラウザで Cloudflare 認証 (対話: ! 接頭辞 
 `.env.local` の値を Workers Secret として投入する (vars には機密を書かない)。
 
 ```bash
-# まとめて投入 (.env.local から 1 件ずつ)
+# API token があれば wrangler login 不要 (headless)。先に export:
+#   export CLOUDFLARE_API_TOKEN=$(grep '^CLOUDFLARE_API_TOKEN=' .env.local | cut -d= -f2-)
+#   export CLOUDFLARE_ACCOUNT_ID=$(grep '^CLOUDFLARE_ACCOUNT_ID=' .env.local | cut -d= -f2-)
+#
+# 投入リスト = worker が実際に読む process.env.* (src/lib を grep して確定。2026-06-02 実態同期)
+# ※ SUPABASE_SCHEMA は必須 (=xad。無いと public 参照で本番空振り)
+# ※ META/IG/TWITTERAPI は現状 worker 未使用 (IG=H-6 別途、buzz=Python 別運用) のため除外
+# ※ deploy で worker 作成後に secret put する (secret は worker 単位)
 for k in ANTHROPIC_API_KEY OPENAI_API_KEY \
-  X_CLIENT_ID X_CLIENT_SECRET X_ACCESS_TOKEN X_REFRESH_TOKEN \
-  TWITTERAPI_IO_KEY \
-  META_APP_ID META_APP_SECRET IG_ACCESS_TOKEN IG_BUSINESS_ACCOUNT_ID \
-  SUPABASE_URL SUPABASE_ANON_KEY SUPABASE_SERVICE_ROLE_KEY \
-  LINE_CHANNEL_ACCESS_TOKEN LINE_CHANNEL_SECRET LINE_USER_ID_OFMETON; do
+  SUPABASE_URL SUPABASE_SERVICE_ROLE_KEY SUPABASE_SCHEMA \
+  X_CLIENT_ID X_CLIENT_SECRET X_ACCESS_TOKEN X_REFRESH_TOKEN X_TOKEN_EXPIRES_AT X_REDIRECT_URI X_OAUTH_SCOPES \
+  LINE_CHANNEL_ACCESS_TOKEN LINE_USER_ID_OFMETON; do
   v=$(grep "^$k=" .env.local | cut -d= -f2-)
-  [ -n "$v" ] && echo "$v" | npx wrangler secret put "$k"
+  [ -n "$v" ] && printf '%s' "$v" | npx wrangler secret put "$k"
 done
 ```
 
