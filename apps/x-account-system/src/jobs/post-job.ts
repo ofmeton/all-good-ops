@@ -20,6 +20,8 @@ import { pushLine, pushLineMessages } from "../../lib/line/line-client.js";
 import { getRecentStyleFeedback } from "../../lib/feedback/style-feedback.js";
 import { ruleLabelJa } from "../../lib/editor/rule-labels.js";
 import { recordLineMessage } from "../../lib/line/message-map.js";
+import { segmentForPublish } from "../../lib/publisher/format-post.js";
+import type { PublishFormat } from "../../lib/publisher/types.js";
 import type { CoreIdea } from "../../lib/writer/types.js";
 import type { EditorInput, EditorOutput } from "../../lib/editor/types.js";
 import type { DraftOutput } from "../../lib/writer/types.js";
@@ -288,10 +290,20 @@ export async function pushApproval(
   const to = env.LINE_USER_ID_OFMETON || process.env.LINE_USER_ID_OFMETON || "";
   const token = env.LINE_CHANNEL_ACCESS_TOKEN || process.env.LINE_CHANNEL_ACCESS_TOKEN || "";
 
-  // (a) 本文は別の plain text メッセージとして送る (コピー用)。
+  // (a) 実際に投稿されるクリーンなセグメント (足場ラベル・区切りを除去済) を
+  //     プレビューする。thread は 【1/N】 で番号付け表示するが、これは表示専用で
+  //     実投稿ツイートには 【1/N】 は含まれない (publisher が segmentForPublish した本文のみ投稿)。
   //     LINE text message の上限は 5000 字。控えめに 4900 字で cap。
   const MAX_TEXT = 4900;
-  const fullBody = body.length > MAX_TEXT ? body.slice(0, MAX_TEXT) + "\n…(省略)" : body;
+  const segments = segmentForPublish(body, fmat as PublishFormat);
+  const previewBody =
+    segments.length > 1
+      ? segments
+          .map((seg, i) => `【${i + 1}/${segments.length}】\n${seg}`)
+          .join("\n\n")
+      : (segments[0] ?? body);
+  const fullBody =
+    previewBody.length > MAX_TEXT ? previewBody.slice(0, MAX_TEXT) + "\n…(省略)" : previewBody;
 
   const riskBadge = out.riskLevel === "high" ? "⚠️ HIGH RISK" : "✅ low risk";
   const headerText = `📝 投稿承認依頼 [${riskBadge}]`;

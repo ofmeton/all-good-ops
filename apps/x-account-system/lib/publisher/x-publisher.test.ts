@@ -347,3 +347,158 @@ describe("Publisher X — reactive 401 token refresh", () => {
     expect(ks.triggered_by).toBe("oauth_blocked");
   });
 });
+
+// ---------------------------------------------------------------------------
+// Thread chaining: connected reply-chain + partial-failure handling
+// ---------------------------------------------------------------------------
+type CapturedPost = { text: string; replyToId?: string };
+
+/**
+ * 各 POST の payload を記録し、status 列に従ってインクリメンタルな id を返す。
+ * @param statuses POST ごとの HTTP status (足りなければ最後の値を繰り返す)
+ */
+function buildCapturingFetch(statuses: number[]): {
+  fetch: typeof fetch;
+  posts: CapturedPost[];
+} {
+  const posts: CapturedPost[] = [];
+  let n = 0;
+  const fetchImpl = (async (_url: string, init: RequestInit) => {
+    const status = statuses[n] ?? statuses[statuses.length - 1];
+    n++;
+    const parsed = JSON.parse(String(init.body)) as {
+      text: string;
+      reply?: { in_reply_to_tweet_id: string };
+    };
+    posts.push({ text: parsed.text, replyToId: parsed.reply?.in_reply_to_tweet_id });
+    if (status >= 200 && status < 300) {
+      return mockResponse(status, { data: { id: `tweet-${n}`, text: parsed.text } });
+    }
+    return mockResponse(status, { errors: [{ message: `http ${status}` }] });
+  }) as unknown as typeof fetch;
+  return { fetch: fetchImpl, posts };
+}
+
+const THREAD_BODY = [
+  "スレッド1本目",
+  "",
+  "一本目の本文。フックを置く。",
+  "",
+  "---",
+  "",
+  "スレッド2本目",
+  "",
+  "二本目の本文。具体例。",
+  "",
+  "---",
+  "",
+  "スレッド3本目",
+  "",
+  "三本目の本文。結論で締める。",
+].join("\n");
+
+describe("Publisher X — thread chaining", () => {
+  beforeEach(() => {
+    __setKillSwitchOverride(null);
+    __setBrownoutOverride(null);
+    __setTokenOverride(null);
+    __setFetchImpl(null);
+    __resetKillSwitchInMemory();
+    delete process.env.X_ACCESS_TOKEN;
+  });
+
+  afterAll(() => {
+    __setKillSwitchOverride(null);
+    __setBrownoutOverride(null);
+    __setTokenOverride(null);
+    __setFetchImpl(null);
+  });
+
+  test("3 segments → 3 POST calls, seg2/seg3 reply to prior id, result = first id", async () => {
+    __setTokenOverride({ accessToken: "test-token" });
+    const cap = buildCapturingFetch([201, 201, 201]);
+    __setFetchImpl(cap.fetch);
+
+    const result = await publishToX({
+      draftId: "thread-3",
+      body: THREAD_BODY,
+      fmat: "thread",
+      dryRun: false,
+      noBackoff: true,
+      editorOutput: { draftId: "thread-3", ...approvedEditorOutput },
+    });
+
+    expect(result.status).toBe("published");
+    expect(result.tweetId).toBe("tweet-1"); // first tweet id
+    expect(cap.posts).toHaveLength(3);
+
+    // no scaffolding in any posted text
+    for (const p of cap.posts) {
+      expect(p.text).not.toMatch(/スレッド\s*\d+\s*本目/);
+      expect(p.text).not.toMatch(/^---$/m);
+    }
+    // first has no reply; 2nd/3rd chain to the prior id
+    expect(cap.posts[0].replyToId).toBeUndefined();
+    expect(cap.posts[1].replyToId).toBe("tweet-1");
+    expect(cap.posts[2].replyToId).toBe("tweet-2");
+  });
+
+  test("dry-run → no fetch", async () => {
+    __setTokenOverride({ accessToken: "test-token" });
+    const cap = buildCapturingFetch([201]);
+    __setFetchImpl(cap.fetch);
+
+    const result = await publishToX({
+      draftId: "thread-dry",
+      body: THREAD_BODY,
+      fmat: "thread",
+      dryRun: true,
+      noBackoff: true,
+      editorOutput: { draftId: "thread-dry", ...approvedEditorOutput },
+    });
+
+    expect(result.status).toBe("dry_run");
+    expect(cap.posts).toHaveLength(0);
+  });
+
+  test("partial failure: segment 2 fails → first id + partial, no further posts", async () => {
+    __setTokenOverride({ accessToken: "test-token" });
+    // first ok, second 400 (no retry on 4xx), third must NOT be attempted
+    const cap = buildCapturingFetch([201, 400, 201]);
+    __setFetchImpl(cap.fetch);
+
+    const result = await publishToX({
+      draftId: "thread-partial",
+      body: THREAD_BODY,
+      fmat: "thread",
+      dryRun: false,
+      noBackoff: true,
+      editorOutput: { draftId: "thread-partial", ...approvedEditorOutput },
+    });
+
+    expect(result.status).toBe("published");
+    expect(result.tweetId).toBe("tweet-1");
+    expect(result.error).toMatch(/partial_thread/);
+    expect(cap.posts).toHaveLength(2); // stopped after seg2 failed
+  });
+
+  test("single short body still posts as exactly 1 tweet", async () => {
+    __setTokenOverride({ accessToken: "test-token" });
+    const cap = buildCapturingFetch([201]);
+    __setFetchImpl(cap.fetch);
+
+    const result = await publishToX({
+      draftId: "short-1",
+      body: "短い投稿です。",
+      fmat: "short",
+      dryRun: false,
+      noBackoff: true,
+      editorOutput: { draftId: "short-1", ...approvedEditorOutput },
+    });
+
+    expect(result.status).toBe("published");
+    expect(result.tweetId).toBe("tweet-1");
+    expect(cap.posts).toHaveLength(1);
+    expect(cap.posts[0].replyToId).toBeUndefined();
+  });
+});

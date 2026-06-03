@@ -12,6 +12,11 @@
  */
 
 import type { CoreIdea } from "./types.ts";
+import {
+  THREAD_DELIMITER,
+  THREAD_TWEET_JP_SOFT_LIMIT,
+  THREAD_TWEET_MAX_WEIGHTED,
+} from "../publisher/thread-format.ts";
 
 /** §3.2 Hook 16 種の重み配分 (上位 6 種のみ抜粋) */
 export const HOOK_DISTRIBUTION = {
@@ -92,6 +97,23 @@ export const SAFETY_GUARDRAILS = `
 `.trim();
 
 /**
+ * thread 形式の出力規則。
+ * スレッド wire-format の単一契約 (lib/publisher/thread-format.ts) から定数を import し、
+ * 区切り・ラベル禁止・字数を template 補間で埋める。これにより投稿側 splitter
+ * (segmentForPublish) と writer prompt が必ず同じ delimiter / 制約を参照する。
+ * 「スレッドN本目」等の足場ラベルは X 上で自動採番されるので絶対に書かない。
+ * (publisher 側でも後方互換のため除去するが、そもそも生成しないのが正)
+ */
+export const THREAD_FORMAT_GUIDE = `
+スレッド形式の出力規則:
+- 各ツイートの本文だけを書き、ツイート間は "${THREAD_DELIMITER}" だけの行で区切る。
+- 「スレッド1本目」「2本目」「(1/3)」のような番号・足場ラベルは絶対に書かない (X 上で自動採番される)。
+- 各ツイートは日本語 ${THREAD_TWEET_JP_SOFT_LIMIT} 字以内 (X の ${THREAD_TWEET_MAX_WEIGHTED} weighted-char 上限に収める)。
+- 1 本目で最も強いフックを置き、読み進めたくなる引きを作る。
+- 最後のツイートで結論 (仕組み化 / 自動化 / SOP 化) を断定形で締める。
+`.trim();
+
+/**
  * Writer の system prompt を構築。
  * CoreIdea から動的部分を埋めつつ、SSOT を固定要素として組み込む。
  */
@@ -107,6 +129,7 @@ export function buildWriterSystemPrompt(idea: CoreIdea): string {
     PLAINTEXT_GUIDE,
     "",
     SAFETY_GUARDRAILS,
+    idea.fmat === "thread" ? THREAD_FORMAT_GUIDE : "",
     "",
     `今回の topic: ${idea.topic}`,
     `primary_hook: ${idea.primaryHook}`,
@@ -135,6 +158,6 @@ export const FORMAT_MAX_CHARS: Record<string, number> = {
   short: 280,
   medium: 280,
   long: 4000,
-  thread: 280, // thread は分割前提なので 1 つあたり
+  thread: THREAD_TWEET_MAX_WEIGHTED, // thread は分割前提なので 1 つあたり (契約定数から導出)
   article: 4000,
 };
