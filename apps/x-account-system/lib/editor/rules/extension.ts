@@ -145,9 +145,11 @@ export function ruleX4AudienceLine(judge: LlmJudgeResult): EditorRuleResult {
 export function ruleX5DlpAndProperNoun(input: {
   redactNeedsConsent: boolean;
   containsHighRisk: boolean;
+  /** money_jpy/money_usd を除いた本物の PII 高リスク。pipeline が判定し hard/soft 分岐に使う。 */
+  realPiiHighRisk?: boolean;
   judge: LlmJudgeResult;
 }): EditorRuleResult {
-  const { redactNeedsConsent, containsHighRisk, judge } = input;
+  const { redactNeedsConsent, containsHighRisk, realPiiHighRisk = false, judge } = input;
 
   const dlpFail = redactNeedsConsent || containsHighRisk;
   const properFail = judge.x5_proper_noun_assist.status === "fail";
@@ -161,7 +163,7 @@ export function ruleX5DlpAndProperNoun(input: {
       rule: "X5_dlp_and_proper_noun",
       status: "fail",
       reason: reasons.join(" / "),
-      evidence: { redactNeedsConsent, containsHighRisk, llmStatus: judge.x5_proper_noun_assist.status },
+      evidence: { redactNeedsConsent, containsHighRisk, realPiiHighRisk, llmStatus: judge.x5_proper_noun_assist.status },
       durationMs: 0,
     };
   }
