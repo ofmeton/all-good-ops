@@ -13,17 +13,50 @@
 
 // ---- 1. mock supabase BEFORE any imports ----
 
-// Shared chain state for from(table) calls
-const mockDraftSelectData: Record<string, unknown> = {};
-
-// post_drafts select chain
+// post_drafts select chain: .select(...).eq('id', id).maybeSingle()
 const mockDraftMaybeSingle = jest.fn();
 const mockDraftSelectEq = jest.fn(() => ({ maybeSingle: mockDraftMaybeSingle }));
 const mockDraftSelect = jest.fn(() => ({ eq: mockDraftSelectEq }));
 
-// post_drafts update chain: update({...}).eq('id', id)
-const mockDraftUpdateEq = jest.fn().mockResolvedValue({ error: null });
-const mockDraftUpdate = jest.fn(() => ({ eq: mockDraftUpdateEq }));
+// post_drafts claim update chain (FIX 1):
+//   .update({published_at, human_approval_status}).eq('id', id).is('published_at', null).select('id')
+// Returns { data: [{id}], error: null } by default (claim succeeds, 1 row returned).
+const mockDraftClaimSelect = jest.fn().mockResolvedValue({ data: [{ id: "aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee" }], error: null });
+const mockDraftClaimIs = jest.fn(() => ({ select: mockDraftClaimSelect }));
+const mockDraftClaimEq = jest.fn(() => ({ is: mockDraftClaimIs, select: mockDraftClaimSelect, eq: mockDraftClaimEq }));
+
+// post_drafts rollback update chain (FIX 1 rollback):
+//   .update({published_at: null, human_approval_status: priorStatus}).eq('id', id)
+// Separate mock so we can check rollback was (not) called.
+const mockDraftRollbackEq = jest.fn().mockResolvedValue({ error: null });
+const mockDraftRollback = jest.fn(() => ({ eq: mockDraftRollbackEq }));
+
+// post_drafts reject update chain (FIX 2):
+//   .update({human_approval_status: 'rejected'}).eq('id', id).select('id, core_idea_id')
+const mockDraftRejectSelect = jest.fn().mockResolvedValue({
+  data: [{ id: "aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee", core_idea_id: "11111111-2222-4333-8444-555555555555" }],
+  error: null,
+});
+const mockDraftRejectEq = jest.fn(() => ({ select: mockDraftRejectSelect }));
+const mockDraftReject = jest.fn(() => ({ eq: mockDraftRejectEq }));
+
+// Track which update is being called (claim vs rollback vs reject)
+// We use a call counter: first update = claim (approve path) OR reject (reject path).
+// To simplify: use a single mockDraftUpdate that dispatches based on call args.
+let _updateCallCount = 0;
+const mockDraftUpdate = jest.fn((updateArg: Record<string, unknown>) => {
+  _updateCallCount++;
+  // If the update arg has human_approval_status='rejected' → reject path
+  if (updateArg.human_approval_status === "rejected") {
+    return mockDraftReject(updateArg);
+  }
+  // If the update arg has published_at=null → rollback path
+  if (updateArg.published_at === null) {
+    return mockDraftRollback(updateArg);
+  }
+  // Otherwise → claim path (published_at is set to nowIso)
+  return { eq: mockDraftClaimEq };
+});
 
 // posted_records insert
 const mockPostedInsert = jest.fn().mockResolvedValue({ error: null });
@@ -184,11 +217,13 @@ describe("handleLineEvent — approve postback → publish", () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    _updateCallCount = 0;
     fakeFetch = makeFakeFetch(TWEET_ID) as jest.Mock;
     __setFetchImpl(fakeFetch as typeof fetch);
 
     mockDraftMaybeSingle.mockResolvedValue({ data: fakeDraftRow, error: null });
-    mockDraftUpdateEq.mockResolvedValue({ error: null });
+    // Claim succeeds: 1 row returned
+    mockDraftClaimSelect.mockResolvedValue({ data: [{ id: DRAFT_ID }], error: null });
     mockPostedInsert.mockResolvedValue({ error: null });
     mockIdeaUpdateEq.mockResolvedValue({ error: null });
   });
@@ -232,7 +267,7 @@ describe("handleLineEvent — approve postback → publish", () => {
     expect(typeof insertArg.scheduled_at).toBe("string");
   });
 
-  test("approve → post_drafts updated: human_approval_status='approved' + published_at set", async () => {
+  test("approve → claim update sets human_approval_status='approved' + published_at (ISO)", async () => {
     const payload = {
       type: "postback",
       postback: { data: `approve:${DRAFT_ID}` },
@@ -241,11 +276,11 @@ describe("handleLineEvent — approve postback → publish", () => {
 
     await handleLineEvent(payload, makeEnv());
 
-    // post_drafts.update should have been called
+    // The claim update (first update call) must set both fields atomically
     expect(mockDraftUpdate).toHaveBeenCalled();
-    const updateArg = mockDraftUpdate.mock.calls[0][0];
-    expect(updateArg.human_approval_status).toBe("approved");
-    expect(typeof updateArg.published_at).toBe("string"); // ISO timestamp
+    const claimUpdateArg = mockDraftUpdate.mock.calls[0][0];
+    expect(claimUpdateArg.human_approval_status).toBe("approved");
+    expect(typeof claimUpdateArg.published_at).toBe("string"); // ISO timestamp
   });
 
   test("approve → core_ideas.status set to 'published'", async () => {
@@ -291,6 +326,31 @@ describe("handleLineEvent — approve postback → publish", () => {
     expect(fakeFetch).toHaveBeenCalledTimes(1);
     expect(mockPostedInsert).toHaveBeenCalledTimes(1);
   });
+
+  // FIX 1: claim returns 0 rows → another invocation already claimed → publishToX NOT called
+  test("FIX1: claim returns 0 rows (concurrent retry) → publishToX NOT called, 'already processed' notice sent", async () => {
+    // Simulate claim returning 0 rows (another invocation claimed it first)
+    mockDraftClaimSelect.mockResolvedValueOnce({ data: [], error: null });
+
+    const payload = {
+      type: "postback",
+      postback: { data: `approve:${DRAFT_ID}` },
+      source: { type: "user", userId: "U_admin_test" },
+    };
+
+    await handleLineEvent(payload, makeEnv());
+
+    // X API must NOT be called
+    expect(fakeFetch).not.toHaveBeenCalled();
+    // posted_records must NOT be inserted
+    expect(mockPostedInsert).not.toHaveBeenCalled();
+    // core_ideas must NOT be updated to published
+    expect(mockIdeaUpdate).not.toHaveBeenCalled();
+    // A "already processed" LINE message must have been sent
+    expect(mockPushLine).toHaveBeenCalledTimes(1);
+    const [, message] = mockPushLine.mock.calls[0];
+    expect(message).toMatch(/既に処理済み|既に公開済/);
+  });
 });
 
 // ============================================================
@@ -299,10 +359,16 @@ describe("handleLineEvent — approve postback → publish", () => {
 describe("handleLineEvent — reject postback", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    _updateCallCount = 0;
     __setFetchImpl(makeFakeFetch(TWEET_ID) as typeof fetch);
 
     mockDraftMaybeSingle.mockResolvedValue({ data: fakeDraftRow, error: null });
-    mockDraftUpdateEq.mockResolvedValue({ error: null });
+    // Reject update returns the draft row with core_idea_id
+    mockDraftRejectSelect.mockResolvedValue({
+      data: [{ id: DRAFT_ID, core_idea_id: CORE_IDEA_ID }],
+      error: null,
+    });
+    mockIdeaUpdateEq.mockResolvedValue({ error: null });
   });
 
   afterEach(() => {
@@ -328,11 +394,26 @@ describe("handleLineEvent — reject postback", () => {
 
     // posted_records NOT inserted
     expect(mockPostedInsert).not.toHaveBeenCalled();
-    // core_ideas NOT updated
-    expect(mockIdeaUpdate).not.toHaveBeenCalled();
 
     // LINE push for acknowledgement
     expect(mockPushLine).toHaveBeenCalled();
+  });
+
+  // FIX 2: reject → core_ideas.status reverts to 'draft'
+  test("FIX2: reject → core_ideas.status reverted to 'draft' so idea re-enters queue", async () => {
+    const payload = {
+      type: "postback",
+      postback: { data: `reject:${DRAFT_ID}` },
+      source: { type: "user", userId: "U_admin_test" },
+    };
+
+    await handleLineEvent(payload, makeEnv());
+
+    // core_ideas.status must be set back to 'draft'
+    expect(mockIdeaUpdate).toHaveBeenCalledTimes(1);
+    const ideaUpdateArg = mockIdeaUpdate.mock.calls[0][0];
+    expect(ideaUpdateArg.status).toBe("draft");
+    expect(mockIdeaUpdateEq).toHaveBeenCalledWith("id", CORE_IDEA_ID);
   });
 });
 
@@ -344,10 +425,11 @@ describe("handleLineEvent — idempotency (already published)", () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    _updateCallCount = 0;
     fakeFetch = makeFakeFetch(TWEET_ID) as jest.Mock;
     __setFetchImpl(fakeFetch as typeof fetch);
 
-    // Draft already has published_at set → idempotent no-op
+    // Draft already has published_at set → idempotent fast-path no-op
     mockDraftMaybeSingle.mockResolvedValue({
       data: { ...fakeDraftRow, published_at: "2026-06-03T01:00:00.000Z" },
       error: null,
@@ -384,6 +466,7 @@ describe("handleLineEvent — idempotency (already published)", () => {
 describe("handleLineEvent — non-approve/reject events", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    _updateCallCount = 0;
   });
 
   test("unrelated text message → no-op (no DB calls, no throw)", async () => {
@@ -413,11 +496,12 @@ describe("handleLineEvent — unauthorized sender is rejected (IDOR gate)", () =
 
   beforeEach(() => {
     jest.clearAllMocks();
+    _updateCallCount = 0;
     fakeFetch = makeFakeFetch(TWEET_ID) as jest.Mock;
     __setFetchImpl(fakeFetch as typeof fetch);
 
     mockDraftMaybeSingle.mockResolvedValue({ data: fakeDraftRow, error: null });
-    mockDraftUpdateEq.mockResolvedValue({ error: null });
+    mockDraftClaimSelect.mockResolvedValue({ data: [{ id: DRAFT_ID }], error: null });
     mockPostedInsert.mockResolvedValue({ error: null });
     mockIdeaUpdateEq.mockResolvedValue({ error: null });
   });

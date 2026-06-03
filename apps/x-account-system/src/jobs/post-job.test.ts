@@ -12,16 +12,19 @@
 
 // Upsert mock for post_drafts
 const mockUpsert = jest.fn().mockResolvedValue({ error: null });
-// Update mock for core_ideas (dequeue)
-const mockUpdate = jest.fn(() => ({ eq: mockUpdateEq }));
+
+// Update mock for core_ideas (dequeue) — FIX 3: must verify claimed row via .select("id")
+// Chain: .update({status:'approved'}).eq("id", row.id).eq("status","draft").select("id")
+// Returns { data: [{id: 'idea-uuid-001'}], error: null } by default (claim succeeds).
+const mockDequeueClaimSelect = jest.fn().mockResolvedValue({ data: [{ id: "idea-uuid-001" }], error: null });
+const mockUpdateEq2 = jest.fn(() => ({ select: mockDequeueClaimSelect }));
 const mockUpdateEq = jest.fn(() => ({ eq: mockUpdateEq2 }));
-const mockUpdateEq2 = jest.fn().mockResolvedValue({ error: null });
+const mockUpdate = jest.fn(() => ({ eq: mockUpdateEq }));
 
 // Select mock for core_ideas
 const mockSingleRow = jest.fn();
 const mockSelectLimit = jest.fn(() => ({ maybeSingle: mockSingleRow }));
 const mockSelectEq = jest.fn(() => ({ limit: mockSelectLimit }));
-const mockSelectFrom = jest.fn(() => ({ eq: mockSelectEq, select: mockSelectSelectChain }));
 const mockSelectSelectChain = jest.fn(() => ({ eq: mockSelectEq }));
 
 jest.mock("@supabase/supabase-js", () => ({
@@ -161,7 +164,8 @@ describe("runPostJob — happy path (approved)", () => {
     mockDraftForX.mockResolvedValue(fakeDraftOutput);
     mockRunEditor.mockResolvedValue(fakeEditorOutputApproved);
     mockUpsert.mockResolvedValue({ error: null });
-    mockUpdateEq2.mockResolvedValue({ error: null });
+    // FIX 3: claim returns 1 row (success)
+    mockDequeueClaimSelect.mockResolvedValue({ data: [{ id: fakeCoreIdeaRow.id }], error: null });
   });
 
   test("upserts post_drafts with UUID id + human_approval_status=pending + editor_output + writer_draft_id", async () => {
@@ -213,7 +217,7 @@ describe("runPostJob — editor rejected", () => {
     mockDraftForX.mockResolvedValue(fakeDraftOutput);
     mockRunEditor.mockResolvedValue(fakeEditorOutputRejected);
     mockUpsert.mockResolvedValue({ error: null });
-    mockUpdateEq2.mockResolvedValue({ error: null });
+    mockDequeueClaimSelect.mockResolvedValue({ data: [{ id: fakeCoreIdeaRow.id }], error: null });
   });
 
   test("does NOT call pushLine when editor rejects", async () => {
@@ -248,6 +252,33 @@ describe("runPostJob — empty core_ideas", () => {
     expect(mockUpsert).not.toHaveBeenCalled();
 
     // should push a notification line message
+    expect(mockPushLine).toHaveBeenCalledTimes(1);
+    const [, message] = mockPushLine.mock.calls[0];
+    expect(message).toContain("core_ideas");
+  });
+});
+
+// ============================================================
+// Test (d): FIX 3 — dequeueIdeaRow claim returns 0 rows → null, no draft produced
+// ============================================================
+describe("runPostJob — FIX3: dequeue claim returns 0 rows (race condition)", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    mockGetKillSwitchState.mockResolvedValue({ publishing_enabled: true, resume_at: null, triggered_by: null, updated_at: new Date().toISOString() });
+    mockSingleRow.mockResolvedValue({ data: fakeCoreIdeaRow, error: null });
+    // FIX 3: claim returns 0 rows → another consumer already claimed this idea
+    mockDequeueClaimSelect.mockResolvedValue({ data: [], error: null });
+  });
+
+  test("0-rows-claimed → returns null (skips run), no draft or LINE approval push", async () => {
+    await runPostJob("morning", makeEnv());
+
+    // No drafting, no editor, no upsert
+    expect(mockDraftForX).not.toHaveBeenCalled();
+    expect(mockRunEditor).not.toHaveBeenCalled();
+    expect(mockUpsert).not.toHaveBeenCalled();
+
+    // Admin notified that core_ideas is "empty" (treated as null by caller)
     expect(mockPushLine).toHaveBeenCalledTimes(1);
     const [, message] = mockPushLine.mock.calls[0];
     expect(message).toContain("core_ideas");

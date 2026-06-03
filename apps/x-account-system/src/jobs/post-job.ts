@@ -120,14 +120,23 @@ async function dequeueIdeaRow(
   if (error) throw new Error(`dequeueIdeaRow select: ${error.message}`);
   if (!data) return null;
 
-  // Atomically mark as 'approved' to avoid double-consumption
-  const { error: updErr } = await sb
+  // Atomically mark as 'approved' to avoid double-consumption.
+  // Use .select("id") to verify the UPDATE actually claimed the row
+  // (Supabase returns error=null even if 0 rows matched without .select).
+  const { data: claimData, error: updErr } = await sb
     .from("core_ideas")
     .update({ status: "approved" })
     .eq("id", (data as CoreIdeaRow).id)
-    .eq("status", "draft");  // optimistic lock: only update if still 'draft'
+    .eq("status", "draft")  // optimistic lock: only update if still 'draft'
+    .select("id");
 
   if (updErr) throw new Error(`dequeueIdeaRow update: ${updErr.message}`);
+
+  const claimed = Array.isArray(claimData) ? claimData : [];
+  if (claimed.length === 0) {
+    // Another consumer claimed this idea between our SELECT and UPDATE — skip this run.
+    return null;
+  }
 
   return data as CoreIdeaRow;
 }
@@ -152,7 +161,7 @@ async function persistDraft(
   },
 ): Promise<void> {
   const sb = getSupabase(env);
-  if (!sb) return;
+  if (!sb) throw new Error("persistDraft: Supabase not configured");
 
   const { id, idea, draft, out, slot, date } = opts;
 

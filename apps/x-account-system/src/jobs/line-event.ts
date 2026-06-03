@@ -128,7 +128,7 @@ function parseApprovalIntent(
 }
 
 // ============================================================
-// handleApprove — load draft, publish, record results
+// handleApprove — load draft, claim, publish, record results
 // ============================================================
 async function handleApprove(draftId: string, env: Env): Promise<void> {
   const sb = getSupabase(env);
@@ -157,7 +157,7 @@ async function handleApprove(draftId: string, env: Env): Promise<void> {
 
   const draft = data as PostDraftRow;
 
-  // 2. Idempotency check
+  // 2. Idempotency fast-path: already has published_at → no-op
   if (draft.published_at !== null) {
     await notify(env, `ℹ️ draft_id=${draftId} は既に公開済です (published_at: ${draft.published_at})`);
     return;
@@ -171,20 +171,53 @@ async function handleApprove(draftId: string, env: Env): Promise<void> {
   }
 
   const fmat = (draft.fmat ?? "medium") as PublishFormat;
+  const priorApprovalStatus = draft.human_approval_status;
+  const nowIso = new Date().toISOString();
 
-  // 4. publishToX (highRiskApproved=true because a HUMAN approved, dryRun=false)
-  const result = await publishToX({
-    draftId,
-    body: draft.body,
-    fmat,
-    editorOutput,
-    dryRun: false,
-    highRiskApproved: true,
-    noBackoff: false,
-  });
+  // 4. Atomic claim: set published_at + approved ONLY if published_at IS NULL.
+  //    If another invocation already claimed it, .select("id") returns 0 rows.
+  const { data: claimData, error: claimErr } = await sb
+    .from("post_drafts")
+    .update({ published_at: nowIso, human_approval_status: "approved" })
+    .eq("id", draftId)
+    .is("published_at", null)
+    .select("id");
+
+  if (claimErr) {
+    console.error("[line-event] post_drafts claim error:", claimErr.message);
+    throw new Error(`[line-event] post_drafts claim failed: ${claimErr.message}`);
+  }
+
+  const claimed = Array.isArray(claimData) ? claimData : [];
+  if (claimed.length === 0) {
+    // Another invocation already claimed this draft — it is being (or was) published.
+    await notify(env, `ℹ️ draft_id=${draftId} は既に処理済み/公開済みです`);
+    return;
+  }
+
+  // 5. Attempt to publish (claim is held; roll back on failure)
+  let result: Awaited<ReturnType<typeof publishToX>>;
+  try {
+    result = await publishToX({
+      draftId,
+      body: draft.body,
+      fmat,
+      editorOutput,
+      dryRun: false,
+      highRiskApproved: true,
+      noBackoff: false,
+    });
+  } catch (publishErr) {
+    // Roll back claim so the draft is re-approvable
+    await sb
+      .from("post_drafts")
+      .update({ published_at: null, human_approval_status: priorApprovalStatus })
+      .eq("id", draftId);
+    throw publishErr;
+  }
 
   if (result.status === "published" && result.tweetId) {
-    const now = new Date().toISOString();
+    // published_at + human_approval_status already committed in the claim step.
 
     // 5a. Insert posted_records
     const { error: insertErr } = await sb.from("posted_records").insert({
@@ -192,24 +225,16 @@ async function handleApprove(draftId: string, env: Env): Promise<void> {
       draft_id: draftId,
       platform: "x",
       platform_post_id: result.tweetId,
-      scheduled_at: now,
-      posted_at: now,
+      scheduled_at: nowIso,
+      posted_at: nowIso,
       via_fallback: false,
     });
     if (insertErr) {
-      console.error("[line-event] posted_records insert error:", insertErr.message);
+      // Non-fatal: post is already live on X; log for reconciliation.
+      console.error("[line-event] posted_records insert error (post IS live on X):", insertErr.message);
     }
 
-    // 5b. Update post_drafts: human_approval_status + published_at
-    const { error: draftErr } = await sb
-      .from("post_drafts")
-      .update({ human_approval_status: "approved", published_at: now })
-      .eq("id", draftId);
-    if (draftErr) {
-      console.error("[line-event] post_drafts update error:", draftErr.message);
-    }
-
-    // 5c. Update core_ideas.status = 'published'
+    // 5b. Update core_ideas.status = 'published'
     const { error: ideaErr } = await sb
       .from("core_ideas")
       .update({ status: "published" })
@@ -218,13 +243,21 @@ async function handleApprove(draftId: string, env: Env): Promise<void> {
       console.error("[line-event] core_ideas update error:", ideaErr.message);
     }
 
-    // 5d. Success notification
+    // 5c. Success notification
     await notify(
       env,
-      `✅ 投稿完了\ndraft_id: ${draftId}\ntweetId: ${result.tweetId}\nposted_at: ${now}`,
+      `✅ 投稿完了\ndraft_id: ${draftId}\ntweetId: ${result.tweetId}\nposted_at: ${nowIso}`,
     );
   } else {
-    // blocked or failed — leave state unchanged, push reason
+    // blocked or failed — roll back the claim so the draft is re-approvable
+    const { error: rollbackErr } = await sb
+      .from("post_drafts")
+      .update({ published_at: null, human_approval_status: priorApprovalStatus })
+      .eq("id", draftId);
+    if (rollbackErr) {
+      console.error("[line-event] claim rollback error:", rollbackErr.message);
+    }
+
     const reason =
       result.status === "blocked"
         ? `blocked: ${result.blockedReason ?? "unknown"}`
@@ -234,7 +267,7 @@ async function handleApprove(draftId: string, env: Env): Promise<void> {
 }
 
 // ============================================================
-// handleReject — mark draft rejected
+// handleReject — mark draft rejected and return core_idea to queue
 // ============================================================
 async function handleReject(draftId: string, env: Env): Promise<void> {
   const sb = getSupabase(env);
@@ -243,15 +276,35 @@ async function handleReject(draftId: string, env: Env): Promise<void> {
     return;
   }
 
-  const { error } = await sb
+  // 1. Update post_drafts.human_approval_status = 'rejected'
+  const { data: draftData, error } = await sb
     .from("post_drafts")
     .update({ human_approval_status: "rejected" })
-    .eq("id", draftId);
+    .eq("id", draftId)
+    .select("id, core_idea_id");
 
   if (error) {
     console.error("[line-event] post_drafts reject update error:", error.message);
     await notify(env, `⚠️ 却下処理エラー: DBエラー (${error.message})`);
     return;
+  }
+
+  // 2. Return the core_idea to the queue (status → 'draft') so it can be re-processed
+  const rows = Array.isArray(draftData) ? draftData : [];
+  const coreIdeaId: string | null = rows.length > 0
+    ? (rows[0] as { id: string; core_idea_id: string }).core_idea_id
+    : null;
+
+  if (coreIdeaId) {
+    const { error: ideaErr } = await sb
+      .from("core_ideas")
+      .update({ status: "draft" })
+      .eq("id", coreIdeaId);
+    if (ideaErr) {
+      console.error("[line-event] core_ideas revert error:", ideaErr.message);
+    }
+  } else {
+    console.warn("[line-event] handleReject: could not determine core_idea_id for draft", draftId);
   }
 
   await notify(env, `🚫 却下しました\ndraft_id: ${draftId}`);
