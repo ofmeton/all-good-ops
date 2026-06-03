@@ -32,6 +32,13 @@ const mockPostedInsert = jest.fn().mockResolvedValue({ error: null });
 const mockIdeaUpdateEq = jest.fn().mockResolvedValue({ error: null });
 const mockIdeaUpdate = jest.fn(() => ({ eq: mockIdeaUpdateEq }));
 
+// interview_sessions select chain (W4-3: loadSession)
+const mockInterviewSessionSingle = jest.fn().mockResolvedValue({ data: null, error: null });
+const mockInterviewSessionSelectEq = jest.fn(() => ({ single: mockInterviewSessionSingle }));
+const mockInterviewSessionSelect = jest.fn(() => ({ eq: mockInterviewSessionSelectEq }));
+// interview_sessions upsert (W4-3: saveSession)
+const mockInterviewSessionUpsert = jest.fn().mockResolvedValue({ error: null });
+
 jest.mock("@supabase/supabase-js", () => ({
   createClient: jest.fn(() => ({
     from: (table: string) => {
@@ -46,6 +53,12 @@ jest.mock("@supabase/supabase-js", () => ({
       }
       if (table === "core_ideas") {
         return { update: mockIdeaUpdate };
+      }
+      if (table === "interview_sessions") {
+        return {
+          select: mockInterviewSessionSelect,
+          upsert: mockInterviewSessionUpsert,
+        };
       }
       return {};
     },

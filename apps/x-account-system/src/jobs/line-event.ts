@@ -30,6 +30,14 @@ import { pushLine } from "../../lib/line/line-client.js";
 import type { EditorOutput } from "../../lib/editor/types.js";
 import type { PublishFormat } from "../../lib/publisher/types.js";
 import type { Env } from "../worker.js";
+import {
+  createSession,
+  loadSession,
+  nextQuestion,
+  recordAnswer,
+  saveSession,
+} from "../../lib/interviewer/line-flow.js";
+import type { Answer } from "../../lib/interviewer/types.js";
 
 // ============================================================
 // Supabase client factory (same pattern as post-job.ts)
@@ -250,20 +258,114 @@ async function handleReject(draftId: string, env: Env): Promise<void> {
 }
 
 // ============================================================
+// handleInterviewText — W4-3: text message → interviewer flow
+// ============================================================
+
+/**
+ * Extract lineUserId and text from a LINE message event.
+ * Returns null if the event is not a text message.
+ */
+function parseTextMessage(payload: unknown): { lineUserId: string; text: string } | null {
+  if (typeof payload !== "object" || payload === null) return null;
+  const ev = payload as Record<string, unknown>;
+  if (ev.type !== "message") return null;
+
+  const msg = ev.message as Record<string, unknown> | undefined;
+  if (msg?.type !== "text" || typeof msg?.text !== "string") return null;
+
+  const source = ev.source as Record<string, unknown> | undefined;
+  const lineUserId = (typeof source?.userId === "string" && source.userId) ||
+    lineUserId_env(undefined);
+  if (!lineUserId) return null;
+
+  return { lineUserId, text: msg.text.trim() };
+}
+
+function lineUserId_env(env: Env | undefined): string {
+  return (env?.LINE_USER_ID_OFMETON) || process.env.LINE_USER_ID_OFMETON || "";
+}
+
+async function handleInterviewText(
+  lineUserId: string,
+  text: string,
+  env: Env,
+): Promise<void> {
+  const token = lineToken(env);
+  const sessionId = lineUserId; // 1:1 user→session; id = lineUserId
+
+  // Load or create session
+  let session = await loadSession(sessionId);
+  if (!session || session.finalized) {
+    // Start a new interview session (default industry=generic, topic=業務改善)
+    session = createSession({
+      id: sessionId,
+      line_user_id: lineUserId,
+      industry: "generic",
+      topic: "業務改善",
+    });
+  }
+
+  // Get next question BEFORE recording (so we know what step/pattern this answer belongs to)
+  const currentQ = await nextQuestion(session);
+  if (!currentQ) {
+    // Session already finalized or no more questions
+    if (token && lineUserId) {
+      await pushLine(lineUserId, "インタビューは完了しています。ありがとうございました！", token);
+    }
+    return;
+  }
+
+  // Record the user's answer to the current question
+  const answer: Answer = {
+    step: currentQ.step,
+    pattern_id: currentQ.pattern_id,
+    question_text: currentQ.text,
+    answer_text: text,
+    received_at: new Date().toISOString(),
+  };
+  await recordAnswer(session, answer);
+
+  // Save updated session to DB
+  await saveSession(session);
+
+  // Get the next question to ask (after advancing)
+  const nextQ = await nextQuestion(session);
+
+  if (!nextQ || session.finalized) {
+    // Interview complete
+    if (token && lineUserId) {
+      await pushLine(
+        lineUserId,
+        "インタビューありがとうございました！素材を受け付けました。投稿準備が整いましたらお知らせします。",
+        token,
+      );
+    }
+  } else {
+    // Send next question
+    if (token && lineUserId) {
+      await pushLine(lineUserId, nextQ.text, token);
+    }
+  }
+}
+
+// ============================================================
 // Main export
 // ============================================================
 export async function handleLineEvent(payload: unknown, env: Env): Promise<void> {
   const intent = parseApprovalIntent(payload);
 
-  if (!intent) {
-    // W4-3 will extend this for interviewer text flow
-    // For now: no-op / TODO marker
+  if (intent) {
+    if (intent.action === "approve") {
+      await handleApprove(intent.draftId, env);
+    } else {
+      await handleReject(intent.draftId, env);
+    }
     return;
   }
 
-  if (intent.action === "approve") {
-    await handleApprove(intent.draftId, env);
-  } else {
-    await handleReject(intent.draftId, env);
+  // W4-3: text message → interviewer flow
+  const textMsg = parseTextMessage(payload);
+  if (textMsg) {
+    await handleInterviewText(textMsg.lineUserId, textMsg.text, env);
   }
 }
