@@ -12,6 +12,7 @@ import type { Env, JobMessage } from "./worker.js";
 import { runPostJob } from "./jobs/post-job.js";
 import { handleLineEvent } from "./jobs/line-event.js";
 import { runBuzzIngest } from "../lib/ingest/buzz-ingest.js";
+import { runInspirationsIngest } from "../lib/ingest/inspirations-ingest.js";
 import { runIdeation } from "../lib/ideation/ideate.js";
 
 export async function handleJob(msg: JobMessage, env: Env): Promise<void> {
@@ -76,15 +77,17 @@ export async function handleJob(msg: JobMessage, env: Env): Promise<void> {
     }
 
     // ----------------------------------------------------------------
-    // inspirations-ingest: 週次 inspirations 取得
+    // inspirations-ingest: 週次 inspirations 取得 (W5-3)
     // ----------------------------------------------------------------
     case "inspirations-ingest": {
-      // W4: 週次 inspirations ingest (海外≥1 / 国内≥1 / note≥1)
+      // X seeds (overseas ≥6 / domestic ≥18) + note seeds (≥3) → materials_store
+      const count = await runInspirationsIngest(env);
       console.log(
         JSON.stringify({
           level: "info",
-          msg: "[inspirations-ingest] 週次 ingest (stub)",
+          msg: "[inspirations-ingest] 週次 ingest 完了",
           date: msg.date,
+          inserted: count,
         }),
       );
       break;
