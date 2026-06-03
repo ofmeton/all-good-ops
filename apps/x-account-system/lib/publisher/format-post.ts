@@ -18,9 +18,17 @@
  *   - 必ず非空配列 (≥1) を返す
  */
 import type { PublishFormat } from "./types.ts";
+import {
+  THREAD_TWEET_MAX_WEIGHTED,
+  isDelimiterLine,
+  isScaffoldLabelLine,
+} from "./thread-format.ts";
 
-/** X の 280 weighted-char 上限 (日本語等 non-ASCII は 2 でカウント) */
-export const X_WEIGHTED_LIMIT = 280;
+/**
+ * X の weighted-char 上限 (日本語等 non-ASCII は 2 でカウント)。
+ * スレッド契約 (thread-format.ts) の THREAD_TWEET_MAX_WEIGHTED から導出し、別リテラルを作らない。
+ */
+export const X_WEIGHTED_LIMIT = THREAD_TWEET_MAX_WEIGHTED;
 
 /**
  * X の weighted length 近似。
@@ -38,36 +46,8 @@ export function weightedLen(s: string): number {
   return n;
 }
 
-/**
- * 足場ラベル単独行か判定する。
- * 対象 (前後 whitespace 許容、行全体がラベルのときのみ true):
- *   - スレッド1本目 / スレッド 1 本目
- *   - 1本目 / 1 本目
- *   - (1/3) / （1/3）
- *   - 1/3 (単独行)
- * 文中に出てきた場合 (他のテキストが同じ行にある) は除去しない。
- */
-function isScaffoldLabelLine(line: string): boolean {
-  const t = line.trim();
-  if (t.length === 0) return false;
-  // スレッドN本目
-  if (/^スレッド\s*\d+\s*本目$/.test(t)) return true;
-  // N本目
-  if (/^\d+\s*本目$/.test(t)) return true;
-  // (1/3) （全角括弧も）
-  if (/^[（(]\s*\d+\s*\/\s*\d+\s*[)）]$/.test(t)) return true;
-  // 1/3 単独
-  if (/^\d+\s*\/\s*\d+$/.test(t)) return true;
-  return false;
-}
-
-/** delimiter 単独行 (--- / — / ー のみ) か判定する。 */
-function isDelimiterLine(line: string): boolean {
-  const t = line.trim();
-  if (t.length === 0) return false;
-  // "---" 以上のハイフン or "—"(em dash) のみ or "ー"(長音) のみ の行
-  return /^-{3,}$/.test(t) || /^—+$/.test(t) || /^ー+$/.test(t);
-}
+// 足場ラベル / delimiter の判定はスレッド契約 (thread-format.ts) を SSOT として import。
+// ここで再定義すると writer prompt と silent drift するため絶対に複製しない。
 
 /** 1 セグメントから足場ラベル単独行を除去して trim する。 */
 function stripLabels(segment: string): string {
