@@ -15,6 +15,7 @@
 
 import { bridgeEnv } from "./env-bridge.js";
 import { handleJob } from "./queue.js";
+import { verifyLineSignature } from "../lib/crypto/webcrypto.js";
 
 export interface Env {
   // vars (wrangler.toml [vars])
@@ -118,18 +119,26 @@ export default {
     ctx.waitUntil(env.JOBS.send(msg));
   },
 
-  async fetch(request: Request, env: Env): Promise<Response> {
+  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     bridgeEnv(env as unknown as Record<string, unknown>);
 
     const url = new URL(request.url);
 
-    // LINE Webhook (設計 L1098): 承認タップ / Interviewer 応答
+    // LINE Webhook (設計 L1098): 署名検証 → per-event enqueue
     if (url.pathname === "/line/webhook" && request.method === "POST") {
-      // TODO(next-phase): 署名検証 (LINE_CHANNEL_SECRET) → イベント分岐
-      //   - postback "approve:<draftId>" → queue に line-event enqueue → publish
-      //   - postback "reject:<draftId>"  → queue に line-event enqueue → draft 破棄
-      //   - text message → lib/interviewer/line-flow.ts 5 ステップへ
-      log(env, "info", "LINE webhook received (stub)");
+      // RAW body を一度だけ読む（HMAC はバイト列に対して計算するため、JSON.parse 前に text() で取得）
+      const body = await request.text();
+      const sig = request.headers.get("x-line-signature");
+      if (!(await verifyLineSignature(body, sig, env.LINE_CHANNEL_SECRET))) {
+        log(env, "error", "LINE webhook: invalid signature");
+        return new Response("invalid signature", { status: 401 });
+      }
+      const parsed = JSON.parse(body) as { events?: unknown[] };
+      const date = jstDate(new Date());
+      for (const ev of parsed.events ?? []) {
+        ctx.waitUntil(env.JOBS.send({ job: "line-event", date, payload: ev }));
+      }
+      log(env, "info", `LINE webhook: enqueued ${(parsed.events ?? []).length} event(s)`);
       return new Response("OK", { status: 200 });
     }
 
