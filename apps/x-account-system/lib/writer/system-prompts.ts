@@ -92,6 +92,21 @@ export const SAFETY_GUARDRAILS = `
 `.trim();
 
 /**
+ * thread 形式の出力規則。
+ * 投稿側 (publisher) が "---" 単独行でツイートを分割するため、区切りは "---" のみ。
+ * 「スレッドN本目」等の足場ラベルは X 上で自動採番されるので絶対に書かない。
+ * (publisher 側でも安全のため除去するが、そもそも生成しないのが正)
+ */
+export const THREAD_FORMAT_GUIDE = `
+スレッド形式の出力規則:
+- 各ツイートの本文だけを書き、ツイート間は "---" だけの行で区切る。
+- 「スレッド1本目」「2本目」「(1/3)」のような番号・足場ラベルは絶対に書かない (X 上で自動採番される)。
+- 各ツイートは日本語 130 字以内 (X の 280 weighted-char 上限に収める)。
+- 1 本目で最も強いフックを置き、読み進めたくなる引きを作る。
+- 最後のツイートで結論 (仕組み化 / 自動化 / SOP 化) を断定形で締める。
+`.trim();
+
+/**
  * Writer の system prompt を構築。
  * CoreIdea から動的部分を埋めつつ、SSOT を固定要素として組み込む。
  */
@@ -107,6 +122,7 @@ export function buildWriterSystemPrompt(idea: CoreIdea): string {
     PLAINTEXT_GUIDE,
     "",
     SAFETY_GUARDRAILS,
+    idea.fmat === "thread" ? THREAD_FORMAT_GUIDE : "",
     "",
     `今回の topic: ${idea.topic}`,
     `primary_hook: ${idea.primaryHook}`,

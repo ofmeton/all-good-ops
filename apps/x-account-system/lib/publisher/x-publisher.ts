@@ -23,6 +23,7 @@ import {
   refreshAccessToken,
 } from "./token-store.ts";
 import { assertPublishingEnabled } from "../safety/kill-switch.ts";
+import { segmentForPublish } from "./format-post.ts";
 
 const X_TWEETS_ENDPOINT = "https://api.twitter.com/2/tweets";
 const MAX_RETRIES = 3;
@@ -75,8 +76,16 @@ async function postTweetWithRetry(
   body: string,
   accessToken: string,
   noBackoff: boolean,
+  replyToId?: string,
 ): Promise<PostTweetResult> {
   let lastError = "unknown error";
+  // thread chaining (X API v2): reply.in_reply_to_tweet_id で前ツイートに連結
+  const payload: { text: string; reply?: { in_reply_to_tweet_id: string } } = {
+    text: body,
+  };
+  if (replyToId) {
+    payload.reply = { in_reply_to_tweet_id: replyToId };
+  }
   for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
     try {
       const res = await _fetchImpl(X_TWEETS_ENDPOINT, {
@@ -85,7 +94,7 @@ async function postTweetWithRetry(
           Authorization: `Bearer ${accessToken}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ text: body }),
+        body: JSON.stringify(payload),
       });
       if (res.ok) {
         const json = (await res.json()) as XPostResponse;
@@ -180,6 +189,9 @@ export async function publishToX(req: PublishRequest): Promise<PublishResult> {
     };
   }
 
+  // ---- Segment body into clean tweet(s) (strip scaffolding, thread split) ----
+  const segments = segmentForPublish(req.body, req.fmat);
+
   // ---- Gate 5: dry-run ----
   if (req.dryRun) {
     return {
@@ -187,6 +199,10 @@ export async function publishToX(req: PublishRequest): Promise<PublishResult> {
       status: "dry_run",
       postedAt: new Date().toISOString(),
       retryCount: 0,
+      error:
+        segments.length > 1
+          ? `dry-run: ${segments.length} 連結ツイートとして投稿予定`
+          : undefined,
     };
   }
 
@@ -215,25 +231,19 @@ export async function publishToX(req: PublishRequest): Promise<PublishResult> {
     }
   }
 
-  // ---- Actual POST ----
-  let result = await postTweetWithRetry(
-    req.body,
-    token.accessToken,
-    req.noBackoff ?? false,
-  );
+  // ---- Actual POST (thread chain) ----
+  // 1) 先頭ツイートを投稿 (reply 無し)。既存の 401→refresh→retry を維持する。
+  const noBackoff = req.noBackoff ?? false;
+  let result = await postTweetWithRetry(segments[0], token.accessToken, noBackoff);
 
-  // ---- Reactive 401 recovery: refresh ONCE + retry ONCE ----
+  // ---- Reactive 401 recovery: refresh ONCE + retry ONCE (先頭ツイートのみ) ----
   // X access tokens expire (~2h). If the post returns 401 the stored token went
   // stale between read and send; refresh (rotating the refresh_token) and retry.
   if (!("tweetId" in result) && result.unauthorized) {
     try {
       const refreshed = await refreshAccessToken(token);
       token = refreshed;
-      result = await postTweetWithRetry(
-        req.body,
-        token.accessToken,
-        req.noBackoff ?? false,
-      );
+      result = await postTweetWithRetry(segments[0], token.accessToken, noBackoff);
     } catch (e) {
       // Refresh failed → kill-switch already triggered inside refreshAccessToken.
       // Fail closed; do NOT loop.
@@ -246,20 +256,50 @@ export async function publishToX(req: PublishRequest): Promise<PublishResult> {
     }
   }
 
-  if ("tweetId" in result) {
+  // 先頭ツイートが失敗 → 何も投稿されていないので failed。
+  if (!("tweetId" in result)) {
     return {
       draftId: req.draftId,
-      status: "published",
-      tweetId: result.tweetId,
-      postedAt: new Date().toISOString(),
+      status: "failed",
       retryCount: result.retryCount,
+      error: result.error,
     };
   }
+
+  const firstTweetId = result.tweetId;
+  let retryCount = result.retryCount;
+
+  // 2) 残りのセグメントを直前ツイートへの reply として順次投稿する。
+  //    途中で失敗したら STOP し、部分スレッドとして published を返す (二重投稿しない)。
+  let previousId = firstTweetId;
+  for (let i = 1; i < segments.length; i++) {
+    const seg = await postTweetWithRetry(
+      segments[i],
+      token.accessToken,
+      noBackoff,
+      previousId,
+    );
+    retryCount += seg.retryCount;
+    if (!("tweetId" in seg)) {
+      // 部分スレッド: 先頭 id は live。エラーを note に載せて二重投稿せず返す。
+      return {
+        draftId: req.draftId,
+        status: "published",
+        tweetId: firstTweetId,
+        postedAt: new Date().toISOString(),
+        retryCount,
+        error: `partial_thread: posted ${i}/${segments.length} tweets, segment ${i + 1} failed: ${seg.error}`,
+      };
+    }
+    previousId = seg.tweetId;
+  }
+
   return {
     draftId: req.draftId,
-    status: "failed",
-    retryCount: result.retryCount,
-    error: result.error,
+    status: "published",
+    tweetId: firstTweetId,
+    postedAt: new Date().toISOString(),
+    retryCount,
   };
 }
 
