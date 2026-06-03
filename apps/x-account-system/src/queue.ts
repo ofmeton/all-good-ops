@@ -9,6 +9,7 @@
  */
 
 import type { Env, JobMessage } from "./worker.js";
+import { runPostJob } from "./jobs/post-job.js";
 
 export async function handleJob(msg: JobMessage, env: Env): Promise<void> {
   switch (msg.job) {
@@ -18,19 +19,8 @@ export async function handleJob(msg: JobMessage, env: Env): Promise<void> {
     case "post-morning":
     case "post-noon":
     case "post-evening": {
-      // W3-2: Writer (lib/writer) で draft 生成
-      //        → Editor 6+5 (lib/editor/pipeline.ts) 審査
-      //        → approved なら LINE 承認依頼 push
-      //        → rejected なら理由を Digest に記録
-      //        Phase 1: AUTONOMOUS_PUBLISH=false を強制確認してから publish
-      console.log(
-        JSON.stringify({
-          level: "info",
-          msg: `[${msg.job}] draft 生成 + LINE 承認依頼 (Phase 1 human-approval stub)`,
-          slot: msg.slot,
-          date: msg.date,
-        }),
-      );
+      // W3-2: idea→draft→editor→LINE承認依頼
+      await runPostJob(msg.slot, env);
       break;
     }
 
