@@ -27,7 +27,7 @@ function getSupabase(): SupabaseClient | null {
       process.env.SUPABASE_URL,
       process.env.SUPABASE_SERVICE_ROLE_KEY,
       { db: { schema: process.env.SUPABASE_SCHEMA || "public" } },
-    );
+    ) as unknown as SupabaseClient;
   }
   return _supabase;
 }
