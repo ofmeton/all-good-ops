@@ -38,14 +38,70 @@ const AUDIENCE_LINE_PATTERN =
 const WORKFLOW_PATTERN =
   /(仕組み化|自動化|業務改善|ワークフロー|効率化|時短|テンプレ化|定型化|プロセス|手順|SOP|standardize)/;
 
+const JUDGE_TOOL = {
+  name: "judge",
+  description: "Editor 6項目を pass/fail/skip で判定",
+  input_schema: {
+    type: "object",
+    properties: Object.fromEntries(
+      [
+        "r1_workflow_theme",
+        "r3_no_enemy",
+        "r6_assertive_conclusion",
+        "x2_stealth_disclosure_text",
+        "x4_audience_line",
+        "x5_proper_noun_assist",
+      ].map((k) => [
+        k,
+        {
+          type: "object",
+          properties: {
+            status: { type: "string", enum: ["pass", "fail", "skip"] },
+            reason: { type: "string" },
+          },
+          required: ["status", "reason"],
+        },
+      ]),
+    ),
+    required: [
+      "r1_workflow_theme",
+      "r3_no_enemy",
+      "r6_assertive_conclusion",
+      "x2_stealth_disclosure_text",
+      "x4_audience_line",
+      "x5_proper_noun_assist",
+    ],
+  },
+} as const;
+
 /**
- * Sonnet 4.6 等の実 API を呼ぶ場合の placeholder。
- * Phase 0.5 stub では呼ばれない (IN_MEMORY_FALLBACK=true 強制)。
+ * Anthropic Sonnet を tool_use で呼び出し 6 項目を一括判定する。
+ * IN_MEMORY_FALLBACK=true の場合は呼ばれない (stubJudge が優先)。
  */
-async function callAnthropicJudge(_input: LlmJudgeInput): Promise<LlmJudgeResult> {
-  throw new Error(
-    "Live Anthropic judge not implemented yet. Set IN_MEMORY_FALLBACK=true for Phase 0.5.",
-  );
+async function callAnthropicJudge(input: LlmJudgeInput): Promise<LlmJudgeResult> {
+  const Anthropic = (await import("@anthropic-ai/sdk")).default;
+  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+  const res = await client.messages.create({
+    model: "claude-sonnet-4-5",
+    max_tokens: 1024,
+    tools: [JUDGE_TOOL as never],
+    tool_choice: { type: "tool", name: "judge" },
+    messages: [
+      {
+        role: "user",
+        content:
+          `platform=${input.platform} format=${input.format} affiliate=${input.hasAffiliateLink}\n---\n${input.body}\n---\n上記を Editor 6項目で判定し judge tool を呼べ。`,
+      },
+    ],
+  });
+  const tu = res.content.find((b) => b.type === "tool_use");
+  if (!tu || tu.type !== "tool_use") {
+    throw new Error("judge: no tool_use in response");
+  }
+  const costUsd =
+    (res.usage.input_tokens / 1_000_000) * 3 +
+    (res.usage.output_tokens / 1_000_000) * 15;
+  return { ...(tu.input as Omit<LlmJudgeResult, "costUsd">), costUsd };
 }
 
 /**
