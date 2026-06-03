@@ -13,6 +13,7 @@
  *   denied / 曖昧 → INSERT せず session を internal_only で完了
  */
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { pushLine } from "../line/line-client.ts";
 import {
   parseConsent,
   pickPattern,
@@ -55,7 +56,7 @@ function getSupabase(): SupabaseClient | null {
       process.env.SUPABASE_URL,
       process.env.SUPABASE_SERVICE_ROLE_KEY,
       { db: { schema: process.env.SUPABASE_SCHEMA || "public" } },
-    );
+    ) as unknown as SupabaseClient;
   }
   return _supabase;
 }
@@ -91,6 +92,74 @@ export function createSession(args: {
 
 export function getSession(id: string): InterviewSession | undefined {
   return sessionStore.get(id);
+}
+
+/**
+ * DB-backed session load (async, additive — does NOT replace getSession).
+ *
+ * - IN_MEMORY_FALLBACK/no Supabase client → falls back to sessionStore Map.
+ * - Otherwise selects from interview_sessions, maps snake_case→InterviewSession.
+ */
+export async function loadSession(id: string): Promise<InterviewSession | null> {
+  const supabase = getSupabase();
+  if (!supabase) {
+    return sessionStore.get(id) ?? null;
+  }
+
+  const { data, error } = await supabase
+    .from("interview_sessions")
+    .select("*")
+    .eq("id", id)
+    .single();
+
+  if (error || !data) return null;
+
+  const row = data as Record<string, unknown>;
+  const session: InterviewSession = {
+    id: row.id as string,
+    line_user_id: row.line_user_id as string,
+    current_step: row.current_step as InterviewSession["current_step"],
+    industry: row.industry as InterviewSession["industry"],
+    topic: row.topic as string,
+    answers: Array.isArray(row.answers) ? (row.answers as InterviewSession["answers"]) : [],
+    material_id: (row.material_id as string | null) ?? undefined,
+    publication_consent: row.publication_consent as InterviewSession["publication_consent"],
+    finalized: row.finalized as boolean,
+    created_at: row.created_at as string,
+    updated_at: row.updated_at as string,
+  };
+  return session;
+}
+
+/**
+ * DB-backed session save (async, additive — does NOT replace sessionStore mutations).
+ *
+ * - IN_MEMORY_FALLBACK/no Supabase client → falls back to sessionStore Map.
+ * - Otherwise upserts to interview_sessions (snake_case columns, updated_at=now()).
+ */
+export async function saveSession(session: InterviewSession): Promise<void> {
+  const supabase = getSupabase();
+  if (!supabase) {
+    sessionStore.set(session.id, session);
+    return;
+  }
+
+  const { error } = await supabase.from("interview_sessions").upsert({
+    id: session.id,
+    line_user_id: session.line_user_id,
+    current_step: session.current_step,
+    industry: session.industry,
+    topic: session.topic,
+    answers: session.answers,
+    material_id: session.material_id ?? null,
+    publication_consent: session.publication_consent,
+    finalized: session.finalized,
+    updated_at: new Date().toISOString(),
+  });
+
+  if (error) {
+    throw new Error(`interview_sessions upsert failed: ${error.message}`);
+  }
 }
 
 /**
@@ -234,21 +303,8 @@ export async function sendLineMessage(
     console.log(`[LINE DRY-RUN] to=${to} message: ${text.slice(0, 200)}`);
     return { status: "dry_run" };
   }
-  // lazy import to keep test footprint small
-  const axiosMod = await import("axios");
-  const axios = axiosMod.default ?? axiosMod;
-  const res = await axios.post(
-    "https://api.line.me/v2/bot/message/push",
-    { to, messages: [{ type: "text", text }] },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      timeout: 5000,
-    },
-  );
-  return { status: "sent", reply: res.data };
+  await pushLine(to, text, token);
+  return { status: "sent" };
 }
 
 // ---------------------------------------------------------------------------

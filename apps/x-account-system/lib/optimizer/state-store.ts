@@ -11,12 +11,42 @@
  * snapshot ID は ulid 風の `snap_<ts>_<rand>` 文字列。
  */
 
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import type {
   OptimizerState,
   ParameterPosterior,
 } from "./types.ts";
 
-const IN_MEMORY_FALLBACK = process.env.IN_MEMORY_FALLBACK === "true";
+// ---------------------------------------------------------------------------
+// 0. Supabase client helper (mirrors kill-switch.ts pattern)
+// ---------------------------------------------------------------------------
+
+let _supabase: SupabaseClient | null = null;
+function getSupabase(): SupabaseClient | null {
+  if (process.env.IN_MEMORY_FALLBACK === "true") return null;
+  if (
+    !_supabase &&
+    process.env.SUPABASE_URL &&
+    process.env.SUPABASE_SERVICE_ROLE_KEY
+  ) {
+    _supabase = createClient(
+      process.env.SUPABASE_URL,
+      process.env.SUPABASE_SERVICE_ROLE_KEY,
+      { db: { schema: process.env.SUPABASE_SCHEMA || "public" } },
+    );
+  }
+  return _supabase;
+}
+
+/** test 用にクライアントシングルトンをリセット */
+export function __resetSupabaseClient(): void {
+  _supabase = null;
+}
+
+/** 呼出時に評価（モジュールロード時固定を避ける、テスト隔離のため） */
+function isInMemoryFallback(): boolean {
+  return process.env.IN_MEMORY_FALLBACK === "true";
+}
 
 // ---------------------------------------------------------------------------
 // 1. initial-values §8.1 採用初期値 (Current SSOT v10.3 + Style Guide v1.3)
@@ -182,22 +212,33 @@ export function __setInMemoryState(state: OptimizerState) {
 export async function loadOptimizerState(
   now: Date = new Date(),
 ): Promise<OptimizerState> {
-  if (IN_MEMORY_FALLBACK) {
+  if (isInMemoryFallback()) {
     if (!_store.current) {
       _store.current = buildInitialState(now);
     }
     return cloneState(_store.current);
   }
-  // Phase 1: Supabase optimizer_state テーブル read (未実装)
-  throw new Error(
-    "loadOptimizerState: Supabase backend は未実装 (Phase 1)。IN_MEMORY_FALLBACK=true を設定してください。",
-  );
+  // Phase 1: Supabase optimizer_state テーブル read
+  const sb = getSupabase();
+  if (!sb) {
+    return buildInitialState(now);
+  }
+  const { data, error } = await sb
+    .from("optimizer_state")
+    .select("state, generation")
+    .eq("scope", "global")
+    .maybeSingle();
+  if (error || !data) {
+    return buildInitialState(now);
+  }
+  const parsed = data.state as OptimizerState;
+  return { ...parsed, generation: data.generation ?? parsed.generation ?? 0 };
 }
 
 export async function saveOptimizerState(
   state: OptimizerState,
 ): Promise<void> {
-  if (IN_MEMORY_FALLBACK) {
+  if (isInMemoryFallback()) {
     _store.current = cloneState({
       ...state,
       generation: (state.generation ?? 0) + 1,
@@ -205,8 +246,17 @@ export async function saveOptimizerState(
     });
     return;
   }
-  throw new Error(
-    "saveOptimizerState: Supabase backend は未実装 (Phase 1)。IN_MEMORY_FALLBACK=true を設定してください。",
+  // Phase 1: Supabase optimizer_state upsert
+  const sb = getSupabase();
+  if (!sb) return;
+  await sb.from("optimizer_state").upsert(
+    {
+      scope: "global",
+      state,
+      generation: (state.generation ?? 0) + 1,
+      updated_at: new Date().toISOString(),
+    },
+    { onConflict: "scope" },
   );
 }
 
@@ -215,7 +265,7 @@ export async function snapshotState(
 ): Promise<{ snapshotId: string }> {
   const current = await loadOptimizerState(timestamp);
   const snapshotId = `snap_${timestamp.toISOString().replace(/[^0-9]/g, "")}_${randTail()}`;
-  if (IN_MEMORY_FALLBACK) {
+  if (isInMemoryFallback()) {
     _store.snapshots.set(
       snapshotId,
       cloneState({ ...current, lastSnapshotId: snapshotId }),
@@ -225,15 +275,23 @@ export async function snapshotState(
     }
     return { snapshotId };
   }
-  throw new Error(
-    "snapshotState: Supabase backend は未実装 (Phase 1)。IN_MEMORY_FALLBACK=true を設定してください。",
-  );
+  // Phase 1: Supabase optimizer_snapshot insert
+  const sb = getSupabase();
+  if (sb) {
+    await sb.from("optimizer_snapshot").insert({
+      snapshot_id: snapshotId,
+      state: { ...current, lastSnapshotId: snapshotId },
+    });
+    // update current state with lastSnapshotId
+    await saveOptimizerState({ ...current, lastSnapshotId: snapshotId });
+  }
+  return { snapshotId };
 }
 
 export async function rollbackToSnapshot(
   snapshotId: string,
 ): Promise<OptimizerState> {
-  if (IN_MEMORY_FALLBACK) {
+  if (isInMemoryFallback()) {
     const snap = _store.snapshots.get(snapshotId);
     if (!snap) {
       throw new Error(`rollbackToSnapshot: snapshot not found: ${snapshotId}`);
@@ -241,9 +299,22 @@ export async function rollbackToSnapshot(
     _store.current = cloneState(snap);
     return cloneState(snap);
   }
-  throw new Error(
-    "rollbackToSnapshot: Supabase backend は未実装 (Phase 1)。IN_MEMORY_FALLBACK=true を設定してください。",
-  );
+  // Phase 1: Supabase — fetch snapshot, save back as current
+  const sb = getSupabase();
+  if (!sb) {
+    throw new Error(`rollbackToSnapshot: Supabase client unavailable`);
+  }
+  const { data, error } = await sb
+    .from("optimizer_snapshot")
+    .select("state")
+    .eq("snapshot_id", snapshotId)
+    .maybeSingle();
+  if (error || !data) {
+    throw new Error(`rollbackToSnapshot: snapshot not found: ${snapshotId}`);
+  }
+  const snapState = data.state as OptimizerState;
+  await saveOptimizerState(snapState);
+  return snapState;
 }
 
 // ---------------------------------------------------------------------------

@@ -6,8 +6,10 @@ module.exports = {
   testPathIgnorePatterns: ["/node_modules/", "/dist/"],
   moduleFileExtensions: ["ts", "tsx", "js", "json"],
   // .ts import 文に拡張子を含む書き方 (TS NodeNext) を許可
+  // .js 拡張子も .ts ファイルに解決 (bundler moduleResolution → CJS jest 互換)
   moduleNameMapper: {
     "^(\\.{1,2}/.*)\\.ts$": "$1",
+    "^(\\.{1,2}/.*)\\.js$": "$1",
   },
   transform: {
     "^.+\\.tsx?$": [

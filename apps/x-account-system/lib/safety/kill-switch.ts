@@ -27,7 +27,7 @@ function getSupabase(): SupabaseClient | null {
       process.env.SUPABASE_URL,
       process.env.SUPABASE_SERVICE_ROLE_KEY,
       { db: { schema: process.env.SUPABASE_SCHEMA || "public" } },
-    );
+    ) as unknown as SupabaseClient;
   }
   return _supabase;
 }
@@ -72,10 +72,15 @@ export async function getKillSwitchState(): Promise<KillSwitchState> {
     .eq("scope", "global")
     .maybeSingle();
   if (error || !data) {
+    // Fail CLOSED: real client present but read failed or row missing → treat as DISABLED
+    console.warn(
+      "[kill-switch] safety_state read failed or no row found — failing CLOSED (publishing disabled)",
+      error ?? "no row",
+    );
     return {
-      publishing_enabled: true,
+      publishing_enabled: false,
       resume_at: null,
-      triggered_by: null,
+      triggered_by: "fail_closed",
       updated_at: new Date().toISOString(),
     };
   }

@@ -25,32 +25,48 @@ compatibility_flags = ["nodejs_compat"]
 enabled = true
 
 # --------------------------------------------------------------------
-# Cron Triggers (Cloudflare は UTC 指定。JST = UTC+9)
+# Queues (xad-jobs producer/consumer + DLQ)
 # --------------------------------------------------------------------
-# | JST       | UTC          | ジョブ                                   |
-# |-----------|--------------|------------------------------------------|
-# | 06:00 月-日 | 21:00 (前日) | 海外X buzz 日次 ingest (v10.3 日次化)     |
-# | 07:00     | 22:00 (前日) | 朝投稿: 失敗談先行型 (導線A, URLなし)      |
-# | 12:00     | 03:00        | 昼投稿: ROI Before-After (導線A)         |
-# | 17:00     | 08:00        | 夕投稿: note 送客告知 (導線B, URL末尾)    |
-# | 17:30     | 08:30        | 夕: 17:00 引用RT + 補足 (導線B派生)       |
-# | 21:00     | 12:00        | 夜: 17:00 引用RT + 別角度 (導線C)         |
-# | 22:00     | 13:00        | Daily Digest (LINE 配信)                 |
-# | 23:00     | 14:00        | Optimizer posterior 更新                 |
-# | 月曜 09:00 | 00:00 (Mon)  | inspirations 週次 ingest                 |
-# | 毎月1日0:00 | 15:00 (1日) | 月次 token rotation 通知 (§10.6)         |
+[[queues.producers]]
+queue = "xad-jobs"
+binding = "JOBS"
+
+[[queues.consumers]]
+queue = "xad-jobs"
+max_batch_size = 1
+max_retries = 3
+dead_letter_queue = "xad-jobs-dlq"
+
+# --------------------------------------------------------------------
+# Cron Triggers (Cloudflare は UTC 指定。JST = UTC+9)
+# Phase 1: X API 100/月上限 → 投稿 cron は 3 本のみ (morning/noon/evening)。
+# 旧 "引用RT" 系 (post-evening-quote / post-night-quote) を削除し、
+# post-evening (19:00 JST note 送客) に統一。
+# --------------------------------------------------------------------
+# | JST       | UTC          | ジョブ                                      |
+# |-----------|--------------|---------------------------------------------|
+# | 06:00     | 21:00 (前日) | buzz-ingest (海外X buzz 日次)               |
+# | 07:00     | 22:00 (前日) | post-morning (失敗談先行型, URLなし)         |
+# | 12:00     | 03:00        | post-noon (ROI Before-After)                |
+# | 19:00     | 10:00        | post-evening (note 送客, URL末尾)            |
+# | 07:30     | 22:30        | github-trending (30分オフセットで重複回避)   |
+# | 21:00     | 12:00        | daily-digest (LINE 配信)                    |
+# | 23:00     | 14:00        | optimizer-update (posterior 更新)           |
+# | 毎2h      | */2          | rollback-monitor (異常検知)                 |
+# | 月曜 09:00 | 00:00 (Mon)  | inspirations-ingest (週次)                  |
+# | 毎月1日 00:00| 15:00 (1日) | rotation-notice (token rotation 通知)       |
 [triggers]
 crons = [
-  "0 21 * * *",    # 海外X buzz 日次 ingest
-  "0 22 * * *",    # 朝 7:00 投稿
-  "0 3 * * *",     # 昼 12:00 投稿
-  "0 8 * * *",     # 夕 17:00 投稿 (note 送客)
-  "30 8 * * *",    # 夕 17:30 引用RT
-  "0 12 * * *",    # 夜 21:00 引用RT
-  "0 13 * * *",    # Daily Digest
-  "0 14 * * *",    # Optimizer 更新
-  "0 0 * * 1",     # 月曜 inspirations ingest
-  "0 15 1 * *",    # 月次 rotation 通知
+  "0 22 * * *",    # 07:00 JST post-morning
+  "0 3 * * *",     # 12:00 JST post-noon
+  "0 10 * * *",    # 19:00 JST post-evening (note 送客)
+  "0 21 * * *",    # 06:00 JST buzz-ingest
+  "30 22 * * *",   # 07:30 JST github-trending (分オフセットで post-morning と重複回避)
+  "0 12 * * *",    # 21:00 JST daily-digest
+  "0 14 * * *",    # 23:00 JST optimizer-update
+  "0 */2 * * *",   # rollback-monitor 毎2h
+  "0 0 * * 1",     # 月曜 09:00 JST inspirations-ingest
+  "0 15 1 * *",    # 毎月1日 rotation-notice
 ]
 
 # --------------------------------------------------------------------
@@ -66,6 +82,7 @@ BUDGET_BROWNOUT_THRESHOLD_JPY = "11500"
 # Phase 1 は人間承認必須。自律 live 投稿を恒久ブロックするフラグ。
 PHASE = "1"
 AUTONOMOUS_PUBLISH = "false"
+SUPABASE_SCHEMA = "xad"
 
 # 機密 (wrangler secret put で投入。ここには値を書かない):
 #   ANTHROPIC_API_KEY / OPENAI_API_KEY

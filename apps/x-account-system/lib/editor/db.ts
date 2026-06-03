@@ -29,7 +29,7 @@ export function getSupabase(): SupabaseClient | null {
       process.env.SUPABASE_URL,
       process.env.SUPABASE_SERVICE_ROLE_KEY,
       { db: { schema: process.env.SUPABASE_SCHEMA || "public" } },
-    );
+    ) as unknown as SupabaseClient;
   }
   return _client;
 }
@@ -113,10 +113,12 @@ export async function fetchRecentPostBodies(
     .gte("posted_at", since);
 
   if (error) throw new Error(`fetchRecentPostBodies: ${error.message}`);
-  return (data ?? []).map((r: {
+  // supabase-js types a !inner join as an array, but at runtime a to-one join
+  // returns a single object. Cast to the runtime shape.
+  return ((data ?? []) as unknown as Array<{
     draft_id: string;
     post_drafts: { body: string; embedding?: number[] };
-  }) => ({
+  }>).map((r) => ({
     id: r.draft_id,
     body: r.post_drafts.body,
     embedding: r.post_drafts.embedding,

@@ -9,12 +9,13 @@
   },
   "type": "module",
   "scripts": {
-    "budget": "tsx lib/cost/budget-calculator.ts",
+    "budget": "tsx lib/cost/budget-cli.ts",
     "oauth:test": "tsx lib/oauth/pkce-test.ts",
-    "fallback:dry-run": "tsx lib/fallback/trigger.ts --dry-run",
+    "fallback:dry-run": "tsx lib/fallback/trigger-cli.ts --dry-run",
     "relabel": "python3 scripts/relabel-tweets.py",
     "dlp:lint": "tsx lib/dlp/lint.ts",
     "test": "IN_MEMORY_FALLBACK=true jest",
+    "test:worker-live": "jest lib/editor/llm-judge.live.test.ts lib/optimizer/supabase-store.test.ts lib/dashboard/digest-persist.test.ts lib/publisher/x-publisher-db-gate.test.ts lib/interviewer/line-flow-db.test.ts src/",
     "editor:test": "IN_MEMORY_FALLBACK=true jest lib/editor",
     "editor:cli": "tsx lib/editor/cli.ts",
     "publisher:test": "IN_MEMORY_FALLBACK=true jest lib/publisher",
@@ -24,7 +25,7 @@
     "dashboard:test": "IN_MEMORY_FALLBACK=true jest lib/dashboard",
     "safety:test": "IN_MEMORY_FALLBACK=true jest lib/safety",
     "ma:test": "IN_MEMORY_FALLBACK=true jest lib/ma",
-    "digest:cli": "IN_MEMORY_FALLBACK=true tsx lib/dashboard/digest.ts",
+    "digest:cli": "IN_MEMORY_FALLBACK=true tsx lib/dashboard/digest-cli.ts",
     "optimizer:test": "IN_MEMORY_FALLBACK=true jest lib/optimizer",
     "visualizer:test": "IN_MEMORY_FALLBACK=true jest lib/visualizer",
     "attribution:test": "IN_MEMORY_FALLBACK=true jest lib/attribution",
@@ -32,7 +33,8 @@
     "writer:ig:test": "IN_MEMORY_FALLBACK=true jest lib/writer/writer-ig.test.ts",
     "worker:typecheck": "tsc -p src/tsconfig.json --noEmit",
     "worker:dev": "wrangler dev",
-    "worker:deploy": "wrangler deploy"
+    "worker:deploy": "wrangler deploy",
+    "worker:bundle-check": "bash scripts/bundle-check.sh"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.36.0",

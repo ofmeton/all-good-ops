@@ -2,16 +2,20 @@
  * Cloudflare Workers entry — x-account-system Phase 1
  *
  * 役割:
- *   1. scheduled(): cron triggers (wrangler.toml) を job にディスパッチ。
- *      Phase 1 は「人間承認つき 1 投稿/日」なので、投稿系 cron は
- *      draft 生成 + LINE 承認依頼まで。live 投稿はしない (env.AUTONOMOUS_PUBLISH=false)。
- *   2. fetch(): LINE Webhook 受信 (設計 L1098)。承認タップ → publish、
- *      Interviewer 5 ステップ応答を処理する入口。
+ *   1. scheduled(): cron triggers (wrangler.toml) を Queue に enqueue するだけ。
+ *      重い処理は queue() consumer 側 (src/queue.ts) に移譲。
+ *      Phase 1 は「人間承認つき 1 投稿/日」。X API 100/月上限 → 投稿 cron は 3 本。
+ *   2. fetch(): LINE Webhook 受信 (設計 L1098)。承認タップ → queue にも enqueue。
+ *   3. queue(): MessageBatch<JobMessage> を受け取り handleJob へ dispatch。
  *
  * 実装状況: Phase 1 deploy 準備の scaffold。各 job は lib/ の既存ロジックへ
  *   段階的に配線する (TODO 参照)。lib/ は現状 Node (fs/Python 依存) を含むため、
  *   Workers 互換化は job ごとに次フェーズ PR で実施。
  */
+
+import { bridgeEnv } from "./env-bridge.js";
+import { handleJob } from "./queue.js";
+import { verifyLineSignature } from "../lib/crypto/webcrypto.js";
 
 export interface Env {
   // vars (wrangler.toml [vars])
@@ -21,6 +25,8 @@ export interface Env {
   AUTONOMOUS_PUBLISH: string;
   BUDGET_MONTHLY_LIMIT_JPY: string;
   BUDGET_BROWNOUT_THRESHOLD_JPY: string;
+  // Queue binding (wrangler.toml [[queues.producers]])
+  JOBS: Queue<JobMessage>;
   // secrets (wrangler secret put)
   ANTHROPIC_API_KEY: string;
   OPENAI_API_KEY: string;
@@ -36,27 +42,57 @@ export interface Env {
   LINE_USER_ID_OFMETON: string;
 }
 
-/** cron 式 → job 名 (wrangler.toml の crons と 1:1 対応、JST はコメント) */
-const CRON_JOBS: Record<string, string> = {
-  "0 21 * * *": "buzz-ingest", // 海外X buzz 日次 (06:00 JST)
-  "0 22 * * *": "post-morning", // 朝 7:00 失敗談先行型
-  "0 3 * * *": "post-noon", // 昼 12:00 ROI Before-After
-  "0 8 * * *": "post-evening-note", // 夕 17:00 note 送客
-  "30 8 * * *": "post-evening-quote", // 夕 17:30 引用RT 補足
-  "0 12 * * *": "post-night-quote", // 夜 21:00 引用RT 別角度
-  "0 13 * * *": "daily-digest", // 22:00 Digest
-  "0 14 * * *": "optimizer-update", // 23:00 posterior 更新
-  "0 0 * * 1": "inspirations-ingest", // 月曜 09:00 週次
-  "0 15 1 * *": "rotation-notice", // 月初 token rotation
+/**
+ * Queue に流れるメッセージ型。
+ * - 投稿系: slot (morning/noon/evening) を付与。
+ * - その他 job: date のみ。
+ * - LINE webhook 経由: payload を添付。
+ */
+export type JobMessage =
+  | {
+      job: "post-morning" | "post-noon" | "post-evening";
+      date: string;
+      slot: "morning" | "noon" | "evening";
+    }
+  | {
+      job:
+        | "buzz-ingest"
+        | "github-trending"
+        | "daily-digest"
+        | "optimizer-update"
+        | "rollback-monitor"
+        | "inspirations-ingest"
+        | "rotation-notice";
+      date: string;
+    }
+  | { job: "line-event"; date: string; payload: unknown };
+
+/** Asia/Tokyo YYYY-MM-DD 文字列を返す（datetime-local は固定TZで解釈する設計原則に従う） */
+function jstDate(d: Date): string {
+  return d.toLocaleDateString("sv-SE", { timeZone: "Asia/Tokyo" }); // "sv-SE" → YYYY-MM-DD
+}
+
+// cron 式 → job 名。wrangler.toml の crons と 1:1 対応（文字列が MAP KEY = 必ず一意）。
+// 注: "0 * /2 * * *" (スペースなし: 0 */2 * * *) は複数時刻に発火するが式文字列として一意なのでキーとして安全。
+const CRON_JOBS: Record<string, JobMessage["job"]> = {
+  "0 22 * * *": "post-morning",      // 07:00 JST
+  "0 3 * * *": "post-noon",          // 12:00 JST
+  "0 10 * * *": "post-evening",      // 19:00 JST (note 送客)
+  "0 21 * * *": "buzz-ingest",       // 06:00 JST
+  "30 22 * * *": "github-trending",  // 07:30 JST (post-morning と分オフセット差)
+  "0 12 * * *": "daily-digest",      // 21:00 JST
+  "0 14 * * *": "optimizer-update",  // 23:00 JST
+  "0 */2 * * *": "rollback-monitor", // 毎2h
+  "0 0 * * 1": "inspirations-ingest", // 月曜 09:00 JST
+  "0 15 1 * *": "rotation-notice",   // 月初 rotation 通知
 };
 
-const POST_JOBS = new Set([
-  "post-morning",
-  "post-noon",
-  "post-evening-note",
-  "post-evening-quote",
-  "post-night-quote",
-]);
+/** 投稿 job → slot 名のマップ */
+const POST_SLOTS = {
+  "post-morning": "morning",
+  "post-noon": "noon",
+  "post-evening": "evening",
+} as const;
 
 export default {
   async scheduled(
@@ -64,27 +100,45 @@ export default {
     env: Env,
     ctx: ExecutionContext,
   ): Promise<void> {
-    const job = CRON_JOBS[event.cron] ?? "unknown";
-    log(env, "info", `cron fired: ${event.cron} → job=${job}`);
+    bridgeEnv(env as unknown as Record<string, unknown>);
 
-    if (job === "unknown") {
+    const job = CRON_JOBS[event.cron];
+    if (!job) {
       log(env, "error", `no job mapped for cron "${event.cron}"`);
       return;
     }
 
-    ctx.waitUntil(dispatch(job, env));
+    log(env, "info", `cron fired: ${event.cron} → job=${job} (enqueueing)`);
+
+    const date = jstDate(new Date());
+    const slot = POST_SLOTS[job as keyof typeof POST_SLOTS];
+    const msg: JobMessage = slot
+      ? ({ job, date, slot } as JobMessage)
+      : ({ job, date } as JobMessage);
+
+    ctx.waitUntil(env.JOBS.send(msg));
   },
 
-  async fetch(request: Request, env: Env): Promise<Response> {
+  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+    bridgeEnv(env as unknown as Record<string, unknown>);
+
     const url = new URL(request.url);
 
-    // LINE Webhook (設計 L1098): 承認タップ / Interviewer 応答
+    // LINE Webhook (設計 L1098): 署名検証 → per-event enqueue
     if (url.pathname === "/line/webhook" && request.method === "POST") {
-      // TODO(next-phase): 署名検証 (LINE_CHANNEL_SECRET) → イベント分岐
-      //   - postback "approve:<draftId>" → publish (人間承認済 → live OK)
-      //   - postback "reject:<draftId>"  → draft 破棄 + 理由記録
-      //   - text message → lib/interviewer/line-flow.ts 5 ステップへ
-      log(env, "info", "LINE webhook received (stub)");
+      // RAW body を一度だけ読む（HMAC はバイト列に対して計算するため、JSON.parse 前に text() で取得）
+      const body = await request.text();
+      const sig = request.headers.get("x-line-signature");
+      if (!(await verifyLineSignature(body, sig, env.LINE_CHANNEL_SECRET))) {
+        log(env, "error", "LINE webhook: invalid signature");
+        return new Response("invalid signature", { status: 401 });
+      }
+      const parsed = JSON.parse(body) as { events?: unknown[] };
+      const date = jstDate(new Date());
+      for (const ev of parsed.events ?? []) {
+        ctx.waitUntil(env.JOBS.send({ job: "line-event", date, payload: ev }));
+      }
+      log(env, "info", `LINE webhook: enqueued ${(parsed.events ?? []).length} event(s)`);
       return new Response("OK", { status: 200 });
     }
 
@@ -104,50 +158,25 @@ export default {
 
     return new Response("Not Found", { status: 404 });
   },
-};
 
-/** job ディスパッチ。Phase 1 は投稿系を draft+承認依頼に限定。 */
-async function dispatch(job: string, env: Env): Promise<void> {
-  const autonomous = env.AUTONOMOUS_PUBLISH === "true";
+  async queue(
+    batch: MessageBatch<JobMessage>,
+    env: Env,
+    ctx: ExecutionContext,
+  ): Promise<void> {
+    bridgeEnv(env as unknown as Record<string, unknown>);
 
-  if (POST_JOBS.has(job)) {
-    // Phase 1: 自律投稿は恒久ブロック。draft 生成 → LINE 承認依頼まで。
-    if (autonomous) {
-      log(env, "error", `AUTONOMOUS_PUBLISH=true は Phase 1 で不許可。job=${job} 中断`);
-      return;
+    for (const m of batch.messages) {
+      try {
+        await handleJob(m.body, env);
+        m.ack();
+      } catch (e) {
+        console.error("job failed", m.body, e);
+        m.retry();
+      }
     }
-    // TODO(next-phase): Writer (lib/writer) で draft 生成
-    //   → Editor 6+5 (lib/editor/pipeline.ts) で審査
-    //   → approved なら LINE 承認依頼 push、rejected なら理由を Digest に記録
-    log(env, "info", `[${job}] draft 生成 + LINE 承認依頼 (Phase 1 human-approval, stub)`);
-    return;
-  }
-
-  switch (job) {
-    case "buzz-ingest":
-      // TODO: twitterapi.io 海外/国内 → raw/publishing/inspirations/ ingest
-      log(env, "info", "[buzz-ingest] twitterapi.io 日次取得 (stub)");
-      break;
-    case "inspirations-ingest":
-      // TODO: 週次 inspirations ingest (海外≥1 / 国内≥1 / note≥1)
-      log(env, "info", "[inspirations-ingest] 週次 ingest (stub)");
-      break;
-    case "daily-digest":
-      // TODO: lib/dashboard/digest.ts → LINE 配信
-      log(env, "info", "[daily-digest] Digest 生成 + LINE 配信 (stub)");
-      break;
-    case "optimizer-update":
-      // TODO: lib/optimizer/update-loop.ts → posterior 更新
-      log(env, "info", "[optimizer-update] Thompson posterior 更新 (stub)");
-      break;
-    case "rotation-notice":
-      // TODO: X/Meta token refresh 期日を LINE 通知 (§10.6)
-      log(env, "info", "[rotation-notice] token rotation 通知 (stub)");
-      break;
-    default:
-      log(env, "error", `dispatch: unhandled job=${job}`);
-  }
-}
+  },
+};
 
 function log(env: Env, level: "info" | "error", msg: string): void {
   if (level === "error" || env.LOG_LEVEL !== "error") {

@@ -1,18 +1,14 @@
 /**
- * Hook classifier TS wrapper (Python subprocess)
+ * Hook classifier TS entry point
  *
- * classify.py を `python3 classify.py --text=<value>` 形式で呼び出し、
- * stdout JSON を parse して返す。Editor pipeline Stage 0 で使用。
+ * classify.py の代替として純 TS 実装 (classify-rules.ts) を呼び出す。
+ * Cloudflare Workers 対応 (child_process / Node.js API を使用しない)。
+ * Editor pipeline Stage 0 で使用。
  *
  * 環境変数:
- *   IN_MEMORY_FALLBACK=true → Python を呼ばずに低 confidence の tips_enum を返す
- *   HOOK_CLASSIFIER_PYTHON   → 使用する Python binary (default: python3)
- *
- * cold start ~200ms 想定。E-46 (1 件処理 < 10 秒) の budget 内。
+ *   IN_MEMORY_FALLBACK=true → 簡易 stub を返す (テスト用後方互換)
  */
-import { spawn } from "node:child_process";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { classifyRules } from "./classify-rules.ts";
 
 export type HookClassification = {
   primary_hook: "failure_story" | "business_repro" | "critique" | "tips_enum";
@@ -20,10 +16,6 @@ export type HookClassification = {
   confidence: number;
   raw_features?: Record<string, string>;
 };
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const SCRIPT_PATH = path.resolve(__dirname, "classify.py");
 
 const FALLBACK: HookClassification = {
   primary_hook: "tips_enum",
@@ -62,36 +54,5 @@ export async function classifyHook(text: string): Promise<HookClassification> {
     return { ...FALLBACK, confidence: 0.5 };
   }
 
-  const py = process.env.HOOK_CLASSIFIER_PYTHON || "python3";
-
-  return new Promise((resolve, reject) => {
-    const child = spawn(py, [SCRIPT_PATH, "--text", text], {
-      stdio: ["ignore", "pipe", "pipe"],
-    });
-    let stdout = "";
-    let stderr = "";
-    child.stdout.on("data", (d) => (stdout += d.toString("utf-8")));
-    child.stderr.on("data", (d) => (stderr += d.toString("utf-8")));
-    child.on("error", (err) => reject(err));
-    child.on("close", (code) => {
-      if (code !== 0) {
-        reject(
-          new Error(
-            `classify.py exited with ${code}: stderr=${stderr.slice(0, 500)}`,
-          ),
-        );
-        return;
-      }
-      try {
-        const parsed = JSON.parse(stdout) as HookClassification;
-        resolve(parsed);
-      } catch (e) {
-        reject(
-          new Error(
-            `classify.py stdout JSON parse failed: ${(e as Error).message}\nstdout=${stdout.slice(0, 500)}`,
-          ),
-        );
-      }
-    });
-  });
+  return classifyRules(text);
 }

@@ -2,6 +2,7 @@
  * kill-switch.test.ts (PR-D)
  *
  * Phase 0.5 fallback で完走。
+ * FIX 4 追加: real client + DB read error → fail CLOSED (publishing disabled).
  */
 import {
   __resetKillSwitchInMemory,
@@ -82,5 +83,83 @@ describe("kill-switch", () => {
     // ただし resume_at <= Date.now() の比較は等号成立で auto-resume.
     const after = await getKillSwitchState();
     expect(after.publishing_enabled).toBe(true);
+  });
+});
+
+// ============================================================
+// FIX 4: real Supabase client present, but safety_state read errors → fail CLOSED
+// ============================================================
+describe("kill-switch — FIX4: fail CLOSED when real client + DB read error", () => {
+  // Mock supabase createClient to inject a client that returns an error on .from("safety_state")
+  const mockMaybeSingle = jest.fn();
+  const mockEq = jest.fn(() => ({ maybeSingle: mockMaybeSingle }));
+  const mockSelect = jest.fn(() => ({ eq: mockEq }));
+
+  beforeEach(() => {
+    jest.resetModules();
+    jest.clearAllMocks();
+  });
+
+  test("FIX4: real client, safety_state read returns error → getKillSwitchState returns publishing_enabled=false (fail closed)", async () => {
+    // Temporarily disable IN_MEMORY_FALLBACK to exercise the real-client path
+    const origFallback = process.env.IN_MEMORY_FALLBACK;
+    const origUrl = process.env.SUPABASE_URL;
+    const origKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+    process.env.IN_MEMORY_FALLBACK = "false";
+    process.env.SUPABASE_URL = "https://test.supabase.co";
+    process.env.SUPABASE_SERVICE_ROLE_KEY = "test-key";
+
+    // Simulate a DB read error
+    mockMaybeSingle.mockResolvedValue({ data: null, error: { message: "connection refused" } });
+
+    // We need to import the module fresh with the mock
+    jest.mock("@supabase/supabase-js", () => ({
+      createClient: jest.fn(() => ({
+        from: (_table: string) => ({ select: mockSelect }),
+      })),
+    }));
+
+    // Re-import to pick up the new mock (module-level singleton _supabase is cached, so use jest.resetModules)
+    jest.resetModules();
+    const { getKillSwitchState: getStateFresh } = await import("./kill-switch.ts");
+
+    const state = await getStateFresh();
+
+    // Must be fail CLOSED
+    expect(state.publishing_enabled).toBe(false);
+
+    // Restore
+    process.env.IN_MEMORY_FALLBACK = origFallback ?? "true";
+    if (origUrl) process.env.SUPABASE_URL = origUrl; else delete process.env.SUPABASE_URL;
+    if (origKey) process.env.SUPABASE_SERVICE_ROLE_KEY = origKey; else delete process.env.SUPABASE_SERVICE_ROLE_KEY;
+  });
+
+  test("FIX4: assertPublishingEnabled throws when real client returns DB error (fail closed)", async () => {
+    const origFallback = process.env.IN_MEMORY_FALLBACK;
+    const origUrl = process.env.SUPABASE_URL;
+    const origKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+    process.env.IN_MEMORY_FALLBACK = "false";
+    process.env.SUPABASE_URL = "https://test.supabase.co";
+    process.env.SUPABASE_SERVICE_ROLE_KEY = "test-key";
+
+    mockMaybeSingle.mockResolvedValue({ data: null, error: { message: "network error" } });
+
+    jest.mock("@supabase/supabase-js", () => ({
+      createClient: jest.fn(() => ({
+        from: (_table: string) => ({ select: mockSelect }),
+      })),
+    }));
+
+    jest.resetModules();
+    const { assertPublishingEnabled: assertFresh } = await import("./kill-switch.ts");
+
+    // fail CLOSED means assertPublishingEnabled throws (publishing disabled)
+    await expect(assertFresh()).rejects.toThrow(/publishing disabled/);
+
+    process.env.IN_MEMORY_FALLBACK = origFallback ?? "true";
+    if (origUrl) process.env.SUPABASE_URL = origUrl; else delete process.env.SUPABASE_URL;
+    if (origKey) process.env.SUPABASE_SERVICE_ROLE_KEY = origKey; else delete process.env.SUPABASE_SERVICE_ROLE_KEY;
   });
 });
