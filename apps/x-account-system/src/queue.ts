@@ -11,6 +11,7 @@
 import type { Env, JobMessage } from "./worker.js";
 import { runPostJob } from "./jobs/post-job.js";
 import { handleLineEvent } from "./jobs/line-event.js";
+import { runBuzzIngest } from "../lib/ingest/buzz-ingest.js";
 
 export async function handleJob(msg: JobMessage, env: Env): Promise<void> {
   switch (msg.job) {
@@ -26,15 +27,17 @@ export async function handleJob(msg: JobMessage, env: Env): Promise<void> {
     }
 
     // ----------------------------------------------------------------
-    // buzz-ingest: 海外 X buzz 日次取得
+    // buzz-ingest: 海外 X buzz 日次取得 → materials_store
     // ----------------------------------------------------------------
     case "buzz-ingest": {
-      // W4: twitterapi.io 海外/国内 → raw/publishing/inspirations/ ingest
+      // W5-1: twitterapi.io seed accounts → xad.materials_store (x_inspirations)
+      const count = await runBuzzIngest(env);
       console.log(
         JSON.stringify({
           level: "info",
-          msg: "[buzz-ingest] twitterapi.io 日次取得 (stub)",
+          msg: "[buzz-ingest] twitterapi.io 日次取得 完了",
           date: msg.date,
+          inserted: count,
         }),
       );
       break;
