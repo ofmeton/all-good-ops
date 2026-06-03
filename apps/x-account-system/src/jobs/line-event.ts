@@ -27,7 +27,21 @@ import { createClient } from "@supabase/supabase-js";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { publishToX } from "../../lib/publisher/x-publisher.js";
 import { pushLine } from "../../lib/line/line-client.js";
+import { runEditor } from "../../lib/editor/pipeline.js";
+import { reviseDraftForX } from "../../lib/writer/writer-x.js";
+import {
+  addStyleFeedback,
+  getRecentStyleFeedback,
+} from "../../lib/feedback/style-feedback.js";
+import {
+  buildEditorInput,
+  persistDraft,
+  pushApproval,
+  toCoreIdea,
+} from "./post-job.js";
+import type { CoreIdeaRow } from "./post-job.js";
 import type { EditorOutput } from "../../lib/editor/types.js";
+import type { CoreIdea } from "../../lib/writer/types.js";
 import type { PublishFormat } from "../../lib/publisher/types.js";
 import type { Env } from "../worker.js";
 import {
@@ -311,6 +325,142 @@ async function handleReject(draftId: string, env: Env): Promise<void> {
 }
 
 // ============================================================
+// Japanese feedback commands — 覚えて: / 修正:
+// 全角コロン「：」と半角「:」の両方を受け付け、前後 whitespace を trim。
+// ============================================================
+function parseFeedbackCommand(
+  text: string,
+): { kind: "remember" | "revise"; instruction: string } | null {
+  const trimmed = text.trim();
+  // 「覚えておいて」も許容。コロンの後ろに本文。
+  const remember = trimmed.match(/^覚えて(おいて)?\s*[:：]\s*([\s\S]+)$/);
+  if (remember) {
+    const instruction = remember[2].trim();
+    if (instruction) return { kind: "remember", instruction };
+  }
+  const revise = trimmed.match(/^修正\s*[:：]\s*([\s\S]+)$/);
+  if (revise) {
+    const instruction = revise[1].trim();
+    if (instruction) return { kind: "revise", instruction };
+  }
+  return null;
+}
+
+// ============================================================
+// handleRememberFeedback — 覚えて: <text>
+// 継続参考ガイダンスとして保存する (draft 不要)。
+// ============================================================
+async function handleRememberFeedback(instruction: string, env: Env): Promise<void> {
+  await addStyleFeedback(env, "remember", instruction);
+  await notify(env, `覚えました（今後の参考にします）: ${instruction}`);
+}
+
+// ============================================================
+// 修正対象の post_drafts row (revise で必要な列)
+// ============================================================
+type ReviseDraftRow = {
+  id: string;
+  core_idea_id: string;
+  body: string;
+  fmat: string | null;
+  scheduled_date: string | null;
+  slot: string | null;
+};
+
+// ============================================================
+// loadCoreIdeaForRevise — core_ideas を引いて CoreIdea を復元
+// 見つからなければ post_drafts の fmat から最小 CoreIdea を再構成。
+// ============================================================
+async function loadCoreIdeaForRevise(
+  sb: SupabaseClient,
+  draft: ReviseDraftRow,
+): Promise<CoreIdea> {
+  const { data, error } = await sb
+    .from("core_ideas")
+    .select("id, topic, title, summary, primary_hook, fmat, category, audience, source_material_ids, meta")
+    .eq("id", draft.core_idea_id)
+    .maybeSingle();
+
+  if (!error && data) {
+    return toCoreIdea(data as CoreIdeaRow);
+  }
+
+  // フォールバック: post_drafts の情報だけで最小 CoreIdea を再構成。
+  return toCoreIdea({
+    id: draft.core_idea_id,
+    fmat: draft.fmat ?? "medium",
+    category: "first_hand",
+  });
+}
+
+// ============================================================
+// handleReviseFeedback — 修正: <text>
+// 直近の pending かつ未公開の post_drafts を書き直して再送する。
+// ============================================================
+async function handleReviseFeedback(instruction: string, env: Env): Promise<void> {
+  const sb = getSupabase(env);
+  if (!sb) {
+    console.error("[line-event] Supabase not configured");
+    return;
+  }
+
+  // 1. 最新の pending かつ未公開の下書きを取得 (created_at desc)。
+  const { data, error } = await sb
+    .from("post_drafts")
+    .select("id, core_idea_id, body, fmat, scheduled_date, slot")
+    .eq("human_approval_status", "pending")
+    .is("published_at", null)
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (error) {
+    console.error("[line-event] revise select error:", error.message);
+    await notify(env, `⚠️ 修正処理エラー: DBエラー (${error.message})`);
+    return;
+  }
+  if (!data) {
+    await notify(env, "対象の下書きが見つかりません");
+    return;
+  }
+
+  const draft = data as ReviseDraftRow;
+  const idea = await loadCoreIdeaForRevise(sb, draft);
+
+  // 2. 過去フィードバックを SOFT reference として注入し書き直す。
+  const refFb = await getRecentStyleFeedback(env);
+  const revised = await reviseDraftForX(draft.body, instruction, idea, refFb);
+
+  // 3. 同じ dbDraftId / 行で editor を再実行。
+  const ein = buildEditorInput(idea, revised.body, draft.id);
+  const out = await runEditor(ein);
+
+  // 4. 同じ post_drafts 行を upsert (id / scheduled_date / slot を維持)。
+  await persistDraft(env, {
+    id: draft.id,
+    idea,
+    draft: revised,
+    out,
+    slot: draft.slot ?? "manual",
+    date: draft.scheduled_date ?? new Date().toLocaleDateString("sv-SE", { timeZone: "Asia/Tokyo" }),
+  });
+
+  // 5. 修正指示も継続参考として保存。
+  await addStyleFeedback(env, "revise", instruction, draft.id);
+
+  // 6. editor 判定に応じて再送 / 却下理由を返す。
+  if (out.decision === "approved") {
+    await pushApproval(env, draft.id, revised.body, out, idea.fmat);
+  } else {
+    const reasons = out.rejectReasons.join(", ") || "(no reasons)";
+    await notify(
+      env,
+      `⚠️ 修正後も editor が却下しました\n理由: ${reasons}\nもう一度「修正: <指示>」で調整できます。\ndraft_id: ${draft.id}`,
+    );
+  }
+}
+
+// ============================================================
 // handleInterviewText — W4-3: text message → interviewer flow
 // ============================================================
 
@@ -435,9 +585,20 @@ export async function handleLineEvent(payload: unknown, env: Env): Promise<void>
     return;
   }
 
-  // W4-3: text message → interviewer flow
+  // Typed Japanese feedback commands (覚えて: / 修正:) — interview fallback より前。
   const textMsg = parseTextMessage(payload);
   if (textMsg) {
+    const fb = parseFeedbackCommand(textMsg.text);
+    if (fb) {
+      if (fb.kind === "remember") {
+        await handleRememberFeedback(fb.instruction, env);
+      } else {
+        await handleReviseFeedback(fb.instruction, env);
+      }
+      return;
+    }
+
+    // W4-3: text message → interviewer flow
     await handleInterviewText(textMsg.lineUserId, textMsg.text, env);
   }
 }

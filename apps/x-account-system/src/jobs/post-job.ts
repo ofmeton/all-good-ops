@@ -16,7 +16,8 @@ import { draftForX } from "../../lib/writer/writer-x.js";
 import { runEditor } from "../../lib/editor/pipeline.js";
 import { classifyRules } from "../../lib/hook-classifier/classify-rules.js";
 import { getKillSwitchState } from "../../lib/safety/kill-switch.js";
-import { pushLine } from "../../lib/line/line-client.js";
+import { pushLine, pushLineFlex } from "../../lib/line/line-client.js";
+import { getRecentStyleFeedback } from "../../lib/feedback/style-feedback.js";
 import type { CoreIdea } from "../../lib/writer/types.js";
 import type { EditorInput, EditorOutput } from "../../lib/editor/types.js";
 import type { DraftOutput } from "../../lib/writer/types.js";
@@ -27,7 +28,7 @@ import type { Env } from "../worker.js";
 // ============================================================
 let _supabase: SupabaseClient | null = null;
 
-function getSupabase(env: Env): SupabaseClient | null {
+export function getSupabase(env: Env): SupabaseClient | null {
   if (_supabase) return _supabase;
   const url = env.SUPABASE_URL || process.env.SUPABASE_URL;
   const key = env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -41,7 +42,7 @@ function getSupabase(env: Env): SupabaseClient | null {
 // ============================================================
 // CoreIdeaRow — DB row shape (core_ideas table, 0002 + 0007 migration)
 // ============================================================
-type CoreIdeaRow = {
+export type CoreIdeaRow = {
   id: string;
   topic?: string | null;
   title?: string | null;
@@ -57,7 +58,7 @@ type CoreIdeaRow = {
 // ============================================================
 // toCoreIdea — DB row → CoreIdea
 // ============================================================
-function toCoreIdea(row: CoreIdeaRow): CoreIdea {
+export function toCoreIdea(row: CoreIdeaRow): CoreIdea {
   return {
     id: row.id,
     topic: row.topic ?? row.title ?? row.summary ?? "(no topic)",
@@ -150,7 +151,7 @@ async function dequeueIdeaRow(
 //   writer_draft_id (0007), risk_level, risk_reasons, cost_usd
 // Unique index: (scheduled_date, slot) → idempotent re-run
 // ============================================================
-async function persistDraft(
+export async function persistDraft(
   env: Env,
   opts: {
     id: string;          // dbDraftId (UUID)
@@ -196,41 +197,171 @@ async function persistDraft(
 }
 
 // ============================================================
-// pushApproval — LINE メッセージで承認依頼
-// W4-2 が postback "approve:<dbDraftId>" / "reject:<dbDraftId>" で処理する
+// buildEditorInput — CoreIdea + body から EditorInput を組み立てる
+// runPostJob と line-event(修正) で共有
 // ============================================================
-async function pushApproval(
+export function buildEditorInput(
+  idea: CoreIdea,
+  body: string,
+  dbDraftId: string,
+): EditorInput {
+  return {
+    traceId: crypto.randomUUID(),
+    draftId: dbDraftId,
+    coreIdeaId: idea.id,
+    platform: "x",
+    body,
+    fmat: idea.fmat as EditorInput["fmat"],
+    sourceMaterialIds: idea.sourceMaterialIds,
+    hasAffiliateLink: false,
+    // R2(実体験行) を種別で出し分け: first_hand のみ必須、paraphrase/industry_sop は skip
+    contentType: idea.contentType as EditorInput["contentType"],
+  };
+}
+
+// ============================================================
+// fmat → 日本語ラベル
+// ============================================================
+const FMAT_JP_LABEL: Record<string, string> = {
+  short: "短文",
+  medium: "中文",
+  long: "長文",
+  thread: "スレッド",
+  article: "記事",
+  carousel: "カルーセル",
+};
+
+// ============================================================
+// pushApproval — LINE Flex カードで承認依頼
+// W4-2 が postback "approve:<dbDraftId>" / "reject:<dbDraftId>" で処理する。
+// 承認/却下はボタン (postback)、修正/覚えて は typed コマンドで処理する。
+// ============================================================
+export async function pushApproval(
   env: Env,
   dbDraftId: string,
   body: string,
   out: EditorOutput,
+  fmat: string,
 ): Promise<void> {
   const to = env.LINE_USER_ID_OFMETON || process.env.LINE_USER_ID_OFMETON || "";
   const token = env.LINE_CHANNEL_ACCESS_TOKEN || process.env.LINE_CHANNEL_ACCESS_TOKEN || "";
 
-  // 承認判断には全文が必要なので投稿本文は全文を出す (LINE text 上限 5000 字。
-  // warnings/ID 等の余白を確保して 4500 字で防御的に cap)。
+  // 承認判断には全文が必要 (Flex text component の上限は控えめに 4500 字で cap)。
   const MAX_BODY = 4500;
-  const fullBody = body.length > MAX_BODY ? body.slice(0, MAX_BODY) + "\n…(本文が長いため省略)" : body;
+  const fullBody = body.length > MAX_BODY ? body.slice(0, MAX_BODY) + "\n…(省略)" : body;
+
   const riskBadge = out.riskLevel === "high" ? "⚠️ HIGH RISK" : "✅ low risk";
-  // soft ルールの警告を付記 (品質粗。人間が見て判断)
-  const warnLines = (out.warnings ?? []).length
-    ? [`⚠️ 品質警告 (${out.warnings.length}):`, ...out.warnings.map((w) => `・${w.rule}: ${w.reason}`)]
-    : [];
+  const headerText = `📝 投稿承認依頼 [${riskBadge}]`;
+  const fmatLabel = FMAT_JP_LABEL[fmat] ?? fmat;
+  const formatLine = `形式: ${fmatLabel} / ${body.length}字`;
 
-  const message = [
-    `📝 投稿承認依頼 [${riskBadge}]`,
-    `---`,
-    fullBody,
-    `---`,
-    ...warnLines,
-    `draft_id: ${dbDraftId}`,
-    `承認: approve:${dbDraftId}`,
-    `却下: reject:${dbDraftId}`,
-    `(この ID を含む返信で承認/却下が確定します)`,
-  ].join("\n");
+  const warnings = out.warnings ?? [];
+  const warnLine =
+    warnings.length > 0
+      ? `⚠️ 品質警告: ${warnings.map((w) => w.rule).join(", ")}`
+      : null;
 
-  await pushLine(to, message, token);
+  const altText = body.slice(0, 100);
+
+  // Flex bubble: header(リスク) + body(形式/警告/本文/draft_id) + footer(ボタン + ヒント)
+  const bodyContents: Array<Record<string, unknown>> = [
+    { type: "text", text: formatLine, size: "sm", color: "#666666", wrap: true },
+  ];
+  if (warnLine) {
+    bodyContents.push({
+      type: "text",
+      text: warnLine,
+      size: "sm",
+      color: "#C0392B",
+      wrap: true,
+    });
+  }
+  bodyContents.push({
+    type: "separator",
+    margin: "md",
+  });
+  bodyContents.push({
+    type: "text",
+    text: fullBody,
+    wrap: true,
+    size: "sm",
+    margin: "md",
+  });
+  bodyContents.push({
+    type: "text",
+    text: `draft_id: ${dbDraftId}`,
+    size: "xxs",
+    color: "#AAAAAA",
+    margin: "md",
+    wrap: true,
+  });
+
+  const contents = {
+    type: "bubble",
+    header: {
+      type: "box",
+      layout: "vertical",
+      contents: [
+        {
+          type: "text",
+          text: headerText,
+          weight: "bold",
+          size: "md",
+          wrap: true,
+          color: out.riskLevel === "high" ? "#C0392B" : "#1B7F4B",
+        },
+      ],
+    },
+    body: {
+      type: "box",
+      layout: "vertical",
+      contents: bodyContents,
+    },
+    footer: {
+      type: "box",
+      layout: "vertical",
+      spacing: "sm",
+      contents: [
+        {
+          type: "box",
+          layout: "horizontal",
+          spacing: "sm",
+          contents: [
+            {
+              type: "button",
+              style: "primary",
+              color: "#1B7F4B",
+              action: {
+                type: "postback",
+                label: "✅ 承認",
+                data: `approve:${dbDraftId}`,
+                displayText: `approve:${dbDraftId}`,
+              },
+            },
+            {
+              type: "button",
+              style: "secondary",
+              action: {
+                type: "postback",
+                label: "❌ 却下",
+                data: `reject:${dbDraftId}`,
+                displayText: `reject:${dbDraftId}`,
+              },
+            },
+          ],
+        },
+        {
+          type: "text",
+          text: "修正: <指示> で直して再送 / 覚えて: <指示> で今後の参考に登録",
+          size: "xxs",
+          color: "#888888",
+          wrap: true,
+        },
+      ],
+    },
+  };
+
+  await pushLineFlex(to, altText, contents, token);
 }
 
 // ============================================================
@@ -275,22 +406,14 @@ export async function runPostJob(slot: string, env: Env): Promise<void> {
   }
 
   const idea = toCoreIdea(row);
-  const draft = await draftForX(idea);
+
+  // 過去のユーザー指摘を SOFT reference として draft 生成に注入する。
+  const refFb = await getRecentStyleFeedback(env);
+  const draft = await draftForX(idea, refFb);
 
   const dbDraftId = crypto.randomUUID();
 
-  const ein: EditorInput = {
-    traceId: crypto.randomUUID(),
-    draftId: dbDraftId,
-    coreIdeaId: idea.id,
-    platform: "x",
-    body: draft.body,
-    fmat: idea.fmat as EditorInput["fmat"],
-    sourceMaterialIds: idea.sourceMaterialIds,
-    hasAffiliateLink: false,
-    // R2(実体験行) を種別で出し分け: first_hand のみ必須、paraphrase/industry_sop は skip
-    contentType: idea.contentType as EditorInput["contentType"],
-  };
+  const ein = buildEditorInput(idea, draft.body, dbDraftId);
 
   const out = await runEditor(ein);
 
@@ -304,7 +427,7 @@ export async function runPostJob(slot: string, env: Env): Promise<void> {
   });
 
   if (out.decision === "approved") {
-    await pushApproval(env, dbDraftId, draft.body, out);
+    await pushApproval(env, dbDraftId, draft.body, out, idea.fmat);
   } else {
     await logRejectToDigest(env, dbDraftId, out.rejectReasons);
   }
