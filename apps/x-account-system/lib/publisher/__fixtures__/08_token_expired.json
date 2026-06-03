@@ -27,6 +27,6 @@
   },
   "expected": {
     "status": "failed",
-    "errorContains": "OAuth refresh not implemented"
+    "errorContains": "Cannot refresh: no refresh_token"
   }
 }

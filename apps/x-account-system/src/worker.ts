@@ -15,7 +15,9 @@
 
 import { bridgeEnv } from "./env-bridge.js";
 import { handleJob } from "./queue.js";
-import { verifyLineSignature } from "../lib/crypto/webcrypto.js";
+import { verifyLineSignature, pkceChallenge, randomVerifier } from "../lib/crypto/webcrypto.js";
+import { exchangeCode } from "../lib/oauth/token-exchange.js";
+import { createClient } from "@supabase/supabase-js";
 
 export interface Env {
   // vars (wrangler.toml [vars])
@@ -27,13 +29,18 @@ export interface Env {
   BUDGET_BROWNOUT_THRESHOLD_JPY: string;
   // Queue binding (wrangler.toml [[queues.producers]])
   JOBS: Queue<JobMessage>;
+  // KV binding (wrangler.toml [[kv_namespaces]])
+  OAUTH_STATE: KVNamespace;
   // secrets (wrangler secret put)
   ANTHROPIC_API_KEY: string;
   OPENAI_API_KEY: string;
   X_CLIENT_ID: string;
   X_CLIENT_SECRET: string;
+  X_REDIRECT_URI: string;
+  X_OAUTH_SCOPES: string;
   X_ACCESS_TOKEN: string;
   X_REFRESH_TOKEN: string;
+  X_TOKEN_EXPIRES_AT: string;
   TWITTERAPI_IO_KEY: string;
   SUPABASE_URL: string;
   SUPABASE_SERVICE_ROLE_KEY: string;
@@ -142,10 +149,85 @@ export default {
       return new Response("OK", { status: 200 });
     }
 
-    // X OAuth callback (PKCE Step 2、ローカル test では localhost:3000)
+    // X OAuth PKCE Step 1: generate verifier/state → store in KV → redirect to X
+    if (url.pathname === "/oauth/x/start") {
+      try {
+        const verifier = randomVerifier();
+        const state = randomVerifier();
+        const challenge = await pkceChallenge(verifier);
+
+        // Store verifier keyed by state. TTL 300s (5 min) for the authorization code window.
+        await env.OAUTH_STATE.put(state, verifier, { expirationTtl: 300 });
+
+        const authorizeUrl = new URL("https://x.com/i/oauth2/authorize");
+        authorizeUrl.searchParams.set("response_type", "code");
+        authorizeUrl.searchParams.set("client_id", env.X_CLIENT_ID);
+        authorizeUrl.searchParams.set("redirect_uri", env.X_REDIRECT_URI);
+        authorizeUrl.searchParams.set("scope", env.X_OAUTH_SCOPES);
+        authorizeUrl.searchParams.set("state", state);
+        authorizeUrl.searchParams.set("code_challenge", challenge);
+        authorizeUrl.searchParams.set("code_challenge_method", "S256");
+
+        return Response.redirect(authorizeUrl.toString(), 302);
+      } catch (e) {
+        log(env, "error", `/oauth/x/start error: ${String(e)}`);
+        return new Response(`OAuth start error: ${String(e)}`, { status: 500 });
+      }
+    }
+
+    // X OAuth PKCE Step 2: exchange code for tokens → upsert oauth_tokens
     if (url.pathname === "/oauth/x/callback") {
-      // TODO(next-phase): lib/oauth の PKCE token 交換へ
-      return new Response("OAuth callback (stub)", { status: 200 });
+      const code = url.searchParams.get("code");
+      const state = url.searchParams.get("state");
+
+      if (!code || !state) {
+        return new Response("Missing code or state parameter", { status: 400 });
+      }
+
+      // One-time state: read AND delete before exchange (replay protection)
+      const verifier = await env.OAUTH_STATE.get(state);
+      if (!verifier) {
+        return new Response("Invalid or expired state (possible replay attack)", { status: 400 });
+      }
+      await env.OAUTH_STATE.delete(state);
+
+      try {
+        const token = await exchangeCode(code, verifier, {
+          X_CLIENT_ID: env.X_CLIENT_ID,
+          X_CLIENT_SECRET: env.X_CLIENT_SECRET,
+          X_REDIRECT_URI: env.X_REDIRECT_URI,
+        });
+
+        // Upsert into xad.oauth_tokens
+        const sb = createClient(env.SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY, {
+          db: { schema: "xad" },
+        });
+        await sb.from("oauth_tokens").upsert(
+          {
+            provider: "x",
+            access_token: token.accessToken,
+            refresh_token: token.refreshToken ?? null,
+            // epoch ms → timestamptz ISO
+            expires_at: token.expiresAt ? new Date(token.expiresAt).toISOString() : null,
+            scope: token.scope ?? null,
+            updated_at: new Date().toISOString(),
+          },
+          { onConflict: "provider" },
+        );
+
+        log(env, "info", "OAuth callback: token exchanged and persisted to oauth_tokens");
+        return new Response(
+          `<!DOCTYPE html><html><head><title>OAuth Success</title></head><body>` +
+          `<h1>X OAuth Authorization Successful</h1>` +
+          `<p>Access token has been stored. You may close this window.</p>` +
+          `</body></html>`,
+          { status: 200, headers: { "Content-Type": "text/html; charset=utf-8" } },
+        );
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : String(e);
+        log(env, "error", `/oauth/x/callback error: ${msg}`);
+        return new Response(`OAuth callback error: ${msg}`, { status: 500 });
+      }
     }
 
     if (url.pathname === "/health") {
