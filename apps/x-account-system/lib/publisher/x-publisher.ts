@@ -67,11 +67,15 @@ type XPostResponse = {
  * X API POST /2/tweets を retry 付きで叩く。
  * 5xx / network error は retry、4xx は即 fail。
  */
+type PostTweetResult =
+  | { tweetId: string; retryCount: number }
+  | { error: string; retryCount: number; unauthorized?: boolean };
+
 async function postTweetWithRetry(
   body: string,
   accessToken: string,
   noBackoff: boolean,
-): Promise<{ tweetId: string; retryCount: number } | { error: string; retryCount: number }> {
+): Promise<PostTweetResult> {
   let lastError = "unknown error";
   for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
     try {
@@ -89,6 +93,15 @@ async function postTweetWithRetry(
           return { tweetId: json.data.id, retryCount: attempt };
         }
         lastError = `unexpected response shape: ${JSON.stringify(json).slice(0, 200)}`;
+      } else if (res.status === 401) {
+        // 401 = expired/invalid access token. Surface separately so the caller
+        // can attempt ONE token refresh + retry. Do not retry here.
+        const text = await res.text();
+        return {
+          error: `HTTP 401: ${text.slice(0, 200)}`,
+          retryCount: attempt,
+          unauthorized: true,
+        };
       } else if (res.status >= 400 && res.status < 500) {
         // 4xx は retry しない
         const text = await res.text();
@@ -203,11 +216,36 @@ export async function publishToX(req: PublishRequest): Promise<PublishResult> {
   }
 
   // ---- Actual POST ----
-  const result = await postTweetWithRetry(
+  let result = await postTweetWithRetry(
     req.body,
     token.accessToken,
     req.noBackoff ?? false,
   );
+
+  // ---- Reactive 401 recovery: refresh ONCE + retry ONCE ----
+  // X access tokens expire (~2h). If the post returns 401 the stored token went
+  // stale between read and send; refresh (rotating the refresh_token) and retry.
+  if (!("tweetId" in result) && result.unauthorized) {
+    try {
+      const refreshed = await refreshAccessToken(token);
+      token = refreshed;
+      result = await postTweetWithRetry(
+        req.body,
+        token.accessToken,
+        req.noBackoff ?? false,
+      );
+    } catch (e) {
+      // Refresh failed → kill-switch already triggered inside refreshAccessToken.
+      // Fail closed; do NOT loop.
+      return {
+        draftId: req.draftId,
+        status: "failed",
+        retryCount: result.retryCount,
+        error: e instanceof Error ? e.message : String(e),
+      };
+    }
+  }
+
   if ("tweetId" in result) {
     return {
       draftId: req.draftId,
