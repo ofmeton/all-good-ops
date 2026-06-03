@@ -6,6 +6,12 @@
  * 実装は後続タスクで順次配線:
  *   - W3-2: 投稿 job (post-morning / post-noon / post-evening) の実装
  *   - W4:   その他 job (buzz-ingest / optimizer-update など) の実装
+ *
+ * W5-7: brownout 4-stage guard
+ *   handleJob() 冒頭で当月コストを取得し evaluateBrownout() を呼ぶ。
+ *   allowedJobs に含まれない job は ACK してスキップ (無限リトライ防止)。
+ *   daily-digest と line-event は全ステージで常に allowedJobs に含まれるため
+ *   オペレーターへの通知・!resume 操作は遮断されない。
  */
 
 import type { Env, JobMessage } from "./worker.js";
@@ -15,8 +21,38 @@ import { runBuzzIngest } from "../lib/ingest/buzz-ingest.js";
 import { runInspirationsIngest } from "../lib/ingest/inspirations-ingest.js";
 import { runIdeation } from "../lib/ideation/ideate.js";
 import { runRollbackMonitor } from "./jobs/rollback-job.js";
+import { evaluateBrownout } from "../lib/safety/brownout-handler.js";
+import { makeProductionDeps } from "../lib/dashboard/kpi-collector.js";
 
 export async function handleJob(msg: JobMessage, env: Env): Promise<void> {
+  // ----------------------------------------------------------------
+  // W5-7: brownout 4-stage guard
+  //   当月コストを cost_ledger から取得し、4-stage 判定を行う。
+  //   allowedJobs に含まれない job は即 ACK してスキップ (リトライしない)。
+  //   - cost source: makeProductionDeps().getMonthlyCostJpy()
+  //     → Supabase cost_ledger の当月合計 (IN_MEMORY_FALLBACK=true 時は 0)
+  //   - daily-digest / line-event は全 stage で allowedJobs に含まれるため
+  //     オペレーター通知・!resume 操作は遮断されない
+  // ----------------------------------------------------------------
+  {
+    const costJpy = await makeProductionDeps().getMonthlyCostJpy!();
+    const decision = await evaluateBrownout(costJpy);
+    if (!decision.allowedJobs.includes(msg.job)) {
+      console.log(
+        JSON.stringify({
+          level: "warn",
+          msg: "[queue] job skipped by brownout guard",
+          job: msg.job,
+          brownout_status: decision.status,
+          cost_jpy: decision.cost_jpy,
+          allowed: decision.allowedJobs,
+        }),
+      );
+      // ACK: リトライしない (予算回復まで次の cron 発火を待つ)
+      return;
+    }
+  }
+
   switch (msg.job) {
     // ----------------------------------------------------------------
     // ideation: materials_store → core_ideas LLM 自動生成 (W5-2)
