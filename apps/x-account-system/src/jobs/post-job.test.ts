@@ -52,10 +52,18 @@ jest.mock("../../lib/editor/pipeline.ts", () => ({
   runEditor: (...args: unknown[]) => mockRunEditor(...args),
 }));
 
-// ---- 4. mock pushLine ----
+// ---- 4. mock pushLine + pushLineFlex ----
 const mockPushLine = jest.fn().mockResolvedValue(undefined);
+const mockPushLineFlex = jest.fn().mockResolvedValue(undefined);
 jest.mock("../../lib/line/line-client.ts", () => ({
   pushLine: (...args: unknown[]) => mockPushLine(...args),
+  pushLineFlex: (...args: unknown[]) => mockPushLineFlex(...args),
+}));
+
+// ---- 4b. mock style-feedback (no DB) ----
+jest.mock("../../lib/feedback/style-feedback.ts", () => ({
+  getRecentStyleFeedback: jest.fn().mockResolvedValue([]),
+  addStyleFeedback: jest.fn().mockResolvedValue(undefined),
 }));
 
 // ---- 5. mock kill-switch ----
@@ -192,17 +200,23 @@ describe("runPostJob — happy path (approved)", () => {
     expect(upsertArg.scheduled_date).toMatch(/^\d{4}-\d{2}-\d{2}$/);
   });
 
-  test("pushLine called with approval message containing the DB UUID", async () => {
+  test("pushLineFlex called with approval card containing approve/reject postback data + DB UUID", async () => {
     await runPostJob("morning", makeEnv());
 
-    expect(mockPushLine).toHaveBeenCalledTimes(1);
-    const [_to, message, _token] = mockPushLine.mock.calls[0];
+    expect(mockPushLineFlex).toHaveBeenCalledTimes(1);
+    const [_to, altText, contents, _token] = mockPushLineFlex.mock.calls[0];
 
-    // postback data must contain the db UUID (same one used in upsert)
     const dbUuid = mockUpsert.mock.calls[0][0].id;
-    expect(message).toContain(dbUuid);
-    // message should contain approve/reject instruction
-    expect(message).toMatch(/approve:|reject:/);
+    // altText is a string (first ~100 chars of body)
+    expect(typeof altText).toBe("string");
+
+    // The Flex JSON, serialized, must contain the postback data + db UUID.
+    const json = JSON.stringify(contents);
+    expect(json).toContain(`approve:${dbUuid}`);
+    expect(json).toContain(`reject:${dbUuid}`);
+    expect(json).toContain(`draft_id: ${dbUuid}`);
+    // bubble type
+    expect((contents as { type?: string }).type).toBe("bubble");
   });
 });
 
@@ -220,17 +234,14 @@ describe("runPostJob — editor rejected", () => {
     mockDequeueClaimSelect.mockResolvedValue({ data: [{ id: fakeCoreIdeaRow.id }], error: null });
   });
 
-  test("does NOT call pushLine when editor rejects", async () => {
+  test("does NOT send approval card when editor rejects", async () => {
     await runPostJob("noon", makeEnv());
 
     // draft should still be persisted
     expect(mockUpsert).toHaveBeenCalledTimes(1);
 
-    // no approval push
-    const pushLineCalls = mockPushLine.mock.calls.filter(([, msg]) =>
-      typeof msg === "string" && (msg.includes("approve:") || msg.includes("reject:"))
-    );
-    expect(pushLineCalls).toHaveLength(0);
+    // no approval Flex card
+    expect(mockPushLineFlex).not.toHaveBeenCalled();
   });
 });
 

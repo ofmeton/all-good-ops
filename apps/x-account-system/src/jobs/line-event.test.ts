@@ -13,10 +13,25 @@
 
 // ---- 1. mock supabase BEFORE any imports ----
 
-// post_drafts select chain: .select(...).eq('id', id).maybeSingle()
+// post_drafts select chain (approve path): .select(...).eq('id', id).maybeSingle()
+// post_drafts select chain (revise path): .select(...).eq(status).is(published_at).order().limit().maybeSingle()
+// Both terminate in maybeSingle → share mockDraftMaybeSingle; intermediate links are chainable.
 const mockDraftMaybeSingle = jest.fn();
-const mockDraftSelectEq = jest.fn(() => ({ maybeSingle: mockDraftMaybeSingle }));
-const mockDraftSelect = jest.fn(() => ({ eq: mockDraftSelectEq }));
+const mockDraftReviseChain: Record<string, jest.Mock> = {};
+mockDraftReviseChain.eq = jest.fn(() => mockDraftReviseChain);
+mockDraftReviseChain.is = jest.fn(() => mockDraftReviseChain);
+mockDraftReviseChain.order = jest.fn(() => mockDraftReviseChain);
+mockDraftReviseChain.limit = jest.fn(() => mockDraftReviseChain);
+mockDraftReviseChain.maybeSingle = mockDraftMaybeSingle;
+const mockDraftSelect = jest.fn(() => mockDraftReviseChain);
+
+// post_drafts upsert (revise persistDraft)
+const mockDraftUpsert = jest.fn().mockResolvedValue({ error: null });
+
+// core_ideas select chain (revise loadCoreIdeaForRevise): .select().eq().maybeSingle()
+const mockIdeaSelectMaybeSingle = jest.fn().mockResolvedValue({ data: null, error: null });
+const mockIdeaSelectEq = jest.fn(() => ({ maybeSingle: mockIdeaSelectMaybeSingle }));
+const mockIdeaSelect = jest.fn(() => ({ eq: mockIdeaSelectEq }));
 
 // post_drafts claim update chain (FIX 1):
 //   .update({published_at, human_approval_status}).eq('id', id).is('published_at', null).select('id')
@@ -79,13 +94,22 @@ jest.mock("@supabase/supabase-js", () => ({
         return {
           select: mockDraftSelect,
           update: mockDraftUpdate,
+          upsert: mockDraftUpsert,
         };
       }
       if (table === "posted_records") {
         return { insert: mockPostedInsert };
       }
       if (table === "core_ideas") {
-        return { update: mockIdeaUpdate };
+        return { update: mockIdeaUpdate, select: mockIdeaSelect };
+      }
+      if (table === "style_feedback") {
+        return {
+          insert: jest.fn().mockResolvedValue({ error: null }),
+          select: jest.fn(() => ({
+            order: jest.fn(() => ({ limit: jest.fn().mockResolvedValue({ data: [], error: null }) })),
+          })),
+        };
       }
       if (table === "interview_sessions") {
         return {
@@ -98,10 +122,32 @@ jest.mock("@supabase/supabase-js", () => ({
   })),
 }));
 
-// ---- 2. mock pushLine ----
+// ---- 2. mock pushLine + pushLineFlex ----
 const mockPushLine = jest.fn().mockResolvedValue(undefined);
+const mockPushLineFlex = jest.fn().mockResolvedValue(undefined);
 jest.mock("../../lib/line/line-client.ts", () => ({
   pushLine: (...args: unknown[]) => mockPushLine(...args),
+  pushLineFlex: (...args: unknown[]) => mockPushLineFlex(...args),
+}));
+
+// ---- 2b. mock style-feedback ----
+const mockAddStyleFeedback = jest.fn().mockResolvedValue(undefined);
+const mockGetRecentStyleFeedback = jest.fn().mockResolvedValue([]);
+jest.mock("../../lib/feedback/style-feedback.ts", () => ({
+  addStyleFeedback: (...args: unknown[]) => mockAddStyleFeedback(...args),
+  getRecentStyleFeedback: (...args: unknown[]) => mockGetRecentStyleFeedback(...args),
+}));
+
+// ---- 2c. mock writer reviseDraftForX ----
+const mockReviseDraftForX = jest.fn();
+jest.mock("../../lib/writer/writer-x.ts", () => ({
+  reviseDraftForX: (...args: unknown[]) => mockReviseDraftForX(...args),
+}));
+
+// ---- 2d. mock runEditor ----
+const mockRunEditor = jest.fn();
+jest.mock("../../lib/editor/pipeline.ts", () => ({
+  runEditor: (...args: unknown[]) => mockRunEditor(...args),
 }));
 
 // ---- 3. mock kill-switch (assertPublishingEnabled always passes) ----
@@ -543,5 +589,187 @@ describe("handleLineEvent — unauthorized sender is rejected (IDOR gate)", () =
     expect(fakeFetch).not.toHaveBeenCalled();
     expect(mockPostedInsert).not.toHaveBeenCalled();
     expect(mockDraftUpdate).not.toHaveBeenCalled();
+  });
+});
+
+// ============================================================
+// Test (f): 覚えて: <text> → addStyleFeedback(remember), reply, no draft
+// ============================================================
+describe("handleLineEvent — 覚えて (remember feedback)", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    _updateCallCount = 0;
+  });
+
+  test("覚えて: コマンド → addStyleFeedback(remember) + ack push, no draft lookup", async () => {
+    const payload = {
+      type: "message",
+      message: { type: "text", text: "覚えて: 絵文字は控えめにして" },
+      source: { type: "user", userId: "U_admin_test" },
+    };
+
+    await handleLineEvent(payload, makeEnv());
+
+    expect(mockAddStyleFeedback).toHaveBeenCalledTimes(1);
+    const [, kind, body] = mockAddStyleFeedback.mock.calls[0];
+    expect(kind).toBe("remember");
+    expect(body).toBe("絵文字は控えめにして");
+
+    // ack push
+    expect(mockPushLine).toHaveBeenCalledTimes(1);
+    expect(mockPushLine.mock.calls[0][1]).toContain("覚えました");
+
+    // no revise → no draft select / no flex card
+    expect(mockReviseDraftForX).not.toHaveBeenCalled();
+    expect(mockPushLineFlex).not.toHaveBeenCalled();
+  });
+
+  test("全角コロン「覚えて：」も受け付ける", async () => {
+    const payload = {
+      type: "message",
+      message: { type: "text", text: "覚えて：もっと具体例を入れて" },
+      source: { type: "user", userId: "U_admin_test" },
+    };
+
+    await handleLineEvent(payload, makeEnv());
+
+    expect(mockAddStyleFeedback).toHaveBeenCalledTimes(1);
+    expect(mockAddStyleFeedback.mock.calls[0][2]).toBe("もっと具体例を入れて");
+  });
+});
+
+// ============================================================
+// Test (g): 修正: <text> → revise latest pending draft, re-edit, re-send
+// ============================================================
+describe("handleLineEvent — 修正 (revise feedback)", () => {
+  const REVISE_DRAFT_ROW = {
+    id: DRAFT_ID,
+    core_idea_id: CORE_IDEA_ID,
+    body: "元の本文です。",
+    fmat: "medium",
+    scheduled_date: "2026-06-03",
+    slot: "morning",
+  };
+
+  const revisedDraft = {
+    draftId: "draft-revised-1",
+    body: "修正後の本文です。",
+    primaryHook: "tips_enum",
+    estimatedScore: 0.7,
+    llmCostUsd: 0.001,
+    generator: "anthropic-sonnet-4.6",
+  };
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+    _updateCallCount = 0;
+    mockReviseDraftForX.mockResolvedValue(revisedDraft);
+    mockDraftUpsert.mockResolvedValue({ error: null });
+    // core_ideas lookup returns a row
+    mockIdeaSelectMaybeSingle.mockResolvedValue({
+      data: {
+        id: CORE_IDEA_ID,
+        topic: "AI 自動化",
+        fmat: "medium",
+        category: "first_hand",
+        audience: "経営者",
+        source_material_ids: [],
+        meta: {},
+      },
+      error: null,
+    });
+  });
+
+  test("修正: → latest pending draft revised, editor re-run, approved → Flex re-sent + feedback stored", async () => {
+    mockDraftMaybeSingle.mockResolvedValue({ data: REVISE_DRAFT_ROW, error: null });
+    mockRunEditor.mockResolvedValue(fakeEditorOutput);
+
+    const payload = {
+      type: "message",
+      message: { type: "text", text: "修正: もっと短く" },
+      source: { type: "user", userId: "U_admin_test" },
+    };
+
+    await handleLineEvent(payload, makeEnv());
+
+    // revised with the instruction
+    expect(mockReviseDraftForX).toHaveBeenCalledTimes(1);
+    const [origBody, instruction] = mockReviseDraftForX.mock.calls[0];
+    expect(origBody).toBe(REVISE_DRAFT_ROW.body);
+    expect(instruction).toBe("もっと短く");
+
+    // editor re-run on revised body
+    expect(mockRunEditor).toHaveBeenCalledTimes(1);
+    expect(mockRunEditor.mock.calls[0][0].body).toBe(revisedDraft.body);
+
+    // same row upserted (same id)
+    expect(mockDraftUpsert).toHaveBeenCalledTimes(1);
+    expect(mockDraftUpsert.mock.calls[0][0].id).toBe(DRAFT_ID);
+
+    // revise instruction stored as feedback
+    expect(mockAddStyleFeedback).toHaveBeenCalledTimes(1);
+    expect(mockAddStyleFeedback.mock.calls[0][1]).toBe("revise");
+    expect(mockAddStyleFeedback.mock.calls[0][2]).toBe("もっと短く");
+    expect(mockAddStyleFeedback.mock.calls[0][3]).toBe(DRAFT_ID);
+
+    // approved → Flex re-sent
+    expect(mockPushLineFlex).toHaveBeenCalledTimes(1);
+    const flexJson = JSON.stringify(mockPushLineFlex.mock.calls[0][2]);
+    expect(flexJson).toContain(`approve:${DRAFT_ID}`);
+  });
+
+  test("修正: → no pending draft found → '見つかりません'", async () => {
+    mockDraftMaybeSingle.mockResolvedValue({ data: null, error: null });
+
+    const payload = {
+      type: "message",
+      message: { type: "text", text: "修正: もっと短く" },
+      source: { type: "user", userId: "U_admin_test" },
+    };
+
+    await handleLineEvent(payload, makeEnv());
+
+    expect(mockReviseDraftForX).not.toHaveBeenCalled();
+    expect(mockPushLine).toHaveBeenCalledTimes(1);
+    expect(mockPushLine.mock.calls[0][1]).toContain("見つかりません");
+  });
+
+  test("修正: → editor rejects revised → reject reason replied, no Flex card", async () => {
+    mockDraftMaybeSingle.mockResolvedValue({ data: REVISE_DRAFT_ROW, error: null });
+    mockRunEditor.mockResolvedValue({
+      ...fakeEditorOutput,
+      decision: "rejected",
+      rejectReasons: ["R1_workflow_theme"],
+    });
+
+    const payload = {
+      type: "message",
+      message: { type: "text", text: "修正：攻撃的に" },
+      source: { type: "user", userId: "U_admin_test" },
+    };
+
+    await handleLineEvent(payload, makeEnv());
+
+    expect(mockReviseDraftForX).toHaveBeenCalledTimes(1);
+    expect(mockPushLineFlex).not.toHaveBeenCalled();
+    expect(mockPushLine).toHaveBeenCalledTimes(1);
+    expect(mockPushLine.mock.calls[0][1]).toContain("却下");
+    // feedback still stored
+    expect(mockAddStyleFeedback).toHaveBeenCalledTimes(1);
+  });
+
+  test("修正/覚えて from attacker → no-op (auth gate)", async () => {
+    mockDraftMaybeSingle.mockResolvedValue({ data: REVISE_DRAFT_ROW, error: null });
+
+    const payload = {
+      type: "message",
+      message: { type: "text", text: "修正: もっと短く" },
+      source: { type: "user", userId: "U_attacker" },
+    };
+
+    await handleLineEvent(payload, makeEnv());
+
+    expect(mockReviseDraftForX).not.toHaveBeenCalled();
+    expect(mockAddStyleFeedback).not.toHaveBeenCalled();
   });
 });
