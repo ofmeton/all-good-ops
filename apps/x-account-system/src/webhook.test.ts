@@ -237,3 +237,66 @@ describe("/oauth/x/start admin gate", () => {
     expect((env.OAUTH_STATE as unknown as { put: jest.Mock }).put).toHaveBeenCalledTimes(1);
   });
 });
+
+// ============================================================
+// /admin/enqueue manual trigger gate
+// ============================================================
+
+describe("/admin/enqueue manual trigger", () => {
+  const ADMIN_SECRET = "super-secret-admin-key";
+
+  function adminEnv(overrides: Partial<Env> = {}): Env & { JOBS: { send: jest.Mock } } {
+    return {
+      ...makeEnv(),
+      OAUTH_ADMIN_SECRET: ADMIN_SECRET,
+      ...overrides,
+    } as Env & { JOBS: { send: jest.Mock } };
+  }
+
+  function req(params: Record<string, string>): Request {
+    const u = new URL("https://worker.example.com/admin/enqueue");
+    for (const [k, v] of Object.entries(params)) u.searchParams.set(k, v);
+    return new Request(u.toString(), { method: "GET" });
+  }
+
+  test("missing key → 401, no enqueue", async () => {
+    const env = adminEnv();
+    const res = await worker.fetch(req({ job: "buzz-ingest" }), env, makeCtx());
+    expect(res.status).toBe(401);
+    expect(env.JOBS.send).not.toHaveBeenCalled();
+  });
+
+  test("wrong key → 401", async () => {
+    const env = adminEnv();
+    const res = await worker.fetch(req({ job: "buzz-ingest", key: "nope" }), env, makeCtx());
+    expect(res.status).toBe(401);
+    expect(env.JOBS.send).not.toHaveBeenCalled();
+  });
+
+  test("unknown job → 400", async () => {
+    const env = adminEnv();
+    const res = await worker.fetch(req({ job: "rm-rf", key: ADMIN_SECRET }), env, makeCtx());
+    expect(res.status).toBe(400);
+    expect(env.JOBS.send).not.toHaveBeenCalled();
+  });
+
+  test("valid non-post job → enqueues {job,date}", async () => {
+    const env = adminEnv();
+    const res = await worker.fetch(req({ job: "buzz-ingest", key: ADMIN_SECRET }), env, makeCtx());
+    expect(res.status).toBe(200);
+    expect(env.JOBS.send).toHaveBeenCalledTimes(1);
+    const msg = env.JOBS.send.mock.calls[0][0];
+    expect(msg.job).toBe("buzz-ingest");
+    expect(typeof msg.date).toBe("string");
+    expect(msg.slot).toBeUndefined();
+  });
+
+  test("valid post job → enqueues with slot", async () => {
+    const env = adminEnv();
+    const res = await worker.fetch(req({ job: "post-morning", key: ADMIN_SECRET }), env, makeCtx());
+    expect(res.status).toBe(200);
+    const msg = env.JOBS.send.mock.calls[0][0];
+    expect(msg.job).toBe("post-morning");
+    expect(msg.slot).toBe("morning");
+  });
+});

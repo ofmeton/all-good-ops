@@ -84,11 +84,11 @@ function jstDate(d: Date): string {
 // cron 式 → job 名。wrangler.toml の crons と 1:1 対応（文字列が MAP KEY = 必ず一意）。
 // 注: "0 * /2 * * *" (スペースなし: 0 */2 * * *) は複数時刻に発火するが式文字列として一意なのでキーとして安全。
 const CRON_JOBS: Record<string, JobMessage["job"]> = {
-  "0 20 * * *": "ideation",          // 05:00 JST (buzz-ingest より 1h 前)
+  "0 21 * * *": "buzz-ingest",       // 06:00 JST (素材収集を最初に)
+  "30 21 * * *": "ideation",         // 06:30 JST (buzz の後で素材→ネタ変換)
   "0 22 * * *": "post-morning",      // 07:00 JST
   "0 3 * * *": "post-noon",          // 12:00 JST
   "0 10 * * *": "post-evening",      // 19:00 JST (note 送客)
-  "0 21 * * *": "buzz-ingest",       // 06:00 JST
   "0 12 * * *": "daily-digest",      // 21:00 JST
   "0 14 * * *": "optimizer-update",  // 23:00 JST
   "0 */2 * * *": "rollback-monitor", // 毎2h
@@ -102,6 +102,20 @@ const POST_SLOTS = {
   "post-noon": "noon",
   "post-evening": "evening",
 } as const;
+
+/** /admin/enqueue で手動起動を許可する job 名（line-event は webhook 専用なので除外） */
+const CRON_JOBS_BY_NAME: Record<string, true> = {
+  ideation: true,
+  "buzz-ingest": true,
+  "post-morning": true,
+  "post-noon": true,
+  "post-evening": true,
+  "daily-digest": true,
+  "optimizer-update": true,
+  "rollback-monitor": true,
+  "inspirations-ingest": true,
+  "rotation-notice": true,
+};
 
 export default {
   async scheduled(
@@ -149,6 +163,30 @@ export default {
       }
       log(env, "info", `LINE webhook: enqueued ${(parsed.events ?? []).length} event(s)`);
       return new Response("OK", { status: 200 });
+    }
+
+    // 管理用: cron job を手動で enqueue（OAUTH_ADMIN_SECRET ゲート）。
+    // GET /admin/enqueue?job=<name>&key=<secret>  → 該当 job を即 enqueue（consumer が処理）
+    if (url.pathname === "/admin/enqueue") {
+      const key = url.searchParams.get("key");
+      if (!env.OAUTH_ADMIN_SECRET || key !== env.OAUTH_ADMIN_SECRET) {
+        return new Response("unauthorized", { status: 401 });
+      }
+      const job = url.searchParams.get("job") as JobMessage["job"] | null;
+      if (!job || !(job in CRON_JOBS_BY_NAME)) {
+        return new Response(
+          `bad job. allowed: ${Object.keys(CRON_JOBS_BY_NAME).join(", ")}`,
+          { status: 400 },
+        );
+      }
+      const date = jstDate(new Date());
+      const slot = POST_SLOTS[job as keyof typeof POST_SLOTS];
+      const msg: JobMessage = slot
+        ? ({ job, date, slot } as JobMessage)
+        : ({ job, date } as JobMessage);
+      await env.JOBS.send(msg);
+      log(env, "info", `admin: enqueued job=${job}`);
+      return Response.json({ ok: true, enqueued: msg });
     }
 
     // X OAuth PKCE Step 1: generate verifier/state → store in KV → redirect to X

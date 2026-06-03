@@ -45,8 +45,8 @@ dead_letter_queue = "xad-jobs-dlq"
 # --------------------------------------------------------------------
 # | JST       | UTC          | ジョブ                                      |
 # |-----------|--------------|---------------------------------------------|
-# | 05:00     | 20:00 (前日) | ideation (materials→core_ideas LLM生成, 投稿より前)
-# | 06:00     | 21:00 (前日) | buzz-ingest (海外X buzz 日次)               |
+# | 06:00     | 21:00 (前日) | buzz-ingest (海外X buzz 日次, 素材収集を最初に) |
+# | 06:30     | 21:30 (前日) | ideation (materials→core_ideas LLM生成, buzzの後)|
 # | 07:00     | 22:00 (前日) | post-morning (失敗談先行型, URLなし)         |
 # | 12:00     | 03:00        | post-noon (ROI Before-After)                |
 # | 19:00     | 10:00        | post-evening (note 送客, URL末尾)            |
@@ -57,11 +57,11 @@ dead_letter_queue = "xad-jobs-dlq"
 # | 毎月1日 00:00| 15:00 (1日) | rotation-notice (token rotation 通知)       |
 [triggers]
 crons = [
-  "0 20 * * *",    # 05:00 JST ideation (buzz-ingest より 1h 前で素材→ネタ変換)
+  "0 21 * * *",    # 06:00 JST buzz-ingest (素材収集を最初に)
+  "30 21 * * *",   # 06:30 JST ideation (buzz の後で素材→ネタ変換)
   "0 22 * * *",    # 07:00 JST post-morning
   "0 3 * * *",     # 12:00 JST post-noon
   "0 10 * * *",    # 19:00 JST post-evening (note 送客)
-  "0 21 * * *",    # 06:00 JST buzz-ingest
   "0 12 * * *",    # 21:00 JST daily-digest
   "0 14 * * *",    # 23:00 JST optimizer-update
   "0 */2 * * *",   # rollback-monitor 毎2h
