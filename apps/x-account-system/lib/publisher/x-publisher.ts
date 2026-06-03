@@ -22,6 +22,7 @@ import {
   isTokenExpired,
   refreshAccessToken,
 } from "./token-store.ts";
+import { assertPublishingEnabled } from "../safety/kill-switch.ts";
 
 const X_TWEETS_ENDPOINT = "https://api.twitter.com/2/tweets";
 const MAX_RETRIES = 3;
@@ -150,6 +151,18 @@ export async function publishToX(req: PublishRequest): Promise<PublishResult> {
       draftId: req.draftId,
       status: "blocked",
       blockedReason: "brownout",
+      retryCount: 0,
+    };
+  }
+
+  // ---- Gate 4.5: DB kill-switch (safety_state table) ----
+  try {
+    await assertPublishingEnabled();
+  } catch {
+    return {
+      draftId: req.draftId,
+      status: "blocked",
+      blockedReason: "kill_switch",
       retryCount: 0,
     };
   }

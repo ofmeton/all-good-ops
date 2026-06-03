@@ -20,6 +20,24 @@ import { collectKpis, makeProductionDeps } from "./kpi-collector.ts";
 export { toJstDateString } from "./kpi-collector.ts";
 import type { DigestPayload, KpiSnapshot } from "./types.ts";
 import { pushLine } from "../line/line-client.ts";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+
+let _supabase: SupabaseClient | null = null;
+function getDigestSupabase(): SupabaseClient | null {
+  if (process.env.IN_MEMORY_FALLBACK === "true") return null;
+  if (
+    !_supabase &&
+    process.env.SUPABASE_URL &&
+    process.env.SUPABASE_SERVICE_ROLE_KEY
+  ) {
+    _supabase = createClient(
+      process.env.SUPABASE_URL,
+      process.env.SUPABASE_SERVICE_ROLE_KEY,
+      { db: { schema: process.env.SUPABASE_SCHEMA || "public" } },
+    );
+  }
+  return _supabase;
+}
 
 const DEFAULT_TO = process.env.LINE_USER_ID_OFMETON ?? "<LINE_USER_ID_OFMETON unset>";
 
@@ -119,6 +137,26 @@ export async function runDailyDigest(args: {
   const kpi = await collectKpis({ now, deps });
   const payload = formatDigest(kpi, args.to ?? DEFAULT_TO);
   const sendResult = await sendToLine(payload);
+
+  // Persist to daily_digest_log after successful send (skip in dry-run / IN_MEMORY_FALLBACK)
+  if (sendResult.status === "sent") {
+    const sb = getDigestSupabase();
+    if (sb) {
+      const { error } = await sb.from("daily_digest_log").insert({
+        digest_type: "daily",
+        sent_at: new Date().toISOString(),
+        recipient: payload.to,
+        body: payload.text,
+        alerts: kpi.alerts,
+        approval_items_count: 0,
+        status: "sent",
+      });
+      if (error) {
+        console.warn("[digest] daily_digest_log insert failed:", error.message);
+      }
+    }
+  }
+
   return { payload, sendResult };
 }
 

@@ -130,8 +130,19 @@ export async function collectKpis(args: {
 export function makeProductionDeps(): KpiCollectorDeps {
   return {
     getMonthlyCostJpy: async () => {
-      // TODO Phase 1: budget-calculator.ts 経由で月初〜現在の cost を Supabase から集計
-      return 0;
+      const sb = getSupabase();
+      if (!sb) return 0;
+      // Current month in 'YYYY-MM' format (UTC-based; cost_ledger month is 'YYYY-MM')
+      const now = new Date();
+      const monthStart = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1));
+      const monthEnd = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 1, 1));
+      const { data, error } = await sb
+        .from("cost_ledger")
+        .select("cost_jpy")
+        .gte("created_at", monthStart.toISOString())
+        .lt("created_at", monthEnd.toISOString());
+      if (error || !data) return 0;
+      return sum(data as Array<Record<string, unknown>>, "cost_jpy");
     },
     getKillSwitchState: async () => {
       const sb = getSupabase();
