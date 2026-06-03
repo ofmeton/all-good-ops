@@ -1,94 +1,71 @@
-# ミナト LP 広告計測 修正指示書（2026-06-03）
+# ミナト LP 広告計測 診断レポート（2026-06-03・改訂版）
 
 対象: minato-ltd.com の2つのLP（kc=キッチン / ub=ユニットバス）の広告コンバージョン計測
-診断: chrome-devtools MCP で GTM 管理画面と両 thanks ページの実発火を実測済み
+方法: chrome-devtools MCP で個人Chrome（ログイン済み）にアタッチし、GTM 管理画面・実フォーム送信・各広告管理画面を実測
+
+> ⚠️ **このドキュメントは初版（2026-06-03 昼）の診断を撤回・訂正したものです。**
+> 初版は「ub の CV が死んでおり、トリガーURLを `mail.php`→`thanks` に直せば復活する」としていましたが、**誤りでした**。実フローで到達しない `/ub/lp1/thanks/` をテストしていたことが原因です。下記が正しい結論です。
 
 ---
 
 ## 結論（3行）
 
-- **ub/lp1 の Meta・Yahoo コンバージョンが計測ゼロ**だった原因が確定。
-- 原因は CV タグではなく、**トリガーの参照URLが間違っていた**（描画されない `mail.php` を指していた）。
-- **トリガーのURLを1箇所直すだけ**で Meta・Yahoo CV が即復活する（新規タグ作成は不要）。
+- **ub の Meta コンバージョン（Lead）は正常に動作・記録されている**（イベントマネージャに22件）。死んでいない。
+- ユーザーが「CV死んでそう」と感じたのは **Yahoo 管理画面のコンバージョン数が 0** だったため。これはタグ故障ではなく **Yahoo広告クリック経由の成果が無い/広告未配信** の可能性が高い（アトリビューションの差）。
+- **GTM の修正は不要。** 元の設定（トリガー `Page Path = /ub/lp1/mail.php`）が正しい。
 
 ---
 
-## 現状の実態
+## 実測で確定した事実
 
-| LP | GTMコンテナ | GA4 | Google Ads | Meta | Yahoo |
-|---|---|---|---|---|---|
-| kc/lp1 | GTM-N9QMLZTX | ✅発火 | ✅発火 | 無 | 無 |
-| ub/lp1 | GTM-M2WZBHHF | 無 | 無 | ⚠️PageViewのみ・**CV死** | ⚠️baseのみ・**CV死** |
+### フォーム完了フロー（重要）
+- ub の問い合わせフォームは `/ub/lp1/mail.php` に POST → **mail.php がそのまま成功サンクスHTML（「お問い合わせありがとうございます」）を描画**（リダイレクトではない）。
+- `/ub/lp1/thanks/` は実フローで踏まれない（直叩き専用の別ページ）。
+- mail.php は**バリデーション失敗時はGTM無しの素のエラーページ**（「送信内容を確認できませんでした」）を返す。成功時のみ計測タグが載る。
 
-ub の Meta Pixel（px `1429820785583320`）と Yahoo タグ（`ytag.js`）の**ベースは生きている**。
-コンバージョンタグ（Meta Pixel Lead / Yahoo_CV_問い合わせ完了）も**存在する**。
-しかし thanks ページで**発火していない**。
+### タグ発火（成功送信を実測）
+| 媒体 | 結果 |
+|---|---|
+| Meta Lead | ✅ `facebook.com/tr/?id=1429820785583320&ev=Lead` が **200で発火**（公開版GTM）|
+| Yahoo CV | ✅ 成功ページ内で `ytag({type:"yss_conversion",yahoo_conversion_id:"1001377234",label:"DkMgCNer9bEcEITLqq1B"})` 実行 |
+| GTM-M2WZBHHF | ✅ ロード（ub の正規コンテナ）|
 
----
+### 管理画面の実コンバージョン（ground truth）
+| 媒体 | 期間 | 計上 |
+|---|---|---|
+| **Meta**（pixel 1429820785583320）| 2026/05/06〜06/02 | PageView **4,370** / **Lead 22件**（直近受信あり）→ 記録されている |
+| **Yahoo**（CV「問い合わせ完了_Yahoo_ピカっとバス」）| 2026/05/20〜06/02 | 設定アクティブ(緑)・90日・初回のみ。**コンバージョン数 0 / 直近CV日 なし** |
 
-## 根本原因
-
-ub コンテナ（GTM-M2WZBHHF）の CV タグ2本が参照するトリガー **「PV_問い合わせ完了ページ」** の条件が誤り:
-
-```
-現状（誤り）: ページビュー / Page Path 等しい  /ub/lp1/mail.php
-正しい姿     : ページビュー / Page Path 等しい  /ub/lp1/thanks/
-```
-
-`mail.php` はフォーム送信を処理する PHP で、**ブラウザに表示されずに `/ub/lp1/thanks/` へリダイレクトする中継URL**。
-そのため「Page Path が mail.php と等しい時に発火」という条件は永遠に成立せず、Meta Lead と Yahoo CV が一度も飛ばない。
-
-※ 正常に動いている kc 側のトリガー「PV - KCLP Thanks」は `Page Path 等しい /kc/lp1/thanks/` を正しく指している（対照確認済み）。
+- Meta の「合計イベント数」は広告非経由も含む全発火。Yahoo の「コンバージョン数」は**Yahoo広告クリック経由の成果のみ**。
+  → Yahoo が 0 でも「タグ故障」とは限らない。**Yahoo広告を回していない/Yahoo経由の問い合わせが無い**なら 0 になる。
 
 ---
 
-## 修正手順 ①【緊急・最小】ub の CV を即復活させる
+## いま GTM をどうするか
 
-> GTM 公開は本番の広告計測に直接影響するため、実施前に人間が最終確認すること。
-
-1. GTM で **GTM-M2WZBHHF**（account 6356775932 / container 253430643）を開く
-2. 左メニュー「トリガー」→ **「PV_問い合わせ完了ページ」** を開く
-3. 「このトリガーの発生場所」の条件を編集:
-   - 変更前: `Page Path` `等しい` `/ub/lp1/mail.php`
-   - 変更後: `Page Path` `等しい` `/ub/lp1/thanks/`
-4. （任意・推奨）誤発火防止に条件を1行追加: `Referrer` `含む` `minato-ltd.com/ub/lp1`
-5. 保存 → 右上「プレビュー」で `https://minato-ltd.com/ub/lp1/` から実際にフォーム送信し、Tag Assistant で **Meta Pixel Lead** と **Yahoo_CV_問い合わせ完了** が thanks で発火することを確認
-6. 問題なければ「公開」
-
-### 修正後の検証（公開後）
-- thanks 到達時に `facebook.com/tr/?...&ev=Lead`（または設定したイベント名）が飛ぶこと
-- Yahoo の CV ビーコンが飛ぶこと
-- 翌日以降、Meta イベントマネージャ / Yahoo 広告 のコンバージョン件数が計上され始めること
-
-これで ub の Meta・Yahoo CV 計測は復旧する（kc は元から正常なので変更不要）。
+- **何も変更しない（修正不要）**。ub トリガーは元の `Page Path = /ub/lp1/mail.php`（等しい）が正しく、Meta Lead を計上できている。
+- 本セッションで一時的に `含む /ub/lp1/mail.php` へ変更したが、**破棄して公開バージョン4の元状態に復帰済み**（ライブ無変更）。
 
 ---
 
-## 修正手順 ②【整理・Phase 2】全タグを Google コンテナ N9QMLZTX に集約（任意・後日）
+## 残課題：Yahoo の 0 の正体を詰める
 
-目的: 2コンテナ運用をやめ **GTM-N9QMLZTX 1本に統合**し、両 LP に展開。ub にも GA4 と Google Ads を乗せる。
+次のどちらかを確認すれば「アトリビューション差（問題なし）」か「Yahooタグ受信不備（要対応）」か確定する:
 
-> ①でCVを復旧させてから、別タスクとして落ち着いて実施するのを推奨（①と②を同時にやるとリスク切り分けが難しい）。
+1. **Yahoo広告が現在配信中か**（配信していなければ 0 は当然）
+2. **Yahoo 側のタグ受信診断**（コンバージョン測定の「タグを表示」やタグ稼働状況で、実際にビーコンを受信できているか）
 
-1. **N9QMLZTX に Meta/Yahoo を移植**: M2WZBHHF の4タグ（Meta_Pixel_PageView / Meta Pixel Lead / Yahoo_サイトジェネラルタグ / Yahoo_CV_問い合わせ完了）と対応トリガーを N9QMLZTX に複製。
-   - ベースタグ（PageView / ジェネラル）は All Pages のまま。
-   - CV タグのトリガーは **ub 用 thanks**（`Page Path 等しい /ub/lp1/thanks/`）を新規作成して紐付け（kc 用とは別トリガー）。
-2. **ub スニペット差替（先方サイト担当者へ依頼）**: ub/lp1 の全ページ（LP本体 + thanks）の GTM スニペットを `GTM-M2WZBHHF` → `GTM-N9QMLZTX` に差し替え。
-   - これにより ub にも GA4(G-M42JR0G90H) と Google Ads(AW-18178517432) が自動で乗る（N9QMLZTX に含まれるため）。
-   - ただし Google Ads CV / GA4 CV を ub でも計測したい場合、それらのトリガーも ub thanks 用に追加が必要。
-3. 旧 M2WZBHHF は差替確認後に停止（即削除はせず一定期間並走 → 二重計測に注意、どちらかのCVは無効化）。
+→ もし「広告配信中なのに受信0」なら、Yahooタグ側の設定（conversion_id/label の一致、計測タイミング）を精査する。
 
-### Phase 2 の注意点
-- 統合中は二重計測 / 計測欠損が起きやすい。プレビューで全タグの発火マトリクス（LP×イベント）を確認してから公開。
-- N9QMLZTX workspace に未公開変更が1件残っていた（2026-06-03 時点）。統合作業前に現公開バージョンと workspace の差分を確認すること。
+---
+
+## （参考）統合 N9QMLZTX について
+
+初版で「全タグを N9QMLZTX に集約」を提案したが、**CV復旧を目的とした統合は不要**（CVは動いている）。コンテナ運用の整理としてやりたい場合は別途独立タスクで検討する（緊急性なし）。
 
 ---
 
 ## 付録: 確定情報
-
-- GTM コンテナ
-  - GTM-N9QMLZTX (kc): account `6356775932` / container `253236439`
-  - GTM-M2WZBHHF (ub): account `6356775932` / container `253430643`
-- 計測ID: GA4 `G-M42JR0G90H` / Google Ads `AW-18178517432` / Meta Pixel `1429820785583320` / Yahoo `ytag.js`(サイトジェネラル)
-- thanks URL: `/kc/lp1/thanks/` ・ `/ub/lp1/thanks/`
-- フォーム送信処理URL（中継・非表示）: `/ub/lp1/mail.php`
+- GTM: GTM-N9QMLZTX(kc)=acc6356775932/cont253236439 / GTM-M2WZBHHF(ub)=acc6356775932/cont253430643
+- 計測ID: GA4 `G-M42JR0G90H`(kcのみ) / Google Ads `AW-18178517432`(kcのみ) / Meta Pixel `1429820785583320`(ub) / Yahoo CV id `1001377234` label `DkMgCNer9bEcEITLqq1B`(ub)
+- ub 完了ページ: `/ub/lp1/mail.php`（成功時に計測タグ描画）。`/ub/lp1/thanks/` は実フロー未使用
