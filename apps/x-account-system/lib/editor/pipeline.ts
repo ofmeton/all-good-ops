@@ -76,12 +76,12 @@ export async function runEditor(input: EditorInput): Promise<EditorOutput> {
   ]);
   const highRiskRemaining = containsHighRisk(redactResult.redactedText);
 
-  // money_jpy/money_usd は公開投稿のマーケ数値 (◯万円削減 等) であり PII ではないため、
-  // X5 の hard 却下対象から外す (soft 警告化)。それ以外の高リスク (email/phone/カード/住所/
-  // 顧客名シグナル/APIキー/長ID) は本物の PII として hard 維持。
+  // hard 却下するのは「確実な PII」のみ。公開投稿は人間が最終承認するため、誤検出しやすい
+  // ヒューリスティック (money=マーケ数値 / client_name_signal=「…を社」等を誤マッチ /
+  // long_alphanum_id=tech文字列) は soft 警告に留め、人間判断に委ねる。
+  // 確実な PII (email/phone/カード/住所/APIキー) のみ hard 維持。
   const HARD_PII_CATEGORIES = new Set([
-    "email", "phone", "credit_card", "japanese_address",
-    "client_name_signal", "api_key_like", "long_alphanum_id",
+    "email", "phone", "credit_card", "japanese_address", "api_key_like",
   ]);
   const realPiiHighRisk =
     highRiskRemaining ||
