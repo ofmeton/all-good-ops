@@ -122,12 +122,28 @@ jest.mock("@supabase/supabase-js", () => ({
   })),
 }));
 
-// ---- 2. mock pushLine + pushLineFlex ----
+// ---- 2. mock pushLine + pushLineMessages ----
 const mockPushLine = jest.fn().mockResolvedValue(undefined);
-const mockPushLineFlex = jest.fn().mockResolvedValue(undefined);
+const mockPushLineMessages = jest.fn().mockResolvedValue({
+  sentMessages: [{ id: "msg-text-1" }, { id: "msg-card-2" }],
+});
 jest.mock("../../lib/line/line-client.ts", () => ({
   pushLine: (...args: unknown[]) => mockPushLine(...args),
-  pushLineFlex: (...args: unknown[]) => mockPushLineFlex(...args),
+  pushLineMessages: (...args: unknown[]) => mockPushLineMessages(...args),
+}));
+
+// ---- 2a2. mock message-map (quote-reply resolution) ----
+const mockRecordLineMessage = jest.fn().mockResolvedValue(undefined);
+const mockLookupDraftByMessage = jest.fn().mockResolvedValue(null);
+jest.mock("../../lib/line/message-map.ts", () => ({
+  recordLineMessage: (...args: unknown[]) => mockRecordLineMessage(...args),
+  lookupDraftByMessage: (...args: unknown[]) => mockLookupDraftByMessage(...args),
+}));
+
+// ---- 2a3. mock intent-classifier (free-text Haiku path) ----
+const mockClassifyReplyIntent = jest.fn().mockResolvedValue({ intent: "none" });
+jest.mock("../../lib/feedback/intent-classifier.ts", () => ({
+  classifyReplyIntent: (...args: unknown[]) => mockClassifyReplyIntent(...args),
 }));
 
 // ---- 2b. mock style-feedback ----
@@ -621,7 +637,9 @@ describe("handleLineEvent — 覚えて (remember feedback)", () => {
 
     // no revise → no draft select / no flex card
     expect(mockReviseDraftForX).not.toHaveBeenCalled();
-    expect(mockPushLineFlex).not.toHaveBeenCalled();
+    expect(mockPushLineMessages).not.toHaveBeenCalled();
+    // explicit prefix → no LLM
+    expect(mockClassifyReplyIntent).not.toHaveBeenCalled();
   });
 
   test("全角コロン「覚えて：」も受け付ける", async () => {
@@ -712,9 +730,10 @@ describe("handleLineEvent — 修正 (revise feedback)", () => {
     expect(mockAddStyleFeedback.mock.calls[0][2]).toBe("もっと短く");
     expect(mockAddStyleFeedback.mock.calls[0][3]).toBe(DRAFT_ID);
 
-    // approved → Flex re-sent
-    expect(mockPushLineFlex).toHaveBeenCalledTimes(1);
-    const flexJson = JSON.stringify(mockPushLineFlex.mock.calls[0][2]);
+    // approved → approval push (text + Flex) re-sent
+    expect(mockPushLineMessages).toHaveBeenCalledTimes(1);
+    const messages = mockPushLineMessages.mock.calls[0][1] as Array<Record<string, unknown>>;
+    const flexJson = JSON.stringify(messages[1].contents);
     expect(flexJson).toContain(`approve:${DRAFT_ID}`);
   });
 
@@ -751,7 +770,7 @@ describe("handleLineEvent — 修正 (revise feedback)", () => {
     await handleLineEvent(payload, makeEnv());
 
     expect(mockReviseDraftForX).toHaveBeenCalledTimes(1);
-    expect(mockPushLineFlex).not.toHaveBeenCalled();
+    expect(mockPushLineMessages).not.toHaveBeenCalled();
     expect(mockPushLine).toHaveBeenCalledTimes(1);
     expect(mockPushLine.mock.calls[0][1]).toContain("却下");
     // feedback still stored
@@ -771,5 +790,128 @@ describe("handleLineEvent — 修正 (revise feedback)", () => {
 
     expect(mockReviseDraftForX).not.toHaveBeenCalled();
     expect(mockAddStyleFeedback).not.toHaveBeenCalled();
+  });
+});
+
+// ============================================================
+// Test (h): 引用リプライ紐づけ — quotedMessageId → 対象 draft 解決
+// ============================================================
+describe("handleLineEvent — quote-reply resolves target draft", () => {
+  const QUOTED_DRAFT_ID = "99999999-aaaa-4bbb-8ccc-dddddddddddd";
+  const QUOTED_DRAFT_ROW = {
+    id: QUOTED_DRAFT_ID,
+    core_idea_id: CORE_IDEA_ID,
+    body: "引用先の本文。",
+    fmat: "medium",
+    scheduled_date: "2026-06-03",
+    slot: "morning",
+  };
+  const revisedDraft = {
+    draftId: "draft-revised-q",
+    body: "引用先を直した本文。",
+    primaryHook: "tips_enum",
+    estimatedScore: 0.7,
+    llmCostUsd: 0.001,
+    generator: "anthropic-sonnet-4.6",
+  };
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+    _updateCallCount = 0;
+    mockReviseDraftForX.mockResolvedValue(revisedDraft);
+    mockRunEditor.mockResolvedValue(fakeEditorOutput);
+    mockDraftUpsert.mockResolvedValue({ error: null });
+    mockIdeaSelectMaybeSingle.mockResolvedValue({ data: null, error: null });
+    // lookupDraftByMessage resolves the quoted message → quoted draft id
+    mockLookupDraftByMessage.mockResolvedValue(QUOTED_DRAFT_ID);
+    // loadTargetDraftForRevise (by id) chain → returns the quoted draft
+    mockDraftMaybeSingle.mockResolvedValue({ data: QUOTED_DRAFT_ROW, error: null });
+  });
+
+  test("修正: with quotedMessageId → revises the QUOTED draft (not latest-pending)", async () => {
+    const payload = {
+      type: "message",
+      message: { type: "text", text: "修正: もっと短く", quotedMessageId: "card-msg-id-1" },
+      source: { type: "user", userId: "U_admin_test" },
+    };
+
+    await handleLineEvent(payload, makeEnv());
+
+    // quoted message resolved
+    expect(mockLookupDraftByMessage).toHaveBeenCalledWith(expect.anything(), "card-msg-id-1");
+    // revise ran on the quoted draft body
+    expect(mockReviseDraftForX).toHaveBeenCalledTimes(1);
+    expect(mockReviseDraftForX.mock.calls[0][0]).toBe(QUOTED_DRAFT_ROW.body);
+    // re-sent approval references the quoted draft id
+    const messages = mockPushLineMessages.mock.calls[0][1] as Array<Record<string, unknown>>;
+    expect(JSON.stringify(messages[1].contents)).toContain(`approve:${QUOTED_DRAFT_ID}`);
+  });
+});
+
+// ============================================================
+// Test (i): 自由文意図判定 (Haiku) — button/prefix は LLM を呼ばない
+// ============================================================
+describe("handleLineEvent — free-text intent (Haiku)", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    _updateCallCount = 0;
+    __setFetchImpl(makeFakeFetch(TWEET_ID) as typeof fetch);
+    mockClassifyReplyIntent.mockResolvedValue({ intent: "none" });
+    mockLookupDraftByMessage.mockResolvedValue(null);
+    // no active interview session
+    mockInterviewSessionSingle.mockResolvedValue({ data: null, error: null });
+  });
+  afterEach(() => {
+    __setFetchImpl(null);
+  });
+
+  test("free text → classifyReplyIntent called once; intent=none → help reply, no publish", async () => {
+    mockClassifyReplyIntent.mockResolvedValue({ intent: "none" });
+    const payload = {
+      type: "message",
+      message: { type: "text", text: "うーん、どうしようかな" },
+      source: { type: "user", userId: "U_admin_test" },
+    };
+
+    await handleLineEvent(payload, makeEnv());
+
+    expect(mockClassifyReplyIntent).toHaveBeenCalledTimes(1);
+    expect(mockPushLine).toHaveBeenCalledTimes(1);
+    expect(mockPostedInsert).not.toHaveBeenCalled();
+  });
+
+  test("free text intent=approve → resolves latest-pending and publishes", async () => {
+    mockClassifyReplyIntent.mockResolvedValue({ intent: "approve" });
+    // resolveLatestPendingDraftId select chain → {id}
+    mockDraftMaybeSingle.mockResolvedValueOnce({ data: { id: DRAFT_ID }, error: null });
+    // then handleApprove loads the full draft row
+    mockDraftMaybeSingle.mockResolvedValueOnce({ data: fakeDraftRow, error: null });
+    mockDraftClaimSelect.mockResolvedValue({ data: [{ id: DRAFT_ID }], error: null });
+
+    const payload = {
+      type: "message",
+      message: { type: "text", text: "これで投稿して大丈夫" },
+      source: { type: "user", userId: "U_admin_test" },
+    };
+
+    await handleLineEvent(payload, makeEnv());
+
+    expect(mockClassifyReplyIntent).toHaveBeenCalledTimes(1);
+    expect(mockPostedInsert).toHaveBeenCalledTimes(1);
+  });
+
+  test("button postback approve → classifyReplyIntent NOT called (cheap path)", async () => {
+    mockDraftMaybeSingle.mockResolvedValue({ data: fakeDraftRow, error: null });
+    mockDraftClaimSelect.mockResolvedValue({ data: [{ id: DRAFT_ID }], error: null });
+
+    const payload = {
+      type: "postback",
+      postback: { data: `approve:${DRAFT_ID}` },
+      source: { type: "user", userId: "U_admin_test" },
+    };
+
+    await handleLineEvent(payload, makeEnv());
+
+    expect(mockClassifyReplyIntent).not.toHaveBeenCalled();
   });
 });
