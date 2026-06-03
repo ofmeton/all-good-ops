@@ -18,7 +18,10 @@
     }
   },
   "expected": {
-    "decision": "rejected",
-    "rejectReasons": ["R5_no_duplicate_14d"]
+    "decision": "approved",
+    "rejectReasons": [],
+    "warningsAtLeast": [
+      "R5_no_duplicate_14d"
+    ]
   }
 }

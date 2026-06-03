@@ -12,7 +12,10 @@
     "hasAffiliateLink": false
   },
   "expected": {
-    "decision": "rejected",
-    "rejectReasons": ["R2_first_hand_line"]
+    "decision": "approved",
+    "rejectReasons": [],
+    "warningsAtLeast": [
+      "R2_first_hand_line"
+    ]
   }
 }

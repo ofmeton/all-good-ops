@@ -19,7 +19,10 @@
     }
   },
   "expected": {
-    "decision": "rejected",
-    "rejectReasons": ["X1_hook_strength"]
+    "decision": "approved",
+    "rejectReasons": [],
+    "warningsAtLeast": [
+      "X1_hook_strength"
+    ]
   }
 }

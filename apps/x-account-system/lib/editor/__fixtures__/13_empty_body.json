@@ -12,8 +12,9 @@
     "hasAffiliateLink": false
   },
   "expected": {
-    "decision": "rejected",
-    "rejectReasonsAtLeast": [
+    "decision": "approved",
+    "rejectReasons": [],
+    "warningsAtLeast": [
       "R1_workflow_theme",
       "R2_first_hand_line",
       "X1_hook_strength",

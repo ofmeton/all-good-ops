@@ -12,7 +12,10 @@
     "hasAffiliateLink": false
   },
   "expected": {
-    "decision": "rejected",
-    "rejectReasons": ["R6_assertive_conclusion"]
+    "decision": "approved",
+    "rejectReasons": [],
+    "warningsAtLeast": [
+      "R6_assertive_conclusion"
+    ]
   }
 }

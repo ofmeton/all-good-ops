@@ -56,6 +56,11 @@ export type EditorInput = {
   fmat: EditorFormat;
   sourceMaterialIds: string[];
   hasAffiliateLink: boolean;
+  /**
+   * コンテンツ種別 (core_ideas.category 由来)。R2 実体験行は first_hand のみ必須。
+   * 未指定時は first_hand 扱い (後方互換: 従来どおり R2 を適用)。
+   */
+  contentType?: "paraphrase" | "first_hand" | "industry_sop";
   acquisitionRoute?: AcquisitionRoute;
   /**
    * v10.3 §4.6.4 高リスク承認モード判定に使う追加メタデータ。
@@ -83,6 +88,8 @@ export type EditorOutput = {
   draftId: string;
   decision: "approved" | "rejected";
   rejectReasons: RuleId[];
+  /** soft ルール(品質)の fail。却下せず、LINE 承認文に警告として付記する。 */
+  warnings: Array<{ rule: RuleId; reason: string }>;
   rules: EditorRuleResult[];
   riskLevel: EditorRiskLevel;
   riskReasons: string[];
