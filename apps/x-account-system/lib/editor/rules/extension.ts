@@ -14,6 +14,7 @@ import type {
   LlmJudgeResult,
   RuleStatus,
 } from "../types.ts";
+import type { FactualityJudgeResult } from "../factuality-judge.ts";
 import {
   HOOK_STRENGTH_THRESHOLD,
   VERIFIED_FAILURE_STORY_MONTHLY_CAP,
@@ -172,6 +173,27 @@ export function ruleX5DlpAndProperNoun(input: {
     rule: "X5_dlp_and_proper_noun",
     status: "pass",
     reason: "DLP highRiskHits=0 / proper noun pass",
+    durationMs: 0,
+  };
+}
+
+/**
+ * X6: 出典グラウンディング (事実チェック) — SOFT ルール。
+ *
+ * factuality judge の結果を載せ替える。
+ * - 出典に見当たらない具体主張 (数字/期間/価格/プロセス) があれば fail。
+ * - 出典が無ければ skip (judge が skip を返す)。
+ *
+ * NOTE: pipeline.ts の HARD set には入れない。fail でも却下せず warning にする。
+ */
+export function ruleX6SourceGrounding(
+  result: FactualityJudgeResult,
+): EditorRuleResult {
+  return {
+    rule: "X6_source_grounding",
+    status: result.status,
+    reason: result.reason,
+    evidence: { unsupportedClaims: result.unsupportedClaims },
     durationMs: 0,
   };
 }

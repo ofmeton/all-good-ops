@@ -206,6 +206,7 @@ export function buildEditorInput(
   idea: CoreIdea,
   body: string,
   dbDraftId: string,
+  sourceMaterialTexts?: string[],
 ): EditorInput {
   return {
     traceId: crypto.randomUUID(),
@@ -215,10 +216,46 @@ export function buildEditorInput(
     body,
     fmat: idea.fmat as EditorInput["fmat"],
     sourceMaterialIds: idea.sourceMaterialIds,
+    // X6 出典グラウンディング (事実チェック) 用の素材本文。空なら X6 は skip。
+    sourceMaterialTexts: sourceMaterialTexts ?? [],
     hasAffiliateLink: false,
     // R2(実体験行) を種別で出し分け: first_hand のみ必須、paraphrase/industry_sop は skip
     contentType: idea.contentType as EditorInput["contentType"],
   };
+}
+
+// ============================================================
+// fetchSourceMaterialTexts — materials_store から redacted_text/raw_text を取得
+// X6 出典グラウンディング (事実チェック) に渡す。
+// Supabase 未設定 / IDs 空 / エラー時は [] を返す (X6 は skip)。
+// ============================================================
+export async function fetchSourceMaterialTexts(
+  env: Env,
+  materialIds: string[],
+): Promise<string[]> {
+  if (!materialIds || materialIds.length === 0) return [];
+  const sb = getSupabase(env);
+  if (!sb) return [];
+  const { data, error } = await sb
+    .from("materials_store")
+    .select("redacted_text, raw_text")
+    .in("id", materialIds);
+  if (error) {
+    console.warn("[post-job] fetchSourceMaterialTexts error:", error.message);
+    return [];
+  }
+  const rows = Array.isArray(data) ? data : [];
+  return rows
+    .map((r) => {
+      const row = r as { redacted_text?: unknown; raw_text?: unknown };
+      // redaction 済みを優先。無ければ raw を使う。
+      const t =
+        (typeof row.redacted_text === "string" && row.redacted_text) ||
+        (typeof row.raw_text === "string" && row.raw_text) ||
+        "";
+      return t;
+    })
+    .filter((t) => typeof t === "string" && t.trim().length > 0);
 }
 
 // ============================================================
@@ -431,7 +468,9 @@ export async function runPostJob(slot: string, env: Env): Promise<void> {
 
   const dbDraftId = crypto.randomUUID();
 
-  const ein = buildEditorInput(idea, draft.body, dbDraftId);
+  // X6 出典グラウンディング (事実チェック) 用に素材本文を取得して editor に渡す。
+  const sourceTexts = await fetchSourceMaterialTexts(env, idea.sourceMaterialIds);
+  const ein = buildEditorInput(idea, draft.body, dbDraftId, sourceTexts);
 
   const out = await runEditor(ein);
 

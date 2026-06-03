@@ -19,6 +19,7 @@ const RULE_LABEL_JA: Record<RuleId, string> = {
   X3_failure_story_verified: "失敗談の検証が未済",
   X4_audience_line: "読者の明示がない",
   X5_dlp_and_proper_noun: "固有名詞/金額の注意",
+  X6_source_grounding: "出典にない主張あり(要確認)",
 };
 
 /**

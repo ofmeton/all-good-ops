@@ -145,10 +145,22 @@ describe("Editor pipeline (6+5 rules)", () => {
     },
   );
 
-  test("count: pipeline returns 11 rule results", async () => {
+  test("count: pipeline returns 12 rule results", async () => {
     const fx = fixtures.find((f) => f.name === "01_baseline_pass")!;
     const out = await runEditor(fx.input);
-    expect(out.rules).toHaveLength(11);
+    expect(out.rules).toHaveLength(12);
+  });
+
+  test("X6 source_grounding is SOFT: skip when no source texts (does not reject)", async () => {
+    const fx = fixtures.find((f) => f.name === "01_baseline_pass")!;
+    const out = await runEditor(fx.input);
+    const x6 = out.rules.find((r) => r.rule === "X6_source_grounding");
+    expect(x6).toBeDefined();
+    // 出典テキスト未指定 → skip
+    expect(x6!.status).toBe("skip");
+    // skip は却下にも warning にもならない
+    expect(out.rejectReasons).not.toContain("X6_source_grounding");
+    expect(out.warnings.map((w) => w.rule)).not.toContain("X6_source_grounding");
   });
 
   test("pipeline runs under 10 seconds (E-46 budget) for baseline", async () => {

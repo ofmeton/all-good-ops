@@ -51,6 +51,35 @@ export const OFMETON_PERSPECTIVE = `
 - 数字 / 失敗談 / 一次体験を最優先素材にする
 `.trim();
 
+/**
+ * X バズ文体ガイド (Japanese buzz-tweet patterns)。
+ * 参考アカウント (Shimayus / SuguruKun_ai / masahirochaen / ClaudeCode_love 等、
+ * raw/publishing/inspirations) のトーンを蒸留。コピーではなく型のみ採用。
+ */
+export const BUZZ_STYLE_GUIDE = `
+文体・フック (X はタイムライン上で先頭 1-2 行しか表示されない):
+- 1 行目で強いフックを置く。次のいずれかを使う:
+  - 数字 (「月3万円」「作業90%減」など具体値)
+  - 意外性・常識の逆 (「実は◯◯は不要だった」)
+  - 結論先出し (一番言いたい結論を冒頭に置く)
+  - 問いかけ (「◯◯で消耗してませんか?」)
+- 1 行目に固有名詞の羅列・前置き・あいさつを置かない。即・本題。
+- 続きを読みたくなる「余白」を作る (全部を1行目で言い切らない)。
+- 具体性を最優先 (抽象論より「何を・どれだけ・どうやって」)。
+- リズム = 短文 + 改行。1 文を短く、改行で区切ってテンポを出す。
+- 強調は記号でなく「言葉と改行」で行う (太字記号や見出し記号に頼らない)。
+- 煽りすぎ・誇張・嘘は NG。フックはあくまで事実ベースで強くする。
+- 読者は非エンジニアの経営者・実務者。専門用語は噛み砕く姿勢を崩さない。
+`.trim();
+
+/** プレーンテキスト要件 (X は Markdown 非対応) */
+export const PLAINTEXT_GUIDE = `
+プレーンテキスト要件:
+- X はプレーンテキスト。Markdown 記法 (\`*\`, \`**\`, \`#\` 見出し) は使わない。
+- 強調は記号でなく言葉と改行で表現する。
+- 箇条書きが必要なら「・」や数字 + 改行で書く (\`-\` や \`*\` のマークダウンリストは使わない)。
+`.trim();
+
 /** DLP + 業法 ガード (cs:p1-27fa) */
 export const SAFETY_GUARDRAILS = `
 安全要件:
@@ -73,6 +102,10 @@ export function buildWriterSystemPrompt(idea: CoreIdea): string {
     "",
     OFMETON_PERSPECTIVE,
     "",
+    BUZZ_STYLE_GUIDE,
+    "",
+    PLAINTEXT_GUIDE,
+    "",
     SAFETY_GUARDRAILS,
     "",
     `今回の topic: ${idea.topic}`,
@@ -84,6 +117,8 @@ export function buildWriterSystemPrompt(idea: CoreIdea): string {
     "",
     "出力要件:",
     "- 本文のみを出力 (説明文・前置きは付けない)",
+    "- 1 行目を最も強いフックにする (数字 / 意外性 / 結論先出し / 問いかけ)",
+    "- Markdown 記法 (*, **, # 見出し) は使わない。プレーンテキストで書く",
     "- 結論は断定形で締める",
     "- 業務の仕組み化 / 自動化 / SOP 化 に繋がる視点で書く",
     "- 読者像を 1 行で明示する (例: 経営者向け / 非エンジニアの方へ)",

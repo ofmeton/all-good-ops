@@ -32,6 +32,7 @@ import {
 } from "./db.ts";
 import { embedText, maxCosineSim } from "./embedding.ts";
 import { runLlmJudge } from "./llm-judge.ts";
+import { runFactualityJudge } from "./factuality-judge.ts";
 import {
   ruleR1Workflow,
   ruleR2FirstHand,
@@ -46,6 +47,7 @@ import {
   ruleX3FailureVerified,
   ruleX4AudienceLine,
   ruleX5DlpAndProperNoun,
+  ruleX6SourceGrounding,
 } from "./rules/extension.ts";
 import type {
   EditorInput,
@@ -112,14 +114,23 @@ export async function runEditor(input: EditorInput): Promise<EditorOutput> {
   );
 
   // ============================================================
-  // Stage 2: 1 LLM call (Sonnet 4.6 tool_use bundled)
+  // Stage 2: LLM calls (並列)
+  //   - bundled judge (Sonnet tool_use): R1/R3/R6/X2/X4/X5 補助
+  //   - factuality judge (cheap haiku tool_use): X6 出典グラウンディング (SOFT)
+  //     出典テキストが無い / fallback では LLM を呼ばず skip-pass する。
   // ============================================================
-  const judge = await runLlmJudge({
-    body,
-    hasAffiliateLink: input.hasAffiliateLink,
-    format: input.fmat,
-    platform: input.platform,
-  });
+  const [judge, factuality] = await Promise.all([
+    runLlmJudge({
+      body,
+      hasAffiliateLink: input.hasAffiliateLink,
+      format: input.fmat,
+      platform: input.platform,
+    }),
+    runFactualityJudge({
+      body,
+      sourceTexts: input.sourceMaterialTexts ?? [],
+    }),
+  ]);
 
   // ============================================================
   // Rule assembly
@@ -146,6 +157,7 @@ export async function runEditor(input: EditorInput): Promise<EditorOutput> {
       realPiiHighRisk,
       judge,
     }),
+    ruleX6SourceGrounding(factuality),
   ];
 
   // ============================================================
@@ -205,6 +217,6 @@ export async function runEditor(input: EditorInput): Promise<EditorOutput> {
     businessLawRiskFlag: businessLawResult.flag,
     businessLawKeywords: businessLawResult.keywords,
     totalDurationMs: Date.now() - totalStart,
-    llmCostUsd: judge.costUsd,
+    llmCostUsd: judge.costUsd + factuality.costUsd,
   };
 }

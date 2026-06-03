@@ -22,6 +22,7 @@ const ALL_RULE_IDS: RuleId[] = [
   "X3_failure_story_verified",
   "X4_audience_line",
   "X5_dlp_and_proper_noun",
+  "X6_source_grounding",
 ];
 
 describe("ruleLabelJa", () => {
@@ -41,6 +42,7 @@ describe("ruleLabelJa", () => {
     expect(ruleLabelJa("X1_hook_strength")).toBe("フック(書き出し)が弱い");
     expect(ruleLabelJa("X4_audience_line")).toBe("読者の明示がない");
     expect(ruleLabelJa("X5_dlp_and_proper_noun")).toBe("固有名詞/金額の注意");
+    expect(ruleLabelJa("X6_source_grounding")).toBe("出典にない主張あり(要確認)");
   });
 
   test("unknown id falls back to raw id", () => {

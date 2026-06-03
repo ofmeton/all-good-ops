@@ -17,6 +17,41 @@ import type { CoreIdea, DraftOutput, DraftRequest } from "./types.ts";
 import { buildWriterSystemPrompt, FORMAT_MAX_CHARS } from "./system-prompts.ts";
 
 /**
+ * X はプレーンテキスト。人間は `*` `#` を投稿に使わない。
+ * LLM が Markdown を混ぜてきた場合に備え、最終本文から Markdown 記法を除去する。
+ *
+ * 除去対象:
+ *   - `**bold**` → bold （太字記号を剥がす）
+ *   - `*italic*` → italic （斜体記号を剥がす）
+ *   - 行頭 `# ` `## ` `### ` 見出しマーカー → 見出しテキストのみ残す
+ *   - 取り残しの `**` / 行頭の裸の `#`（見出し化されていない `#`）
+ *
+ * 保持するもの:
+ *   - 日本語・絵文字・通常の句読点
+ *   - ハッシュタグ `#PR` `#広告` 等（語に直結する `#` は見出しではないので残す）
+ *   - 掛け算/箇条書き以外の通常の `*` を含む文字列は basic に剥がすが、句読点は壊さない
+ */
+export function stripMarkdownForX(text: string): string {
+  if (!text) return text;
+  let out = text;
+
+  // 1. 行頭の見出しマーカー `# ` `## ` `### ` ... を除去（テキストは残す）。
+  //    行頭の `#` の後に空白が続くものだけを見出しとみなす（`#PR` 等のタグは保護）。
+  out = out.replace(/^[ \t]*#{1,6}[ \t]+/gm, "");
+
+  // 2. `**bold**` → bold（最短一致、改行をまたがない）。
+  out = out.replace(/\*\*([^\n*]+?)\*\*/g, "$1");
+
+  // 3. `*italic*` → italic（最短一致、改行をまたがない、空でない中身）。
+  out = out.replace(/\*([^\n*]+?)\*/g, "$1");
+
+  // 4. 取り残しの `**` を除去。
+  out = out.replace(/\*\*/g, "");
+
+  return out;
+}
+
+/**
  * Phase 0.5 stub body 生成。
  * - 必ず R1 (仕組み化 / 自動化) / R2 (実体験 1 行) / X4 (audience 明示) を含む
  * - hedge 表現を末尾に置かない (R6 pass)
@@ -119,7 +154,7 @@ export async function draftForX(
   const { body, costUsd } = await callAnthropicWriter(idea, systemPrompt);
   return {
     draftId,
-    body,
+    body: stripMarkdownForX(body), // X はプレーンテキスト: Markdown 記法を最終本文から除去
     primaryHook: idea.primaryHook,
     estimatedScore: 0.7, // live でも初期値、後段の Editor / Analyst で更新
     llmCostUsd: costUsd,
@@ -188,7 +223,7 @@ export async function reviseDraftForX(
   const outputCost = (response.usage.output_tokens / 1_000_000) * 15;
   return {
     draftId,
-    body: text,
+    body: stripMarkdownForX(text), // X はプレーンテキスト: Markdown 記法を最終本文から除去
     primaryHook: idea.primaryHook,
     estimatedScore: 0.7,
     llmCostUsd: inputCost + outputCost,
