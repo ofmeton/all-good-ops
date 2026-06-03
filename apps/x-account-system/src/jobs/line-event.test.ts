@@ -217,6 +217,7 @@ describe("handleLineEvent — approve postback → publish", () => {
     const payload = {
       type: "postback",
       postback: { data: `approve:${DRAFT_ID}` },
+      source: { type: "user", userId: "U_admin_test" },
     };
 
     await handleLineEvent(payload, makeEnv());
@@ -235,6 +236,7 @@ describe("handleLineEvent — approve postback → publish", () => {
     const payload = {
       type: "postback",
       postback: { data: `approve:${DRAFT_ID}` },
+      source: { type: "user", userId: "U_admin_test" },
     };
 
     await handleLineEvent(payload, makeEnv());
@@ -250,6 +252,7 @@ describe("handleLineEvent — approve postback → publish", () => {
     const payload = {
       type: "postback",
       postback: { data: `approve:${DRAFT_ID}` },
+      source: { type: "user", userId: "U_admin_test" },
     };
 
     await handleLineEvent(payload, makeEnv());
@@ -265,6 +268,7 @@ describe("handleLineEvent — approve postback → publish", () => {
     const payload = {
       type: "postback",
       postback: { data: `approve:${DRAFT_ID}` },
+      source: { type: "user", userId: "U_admin_test" },
     };
 
     await handleLineEvent(payload, makeEnv());
@@ -309,6 +313,7 @@ describe("handleLineEvent — reject postback", () => {
     const payload = {
       type: "postback",
       postback: { data: `reject:${DRAFT_ID}` },
+      source: { type: "user", userId: "U_admin_test" },
     };
 
     await handleLineEvent(payload, makeEnv());
@@ -357,6 +362,7 @@ describe("handleLineEvent — idempotency (already published)", () => {
     const payload = {
       type: "postback",
       postback: { data: `approve:${DRAFT_ID}` },
+      source: { type: "user", userId: "U_admin_test" },
     };
 
     await handleLineEvent(payload, makeEnv());
@@ -396,5 +402,62 @@ describe("handleLineEvent — non-approve/reject events", () => {
 
     await expect(handleLineEvent(payload, makeEnv())).resolves.toBeUndefined();
     expect(mockDraftSelect).not.toHaveBeenCalled();
+  });
+});
+
+// ============================================================
+// Test (e): unauthorized sender — approve postback from non-admin → no-op
+// ============================================================
+describe("handleLineEvent — unauthorized sender is rejected (IDOR gate)", () => {
+  let fakeFetch: jest.Mock;
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+    fakeFetch = makeFakeFetch(TWEET_ID) as jest.Mock;
+    __setFetchImpl(fakeFetch as typeof fetch);
+
+    mockDraftMaybeSingle.mockResolvedValue({ data: fakeDraftRow, error: null });
+    mockDraftUpdateEq.mockResolvedValue({ error: null });
+    mockPostedInsert.mockResolvedValue({ error: null });
+    mockIdeaUpdateEq.mockResolvedValue({ error: null });
+  });
+
+  afterEach(() => {
+    __setFetchImpl(null);
+  });
+
+  test("approve postback from attacker userId → no-op: X not called, no DB writes, no LINE push", async () => {
+    const payload = {
+      type: "postback",
+      postback: { data: `approve:${DRAFT_ID}` },
+      source: { type: "user", userId: "U_attacker" },
+    };
+
+    await expect(handleLineEvent(payload, makeEnv())).resolves.toBeUndefined();
+
+    // X API must NOT be called
+    expect(fakeFetch).not.toHaveBeenCalled();
+    // posted_records must NOT be inserted
+    expect(mockPostedInsert).not.toHaveBeenCalled();
+    // post_drafts must NOT be updated
+    expect(mockDraftUpdate).not.toHaveBeenCalled();
+    // core_ideas must NOT be updated
+    expect(mockIdeaUpdate).not.toHaveBeenCalled();
+    // LINE push must NOT be sent
+    expect(mockPushLine).not.toHaveBeenCalled();
+  });
+
+  test("approve postback with missing source → no-op (no userId → rejected)", async () => {
+    const payload = {
+      type: "postback",
+      postback: { data: `approve:${DRAFT_ID}` },
+      // no source field at all
+    };
+
+    await expect(handleLineEvent(payload, makeEnv())).resolves.toBeUndefined();
+
+    expect(fakeFetch).not.toHaveBeenCalled();
+    expect(mockPostedInsert).not.toHaveBeenCalled();
+    expect(mockDraftUpdate).not.toHaveBeenCalled();
   });
 });

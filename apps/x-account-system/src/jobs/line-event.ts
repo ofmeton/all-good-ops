@@ -349,9 +349,28 @@ async function handleInterviewText(
 }
 
 // ============================================================
+// Authorization helper — extract sender userId from LINE event payload
+// ============================================================
+function eventSenderId(payload: unknown): string | null {
+  if (typeof payload !== "object" || payload === null) return null;
+  const src = (payload as Record<string, unknown>).source as Record<string, unknown> | undefined;
+  return typeof src?.userId === "string" ? src.userId : null;
+}
+
+// ============================================================
 // Main export
 // ============================================================
 export async function handleLineEvent(payload: unknown, env: Env): Promise<void> {
+  // Authorization: only the admin (operator) may drive any LINE action.
+  // The webhook signature proves the request came from LINE, but NOT who sent it —
+  // without this, any LINE user could send `approve:<id>` and trigger a public X post.
+  const adminId = lineUserId(env);
+  const senderId = eventSenderId(payload);
+  if (!adminId || senderId !== adminId) {
+    console.warn("[line-event] unauthorized sender ignored", { senderId });
+    return;
+  }
+
   const intent = parseApprovalIntent(payload);
 
   if (intent) {
