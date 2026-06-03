@@ -208,7 +208,10 @@ async function pushApproval(
   const to = env.LINE_USER_ID_OFMETON || process.env.LINE_USER_ID_OFMETON || "";
   const token = env.LINE_CHANNEL_ACCESS_TOKEN || process.env.LINE_CHANNEL_ACCESS_TOKEN || "";
 
-  const preview = body.slice(0, 100) + (body.length > 100 ? "…" : "");
+  // 承認判断には全文が必要なので投稿本文は全文を出す (LINE text 上限 5000 字。
+  // warnings/ID 等の余白を確保して 4500 字で防御的に cap)。
+  const MAX_BODY = 4500;
+  const fullBody = body.length > MAX_BODY ? body.slice(0, MAX_BODY) + "\n…(本文が長いため省略)" : body;
   const riskBadge = out.riskLevel === "high" ? "⚠️ HIGH RISK" : "✅ low risk";
   // soft ルールの警告を付記 (品質粗。人間が見て判断)
   const warnLines = (out.warnings ?? []).length
@@ -218,7 +221,7 @@ async function pushApproval(
   const message = [
     `📝 投稿承認依頼 [${riskBadge}]`,
     `---`,
-    preview,
+    fullBody,
     `---`,
     ...warnLines,
     `draft_id: ${dbDraftId}`,
