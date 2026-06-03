@@ -76,6 +76,17 @@ export async function runEditor(input: EditorInput): Promise<EditorOutput> {
   ]);
   const highRiskRemaining = containsHighRisk(redactResult.redactedText);
 
+  // money_jpy/money_usd は公開投稿のマーケ数値 (◯万円削減 等) であり PII ではないため、
+  // X5 の hard 却下対象から外す (soft 警告化)。それ以外の高リスク (email/phone/カード/住所/
+  // 顧客名シグナル/APIキー/長ID) は本物の PII として hard 維持。
+  const HARD_PII_CATEGORIES = new Set([
+    "email", "phone", "credit_card", "japanese_address",
+    "client_name_signal", "api_key_like", "long_alphanum_id",
+  ]);
+  const realPiiHighRisk =
+    highRiskRemaining ||
+    redactResult.findings.some((f) => HARD_PII_CATEGORIES.has(f.category));
+
   // ============================================================
   // Stage 1: 並列 I/O
   // ============================================================
@@ -132,6 +143,7 @@ export async function runEditor(input: EditorInput): Promise<EditorOutput> {
     ruleX5DlpAndProperNoun({
       redactNeedsConsent: redactResult.needsConsent,
       containsHighRisk: highRiskRemaining,
+      realPiiHighRisk,
       judge,
     }),
   ];
@@ -148,14 +160,13 @@ export async function runEditor(input: EditorInput): Promise<EditorOutput> {
     "X2_stealth_disclosure",
     "X3_failure_story_verified",
   ]);
-  // X5 は DLP(PII)=hard / 固有名詞=soft の複合ルール。DLP 起因の fail のみ hard。
+  // X5 は複合ルール: 本物の PII(email/phone/カード/住所/顧客名/APIキー/長ID)=hard、
+  // money_jpy/money_usd(マーケ数値) と 固有名詞 LLM=soft。realPiiHighRisk のみ hard 扱い。
   const isHardFail = (r: EditorRuleResult): boolean => {
     if (r.status !== "fail") return false;
     if (r.rule === "X5_dlp_and_proper_noun") {
-      const ev = r.evidence as
-        | { redactNeedsConsent?: boolean; containsHighRisk?: boolean }
-        | undefined;
-      return ev?.redactNeedsConsent === true || ev?.containsHighRisk === true;
+      const ev = r.evidence as { realPiiHighRisk?: boolean } | undefined;
+      return ev?.realPiiHighRisk === true;
     }
     return HARD_RULES.has(r.rule);
   };
