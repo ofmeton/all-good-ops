@@ -16,9 +16,10 @@
  *   npm run digest:cli                  当日 KPI を集計し送信
  *   npm run digest:cli -- --dry-run     強制 stdout 代替
  */
-import "dotenv/config";
-import { collectKpis, makeProductionDeps, toJstDateString } from "./kpi-collector.ts";
+import { collectKpis, makeProductionDeps } from "./kpi-collector.ts";
+export { toJstDateString } from "./kpi-collector.ts";
 import type { DigestPayload, KpiSnapshot } from "./types.ts";
+import { pushLine } from "../line/line-client.ts";
 
 const DEFAULT_TO = process.env.LINE_USER_ID_OFMETON ?? "<LINE_USER_ID_OFMETON unset>";
 
@@ -101,16 +102,7 @@ export async function sendToLine(payload: DigestPayload): Promise<{ status: "sen
     console.log(`[LINE DRY-RUN] to=${payload.to} message:\n${payload.text}\n`);
     return { status: "dry_run" };
   }
-  const axiosMod = await import("axios");
-  const axios = axiosMod.default ?? axiosMod;
-  await axios.post(
-    "https://api.line.me/v2/bot/message/push",
-    { to: payload.to, messages: [{ type: "text", text: payload.text }] },
-    {
-      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
-      timeout: 5000,
-    },
-  );
+  await pushLine(payload.to, payload.text, token);
   return { status: "sent" };
 }
 
@@ -130,36 +122,4 @@ export async function runDailyDigest(args: {
   return { payload, sendResult };
 }
 
-// ---------------------------------------------------------------------------
-// CLI (npm run digest:cli)
-// ---------------------------------------------------------------------------
-async function cli() {
-  const argv = process.argv.slice(2);
-  if (argv.includes("--dry-run")) {
-    process.env.LINE_DRY_RUN = "true";
-  }
-  const now = new Date();
-  const { payload, sendResult } = await runDailyDigest({ now });
-  console.log(
-    JSON.stringify(
-      {
-        date: toJstDateString(now),
-        send_status: sendResult.status,
-        meta: payload.meta,
-      },
-      null,
-      2,
-    ),
-  );
-}
-
-// CLI 実行判定 (ts-jest CommonJS 互換: require.main、tsx ESM: 別 entry を推奨)
-const isDirectRun =
-  typeof require !== "undefined" && typeof module !== "undefined" && require.main === module;
-
-if (isDirectRun) {
-  cli().catch((e) => {
-    console.error(e);
-    process.exit(1);
-  });
-}
+// CLI entry point は lib/dashboard/digest-cli.ts に分離

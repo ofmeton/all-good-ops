@@ -13,6 +13,7 @@
  *   denied / 曖昧 → INSERT せず session を internal_only で完了
  */
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { pushLine } from "../line/line-client.ts";
 import {
   parseConsent,
   pickPattern,
@@ -234,21 +235,8 @@ export async function sendLineMessage(
     console.log(`[LINE DRY-RUN] to=${to} message: ${text.slice(0, 200)}`);
     return { status: "dry_run" };
   }
-  // lazy import to keep test footprint small
-  const axiosMod = await import("axios");
-  const axios = axiosMod.default ?? axiosMod;
-  const res = await axios.post(
-    "https://api.line.me/v2/bot/message/push",
-    { to, messages: [{ type: "text", text }] },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      timeout: 5000,
-    },
-  );
-  return { status: "sent", reply: res.data };
+  await pushLine(to, text, token);
+  return { status: "sent" };
 }
 
 // ---------------------------------------------------------------------------
