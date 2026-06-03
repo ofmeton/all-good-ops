@@ -52,6 +52,8 @@ import {
   saveSession,
 } from "../../lib/interviewer/line-flow.js";
 import type { Answer } from "../../lib/interviewer/types.js";
+import { lookupDraftByMessage } from "../../lib/line/message-map.js";
+import { classifyReplyIntent } from "../../lib/feedback/intent-classifier.js";
 
 // ============================================================
 // Supabase client factory (same pattern as post-job.ts)
@@ -394,17 +396,26 @@ async function loadCoreIdeaForRevise(
 }
 
 // ============================================================
-// handleReviseFeedback — 修正: <text>
-// 直近の pending かつ未公開の post_drafts を書き直して再送する。
+// loadTargetDraftForRevise — 修正/自由文の対象 draft を解決する。
+//   targetDraftId 指定あり (引用リプライ) → その draft を引く。
+//   なければ 最新の pending かつ未公開の下書き (created_at desc)。
 // ============================================================
-async function handleReviseFeedback(instruction: string, env: Env): Promise<void> {
-  const sb = getSupabase(env);
-  if (!sb) {
-    console.error("[line-event] Supabase not configured");
-    return;
+async function loadTargetDraftForRevise(
+  sb: SupabaseClient,
+  targetDraftId: string | null,
+): Promise<{ row: ReviseDraftRow | null; error: string | null }> {
+  if (targetDraftId) {
+    const { data, error } = await sb
+      .from("post_drafts")
+      .select("id, core_idea_id, body, fmat, scheduled_date, slot")
+      .eq("id", targetDraftId)
+      .is("published_at", null)
+      .maybeSingle();
+    if (error) return { row: null, error: error.message };
+    if (data) return { row: data as ReviseDraftRow, error: null };
+    // 引用先が見つからない (公開済 or 不明) → latest-pending にフォールバック。
   }
 
-  // 1. 最新の pending かつ未公開の下書きを取得 (created_at desc)。
   const { data, error } = await sb
     .from("post_drafts")
     .select("id, core_idea_id, body, fmat, scheduled_date, slot")
@@ -413,10 +424,32 @@ async function handleReviseFeedback(instruction: string, env: Env): Promise<void
     .order("created_at", { ascending: false })
     .limit(1)
     .maybeSingle();
+  if (error) return { row: null, error: error.message };
+  return { row: (data as ReviseDraftRow) ?? null, error: null };
+}
+
+// ============================================================
+// handleReviseFeedback — 修正: <text>
+// 引用リプライ先 (targetDraftId) があればその draft、なければ
+// 直近の pending かつ未公開の post_drafts を書き直して再送する。
+// ============================================================
+async function handleReviseFeedback(
+  instruction: string,
+  env: Env,
+  targetDraftId: string | null = null,
+): Promise<void> {
+  const sb = getSupabase(env);
+  if (!sb) {
+    console.error("[line-event] Supabase not configured");
+    return;
+  }
+
+  // 1. 対象の下書きを解決 (引用先 → なければ latest-pending)。
+  const { row: data, error } = await loadTargetDraftForRevise(sb, targetDraftId);
 
   if (error) {
-    console.error("[line-event] revise select error:", error.message);
-    await notify(env, `⚠️ 修正処理エラー: DBエラー (${error.message})`);
+    console.error("[line-event] revise select error:", error);
+    await notify(env, `⚠️ 修正処理エラー: DBエラー (${error})`);
     return;
   }
   if (!data) {
@@ -424,7 +457,7 @@ async function handleReviseFeedback(instruction: string, env: Env): Promise<void
     return;
   }
 
-  const draft = data as ReviseDraftRow;
+  const draft = data;
   const idea = await loadCoreIdeaForRevise(sb, draft);
 
   // 2. 過去フィードバックを SOFT reference として注入し書き直す。
@@ -486,6 +519,134 @@ function parseTextMessage(payload: unknown): { lineUserId: string; text: string 
 
 function lineUserId_env(env: Env | undefined): string {
   return (env?.LINE_USER_ID_OFMETON) || process.env.LINE_USER_ID_OFMETON || "";
+}
+
+/**
+ * 引用リプライの quotedMessageId を取り出す。
+ * LINE message event では payload.message.quotedMessageId に引用元 message id が入る。
+ * 引用なしなら null。
+ */
+function parseQuotedMessageId(payload: unknown): string | null {
+  if (typeof payload !== "object" || payload === null) return null;
+  const ev = payload as Record<string, unknown>;
+  if (ev.type !== "message") return null;
+  const msg = ev.message as Record<string, unknown> | undefined;
+  const q = msg?.quotedMessageId;
+  return typeof q === "string" && q.length > 0 ? q : null;
+}
+
+/**
+ * 引用元 message id から対象 draft_id を解決する (なければ null)。
+ * 失敗しても throw しない (latest-pending fallback がある)。
+ */
+async function resolveQuotedDraftId(payload: unknown, env: Env): Promise<string | null> {
+  const quoted = parseQuotedMessageId(payload);
+  if (!quoted) return null;
+  try {
+    return await lookupDraftByMessage(env, quoted);
+  } catch (e) {
+    console.warn("[line-event] lookupDraftByMessage failed:", (e as Error).message);
+    return null;
+  }
+}
+
+/**
+ * 進行中の interview session があるか (free-text を interview に回すべきか) を判定する。
+ * finalized でない session が存在すれば interview-flow。
+ */
+async function hasActiveInterview(lineUserId: string): Promise<boolean> {
+  try {
+    const session = await loadSession(lineUserId);
+    return !!session && !session.finalized;
+  } catch (e) {
+    console.warn("[line-event] loadSession check failed:", (e as Error).message);
+    return false;
+  }
+}
+
+// ============================================================
+// handleFreeTextIntent — 自由文 (ボタンでも 修正:/覚えて: でもない) を
+// Haiku で意図判定して処理する。対象 draft は引用先 → なければ latest-pending。
+// ============================================================
+async function handleFreeTextIntent(
+  text: string,
+  env: Env,
+  targetDraftId: string | null,
+): Promise<void> {
+  const result = await classifyReplyIntent(text);
+
+  switch (result.intent) {
+    case "approve": {
+      const id = await resolveLatestPendingDraftId(env, targetDraftId);
+      if (!id) {
+        await notify(env, "承認対象の下書きが見つかりません");
+        return;
+      }
+      await handleApprove(id, env);
+      return;
+    }
+    case "reject": {
+      const id = await resolveLatestPendingDraftId(env, targetDraftId);
+      if (!id) {
+        await notify(env, "却下対象の下書きが見つかりません");
+        return;
+      }
+      await handleReject(id, env);
+      return;
+    }
+    case "revise": {
+      const instruction = result.instruction || text;
+      await handleReviseFeedback(instruction, env, targetDraftId);
+      return;
+    }
+    case "remember": {
+      await handleRememberFeedback(result.note || text, env);
+      return;
+    }
+    case "approve_and_remember": {
+      const id = await resolveLatestPendingDraftId(env, targetDraftId);
+      if (id) await handleApprove(id, env);
+      await addStyleFeedback(env, "remember", result.note || text, id ?? undefined);
+      await notify(env, "覚えました（今後の参考にします）");
+      return;
+    }
+    case "none":
+    default:
+      await notify(
+        env,
+        "判断できませんでした。「承認」「却下」「修正: <指示>」「覚えて: <指示>」のいずれかで指示してください。" +
+          "（カードに引用リプライすると対象を特定できます）",
+      );
+      return;
+  }
+}
+
+/**
+ * approve/reject の対象 draft_id を解決する。
+ * targetDraftId (引用先) があればそれを使い、なければ latest-pending を引く。
+ */
+async function resolveLatestPendingDraftId(
+  env: Env,
+  targetDraftId: string | null,
+): Promise<string | null> {
+  if (targetDraftId) return targetDraftId;
+  const sb = getSupabase(env);
+  if (!sb) return null;
+  const { data, error } = await sb
+    .from("post_drafts")
+    .select("id")
+    .eq("human_approval_status", "pending")
+    .is("published_at", null)
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  if (error) {
+    console.error("[line-event] resolveLatestPendingDraftId error:", error.message);
+    return null;
+  }
+  if (!data) return null;
+  const id = (data as { id?: unknown }).id;
+  return typeof id === "string" ? id : null;
 }
 
 async function handleInterviewText(
@@ -574,8 +735,8 @@ export async function handleLineEvent(payload: unknown, env: Env): Promise<void>
     return;
   }
 
+  // 1. approve:/reject: (postback + text) → 即処理 (LLM を呼ばない cheap path)。
   const intent = parseApprovalIntent(payload);
-
   if (intent) {
     if (intent.action === "approve") {
       await handleApprove(intent.draftId, env);
@@ -585,20 +746,30 @@ export async function handleLineEvent(payload: unknown, env: Env): Promise<void>
     return;
   }
 
-  // Typed Japanese feedback commands (覚えて: / 修正:) — interview fallback より前。
   const textMsg = parseTextMessage(payload);
-  if (textMsg) {
-    const fb = parseFeedbackCommand(textMsg.text);
-    if (fb) {
-      if (fb.kind === "remember") {
-        await handleRememberFeedback(fb.instruction, env);
-      } else {
-        await handleReviseFeedback(fb.instruction, env);
-      }
-      return;
-    }
+  if (!textMsg) return;
 
-    // W4-3: text message → interviewer flow
-    await handleInterviewText(textMsg.lineUserId, textMsg.text, env);
+  // 引用リプライ先 (あれば) から対象 draft_id を先に解決する。
+  const quotedDraftId = await resolveQuotedDraftId(payload, env);
+
+  // 2/3. 明示プレフィックス 覚えて: / 修正: → 即処理 (LLM を呼ばない cheap path)。
+  const fb = parseFeedbackCommand(textMsg.text);
+  if (fb) {
+    if (fb.kind === "remember") {
+      await handleRememberFeedback(fb.instruction, env);
+    } else {
+      // 修正: 引用先 draft → なければ latest-pending。
+      await handleReviseFeedback(fb.instruction, env, quotedDraftId);
+    }
+    return;
   }
+
+  // 4. interview-flow message → interview。
+  if (await hasActiveInterview(textMsg.lineUserId)) {
+    await handleInterviewText(textMsg.lineUserId, textMsg.text, env);
+    return;
+  }
+
+  // 5. else 自由文 → Haiku で意図判定して処理 (free-text のみ LLM)。
+  await handleFreeTextIntent(textMsg.text, env, quotedDraftId);
 }
