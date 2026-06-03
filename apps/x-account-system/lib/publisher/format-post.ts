@@ -159,9 +159,10 @@ function hardSplit(text: string, limit: number): string[] {
 export function segmentForPublish(body: string, fmat: PublishFormat): string[] {
   const raw = (body ?? "").replace(/\r\n/g, "\n");
 
-  let baseSegments: string[];
+  const out: string[] = [];
   if (fmat === "thread") {
-    // delimiter 単独行で分割 → 各セグメントからラベル除去
+    // thread のみ複数ツイートに分割する。
+    // delimiter 単独行で分割 → 各セグメントからラベル除去 → 各ツイートを weighted limit 以下に。
     const lines = raw.split("\n");
     const groups: string[][] = [[]];
     for (const line of lines) {
@@ -171,21 +172,19 @@ export function segmentForPublish(body: string, fmat: PublishFormat): string[] {
         groups[groups.length - 1].push(line);
       }
     }
-    baseSegments = groups
+    const baseSegments = groups
       .map((g) => stripLabels(g.join("\n")))
       .filter((s) => s.length > 0);
-  } else {
-    // 非 thread: ラベル除去した本文全体を 1 セグメントとして開始
-    const stripped = stripLabels(raw);
-    baseSegments = stripped.length > 0 ? [stripped] : [];
-  }
-
-  // 長さ安全: 各セグメントを weighted limit 以下に分割
-  const out: string[] = [];
-  for (const seg of baseSegments) {
-    for (const piece of splitToFit(seg, X_WEIGHTED_LIMIT)) {
-      out.push(piece);
+    for (const seg of baseSegments) {
+      for (const piece of splitToFit(seg, X_WEIGHTED_LIMIT)) {
+        out.push(piece);
+      }
     }
+  } else {
+    // 非 thread (short/medium/long/article): その形式で投稿する意図なので分割しない。
+    // ラベルだけ除去し本文を 1 投稿として返す (long は X Premium の長文単発投稿)。
+    const stripped = stripLabels(raw).trim();
+    if (stripped.length > 0) out.push(stripped);
   }
 
   // 空配列にならないよう保険 (全部ラベル/区切りだった等)。

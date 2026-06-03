@@ -89,24 +89,28 @@ describe("segmentForPublish — non-thread", () => {
     expect(segmentForPublish(body, "short")).toEqual([body]);
   });
 
-  test("280 weighted 超の long 非 thread は自動分割 (各 ≤280)", () => {
-    // 200 JP chars = 400 weighted。段落区切りで自動スレッド化される。
+  test("280 weighted 超の long 非 thread は分割せず 1 投稿のまま (長文形式の意図を尊重)", () => {
+    // long はその形式で投稿する意図 (X Premium 長文)。分割しない。
     const para1 = "あ".repeat(120) + "。"; // ~242 weighted
     const para2 = "い".repeat(120) + "。";
     const body = `${para1}\n\n${para2}`;
     const segs = segmentForPublish(body, "long");
-    expect(segs.length).toBeGreaterThan(1);
-    for (const seg of segs) {
-      expect(weightedLen(seg)).toBeLessThanOrEqual(X_WEIGHTED_LIMIT);
-    }
+    expect(segs).toHaveLength(1);
+    expect(segs[0]).toBe(body);
   });
 
-  test("文境界の無い超長文は hard-split で必ず ≤280", () => {
-    const body = "x".repeat(1000); // 1000 weighted, 区切りなし
+  test("medium も超長でも 1 投稿のまま (分割しない)", () => {
+    const body = "あ".repeat(400) + "。"; // ~802 weighted
+    const segs = segmentForPublish(body, "medium");
+    expect(segs).toHaveLength(1);
+  });
+
+  test("非 thread はラベルだけ除去し本文を 1 投稿で返す", () => {
+    const body = "スレッド1本目\n\n本文テキストです。";
     const segs = segmentForPublish(body, "long");
-    for (const seg of segs) {
-      expect(weightedLen(seg)).toBeLessThanOrEqual(X_WEIGHTED_LIMIT);
-    }
+    expect(segs).toHaveLength(1);
+    expect(segs[0]).not.toMatch(/スレッド\s*\d+\s*本目/);
+    expect(segs[0]).toContain("本文テキストです。");
   });
 });
 
