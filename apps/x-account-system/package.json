@@ -32,7 +32,8 @@
     "writer:ig:test": "IN_MEMORY_FALLBACK=true jest lib/writer/writer-ig.test.ts",
     "worker:typecheck": "tsc -p src/tsconfig.json --noEmit",
     "worker:dev": "wrangler dev",
-    "worker:deploy": "wrangler deploy"
+    "worker:deploy": "wrangler deploy",
+    "worker:bundle-check": "bash scripts/bundle-check.sh"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.36.0",

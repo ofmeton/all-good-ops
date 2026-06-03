@@ -66,6 +66,7 @@ BUDGET_BROWNOUT_THRESHOLD_JPY = "11500"
 # Phase 1 は人間承認必須。自律 live 投稿を恒久ブロックするフラグ。
 PHASE = "1"
 AUTONOMOUS_PUBLISH = "false"
+SUPABASE_SCHEMA = "xad"
 
 # 機密 (wrangler secret put で投入。ここには値を書かない):
 #   ANTHROPIC_API_KEY / OPENAI_API_KEY
