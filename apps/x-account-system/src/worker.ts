@@ -56,6 +56,7 @@ export type JobMessage =
     }
   | {
       job:
+        | "ideation"
         | "buzz-ingest"
         | "github-trending"
         | "daily-digest"
@@ -75,6 +76,7 @@ function jstDate(d: Date): string {
 // cron 式 → job 名。wrangler.toml の crons と 1:1 対応（文字列が MAP KEY = 必ず一意）。
 // 注: "0 * /2 * * *" (スペースなし: 0 */2 * * *) は複数時刻に発火するが式文字列として一意なのでキーとして安全。
 const CRON_JOBS: Record<string, JobMessage["job"]> = {
+  "0 20 * * *": "ideation",          // 05:00 JST (buzz-ingest より 1h 前)
   "0 22 * * *": "post-morning",      // 07:00 JST
   "0 3 * * *": "post-noon",          // 12:00 JST
   "0 10 * * *": "post-evening",      // 19:00 JST (note 送客)

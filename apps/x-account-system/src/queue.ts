@@ -12,9 +12,26 @@ import type { Env, JobMessage } from "./worker.js";
 import { runPostJob } from "./jobs/post-job.js";
 import { handleLineEvent } from "./jobs/line-event.js";
 import { runBuzzIngest } from "../lib/ingest/buzz-ingest.js";
+import { runIdeation } from "../lib/ideation/ideate.js";
 
 export async function handleJob(msg: JobMessage, env: Env): Promise<void> {
   switch (msg.job) {
+    // ----------------------------------------------------------------
+    // ideation: materials_store → core_ideas LLM 自動生成 (W5-2)
+    // ----------------------------------------------------------------
+    case "ideation": {
+      const count = await runIdeation(env);
+      console.log(
+        JSON.stringify({
+          level: "info",
+          msg: "[ideation] materials→core_ideas 生成 完了",
+          date: msg.date,
+          inserted: count,
+        }),
+      );
+      break;
+    }
+
     // ----------------------------------------------------------------
     // 投稿系 (X API 100/月上限 → Phase 1 は人間承認必須)
     // ----------------------------------------------------------------
