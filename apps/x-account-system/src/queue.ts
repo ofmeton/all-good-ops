@@ -21,6 +21,7 @@ import { runBuzzIngest } from "../lib/ingest/buzz-ingest.js";
 import { runInspirationsIngest } from "../lib/ingest/inspirations-ingest.js";
 import { runIdeation } from "../lib/ideation/ideate.js";
 import { runRollbackMonitor } from "./jobs/rollback-job.js";
+import { runRotationNotice } from "./jobs/rotation-job.js";
 import { evaluateBrownout } from "../lib/safety/brownout-handler.js";
 import { makeProductionDeps } from "../lib/dashboard/kpi-collector.js";
 
@@ -169,14 +170,14 @@ export async function handleJob(msg: JobMessage, env: Env): Promise<void> {
     }
 
     // ----------------------------------------------------------------
-    // rotation-notice: X/Meta token rotation 通知
+    // rotation-notice: X token 期限チェック + 自動 refresh + LINE 通知 (W5-9)
     // ----------------------------------------------------------------
     case "rotation-notice": {
-      // W4: X/Meta token refresh 期日を LINE 通知 (§10.6)
+      await runRotationNotice(env);
       console.log(
         JSON.stringify({
           level: "info",
-          msg: "[rotation-notice] token rotation 通知 (stub)",
+          msg: "[rotation-notice] token rotation チェック完了",
           date: msg.date,
         }),
       );
