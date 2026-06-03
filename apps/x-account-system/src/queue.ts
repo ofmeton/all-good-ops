@@ -14,6 +14,7 @@ import { handleLineEvent } from "./jobs/line-event.js";
 import { runBuzzIngest } from "../lib/ingest/buzz-ingest.js";
 import { runInspirationsIngest } from "../lib/ingest/inspirations-ingest.js";
 import { runIdeation } from "../lib/ideation/ideate.js";
+import { runRollbackMonitor } from "./jobs/rollback-job.js";
 
 export async function handleJob(msg: JobMessage, env: Env): Promise<void> {
   switch (msg.job) {
@@ -117,14 +118,14 @@ export async function handleJob(msg: JobMessage, env: Env): Promise<void> {
     }
 
     // ----------------------------------------------------------------
-    // rollback-monitor: 異常検知・自動ロールバック監視
+    // rollback-monitor: 異常検知・自動ロールバック監視 (W5-6)
     // ----------------------------------------------------------------
     case "rollback-monitor": {
-      // W4: エラー率・KPI 閾値チェック → fallback trigger
+      await runRollbackMonitor(env);
       console.log(
         JSON.stringify({
           level: "info",
-          msg: "[rollback-monitor] 異常検知チェック (stub)",
+          msg: "[rollback-monitor] 異常検知チェック 完了",
           date: msg.date,
         }),
       );

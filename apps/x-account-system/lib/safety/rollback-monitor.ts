@@ -4,10 +4,10 @@
  * SSoT: main-design-all-versions.md §2.12 監視ガード装置 / launch-roadmap.md §5
  *
  * 7 日窓で PCR -30% / インプレッション -50% を検出したら Optimizer posterior を
- * 1 段戻す (rollback)。
+ * 直近確認済み snapshot (lastSnapshotId) に戻す (rollback)。
  *
- * Phase 0.5 では PR-C (Optimizer) が未着手なので、検出 + alert 生成までを実装し、
- * 実 rollback hook は stub (no-op) で返す。PR-C 完了後に hook を差し替える。
+ * このファイルは純粋判定 (evaluateRollback) のみを持つ。
+ * 実 rollback・LINE 通知・DB 記録は src/jobs/rollback-job.ts が担う。
  */
 
 export interface RollbackInput {
@@ -87,18 +87,9 @@ export function evaluateRollback(input: RollbackInput): RollbackDecision {
   return {
     triggered,
     reasons,
-    rollback_steps: triggered ? requestRollbackStep() : 0,
+    // rollback_steps は純粋判定の外側 (rollback-job.ts) が担うため常に 0
+    rollback_steps: 0,
     pcr_drop_pct: pcr_drop !== undefined ? Math.round(pcr_drop * 1000) / 10 : undefined,
     impressions_drop_pct: imp_drop !== undefined ? Math.round(imp_drop * 1000) / 10 : undefined,
   };
-}
-
-/**
- * Optimizer posterior を 1 段戻す stub.
- * Phase 0.5 では何もせず 0 を返す。
- * Phase 1+ で PR-C optimizer_state テーブルから前回 snapshot を読み出して書き戻す実装。
- */
-function requestRollbackStep(): number {
-  // TODO PR-C 完了後に hook を差し替え
-  return 0;
 }
