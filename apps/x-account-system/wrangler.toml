@@ -50,7 +50,6 @@ dead_letter_queue = "xad-jobs-dlq"
 # | 07:00     | 22:00 (前日) | post-morning (失敗談先行型, URLなし)         |
 # | 12:00     | 03:00        | post-noon (ROI Before-After)                |
 # | 19:00     | 10:00        | post-evening (note 送客, URL末尾)            |
-# | 07:30     | 22:30        | github-trending (30分オフセットで重複回避)   |
 # | 21:00     | 12:00        | daily-digest (LINE 配信)                    |
 # | 23:00     | 14:00        | optimizer-update (posterior 更新)           |
 # | 毎2h      | */2          | rollback-monitor (異常検知)                 |
@@ -63,7 +62,6 @@ crons = [
   "0 3 * * *",     # 12:00 JST post-noon
   "0 10 * * *",    # 19:00 JST post-evening (note 送客)
   "0 21 * * *",    # 06:00 JST buzz-ingest
-  "30 22 * * *",   # 07:30 JST github-trending (分オフセットで post-morning と重複回避)
   "0 12 * * *",    # 21:00 JST daily-digest
   "0 14 * * *",    # 23:00 JST optimizer-update
   "0 */2 * * *",   # rollback-monitor 毎2h

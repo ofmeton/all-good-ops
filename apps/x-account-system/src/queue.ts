@@ -62,21 +62,6 @@ export async function handleJob(msg: JobMessage, env: Env): Promise<void> {
     }
 
     // ----------------------------------------------------------------
-    // github-trending: GitHub トレンド取得
-    // ----------------------------------------------------------------
-    case "github-trending": {
-      // W4: GitHub Trending → inspirations ネタ補充
-      console.log(
-        JSON.stringify({
-          level: "info",
-          msg: "[github-trending] GitHub Trending 取得 (stub)",
-          date: msg.date,
-        }),
-      );
-      break;
-    }
-
-    // ----------------------------------------------------------------
     // inspirations-ingest: 週次 inspirations 取得 (W5-3)
     // ----------------------------------------------------------------
     case "inspirations-ingest": {

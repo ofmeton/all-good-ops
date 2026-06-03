@@ -58,7 +58,6 @@ export type JobMessage =
       job:
         | "ideation"
         | "buzz-ingest"
-        | "github-trending"
         | "daily-digest"
         | "optimizer-update"
         | "rollback-monitor"
@@ -81,7 +80,6 @@ const CRON_JOBS: Record<string, JobMessage["job"]> = {
   "0 3 * * *": "post-noon",          // 12:00 JST
   "0 10 * * *": "post-evening",      // 19:00 JST (note 送客)
   "0 21 * * *": "buzz-ingest",       // 06:00 JST
-  "30 22 * * *": "github-trending",  // 07:30 JST (post-morning と分オフセット差)
   "0 12 * * *": "daily-digest",      // 21:00 JST
   "0 14 * * *": "optimizer-update",  // 23:00 JST
   "0 */2 * * *": "rollback-monitor", // 毎2h
