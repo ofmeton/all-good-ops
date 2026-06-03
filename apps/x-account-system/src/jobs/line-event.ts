@@ -35,6 +35,7 @@ import {
 } from "../../lib/feedback/style-feedback.js";
 import {
   buildEditorInput,
+  fetchSourceMaterialTexts,
   persistDraft,
   pushApproval,
   toCoreIdea,
@@ -465,7 +466,9 @@ async function handleReviseFeedback(
   const revised = await reviseDraftForX(draft.body, instruction, idea, refFb);
 
   // 3. 同じ dbDraftId / 行で editor を再実行。
-  const ein = buildEditorInput(idea, revised.body, draft.id);
+  //    X6 出典グラウンディング (事実チェック) 用に素材本文を取得して渡す。
+  const sourceTexts = await fetchSourceMaterialTexts(env, idea.sourceMaterialIds);
+  const ein = buildEditorInput(idea, revised.body, draft.id, sourceTexts);
   const out = await runEditor(ein);
 
   // 4. 同じ post_drafts 行を upsert (id / scheduled_date / slot を維持)。

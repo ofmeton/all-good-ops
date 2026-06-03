@@ -27,6 +27,10 @@ const mockSelectLimit = jest.fn(() => ({ maybeSingle: mockSingleRow }));
 const mockSelectEq = jest.fn(() => ({ limit: mockSelectLimit }));
 const mockSelectSelectChain = jest.fn(() => ({ eq: mockSelectEq }));
 
+// materials_store mock (X6 source grounding text fetch): .select(...).in(...)
+const mockMaterialsIn = jest.fn().mockResolvedValue({ data: [], error: null });
+const mockMaterialsSelect = jest.fn(() => ({ in: mockMaterialsIn }));
+
 jest.mock("@supabase/supabase-js", () => ({
   createClient: jest.fn(() => ({
     from: (table: string) => {
@@ -35,6 +39,7 @@ jest.mock("@supabase/supabase-js", () => ({
         select: jest.fn(() => ({ eq: mockSelectEq })),
         update: mockUpdate,
       };
+      if (table === "materials_store") return { select: mockMaterialsSelect };
       return {};
     },
   })),

@@ -35,7 +35,8 @@ export type RuleId =
   | "X2_stealth_disclosure"
   | "X3_failure_story_verified"
   | "X4_audience_line"
-  | "X5_dlp_and_proper_noun";
+  | "X5_dlp_and_proper_noun"
+  | "X6_source_grounding";
 
 export type EditorFormat =
   | "short"
@@ -55,6 +56,12 @@ export type EditorInput = {
   body: string;
   fmat: EditorFormat;
   sourceMaterialIds: string[];
+  /**
+   * X6 出典グラウンディング (事実チェック) 用の素材本文。
+   * sourceMaterialIds に対応する materials_store の redacted_text/raw_text。
+   * 空/未指定なら X6 は skip (pass-through)。
+   */
+  sourceMaterialTexts?: string[];
   hasAffiliateLink: boolean;
   /**
    * コンテンツ種別 (core_ideas.category 由来)。R2 実体験行は first_hand のみ必須。
