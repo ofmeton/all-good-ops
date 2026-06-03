@@ -89,12 +89,13 @@ export async function getXAccessToken(): Promise<OAuthTokenState | null> {
     if (!error && data) {
       const row = data as OAuthTokenRow;
       const expiresAt = row.expires_at ? Date.parse(row.expires_at) : undefined;
-      return {
+      const state: OAuthTokenState = {
         accessToken: row.access_token,
         refreshToken: row.refresh_token ?? undefined,
         expiresAt: Number.isFinite(expiresAt) ? expiresAt : undefined,
         scope: row.scope ?? undefined,
       };
+      return await ensureFreshToken(state);
     }
     // DB error or no row → fall through to env
   }
@@ -104,12 +105,29 @@ export async function getXAccessToken(): Promise<OAuthTokenState | null> {
   if (!accessToken || accessToken.trim() === "") return null;
   const expiresRaw = process.env.X_TOKEN_EXPIRES_AT;
   const expiresAt = expiresRaw ? Number(expiresRaw) : undefined;
-  return {
+  const state: OAuthTokenState = {
     accessToken,
     refreshToken: process.env.X_REFRESH_TOKEN || undefined,
     expiresAt: Number.isFinite(expiresAt) ? expiresAt : undefined,
     scope: process.env.X_OAUTH_SCOPES,
   };
+  return await ensureFreshToken(state);
+}
+
+/**
+ * Proactive refresh guard: if `state` is (about to be) expired AND a refresh_token
+ * is available, refresh + persist (rotated refresh_token included) the new token
+ * and return it. Otherwise return the original state unchanged.
+ *
+ * - No refresh_token → return as-is (publish path handles failure / dry-run).
+ * - Not expired → return as-is.
+ * - Refresh failure → propagate (refreshAccessToken triggers kill-switch on its
+ *   own failure path; we surface the error so the publish path can fail closed).
+ */
+async function ensureFreshToken(state: OAuthTokenState): Promise<OAuthTokenState> {
+  if (!isTokenExpired(state)) return state;
+  if (!state.refreshToken) return state; // can't refresh → let publish path decide
+  return await refreshAccessToken(state);
 }
 
 // ---------------------------------------------------------------------------

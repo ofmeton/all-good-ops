@@ -14,8 +14,18 @@ import {
   __setBrownoutOverride,
   __setFetchImpl,
 } from "./x-publisher.ts";
-import { __setTokenOverride } from "./token-store.ts";
+import {
+  __setTokenOverride,
+  __setRefreshImpl,
+  __setSupabaseUpsertImpl,
+  __setSupabaseAuthBlockedImpl,
+} from "./token-store.ts";
+import {
+  __resetKillSwitchInMemory,
+  getKillSwitchState,
+} from "../safety/kill-switch.ts";
 import type { PublishRequest, PublishResult } from "./types.ts";
+import type { OAuthTokenState } from "./types.ts";
 
 const FIXTURES_DIR = path.join(__dirname, "__fixtures__");
 
@@ -215,5 +225,125 @@ describe("Publisher X (8 fixtures)", () => {
       },
     });
     expect(result.status).toBe("dry_run");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Reactive 401 recovery: refresh + retry once
+// ---------------------------------------------------------------------------
+function buildStatusSequenceFetch(statuses: number[]): {
+  fetch: typeof fetch;
+  attempts: () => number;
+} {
+  let callCount = 0;
+  const fetchImpl = (async () => {
+    const status = statuses[callCount] ?? statuses[statuses.length - 1];
+    callCount++;
+    if (status >= 200 && status < 300) {
+      return mockResponse(status, { data: { id: "tweet-after-refresh", text: "ok" } });
+    }
+    return mockResponse(status, { errors: [{ message: `http ${status}` }] });
+  }) as typeof fetch;
+  return { fetch: fetchImpl, attempts: () => callCount };
+}
+
+const approvedEditorOutput = {
+  decision: "approved" as const,
+  rejectReasons: [],
+  rules: [],
+  riskLevel: "low" as const,
+  riskReasons: [],
+  businessLawRiskFlag: false,
+  businessLawKeywords: [],
+  totalDurationMs: 100,
+  llmCostUsd: 0,
+};
+
+describe("Publisher X — reactive 401 token refresh", () => {
+  beforeEach(() => {
+    __setKillSwitchOverride(null);
+    __setBrownoutOverride(null);
+    __setTokenOverride(null);
+    __setFetchImpl(null);
+    __setRefreshImpl(null);
+    __setSupabaseUpsertImpl(null);
+    __setSupabaseAuthBlockedImpl(null);
+    __resetKillSwitchInMemory();
+    delete process.env.X_ACCESS_TOKEN;
+  });
+
+  afterAll(() => {
+    __setTokenOverride(null);
+    __setFetchImpl(null);
+    __setRefreshImpl(null);
+    __setSupabaseUpsertImpl(null);
+    __setSupabaseAuthBlockedImpl(null);
+  });
+
+  test("first post 401 → refresh → retry → 200 success (2 post attempts + refresh between)", async () => {
+    __setTokenOverride({ accessToken: "stale", refreshToken: "valid-refresh" });
+
+    const newToken: OAuthTokenState = {
+      accessToken: "fresh",
+      refreshToken: "rotated-refresh",
+      expiresAt: Date.now() + 7200_000,
+    };
+    const mockRefresh = jest.fn().mockResolvedValue(newToken);
+    __setRefreshImpl(mockRefresh as typeof import("../oauth/token-exchange.ts").refreshToken);
+    const upserted: OAuthTokenState[] = [];
+    __setSupabaseUpsertImpl(async (t) => { upserted.push(t); });
+
+    const seq = buildStatusSequenceFetch([401, 200]);
+    __setFetchImpl(seq.fetch);
+
+    const result = await publishToX({
+      draftId: "reactive-401",
+      body: "通常本文",
+      fmat: "short",
+      dryRun: false,
+      noBackoff: true,
+      editorOutput: { draftId: "reactive-401", ...approvedEditorOutput },
+    });
+
+    expect(result.status).toBe("published");
+    expect(result.tweetId).toBe("tweet-after-refresh");
+    // exactly 2 post attempts (401 then 200), one refresh between
+    expect(seq.attempts()).toBe(2);
+    expect(mockRefresh).toHaveBeenCalledTimes(1);
+    // rotated refresh_token persisted
+    expect(upserted).toHaveLength(1);
+    expect(upserted[0].refreshToken).toBe("rotated-refresh");
+  });
+
+  test("401 → refresh fails → failed + kill-switch (no infinite retry)", async () => {
+    __setTokenOverride({ accessToken: "stale", refreshToken: "expired-refresh" });
+
+    const mockRefresh = jest
+      .fn()
+      .mockRejectedValue(new Error("X token endpoint error 401: refresh token expired"));
+    __setRefreshImpl(mockRefresh as typeof import("../oauth/token-exchange.ts").refreshToken);
+    __setSupabaseAuthBlockedImpl(async () => {});
+
+    const seq = buildStatusSequenceFetch([401, 401]);
+    __setFetchImpl(seq.fetch);
+
+    const result = await publishToX({
+      draftId: "reactive-401-fail",
+      body: "通常本文",
+      fmat: "short",
+      dryRun: false,
+      noBackoff: true,
+      editorOutput: { draftId: "reactive-401-fail", ...approvedEditorOutput },
+    });
+
+    expect(result.status).toBe("failed");
+    // only the FIRST post attempt happened; no retry after refresh failure (no loop)
+    expect(seq.attempts()).toBe(1);
+    expect(mockRefresh).toHaveBeenCalledTimes(1);
+
+    // kill-switch triggered by refreshAccessToken failure path
+    const ks = await getKillSwitchState();
+    expect(ks.publishing_enabled).toBe(false);
+    expect(ks.triggered_by).toBe("oauth_blocked");
   });
 });

@@ -59,6 +59,67 @@ describe("getXAccessToken", () => {
     const result = await getXAccessToken();
     expect(result).toBe(override);
   });
+
+  it("proactively refreshes an expired env token with a refresh_token + persists rotated token", async () => {
+    // expired access token + valid refresh token in env
+    process.env.X_ACCESS_TOKEN = "stale-access";
+    process.env.X_REFRESH_TOKEN = "valid-refresh";
+    process.env.X_TOKEN_EXPIRES_AT = "100"; // long expired
+
+    const newToken: OAuthTokenState = {
+      accessToken: "fresh-access",
+      refreshToken: "rotated-refresh", // X rotates the refresh_token
+      expiresAt: Date.now() + 7200_000,
+    };
+    const mockRefresh = jest.fn().mockResolvedValue(newToken);
+    __setRefreshImpl(mockRefresh as typeof import("../oauth/token-exchange.ts").refreshToken);
+
+    const upserted: OAuthTokenState[] = [];
+    __setSupabaseUpsertImpl(async (token) => { upserted.push(token); });
+
+    const result = await getXAccessToken();
+
+    // refresh used the CURRENT refresh token
+    expect(mockRefresh).toHaveBeenCalledWith(
+      "valid-refresh",
+      expect.objectContaining({ X_CLIENT_ID: expect.any(String) }),
+      undefined,
+    );
+    // fresh token returned
+    expect(result).not.toBeNull();
+    expect(result!.accessToken).toBe("fresh-access");
+    // rotated refresh_token persisted to oauth_tokens (never reuse old one)
+    expect(upserted).toHaveLength(1);
+    expect(upserted[0].accessToken).toBe("fresh-access");
+    expect(upserted[0].refreshToken).toBe("rotated-refresh");
+  });
+
+  it("does NOT refresh an expired token when no refresh_token is available", async () => {
+    process.env.X_ACCESS_TOKEN = "stale-access";
+    process.env.X_TOKEN_EXPIRES_AT = "100"; // expired, no refresh token
+
+    const mockRefresh = jest.fn();
+    __setRefreshImpl(mockRefresh as typeof import("../oauth/token-exchange.ts").refreshToken);
+
+    const result = await getXAccessToken();
+
+    expect(mockRefresh).not.toHaveBeenCalled();
+    expect(result!.accessToken).toBe("stale-access");
+  });
+
+  it("does NOT refresh a still-valid token", async () => {
+    process.env.X_ACCESS_TOKEN = "good-access";
+    process.env.X_REFRESH_TOKEN = "valid-refresh";
+    process.env.X_TOKEN_EXPIRES_AT = String(Date.now() + 7200_000);
+
+    const mockRefresh = jest.fn();
+    __setRefreshImpl(mockRefresh as typeof import("../oauth/token-exchange.ts").refreshToken);
+
+    const result = await getXAccessToken();
+
+    expect(mockRefresh).not.toHaveBeenCalled();
+    expect(result!.accessToken).toBe("good-access");
+  });
 });
 
 // ---------------------------------------------------------------------------
