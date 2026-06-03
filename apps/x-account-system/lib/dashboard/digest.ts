@@ -20,6 +20,12 @@ import { collectKpis, makeProductionDeps } from "./kpi-collector.ts";
 export { toJstDateString } from "./kpi-collector.ts";
 import type { DigestPayload, KpiSnapshot } from "./types.ts";
 import { pushLine } from "../line/line-client.ts";
+import {
+  buildCostReport,
+  formatCostReportJa,
+  type CostReport,
+  type CostReportEnv,
+} from "./cost-report.ts";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
 let _supabase: SupabaseClient | null = null;
@@ -41,11 +47,34 @@ function getDigestSupabase(): SupabaseClient | null {
 
 const DEFAULT_TO = process.env.LINE_USER_ID_OFMETON ?? "<LINE_USER_ID_OFMETON unset>";
 
+/** IN_MEMORY_FALLBACK / LINE_DRY_RUN のとき live fetch を skip する判定. */
+function isFallbackOrDryRun(): boolean {
+  return (
+    process.env.IN_MEMORY_FALLBACK === "true" ||
+    process.env.LINE_DRY_RUN === "true"
+  );
+}
+
+/** buildCostReport が必要とする env subset を process.env から取り出す. */
+function costReportEnvFromProcess(): CostReportEnv {
+  return {
+    LINE_CHANNEL_ACCESS_TOKEN: process.env.LINE_CHANNEL_ACCESS_TOKEN,
+    ANTHROPIC_ADMIN_KEY: process.env.ANTHROPIC_ADMIN_KEY,
+    SUPABASE_URL: process.env.SUPABASE_URL,
+    SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
+    SUPABASE_SCHEMA: process.env.SUPABASE_SCHEMA,
+  };
+}
+
 /**
  * KpiSnapshot を LINE 送信用 markdown 風 text にフォーマット。
  * SSoT §A-4 「PCR / impressions / 当日 / 7日 / alert / next-action」レイアウト
  */
-export function formatDigest(kpi: KpiSnapshot, to: string = DEFAULT_TO): DigestPayload {
+export function formatDigest(
+  kpi: KpiSnapshot,
+  to: string = DEFAULT_TO,
+  costReport?: CostReport | null,
+): DigestPayload {
   const lines: string[] = [];
   lines.push(`📊 はぐりん Daily Digest ${kpi.date}`);
   lines.push("");
@@ -71,6 +100,11 @@ export function formatDigest(kpi: KpiSnapshot, to: string = DEFAULT_TO): DigestP
       const icon = a.severity === "critical" ? "🔴" : a.severity === "warn" ? "🟡" : "ℹ️";
       lines.push(`  ${icon} [${a.rule_id}] ${a.message}`);
     }
+  }
+
+  if (costReport) {
+    lines.push("");
+    lines.push(formatCostReportJa(costReport));
   }
 
   lines.push("");
@@ -131,11 +165,32 @@ export async function runDailyDigest(args: {
   now?: Date;
   deps?: Parameters<typeof collectKpis>[0]["deps"];
   to?: string;
+  /** テスト用: cost report を明示注入 (省略時は process.env から live fetch). */
+  costReport?: CostReport | null;
 }): Promise<{ payload: DigestPayload; sendResult: Awaited<ReturnType<typeof sendToLine>> }> {
   const now = args.now ?? new Date();
   const deps = args.deps ?? makeProductionDeps();
   const kpi = await collectKpis({ now, deps });
-  const payload = formatDigest(kpi, args.to ?? DEFAULT_TO);
+
+  // 実数コストセクション。
+  //  - 明示注入された costReport (null 含む) はそのまま尊重 (テスト)。
+  //  - 未指定かつ IN_MEMORY_FALLBACK / dry-run のときは live fetch を skip し null
+  //    (既存 fallback テストの決定性を保つ)。
+  //  - 未指定かつ production のときは process.env から live fetch (各社 fail-safe)。
+  let costReport: CostReport | null;
+  if ("costReport" in args) {
+    costReport = args.costReport ?? null;
+  } else if (isFallbackOrDryRun()) {
+    costReport = null;
+  } else {
+    try {
+      costReport = await buildCostReport(costReportEnvFromProcess(), now);
+    } catch {
+      costReport = null;
+    }
+  }
+
+  const payload = formatDigest(kpi, args.to ?? DEFAULT_TO, costReport);
   const sendResult = await sendToLine(payload);
 
   // Persist to daily_digest_log after successful send (skip in dry-run / IN_MEMORY_FALLBACK)

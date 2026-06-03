@@ -27,17 +27,41 @@ const mockMaybeSingle = jest.fn().mockResolvedValue({ data: { publishing_enabled
 const mockEq = jest.fn(() => ({ maybeSingle: mockMaybeSingle }));
 const mockSafetySelect = jest.fn(() => ({ eq: mockEq }));
 
+// cost_ledger (cost-report) mock chain: .select().eq('month') → resolves rows
+const mockLedgerEq = jest.fn().mockResolvedValue({ data: [], error: null });
+const mockLedgerSelect = jest.fn(() => ({ eq: mockLedgerEq }));
+
+// posted_records (cost-report) mock chain: .select(...,{count,head}).eq().gte().lt()
+const mockPostedLt = jest.fn().mockResolvedValue({ count: 0, error: null });
+const mockPostedGte = jest.fn(() => ({ lt: mockPostedLt }));
+const mockPostedEq = jest.fn(() => ({ gte: mockPostedGte }));
+const mockPostedSelect = jest.fn(() => ({ eq: mockPostedEq }));
+
 jest.mock("@supabase/supabase-js", () => ({
   createClient: jest.fn(() => ({
     from: (table: string) => {
       if (table === "daily_digest_log") return { insert: mockInsert };
-      if (table === "cost_ledger") return { select: mockSelect };
+      // cost_ledger is used by both getMonthlyCostJpy (.select().gte().lt())
+      // and cost-report (.select().eq('month')). Return a chain that supports both.
+      if (table === "cost_ledger") {
+        return {
+          select: (cols: string) =>
+            cols.includes("category") ? mockLedgerSelect(cols) : mockSelect(cols),
+        };
+      }
       if (table === "performance_metrics") return { select: mockPerfSelect };
+      if (table === "posted_records") return { select: mockPostedSelect };
       // safety_state (getKillSwitchState in makeProductionDeps)
       return { select: mockSafetySelect };
     },
   })),
 }));
+
+// ---- 1b. mock global fetch for cost-report (LINE quota / Anthropic) ----
+const mockFetch = jest.fn();
+beforeAll(() => {
+  (globalThis as unknown as { fetch: jest.Mock }).fetch = mockFetch;
+});
 
 // ---- 2. mock line-client so we don't need LINE tokens ----
 jest.mock("../line/line-client.ts", () => ({
@@ -52,6 +76,7 @@ beforeAll(() => {
   process.env.SUPABASE_SERVICE_ROLE_KEY = "test-service-role-key";
   // Use real LINE token so sendToLine doesn't fall back to dry_run
   process.env.LINE_CHANNEL_ACCESS_TOKEN = "test-line-token";
+  process.env.ANTHROPIC_ADMIN_KEY = "test-admin-key";
   delete process.env.LINE_DRY_RUN;
   process.env.BUDGET_BROWNOUT_THRESHOLD_JPY = "11500";
   process.env.BUDGET_MONTHLY_LIMIT_JPY = "10000";
@@ -62,6 +87,7 @@ afterAll(() => {
   delete process.env.SUPABASE_URL;
   delete process.env.SUPABASE_SERVICE_ROLE_KEY;
   delete process.env.LINE_CHANNEL_ACCESS_TOKEN;
+  delete process.env.ANTHROPIC_ADMIN_KEY;
 });
 
 // ---- 4. imports AFTER mocks ----
@@ -75,6 +101,32 @@ describe("runDailyDigest → daily_digest_log insert", () => {
   beforeEach(() => {
     mockInsert.mockClear();
     mockInsert.mockResolvedValue({ error: null });
+    // default cost-report fetch behaviour: LINE quota + Anthropic cost_report
+    mockFetch.mockReset();
+    mockFetch.mockImplementation(async (input: string | URL) => {
+      const url = String(input);
+      if (url.endsWith("/quota/consumption")) {
+        return { ok: true, json: async () => ({ totalUsage: 12 }) };
+      }
+      if (url.endsWith("/message/quota")) {
+        return { ok: true, json: async () => ({ type: "limited", value: 200 }) };
+      }
+      if (url.includes("cost_report")) {
+        return {
+          ok: true,
+          json: async () => ({
+            data: [{ results: [{ amount: "123.45", currency: "USD" }] }],
+            has_more: false,
+          }),
+        };
+      }
+      return { ok: false, status: 404, json: async () => ({}) };
+    });
+    mockLedgerEq.mockResolvedValue({
+      data: [{ category: "twitterapi", cost_jpy: 80, cost_usd: 0.5 }],
+      error: null,
+    });
+    mockPostedLt.mockResolvedValue({ count: 7, error: null });
   });
 
   test("inserts a row into daily_digest_log after LINE send succeeds", async () => {
@@ -101,6 +153,14 @@ describe("runDailyDigest → daily_digest_log insert", () => {
     expect(insertArg.body.length).toBeGreaterThan(0);
     expect(insertArg).toHaveProperty("alerts");
     expect(Array.isArray(insertArg.alerts)).toBe(true);
+
+    // cost-report section appended to digest body (REAL numbers)
+    expect(insertArg.body).toContain("◆ コスト実数 (今月)");
+    expect(insertArg.body).toContain("Claude 実コスト: $1.23"); // 123.45 cents → $1.23
+    expect(insertArg.body).toContain("LINE 送信: 12 通 / 無料枠 200 通");
+    expect(insertArg.body).toContain("X 投稿: 7 件");
+    expect(insertArg.body).toContain("twitterapi.io: ¥80");
+    expect(insertArg.body).toContain("残クレジット/残高は各社 API 非提供");
   });
 
   test("does NOT insert when LINE send returns dry_run (IN_MEMORY_FALLBACK path)", async () => {

@@ -33,6 +33,8 @@ export interface Env {
   OAUTH_STATE: KVNamespace;
   // secrets (wrangler secret put)
   ANTHROPIC_API_KEY: string;
+  // Anthropic Admin API key for cost_report (optional; unset → Claude 実コスト null)
+  ANTHROPIC_ADMIN_KEY: string;
   OPENAI_API_KEY: string;
   X_CLIENT_ID: string;
   X_CLIENT_SECRET: string;
