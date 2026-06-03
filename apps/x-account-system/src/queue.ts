@@ -10,6 +10,7 @@
 
 import type { Env, JobMessage } from "./worker.js";
 import { runPostJob } from "./jobs/post-job.js";
+import { handleLineEvent } from "./jobs/line-event.js";
 
 export async function handleJob(msg: JobMessage, env: Env): Promise<void> {
   switch (msg.job) {
@@ -133,17 +134,9 @@ export async function handleJob(msg: JobMessage, env: Env): Promise<void> {
     // line-event: LINE Webhook 経由イベント
     // ----------------------------------------------------------------
     case "line-event": {
-      // W3-2: 署名検証済みイベントを分岐
-      //   postback "approve:<draftId>" → publish
-      //   postback "reject:<draftId>"  → draft 破棄
-      //   text → lib/interviewer/line-flow.ts 5 ステップへ
-      console.log(
-        JSON.stringify({
-          level: "info",
-          msg: "[line-event] LINE イベント処理 (stub)",
-          date: msg.date,
-        }),
-      );
+      // W4-2: approve/reject postback → publish
+      // W4-3 will extend for interviewer text flow
+      await handleLineEvent(msg.payload, env);
       break;
     }
 
