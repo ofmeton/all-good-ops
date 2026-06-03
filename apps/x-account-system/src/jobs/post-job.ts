@@ -14,6 +14,7 @@ import { createClient } from "@supabase/supabase-js";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { draftForX } from "../../lib/writer/writer-x.js";
 import { runEditor } from "../../lib/editor/pipeline.js";
+import { classifyRules } from "../../lib/hook-classifier/classify-rules.js";
 import { getKillSwitchState } from "../../lib/safety/kill-switch.js";
 import { pushLine } from "../../lib/line/line-client.js";
 import type { CoreIdea } from "../../lib/writer/types.js";
@@ -173,11 +174,13 @@ async function persistDraft(
     variant_index: 0,
     fmat: idea.fmat,
     body: draft.body,
-    primary_hook: idea.primaryHook,
     editor_status: out.decision,                     // 'approved' | 'rejected'
     human_approval_status: "pending" as const,
     editor_output: out as unknown as Record<string, unknown>,
     writer_draft_id: draft.draftId,                  // writer's non-UUID id
+    // post_drafts.primary_hook は Editor の 4 分類 (failure_story/business_repro/critique/tips_enum)。
+    // idea.primaryHook は Writer 12 種で CHECK 制約に違反するため、本文を分類器にかけた 4 種を使う。
+    primary_hook: classifyRules(draft.body).primary_hook,
     scheduled_date: date,
     slot,
     risk_level: out.riskLevel,
@@ -207,12 +210,17 @@ async function pushApproval(
 
   const preview = body.slice(0, 100) + (body.length > 100 ? "…" : "");
   const riskBadge = out.riskLevel === "high" ? "⚠️ HIGH RISK" : "✅ low risk";
+  // soft ルールの警告を付記 (品質粗。人間が見て判断)
+  const warnLines = (out.warnings ?? []).length
+    ? [`⚠️ 品質警告 (${out.warnings.length}):`, ...out.warnings.map((w) => `・${w.rule}: ${w.reason}`)]
+    : [];
 
   const message = [
     `📝 投稿承認依頼 [${riskBadge}]`,
     `---`,
     preview,
     `---`,
+    ...warnLines,
     `draft_id: ${dbDraftId}`,
     `承認: approve:${dbDraftId}`,
     `却下: reject:${dbDraftId}`,
@@ -277,6 +285,8 @@ export async function runPostJob(slot: string, env: Env): Promise<void> {
     fmat: idea.fmat as EditorInput["fmat"],
     sourceMaterialIds: idea.sourceMaterialIds,
     hasAffiliateLink: false,
+    // R2(実体験行) を種別で出し分け: first_hand のみ必須、paraphrase/industry_sop は skip
+    contentType: idea.contentType as EditorInput["contentType"],
   };
 
   const out = await runEditor(ein);

@@ -37,9 +37,24 @@ export function ruleR1Workflow(judge: LlmJudgeResult): EditorRuleResult {
 }
 
 /**
- * R2: 実体験要素 1 行 (regex を主判定、不足時のみ LLM judge を補助に使う)
+ * R2: 実体験要素 1 行 (regex を主判定)。
+ * contentType='first_hand' のときのみ必須。paraphrase/industry_sop は skip(=非却下)。
+ * （ニュース紹介や業界SOPは構造的に一次体験を持たないため、種別で適用を分ける）
  */
-export function ruleR2FirstHand(body: string): EditorRuleResult {
+export function ruleR2FirstHand(
+  body: string,
+  contentType?: "paraphrase" | "first_hand" | "industry_sop",
+): EditorRuleResult {
+  // first_hand 以外 (未指定は後方互換で first_hand 扱い) は実体験を求めない
+  if (contentType && contentType !== "first_hand") {
+    return {
+      rule: "R2_first_hand_line",
+      status: "skip",
+      reason: `contentType=${contentType} は実体験行 不要 (skip)`,
+      evidence: { hit: false, skipped: true },
+      durationMs: 0,
+    };
+  }
   const { result, durationMs } = timed(() => {
     return FIRST_HAND_REGEX.test(body);
   });

@@ -56,6 +56,7 @@ type Fixture = {
     decision: "approved" | "rejected";
     rejectReasons?: RuleId[];
     rejectReasonsAtLeast?: RuleId[];
+    warningsAtLeast?: RuleId[];
     riskLevel?: "low" | "high";
     businessLawRiskFlag?: boolean;
   };
@@ -118,6 +119,14 @@ describe("Editor pipeline (6+5 rules)", () => {
         expect([...out.rejectReasons].sort()).toEqual(
           [...fx.expected.rejectReasons].sort(),
         );
+      }
+
+      // Subset assertion: soft warnings must include these
+      if (fx.expected.warningsAtLeast) {
+        const warnRules = out.warnings.map((w) => w.rule);
+        for (const r of fx.expected.warningsAtLeast) {
+          expect(warnRules).toContain(r);
+        }
       }
 
       // Subset assertion: rejectReasons must include these

@@ -115,7 +115,7 @@ export async function runEditor(input: EditorInput): Promise<EditorOutput> {
   // ============================================================
   const ruleResults: EditorRuleResult[] = [
     ruleR1Workflow(judge),
-    ruleR2FirstHand(body),
+    ruleR2FirstHand(body, input.contentType),
     ruleR3NoEnemy(judge),
     ruleR4ConflictPhrase(body),
     ruleR5NoDuplicate14d(maxSim, matchedId),
@@ -139,9 +139,30 @@ export async function runEditor(input: EditorInput): Promise<EditorOutput> {
   // ============================================================
   // Decision + risk
   // ============================================================
-  const rejectReasons: RuleId[] = ruleResults
-    .filter((r) => r.status === "fail")
-    .map((r) => r.rule);
+  // hard/soft 分離 (Phase 1: 人間が LINE で最終承認するため、品質粗は警告に留める)。
+  // HARD = 安全・法令・brand-safety → fail なら却下 (人間に出さない)。
+  // SOFT = 品質・スタイル → fail でも draft は出し、警告として承認文に付記。
+  const HARD_RULES = new Set<RuleId>([
+    "R3_no_enemy",
+    "R4_no_conflict_phrase",
+    "X2_stealth_disclosure",
+    "X3_failure_story_verified",
+  ]);
+  // X5 は DLP(PII)=hard / 固有名詞=soft の複合ルール。DLP 起因の fail のみ hard。
+  const isHardFail = (r: EditorRuleResult): boolean => {
+    if (r.status !== "fail") return false;
+    if (r.rule === "X5_dlp_and_proper_noun") {
+      const ev = r.evidence as
+        | { redactNeedsConsent?: boolean; containsHighRisk?: boolean }
+        | undefined;
+      return ev?.redactNeedsConsent === true || ev?.containsHighRisk === true;
+    }
+    return HARD_RULES.has(r.rule);
+  };
+  const rejectReasons: RuleId[] = ruleResults.filter(isHardFail).map((r) => r.rule);
+  const warnings: EditorOutput["warnings"] = ruleResults
+    .filter((r) => r.status === "fail" && !isHardFail(r))
+    .map((r) => ({ rule: r.rule, reason: r.reason ?? "" }));
   const decision: EditorOutput["decision"] =
     rejectReasons.length > 0 ? "rejected" : "approved";
 
@@ -166,6 +187,7 @@ export async function runEditor(input: EditorInput): Promise<EditorOutput> {
     draftId: input.draftId,
     decision,
     rejectReasons,
+    warnings,
     rules: ruleResults,
     riskLevel,
     riskReasons,

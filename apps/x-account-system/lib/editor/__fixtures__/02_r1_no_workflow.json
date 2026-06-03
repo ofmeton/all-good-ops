@@ -12,7 +12,10 @@
     "hasAffiliateLink": false
   },
   "expected": {
-    "decision": "rejected",
-    "rejectReasons": ["R1_workflow_theme"]
+    "decision": "approved",
+    "rejectReasons": [],
+    "warningsAtLeast": [
+      "R1_workflow_theme"
+    ]
   }
 }
