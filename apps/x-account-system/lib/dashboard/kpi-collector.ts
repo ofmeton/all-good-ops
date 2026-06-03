@@ -25,7 +25,7 @@ function getSupabase(): SupabaseClient | null {
     _supabase = createClient(
       process.env.SUPABASE_URL,
       process.env.SUPABASE_SERVICE_ROLE_KEY,
-      { db: { schema: process.env.SUPABASE_SCHEMA || "public" } },
+      { db: { schema: (process.env.SUPABASE_SCHEMA || "public") as "public" } },
     );
   }
   return _supabase;

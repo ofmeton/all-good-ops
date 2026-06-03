@@ -79,30 +79,38 @@ export async function handleJob(msg: JobMessage, env: Env): Promise<void> {
     }
 
     // ----------------------------------------------------------------
-    // daily-digest: Daily Digest 生成 + LINE 配信
+    // daily-digest: Daily Digest 生成 + LINE 配信 (W5-5)
     // ----------------------------------------------------------------
     case "daily-digest": {
-      // W4: lib/dashboard/digest.ts → LINE 配信
+      const { runDailyDigest } = await import("../lib/dashboard/digest.js");
+      const result = await runDailyDigest({});
       console.log(
         JSON.stringify({
           level: "info",
-          msg: "[daily-digest] Digest 生成 + LINE 配信 (stub)",
+          msg: "[daily-digest] Digest 生成 + LINE 配信 完了",
           date: msg.date,
+          sendStatus: result.sendResult.status,
+          alertCount: result.payload.meta.alert_count,
         }),
       );
       break;
     }
 
     // ----------------------------------------------------------------
-    // optimizer-update: Thompson sampling posterior 更新
+    // optimizer-update: Thompson sampling posterior 更新 (W5-5)
     // ----------------------------------------------------------------
     case "optimizer-update": {
-      // W4: lib/optimizer/update-loop.ts → posterior 更新
+      const { runOptimizerUpdate } = await import("../lib/optimizer/update-loop.js");
+      const result = await runOptimizerUpdate();
       console.log(
         JSON.stringify({
           level: "info",
-          msg: "[optimizer-update] Thompson posterior 更新 (stub)",
+          msg: "[optimizer-update] Thompson posterior 更新 完了",
           date: msg.date,
+          rolledBack: result.rolledBack,
+          signalsObserved: result.signalsObserved,
+          changesCount: result.changes.length,
+          durationMs: result.durationMs,
         }),
       );
       break;
