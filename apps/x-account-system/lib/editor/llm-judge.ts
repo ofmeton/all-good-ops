@@ -101,7 +101,28 @@ async function callAnthropicJudge(input: LlmJudgeInput): Promise<LlmJudgeResult>
   const costUsd =
     (res.usage.input_tokens / 1_000_000) * 3 +
     (res.usage.output_tokens / 1_000_000) * 15;
-  return { ...(tu.input as Omit<LlmJudgeResult, "costUsd">), costUsd };
+  // LLM は tool_use で 6 項目を省略することがある (非決定的)。欠損フィールドを
+  // skip で補完して、rule 側の `.status` 参照クラッシュ (= post-job orphan) を防ぐ。
+  const raw = (tu.input ?? {}) as Partial<Omit<LlmJudgeResult, "costUsd">>;
+  const JUDGE_FIELDS = [
+    "r1_workflow_theme",
+    "r3_no_enemy",
+    "r6_assertive_conclusion",
+    "x2_stealth_disclosure_text",
+    "x4_audience_line",
+    "x5_proper_noun_assist",
+  ] as const;
+  const normalized = {} as Omit<LlmJudgeResult, "costUsd">;
+  for (const f of JUDGE_FIELDS) {
+    const v = raw[f] as { status?: RuleStatus; reason?: string } | undefined;
+    if (v && typeof v.status === "string") {
+      normalized[f] = { status: v.status, reason: v.reason ?? "" };
+    } else {
+      console.warn(`[llm-judge] 項目 ${f} が応答に無いため skip 補完`);
+      normalized[f] = { status: "skip" as RuleStatus, reason: "judge が項目を省略 (skip 既定)" };
+    }
+  }
+  return { ...normalized, costUsd };
 }
 
 /**

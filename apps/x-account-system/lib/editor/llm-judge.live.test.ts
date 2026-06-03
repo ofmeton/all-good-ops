@@ -68,3 +68,33 @@ test("callAnthropicJudge: costUsd is calculated from token usage", async () => {
   // 1500 input tokens * 3/1M + 500 output tokens * 15/1M = 0.0045 + 0.0075 = 0.012
   expect(r.costUsd).toBeCloseTo(0.012, 5);
 });
+
+describe("callAnthropicJudge robustness", () => {
+  test("judge が項目を省略しても skip 補完されクラッシュしない", async () => {
+    jest.resetModules();
+    jest.doMock("@anthropic-ai/sdk", () => ({
+      __esModule: true,
+      default: class {
+        messages = {
+          create: async () => ({
+            // x2_stealth_disclosure_text を意図的に欠落させる
+            content: [{ type: "tool_use", name: "judge", input: {
+              r1_workflow_theme: { status: "pass", reason: "ok" },
+              r3_no_enemy: { status: "pass", reason: "ok" },
+              r6_assertive_conclusion: { status: "pass", reason: "ok" },
+              x4_audience_line: { status: "pass", reason: "ok" },
+              x5_proper_noun_assist: { status: "pass", reason: "ok" },
+            } }],
+            usage: { input_tokens: 100, output_tokens: 50 },
+          }),
+        };
+      },
+    }));
+    const { runLlmJudge } = await import("./llm-judge.ts");
+    process.env.ANTHROPIC_API_KEY = "test";
+    delete process.env.IN_MEMORY_FALLBACK;
+    const r = await runLlmJudge({ body: "x", hasAffiliateLink: false, format: "short", platform: "x" });
+    expect(r.x2_stealth_disclosure_text.status).toBe("skip");
+    expect(r.r1_workflow_theme.status).toBe("pass");
+  });
+});
