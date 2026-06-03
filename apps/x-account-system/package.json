@@ -15,6 +15,7 @@
     "relabel": "python3 scripts/relabel-tweets.py",
     "dlp:lint": "tsx lib/dlp/lint.ts",
     "test": "IN_MEMORY_FALLBACK=true jest",
+    "test:worker-live": "jest lib/editor/llm-judge.live.test.ts lib/optimizer/supabase-store.test.ts lib/dashboard/digest-persist.test.ts lib/publisher/x-publisher-db-gate.test.ts lib/interviewer/line-flow-db.test.ts src/",
     "editor:test": "IN_MEMORY_FALLBACK=true jest lib/editor",
     "editor:cli": "tsx lib/editor/cli.ts",
     "publisher:test": "IN_MEMORY_FALLBACK=true jest lib/publisher",
