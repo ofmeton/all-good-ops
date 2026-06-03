@@ -9,9 +9,9 @@
   },
   "type": "module",
   "scripts": {
-    "budget": "tsx lib/cost/budget-calculator.ts",
+    "budget": "tsx lib/cost/budget-cli.ts",
     "oauth:test": "tsx lib/oauth/pkce-test.ts",
-    "fallback:dry-run": "tsx lib/fallback/trigger.ts --dry-run",
+    "fallback:dry-run": "tsx lib/fallback/trigger-cli.ts --dry-run",
     "relabel": "python3 scripts/relabel-tweets.py",
     "dlp:lint": "tsx lib/dlp/lint.ts",
     "test": "IN_MEMORY_FALLBACK=true jest",

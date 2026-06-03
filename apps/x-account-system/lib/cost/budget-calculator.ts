@@ -1,74 +1,18 @@
 /**
- * budget-calculator: cost-model.csv を読み、low / expected / p95 の月額予算を計算。
+ * budget-calculator: COST_MODEL_ROWS を読み、low / expected / p95 の月額予算を計算。
  *
  * v10.2 §3.3 CR-3 の 3 シナリオ予算試算を実装。
  *
- * 使い方:
- *   npm run budget               # expected
- *   npm run budget -- --scenario p95
- *   npm run budget -- --json     # JSON 出力
+ * CLI 実行: npm run budget (budget-cli.ts 経由)
+ *
+ * このモジュールは node:fs / dotenv を一切使わず Cloudflare Worker で import 可能。
  */
-import { readFileSync } from "node:fs";
-import { fileURLToPath } from "node:url";
-import { dirname, join } from "node:path";
+import { COST_MODEL_ROWS } from "./cost-model-data";
+import type { CostRow } from "./cost-model-data";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+export type { CostRow };
 
-const MONTHLY_LIMIT = Number(process.env.BUDGET_MONTHLY_LIMIT_JPY ?? 10000);
-const BROWNOUT = Number(process.env.BUDGET_BROWNOUT_THRESHOLD_JPY ?? 11500);
-
-type Row = {
-  category: string;
-  runs_per_month: number;
-  input_tok_per_run: number;
-  output_tok_per_run: number;
-  retry_rate: number;
-  model: string;
-  input_usd_per_mtok: number;
-  output_usd_per_mtok: number;
-  monthly_jpy_expected: number;
-  notes: string;
-};
-
-type Scenario = "low" | "expected" | "p95";
-
-function parseCsv(text: string): Row[] {
-  const lines = text.trim().split("\n");
-  const headers = lines[0].split(",");
-  return lines.slice(1).map((line) => {
-    // 簡易 CSV parser (notes に , が含まれることを考慮、quote 対応)
-    const cols: string[] = [];
-    let cur = "";
-    let inQuote = false;
-    for (const ch of line) {
-      if (ch === '"') {
-        inQuote = !inQuote;
-      } else if (ch === "," && !inQuote) {
-        cols.push(cur);
-        cur = "";
-      } else {
-        cur += ch;
-      }
-    }
-    cols.push(cur);
-
-    const row: Record<string, string> = {};
-    headers.forEach((h, i) => (row[h] = (cols[i] ?? "").trim()));
-    return {
-      category: row.category,
-      runs_per_month: Number(row.runs_per_month || 0),
-      input_tok_per_run: Number(row.input_tok_per_run || 0),
-      output_tok_per_run: Number(row.output_tok_per_run || 0),
-      retry_rate: Number(row.retry_rate || 0),
-      model: row.model,
-      input_usd_per_mtok: Number(row.input_usd_per_mtok || 0),
-      output_usd_per_mtok: Number(row.output_usd_per_mtok || 0),
-      monthly_jpy_expected: Number(row.monthly_jpy_expected || 0),
-      notes: row.notes ?? "",
-    };
-  });
-}
+export type Scenario = "low" | "expected" | "p95";
 
 /**
  * scenario multiplier:
@@ -76,7 +20,7 @@ function parseCsv(text: string): Row[] {
  * - expected: CSV の monthly_jpy_expected をそのまま使う
  * - p95:      retry_rate を 2.0 倍、image medium 50 枚化、Opus thinking high、Interviewer 1.3 倍
  */
-function scaleRow(row: Row, scenario: Scenario): number {
+export function scaleRow(row: CostRow, scenario: Scenario): number {
   if (scenario === "expected") return row.monthly_jpy_expected;
 
   const cat = row.category;
@@ -106,7 +50,7 @@ function scaleRow(row: Row, scenario: Scenario): number {
   return expected * 1.05;
 }
 
-function summarize(rows: Row[], scenario: Scenario) {
+export function summarize(rows: CostRow[], scenario: Scenario) {
   const breakdown = rows.map((r) => ({
     category: r.category,
     jpy: Math.round(scaleRow(r, scenario)),
@@ -115,45 +59,7 @@ function summarize(rows: Row[], scenario: Scenario) {
   return { scenario, total, breakdown };
 }
 
-function main() {
-  const csvPath = join(__dirname, "cost-model.csv");
-  const csv = readFileSync(csvPath, "utf-8");
-  const rows = parseCsv(csv);
-
-  const argv = process.argv.slice(2);
-  const isJson = argv.includes("--json");
-  const scenarioArg = argv.find((a) => a.startsWith("--scenario="));
-  const explicitScenario = scenarioArg
-    ? (scenarioArg.split("=")[1] as Scenario)
-    : null;
-
-  const scenarios: Scenario[] = explicitScenario ? [explicitScenario] : ["low", "expected", "p95"];
-  const reports = scenarios.map((s) => summarize(rows, s));
-
-  if (isJson) {
-    const out = reports.map((r) => ({
-      ...r,
-      monthly_limit_jpy: MONTHLY_LIMIT,
-      brownout_threshold_jpy: BROWNOUT,
-      over_limit: r.total > MONTHLY_LIMIT,
-      over_brownout: r.total > BROWNOUT,
-    }));
-    console.log(JSON.stringify(out, null, 2));
-    return;
-  }
-
-  console.log(`Budget scenarios (BUDGET_MONTHLY_LIMIT=¥${MONTHLY_LIMIT}, BROWNOUT=¥${BROWNOUT}):\n`);
-  for (const rep of reports) {
-    const flag = rep.total > BROWNOUT ? "❌ BROWNOUT" : rep.total > MONTHLY_LIMIT ? "⚠️ OVER" : "✅ OK";
-    console.log(`[${rep.scenario.padEnd(8)}] total = ¥${rep.total.toLocaleString()}  ${flag}`);
-    if (scenarios.length === 1) {
-      console.log("  breakdown:");
-      for (const b of rep.breakdown) {
-        if (b.jpy === 0) continue;
-        console.log(`    ${b.category.padEnd(28)} ¥${b.jpy.toLocaleString()}`);
-      }
-    }
-  }
+/** 全シナリオ集計。Worker / CLI 両方から呼べる純粋関数。 */
+export function calcBudget(scenarios: Scenario[] = ["low", "expected", "p95"]) {
+  return scenarios.map((s) => summarize(COST_MODEL_ROWS, s));
 }
-
-main();
