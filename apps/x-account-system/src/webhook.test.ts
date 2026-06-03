@@ -180,3 +180,60 @@ describe("LINE /line/webhook", () => {
     expect(json.ok).toBe(true);
   });
 });
+
+// ============================================================
+// /oauth/x/start admin gate (FIX 3)
+// ============================================================
+
+describe("/oauth/x/start admin gate", () => {
+  const ADMIN_SECRET = "super-secret-admin-key";
+
+  /** Env with admin secret + a mock KV namespace for OAUTH_STATE */
+  function makeOauthEnv(overrides: Partial<Env> = {}): Env {
+    const kvPut = jest.fn().mockResolvedValue(undefined);
+    return {
+      ...makeEnv(),
+      OAUTH_ADMIN_SECRET: ADMIN_SECRET,
+      X_CLIENT_ID: "x-client-id",
+      X_REDIRECT_URI: "https://worker.example.com/oauth/x/callback",
+      X_OAUTH_SCOPES: "tweet.read tweet.write offline.access",
+      OAUTH_STATE: { put: kvPut } as unknown as KVNamespace,
+      ...overrides,
+    } as Env;
+  }
+
+  function startReq(key?: string): Request {
+    const u = new URL("https://worker.example.com/oauth/x/start");
+    if (key !== undefined) u.searchParams.set("key", key);
+    return new Request(u.toString(), { method: "GET" });
+  }
+
+  test("missing key → 401 (no KV write, no redirect)", async () => {
+    const env = makeOauthEnv();
+    const res = await worker.fetch(startReq(), env, makeCtx());
+    expect(res.status).toBe(401);
+    expect((env.OAUTH_STATE as unknown as { put: jest.Mock }).put).not.toHaveBeenCalled();
+  });
+
+  test("wrong key → 401", async () => {
+    const env = makeOauthEnv();
+    const res = await worker.fetch(startReq("nope"), env, makeCtx());
+    expect(res.status).toBe(401);
+    expect((env.OAUTH_STATE as unknown as { put: jest.Mock }).put).not.toHaveBeenCalled();
+  });
+
+  test("unset OAUTH_ADMIN_SECRET → fail CLOSED (401 even with a key)", async () => {
+    const env = makeOauthEnv({ OAUTH_ADMIN_SECRET: "" });
+    const res = await worker.fetch(startReq(ADMIN_SECRET), env, makeCtx());
+    expect(res.status).toBe(401);
+  });
+
+  test("correct key → 302 redirect to x.com authorize + KV state stored", async () => {
+    const env = makeOauthEnv();
+    const res = await worker.fetch(startReq(ADMIN_SECRET), env, makeCtx());
+    expect(res.status).toBe(302);
+    const loc = res.headers.get("location") ?? "";
+    expect(loc).toContain("x.com/i/oauth2/authorize");
+    expect((env.OAUTH_STATE as unknown as { put: jest.Mock }).put).toHaveBeenCalledTimes(1);
+  });
+});

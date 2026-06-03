@@ -117,6 +117,20 @@ async function insertTweet(
 
   const { error } = await sb.from("materials_store").insert(row);
   if (error) {
+    // FIX 5: a unique-violation (Postgres 23505) on the tweet_id index is a
+    // BENIGN concurrent-dedup race — the existence check above is only an
+    // optimization. Log at info and skip (not fatal to the run).
+    if (isUniqueViolation(error)) {
+      console.log(
+        JSON.stringify({
+          level: "info",
+          msg: "[buzz-ingest] duplicate tweet_id skipped (unique violation)",
+          tweet_id: tweet.id,
+          userName,
+        }),
+      );
+      return false;
+    }
     console.error(
       JSON.stringify({
         level: "error",
@@ -129,6 +143,13 @@ async function insertTweet(
     return false;
   }
   return true;
+}
+
+/** Postgres unique-violation detection (Supabase PostgrestError code 23505) */
+function isUniqueViolation(error: { code?: string; message?: string } | null): boolean {
+  if (!error) return false;
+  if (error.code === "23505") return true;
+  return /duplicate key value|unique constraint/i.test(error.message ?? "");
 }
 
 /**

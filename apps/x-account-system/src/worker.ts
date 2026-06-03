@@ -41,6 +41,8 @@ export interface Env {
   X_ACCESS_TOKEN: string;
   X_REFRESH_TOKEN: string;
   X_TOKEN_EXPIRES_AT: string;
+  // Admin secret gating /oauth/x/start (fail closed: unset → reject)
+  OAUTH_ADMIN_SECRET: string;
   TWITTERAPI_IO_KEY: string;
   SUPABASE_URL: string;
   SUPABASE_SERVICE_ROLE_KEY: string;
@@ -151,6 +153,13 @@ export default {
 
     // X OAuth PKCE Step 1: generate verifier/state → store in KV → redirect to X
     if (url.pathname === "/oauth/x/start") {
+      // Admin gate (fail CLOSED): unauthenticated callers could poison the token
+      // store / DoS the X OAuth flow. The admin invokes /oauth/x/start?key=<secret>.
+      const key = url.searchParams.get("key");
+      if (!env.OAUTH_ADMIN_SECRET || key !== env.OAUTH_ADMIN_SECRET) {
+        log(env, "error", "/oauth/x/start: unauthorized (missing/invalid key)");
+        return new Response("unauthorized", { status: 401 });
+      }
       try {
         const verifier = randomVerifier();
         const state = randomVerifier();

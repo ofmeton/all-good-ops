@@ -21,18 +21,18 @@ import { triggerKillSwitch } from "../safety/kill-switch.ts";
 // ---------------------------------------------------------------------------
 let _supabase: SupabaseClient | null = null;
 function getSupabase(): SupabaseClient | null {
+  // Only ever CACHE a successfully-created client. Returning null (fallback /
+  // not-yet-configured) must NOT be memoized — otherwise a first call that races
+  // ahead of bridgeEnv (env vars not set yet) would pin null forever and silently
+  // fall back to the stale env token even after the DB becomes available.
+  if (_supabase) return _supabase;
   if (process.env.IN_MEMORY_FALLBACK === "true") return null;
-  if (
-    !_supabase &&
-    process.env.SUPABASE_URL &&
-    process.env.SUPABASE_SERVICE_ROLE_KEY
-  ) {
-    _supabase = createClient(
-      process.env.SUPABASE_URL,
-      process.env.SUPABASE_SERVICE_ROLE_KEY,
-      { db: { schema: (process.env.SUPABASE_SCHEMA || "public") as "public" } },
-    );
-  }
+  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) return null;
+  _supabase = createClient(
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_ROLE_KEY,
+    { db: { schema: (process.env.SUPABASE_SCHEMA || "public") as "public" } },
+  );
   return _supabase;
 }
 

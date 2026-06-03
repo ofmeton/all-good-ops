@@ -199,6 +199,40 @@ describe("runBuzzIngest", () => {
     expect(inserted).toBe(0);
   });
 
+  test("treats unique-violation (23505) on insert as a benign skip (not fatal)", async () => {
+    // Existence check passes (no row), but the INSERT loses the dedup race and
+    // returns a unique-violation. The run must continue and NOT throw.
+    const insertMock = jest
+      .fn()
+      .mockResolvedValue({ error: { code: "23505", message: "duplicate key value violates unique constraint" } });
+    const limitMock = jest.fn().mockResolvedValue({ data: [], error: null }); // existence: no row
+    const filterMock = jest.fn().mockReturnValue({ limit: limitMock });
+    const eqMock = jest.fn().mockReturnValue({ filter: filterMock });
+    const selectMock = jest.fn().mockReturnValue({ eq: eqMock });
+    const fromMock = jest.fn().mockImplementation(() => ({ select: selectMock, insert: insertMock }));
+    const client = { from: fromMock };
+
+    const tweet1 = makeTweet("race-tweet", "Shimayus");
+    const mockFetch = jest.fn().mockImplementation(() => {
+      return Promise.resolve({ ok: true, json: () => Promise.resolve({ tweets: [tweet1] }) });
+    });
+
+    let buzzIngest: typeof import("./buzz-ingest.ts");
+    jest.isolateModules(() => {
+      jest.doMock("@supabase/supabase-js", () => ({
+        __esModule: true,
+        createClient: jest.fn(() => client),
+      }));
+      buzzIngest = require("./buzz-ingest.ts");
+    });
+
+    const env = makeEnv();
+    // Must resolve (not throw) and count 0 newly-inserted rows
+    const inserted = await buzzIngest!.runBuzzIngest(env, mockFetch as unknown as typeof fetch);
+    expect(inserted).toBe(0);
+    expect(insertMock).toHaveBeenCalled(); // insert was attempted
+  });
+
   test("continues to next handle when fetch fails", async () => {
     const { client, insertMock } = makeSupabaseMock();
 

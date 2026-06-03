@@ -179,6 +179,19 @@ async function insertTweet(
 
   const { error } = await sb.from("materials_store").insert(row);
   if (error) {
+    // FIX 5: unique-violation (23505) on the tweet_id index is a benign dedup
+    // race — existence check is just an optimization. Log info + skip.
+    if (isUniqueViolation(error)) {
+      console.log(
+        JSON.stringify({
+          level: "info",
+          msg: "[inspirations-ingest] duplicate tweet_id skipped (unique violation)",
+          tweet_id: tweet.id,
+          userName,
+        }),
+      );
+      return false;
+    }
     console.error(
       JSON.stringify({
         level: "error",
@@ -191,6 +204,13 @@ async function insertTweet(
     return false;
   }
   return true;
+}
+
+/** Postgres unique-violation detection (Supabase PostgrestError code 23505) */
+function isUniqueViolation(error: { code?: string; message?: string } | null): boolean {
+  if (!error) return false;
+  if (error.code === "23505") return true;
+  return /duplicate key value|unique constraint/i.test(error.message ?? "");
 }
 
 // ---------------------------------------------------------------------------
@@ -237,6 +257,18 @@ async function insertNoteSeed(
 
   const { error } = await sb.from("materials_store").insert(row);
   if (error) {
+    // FIX 5: benign unique-violation (concurrent note-seed dedup race) → skip.
+    if (isUniqueViolation(error)) {
+      console.log(
+        JSON.stringify({
+          level: "info",
+          msg: "[inspirations-ingest] duplicate note seed skipped (unique violation)",
+          handle: seed.handle,
+          dedup_key: dedupKey,
+        }),
+      );
+      return false;
+    }
     console.error(
       JSON.stringify({
         level: "error",

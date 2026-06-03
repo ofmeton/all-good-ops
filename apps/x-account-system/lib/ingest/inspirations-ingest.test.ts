@@ -103,6 +103,45 @@ afterEach(() => {
 // ---------------------------------------------------------------------------
 
 describe("runInspirationsIngest", () => {
+  test("treats unique-violation (23505) on insert as a benign skip (not fatal)", async () => {
+    // Existence check passes (no row) but the INSERT loses the dedup race and
+    // returns a unique-violation. The whole weekly run must NOT throw.
+    const insertMock = jest
+      .fn()
+      .mockResolvedValue({ error: { code: "23505", message: "duplicate key value violates unique constraint" } });
+    const limitMock = jest.fn().mockResolvedValue({ data: [], error: null });
+    const filterMock = jest.fn().mockReturnValue({ limit: limitMock });
+    const eqMock = jest.fn().mockReturnValue({ filter: filterMock });
+    const selectMock = jest.fn().mockReturnValue({ eq: eqMock });
+    const fromMock = jest.fn().mockImplementation(() => ({ select: selectMock, insert: insertMock }));
+    const client = { from: fromMock };
+
+    const tweet1 = makeTweet("race-tweet", "jason_coder0");
+    let xCallCount = 0;
+    const mockFetch = jest.fn().mockImplementation(() => {
+      xCallCount++;
+      return Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve({ tweets: xCallCount === 1 ? [tweet1] : [] }),
+      });
+    });
+
+    let ingest: typeof import("./inspirations-ingest.ts");
+    jest.isolateModules(() => {
+      jest.doMock("@supabase/supabase-js", () => ({
+        __esModule: true,
+        createClient: jest.fn(() => client),
+      }));
+      ingest = require("./inspirations-ingest.ts");
+    });
+
+    const env = makeEnv();
+    // note seeds also hit the same 23505 insert mock → all benign skip
+    const inserted = await ingest!.runInspirationsIngest(env, mockFetch as unknown as typeof fetch);
+    expect(inserted).toBe(0);
+    expect(insertMock).toHaveBeenCalled();
+  });
+
   test("inserts x_inspirations tweets from X seed handles", async () => {
     const { client, fromMock, insertMock } = makeSupabaseMock();
 

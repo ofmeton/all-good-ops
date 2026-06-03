@@ -181,14 +181,20 @@ export function resetSupabaseForTest(): void {
 // ---------------------------------------------------------------------------
 
 /**
- * Atomic claim: UPDATE materials_store SET meta = meta || '{"ideation_status":"claimed"}'
- *   WHERE (meta->>'ideation_status') IS NULL
+ * Atomic claim: UPDATE materials_store SET ideation_status = 'claimed'
+ *   WHERE ideation_status IS NULL
+ *   AND publication_consent = 'pending'
  *   AND source_type IN ('x_inspirations','note_inspirations')
  *   RETURNING *  (via .select() in Supabase JS)
  *
+ * Uses the dedicated `ideation_status` COLUMN (migration 0009) rather than
+ * stuffing the flag into the `meta` JSONB. The previous implementation did
+ * `.update({ meta: { ideation_status: "claimed" } })` which REPLACED the whole
+ * meta column — wiping tweet_id/url/etc. and breaking buzz-ingest dedup.
+ *
  * Supabase JS returns updated rows when you chain .select() after .update().
- * The filter `.is("meta->ideation_status", null)` claims only unclaimed rows.
- * Concurrent calls see "claimed" and skip → no double-consume.
+ * The filter `.is("ideation_status", null)` claims only unclaimed rows.
+ * Concurrent calls see "claimed" and skip → no double-consume. meta is untouched.
  */
 async function fetchUnideatedMaterials(
   env: Env,
@@ -196,13 +202,14 @@ async function fetchUnideatedMaterials(
 ): Promise<MaterialRow[]> {
   const sb = getSupabase(env);
 
-  // Claim rows atomically: only rows where ideation_status IS NULL
+  // Claim rows atomically: only rows where ideation_status IS NULL.
+  // Sets the dedicated column — meta JSONB is left intact.
   const { data, error } = await sb
     .from("materials_store")
-    .update({ meta: { ideation_status: "claimed" } })
+    .update({ ideation_status: "claimed" })
     .eq("publication_consent", "pending")  // x_inspirations come in as pending
     .in("source_type", ["x_inspirations", "note_inspirations"])
-    .is("meta->ideation_status" as never, null)
+    .is("ideation_status", null)
     .select();
 
   if (error) {
@@ -239,13 +246,14 @@ async function insertCoreIdeas(
 
 /**
  * Mark consumed materials as ideation_status='done'.
+ * Uses the dedicated `ideation_status` column (migration 0009) — leaves meta intact.
  */
 async function markMaterialsIdeated(env: Env, ids: string[]): Promise<void> {
   if (ids.length === 0) return;
   const sb = getSupabase(env);
   const { error } = await sb
     .from("materials_store")
-    .update({ meta: { ideation_status: "done" } })
+    .update({ ideation_status: "done" })
     .in("id", ids)
     .select();
 

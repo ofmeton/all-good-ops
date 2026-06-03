@@ -36,7 +36,15 @@ export async function handleJob(msg: JobMessage, env: Env): Promise<void> {
   //     オペレーター通知・!resume 操作は遮断されない
   // ----------------------------------------------------------------
   {
-    const costJpy = await makeProductionDeps().getMonthlyCostJpy!();
+    // Fail OPEN for dispatch: if the cost source (Supabase / network) throws,
+    // default to 0 so jobs still run. daily-digest / line-event MUST always run,
+    // and the kill-switch + DB publisher gate independently protect actual publishing.
+    let costJpy = 0;
+    try {
+      costJpy = await makeProductionDeps().getMonthlyCostJpy!();
+    } catch (e) {
+      console.warn("[queue] cost fetch failed, defaulting to 0 (ok)", e);
+    }
     const decision = await evaluateBrownout(costJpy);
     if (!decision.allowedJobs.includes(msg.job)) {
       console.log(

@@ -372,11 +372,40 @@ describe("runIdeation", () => {
     const env = makeEnv();
     await ideation!.runIdeation(env);
 
-    // The claim update should set ideation_status to "claimed"
-    expect(materialsUpdateMock).toHaveBeenCalledWith(
-      expect.objectContaining({
-        meta: expect.anything(),
-      }),
-    );
+    // The claim update should set the dedicated ideation_status column to "claimed"
+    // (NOT stuff it into meta — that would wipe tweet_id/url and break dedup)
+    expect(materialsUpdateMock).toHaveBeenCalledWith({ ideation_status: "claimed" });
+  });
+
+  test("claim and mark-done NEVER touch the meta JSONB column (preserves tweet_id/url)", async () => {
+    const materialRows = makeMaterialRows();
+    const { client, materialsUpdateMock, markDoneUpdateMock } = makeSupabaseMock(materialRows);
+    const { AnthropicClass } = makeAnthropicMock(makeIdeaToolResult());
+
+    let ideation: typeof import("./ideate.ts");
+    jest.isolateModules(() => {
+      jest.doMock("@supabase/supabase-js", () => ({
+        __esModule: true,
+        createClient: jest.fn(() => client),
+      }));
+      jest.doMock("@anthropic-ai/sdk", () => ({
+        __esModule: true,
+        default: AnthropicClass,
+      }));
+      ideation = require("./ideate.ts");
+    });
+
+    const env = makeEnv();
+    await ideation!.runIdeation(env);
+
+    // Claim payload: dedicated column only, no meta key
+    const claimArg = materialsUpdateMock.mock.calls[0][0] as Record<string, unknown>;
+    expect(claimArg).toEqual({ ideation_status: "claimed" });
+    expect(claimArg).not.toHaveProperty("meta");
+
+    // Mark-done payload: dedicated column only, no meta key
+    expect(markDoneUpdateMock).toHaveBeenCalledWith({ ideation_status: "done" });
+    const doneArg = markDoneUpdateMock.mock.calls[0][0] as Record<string, unknown>;
+    expect(doneArg).not.toHaveProperty("meta");
   });
 });
