@@ -45,11 +45,11 @@ dead_letter_queue = "xad-jobs-dlq"
 # --------------------------------------------------------------------
 # | JST       | UTC          | ジョブ                                      |
 # |-----------|--------------|---------------------------------------------|
+# | 05:00     | 20:00 (前日) | ideation (materials→core_ideas LLM生成, 投稿より前)
 # | 06:00     | 21:00 (前日) | buzz-ingest (海外X buzz 日次)               |
 # | 07:00     | 22:00 (前日) | post-morning (失敗談先行型, URLなし)         |
 # | 12:00     | 03:00        | post-noon (ROI Before-After)                |
 # | 19:00     | 10:00        | post-evening (note 送客, URL末尾)            |
-# | 07:30     | 22:30        | github-trending (30分オフセットで重複回避)   |
 # | 21:00     | 12:00        | daily-digest (LINE 配信)                    |
 # | 23:00     | 14:00        | optimizer-update (posterior 更新)           |
 # | 毎2h      | */2          | rollback-monitor (異常検知)                 |
@@ -57,17 +57,25 @@ dead_letter_queue = "xad-jobs-dlq"
 # | 毎月1日 00:00| 15:00 (1日) | rotation-notice (token rotation 通知)       |
 [triggers]
 crons = [
+  "0 20 * * *",    # 05:00 JST ideation (buzz-ingest より 1h 前で素材→ネタ変換)
   "0 22 * * *",    # 07:00 JST post-morning
   "0 3 * * *",     # 12:00 JST post-noon
   "0 10 * * *",    # 19:00 JST post-evening (note 送客)
   "0 21 * * *",    # 06:00 JST buzz-ingest
-  "30 22 * * *",   # 07:30 JST github-trending (分オフセットで post-morning と重複回避)
   "0 12 * * *",    # 21:00 JST daily-digest
   "0 14 * * *",    # 23:00 JST optimizer-update
   "0 */2 * * *",   # rollback-monitor 毎2h
   "0 0 * * 1",     # 月曜 09:00 JST inspirations-ingest
   "0 15 1 * *",    # 毎月1日 rotation-notice
 ]
+
+# --------------------------------------------------------------------
+# KV Namespaces
+# --------------------------------------------------------------------
+# xad-oauth-state: PKCE state→verifier の一時保存 (TTL 300s で自動削除)
+[[kv_namespaces]]
+binding = "OAUTH_STATE"
+id = "e848abee83b046bdba9b372d7b7b7609"
 
 # --------------------------------------------------------------------
 # 環境変数 (非機密のみ。機密は `wrangler secret put` で投入 → DEPLOY.md)
@@ -87,6 +95,7 @@ SUPABASE_SCHEMA = "xad"
 # 機密 (wrangler secret put で投入。ここには値を書かない):
 #   ANTHROPIC_API_KEY / OPENAI_API_KEY
 #   X_CLIENT_ID / X_CLIENT_SECRET / X_ACCESS_TOKEN / X_REFRESH_TOKEN
+#   OAUTH_ADMIN_SECRET (gates /oauth/x/start — fail closed if unset)
 #   TWITTERAPI_IO_KEY
 #   META_APP_ID / META_APP_SECRET / IG_ACCESS_TOKEN / IG_BUSINESS_ACCOUNT_ID
 #   SUPABASE_URL / SUPABASE_ANON_KEY / SUPABASE_SERVICE_ROLE_KEY

@@ -19,7 +19,7 @@ import re
 import sys
 import time
 import urllib.request
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from html.parser import HTMLParser
 from pathlib import Path
 
@@ -105,7 +105,7 @@ def main() -> int:
                         help="default: <repo>/raw/publishing/github-trending/")
     args = parser.parse_args()
 
-    today = datetime.now(timezone.utc).date().isoformat()
+    today = datetime.now(timezone(timedelta(hours=9))).date().isoformat()  # JST
     out_dir = Path(args.output_dir) if args.output_dir else (
         Path(__file__).resolve().parents[3] / "raw/publishing/github-trending"
     )
