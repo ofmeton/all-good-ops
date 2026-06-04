@@ -496,7 +496,7 @@ git commit -m "feat(xad/trace): withTrace (waitUntil完了保証 + fail-open) + 
 - `lib/writer/writer-x.ts`: **text 完了**（`response.content.find(b => b.type === "text")?.text`）
 - `lib/ideation/ideate.ts`: **tool_use**（`tool_choice: {type:"tool", name:"core_ideas"}` → `content.find(b => b.type === "tool_use")`）
 
-→ ヘルパは `messages.create` 引数を**パススルー**し、応答から text と tool_use の両方を取り出せる形にする（片方しか扱わないと ideation で空 trace になる）。`cost_jpy` は既存 `lib/cost/cost-model` で tokens から算出して埋める。
+→ ヘルパは `messages.create` 引数を**パススルー**し、応答から text と tool_use の両方を取り出せる形にする（片方しか扱わないと ideation で空 trace になる）。`cost_jpy` は MVP では算出せず **tokens のみ記録**（`lib/cost/cost-model.ts` は存在しない。円換算はダッシュボード側に委ねる）。
 
 - [ ] **Step 2: 失敗テストを書く**
 
@@ -598,11 +598,20 @@ export async function callClaudeTraced(
 Run: `npx jest lib/trace/llm-trace.test.ts`
 Expected: PASS
 
-- [ ] **Step 6: Commit**
+- [ ] **Step 6: 実 callsite への配線（prompt/tokens を実際に捕捉するため必須）**
+
+`callClaudeTraced` は作るだけでなく、各 LLM stage の `messages.create` 呼び出しを置き換えて初めて prompt/tokens が trace に乗る（完了条件「IO/prompt/tokens が読める」）。対象 callsite と方針:
+- `lib/writer/writer-x.ts:134`（text 完了）: `client.messages.create(params)` → `callClaudeTraced(client, { params, promptText })`。戻り `text` を従来通り使い、`meta` を呼び出し元へ返す（関数戻り値に `_trace?: TraceMeta` を足す optional 後方互換）。
+- `lib/ideation/ideate.ts:325`（tool_use）: 同様に置換し、`toolUse` を従来の `tu.input` の代わりに使う。`_trace` を返す。
+- `lib/editor/llm-judge.ts:84` / factuality（`pipeline.ts` 経由）: 同様。editor は judge が複数あるため、合算 prompt は省略可（tokens 合算 or 主 judge のみ）。
+
+各 stage の `withTrace(...)` 呼び出しで、`fn` の戻りに `meta: <stage が返した _trace>` を載せる（A9/A10 で具体化）。配線できない callsite は `meta` 省略（tokens=null、prompt は input から推測表示）。
+
+- [ ] **Step 7: Commit**
 
 ```bash
-git add apps/x-account-system/lib/trace/llm-trace.ts apps/x-account-system/lib/trace/llm-trace.test.ts
-git commit -m "feat(xad/trace): callClaudeTraced (prompt+usage 捕捉)"
+git add apps/x-account-system/lib/trace/llm-trace.ts apps/x-account-system/lib/trace/llm-trace.test.ts apps/x-account-system/lib/writer/writer-x.ts apps/x-account-system/lib/ideation/ideate.ts apps/x-account-system/lib/editor/llm-judge.ts
+git commit -m "feat(xad/trace): callClaudeTraced + 実callsite配線(writer/ideation/editor judge)"
 ```
 
 ---
@@ -877,7 +886,7 @@ if (process.argv[1] && process.argv[1].endsWith("build-registry.ts")) {
 
 Run: `npx jest scripts/build-registry.test.ts` → PASS
 Run: `cd apps/x-account-system && npm run build:registry`
-Expected: `lib/registry/registry.generated.json` 生成、8 stages。
+Expected: `lib/registry/registry.generated.json` 生成、11 stages（投稿生成系 8 + safety/dlp/optimizer）。
 
 - [ ] **Step 6: Commit**
 
@@ -1069,11 +1078,11 @@ export async function runPostJob(
   const rid = runId ?? "";
   if (!rid) { /* 既存挙動（trace 無し）にフォールバック */ }
 
-  // Writer
+  // Writer（writer-x が callClaudeTraced の meta を _trace で返す＝A5 Step6 配線）
   const draft = await withTrace(ctx, { runId: rid, stageId: "writer", input: { /* core_idea 要約 */ } },
     async () => {
-      const d = await /* 既存 writer 呼び出し */;
-      return { result: d, output: { body: d.body, format: d.format } };
+      const d = await /* 既存 writer 呼び出し（_trace 付き戻り） */;
+      return { result: d, output: { body: d.body, format: d.format }, meta: d._trace };
     });
 
   // Hook
@@ -1137,14 +1146,17 @@ case "ideation": {
   const rid = (msg as { runId?: string }).runId ?? "";
   const count = rid
     ? await withTrace(ctx, { runId: rid, stageId: "ideation" }, async () => {
-        const c = await runIdeation(env);
-        return { result: c, output: { inserted: c } };
+        const c = await runIdeation(env); // runIdeation が _trace(meta) を返すよう A5 Step6 で配線
+        return { result: c.count ?? c, output: { inserted: c.count ?? c }, meta: c._trace };
       })
     : await runIdeation(env);
   break;
 }
 ```
-`buzz-ingest` / `inspirations-ingest` も同様（stageId をそれぞれに）。
+
+> `runIdeation` の現行戻り値は件数（number）。配線後は `{ count, _trace }` を返す optional 後方互換にする（既存呼び出し側は数値を期待するので、計装経路のみ新形を使う）。editor も同様に `runEditor` が `_trace` を返し、A9 の editor `withTrace` で `meta: e._trace` を載せる。
+
+`buzz-ingest` / `inspirations-ingest` も同様（stageId をそれぞれに）。`runIdeation` の戻り `c.count ?? c` は配線前(number)後(object)両対応の保険。
 
 - [ ] **Step 2: revise/publisher 相関の失敗テストを書く**
 
@@ -1191,19 +1203,28 @@ ctx.waitUntil((async () => {
 })());
 ```
 
-**承認/却下応答の line-approval trace（MAJOR対応）**: approve/reject postback 処理（`handleApprove` 等）で、対象 draft の run_id に `line-approval` trace を追記する（outcome=`approved`|`rejected`）。これで `/runs/R1` に approval-request →（時間差）approval-response → publish が並ぶ。
+**post_drafts.run_id の読み出し（MAJOR対応）**: 承認/修正側は現状 `run_id` を select も型も持たない（`line-event.ts` の `PostDraftRow` 型 + draft select）。配線前提として:
+- `PostDraftRow`（または該当 draft 型）に `run_id?: string | null` を追加。
+- draft を読む select（承認 `:158` / 修正 `:411` 付近）に `run_id` を加える。
+- draft 保存（`persistDraft` 等）に `runId?: string` を optional 引数で渡し、新規 draft 時のみ書く（後方互換）。
+
+**承認/却下応答の line-approval trace（MAJOR対応）**: approve/reject postback（`handleApprove` 等）で対象 draft の run_id に `line-approval` trace を追記（outcome=`approved`|`rejected`）。**publish は run_id の有無に依存させない**（現行は run_id なしで claim→publish。trace は付帯物なので、無い時は trace を諦め投稿は継続）。
 
 ```ts
 // handleApprove 内（承認確定時）
-const runId = await resolveRunIdForDraft(draftId, fetchDraft);
+const runId = await resolveRunIdForDraft(draftId, fetchDraft); // 無ければ undefined
 if (runId) {
   await withTrace(ctx, { runId, stageId: "line-approval", input: { draftId, response: true } },
     async () => ({ result: undefined, outcome: "approved" }));
-  // 続けて publisher を trace で包んで投稿
-  await withTrace(ctx, { runId, stageId: "publisher", input: { draftId } },
-    async () => { await /* 既存投稿処理 */; return { result: undefined }; });
 }
-// reject 時は outcome="rejected" の line-approval trace のみ（publisher 無し）
+// publish は runId に関係なく必ず実行（既存挙動を維持）。runId があれば trace で包む。
+if (runId) {
+  await withTrace(ctx, { runId, stageId: "publisher", input: { draftId } },
+    async () => { await /* 既存 claim→publish 処理 */; return { result: undefined }; });
+} else {
+  await /* 既存 claim→publish 処理（trace なし） */;
+}
+// reject 時は runId があれば outcome="rejected" の line-approval trace のみ（publisher 無し）
 ```
 
 - `修正:` → `handleReviseFeedback`: revise writer/editor/line-approval を `withTrace` で包み、`stageId` は `writer`/`editor`/`line-approval` のまま、`input` に `{ revision: true, ... }` を入れる（registry に新ノードを足さない）。`runId` は対象 draft の run_id。
