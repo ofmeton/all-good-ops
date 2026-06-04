@@ -34,7 +34,8 @@
     "worker:typecheck": "tsc -p src/tsconfig.json --noEmit",
     "worker:dev": "wrangler dev",
     "worker:deploy": "wrangler deploy",
-    "worker:bundle-check": "bash scripts/bundle-check.sh"
+    "worker:bundle-check": "bash scripts/bundle-check.sh",
+    "build:registry": "tsx scripts/build-registry.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.36.0",
