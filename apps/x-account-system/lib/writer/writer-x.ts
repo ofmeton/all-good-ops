@@ -95,11 +95,13 @@ function buildReferenceFeedbackSection(referenceFeedback?: string[]): string {
  * (note は writer-note.ts、IG は writer-ig.ts が別途持つ)
  */
 const MAX_TOKENS_BY_FORMAT: Record<string, number> = {
-  short: 512,
-  medium: 1024,
-  long: 2560,
-  thread: 4096,
-  article: 4096,
+  // 収集済バズは最大 ~4,156 字 (長尺競合)。自前 thread/medium は 1024 上限で頭打ちだった。
+  // コストは実生成分のみ課金なので余裕を持たせる (Sonnet 4.5 は出力 64K まで可)。
+  short: 1024,
+  medium: 3072,
+  long: 8192,
+  thread: 8192,
+  article: 8192,
 };
 
 /**

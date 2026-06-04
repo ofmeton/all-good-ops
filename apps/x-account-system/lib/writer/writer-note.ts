@@ -92,7 +92,7 @@ async function callAnthropicWriter(
   const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
   const response = await client.messages.create({
     model: "claude-sonnet-4-5",
-    max_tokens: 4096,
+    max_tokens: 8192, // note 記事は長文。余裕を持たせる (実生成分のみ課金)
     system: systemPrompt,
     messages: [
       {
