@@ -1,45 +1,36 @@
 ---
 type: meta
 title: "Hot Cache"
-updated: 2026-05-27
+updated: 2026-06-05
 ---
 
 # Recent Context
 
-> セッション間で保持される ~500 words のコンテキストキャッシュ。LLM はセッション開始時に最優先でこれを読む。詳細仕様: [[SCHEMA]] §ホットキャッシュ。
+> セッション間で保持される ~500 words のコンテキストキャッシュ。セッション開始時に最優先で読む。詳細: [[SCHEMA]] §ホットキャッシュ。
 
 ## Last Updated
-2026-05-27 — **x-account-design Phase 0.5 駆け抜け完了** (11 PR merged、main HEAD 384740c)。launch-roadmap + PR-A〜PR-E 全実装 (~12,000 LOC / 182 tests pass) + content drafts + handson + note 有料 #1 + Phase 1 Day 1 runbook。残: ofmeton ハンズオン (H-1〜H-10) のみで X+note soft launch (6/8 目標) 可能。
+2026-06-05 — **x-account-system（はぐりん名義 X 自動投稿）が W1-W5 フル実装 → 本番 deploy → 実運用入り**。2026-06-04 に実投稿4件が LINE 承認経由で X に出た（実ツイートID付き、AUTONOMOUS_PUBLISH=false で全て人間承認）。PR #63〜#81（約19本）で配線+backend+Queues+投稿/承認/webhook + 全自動化(ingest/ideation/digest/optimizer/rollback/brownout4段階/oauth) + LINE UX(Flexボタン/修正・覚えて/引用リプライ/自由文意図) + コスト実数ダイジェスト。実走で本番バグを多数修正（token失効→自動refresh / スレッド連結投稿 / judge欠落crash / ideation orphan / DLP誤検出soft化 / max_tokens形式別 / 手動slot分離）。Worker `ofmeton-x-account` 最新 v9f95ca2b。詳細 SSOT: memory [[project-x-account-phase05]] + raw `2026-06-04-xad-operational-and-money-bot-down.md`。振り返り反映: wiki [[self/engineering-principles]] 新設 + memory feedback 5件 + improvement-log 4件。
 
 ## Current Focus
-- **ofmeton ハンズオン H-1〜H-10 進行待ち** — handson-h1-to-h10.md の Day A 〜 Day E に従い 2-3h で完了 (X Developer + Supabase + Anthropic/OpenAI + Cloudflare or launchd + LINE + note 購読 + budget 確認)
-- **Phase 1 Day 1 (2026-06-08) X+note soft launch** — phase1-day1-runbook.md §1 前日チェックリストを 6/7 実行
-- money-bot Phase 1 残タスク (Supabase / LINE / Meta / Vercel 人間タスク、別 session で着手予定)
-- ai-radar v2 安定運用観測 (Phase 1-8 + 7day 窓 + X 5 アカ稼働中)
-- terra-isshiki / minpaku-cleaning 個人案件は 2026-06 末完納
+- **x-account 運用**: LINE で承認カード（本文コピー可 + 形式/品質メモ/[承認][却下]）を承認→投稿。cron 自動巡回（06:00 buzz→06:30 ideation→07/12/19 post→21:00 digest）稼働。手動投稿は manual-slot で標準スロットと分離。
+- **writer ハルシネーション**: X6 出典グラウンディング警告で人間が弾く網。将来 writer 側で捏造抑制が候補。
+- **🔴 ミナト広告設定 案件（再開待ち）**: chrome-devtools MCP 接続待ち。memory [[project-minato-ad-settings]]
+- **money-bot 不調（保留）**: dailyPublishWorkflow が `publish_queue upsert: fetch failed`。ユーザー判断で一旦放置。
 
 ## Recently Touched
-- [[../outputs/improvements/x-account-design-consolidated/launch-roadmap]] (PR #30)
-- [[../outputs/improvements/x-account-design-consolidated/handson-h1-to-h10]] (PR #33、855 行)
-- [[../outputs/improvements/x-account-design-consolidated/phase1-day1-runbook]] (PR #39、390 行)
-- [[../outputs/improvements/x-account-design-consolidated/content-drafts/phase1-month1-initial-content]] (PR #31)
-- [[../outputs/improvements/x-account-design-consolidated/content-drafts/note-paid-1-draft]] (PR #35、4,200 字)
-- [[../apps/x-account-system/lib/editor/pipeline]] (PR #34、Editor 6+5)
-- [[../apps/x-account-system/lib/publisher/x-publisher]] (PR #36)
-- [[../apps/x-account-system/lib/optimizer/thompson]] (PR #37)
-- [[../apps/x-account-system/lib/safety/kill-switch]] (PR #38)
-- [[../apps/x-account-system/lib/visualizer/codex-image]] (PR #40)
-- [[../outputs/retrospectives/2026-05-27-1500-phase05-driven-complete]] (本セッション振り返り)
+- [[self/engineering-principles]] (2026-06-05 新設・連結学びノート)
+- [[../apps/x-account-system/]] (W1-W5 + 多数 runtime fix, v9f95ca2b)
+- [[../raw/facts/situations/2026-06-04-xad-operational-and-money-bot-down]]
+- [[../outputs/retrospectives/2026-06-05-0030-x-account-full-build-and-live-ops]]
+- [[index]] / [[log]] (engineering-principles 反映)
 
 ## Open Questions / Frontiers
-- ofmeton 側 H-1〜H-10 完了タイミング (6/7 前日チェックリスト着手の trigger)
-- H-2 Supabase Free tier 2 project 上限 (民泊清掃と x-account-system 同居 → Phase 0.5 in-memory fallback で 6/7 直前 provision の方針確認)
-- H-4 Cloudflare Workers Paid vs mac launchd の最終判断
-- Phase 1 Month 1 末 (7/31) note 有料 #1 公開時の価格 (¥980 vs ¥500) と公開日確定
-- Optimizer Phase 1 起動後 30 投稿/60 投稿 posterior 反映の精度実測 (E-46 / E-47 / E-52)
+- writer の事実捏造（具体値ハルシネーション）を生成側で抑える方法（現状 X6 警告のみ）
+- ideation の1日産出数 vs 3投稿/日の在庫バランス（現状 limit20→~5件/run）
+- prod-lib-diag スキル化（queue/cron 診断ハーネスの型化）の是非
+- money-bot `fetch failed` の原因調査（Supabase通信 or 設定）
+- X soft launch 後の non_public_metrics 検証 / 投稿テーマ配分
 
 ## Conventions
-- ファイルサイズ目安: 500 words 以内
-- 文体: declarative present tense
-- 更新タイミング: ingest 完了後 / 大きな query 合成完了後 / 戦略変更 commit 後 / セッション振り返り完了時
-- 全置換更新（追記しない・古い項目は間引く）
+- 500 words 以内 / declarative present tense / 全置換更新（古い項目は間引く）
+- 更新タイミング: ingest 後 / 大きな query 合成後 / 戦略変更 commit 後 / 振り返り完了時

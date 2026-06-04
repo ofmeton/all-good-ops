@@ -385,6 +385,7 @@ source: session
 | 38 | OAuth トラブルシューティング | `oauth-troubleshooting.md` | OAuth プロバイダ (Meta / Google / Stripe 等) の認証エラー時の三段構え (シークレット試行 / Cookie 削除 / 拡張機能 OFF) |
 | 39 | Vercel env 一括投入 | `vercel-env-bulk-add.md` | `.env.local` から stdin 経由で Vercel production env への一括投入。シェル履歴に値を残さない安全な方式 |
 | 40 | Supabase project 前提チェック | `supabase-project-precheck.md` | `create_project` 前の list_projects + Free tier 2 制限確認 + 残り枠なし時の A〜E 代替案提示 |
+| 41 | 本番 lib ローカル診断ハーネス | `prod-lib-diag.md` | queue/cron の本番バグ調査・特定 idea/draft 再生成を、`.env.local` 読込で lib 関数をローカル tsx で本番 env 直接実行。tail 不安定経路の実エラー特定・本番経路 end-to-end 検証。副作用注意（実DB/LLM/LINE/X、slot 分離、一時script削除） |
 
 ---
 

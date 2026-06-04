@@ -326,3 +326,7 @@ ai-radar プロジェクトを完全撤廃。Free tier 枠空け含む整理。
 - `wiki/domain/claude-usage/` (手動運用に縮小して存続)
 
 決定事実: [[raw/facts/situations/2026-05-27-ai-radar-shutdown-decision.md]]
+
+## [2026-06-05] phase | engineering-principles 連結学びノート新設 (x-account 振り返り)
+- self/engineering-principles.md 新設: 境界で外部/LLM出力検証 / テスト緑≠本番 / 既知バグ非deferred / 出力形式の単一契約 / エラー発信元確認
+- 振り返り学びを memory フラットから wiki 連結ノートへ寄せる方針（atomic recall=memory, 高次化=wiki）
