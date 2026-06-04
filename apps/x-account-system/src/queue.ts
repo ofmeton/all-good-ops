@@ -24,8 +24,27 @@ import { runRollbackMonitor } from "./jobs/rollback-job.js";
 import { runRotationNotice } from "./jobs/rotation-job.js";
 import { evaluateBrownout } from "../lib/safety/brownout-handler.js";
 import { makeProductionDeps } from "../lib/dashboard/kpi-collector.js";
+import { recordSkip } from "../lib/trace/with-trace.js";
 
-export async function handleJob(msg: JobMessage, env: Env): Promise<void> {
+export const MAX_ATTEMPTS = 4; // = 1 + wrangler.toml max_retries(3)。変更時は wrangler.toml と両方
+
+export interface HandleJobResult {
+  skipped: boolean;
+}
+
+export function decideRunStatus(
+  a: { ok: boolean; attempt: number; maxAttempts: number },
+): "ok" | "running" | "error" {
+  if (a.ok) return "ok";
+  return a.attempt >= a.maxAttempts ? "error" : "running";
+}
+
+export async function handleJob(
+  msg: JobMessage,
+  env: Env,
+  ctx?: ExecutionContext,
+): Promise<HandleJobResult> {
+  const runId = (msg as { runId?: string }).runId;
   // ----------------------------------------------------------------
   // W5-7: brownout 4-stage guard
   //   当月コストを cost_ledger から取得し、4-stage 判定を行う。
@@ -57,8 +76,9 @@ export async function handleJob(msg: JobMessage, env: Env): Promise<void> {
           allowed: decision.allowedJobs,
         }),
       );
+      if (runId) await recordSkip(ctx, { runId, stageId: "safety", outcome: `brownout:${decision.status}` });
       // ACK: リトライしない (予算回復まで次の cron 発火を待つ)
-      return;
+      return { skipped: true };
     }
   }
 
@@ -91,6 +111,7 @@ export async function handleJob(msg: JobMessage, env: Env): Promise<void> {
       const slot = msg.manual
         ? `manual-${msg.slot}-${crypto.randomUUID().slice(0, 8)}`
         : msg.slot;
+      // TODO(A9): runPostJob を ctx,runId 受け取りに拡張後 runPostJob(slot, env, ctx, runId) へ
       await runPostJob(slot, env);
       break;
     }
@@ -203,6 +224,7 @@ export async function handleJob(msg: JobMessage, env: Env): Promise<void> {
     case "line-event": {
       // W4-2: approve/reject postback → publish
       // W4-3 will extend for interviewer text flow
+      // TODO(A10): handleLineEvent を ctx 受け取りに拡張後 handleLineEvent(msg.payload, env, ctx) へ
       await handleLineEvent(msg.payload, env);
       break;
     }
@@ -219,4 +241,6 @@ export async function handleJob(msg: JobMessage, env: Env): Promise<void> {
       );
     }
   }
+
+  return { skipped: false };
 }

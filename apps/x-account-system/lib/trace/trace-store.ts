@@ -22,7 +22,9 @@ function getTraceSupabase(): SupabaseClient | null {
   if (_client !== undefined) return _client;
   const url = process.env.SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  _client = url && key ? createClient(url, key, { db: { schema: "xad" } }) : null;
+  // 既存 lib/optimizer/state-store.ts 規約: 非 public schema は型上 "public" にキャスト
+  // （ランタイムは "xad" を使用。SupabaseClient 既定型との不一致を避ける）。
+  _client = url && key ? createClient(url, key, { db: { schema: "xad" as "public" } }) : null;
   return _client;
 }
 

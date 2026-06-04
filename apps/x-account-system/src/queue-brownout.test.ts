@@ -83,7 +83,8 @@ afterAll(() => {
 describe("handleJob: brownout cost-fetch fails OPEN", () => {
   it("does NOT throw when getMonthlyCostJpy() rejects (would otherwise retry forever)", async () => {
     const msg: JobMessage = { job: "daily-digest", date: "2026-06-03" };
-    await expect(handleJob(msg, makeEnv())).resolves.toBeUndefined();
+    // 常時許可 job のため brownout skip されず正常完了 → { skipped: false }（throw しない）
+    await expect(handleJob(msg, makeEnv())).resolves.toEqual({ skipped: false });
     expect(mockGetMonthlyCostJpy).toHaveBeenCalledTimes(1);
   });
 

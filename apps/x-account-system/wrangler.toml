@@ -35,6 +35,7 @@ binding = "JOBS"
 queue = "xad-jobs"
 max_batch_size = 1
 max_retries = 3
+# MAX_ATTEMPTS(=1+max_retries)=4 は src/queue.ts と二重管理。変更時は両方
 dead_letter_queue = "xad-jobs-dlq"
 
 # --------------------------------------------------------------------
