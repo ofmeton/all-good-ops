@@ -1,5 +1,9 @@
 import Link from "next/link";
 import { listRuns } from "@/lib/queries";
+
+// 都度フレッシュ（新しい run を再デプロイなしに反映）
+export const dynamic = "force-dynamic";
+
 export default async function Runs() {
   const runs = await listRuns(50).catch(() => []);
   return (
