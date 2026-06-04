@@ -202,22 +202,36 @@ async function fetchUnideatedMaterials(
 ): Promise<MaterialRow[]> {
   const sb = getSupabase(env);
 
-  // Claim rows atomically: only rows where ideation_status IS NULL.
-  // Sets the dedicated column — meta JSONB is left intact.
+  // 1. claim 対象を limit 件に限定するため、まず候補 id を limit 件だけ取得する。
+  //    (旧実装は全 null 行を claim してから slice していたため、未処理分が claimed のまま
+  //     orphan 化し、以降の ideation が素材枯渇でスキップしていた。)
+  const { data: candidates, error: selErr } = await sb
+    .from("materials_store")
+    .select("id")
+    .eq("publication_consent", "pending")  // x_inspirations come in as pending
+    .in("source_type", ["x_inspirations", "note_inspirations"])
+    .is("ideation_status", null)
+    .limit(limit);
+
+  if (selErr) {
+    throw new Error(`[ideation] fetchUnideatedMaterials select failed: ${(selErr as { message: string }).message}`);
+  }
+  const ids = ((candidates as { id: string }[] | null) ?? []).map((c) => c.id);
+  if (ids.length === 0) return [];
+
+  // 2. その id 群だけを atomic claim (still null のみ更新 → 並行 ideation でも二重 claim しない)。
   const { data, error } = await sb
     .from("materials_store")
     .update({ ideation_status: "claimed" })
-    .eq("publication_consent", "pending")  // x_inspirations come in as pending
-    .in("source_type", ["x_inspirations", "note_inspirations"])
+    .in("id", ids)
     .is("ideation_status", null)
     .select();
 
   if (error) {
-    throw new Error(`[ideation] fetchUnideatedMaterials failed: ${(error as { message: string }).message}`);
+    throw new Error(`[ideation] fetchUnideatedMaterials claim failed: ${(error as { message: string }).message}`);
   }
 
-  const rows = ((data as MaterialRow[] | null) ?? []).slice(0, limit);
-  return rows;
+  return (data as MaterialRow[] | null) ?? [];
 }
 
 /**
