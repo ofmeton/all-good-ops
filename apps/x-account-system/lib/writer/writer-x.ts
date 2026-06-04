@@ -15,6 +15,7 @@
 
 import type { CoreIdea, DraftOutput, DraftRequest } from "./types.ts";
 import { buildWriterSystemPrompt, FORMAT_MAX_CHARS } from "./system-prompts.ts";
+import { THREAD_DELIMITER } from "../publisher/thread-format.ts";
 
 /**
  * X はプレーンテキスト。人間は `*` `#` を投稿に使わない。
@@ -90,6 +91,32 @@ function buildReferenceFeedbackSection(referenceFeedback?: string[]): string {
 }
 
 /**
+ * フォーマット別の出力トークン上限。スレッド/長文は複数ツイート分が必要なため大きめ。
+ * (note は writer-note.ts、IG は writer-ig.ts が別途持つ)
+ */
+const MAX_TOKENS_BY_FORMAT: Record<string, number> = {
+  short: 512,
+  medium: 1024,
+  long: 2560,
+  thread: 4096,
+  article: 4096,
+};
+
+/**
+ * max_tokens 到達で打ち切られた本文の不完全な末尾を捨てる安全網。
+ * thread は最後の delimiter 行までで切る (中途半端なツイートを投稿しない)。
+ */
+function dropTruncatedTail(text: string, fmat: string): string {
+  if (fmat === "thread") {
+    const re = new RegExp(`\\n\\s*${THREAD_DELIMITER}\\s*(\\n|$)`, "g");
+    let lastIdx = -1;
+    for (let m = re.exec(text); m; m = re.exec(text)) lastIdx = m.index;
+    if (lastIdx > 0) return text.slice(0, lastIdx).trimEnd();
+  }
+  return text;
+}
+
+/**
  * Live Anthropic SDK call (Phase 1+ で有効化)。
  * Phase 0.5 では呼ばれない。
  */
@@ -101,9 +128,10 @@ async function callAnthropicWriter(
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const Anthropic = (await import("@anthropic-ai/sdk")).default;
   const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+  const maxTokens = MAX_TOKENS_BY_FORMAT[idea.fmat] ?? 4096;
   const response = await client.messages.create({
     model: "claude-sonnet-4-5",
-    max_tokens: 1024,
+    max_tokens: maxTokens,
     system: systemPrompt,
     messages: [
       {
@@ -112,9 +140,13 @@ async function callAnthropicWriter(
       },
     ],
   });
-  const text =
+  let text =
     response.content.find((b) => b.type === "text")?.text ??
     "(no text returned)";
+  if (response.stop_reason === "max_tokens") {
+    console.warn(`[writer] max_tokens(${maxTokens}) 到達で打ち切り (fmat=${idea.fmat}) — 不完全な末尾を除去`);
+    text = dropTruncatedTail(text, idea.fmat);
+  }
   // 概算 cost (Sonnet 4.5 USD: input $3/M tok, output $15/M tok)
   const inputCost = (response.usage.input_tokens / 1_000_000) * 3;
   const outputCost = (response.usage.output_tokens / 1_000_000) * 15;
@@ -201,9 +233,10 @@ export async function reviseDraftForX(
   const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
   const systemPrompt =
     buildWriterSystemPrompt(idea) + buildReferenceFeedbackSection(referenceFeedback);
+  const maxTokens = MAX_TOKENS_BY_FORMAT[idea.fmat] ?? 4096;
   const response = await client.messages.create({
     model: "claude-sonnet-4-5",
-    max_tokens: 1024,
+    max_tokens: maxTokens,
     system: systemPrompt,
     messages: [
       {
@@ -217,8 +250,12 @@ export async function reviseDraftForX(
       },
     ],
   });
-  const text =
+  let text =
     response.content.find((b) => b.type === "text")?.text ?? originalBody;
+  if (response.stop_reason === "max_tokens") {
+    console.warn(`[writer/revise] max_tokens(${maxTokens}) 到達で打ち切り (fmat=${idea.fmat}) — 不完全な末尾を除去`);
+    text = dropTruncatedTail(text, idea.fmat);
+  }
   const inputCost = (response.usage.input_tokens / 1_000_000) * 3;
   const outputCost = (response.usage.output_tokens / 1_000_000) * 15;
   return {
