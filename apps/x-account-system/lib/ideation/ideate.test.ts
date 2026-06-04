@@ -85,53 +85,39 @@ function makeIdeaToolResult() {
 // ---------------------------------------------------------------------------
 
 function makeSupabaseMock(materialRows: ReturnType<typeof makeMaterialRows>) {
-  // materials_store claim: update().eq().in().is().select() → returns material rows
-  const claimSelectMock = jest.fn().mockResolvedValue({
-    data: materialRows,
-    error: null,
-  });
+  // 1. candidate select: select('id').eq().in().is().limit() → 候補 id
+  const candidateRows = materialRows.map((r) => ({ id: r.id }));
+  const candLimitMock = jest.fn().mockResolvedValue({ data: candidateRows, error: null });
+  const candIsMock = jest.fn().mockReturnValue({ limit: candLimitMock });
+  const candInMock = jest.fn().mockReturnValue({ is: candIsMock });
+  const candEqMock = jest.fn().mockReturnValue({ in: candInMock });
+  const candidateSelectMock = jest.fn().mockReturnValue({ eq: candEqMock });
+
+  // 2. claim update: update({claimed}).in().is().select() → 行
+  const claimSelectMock = jest.fn().mockResolvedValue({ data: materialRows, error: null });
   const claimIsNullMock = jest.fn().mockReturnValue({ select: claimSelectMock });
   const claimInMock = jest.fn().mockReturnValue({ is: claimIsNullMock });
-  const claimEqMock = jest.fn().mockReturnValue({ in: claimInMock });
-  const materialsUpdateMock = jest.fn().mockReturnValue({ eq: claimEqMock });
+  const materialsUpdateMock = jest.fn().mockReturnValue({ in: claimInMock });
 
   // core_ideas: INSERT
   const coreIdeasInsertMock = jest.fn().mockResolvedValue({ error: null });
 
-  // materials_store: mark ideated UPDATE (set meta ideation_status="done")
-  // update().in().select()
+  // mark done: update({done}).in().select()
   const markDoneSelectMock = jest.fn().mockResolvedValue({ error: null });
   const markDoneInMock = jest.fn().mockReturnValue({ select: markDoneSelectMock });
   const markDoneUpdateMock = jest.fn().mockReturnValue({ in: markDoneInMock });
 
-  // fromMock: dispatch based on call sequence
-  let fromCallCount = 0;
+  // fromMock: materials_store は candidate-select(1) → claim-update(2) → mark-done(3) の順
+  let materialsCalls = 0;
   const fromMock = jest.fn().mockImplementation((table: string) => {
-    fromCallCount++;
-    if (table === "materials_store" && fromCallCount === 1) {
-      // First call: atomic claim of unconsumed materials
-      return { update: materialsUpdateMock };
-    }
-    if (table === "core_ideas") {
-      // Second call: insert core_ideas
-      return { insert: coreIdeasInsertMock };
-    }
-    if (table === "materials_store" && fromCallCount >= 3) {
-      // Third call: mark ideated done
+    if (table === "core_ideas") return { insert: coreIdeasInsertMock };
+    if (table === "materials_store") {
+      materialsCalls++;
+      if (materialsCalls === 1) return { select: candidateSelectMock };
+      if (materialsCalls === 2) return { update: materialsUpdateMock };
       return { update: markDoneUpdateMock };
     }
-    // fallback
-    return {
-      update: jest.fn().mockReturnValue({
-        eq: jest.fn().mockReturnValue({
-          in: jest.fn().mockReturnValue({
-            is: jest.fn().mockReturnValue({
-              select: jest.fn().mockResolvedValue({ data: [], error: null }),
-            }),
-          }),
-        }),
-      }),
-    };
+    return { select: jest.fn().mockReturnValue({ eq: jest.fn().mockReturnValue({ in: jest.fn().mockReturnValue({ is: jest.fn().mockReturnValue({ limit: jest.fn().mockResolvedValue({ data: [], error: null }) }) }) }) }) };
   });
 
   const client = { from: fromMock };
@@ -142,6 +128,7 @@ function makeSupabaseMock(materialRows: ReturnType<typeof makeMaterialRows>) {
     coreIdeasInsertMock,
     markDoneUpdateMock,
     claimSelectMock,
+    candidateSelectMock,
   };
 }
 
@@ -260,12 +247,13 @@ describe("runIdeation", () => {
   });
 
   test("returns 0 when no unconsumed materials are found", async () => {
-    const claimSelectMock = jest.fn().mockResolvedValue({ data: [], error: null });
-    const updateIsNullMock = jest.fn().mockReturnValue({ select: claimSelectMock });
-    const updateInMock = jest.fn().mockReturnValue({ is: updateIsNullMock });
-    const updateEqMock = jest.fn().mockReturnValue({ in: updateInMock });
-    const materialsUpdateMock = jest.fn().mockReturnValue({ eq: updateEqMock });
-    const fromMock = jest.fn().mockReturnValue({ update: materialsUpdateMock });
+    // candidate select が空 → ideation は素材なしで 0 を返す
+    const candLimitMock = jest.fn().mockResolvedValue({ data: [], error: null });
+    const candIsMock = jest.fn().mockReturnValue({ limit: candLimitMock });
+    const candInMock = jest.fn().mockReturnValue({ is: candIsMock });
+    const candEqMock = jest.fn().mockReturnValue({ in: candInMock });
+    const candidateSelectMock = jest.fn().mockReturnValue({ eq: candEqMock });
+    const fromMock = jest.fn().mockReturnValue({ select: candidateSelectMock });
     const client = { from: fromMock };
 
     const { AnthropicClass, createMock } = makeAnthropicMock({ ideas: [] });
