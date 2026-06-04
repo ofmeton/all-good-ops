@@ -607,6 +607,8 @@ Expected: PASS
 
 各 stage の `withTrace(...)` 呼び出しで、`fn` の戻りに `meta: <stage が返した _trace>` を載せる（A9/A10 で具体化）。配線できない callsite は `meta` 省略（tokens=null、prompt は input から推測表示）。
 
+> `_trace?: TraceMeta` を返り値に足す際は、型定義も同 commit に含める: `lib/writer/types.ts`（DraftOutput）/ `lib/editor/types.ts`（EditorOutput）。型を更新しないと TS が通らない。
+
 - [ ] **Step 7: Commit**
 
 ```bash
@@ -1227,7 +1229,7 @@ if (runId) {
 // reject 時は runId があれば outcome="rejected" の line-approval trace のみ（publisher 無し）
 ```
 
-- `修正:` → `handleReviseFeedback`: revise writer/editor/line-approval を `withTrace` で包み、`stageId` は `writer`/`editor`/`line-approval` のまま、`input` に `{ revision: true, ... }` を入れる（registry に新ノードを足さない）。`runId` は対象 draft の run_id。
+- `修正:` → `handleReviseFeedback`: revise writer/editor/line-approval を `withTrace` で包み、`stageId` は `writer`/`editor`/`line-approval` のまま、`input` に `{ revision: true, ... }` を入れる（registry に新ノードを足さない）。`runId` は対象 draft の run_id。**古い draft で run_id が無い場合は publish と同じく「runId あれば trace、無ければ既存処理のみ」を徹底**（trace 無しでも修正・再承認は機能する）。
 
 ```ts
 // 例: handleReviseFeedback 内 writer 再生成
