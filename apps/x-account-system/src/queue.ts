@@ -111,8 +111,7 @@ export async function handleJob(
       const slot = msg.manual
         ? `manual-${msg.slot}-${crypto.randomUUID().slice(0, 8)}`
         : msg.slot;
-      // TODO(A9): runPostJob を ctx,runId 受け取りに拡張後 runPostJob(slot, env, ctx, runId) へ
-      await runPostJob(slot, env);
+      await runPostJob(slot, env, ctx, runId);
       break;
     }
 
