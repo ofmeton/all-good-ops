@@ -24,7 +24,7 @@ import { runRollbackMonitor } from "./jobs/rollback-job.js";
 import { runRotationNotice } from "./jobs/rotation-job.js";
 import { evaluateBrownout } from "../lib/safety/brownout-handler.js";
 import { makeProductionDeps } from "../lib/dashboard/kpi-collector.js";
-import { recordSkip } from "../lib/trace/with-trace.js";
+import { recordSkip, withTrace } from "../lib/trace/with-trace.js";
 
 export const MAX_ATTEMPTS = 4; // = 1 + wrangler.toml max_retries(3)。変更時は wrangler.toml と両方
 
@@ -87,15 +87,31 @@ export async function handleJob(
     // ideation: materials_store → core_ideas LLM 自動生成 (W5-2)
     // ----------------------------------------------------------------
     case "ideation": {
-      const count = await runIdeation(env);
-      console.log(
-        JSON.stringify({
-          level: "info",
-          msg: "[ideation] materials→core_ideas 生成 完了",
-          date: msg.date,
-          inserted: count,
-        }),
-      );
+      const rid = runId ?? "";
+      if (rid) {
+        await withTrace(ctx, { runId: rid, stageId: "ideation" }, async () => {
+          const count = await runIdeation(env);
+          console.log(
+            JSON.stringify({
+              level: "info",
+              msg: "[ideation] materials→core_ideas 生成 完了",
+              date: msg.date,
+              inserted: count,
+            }),
+          );
+          return { result: count, output: { inserted: count } };
+        });
+      } else {
+        const count = await runIdeation(env);
+        console.log(
+          JSON.stringify({
+            level: "info",
+            msg: "[ideation] materials→core_ideas 生成 完了",
+            date: msg.date,
+            inserted: count,
+          }),
+        );
+      }
       break;
     }
 
@@ -120,15 +136,31 @@ export async function handleJob(
     // ----------------------------------------------------------------
     case "buzz-ingest": {
       // W5-1: twitterapi.io seed accounts → xad.materials_store (x_inspirations)
-      const count = await runBuzzIngest(env);
-      console.log(
-        JSON.stringify({
-          level: "info",
-          msg: "[buzz-ingest] twitterapi.io 日次取得 完了",
-          date: msg.date,
-          inserted: count,
-        }),
-      );
+      const rid = runId ?? "";
+      if (rid) {
+        await withTrace(ctx, { runId: rid, stageId: "buzz-ingest" }, async () => {
+          const count = await runBuzzIngest(env);
+          console.log(
+            JSON.stringify({
+              level: "info",
+              msg: "[buzz-ingest] twitterapi.io 日次取得 完了",
+              date: msg.date,
+              inserted: count,
+            }),
+          );
+          return { result: count, output: { inserted: count } };
+        });
+      } else {
+        const count = await runBuzzIngest(env);
+        console.log(
+          JSON.stringify({
+            level: "info",
+            msg: "[buzz-ingest] twitterapi.io 日次取得 完了",
+            date: msg.date,
+            inserted: count,
+          }),
+        );
+      }
       break;
     }
 
@@ -137,15 +169,31 @@ export async function handleJob(
     // ----------------------------------------------------------------
     case "inspirations-ingest": {
       // X seeds (overseas ≥6 / domestic ≥18) + note seeds (≥3) → materials_store
-      const count = await runInspirationsIngest(env);
-      console.log(
-        JSON.stringify({
-          level: "info",
-          msg: "[inspirations-ingest] 週次 ingest 完了",
-          date: msg.date,
-          inserted: count,
-        }),
-      );
+      const rid = runId ?? "";
+      if (rid) {
+        await withTrace(ctx, { runId: rid, stageId: "inspirations-ingest" }, async () => {
+          const count = await runInspirationsIngest(env);
+          console.log(
+            JSON.stringify({
+              level: "info",
+              msg: "[inspirations-ingest] 週次 ingest 完了",
+              date: msg.date,
+              inserted: count,
+            }),
+          );
+          return { result: count, output: { inserted: count } };
+        });
+      } else {
+        const count = await runInspirationsIngest(env);
+        console.log(
+          JSON.stringify({
+            level: "info",
+            msg: "[inspirations-ingest] 週次 ingest 完了",
+            date: msg.date,
+            inserted: count,
+          }),
+        );
+      }
       break;
     }
 
@@ -223,8 +271,9 @@ export async function handleJob(
     case "line-event": {
       // W4-2: approve/reject postback → publish
       // W4-3 will extend for interviewer text flow
-      // TODO(A10): handleLineEvent を ctx 受け取りに拡張後 handleLineEvent(msg.payload, env, ctx) へ
-      await handleLineEvent(msg.payload, env);
+      // A10: handleLineEvent は ctx を受け取り、承認/却下/修正の trace を
+      //      元の post run(run_id) に追記する。
+      await handleLineEvent(msg.payload, env, ctx);
       break;
     }
 
