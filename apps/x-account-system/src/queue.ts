@@ -86,7 +86,12 @@ export async function handleJob(msg: JobMessage, env: Env): Promise<void> {
     case "post-noon":
     case "post-evening": {
       // W3-2: idea→draft→editor→LINE承認依頼
-      await runPostJob(msg.slot, env);
+      // 手動起動(manual)は標準スロットを占有しないよう manual-xxx slot で投稿する。
+      // → 「各スロット投稿済み」管理は自動(cron)起動のみに反映される。
+      const slot = msg.manual
+        ? `manual-${msg.slot}-${crypto.randomUUID().slice(0, 8)}`
+        : msg.slot;
+      await runPostJob(slot, env);
       break;
     }
 

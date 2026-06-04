@@ -64,6 +64,9 @@ export type JobMessage =
       job: "post-morning" | "post-noon" | "post-evening";
       date: string;
       slot: "morning" | "noon" | "evening";
+      // 手動起動 (/admin/enqueue) は true。標準スロットを占有せず manual-xxx slot で投稿し、
+      // 「各スロット投稿済み」管理は自動(cron)起動のみに反映させる。
+      manual?: boolean;
     }
   | {
       job:
@@ -183,11 +186,12 @@ export default {
       }
       const date = jstDate(new Date());
       const slot = POST_SLOTS[job as keyof typeof POST_SLOTS];
+      // 手動起動は manual:true。標準スロットを占有しない (handleJob 側で manual-xxx slot に振る)。
       const msg: JobMessage = slot
-        ? ({ job, date, slot } as JobMessage)
+        ? ({ job, date, slot, manual: true } as JobMessage)
         : ({ job, date } as JobMessage);
       await env.JOBS.send(msg);
-      log(env, "info", `admin: enqueued job=${job}`);
+      log(env, "info", `admin: enqueued job=${job} (manual)`);
       return Response.json({ ok: true, enqueued: msg });
     }
 
