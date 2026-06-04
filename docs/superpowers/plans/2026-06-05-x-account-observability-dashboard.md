@@ -552,7 +552,6 @@ Expected: FAIL
 ```ts
 // lib/trace/llm-trace.ts
 import type { TraceMeta } from "./types.js";
-import { estimateCostJpy } from "../cost/cost-model.js"; // ← 実関数名は cost-model の export を確認(下記注)
 
 interface ClaudeLike {
   messages: { create: (args: Record<string, unknown>) => Promise<{
@@ -585,14 +584,14 @@ export async function callClaudeTraced(
       model,
       tokensIn,
       tokensOut,
-      // cost-model に該当 export が無ければ tokens を出すだけに留め costJpy 省略可
-      costJpy: tokensIn != null && tokensOut != null ? estimateCostJpy(model, tokensIn, tokensOut) : undefined,
+      // costJpy はここでは算出しない（tokens のみ記録）。
+      // コスト換算はダッシュボード側 cost-report / 既存 lib/cost/cost-model-data.ts に委ねる。
     },
   };
 }
 ```
 
-> 注: `lib/cost/cost-model.ts` の実 export（コスト算出関数名・引数）を Read で確認し合わせる。該当関数が無い/形が違う場合は `costJpy` を省略（tokens のみ記録）し、コスト換算はダッシュボード側の cost-report に委ねてよい。
+> `lib/cost/cost-model.ts` は存在しない（あるのは `cost-model-data.ts`）。MVP では trace に tokens_in/out のみ記録し、円換算はダッシュボードで行う（cost_jpy 列は null のまま可）。コスト換算を trace 側で持たせたい場合は別タスクで `cost-model-data.ts` ベースのヘルパを定義してから注入する。
 
 - [ ] **Step 5: テスト通過を確認**
 
@@ -750,6 +749,32 @@ export const STAGES: StageMeta[] = [
     logicKind: "io", sourcePaths: ["apps/x-account-system/lib/publisher/"],
     upstream: ["line-approval"], downstream: [],
   },
+  // --- ゲート/横断ノード（パイプライン辺は持たず、図に独立表示。spec §4.1） ---
+  {
+    id: "safety", label: "Safety (brownout)", group: "review",
+    purpose: "handleJob 冒頭の brownout 4段階ゲート。許可外 job を skip する。",
+    inputs: ["当月コスト (cost_ledger)"], outputs: ["allowedJobs 判定", "skip"],
+    keyVariables: [{ name: "brownout status", desc: "4段階(normal→…)" }],
+    logicKind: "deterministic",
+    sourcePaths: ["apps/x-account-system/lib/safety/brownout-handler.ts", "apps/x-account-system/src/queue.ts"],
+    upstream: [], downstream: [],
+  },
+  {
+    id: "dlp", label: "DLP", group: "review",
+    purpose: "editor 内包の PII redact / lint（決定的）。MVP は定義のみ（trace は editor 内）。",
+    inputs: ["draft body"], outputs: ["redacted text", "PII findings"],
+    keyVariables: [{ name: "REDACTION_PATTERNS", desc: "PII 検出パターン" }],
+    logicKind: "deterministic", sourcePaths: ["apps/x-account-system/lib/dlp/redact.ts"],
+    upstream: [], downstream: [],
+  },
+  {
+    id: "optimizer", label: "Optimizer", group: "learn",
+    purpose: "Thompson Sampling で 8 パラメータ posterior を更新（optimizer-update cron）。MVP は定義のみ。",
+    inputs: ["posts_performance (reward)"], outputs: ["optimizer_state"],
+    keyVariables: [{ name: "8 parameters", desc: "段階別 posterior は Phase 2" }],
+    logicKind: "deterministic", sourcePaths: ["apps/x-account-system/lib/optimizer/"],
+    upstream: [], downstream: [],
+  },
 ];
 ```
 
@@ -788,7 +813,7 @@ Expected: PASS（3 件）
 
 ```bash
 git add apps/x-account-system/lib/registry/
-git commit -m "feat(xad/registry): StageMeta + 投稿生成系8ノード + 整合バリデータ"
+git commit -m "feat(xad/registry): StageMeta + 投稿生成系8ノード + ゲート3(safety/dlp/optimizer) + 整合バリデータ"
 ```
 
 ---
@@ -909,28 +934,28 @@ export function decideRunStatus(
   return a.attempt >= a.maxAttempts ? "error" : "running";
 }
 
-// handleJob 署名を拡張（既存本体はそのまま、引数 ctx?/retry? を追加）
+// handleJob は「skip したか」を返す（queue 側が ok 上書きしないため）
+export interface HandleJobResult { skipped: boolean }
+
 export async function handleJob(
   msg: JobMessage, env: Env, ctx?: ExecutionContext,
-  _retry: { attempt: number; maxAttempts: number } = { attempt: 1, maxAttempts: MAX_ATTEMPTS },
-): Promise<void> {
+): Promise<HandleJobResult> {
   const runId = (msg as { runId?: string }).runId;
-  // …既存 brownout guard ブロック…
+  // …既存 brownout guard ブロック（下記 return を skip シグナルに変更）…
+  // …既存 switch(msg.job) 本体…
+  return { skipped: false }; // 通常完了
 }
 ```
 
-**brownout 分岐への skip 記録（具体）**: `src/queue.ts` の brownout 早期 return（`if (!decision.allowedJobs.includes(msg.job)) { …console.log…; return; }`）の `return;` の直前に以下を挿入する:
+**brownout 分岐の修正（具体）**: `src/queue.ts` の brownout 早期 return（`if (!decision.allowedJobs.includes(msg.job)) { …console.log…; return; }`）を以下に変える:
 ```ts
-      // 観測: brownout skip を run/trace に残す（成功条件「スキップが色でわかる」）
-      if (runId) {
-        await updateRun(runId, { status: "skipped", finished: true });
-        await recordSkip(ctx, { runId, stageId: "safety", outcome: `brownout:${decision.status}` });
-      }
+      // 観測: brownout skip を trace に残す（成功条件「スキップが色でわかる」）
+      if (runId) await recordSkip(ctx, { runId, stageId: "safety", outcome: `brownout:${decision.status}` });
       // ACK: リトライしない (予算回復まで次の cron 発火を待つ)
-      return;
+      return { skipped: true }; // ← queue 側で status=skipped に確定させる
 ```
 
-> 既存 `handleJob` 本体（switch）はそのまま残す。`runPostJob(slot, env)` 呼び出しは `runPostJob(slot, env, ctx, runId)` に変える（Task A9）。`updateRun`/`recordSkip` は await して書込を確実化（queue handler 内なので runtime が await を待つ）。
+> `run.status` は queue() 側で確定させる（CRITICAL: handleJob 内で skipped にしても直後の成功 return で ok に上書きされるため）。handleJob 本体の他の `return;` も `return { skipped: false };` に揃える。`runPostJob(slot, env)` 呼び出しは `runPostJob(slot, env, ctx, runId)` に変える（Task A9）。
 
 - [ ] **Step 4: worker.ts に runId 発番と run insert を配線**
 
@@ -942,20 +967,27 @@ export async function handleJob(
 //   { job: "line-event"; date: string; payload: unknown; runId?: string }
 
 // scheduled() 内（msg 生成後、send 前）:
+// ⚠️ FK: run_trace.run_id → run。consumer が trace insert する前に run insert を完了させる必要がある。
+//   insertRun と send を 1 つの waitUntil で「insert→send」順に直列化する（別々の waitUntil は race）。
 const runId = crypto.randomUUID();
 const withId = { ...msg, runId } as JobMessage;
-ctx.waitUntil(insertRun({ id: runId, job, trigger: "cron", date, status: "running", attempt: 1 }));
-ctx.waitUntil(env.JOBS.send(withId));
+ctx.waitUntil((async () => {
+  await insertRun({ id: runId, job, trigger: "cron", date, status: "running", attempt: 1 });
+  await env.JOBS.send(withId);
+})());
 
-// /admin/enqueue 内（msg 生成後）も同様に trigger: "manual" で insertRun + runId 付与。
+// /admin/enqueue 内も同様（trigger: "manual"、insert→send 順）。
 
 // queue() consumer:
 async queue(batch: MessageBatch<JobMessage>, env: Env, ctx: ExecutionContext): Promise<void> {
   for (const m of batch.messages) {
     const runId = (m.body as { runId?: string }).runId;
     try {
-      await handleJob(m.body, env, ctx, { attempt: m.attempts, maxAttempts: MAX_ATTEMPTS });
-      if (runId) await updateRun(runId, { status: "ok", finished: true });
+      const r = await handleJob(m.body, env, ctx);
+      // skip は ok で上書きしない（brownout 等）
+      if (runId) await updateRun(runId, r.skipped
+        ? { status: "skipped", finished: true }
+        : { status: "ok", finished: true });
     } catch (e) {
       const status = decideRunStatus({ ok: false, attempt: m.attempts, maxAttempts: MAX_ATTEMPTS });
       if (runId) await updateRun(runId, {
@@ -968,7 +1000,7 @@ async queue(batch: MessageBatch<JobMessage>, env: Env, ctx: ExecutionContext): P
 }
 ```
 
-需要 import: `import { insertRun, updateRun } from "../lib/trace/trace-store.js";` と `import { MAX_ATTEMPTS, decideRunStatus } from "./queue.js";`。
+需要 import: `import { insertRun, updateRun } from "../lib/trace/trace-store.js";` と `import { MAX_ATTEMPTS, decideRunStatus, type HandleJobResult } from "./queue.js";`。lifecycle 判定（attempt/maxAttempts）は **queue() catch 側**で行い、handleJob には渡さない。
 
 - [ ] **Step 5: テスト通過 + 既存テスト緑を確認**
 
@@ -1047,8 +1079,8 @@ export async function runPostJob(
   // Hook
   const hooked = await withTrace(ctx, { runId: rid, stageId: "hook-classifier", input: { body: draft.body } },
     async () => {
-      const h = await /* 既存 hook 分類 */;
-      return { result: h, output: { primaryHook: h.primaryHook } };
+      const h = await /* 既存 hook 分類（classify.ts） */;
+      return { result: h, output: { primary_hook: h.primary_hook } }; // 実 API は primary_hook
     });
 
   // Editor
@@ -1146,7 +1178,34 @@ export async function resolveRunIdForDraft(
 }
 ```
 
-- 承認タップ → publisher: 投稿処理を `withTrace(ctx, { runId: 引いた run_id, stageId: "publisher", input: { draftId } }, ...)` で包む。
+**ctx 伝播（MAJOR対応）**: 実コードの `handleLineEvent(payload, env)` と内部 `handleApprove`/`handleReviseFeedback` には `ctx` が無い。`withTrace(ctx, …)` を使うため署名に `ctx?: ExecutionContext` を足し、`src/queue.ts` の `case "line-event"` を `await handleLineEvent(msg.payload, env, ctx);` に変える。内部 handler へも `ctx` を引き回す。
+
+**webhook 軽量 run（MAJOR対応）**: `src/worker.ts` の `/line/webhook` で各 event を enqueue する際、webhook run を 1 件 insert し `webhookRunId` を `line-event` メッセージに載せる（spec §4.2「webhook 自体の受信は trigger=webhook の軽量 run」）。ただし**承認/修正/投稿の trace は対象 draft の `run_id`（元 post run）に追記**する（webhook run には webhook 受信自体のみ）。
+
+```ts
+// worker.ts /line/webhook（既存 enqueue を包む）
+const webhookRunId = crypto.randomUUID();
+ctx.waitUntil((async () => {
+  await insertRun({ id: webhookRunId, job: "line-event", trigger: "webhook", date, status: "running", attempt: 1 });
+  await env.JOBS.send({ job: "line-event", date, payload: ev, runId: webhookRunId } as JobMessage);
+})());
+```
+
+**承認/却下応答の line-approval trace（MAJOR対応）**: approve/reject postback 処理（`handleApprove` 等）で、対象 draft の run_id に `line-approval` trace を追記する（outcome=`approved`|`rejected`）。これで `/runs/R1` に approval-request →（時間差）approval-response → publish が並ぶ。
+
+```ts
+// handleApprove 内（承認確定時）
+const runId = await resolveRunIdForDraft(draftId, fetchDraft);
+if (runId) {
+  await withTrace(ctx, { runId, stageId: "line-approval", input: { draftId, response: true } },
+    async () => ({ result: undefined, outcome: "approved" }));
+  // 続けて publisher を trace で包んで投稿
+  await withTrace(ctx, { runId, stageId: "publisher", input: { draftId } },
+    async () => { await /* 既存投稿処理 */; return { result: undefined }; });
+}
+// reject 時は outcome="rejected" の line-approval trace のみ（publisher 無し）
+```
+
 - `修正:` → `handleReviseFeedback`: revise writer/editor/line-approval を `withTrace` で包み、`stageId` は `writer`/`editor`/`line-approval` のまま、`input` に `{ revision: true, ... }` を入れる（registry に新ノードを足さない）。`runId` は対象 draft の run_id。
 
 ```ts
