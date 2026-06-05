@@ -49,6 +49,7 @@
 - [goals](self/goals.md) — KGI/KPI 進捗 SSOT（CLAUDE.md と同期）
 - [profile](self/profile.md) — 工藤陸 プロフィール・職歴・スキル SSOT（NDA 方針含む）
 - [streams](self/streams.md) — 現在の収入源ポートフォリオ（BSA・RICE CREAM・Shopify・稼働時間）
+- [engineering-principles](self/engineering-principles.md) — 振り返り由来のエンジニアリング/プロセス原則（連結学びノート・成長型）
 
 ## ibasho
 
