@@ -145,7 +145,7 @@ describe("runBuzzIngest", () => {
         pii: expect.any(Boolean),
         permitted_storage: "title_only",
         publication_consent: "pending",
-        meta: { tweet_id: "tweet-001" },
+        meta: expect.objectContaining({ tweet_id: "tweet-001", source_category: "jp_publisher" }),
       }),
     );
 
@@ -157,7 +157,7 @@ describe("runBuzzIngest", () => {
         raw_text: tweet2.text,
         permitted_storage: "title_only",
         publication_consent: "pending",
-        meta: { tweet_id: "tweet-002" },
+        meta: expect.objectContaining({ tweet_id: "tweet-002", source_category: "jp_publisher" }),
       }),
     );
   });
@@ -269,7 +269,7 @@ describe("runBuzzIngest", () => {
       expect.objectContaining({
         source_type: "x_inspirations",
         source_ref: "SuguruKun_ai",
-        meta: { tweet_id: "tweet-from-second" },
+        meta: expect.objectContaining({ tweet_id: "tweet-from-second" }),
       }),
     );
   });
@@ -298,7 +298,7 @@ describe("runBuzzIngest", () => {
     expect(insertMock).not.toHaveBeenCalled();
   });
 
-  test("SEED_HANDLES contains all 24 expected handles", async () => {
+  test("SEED_SOURCES: 固定ネタ元 (AI公式+英語解説者+JP publishers)", async () => {
     let buzzIngest: typeof import("./buzz-ingest.ts");
     jest.isolateModules(() => {
       jest.doMock("@supabase/supabase-js", () => ({
@@ -308,11 +308,42 @@ describe("runBuzzIngest", () => {
       buzzIngest = require("./buzz-ingest.ts");
     });
 
-    expect(buzzIngest!.SEED_HANDLES).toHaveLength(24);
+    // 24 既存 + 4 追加 (AnthropicAI/OpenAI/GoogleDeepMind/gerardsans)
+    expect(buzzIngest!.SEED_HANDLES).toHaveLength(28);
+    // 既存 JP publishers 維持
     expect(buzzIngest!.SEED_HANDLES).toContain("Shimayus");
-    expect(buzzIngest!.SEED_HANDLES).toContain("SuguruKun_ai");
     expect(buzzIngest!.SEED_HANDLES).toContain("masahirochaen");
-    expect(buzzIngest!.SEED_HANDLES).toContain("ClaudeCode_love");
+    // チャエンのネタ元 (AI 公式) 追加
+    expect(buzzIngest!.SEED_HANDLES).toContain("AnthropicAI");
+    expect(buzzIngest!.SEED_HANDLES).toContain("OpenAI");
+    expect(buzzIngest!.SEED_HANDLES).toContain("GoogleDeepMind");
+    // カテゴリ付与
+    const official = buzzIngest!.SEED_SOURCES.filter((s) => s.category === "ai_official");
+    expect(official.map((s) => s.handle)).toEqual(["AnthropicAI", "OpenAI", "GoogleDeepMind"]);
+    expect(buzzIngest!.SEED_SOURCES.some((s) => s.category === "en_curator")).toBe(true);
+  });
+
+  test("scoreBuzz: ai_official 加点 + engagement 対数加点 (枠)", async () => {
+    let buzzIngest: typeof import("./buzz-ingest.ts");
+    jest.isolateModules(() => {
+      jest.doMock("@supabase/supabase-js", () => ({
+        __esModule: true,
+        createClient: jest.fn(() => ({ from: jest.fn() })),
+      }));
+      buzzIngest = require("./buzz-ingest.ts");
+    });
+
+    const tweet = { id: "t1", text: "x", likeCount: 99, retweetCount: 0 } as never;
+    const official = buzzIngest!.scoreBuzz(tweet, { handle: "OpenAI", category: "ai_official" });
+    const jp = buzzIngest!.scoreBuzz(tweet, { handle: "Shimayus", category: "jp_publisher" });
+
+    // ai_official は +2 加点される
+    expect(official.score).toBeGreaterThan(jp.score);
+    expect(official.reasons).toContain("ai_official");
+    // engagement(99) → log10(100)=2 を加点
+    expect(jp.score).toBeCloseTo(2, 5);
+    // 足切りは無効 (全件通過)
+    expect(buzzIngest!.CURATION_MIN_SCORE).toBe(0);
   });
 });
 
