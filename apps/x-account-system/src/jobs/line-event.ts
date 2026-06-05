@@ -25,7 +25,8 @@
 
 import { createClient } from "@supabase/supabase-js";
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { publishToX } from "../../lib/publisher/x-publisher.js";
+// 投稿層は Phase 1 で「予約待ちストック化」へ移行。X API 直投 (publishToX) は
+// 承認フローから切り離した。実投稿は Phase 2 の chrome-devtools 予約投稿が担う。
 import { pushLine } from "../../lib/line/line-client.js";
 import { runEditor } from "../../lib/editor/pipeline.js";
 import { reviseDraftForX } from "../../lib/writer/writer-x.js";
@@ -43,7 +44,6 @@ import {
 import type { CoreIdeaRow } from "./post-job.js";
 import type { EditorOutput } from "../../lib/editor/types.js";
 import type { CoreIdea } from "../../lib/writer/types.js";
-import type { PublishFormat } from "../../lib/publisher/types.js";
 import type { Env } from "../worker.js";
 import {
   createSession,
@@ -82,6 +82,7 @@ type PostDraftRow = {
   body: string;
   fmat: string | null;
   published_at: string | null;
+  scheduled_for: string | null;
   human_approval_status: string;
   editor_output: EditorOutput | null;
   run_id?: string | null;
@@ -160,7 +161,10 @@ function parseApprovalIntent(
 }
 
 // ============================================================
-// handleApprove — load draft, claim, publish, record results
+// handleApprove — 承認 = 「予約待ちストック化」(X API 直投はしない)
+//   承認すると human_approval_status='approved' / human_approved_at にし、
+//   scheduled_for=NULL のまま「予約待ちストック」に積む。実投稿は Phase 2 の
+//   chrome-devtools 予約投稿 (人のPC起動時トリガ) が担う。
 // ============================================================
 async function handleApprove(
   draftId: string,
@@ -176,7 +180,7 @@ async function handleApprove(
   // 1. Load post_drafts row
   const { data, error } = await sb
     .from("post_drafts")
-    .select("id, core_idea_id, body, fmat, published_at, human_approval_status, editor_output, run_id")
+    .select("id, core_idea_id, body, fmat, published_at, scheduled_for, human_approval_status, editor_output, run_id")
     .eq("id", draftId)
     .maybeSingle();
 
@@ -193,26 +197,32 @@ async function handleApprove(
 
   const draft = data as PostDraftRow;
 
-  // 2. Idempotency fast-path: already has published_at → no-op
-  if (draft.published_at !== null) {
-    await notify(env, `ℹ️ draft_id=${draftId} は既に公開済です (published_at: ${draft.published_at})`);
+  // 2. Idempotency: 既に承認(ストック) / 予約 / 公開済 → no-op。
+  //    (`!= null` で null/undefined 両方を弾く)
+  if (
+    draft.human_approval_status === "approved" ||
+    draft.scheduled_for != null ||
+    draft.published_at != null
+  ) {
+    await notify(env, `ℹ️ draft_id=${draftId} は既に公開済/承認済(予約待ち)です`);
     return;
   }
 
-  // 3. Restore EditorOutput from jsonb — NEVER re-run runEditor
+  // 3. editor が rejected の下書きはストックに積まない (人の承認でも上書きしない)。
   const editorOutput = draft.editor_output;
   if (!editorOutput) {
     await notify(env, `⚠️ draft_id=${draftId} の editor_output が保存されていません`);
     return;
   }
+  if (editorOutput.decision === "rejected") {
+    await notify(env, `⚠️ draft_id=${draftId} は editor 却下済みのため承認できません`);
+    return;
+  }
 
-  const fmat = (draft.fmat ?? "medium") as PublishFormat;
-  const priorApprovalStatus = draft.human_approval_status;
   const nowIso = new Date().toISOString();
-
-  // A10: 元の post run(run_id) があれば line-approval / publisher の trace を
-  //      その run に追記する。run_id 無し (旧 draft) なら trace を付けず素通し。
   const runId = draft.run_id ?? undefined;
+
+  // A10: 元 run があれば line-approval を approved として記録 (publisher trace は廃止)。
   if (runId) {
     await withTrace(
       ctx,
@@ -221,113 +231,42 @@ async function handleApprove(
     );
   }
 
-  // publish 本体 (claim→publish→records)。trace は付帯物であり publish は
-  // run_id の有無に依存しない。runId があれば publisher stage として記録する。
-  const doPublish = async (): Promise<void> => {
-  // 4. Atomic claim: set published_at + approved ONLY if published_at IS NULL.
-  //    If another invocation already claimed it, .select("id") returns 0 rows.
+  // 4. Atomic claim: pending のときだけ approved にする (二重ストック防止)。
+  //    別呼び出しが既に承認済みなら .select("id") は 0 行を返す。
   const { data: claimData, error: claimErr } = await sb
     .from("post_drafts")
-    .update({ published_at: nowIso, human_approval_status: "approved" })
+    .update({ human_approval_status: "approved", human_approved_at: nowIso })
     .eq("id", draftId)
-    .is("published_at", null)
+    .eq("human_approval_status", "pending")
     .select("id");
 
   if (claimErr) {
-    console.error("[line-event] post_drafts claim error:", claimErr.message);
-    throw new Error(`[line-event] post_drafts claim failed: ${claimErr.message}`);
+    console.error("[line-event] post_drafts approve-claim error:", claimErr.message);
+    await notify(env, `⚠️ 承認処理エラー: DBエラー (${claimErr.message})`);
+    return;
   }
 
   const claimed = Array.isArray(claimData) ? claimData : [];
   if (claimed.length === 0) {
-    // Another invocation already claimed this draft — it is being (or was) published.
-    await notify(env, `ℹ️ draft_id=${draftId} は既に処理済み/公開済みです`);
+    // 別呼び出しが既に承認済み。
+    await notify(env, `ℹ️ draft_id=${draftId} は既に処理済みです`);
     return;
   }
 
-  // 5. Attempt to publish (claim is held; roll back on failure)
-  let result: Awaited<ReturnType<typeof publishToX>>;
-  try {
-    result = await publishToX({
-      draftId,
-      body: draft.body,
-      fmat,
-      editorOutput,
-      dryRun: false,
-      highRiskApproved: true,
-      noBackoff: false,
-    });
-  } catch (publishErr) {
-    // Roll back claim so the draft is re-approvable
-    await sb
-      .from("post_drafts")
-      .update({ published_at: null, human_approval_status: priorApprovalStatus })
-      .eq("id", draftId);
-    throw publishErr;
+  // 5. core_ideas.status='approved' (ストック投入。公開は Phase2 で)。
+  const { error: ideaErr } = await sb
+    .from("core_ideas")
+    .update({ status: "approved" })
+    .eq("id", draft.core_idea_id);
+  if (ideaErr) {
+    console.error("[line-event] core_ideas update error:", ideaErr.message);
   }
 
-  if (result.status === "published" && result.tweetId) {
-    // published_at + human_approval_status already committed in the claim step.
-
-    // 5a. Insert posted_records
-    const { error: insertErr } = await sb.from("posted_records").insert({
-      trace_id: crypto.randomUUID(),
-      draft_id: draftId,
-      platform: "x",
-      platform_post_id: result.tweetId,
-      scheduled_at: nowIso,
-      posted_at: nowIso,
-      via_fallback: false,
-    });
-    if (insertErr) {
-      // Non-fatal: post is already live on X; log for reconciliation.
-      console.error("[line-event] posted_records insert error (post IS live on X):", insertErr.message);
-    }
-
-    // 5b. Update core_ideas.status = 'published'
-    const { error: ideaErr } = await sb
-      .from("core_ideas")
-      .update({ status: "published" })
-      .eq("id", draft.core_idea_id);
-    if (ideaErr) {
-      console.error("[line-event] core_ideas update error:", ideaErr.message);
-    }
-
-    // 5c. Success notification
-    await notify(
-      env,
-      `✅ 投稿完了\ndraft_id: ${draftId}\ntweetId: ${result.tweetId}\nposted_at: ${nowIso}`,
-    );
-  } else {
-    // blocked or failed — roll back the claim so the draft is re-approvable
-    const { error: rollbackErr } = await sb
-      .from("post_drafts")
-      .update({ published_at: null, human_approval_status: priorApprovalStatus })
-      .eq("id", draftId);
-    if (rollbackErr) {
-      console.error("[line-event] claim rollback error:", rollbackErr.message);
-    }
-
-    const reason =
-      result.status === "blocked"
-        ? `blocked: ${result.blockedReason ?? "unknown"}`
-        : result.error ?? "unknown error";
-    await notify(env, `⚠️ 投稿失敗 (${result.status}): ${reason}\ndraft_id: ${draftId}`);
-  }
-  };
-
-  if (runId) {
-    await withTrace(
-      ctx,
-      { runId, stageId: "publisher", input: { draftId } },
-      async () => {
-        await doPublish();
-        return { result: undefined };
-      },
-    );
-  } else {
-    await doPublish();
-  }
+  // 6. 承認 = 予約待ちストック追加の案内。
+  await notify(
+    env,
+    `✅ 承認しました（予約待ちストックに追加）\ndraft_id: ${draftId}\nPCで「翌日分を予約して」と指示すると chrome-devtools で X 予約投稿します。`,
+  );
 }
 
 // ============================================================
