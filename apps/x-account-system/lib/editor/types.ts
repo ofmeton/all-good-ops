@@ -104,6 +104,12 @@ export type EditorOutput = {
   businessLawKeywords: string[];
   totalDurationMs: number;
   llmCostUsd: number;
+  /**
+   * 観測ダッシュボード計装用 LLM trace meta。主 judge (llm-judge) の prompt/model と、
+   * judge + factuality の合算 tokens を載せる。live API 経路でのみ付与 (stub では undefined)。
+   * optional なので後方互換。
+   */
+  _trace?: import("../trace/types.ts").TraceMeta;
 };
 
 /**
@@ -118,6 +124,8 @@ export type LlmJudgeResult = {
   x4_audience_line: { status: RuleStatus; reason: string };
   x5_proper_noun_assist: { status: RuleStatus; reason: string };
   costUsd: number;
+  /** live API 経路の LLM trace meta (prompt/tokens)。stub では undefined。 */
+  _trace?: import("../trace/types.ts").TraceMeta;
 };
 
 /**

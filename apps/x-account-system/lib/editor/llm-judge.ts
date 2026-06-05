@@ -17,6 +17,7 @@
  * Anthropic SDK を呼ぶ実装に切替 (tool_use schema を types.LlmJudgeResult に固定)。
  */
 import type { LlmJudgeResult, RuleStatus } from "./types.ts";
+import { callClaudeTraced } from "../trace/llm-trace.ts";
 
 export type LlmJudgeInput = {
   body: string;
@@ -81,29 +82,28 @@ const JUDGE_TOOL = {
 async function callAnthropicJudge(input: LlmJudgeInput): Promise<LlmJudgeResult> {
   const Anthropic = (await import("@anthropic-ai/sdk")).default;
   const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-  const res = await client.messages.create({
-    model: "claude-sonnet-4-5",
-    max_tokens: 1024,
-    tools: [JUDGE_TOOL as never],
-    tool_choice: { type: "tool", name: "judge" },
-    messages: [
-      {
-        role: "user",
-        content:
-          `platform=${input.platform} format=${input.format} affiliate=${input.hasAffiliateLink}\n---\n${input.body}\n---\n上記を Editor 6項目で判定し judge tool を呼べ。`,
-      },
-    ],
+  const model = "claude-sonnet-4-5";
+  const userPrompt =
+    `platform=${input.platform} format=${input.format} affiliate=${input.hasAffiliateLink}\n---\n${input.body}\n---\n上記を Editor 6項目で判定し judge tool を呼べ。`;
+  const out = await callClaudeTraced(client as never, {
+    params: {
+      model,
+      max_tokens: 1024,
+      tools: [JUDGE_TOOL as never],
+      tool_choice: { type: "tool", name: "judge" },
+      messages: [{ role: "user", content: userPrompt }],
+    },
+    promptText: userPrompt,
   });
-  const tu = res.content.find((b) => b.type === "tool_use");
-  if (!tu || tu.type !== "tool_use") {
+  if (out.toolUse == null) {
     throw new Error("judge: no tool_use in response");
   }
   const costUsd =
-    (res.usage.input_tokens / 1_000_000) * 3 +
-    (res.usage.output_tokens / 1_000_000) * 15;
+    ((out.meta.tokensIn ?? 0) / 1_000_000) * 3 +
+    ((out.meta.tokensOut ?? 0) / 1_000_000) * 15;
   // LLM は tool_use で 6 項目を省略することがある (非決定的)。欠損フィールドを
   // skip で補完して、rule 側の `.status` 参照クラッシュ (= post-job orphan) を防ぐ。
-  const raw = (tu.input ?? {}) as Partial<Omit<LlmJudgeResult, "costUsd">>;
+  const raw = (out.toolUse ?? {}) as Partial<Omit<LlmJudgeResult, "costUsd">>;
   const JUDGE_FIELDS = [
     "r1_workflow_theme",
     "r3_no_enemy",
@@ -122,7 +122,7 @@ async function callAnthropicJudge(input: LlmJudgeInput): Promise<LlmJudgeResult>
       normalized[f] = { status: "skip" as RuleStatus, reason: "judge が項目を省略 (skip 既定)" };
     }
   }
-  return { ...normalized, costUsd };
+  return { ...normalized, costUsd, _trace: out.meta };
 }
 
 /**
