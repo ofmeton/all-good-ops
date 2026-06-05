@@ -34,12 +34,25 @@ const seed = JSON.parse(
 
 const BASE_URL = process.env.DEMO_BASE_URL || "http://localhost:3100";
 
+/** タブレット寸法。Remotion 側で 1920x1080 composition に中央配置する */
+const VIEW_W = 1280;
+const VIEW_H = 960;
+/** chromium 全アクション間に追加で挟む待ち。視認性のため */
+const SLOW_MO_MS = 500;
+/** 全 sleep() を一律で何倍にするか */
+const PACE = 2;
+
 type SceneTiming = { startMs: number; endMs: number };
 const timings: Partial<Record<SceneId, SceneTiming>> = {};
 let recordingStartedAt = 0;
 
 function nowMs(): number {
   return Date.now() - recordingStartedAt;
+}
+
+/** PACE 倍された sleep。デモ視認性のため全アクションを引き延ばす */
+function pause(ms: number): Promise<void> {
+  return sleep(ms * PACE);
 }
 
 function dateStr(daysFromNow: number): string {
@@ -56,7 +69,7 @@ async function captureScene<T>(
   console.log(`[record] scene start: ${id} @ ${startMs}ms`);
   const result = await fn();
   // 末尾に「結果を見せる」余白を 800ms 付与（カット時に表示が切れない保険）
-  await sleep(800);
+  await pause(800);
   const endMs = nowMs();
   timings[id] = { startMs, endMs };
   console.log(`[record] scene end:   ${id} @ ${endMs}ms (${endMs - startMs}ms)`);
@@ -67,15 +80,15 @@ async function adminCreateRequest(page: Page) {
   // 前提: 既にログイン済みの想定で /admin/requests を開く
   await page.goto(`${BASE_URL}/admin/requests`);
   await page.waitForLoadState("networkidle");
-  await sleep(600);
+  await pause(600);
   await page.selectOption("select", { label: seed.property.name });
-  await sleep(400);
+  await pause(400);
   await page.fill('input[type="date"] >> nth=0', dateStr(3));
-  await sleep(300);
+  await pause(300);
   await page.fill('input[type="date"] >> nth=1', dateStr(5));
-  await sleep(300);
+  await pause(300);
   await page.fill('input[type="number"]', "2");
-  await sleep(300);
+  await pause(300);
   await page.click('button:has-text("依頼を作成")');
   await page.waitForLoadState("networkidle");
   // 新 UI は table row。row に property name が含まれるまで待つ
@@ -85,15 +98,15 @@ async function adminCreateRequest(page: Page) {
 async function staffAcceptAndStart(page: Page) {
   await page.goto(`${BASE_URL}/staff/${seed.staff.token}`);
   await page.waitForLoadState("networkidle");
-  await sleep(800);
+  await pause(800);
   // 未割当セクションの「承認する」ボタン
   await page.click('button:has-text("承認する")');
   await page.waitForLoadState("networkidle");
-  await sleep(800);
+  await pause(800);
   // 承認後、自分の割当セクションに card (Link wrap) として現れる → 押下で詳細遷移
   await page.click(`a:has-text("${seed.property.name}")`);
   await page.waitForLoadState("networkidle");
-  await sleep(400);
+  await pause(400);
   await page.click('button:has-text("清掃を開始する")');
   await page.waitForLoadState("networkidle");
   await page
@@ -105,9 +118,9 @@ async function staffSubmitReport(page: Page) {
   // 新 UI のチェックリストは <input type=checkbox> ではなく <button> なので label テキストで click
   for (const label of seed.property.checklistLabels) {
     await page.getByRole("button", { name: label }).click();
-    await sleep(220);
+    await pause(400);
   }
-  await sleep(400);
+  await pause(400);
   // 全項目チェック完了で送信ボタンが有効化される
   await page.click('button:has-text("報告を送信する")');
   await page.waitForLoadState("networkidle");
@@ -117,11 +130,11 @@ async function staffSubmitReport(page: Page) {
 async function adminConfirm(page: Page) {
   await page.goto(`${BASE_URL}/admin/requests`);
   await page.waitForLoadState("networkidle");
-  await sleep(500);
+  await pause(500);
   // table row 右端の「詳細 →」リンクで遷移
   await page.locator('a:has-text("詳細")').first().click();
   await page.waitForLoadState("networkidle");
-  await sleep(400);
+  await pause(400);
   await page.locator("h3", { hasText: "完了報告" }).first().waitFor();
   await page.click('button:has-text("内容を確認済みにする")');
   await page.waitForLoadState("networkidle");
@@ -138,16 +151,17 @@ async function adminLogin(page: Page) {
 }
 
 async function main() {
-  console.log(`[record] start. base=${BASE_URL}`);
+  console.log(`[record] start. base=${BASE_URL} viewport=${VIEW_W}x${VIEW_H} slowMo=${SLOW_MO_MS}ms pace=${PACE}x`);
   const browser: Browser = await chromium.launch({
     headless: true,
+    slowMo: SLOW_MO_MS,
   });
 
   const context = await browser.newContext({
-    viewport: { width: 1920, height: 1080 },
+    viewport: { width: VIEW_W, height: VIEW_H },
     recordVideo: {
       dir: recordingsDir,
-      size: { width: 1920, height: 1080 },
+      size: { width: VIEW_W, height: VIEW_H },
     },
   });
 

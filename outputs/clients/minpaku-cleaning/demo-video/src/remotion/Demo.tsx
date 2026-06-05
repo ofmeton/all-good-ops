@@ -30,11 +30,37 @@ function RecordedSlice({ scene, timings }: { scene: Scene; timings: Timings }) {
   const startFrame = Math.round((t.startMs / 1000) * FPS);
   const endFrame = Math.round((t.endMs / 1000) * FPS);
   return (
-    <OffthreadVideo
-      src={staticFile("recordings/full.webm")}
-      trimBefore={startFrame}
-      trimAfter={endFrame}
-    />
+    <AbsoluteFill
+      style={{
+        background:
+          "radial-gradient(120% 80% at 50% 30%, #1e3a8a 0%, #0b1220 70%)",
+      }}
+    >
+      {/* タブレット筐体風の中央配置。SceneCard (下部) と重ならない位置・サイズ */}
+      <div
+        style={{
+          position: "absolute",
+          top: 36,
+          left: "50%",
+          transform: "translateX(-50%)",
+          width: 1140,
+          height: 855, // 4:3 aspect (1280:960)
+          borderRadius: 28,
+          overflow: "hidden",
+          border: "10px solid #0f172a",
+          boxShadow:
+            "0 30px 80px rgba(0,0,0,0.55), 0 0 0 1px rgba(96,165,250,0.18)",
+          background: "#000",
+        }}
+      >
+        <OffthreadVideo
+          src={staticFile("recordings/full.webm")}
+          trimBefore={startFrame}
+          trimAfter={endFrame}
+          style={{ width: "100%", height: "100%", display: "block" }}
+        />
+      </div>
+    </AbsoluteFill>
   );
 }
 
