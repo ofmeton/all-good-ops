@@ -1,13 +1,13 @@
 -- ============================================================================
--- money-bot 初期 schema (ai-radar project に同居、schema 分離方式)
+-- money-bot 初期 schema (ofmeton-apps project に集約、schema 分離方式)
 -- spec: docs/superpowers/specs/2026-05-22-money-bot-design.md §5 §6 §9
 --
--- 配置: ai-radar Supabase project (jzlhzfdvaculblgwlkxz) の money_bot schema 配下
--- 理由: Supabase Free tier の 2 project 制限により ai-radar に同居 (2026-05-22 採用)
---       選択肢 A: §6.4 の ai-radar 連携 (α direct Supabase) と整合的
+-- 配置: ofmeton-apps Supabase project (hofvvcvhjslevymhbcqj) の money_bot schema 配下
+-- 適用日: 2026-05-27 (旧 jzlhzfdvaculblgwlkxz は list_projects から消失のため新規 project へ)
+-- 理由: Supabase Free tier の 2 project 制限により 1 project per-app schema 集約方式採用
 --
 -- 設計方針:
---   - money_bot schema 配下にすべて閉じ込め、ai-radar の public schema には触らない
+--   - money_bot schema 配下にすべて閉じ込め、他 schema (xad, public) には触らない
 --   - RLS は初版 OFF (server-only access のみ。Phase 2 で公開ダッシュボード作る時に ON)
 --   - timestamptz + default now() で UTC 統一
 -- ============================================================================
