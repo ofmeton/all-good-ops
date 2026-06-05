@@ -1,0 +1,20 @@
+{
+  "name": "12_compound_dlp_plus_bizlaw",
+  "description": "DLP fail (電話) かつ 業法 risk (税務相談 代行) ありの複合。X5 で reject、業法は riskLevel='high' に昇格 (reject 理由には含めない)。",
+  "input": {
+    "traceId": "trace-12",
+    "draftId": "draft-12",
+    "coreIdeaId": "core-12",
+    "platform": "x",
+    "body": "経営者向け業務の仕組み化を共有する。私は税務相談を代行できる仕組みを作った。連絡先 03-1234-5678 まで。テンプレ化で 30 分 → 3 分。",
+    "fmat": "short",
+    "sourceMaterialIds": [],
+    "hasAffiliateLink": false
+  },
+  "expected": {
+    "decision": "rejected",
+    "rejectReasons": ["X5_dlp_and_proper_noun"],
+    "riskLevel": "high",
+    "businessLawRiskFlag": true
+  }
+}

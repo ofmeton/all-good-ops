@@ -1,0 +1,141 @@
+{
+  "article": {
+    "id": "QXJ0aWNsZUVudGl0eToyMDQzNzEzMTU5NDIxNDA3MjMy",
+    "author": {
+      "type": "user",
+      "userName": "kenfjt",
+      "url": "https://x.com/kenfjt",
+      "twitterUrl": "https://twitter.com/kenfjt",
+      "id": "1315135582977228802",
+      "name": "藤田拳｜株式会社ピネアルCTO｜『マーケ領域で実践されている生成系AIの技術』著",
+      "isVerified": false,
+      "isBlueVerified": true,
+      "verifiedType": null,
+      "profilePicture": "https://pbs.twimg.com/profile_images/1750105010283892736/9mGGnbAE_normal.jpg",
+      "coverPicture": "https://pbs.twimg.com/profile_banners/1315135582977228802/1751035301",
+      "description": "株式会社ピネアルCTO｜AIの社会実装を通じて、日本を製造業から元気にします🦾｜『宣伝会議』AI講師｜生成AI「やってみる」コミュニティオーナー｜AITech ハッカソン優勝🏆｜東京大→AGC→現職",
+      "location": "東京 墨田区",
+      "followers": 2133,
+      "following": 651,
+      "status": "",
+      "canDm": true,
+      "canMediaTag": true,
+      "createdAt": "Sun Oct 11 03:42:24 +0000 2020",
+      "entities": {
+        "description": {},
+        "url": {
+          "urls": [
+            {
+              "display_url": "pineal-inc.notion.site/fujita-ken",
+              "expanded_url": "https://pineal-inc.notion.site/fujita-ken",
+              "indices": [
+                0,
+                23
+              ],
+              "url": "https://t.co/5igvKGpcoJ"
+            }
+          ]
+        }
+      },
+      "fastFollowersCount": 0,
+      "favouritesCount": 18686,
+      "hasCustomTimelines": false,
+      "isTranslator": false,
+      "mediaCount": 515,
+      "statusesCount": 5353,
+      "withheldInCountries": [],
+      "affiliatesHighlightedLabel": {},
+      "possiblySensitive": false,
+      "pinnedTweetIds": [
+        "1918941584164261910"
+      ],
+      "profile_bio": {},
+      "isAutomated": false,
+      "automatedBy": null
+    },
+    "replyCount": 0,
+    "likeCount": 1,
+    "quoteCount": 0,
+    "viewCount": "140",
+    "createdAt": "Mon Apr 13 15:36:30 +0000 2026",
+    "title": "「AI機能が入ってます」はもういらない。事業者が本当に欲しいのは成果だ",
+    "preview_text": "AIを使った開発ができる事業者って、どうしても「このシステムはAIで作ってます」「AI機能が入ってます」と言いたくなりませんか？",
+    "cover_media_img_url": "https://pbs.twimg.com/media/HFy6szBaUAApzXc.jpg",
+    "contents": [
+      {
+        "type": "unstyled",
+        "text": "AIを使った開発ができる事業者って、どうしても「このシステムはAIで作ってます」「AI機能が入ってます」と言いたくなりませんか？"
+      },
+      {
+        "type": "unstyled",
+        "text": "でも事業者側からすると、正直そこはどうでもよくて、「良いものが手に入るか」「成果が出るか」が全てなんです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ピネアルはそこをすごく大事にしています。"
+      },
+      {
+        "type": "unstyled",
+        "text": ""
+      },
+      {
+        "type": "unstyled",
+        "text": "そして、本日『GetNavi』や『月刊ムー』で有名なワン・パブリッシングさんと協働で「AIオウンドメディアサービス by UPRESS」を提供開始しました。",
+        "inlineStyleRanges": [
+          {
+            "length": 26,
+            "offset": 42,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "本サービスはよくある「AI機能を持っているサービス」ですが、AIを使う\"必然性\"を今回は特に追求したかった。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HFy6y0XagAAhOyS.jpg",
+        "width": 1304,
+        "height": 760
+      },
+      {
+        "type": "unstyled",
+        "text": "UPRESSと呼んでいるAI執筆はもともと、AIで分析・調査を高速化することで成果の出るSEO記事を書ける、ピネアルが独自に開発したプロダクトでした。"
+      },
+      {
+        "type": "unstyled",
+        "text": "そこにワン・パブリッシングの編集者が持つ企画力と編集力が加わることで、人間だけでもできない／AIだけでもできない、新しい成果を出せるサービスになた。これは"
+      },
+      {
+        "type": "unstyled",
+        "text": "AI時代の「あるべきAIと人間の協働のかたち」だと思っています。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HFy648vbAAEISVB.jpg",
+        "width": 1800,
+        "height": 463
+      },
+      {
+        "type": "unstyled",
+        "text": ""
+      },
+      {
+        "type": "unstyled",
+        "text": "マーケティングの領域でAIを正しく使い、ちゃんと成果を出す。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ピネアルがやりたいのはまさにこれで、今回の取り組みはそれを象徴する一歩になったと思っています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "https://prtimes.jp/main/html/rd/p/000000028.000070859.html"
+      }
+    ]
+  },
+  "status": "success",
+  "msg": "success",
+  "_handle": "kenfjt"
+}

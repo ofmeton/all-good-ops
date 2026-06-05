@@ -1,0 +1,22 @@
+{
+  "handle": "obsidianstudio9",
+  "response_text": "```json\n{\n  \"information_source\": \"海外X/公式ブログ/GitHub/Podcast\",\n  \"publishing_lag_hours\": 18,\n  \"selection_criteria\": \"Obsidian×AI連携に特化し、海外で高エンゲージメント（いいね数が多い）な事例・ツール・チュートリアルを選別。「日本語で初解説」「保存推奨」「衝撃」など煽りワードで注目度を最大化する傾向が強い。\",\n  \"translation_rate_pct\": 30,\n  \"paraphrase_rate_pct\": 50,\n  \"opinion_rate_pct\": 10,\n  \"citation_explicit_rate_pct\": 40,\n  \"cross_platform_intake_rate_pct\": 75,\n  \"original_rate_pct\": 10,\n  \"notes\": \"ほぼ全投稿が海外X上の高いいねコンテンツを箇条書きで要約・意訳する定型フォーマット（paraphrase主体）。翻訳というより「日本語ライティングへの意訳再構成」が多い。投稿末尾に自サイト誘導リンクを毎回付与する収益導線が確認でき、情報拡散よりも集客が主目的と推定される。citation_explicit_rateは元ツイートURLを貼る場合と貼らない場合が混在しており40%程度と推定（自信度中）。publishing_lag_hoursは元ネタ特定が困難なため12〜48h幅で中央値18hと推定（自信度低）。\"\n}\n```",
+  "parsed": {
+    "information_source": "海外X/公式ブログ/GitHub/Podcast",
+    "publishing_lag_hours": 18,
+    "selection_criteria": "Obsidian×AI連携に特化し、海外で高エンゲージメント（いいね数が多い）な事例・ツール・チュートリアルを選別。「日本語で初解説」「保存推奨」「衝撃」など煽りワードで注目度を最大化する傾向が強い。",
+    "translation_rate_pct": 30,
+    "paraphrase_rate_pct": 50,
+    "opinion_rate_pct": 10,
+    "citation_explicit_rate_pct": 40,
+    "cross_platform_intake_rate_pct": 75,
+    "original_rate_pct": 10,
+    "notes": "ほぼ全投稿が海外X上の高いいねコンテンツを箇条書きで要約・意訳する定型フォーマット（paraphrase主体）。翻訳というより「日本語ライティングへの意訳再構成」が多い。投稿末尾に自サイト誘導リンクを毎回付与する収益導線が確認でき、情報拡散よりも集客が主目的と推定される。citation_explicit_rateは元ツイートURLを貼る場合と貼らない場合が混在しており40%程度と推定（自信度中）。publishing_lag_hoursは元ネタ特定が困難なため12〜48h幅で中央値18hと推定（自信度低）。"
+  },
+  "usage": {
+    "input_tokens": 6111,
+    "output_tokens": 464,
+    "cache_read_input_tokens": 0,
+    "cache_creation_input_tokens": 0
+  }
+}

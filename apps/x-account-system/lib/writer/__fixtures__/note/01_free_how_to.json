@@ -1,0 +1,24 @@
+{
+  "name": "01_free_how_to",
+  "description": "無料 how_to_summary 記事。free 部のみ、無料軽量版を含む。",
+  "request": {
+    "idea": {
+      "id": "idea-note-01",
+      "topic": "Claude Code Tips 5 選",
+      "primaryHook": "tips_enum",
+      "fmat": "article",
+      "contentType": "industry_sop",
+      "audience": "中小事業者の方",
+      "sourceMaterialIds": ["mat-tips-001"]
+    },
+    "templateId": "how_to_summary",
+    "priceTier": 0
+  },
+  "expected": {
+    "templateId": "how_to_summary",
+    "priceTier": 0,
+    "generator": "stub",
+    "hasPaidBody": false,
+    "freeBodyMustContain": ["中小事業者の方", "無料軽量版", "結論"]
+  }
+}

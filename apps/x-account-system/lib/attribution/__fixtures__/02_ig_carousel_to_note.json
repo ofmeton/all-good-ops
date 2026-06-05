@@ -1,0 +1,22 @@
+{
+  "name": "02_ig_carousel_to_note",
+  "description": "Instagram カルーセルから note 記事へ。",
+  "input": {
+    "url": "https://note.com/ofmeton/n/def456",
+    "params": {
+      "source": "instagram",
+      "medium": "carousel",
+      "campaign": "phase1_month2",
+      "content": "ig_carousel_42"
+    }
+  },
+  "expected": {
+    "trackedUrlContains": [
+      "utm_source=instagram",
+      "utm_medium=carousel",
+      "utm_campaign=phase1_month2",
+      "utm_content=ig_carousel_42"
+    ],
+    "parseRoundtripMatches": true
+  }
+}

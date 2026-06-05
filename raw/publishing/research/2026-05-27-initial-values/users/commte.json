@@ -1,0 +1,59 @@
+{
+  "status": "success",
+  "msg": "success",
+  "data": {
+    "id": "187929218",
+    "name": "コムテ",
+    "userName": "commte",
+    "location": "日本",
+    "url": "https://t.co/2M7oeDl2xQ",
+    "description": "Claude Code 速報・実践テク | AI駆動開発 | 個人開発者がプロダクト登録や技術記事を投稿できるSEO/AEOに強い https://t.co/2M7oeDl2xQ 運営 | ビジョン：無名のプロダクトに光をあてる",
+    "entities": {
+      "description": {
+        "urls": [
+          {
+            "display_url": "izanami.dev",
+            "expanded_url": "https://izanami.dev",
+            "indices": [
+              66,
+              89
+            ],
+            "url": "https://t.co/2M7oeDl2xQ"
+          }
+        ]
+      },
+      "url": {
+        "urls": [
+          {
+            "display_url": "izanami.dev",
+            "expanded_url": "https://izanami.dev",
+            "indices": [
+              0,
+              23
+            ],
+            "url": "https://t.co/2M7oeDl2xQ"
+          }
+        ]
+      }
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 10440,
+    "following": 1962,
+    "favouritesCount": 25003,
+    "statusesCount": 8830,
+    "mediaCount": 727,
+    "createdAt": "2010-09-07T14:22:11.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/187929218/1737018269",
+    "profilePicture": "https://pbs.twimg.com/profile_images/1921356481682624512/mP4IV2A7_normal.jpg",
+    "canDm": true,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": [
+      "2001851242683994177"
+    ]
+  }
+}

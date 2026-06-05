@@ -1,0 +1,22 @@
+{
+  "handle": "SuguruKun_ai",
+  "response_text": "```json\n{\n  \"information_source\": \"海外X/公式ブログ/GitHub/海外YouTube・チュートリアル動画/公式発表・プレスリリース/国内公的機関・企業公開資料PDF\",\n  \"publishing_lag_hours\": 6,\n  \"selection_criteria\": \"Claude Code・生成AI活用・AIエージェント関連で「すごい・有益・バズっている」という枠組みで選別。実務即効性・日本語解説の希少性・インプレッション獲得しやすい数値インパクト（スター数・再生数・フォロワー数）を重視する傾向がある。\",\n  \"translation_rate_pct\": 10,\n  \"paraphrase_rate_pct\": 45,\n  \"opinion_rate_pct\": 15,\n  \"original_rate_pct\": 30,\n  \"citation_explicit_rate_pct\": 55,\n  \"cross_platform_intake_rate_pct\": 70,\n  \"notes\": \"自身で実装・検証したコンテンツ（投稿[1][6][9][10]等）が一定数あり original_rate をやや高めに設定したが、実装内容の独自性は中程度と推定。海外トレンド（Instagram・YouTube・GitHub）を日本語に要約・紹介するパターンが多く cross_platform_intake は高い。publishing_lag は公式発表系（投稿[2][17][19]）では数時間以内の速報性があるが、資料紹介系は発表から数日以内が多く中央値6時間は幅があり自信度は中程度。\"\n}\n```",
+  "parsed": {
+    "information_source": "海外X/公式ブログ/GitHub/海外YouTube・チュートリアル動画/公式発表・プレスリリース/国内公的機関・企業公開資料PDF",
+    "publishing_lag_hours": 6,
+    "selection_criteria": "Claude Code・生成AI活用・AIエージェント関連で「すごい・有益・バズっている」という枠組みで選別。実務即効性・日本語解説の希少性・インプレッション獲得しやすい数値インパクト（スター数・再生数・フォロワー数）を重視する傾向がある。",
+    "translation_rate_pct": 10,
+    "paraphrase_rate_pct": 45,
+    "opinion_rate_pct": 15,
+    "original_rate_pct": 30,
+    "citation_explicit_rate_pct": 55,
+    "cross_platform_intake_rate_pct": 70,
+    "notes": "自身で実装・検証したコンテンツ（投稿[1][6][9][10]等）が一定数あり original_rate をやや高めに設定したが、実装内容の独自性は中程度と推定。海外トレンド（Instagram・YouTube・GitHub）を日本語に要約・紹介するパターンが多く cross_platform_intake は高い。publishing_lag は公式発表系（投稿[2][17][19]）では数時間以内の速報性があるが、資料紹介系は発表から数日以内が多く中央値6時間は幅があり自信度は中程度。"
+  },
+  "usage": {
+    "input_tokens": 5558,
+    "output_tokens": 462,
+    "cache_read_input_tokens": 0,
+    "cache_creation_input_tokens": 0
+  }
+}

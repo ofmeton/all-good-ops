@@ -1,0 +1,45 @@
+{
+  "status": "success",
+  "msg": "success",
+  "data": {
+    "id": "1965999844054675459",
+    "name": "かがり",
+    "userName": "TensyokuRmla",
+    "location": "会社に縛られず生きるAIマネタイズ戦略はこちら→",
+    "url": "https://t.co/Ix6Pmd5m69",
+    "description": "独立を企む悪いマーケター｜ある企業に潜入してマーケ知識を盗んでます｜今はAIアフィリで月7桁稼いでます｜夢は億企業を自分で持つこと｜これまで稼いできたAI情報や副業情報を発信",
+    "entities": {
+      "description": {},
+      "url": {
+        "urls": [
+          {
+            "display_url": "lin.ee/6B5xfUm",
+            "expanded_url": "https://lin.ee/6B5xfUm",
+            "indices": [
+              0,
+              23
+            ],
+            "url": "https://t.co/Ix6Pmd5m69"
+          }
+        ]
+      }
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 574,
+    "following": 16,
+    "favouritesCount": 1754,
+    "statusesCount": 672,
+    "mediaCount": 6,
+    "createdAt": "2025-09-11T04:44:33.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/1965999844054675459/1779338913",
+    "profilePicture": "https://pbs.twimg.com/profile_images/2057093808257687552/yDcUSSWJ_normal.jpg",
+    "canDm": true,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": []
+  }
+}

@@ -1,0 +1,980 @@
+{
+  "by_handle_count": [
+    {
+      "handle": "kandmybike",
+      "hit_count": 15
+    },
+    {
+      "handle": "AIshukyaku",
+      "hit_count": 13
+    },
+    {
+      "handle": "ichiaimarketer",
+      "hit_count": 12
+    },
+    {
+      "handle": "ai_jitan",
+      "hit_count": 12
+    },
+    {
+      "handle": "SuguruKun_ai",
+      "hit_count": 10
+    },
+    {
+      "handle": "Shimayus",
+      "hit_count": 10
+    },
+    {
+      "handle": "masahirochaen",
+      "hit_count": 7
+    },
+    {
+      "handle": "Jeanscpa",
+      "hit_count": 7
+    },
+    {
+      "handle": "sakai_tax",
+      "hit_count": 5
+    },
+    {
+      "handle": "TakeshiYonese",
+      "hit_count": 5
+    },
+    {
+      "handle": "houki_ai_keiri",
+      "hit_count": 5
+    },
+    {
+      "handle": "nikkei",
+      "hit_count": 4
+    },
+    {
+      "handle": "nekokoroconsul1",
+      "hit_count": 4
+    },
+    {
+      "handle": "sugawara11",
+      "hit_count": 4
+    },
+    {
+      "handle": "taharakoichi",
+      "hit_count": 4
+    },
+    {
+      "handle": "MakeAI_CEO",
+      "hit_count": 3
+    },
+    {
+      "handle": "paurooteri",
+      "hit_count": 3
+    },
+    {
+      "handle": "so_ainsight",
+      "hit_count": 3
+    },
+    {
+      "handle": "okuyama_ai_",
+      "hit_count": 3
+    },
+    {
+      "handle": "keyplayers",
+      "hit_count": 3
+    },
+    {
+      "handle": "kajikent",
+      "hit_count": 3
+    },
+    {
+      "handle": "Shuhei_Ohno",
+      "hit_count": 3
+    },
+    {
+      "handle": "sharoukun",
+      "hit_count": 3
+    },
+    {
+      "handle": "con_tax_",
+      "hit_count": 3
+    },
+    {
+      "handle": "ebiebi_pg",
+      "hit_count": 3
+    },
+    {
+      "handle": "Kuroi_CPA",
+      "hit_count": 3
+    },
+    {
+      "handle": "mitsukaru_man",
+      "hit_count": 2
+    },
+    {
+      "handle": "fladdict",
+      "hit_count": 2
+    },
+    {
+      "handle": "columbus_ceo",
+      "hit_count": 2
+    },
+    {
+      "handle": "narukun_ai",
+      "hit_count": 2
+    },
+    {
+      "handle": "dennotai",
+      "hit_count": 2
+    },
+    {
+      "handle": "ikedanob",
+      "hit_count": 2
+    },
+    {
+      "handle": "uchita_success",
+      "hit_count": 2
+    },
+    {
+      "handle": "kumaki_otoku31",
+      "hit_count": 2
+    },
+    {
+      "handle": "IssekiNagae",
+      "hit_count": 2
+    },
+    {
+      "handle": "Tebasaki_lab",
+      "hit_count": 2
+    },
+    {
+      "handle": "ayami_marketing",
+      "hit_count": 2
+    },
+    {
+      "handle": "showheyohtaki",
+      "hit_count": 2
+    },
+    {
+      "handle": "hkunimitsu",
+      "hit_count": 2
+    },
+    {
+      "handle": "jun_ssan",
+      "hit_count": 2
+    },
+    {
+      "handle": "noppezeirishi",
+      "hit_count": 2
+    },
+    {
+      "handle": "miyabi_zzz",
+      "hit_count": 2
+    },
+    {
+      "handle": "nakagawa_soukei",
+      "hit_count": 2
+    },
+    {
+      "handle": "JunichiWaki",
+      "hit_count": 2
+    },
+    {
+      "handle": "waniwanitax",
+      "hit_count": 2
+    },
+    {
+      "handle": "commte",
+      "hit_count": 2
+    },
+    {
+      "handle": "fukkatsu_jyuken",
+      "hit_count": 2
+    },
+    {
+      "handle": "milbon_",
+      "hit_count": 2
+    },
+    {
+      "handle": "niko_tama_work",
+      "hit_count": 2
+    },
+    {
+      "handle": "kurono_ai_ura",
+      "hit_count": 2
+    },
+    {
+      "handle": "digital_jpn",
+      "hit_count": 2
+    },
+    {
+      "handle": "ClaudeCode_UT",
+      "hit_count": 2
+    },
+    {
+      "handle": "shota7180",
+      "hit_count": 2
+    },
+    {
+      "handle": "yoshi8__",
+      "hit_count": 2
+    },
+    {
+      "handle": "kaikeishiro",
+      "hit_count": 2
+    },
+    {
+      "handle": "natsukishopify",
+      "hit_count": 2
+    },
+    {
+      "handle": "tetumemo",
+      "hit_count": 2
+    },
+    {
+      "handle": "hiro9aco",
+      "hit_count": 2
+    },
+    {
+      "handle": "mochitaro_de",
+      "hit_count": 1
+    },
+    {
+      "handle": "takaichi_sanae",
+      "hit_count": 1
+    },
+    {
+      "handle": "k_around_forty",
+      "hit_count": 1
+    },
+    {
+      "handle": "kagero_ai",
+      "hit_count": 1
+    },
+    {
+      "handle": "ImAI_Eruel",
+      "hit_count": 1
+    },
+    {
+      "handle": "arakens",
+      "hit_count": 1
+    },
+    {
+      "handle": "itm_aiplus",
+      "hit_count": 1
+    },
+    {
+      "handle": "redge_nogane",
+      "hit_count": 1
+    },
+    {
+      "handle": "toukatsujin",
+      "hit_count": 1
+    },
+    {
+      "handle": "JapanTank",
+      "hit_count": 1
+    },
+    {
+      "handle": "gorilla0513",
+      "hit_count": 1
+    },
+    {
+      "handle": "TAKAHIRO3IURA",
+      "hit_count": 1
+    },
+    {
+      "handle": "yonemura2006",
+      "hit_count": 1
+    },
+    {
+      "handle": "shinzizm2",
+      "hit_count": 1
+    },
+    {
+      "handle": "koro_suke13",
+      "hit_count": 1
+    },
+    {
+      "handle": "Takahiro0309",
+      "hit_count": 1
+    },
+    {
+      "handle": "fiction_log",
+      "hit_count": 1
+    },
+    {
+      "handle": "ka2aki86",
+      "hit_count": 1
+    },
+    {
+      "handle": "SoundJourneyDS",
+      "hit_count": 1
+    },
+    {
+      "handle": "matsu_party",
+      "hit_count": 1
+    },
+    {
+      "handle": "sasokunitake",
+      "hit_count": 1
+    },
+    {
+      "handle": "Gaku_YouTube24",
+      "hit_count": 1
+    },
+    {
+      "handle": "okasho_0414",
+      "hit_count": 1
+    },
+    {
+      "handle": "maskedanl",
+      "hit_count": 1
+    },
+    {
+      "handle": "yuuuu19860221",
+      "hit_count": 1
+    },
+    {
+      "handle": "sakai_1910",
+      "hit_count": 1
+    },
+    {
+      "handle": "shoji_hq",
+      "hit_count": 1
+    },
+    {
+      "handle": "Qkn3R",
+      "hit_count": 1
+    },
+    {
+      "handle": "sawa20200424",
+      "hit_count": 1
+    },
+    {
+      "handle": "paristexas2009",
+      "hit_count": 1
+    },
+    {
+      "handle": "satetu4401",
+      "hit_count": 1
+    },
+    {
+      "handle": "shikamarurobo",
+      "hit_count": 1
+    },
+    {
+      "handle": "hayakawagomi",
+      "hit_count": 1
+    },
+    {
+      "handle": "upa_rupa0_0",
+      "hit_count": 1
+    },
+    {
+      "handle": "HoangKagawa",
+      "hit_count": 1
+    },
+    {
+      "handle": "n_kata",
+      "hit_count": 1
+    },
+    {
+      "handle": "HirokiIsojima",
+      "hit_count": 1
+    },
+    {
+      "handle": "kutobill",
+      "hit_count": 1
+    },
+    {
+      "handle": "urabro2022",
+      "hit_count": 1
+    },
+    {
+      "handle": "AACSTomiyama",
+      "hit_count": 1
+    },
+    {
+      "handle": "abecky_jp",
+      "hit_count": 1
+    },
+    {
+      "handle": "roumuoguchan",
+      "hit_count": 1
+    },
+    {
+      "handle": "tantansyachik",
+      "hit_count": 1
+    },
+    {
+      "handle": "sharousiminami",
+      "hit_count": 1
+    },
+    {
+      "handle": "sako_numa",
+      "hit_count": 1
+    },
+    {
+      "handle": "asakuraayumu",
+      "hit_count": 1
+    },
+    {
+      "handle": "sakkun_invest",
+      "hit_count": 1
+    },
+    {
+      "handle": "Danny151a",
+      "hit_count": 1
+    },
+    {
+      "handle": "_asa710_",
+      "hit_count": 1
+    },
+    {
+      "handle": "Koshin_p",
+      "hit_count": 1
+    },
+    {
+      "handle": "princess_keiri",
+      "hit_count": 1
+    },
+    {
+      "handle": "ado_sr",
+      "hit_count": 1
+    },
+    {
+      "handle": "STUDY23_24",
+      "hit_count": 1
+    },
+    {
+      "handle": "yukaridoru",
+      "hit_count": 1
+    },
+    {
+      "handle": "gyousyosato",
+      "hit_count": 1
+    },
+    {
+      "handle": "hatake_tax",
+      "hit_count": 1
+    },
+    {
+      "handle": "HHDCZEIRISHI",
+      "hit_count": 1
+    },
+    {
+      "handle": "katokeidai",
+      "hit_count": 1
+    },
+    {
+      "handle": "NakamuraMilei",
+      "hit_count": 1
+    },
+    {
+      "handle": "kinakoa0706",
+      "hit_count": 1
+    },
+    {
+      "handle": "sharoshi_ayumi",
+      "hit_count": 1
+    },
+    {
+      "handle": "srsakashita",
+      "hit_count": 1
+    },
+    {
+      "handle": "syaroshi_",
+      "hit_count": 1
+    },
+    {
+      "handle": "sharotaku24",
+      "hit_count": 1
+    },
+    {
+      "handle": "HiromichiMita",
+      "hit_count": 1
+    },
+    {
+      "handle": "takechan_lawyer",
+      "hit_count": 1
+    },
+    {
+      "handle": "taijirou_nkym",
+      "hit_count": 1
+    },
+    {
+      "handle": "shinjuku_sr",
+      "hit_count": 1
+    },
+    {
+      "handle": "uzumasa9",
+      "hit_count": 1
+    },
+    {
+      "handle": "7Znv478Zu8TnSWj",
+      "hit_count": 1
+    },
+    {
+      "handle": "yoshidamitsugu",
+      "hit_count": 1
+    },
+    {
+      "handle": "oyasenmon",
+      "hit_count": 1
+    },
+    {
+      "handle": "HanadaNaoko",
+      "hit_count": 1
+    },
+    {
+      "handle": "ai_sharoushi",
+      "hit_count": 1
+    },
+    {
+      "handle": "keitazeirishi",
+      "hit_count": 1
+    },
+    {
+      "handle": "hukuhuku_money",
+      "hit_count": 1
+    },
+    {
+      "handle": "toshiyaO202",
+      "hit_count": 1
+    },
+    {
+      "handle": "zei_jij_rou",
+      "hit_count": 1
+    },
+    {
+      "handle": "Kirapapa_Record",
+      "hit_count": 1
+    },
+    {
+      "handle": "NorihikoAmano",
+      "hit_count": 1
+    },
+    {
+      "handle": "megumi_sr",
+      "hit_count": 1
+    },
+    {
+      "handle": "yamashitagyosei",
+      "hit_count": 1
+    },
+    {
+      "handle": "ichito827",
+      "hit_count": 1
+    },
+    {
+      "handle": "fuuu_ten",
+      "hit_count": 1
+    },
+    {
+      "handle": "hikaru_hackjpn",
+      "hit_count": 1
+    },
+    {
+      "handle": "1namaiki",
+      "hit_count": 1
+    },
+    {
+      "handle": "sora19ai",
+      "hit_count": 1
+    },
+    {
+      "handle": "yuxtukuri12092",
+      "hit_count": 1
+    },
+    {
+      "handle": "Hoshino_Sokichi",
+      "hit_count": 1
+    },
+    {
+      "handle": "genai_topic",
+      "hit_count": 1
+    },
+    {
+      "handle": "HayattiQ",
+      "hit_count": 1
+    },
+    {
+      "handle": "Naoki_GPT",
+      "hit_count": 1
+    },
+    {
+      "handle": "ikegpg",
+      "hit_count": 1
+    },
+    {
+      "handle": "ytsunobuchi",
+      "hit_count": 1
+    },
+    {
+      "handle": "ChatgptAIskill",
+      "hit_count": 1
+    },
+    {
+      "handle": "miyashin_prg",
+      "hit_count": 1
+    },
+    {
+      "handle": "iwamizu_SEEC",
+      "hit_count": 1
+    },
+    {
+      "handle": "kokisennyu",
+      "hit_count": 1
+    },
+    {
+      "handle": "Oc4Um",
+      "hit_count": 1
+    },
+    {
+      "handle": "aqumoe1210",
+      "hit_count": 1
+    },
+    {
+      "handle": "m_kumagai",
+      "hit_count": 1
+    },
+    {
+      "handle": "KanaWorks_AI",
+      "hit_count": 1
+    },
+    {
+      "handle": "osabori_code",
+      "hit_count": 1
+    },
+    {
+      "handle": "MuchoAi",
+      "hit_count": 1
+    },
+    {
+      "handle": "ai_hakase_",
+      "hit_count": 1
+    },
+    {
+      "handle": "Sankei_news",
+      "hit_count": 1
+    },
+    {
+      "handle": "iwashi86",
+      "hit_count": 1
+    },
+    {
+      "handle": "tan_go238",
+      "hit_count": 1
+    },
+    {
+      "handle": "gami0507",
+      "hit_count": 1
+    },
+    {
+      "handle": "ck_novasphere",
+      "hit_count": 1
+    },
+    {
+      "handle": "Shizuku_AItuber",
+      "hit_count": 1
+    },
+    {
+      "handle": "araiyusuke_vb",
+      "hit_count": 1
+    },
+    {
+      "handle": "cursorvers",
+      "hit_count": 1
+    },
+    {
+      "handle": "daifukujinji",
+      "hit_count": 1
+    },
+    {
+      "handle": "armadillo_ai",
+      "hit_count": 1
+    },
+    {
+      "handle": "kaede_gpt",
+      "hit_count": 1
+    },
+    {
+      "handle": "jujulife7",
+      "hit_count": 1
+    },
+    {
+      "handle": "piyohisyolog",
+      "hit_count": 1
+    },
+    {
+      "handle": "takeshibengo",
+      "hit_count": 1
+    },
+    {
+      "handle": "shin_fukuoka",
+      "hit_count": 1
+    },
+    {
+      "handle": "nikkeibusiness",
+      "hit_count": 1
+    },
+    {
+      "handle": "beauty_oe",
+      "hit_count": 1
+    },
+    {
+      "handle": "djnobby",
+      "hit_count": 1
+    },
+    {
+      "handle": "minami_freeup",
+      "hit_count": 1
+    },
+    {
+      "handle": "kotatomo0914",
+      "hit_count": 1
+    },
+    {
+      "handle": "sakura_career_",
+      "hit_count": 1
+    },
+    {
+      "handle": "onaac",
+      "hit_count": 1
+    },
+    {
+      "handle": "IHayato",
+      "hit_count": 1
+    },
+    {
+      "handle": "seiichi_satoweb",
+      "hit_count": 1
+    },
+    {
+      "handle": "ker6eros",
+      "hit_count": 1
+    },
+    {
+      "handle": "taishiyade",
+      "hit_count": 1
+    },
+    {
+      "handle": "harayou921",
+      "hit_count": 1
+    },
+    {
+      "handle": "Chiko_root",
+      "hit_count": 1
+    },
+    {
+      "handle": "min_n2525",
+      "hit_count": 1
+    },
+    {
+      "handle": "Migiudeclub",
+      "hit_count": 1
+    },
+    {
+      "handle": "wurst_design",
+      "hit_count": 1
+    },
+    {
+      "handle": "meruru_aiotaku",
+      "hit_count": 1
+    },
+    {
+      "handle": "akihiro_genai",
+      "hit_count": 1
+    },
+    {
+      "handle": "GianMattya",
+      "hit_count": 1
+    },
+    {
+      "handle": "L_go_mrk",
+      "hit_count": 1
+    },
+    {
+      "handle": "mmmiyama_D",
+      "hit_count": 1
+    },
+    {
+      "handle": "shubuppanpro",
+      "hit_count": 1
+    },
+    {
+      "handle": "morita_techlab",
+      "hit_count": 1
+    },
+    {
+      "handle": "yusaku_0426",
+      "hit_count": 1
+    },
+    {
+      "handle": "shodaiiiiii",
+      "hit_count": 1
+    },
+    {
+      "handle": "satori_sz9",
+      "hit_count": 1
+    },
+    {
+      "handle": "ClaudeCode_love",
+      "hit_count": 1
+    },
+    {
+      "handle": "makaibito",
+      "hit_count": 1
+    },
+    {
+      "handle": "shoty_k2",
+      "hit_count": 1
+    },
+    {
+      "handle": "masaru_growth",
+      "hit_count": 1
+    },
+    {
+      "handle": "wan_line_",
+      "hit_count": 1
+    },
+    {
+      "handle": "pop_ikeda",
+      "hit_count": 1
+    },
+    {
+      "handle": "shocolt",
+      "hit_count": 1
+    },
+    {
+      "handle": "suisui_d_esign",
+      "hit_count": 1
+    },
+    {
+      "handle": "zunzun428",
+      "hit_count": 1
+    },
+    {
+      "handle": "RtomuraTaxacc",
+      "hit_count": 1
+    },
+    {
+      "handle": "awakia",
+      "hit_count": 1
+    },
+    {
+      "handle": "xjuntaro",
+      "hit_count": 1
+    },
+    {
+      "handle": "masa_okamura108",
+      "hit_count": 1
+    },
+    {
+      "handle": "09pauai",
+      "hit_count": 1
+    },
+    {
+      "handle": "keitaro_aigc",
+      "hit_count": 1
+    },
+    {
+      "handle": "_anharu",
+      "hit_count": 1
+    },
+    {
+      "handle": "yuno_miyako2",
+      "hit_count": 1
+    },
+    {
+      "handle": "Calahan44",
+      "hit_count": 1
+    },
+    {
+      "handle": "denfaminicogame",
+      "hit_count": 1
+    },
+    {
+      "handle": "kiru_afi",
+      "hit_count": 1
+    },
+    {
+      "handle": "nosen",
+      "hit_count": 1
+    },
+    {
+      "handle": "kenfjt",
+      "hit_count": 1
+    },
+    {
+      "handle": "piranoman",
+      "hit_count": 1
+    },
+    {
+      "handle": "nuits_jp",
+      "hit_count": 1
+    },
+    {
+      "handle": "naoya_ito",
+      "hit_count": 1
+    },
+    {
+      "handle": "Maruo_0314",
+      "hit_count": 1
+    },
+    {
+      "handle": "asami_ops",
+      "hit_count": 1
+    },
+    {
+      "handle": "shinmomo0512",
+      "hit_count": 1
+    },
+    {
+      "handle": "GOROman",
+      "hit_count": 1
+    },
+    {
+      "handle": "msy78",
+      "hit_count": 1
+    },
+    {
+      "handle": "ShunMatsuoka40",
+      "hit_count": 1
+    },
+    {
+      "handle": "kashima510",
+      "hit_count": 1
+    },
+    {
+      "handle": "lasuone",
+      "hit_count": 1
+    },
+    {
+      "handle": "ao_liketea",
+      "hit_count": 1
+    },
+    {
+      "handle": "keiri_IS",
+      "hit_count": 1
+    },
+    {
+      "handle": "kawaseaoi_AI",
+      "hit_count": 1
+    },
+    {
+      "handle": "terurou",
+      "hit_count": 1
+    },
+    {
+      "handle": "maniaK898989",
+      "hit_count": 1
+    },
+    {
+      "handle": "nukonuko",
+      "hit_count": 1
+    },
+    {
+      "handle": "Makopontass",
+      "hit_count": 1
+    }
+  ]
+}

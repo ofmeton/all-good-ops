@@ -1,0 +1,34 @@
+{
+  "status": "success",
+  "msg": "success",
+  "data": {
+    "id": "2009204818376876032",
+    "name": "AI_Explorer",
+    "userName": "ai_explorer25",
+    "location": "",
+    "url": "",
+    "description": "Ai and Tech content Creator. 300k+ on Linkedin. Sharing insights on Ai, Tech, Free tools, resources and websites. DM for collabs at : nehajaincollabs@gmail.com",
+    "entities": {
+      "description": {}
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 8219,
+    "following": 147,
+    "favouritesCount": 559,
+    "statusesCount": 606,
+    "mediaCount": 244,
+    "createdAt": "2026-01-08T10:05:56.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/2009204818376876032/1770999663",
+    "profilePicture": "https://pbs.twimg.com/profile_images/2022344365251911680/VTRlBO9__normal.jpg",
+    "canDm": true,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": [
+      "2059124869351055451"
+    ]
+  }
+}

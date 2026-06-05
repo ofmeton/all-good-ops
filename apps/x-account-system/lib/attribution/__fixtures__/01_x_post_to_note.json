@@ -1,0 +1,22 @@
+{
+  "name": "01_x_post_to_note",
+  "description": "X 投稿から note 記事 URL に UTM 付与。",
+  "input": {
+    "url": "https://note.com/ofmeton/n/abc123",
+    "params": {
+      "source": "x",
+      "medium": "post",
+      "campaign": "phase1_month1",
+      "content": "tweet_id_999"
+    }
+  },
+  "expected": {
+    "trackedUrlContains": [
+      "utm_source=x",
+      "utm_medium=post",
+      "utm_campaign=phase1_month1",
+      "utm_content=tweet_id_999"
+    ],
+    "parseRoundtripMatches": true
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "05_opinion_short",
+  "description": "opinion short post。SOP / 仕組み化結論を保つ stub の確認。",
+  "idea": {
+    "id": "idea-05",
+    "topic": "経理は判断軸 3 つを SOP に書くべき",
+    "primaryHook": "opinion",
+    "fmat": "short",
+    "contentType": "opinion",
+    "audience": "フリーランス経理代行の方",
+    "sourceMaterialIds": []
+  },
+  "expected": {
+    "primaryHook": "opinion",
+    "generator": "stub",
+    "bodyMustContain": ["仕組み化", "フリーランス経理代行の方"],
+    "bodyMaxChars": 280
+  }
+}

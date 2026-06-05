@@ -3,7 +3,7 @@ type: topic
 created: 2026-05-10
 updated: 2026-05-10
 sources: [raw/notes/streams-2026-05.md]
-related: [[goals]], [[profile]], [[wiki/business/bsa/overview]], [[wiki/business/icecream/overview]], [[wiki/business/portfolio/overview]], [[monetize-os-pointer]], [[ai-radar-pointer]]
+related: [[goals]], [[profile]], [[wiki/business/bsa/overview]], [[wiki/business/icecream/overview]], [[wiki/business/portfolio/overview]], [[monetize-os-pointer]]
 tags: [self, income, portfolio, bsa, icecream, shopify]
 status: active
 ---
@@ -81,4 +81,3 @@ status: active
 → ハブ・スポーク構造の詳細は `CLAUDE.md`「外部スポークへの委譲ルール」
 
 - [[monetize-os-pointer]] — はぐりん名義の収益化エンジン（収入源の一角。詳細は monetize-os 側 wiki に隔離）
-- [[ai-radar-pointer]] — AI 機会発見 + Skills 事業防衛ダッシュボード（自己基盤インフラ）

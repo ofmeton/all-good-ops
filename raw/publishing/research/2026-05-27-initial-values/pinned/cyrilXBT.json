@@ -1,0 +1,132 @@
+{
+  "handle": "cyrilXBT",
+  "tweet_id": "2058373087330959829",
+  "body": {
+    "tweets": [
+      {
+        "type": "tweet",
+        "id": "2058373087330959829",
+        "url": "https://x.com/cyrilXBT/status/2058373087330959829",
+        "twitterUrl": "https://twitter.com/cyrilXBT/status/2058373087330959829",
+        "text": "https://t.co/4sLtyJzhmH",
+        "source": "",
+        "retweetCount": 113,
+        "replyCount": 23,
+        "likeCount": 1024,
+        "quoteCount": 21,
+        "viewCount": 6768905,
+        "createdAt": "Sun May 24 02:22:41 +0000 2026",
+        "lang": "zxx",
+        "bookmarkCount": 4296,
+        "isReply": false,
+        "inReplyToId": "",
+        "conversationId": "2058373087330959829",
+        "displayTextRange": [
+          0,
+          23
+        ],
+        "inReplyToUserId": "",
+        "inReplyToUsername": "",
+        "isPinned": false,
+        "author": {
+          "type": "user",
+          "userName": "cyrilXBT",
+          "url": "https://x.com/cyrilXBT",
+          "twitterUrl": "https://twitter.com/cyrilXBT",
+          "id": "1373665408193036293",
+          "name": "CyrilXBT",
+          "isVerified": false,
+          "isBlueVerified": true,
+          "verifiedType": null,
+          "profilePicture": "https://pbs.twimg.com/profile_images/2035229727414534145/aWap3Jbq_normal.jpg",
+          "coverPicture": "https://pbs.twimg.com/profile_banners/1373665408193036293/1775621295",
+          "description": "AI • Tech • Crypto | Sharing what I see before everyone else does.",
+          "location": "",
+          "followers": 180821,
+          "following": 442,
+          "status": "",
+          "canDm": true,
+          "canMediaTag": false,
+          "createdAt": "Sun Mar 21 15:58:58 +0000 2021",
+          "entities": {
+            "description": {},
+            "url": {
+              "urls": [
+                {
+                  "display_url": "linktr.ee/cyrilxbt",
+                  "expanded_url": "https://linktr.ee/cyrilxbt",
+                  "indices": [
+                    0,
+                    23
+                  ],
+                  "url": "https://t.co/mO8iEkuR3J"
+                }
+              ]
+            }
+          },
+          "fastFollowersCount": 0,
+          "favouritesCount": 0,
+          "hasCustomTimelines": true,
+          "isTranslator": false,
+          "mediaCount": 7238,
+          "statusesCount": 40324,
+          "withheldInCountries": [],
+          "affiliatesHighlightedLabel": {},
+          "possiblySensitive": false,
+          "pinnedTweetIds": [
+            "2058373087330959829"
+          ],
+          "profile_bio": {
+            "description": "AI • Tech • Crypto | Sharing what I see before everyone else does.",
+            "entities": {
+              "description": {},
+              "url": {
+                "urls": [
+                  {
+                    "display_url": "linktr.ee/cyrilxbt",
+                    "expanded_url": "https://linktr.ee/cyrilxbt",
+                    "indices": [
+                      0,
+                      23
+                    ],
+                    "url": "https://t.co/mO8iEkuR3J"
+                  }
+                ]
+              }
+            }
+          },
+          "isAutomated": false,
+          "automatedBy": null
+        },
+        "extendedEntities": {},
+        "card": {
+          "rest_id": "https://t.co/4sLtyJzhmH"
+        },
+        "place": {},
+        "entities": {
+          "urls": [
+            {
+              "display_url": "x.com/i/article/2057…",
+              "expanded_url": "http://x.com/i/article/2057568624345563136",
+              "indices": [
+                0,
+                23
+              ],
+              "url": "https://t.co/4sLtyJzhmH"
+            }
+          ]
+        },
+        "isRetweet": false,
+        "isQuote": false,
+        "isConversationControlled": false,
+        "quoted_tweet": null,
+        "retweeted_tweet": null,
+        "isLimitedReply": false,
+        "communityInfo": null
+      }
+    ],
+    "status": "success",
+    "msg": "success",
+    "code": 0
+  }
+}

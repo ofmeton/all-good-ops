@@ -1,0 +1,25 @@
+{
+  "name": "02_carousel_t3",
+  "description": "Instagram カルーセル T3_failure_chronicle (専門職×AI 型 由来) 9 枚 stub。",
+  "request": {
+    "idea": {
+      "id": "idea-ig-02",
+      "topic": "Claude Code 運用の失敗談",
+      "primaryHook": "failure_story",
+      "fmat": "long",
+      "contentType": "failure_story",
+      "audience": "中小事業者の方",
+      "sourceMaterialIds": ["mat-fs-001"]
+    },
+    "kind": "carousel",
+    "carouselTemplateId": "T3_failure_chronicle"
+  },
+  "expected": {
+    "kind": "carousel",
+    "generator": "stub",
+    "slideCount": 9,
+    "carouselTemplateId": "T3_failure_chronicle",
+    "captionMustContain": ["中小事業者の方"],
+    "captionMaxChars": 200
+  }
+}

@@ -1,0 +1,709 @@
+{
+  "fetched_at": "2026-06-04T23:04:09.256618+00:00",
+  "since_period": "daily",
+  "total_repos": 99,
+  "by_language": {
+    "all": [
+      {
+        "full_name": "sponsors/chopratejas",
+        "url": "https://github.com/sponsors/chopratejas",
+        "description": "Compress tool outputs, logs, files, and RAG chunks before they reach the LLM. 60-95% fewer tokens, same answers. Library, proxy, MCP server.",
+        "fetched_language_filter": "all",
+        "since": "daily"
+      },
+      {
+        "full_name": "NousResearch/hermes-agent",
+        "url": "https://github.com/NousResearch/hermes-agent",
+        "description": "The agent that grows with you",
+        "fetched_language_filter": "all",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/affaan-m",
+        "url": "https://github.com/sponsors/affaan-m",
+        "description": "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond.",
+        "fetched_language_filter": "all",
+        "since": "daily"
+      },
+      {
+        "full_name": "PaddlePaddle/PaddleOCR",
+        "url": "https://github.com/PaddlePaddle/PaddleOCR",
+        "description": "Turn any PDF or image document into structured data for your AI. A powerful, lightweight OCR toolkit that bridges the gap between images/PDFs and LLMs. Supports 100+ languages.",
+        "fetched_language_filter": "all",
+        "since": "daily"
+      },
+      {
+        "full_name": "github/spec-kit",
+        "url": "https://github.com/github/spec-kit",
+        "description": "💫 Toolkit to help you get started with Spec-Driven Development",
+        "fetched_language_filter": "all",
+        "since": "daily"
+      },
+      {
+        "full_name": "NVIDIA/cosmos",
+        "url": "https://github.com/NVIDIA/cosmos",
+        "description": "NVIDIA Cosmos is an open platform of world models, datasets, and tools that enables developers to build Physical AI for robots, autonomous vehicles, smart infrastructure, and more.",
+        "fetched_language_filter": "all",
+        "since": "daily"
+      },
+      {
+        "full_name": "lfnovo/open-notebook",
+        "url": "https://github.com/lfnovo/open-notebook",
+        "description": "An Open Source implementation of Notebook LM with more flexibility and features",
+        "fetched_language_filter": "all",
+        "since": "daily"
+      },
+      {
+        "full_name": "Open-LLM-VTuber/Open-LLM-VTuber",
+        "url": "https://github.com/Open-LLM-VTuber/Open-LLM-VTuber",
+        "description": "Talk to any LLM with hands-free voice interaction, voice interruption, and Live2D taking face running locally across platforms",
+        "fetched_language_filter": "all",
+        "since": "daily"
+      },
+      {
+        "full_name": "jwasham/coding-interview-university",
+        "url": "https://github.com/jwasham/coding-interview-university",
+        "description": "A complete computer science study plan to become a software engineer.",
+        "fetched_language_filter": "all",
+        "since": "daily"
+      },
+      {
+        "full_name": "github/copilot-sdk",
+        "url": "https://github.com/github/copilot-sdk",
+        "description": "Multi-platform SDK for integrating GitHub Copilot Agent into apps and services",
+        "fetched_language_filter": "all",
+        "since": "daily"
+      },
+      {
+        "full_name": "aquasecurity/trivy",
+        "url": "https://github.com/aquasecurity/trivy",
+        "description": "Find vulnerabilities, misconfigurations, secrets, SBOM in containers, Kubernetes, code repositories, clouds and more",
+        "fetched_language_filter": "all",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/openclaw",
+        "url": "https://github.com/sponsors/openclaw",
+        "description": "Windows companion suite for OpenClaw - System Tray app, Shared library, Node, and PowerToys Command Palette extension",
+        "fetched_language_filter": "all",
+        "since": "daily"
+      },
+      {
+        "full_name": "reconurge/flowsint",
+        "url": "https://github.com/reconurge/flowsint",
+        "description": "A modern platform for visual, flexible, and extensible graph-based investigations. For cybersecurity analysts and investigators.",
+        "fetched_language_filter": "all",
+        "since": "daily"
+      },
+      {
+        "full_name": "mvanhorn/last30days-skill",
+        "url": "https://github.com/mvanhorn/last30days-skill",
+        "description": "AI agent skill that researches any topic across Reddit, X, YouTube, HN, Polymarket, and the web - then synthesizes a grounded summary",
+        "fetched_language_filter": "all",
+        "since": "daily"
+      }
+    ],
+    "python": [
+      {
+        "full_name": "sponsors/chopratejas",
+        "url": "https://github.com/sponsors/chopratejas",
+        "description": "Compress tool outputs, logs, files, and RAG chunks before they reach the LLM. 60-95% fewer tokens, same answers. Library, proxy, MCP server.",
+        "fetched_language_filter": "python",
+        "since": "daily"
+      },
+      {
+        "full_name": "NousResearch/hermes-agent",
+        "url": "https://github.com/NousResearch/hermes-agent",
+        "description": "The agent that grows with you",
+        "fetched_language_filter": "python",
+        "since": "daily"
+      },
+      {
+        "full_name": "PaddlePaddle/PaddleOCR",
+        "url": "https://github.com/PaddlePaddle/PaddleOCR",
+        "description": "Turn any PDF or image document into structured data for your AI. A powerful, lightweight OCR toolkit that bridges the gap between images/PDFs and LLMs. Supports 100+ languages.",
+        "fetched_language_filter": "python",
+        "since": "daily"
+      },
+      {
+        "full_name": "github/spec-kit",
+        "url": "https://github.com/github/spec-kit",
+        "description": "💫 Toolkit to help you get started with Spec-Driven Development",
+        "fetched_language_filter": "python",
+        "since": "daily"
+      },
+      {
+        "full_name": "Open-LLM-VTuber/Open-LLM-VTuber",
+        "url": "https://github.com/Open-LLM-VTuber/Open-LLM-VTuber",
+        "description": "Talk to any LLM with hands-free voice interaction, voice interruption, and Live2D taking face running locally across platforms",
+        "fetched_language_filter": "python",
+        "since": "daily"
+      },
+      {
+        "full_name": "mvanhorn/last30days-skill",
+        "url": "https://github.com/mvanhorn/last30days-skill",
+        "description": "AI agent skill that researches any topic across Reddit, X, YouTube, HN, Polymarket, and the web - then synthesizes a grounded summary",
+        "fetched_language_filter": "python",
+        "since": "daily"
+      },
+      {
+        "full_name": "odoo/odoo",
+        "url": "https://github.com/odoo/odoo",
+        "description": "Odoo. Open Source Apps To Grow Your Business.",
+        "fetched_language_filter": "python",
+        "since": "daily"
+      },
+      {
+        "full_name": "HKUDS/Vibe-Trading",
+        "url": "https://github.com/HKUDS/Vibe-Trading",
+        "description": "\"Vibe-Trading: Your Personal Trading Agent\"",
+        "fetched_language_filter": "python",
+        "since": "daily"
+      },
+      {
+        "full_name": "datawhalechina/hello-agents",
+        "url": "https://github.com/datawhalechina/hello-agents",
+        "description": "📚 《从零开始构建智能体》——从零开始的智能体原理与实践教程",
+        "fetched_language_filter": "python",
+        "since": "daily"
+      },
+      {
+        "full_name": "jamwithai/production-agentic-rag-course",
+        "url": "https://github.com/jamwithai/production-agentic-rag-course",
+        "fetched_language_filter": "python",
+        "since": "daily"
+      },
+      {
+        "full_name": "unilabsim/UniLab",
+        "url": "https://github.com/unilabsim/UniLab",
+        "description": "UniLab: A Heterogeneous Architecture for Robot RL Beyond GPU-Dominant Paradigms",
+        "fetched_language_filter": "python",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/D4Vinci",
+        "url": "https://github.com/sponsors/D4Vinci",
+        "description": "🕷️ An adaptive Web Scraping framework that handles everything from a single request to a full-scale crawl!",
+        "fetched_language_filter": "python",
+        "since": "daily"
+      },
+      {
+        "full_name": "jundot/omlx",
+        "url": "https://github.com/jundot/omlx",
+        "description": "LLM inference server with continuous batching & SSD caching for Apple Silicon — managed from the macOS menu bar",
+        "fetched_language_filter": "python",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/nesquena",
+        "url": "https://github.com/sponsors/nesquena",
+        "description": "Hermes WebUI: The best way to use Hermes Agent from the web or from your phone!",
+        "fetched_language_filter": "python",
+        "since": "daily"
+      },
+      {
+        "full_name": "AIDC-AI/Pixelle-Video",
+        "url": "https://github.com/AIDC-AI/Pixelle-Video",
+        "description": "🚀 AI 全自动短视频引擎 | AI Fully Automated Short Video Engine",
+        "fetched_language_filter": "python",
+        "since": "daily"
+      }
+    ],
+    "typescript": [
+      {
+        "full_name": "lfnovo/open-notebook",
+        "url": "https://github.com/lfnovo/open-notebook",
+        "description": "An Open Source implementation of Notebook LM with more flexibility and features",
+        "fetched_language_filter": "typescript",
+        "since": "daily"
+      },
+      {
+        "full_name": "reconurge/flowsint",
+        "url": "https://github.com/reconurge/flowsint",
+        "description": "A modern platform for visual, flexible, and extensible graph-based investigations. For cybersecurity analysts and investigators.",
+        "fetched_language_filter": "typescript",
+        "since": "daily"
+      },
+      {
+        "full_name": "NginxProxyManager/nginx-proxy-manager",
+        "url": "https://github.com/NginxProxyManager/nginx-proxy-manager",
+        "description": "Docker container for managing Nginx proxy hosts with a simple, powerful interface",
+        "fetched_language_filter": "typescript",
+        "since": "daily"
+      },
+      {
+        "full_name": "langgenius/dify",
+        "url": "https://github.com/langgenius/dify",
+        "description": "Production-ready platform for agentic workflow development.",
+        "fetched_language_filter": "typescript",
+        "since": "daily"
+      },
+      {
+        "full_name": "cyberpapiii/chipotlai-max",
+        "url": "https://github.com/cyberpapiii/chipotlai-max",
+        "description": "The AI coding agent that runs on stolen Chipotle compute 🌯 Fork of OpenCode with Pepper AI as default model. Community project to add providers from Home Depot, Lowes, Target, Starbucks & more.",
+        "fetched_language_filter": "typescript",
+        "since": "daily"
+      },
+      {
+        "full_name": "microsoft/vscode",
+        "url": "https://github.com/microsoft/vscode",
+        "description": "Visual Studio Code",
+        "fetched_language_filter": "typescript",
+        "since": "daily"
+      },
+      {
+        "full_name": "angular/angular",
+        "url": "https://github.com/angular/angular",
+        "description": "Deliver web apps with confidence 🚀",
+        "fetched_language_filter": "typescript",
+        "since": "daily"
+      },
+      {
+        "full_name": "supermemoryai/supermemory",
+        "url": "https://github.com/supermemoryai/supermemory",
+        "description": "Memory engine and app that is extremely fast, scalable. The Memory API for the AI era.",
+        "fetched_language_filter": "typescript",
+        "since": "daily"
+      },
+      {
+        "full_name": "NVIDIA/NemoClaw",
+        "url": "https://github.com/NVIDIA/NemoClaw",
+        "description": "Run agents like Hermes and OpenClaw more securely inside NVIDIA OpenShell with managed inference",
+        "fetched_language_filter": "typescript",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/anomalyco",
+        "url": "https://github.com/sponsors/anomalyco",
+        "description": "The open source coding agent.",
+        "fetched_language_filter": "typescript",
+        "since": "daily"
+      },
+      {
+        "full_name": "Fission-AI/OpenSpec",
+        "url": "https://github.com/Fission-AI/OpenSpec",
+        "description": "Spec-driven development (SDD) for AI coding assistants.",
+        "fetched_language_filter": "typescript",
+        "since": "daily"
+      },
+      {
+        "full_name": "fathah/hermes-desktop",
+        "url": "https://github.com/fathah/hermes-desktop",
+        "description": "Desktop Companion for Hermes Agent",
+        "fetched_language_filter": "typescript",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/yangshun",
+        "url": "https://github.com/sponsors/yangshun",
+        "description": "Curated coding interview preparation materials for busy software engineers",
+        "fetched_language_filter": "typescript",
+        "since": "daily"
+      },
+      {
+        "full_name": "jestjs/jest",
+        "url": "https://github.com/jestjs/jest",
+        "description": "Delightful JavaScript Testing.",
+        "fetched_language_filter": "typescript",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/DayuanJiang",
+        "url": "https://github.com/sponsors/DayuanJiang",
+        "description": "A next.js web application that integrates AI capabilities with draw.io diagrams. This app allows you to create, modify, and enhance diagrams through natural language commands and AI-assisted visualization.",
+        "fetched_language_filter": "typescript",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/actualbudget",
+        "url": "https://github.com/sponsors/actualbudget",
+        "description": "A local-first personal finance app",
+        "fetched_language_filter": "typescript",
+        "since": "daily"
+      }
+    ],
+    "javascript": [
+      {
+        "full_name": "sponsors/affaan-m",
+        "url": "https://github.com/sponsors/affaan-m",
+        "description": "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond.",
+        "fetched_language_filter": "javascript",
+        "since": "daily"
+      },
+      {
+        "full_name": "pbakaus/impeccable",
+        "url": "https://github.com/pbakaus/impeccable",
+        "description": "The design language that makes your AI harness better at design.",
+        "fetched_language_filter": "javascript",
+        "since": "daily"
+      },
+      {
+        "full_name": "openai/plugins",
+        "url": "https://github.com/openai/plugins",
+        "description": "OpenAI Plugins",
+        "fetched_language_filter": "javascript",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/nodejs",
+        "url": "https://github.com/sponsors/nodejs",
+        "description": "Node.js JavaScript runtime ✨🐢🚀✨",
+        "fetched_language_filter": "javascript",
+        "since": "daily"
+      },
+      {
+        "full_name": "poloclub/transformer-explainer",
+        "url": "https://github.com/poloclub/transformer-explainer",
+        "description": "Transformer Explained Visually: Learn How LLM Transformer Models Work with Interactive Visualization",
+        "fetched_language_filter": "javascript",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/JuliusBrussee",
+        "url": "https://github.com/sponsors/JuliusBrussee",
+        "description": "🪨 why use many token when few token do trick — Claude Code skill that cuts 65% of tokens by talking like caveman",
+        "fetched_language_filter": "javascript",
+        "since": "daily"
+      },
+      {
+        "full_name": "usebruno/bruno",
+        "url": "https://github.com/usebruno/bruno",
+        "description": "Opensource IDE For Exploring and Testing API's (lightweight alternative to Postman/Insomnia)",
+        "fetched_language_filter": "javascript",
+        "since": "daily"
+      },
+      {
+        "full_name": "atlassian/atlassian-mcp-server",
+        "url": "https://github.com/atlassian/atlassian-mcp-server",
+        "description": "Remote MCP Server that securely connects Jira and Confluence with your LLM, IDE, or agent platform of choice.",
+        "fetched_language_filter": "javascript",
+        "since": "daily"
+      },
+      {
+        "full_name": "pot-app/pot-desktop",
+        "url": "https://github.com/pot-app/pot-desktop",
+        "description": "🌈一个跨平台的划词翻译和OCR软件 | A cross-platform software for text translation and recognition.",
+        "fetched_language_filter": "javascript",
+        "since": "daily"
+      },
+      {
+        "full_name": "zarazhangrui/frontend-slides",
+        "url": "https://github.com/zarazhangrui/frontend-slides",
+        "description": "Create beautiful slides on the web using a coding agent's frontend skills",
+        "fetched_language_filter": "javascript",
+        "since": "daily"
+      },
+      {
+        "full_name": "viru0909-dev/nyay-setu-working",
+        "url": "https://github.com/viru0909-dev/nyay-setu-working",
+        "description": "Digitalization of Judiciary System",
+        "fetched_language_filter": "javascript",
+        "since": "daily"
+      },
+      {
+        "full_name": "supermemoryai/claude-supermemory",
+        "url": "https://github.com/supermemoryai/claude-supermemory",
+        "description": "Enable Claude Code to learn in real-time, update it's knowledge, and grow with you, using supermemory.",
+        "fetched_language_filter": "javascript",
+        "since": "daily"
+      },
+      {
+        "full_name": "vercel-labs/agent-skills",
+        "url": "https://github.com/vercel-labs/agent-skills",
+        "description": "Vercel's official collection of agent skills",
+        "fetched_language_filter": "javascript",
+        "since": "daily"
+      },
+      {
+        "full_name": "xuanyustudio/LocalMiniDrama",
+        "url": "https://github.com/xuanyustudio/LocalMiniDrama",
+        "description": "🎬 seedance2接入 开源本地 AI 短剧 & 漫剧生成工具 —— 从故事到成片一站式完成，数据不出本机，短剧工作流管理平台，高灵活度，AI真人剧，AI漫剧本地搞定。 Open-source local AI short drama maker: story → storyboard → video, fully offline, your data stays yours. 纳米流水线",
+        "fetched_language_filter": "javascript",
+        "since": "daily"
+      },
+      {
+        "full_name": "mui/material-ui",
+        "url": "https://github.com/mui/material-ui",
+        "description": "Material UI: Comprehensive React component library that implements Google's Material Design. Free forever.",
+        "fetched_language_filter": "javascript",
+        "since": "daily"
+      }
+    ],
+    "go": [
+      {
+        "full_name": "aquasecurity/trivy",
+        "url": "https://github.com/aquasecurity/trivy",
+        "description": "Find vulnerabilities, misconfigurations, secrets, SBOM in containers, Kubernetes, code repositories, clouds and more",
+        "fetched_language_filter": "go",
+        "since": "daily"
+      },
+      {
+        "full_name": "ollama/ollama",
+        "url": "https://github.com/ollama/ollama",
+        "description": "Get up and running with Kimi-K2.6, GLM-5.1, MiniMax, DeepSeek, gpt-oss, Qwen, Gemma and other models.",
+        "fetched_language_filter": "go",
+        "since": "daily"
+      },
+      {
+        "full_name": "kagent-dev/kagent",
+        "url": "https://github.com/kagent-dev/kagent",
+        "description": "Cloud Native Agentic AI | Discord: https://bit.ly/kagentdiscord",
+        "fetched_language_filter": "go",
+        "since": "daily"
+      },
+      {
+        "full_name": "github/github-mcp-server",
+        "url": "https://github.com/github/github-mcp-server",
+        "description": "GitHub's official MCP Server",
+        "fetched_language_filter": "go",
+        "since": "daily"
+      },
+      {
+        "full_name": "golang/go",
+        "url": "https://github.com/golang/go",
+        "description": "The Go programming language",
+        "fetched_language_filter": "go",
+        "since": "daily"
+      },
+      {
+        "full_name": "caddyserver/caddy",
+        "url": "https://github.com/caddyserver/caddy",
+        "description": "Fast and extensible multi-platform HTTP/1-2-3 web server with automatic HTTPS",
+        "fetched_language_filter": "go",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/tulir",
+        "url": "https://github.com/sponsors/tulir",
+        "description": "Go library for the WhatsApp web multidevice API",
+        "fetched_language_filter": "go",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/derailed",
+        "url": "https://github.com/sponsors/derailed",
+        "description": "🐶 Kubernetes CLI To Manage Your Clusters In Style!",
+        "fetched_language_filter": "go",
+        "since": "daily"
+      },
+      {
+        "full_name": "grafana/pyroscope",
+        "url": "https://github.com/grafana/pyroscope",
+        "description": "Continuous Profiling Platform. Debug performance issues down to a single line of code",
+        "fetched_language_filter": "go",
+        "since": "daily"
+      },
+      {
+        "full_name": "docker/compose",
+        "url": "https://github.com/docker/compose",
+        "description": "Define and run multi-container applications with Docker",
+        "fetched_language_filter": "go",
+        "since": "daily"
+      },
+      {
+        "full_name": "ArvinLovegood/go-stock",
+        "url": "https://github.com/ArvinLovegood/go-stock",
+        "description": "🦄🦄🦄AI赋能股票分析：AI加持的股票分析/选股工具。股票行情获取，AI热点资讯分析，AI资金/财务分析，涨跌报警推送。支持A股，港股，美股。支持市场整体/个股情绪分析，AI辅助选股等。数据全部保留在本地。支持DeepSeek，OpenAI， Ollama，LMStudio，AnythingLLM，硅基流动，火山方舟，阿里云百炼等平台或模型。",
+        "fetched_language_filter": "go",
+        "since": "daily"
+      },
+      {
+        "full_name": "hashicorp/nomad",
+        "url": "https://github.com/hashicorp/nomad",
+        "description": "Nomad is an easy-to-use, flexible, and performant workload orchestrator that can deploy a mix of microservice, batch, containerized, and non-containerized applications. Nomad is easy to operate and scale and has native Consul and Vault integrations.",
+        "fetched_language_filter": "go",
+        "since": "daily"
+      },
+      {
+        "full_name": "podman-container-tools/podman",
+        "url": "https://github.com/podman-container-tools/podman",
+        "description": "Podman: A tool for managing OCI containers and pods.",
+        "fetched_language_filter": "go",
+        "since": "daily"
+      },
+      {
+        "full_name": "grafana/mcp-grafana",
+        "url": "https://github.com/grafana/mcp-grafana",
+        "description": "MCP server for Grafana",
+        "fetched_language_filter": "go",
+        "since": "daily"
+      },
+      {
+        "full_name": "kyverno/kyverno",
+        "url": "https://github.com/kyverno/kyverno",
+        "description": "Unified Policy as Code",
+        "fetched_language_filter": "go",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/traefik",
+        "url": "https://github.com/sponsors/traefik",
+        "description": "The Cloud Native Application Proxy",
+        "fetched_language_filter": "go",
+        "since": "daily"
+      },
+      {
+        "full_name": "gitleaks/gitleaks",
+        "url": "https://github.com/gitleaks/gitleaks",
+        "description": "Find secrets with Gitleaks 🔑",
+        "fetched_language_filter": "go",
+        "since": "daily"
+      },
+      {
+        "full_name": "Gentleman-Programming/gentle-ai",
+        "url": "https://github.com/Gentleman-Programming/gentle-ai",
+        "fetched_language_filter": "go",
+        "since": "daily"
+      },
+      {
+        "full_name": "kubernetes/kubernetes",
+        "url": "https://github.com/kubernetes/kubernetes",
+        "description": "Production-Grade Container Scheduling and Management",
+        "fetched_language_filter": "go",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/danielmiessler",
+        "url": "https://github.com/sponsors/danielmiessler",
+        "description": "Fabric is an open-source framework for augmenting humans using AI. It provides a modular system for solving specific problems using a crowdsourced set of AI prompts that can be used anywhere.",
+        "fetched_language_filter": "go",
+        "since": "daily"
+      },
+      {
+        "full_name": "filebrowser/filebrowser",
+        "url": "https://github.com/filebrowser/filebrowser",
+        "description": "📂 Web File Browser",
+        "fetched_language_filter": "go",
+        "since": "daily"
+      },
+      {
+        "full_name": "pion/webrtc",
+        "url": "https://github.com/pion/webrtc",
+        "description": "Pure Go implementation of the WebRTC API",
+        "fetched_language_filter": "go",
+        "since": "daily"
+      }
+    ],
+    "rust": [
+      {
+        "full_name": "aaif-goose/goose",
+        "url": "https://github.com/aaif-goose/goose",
+        "description": "an open source, extensible AI agent that goes beyond code suggestions - install, execute, edit, and test with any LLM",
+        "fetched_language_filter": "rust",
+        "since": "daily"
+      },
+      {
+        "full_name": "microsoft/mxc",
+        "url": "https://github.com/microsoft/mxc",
+        "description": "Policy-driven, layered isolation and containment",
+        "fetched_language_filter": "rust",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/rustdesk",
+        "url": "https://github.com/sponsors/rustdesk",
+        "description": "An open-source remote desktop application designed for self-hosting, as an alternative to TeamViewer.",
+        "fetched_language_filter": "rust",
+        "since": "daily"
+      },
+      {
+        "full_name": "openai/codex",
+        "url": "https://github.com/openai/codex",
+        "description": "Lightweight coding agent that runs in your terminal",
+        "fetched_language_filter": "rust",
+        "since": "daily"
+      },
+      {
+        "full_name": "rust-lang/rust",
+        "url": "https://github.com/rust-lang/rust",
+        "description": "Empowering everyone to build reliable and efficient software.",
+        "fetched_language_filter": "rust",
+        "since": "daily"
+      },
+      {
+        "full_name": "farion1231/cc-switch",
+        "url": "https://github.com/farion1231/cc-switch",
+        "description": "A cross-platform desktop All-in-One assistant for Claude Code, Codex, OpenCode, OpenClaw, Gemini CLI & Hermes Agent. Only official website: ccswitch.io",
+        "fetched_language_filter": "rust",
+        "since": "daily"
+      },
+      {
+        "full_name": "vercel-labs/agent-browser",
+        "url": "https://github.com/vercel-labs/agent-browser",
+        "description": "Browser automation CLI for AI agents",
+        "fetched_language_filter": "rust",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/ogulcancelik",
+        "url": "https://github.com/sponsors/ogulcancelik",
+        "description": "agent multiplexer that lives in your terminal.",
+        "fetched_language_filter": "rust",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/raphamorim",
+        "url": "https://github.com/sponsors/raphamorim",
+        "description": "A hardware-accelerated GPU terminal emulator focusing to run in desktops and browsers.",
+        "fetched_language_filter": "rust",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/uutils",
+        "url": "https://github.com/sponsors/uutils",
+        "description": "Cross-platform Rust rewrite of the GNU coreutils",
+        "fetched_language_filter": "rust",
+        "since": "daily"
+      },
+      {
+        "full_name": "xingkongliang/skills-manager",
+        "url": "https://github.com/xingkongliang/skills-manager",
+        "description": "A lightweight desktop app to manage, sync, and organize AI agent skills across 15+ coding tools — Cursor, Claude Code, Codex, Copilot, and more.",
+        "fetched_language_filter": "rust",
+        "since": "daily"
+      },
+      {
+        "full_name": "NVIDIA/OpenShell",
+        "url": "https://github.com/NVIDIA/OpenShell",
+        "description": "OpenShell is the safe, private runtime for autonomous AI agents.",
+        "fetched_language_filter": "rust",
+        "since": "daily"
+      },
+      {
+        "full_name": "zeroclaw-labs/zeroclaw",
+        "url": "https://github.com/zeroclaw-labs/zeroclaw",
+        "description": "Fast, small, and fully autonomous AI personal assistant infrastructure, any OS, any platform — deploy anywhere, swap anything 🦀",
+        "fetched_language_filter": "rust",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/zed-industries",
+        "url": "https://github.com/sponsors/zed-industries",
+        "description": "Code at the speed of thought – Zed is a high-performance, multiplayer code editor from the creators of Atom and Tree-sitter.",
+        "fetched_language_filter": "rust",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/jdx",
+        "url": "https://github.com/sponsors/jdx",
+        "description": "dev tools, env vars, task runner",
+        "fetched_language_filter": "rust",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/zed-industries",
+        "url": "https://github.com/sponsors/zed-industries",
+        "fetched_language_filter": "rust",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/clap-rs",
+        "url": "https://github.com/sponsors/clap-rs",
+        "description": "A full featured, fast Command Line Argument Parser for Rust",
+        "fetched_language_filter": "rust",
+        "since": "daily"
+      }
+    ]
+  }
+}

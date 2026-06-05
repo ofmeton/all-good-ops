@@ -1,0 +1,46 @@
+{
+  "status": "success",
+  "msg": "success",
+  "data": {
+    "id": "1260921",
+    "name": "Kai",
+    "userName": "hqmank",
+    "location": "",
+    "url": "",
+    "description": "AI Builder 🛠️ | Daily AI coding tips\nPractical workflows you can actually use\nCore Member @aibuilderclub_ | DM for Collabs",
+    "entities": {
+      "description": {
+        "user_mentions": [
+          {
+            "id_str": "",
+            "indices": [
+              90,
+              105
+            ],
+            "name": "",
+            "screen_name": "aibuilderclub_"
+          }
+        ]
+      }
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 4718,
+    "following": 255,
+    "favouritesCount": 5669,
+    "statusesCount": 2727,
+    "mediaCount": 612,
+    "createdAt": "2007-03-16T02:21:19.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/1260921/1680585361",
+    "profilePicture": "https://pbs.twimg.com/profile_images/2001227557765832707/XG7mxw62_normal.jpg",
+    "canDm": false,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": [
+      "2058404814036652186"
+    ]
+  }
+}

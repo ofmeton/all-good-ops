@@ -1,0 +1,22 @@
+{
+  "handle": "MakeAI_CEO",
+  "response_text": "```json\n{\n  \"information_source\": \"海外X/公式ブログ/論文\",\n  \"publishing_lag_hours\": 48,\n  \"selection_criteria\": \"Claude Code・Codex等の最新AIツールアップデートと、海外研究発の「上級プロンプト技術」を優先的に選別。「日本未浸透」「消される前に」等の希少性・緊急性フレームで注目を集めるネタを重点採用。\",\n  \"translation_rate_pct\": 10,\n  \"paraphrase_rate_pct\": 30,\n  \"opinion_rate_pct\": 20,\n  \"original_rate_pct\": 40,\n  \"citation_explicit_rate_pct\": 15,\n  \"cross_platform_intake_rate_pct\": 40,\n  \"notes\": \"論文・研究引用は「Metaが2026年4月に発表」「研究では自.己検証率が…」等の形で言及されるが一次ソースURLはほぼ非開示で検証困難。数値（93%、1.5%→20%等）の出典は曖昧で誇張の可能性が高く、情報の信頼度は低い。投稿の大半は海外情報を日本語化しつつ『消される』『海外では日本人を馬鹿にしている』等のSNS煽り型フレームを強く上乗せしており、original_rateはフレーミング・演出部分を含む推定値。\"\n}\n```",
+  "parsed": {
+    "information_source": "海外X/公式ブログ/論文",
+    "publishing_lag_hours": 48,
+    "selection_criteria": "Claude Code・Codex等の最新AIツールアップデートと、海外研究発の「上級プロンプト技術」を優先的に選別。「日本未浸透」「消される前に」等の希少性・緊急性フレームで注目を集めるネタを重点採用。",
+    "translation_rate_pct": 10,
+    "paraphrase_rate_pct": 30,
+    "opinion_rate_pct": 20,
+    "original_rate_pct": 40,
+    "citation_explicit_rate_pct": 15,
+    "cross_platform_intake_rate_pct": 40,
+    "notes": "論文・研究引用は「Metaが2026年4月に発表」「研究では自.己検証率が…」等の形で言及されるが一次ソースURLはほぼ非開示で検証困難。数値（93%、1.5%→20%等）の出典は曖昧で誇張の可能性が高く、情報の信頼度は低い。投稿の大半は海外情報を日本語化しつつ『消される』『海外では日本人を馬鹿にしている』等のSNS煽り型フレームを強く上乗せしており、original_rateはフレーミング・演出部分を含む推定値。"
+  },
+  "usage": {
+    "input_tokens": 4678,
+    "output_tokens": 428,
+    "cache_read_input_tokens": 0,
+    "cache_creation_input_tokens": 0
+  }
+}

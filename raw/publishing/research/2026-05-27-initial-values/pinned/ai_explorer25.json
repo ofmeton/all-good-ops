@@ -1,0 +1,231 @@
+{
+  "handle": "ai_explorer25",
+  "tweet_id": "2059124869351055451",
+  "body": {
+    "tweets": [
+      {
+        "type": "tweet",
+        "id": "2059124869351055451",
+        "url": "https://x.com/ai_explorer25/status/2059124869351055451",
+        "twitterUrl": "https://twitter.com/ai_explorer25/status/2059124869351055451",
+        "text": "Learn Data Science for FREE in 2026\n \n1. Python\nhttps://t.co/MaOHz0MmBy\n\n2. SQL\nhttps://t.co/VYMcTJRuwZ\n\n3. Excel\nhttps://t.co/iiHp8bDaM9\n\n4. Power BI\nhttps://t.co/sU505kApdz\n\n5. Mathematics\nhttps://t.co/jUnLb7qJ6X\n\n6. Data Analysis\nhttps://t.co/4aNtpWh37S https://t.co/87d5ck1qdd",
+        "source": "",
+        "retweetCount": 114,
+        "replyCount": 19,
+        "likeCount": 340,
+        "quoteCount": 1,
+        "viewCount": 12428,
+        "createdAt": "Tue May 26 04:10:00 +0000 2026",
+        "lang": "en",
+        "bookmarkCount": 282,
+        "isReply": false,
+        "inReplyToId": "",
+        "conversationId": "2059124869351055451",
+        "displayTextRange": [
+          0,
+          256
+        ],
+        "inReplyToUserId": "",
+        "inReplyToUsername": "",
+        "isPinned": false,
+        "author": {
+          "type": "user",
+          "userName": "ai_explorer25",
+          "url": "https://x.com/ai_explorer25",
+          "twitterUrl": "https://twitter.com/ai_explorer25",
+          "id": "2009204818376876032",
+          "name": "AI_Explorer",
+          "isVerified": false,
+          "isBlueVerified": true,
+          "verifiedType": null,
+          "profilePicture": "https://pbs.twimg.com/profile_images/2022344365251911680/VTRlBO9__normal.jpg",
+          "coverPicture": "https://pbs.twimg.com/profile_banners/2009204818376876032/1770999663",
+          "description": "Ai and Tech content Creator. 300k+ on Linkedin. Sharing insights on Ai, Tech, Free tools, resources and websites. DM for collabs at : nehajaincollabs@gmail.com",
+          "location": "",
+          "followers": 8219,
+          "following": 147,
+          "status": "",
+          "canDm": true,
+          "canMediaTag": true,
+          "createdAt": "Thu Jan 08 10:05:56 +0000 2026",
+          "entities": {
+            "description": {}
+          },
+          "fastFollowersCount": 0,
+          "favouritesCount": 0,
+          "hasCustomTimelines": true,
+          "isTranslator": false,
+          "mediaCount": 244,
+          "statusesCount": 606,
+          "withheldInCountries": [],
+          "affiliatesHighlightedLabel": {},
+          "possiblySensitive": false,
+          "pinnedTweetIds": [
+            "2059124869351055451"
+          ],
+          "profile_bio": {
+            "description": "Ai and Tech content Creator. 300k+ on Linkedin. Sharing insights on Ai, Tech, Free tools, resources and websites. DM for collabs at : nehajaincollabs@gmail.com",
+            "entities": {
+              "description": {}
+            }
+          },
+          "isAutomated": false,
+          "automatedBy": null
+        },
+        "extendedEntities": {
+          "media": [
+            {
+              "allow_download_status": {
+                "allow_download": true
+              },
+              "display_url": "pic.twitter.com/87d5ck1qdd",
+              "expanded_url": "https://twitter.com/ai_explorer25/status/2059124869351055451/photo/1",
+              "ext_master_playlist_only": [],
+              "ext_media_availability": {
+                "status": "Available"
+              },
+              "ext_playlists": [],
+              "features": {
+                "large": {
+                  "faces": []
+                },
+                "orig": {
+                  "faces": []
+                }
+              },
+              "id_str": "2058966366825349120",
+              "indices": [
+                257,
+                280
+              ],
+              "media_key": "3_2058966366825349120",
+              "media_results": {
+                "id": "QXBpTWVkaWFSZXN1bHRzOgwAAQoAARyS6wBzGgAACgACHJN7KLHXoFsAAA==",
+                "result": {
+                  "__typename": "ApiMedia",
+                  "id": "QXBpTWVkaWE6DAABCgABHJLrAHMaAAAKAAIck3sosdegWwAA",
+                  "media_key": "3_2058966366825349120"
+                }
+              },
+              "media_url_https": "https://pbs.twimg.com/media/HJLrAHMaAAAmmiU.png",
+              "original_info": {
+                "focus_rects": [
+                  {
+                    "h": 431,
+                    "w": 770,
+                    "x": 0,
+                    "y": 150
+                  },
+                  {
+                    "h": 663,
+                    "w": 663,
+                    "x": 54,
+                    "y": 0
+                  },
+                  {
+                    "h": 663,
+                    "w": 582,
+                    "x": 94,
+                    "y": 0
+                  },
+                  {
+                    "h": 663,
+                    "w": 332,
+                    "x": 219,
+                    "y": 0
+                  },
+                  {
+                    "h": 663,
+                    "w": 770,
+                    "x": 0,
+                    "y": 0
+                  }
+                ],
+                "height": 663,
+                "width": 770
+              },
+              "sizes": {
+                "large": {
+                  "h": 663,
+                  "w": 770
+                }
+              },
+              "type": "photo",
+              "url": "https://t.co/87d5ck1qdd"
+            }
+          ]
+        },
+        "card": null,
+        "place": {},
+        "entities": {
+          "urls": [
+            {
+              "display_url": "cs50.harvard.edu/python/2022/",
+              "expanded_url": "http://cs50.harvard.edu/python/2022/",
+              "indices": [
+                48,
+                71
+              ],
+              "url": "https://t.co/MaOHz0MmBy"
+            },
+            {
+              "display_url": "mode.com/sql-tutorial",
+              "expanded_url": "https://mode.com/sql-tutorial",
+              "indices": [
+                80,
+                103
+              ],
+              "url": "https://t.co/VYMcTJRuwZ"
+            },
+            {
+              "display_url": "learn.microsoft.com/training/brows…",
+              "expanded_url": "https://learn.microsoft.com/training/browse/?products=excel",
+              "indices": [
+                114,
+                137
+              ],
+              "url": "https://t.co/iiHp8bDaM9"
+            },
+            {
+              "display_url": "learn.microsoft.com/training/power…",
+              "expanded_url": "https://learn.microsoft.com/training/powerplatform/power-bi",
+              "indices": [
+                151,
+                174
+              ],
+              "url": "https://t.co/sU505kApdz"
+            },
+            {
+              "display_url": "khanacademy.org/math",
+              "expanded_url": "https://khanacademy.org/math",
+              "indices": [
+                191,
+                214
+              ],
+              "url": "https://t.co/jUnLb7qJ6X"
+            },
+            {
+              "display_url": "skillsbuild.org/adult-learners",
+              "expanded_url": "https://skillsbuild.org/adult-learners",
+              "indices": [
+                233,
+                256
+              ],
+              "url": "https://t.co/4aNtpWh37S"
+            }
+          ]
+        },
+        "isRetweet": false,
+        "isQuote": false,
+        "isConversationControlled": false,
+        "quoted_tweet": null,
+        "retweeted_tweet": null,
+        "isLimitedReply": false,
+        "communityInfo": null
+      }
+    ],
+    "status": "success",
+    "msg": "success",
+    "code": 0
+  }
+}

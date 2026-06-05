@@ -1,0 +1,5 @@
+{
+  "id": "Q5",
+  "query": "\"AI automation\" (\"small business\" OR \"non-engineer\" OR \"non-coder\") -is:retweet lang:en min_faves:100",
+  "tweets": []
+}

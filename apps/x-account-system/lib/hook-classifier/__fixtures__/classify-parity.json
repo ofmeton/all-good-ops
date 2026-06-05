@@ -1,0 +1,92 @@
+[
+  {
+    "input": "3時間かかってた経理を20分に短縮した手順",
+    "expected": {
+      "primary_hook": "business_repro",
+      "devices": ["number"],
+      "confidenceMin": 0.85,
+      "confidenceMax": 0.95
+    }
+  },
+  {
+    "input": "失敗した。ChatGPTで詰まった話",
+    "expected": {
+      "primary_hook": "failure_story",
+      "devices": [],
+      "confidenceMin": 0.85,
+      "confidenceMax": 0.95
+    }
+  },
+  {
+    "input": "Claude活用5つのコツ",
+    "expected": {
+      "primary_hook": "tips_enum",
+      "devices": [],
+      "confidenceMin": 0.85,
+      "confidenceMax": 0.95
+    }
+  },
+  {
+    "input": "【保存版】請求書自動化",
+    "expected": {
+      "primary_hook": "business_repro",
+      "devices": ["brackets"],
+      "confidenceMin": 0.85,
+      "confidenceMax": 0.95
+    }
+  },
+  {
+    "input": "私も最初は失敗した経験があります",
+    "expected": {
+      "primary_hook": "failure_story",
+      "devices": ["first_hand_past"],
+      "confidenceMin": 0.85,
+      "confidenceMax": 0.95
+    }
+  },
+  {
+    "input": "実は私も最初は詰まった",
+    "expected": {
+      "primary_hook": "failure_story",
+      "devices": ["empathy"],
+      "confidenceMin": 0.85,
+      "confidenceMax": 0.95
+    }
+  },
+  {
+    "input": "ChatGPTは万能だと思われがちだが実は3つの落とし穴がある",
+    "expected": {
+      "primary_hook": "failure_story",
+      "devices": ["contrarian", "warning"],
+      "confidenceMin": 0.30,
+      "confidenceMax": 0.45
+    }
+  },
+  {
+    "input": "✅ 自動化ツール5選",
+    "expected": {
+      "primary_hook": "tips_enum",
+      "devices": ["emoji_lead"],
+      "confidenceMin": 0.55,
+      "confidenceMax": 0.75
+    }
+  },
+  {
+    "input": "業界の本質的な問題は自動化への誤解だ",
+    "expected": {
+      "primary_hook": "critique",
+      "devices": [],
+      "confidenceMin": 0.68,
+      "confidenceMax": 0.88
+    }
+  },
+  {
+    "input": "Before: 30分 → After: 3分で完了する方法",
+    "expected": {
+      "primary_hook": "business_repro",
+      "devices": ["number"],
+      "confidenceMin": 0.85,
+      "confidenceMax": 0.95
+    }
+  }
+]

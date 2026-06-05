@@ -1,0 +1,20 @@
+{
+  "name": "03_ig_bio_link",
+  "description": "Instagram bio リンク (プロフィール踏み込み)。",
+  "input": {
+    "url": "https://ofmeton.com/?ref=ig_bio",
+    "params": {
+      "source": "instagram",
+      "medium": "bio",
+      "campaign": "phase1_bootstrap"
+    }
+  },
+  "expected": {
+    "trackedUrlContains": [
+      "utm_source=instagram",
+      "utm_medium=bio",
+      "utm_campaign=phase1_bootstrap"
+    ],
+    "parseRoundtripMatches": true
+  }
+}

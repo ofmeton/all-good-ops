@@ -1,0 +1,21 @@
+{
+  "name": "10_x3_failure_month_cap",
+  "description": "primary_hook=failure_story、全 material verified だが当月 posted=4 で月次上限到達 → X3 fail。",
+  "input": {
+    "traceId": "trace-10",
+    "draftId": "draft-10",
+    "coreIdeaId": "core-10",
+    "platform": "x",
+    "body": "経営者向けに業務仕組み化の失敗談を共有する。私は経費精算自動化で詰まった。判断軸を 3 段階で固定したが、立替金の例外処理を入れていなかった。30 分 → 90 分に逆戻りした。",
+    "fmat": "short",
+    "sourceMaterialIds": ["mat-100"],
+    "hasAffiliateLink": false
+  },
+  "mockOverrides": {
+    "monthlyFailureStoryCount": 4
+  },
+  "expected": {
+    "decision": "rejected",
+    "rejectReasons": ["X3_failure_story_verified"]
+  }
+}

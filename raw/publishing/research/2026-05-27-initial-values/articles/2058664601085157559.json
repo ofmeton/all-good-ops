@@ -1,0 +1,695 @@
+{
+  "article": {
+    "id": "QXJ0aWNsZUVudGl0eToyMDU4NjU0MjgwNDkyNjU4Njg4",
+    "author": {
+      "type": "user",
+      "userName": "ClaudeCode_UT",
+      "url": "https://x.com/ClaudeCode_UT",
+      "twitterUrl": "https://twitter.com/ClaudeCode_UT",
+      "id": "2045207585574539264",
+      "name": "東大ClaudeCode研究所",
+      "isVerified": false,
+      "isBlueVerified": true,
+      "verifiedType": null,
+      "profilePicture": "https://pbs.twimg.com/profile_images/2045968105172766720/_u891Zxq_normal.jpg",
+      "coverPicture": "https://pbs.twimg.com/profile_banners/2045207585574539264/1776499582",
+      "description": "Claude Codeを極めた現役東大生集団が運営｜実務で使えるノウハウと最新情報を毎日発信｜大手企業とのAIエージェント開発で現場導入実績あり｜研究レベルの技術を応用して社会実装｜AIエージェントの導入相談はDMまでお願いします📩｜独自ニュースと活用法はLINEで：https://t.co/078j7qOKUH",
+      "location": "実務で使えるClaudeCodeならここ一択！",
+      "followers": 19704,
+      "following": 10,
+      "status": "",
+      "canDm": false,
+      "canMediaTag": true,
+      "createdAt": "Fri Apr 17 18:29:47 +0000 2026",
+      "entities": {
+        "description": {
+          "urls": [
+            {
+              "display_url": "lin.ee/quYxNMc",
+              "expanded_url": "https://lin.ee/quYxNMc",
+              "indices": [
+                134,
+                157
+              ],
+              "url": "https://t.co/078j7qOKUH"
+            }
+          ]
+        }
+      },
+      "fastFollowersCount": 0,
+      "favouritesCount": 310,
+      "hasCustomTimelines": false,
+      "isTranslator": false,
+      "mediaCount": 213,
+      "statusesCount": 351,
+      "withheldInCountries": [],
+      "affiliatesHighlightedLabel": {},
+      "possiblySensitive": false,
+      "pinnedTweetIds": [
+        "2058664601085157559"
+      ],
+      "profile_bio": {},
+      "isAutomated": false,
+      "automatedBy": null
+    },
+    "replyCount": 1,
+    "likeCount": 72,
+    "quoteCount": 9,
+    "viewCount": "64006",
+    "createdAt": "Sun May 24 21:41:03 +0000 2026",
+    "title": "【Claude × Obsidian】本物のAI社員を作る方法",
+    "preview_text": "「AI、便利は便利だけど結局自分の業務には組み込めてないな」\n そう感じていませんか。",
+    "cover_media_img_url": "https://pbs.twimg.com/media/HJHPfLYawAAL6y7.jpg",
+    "contents": [
+      {
+        "type": "unstyled",
+        "text": "「AI、便利は便利だけど結局自分の業務には組み込めてないな」"
+      },
+      {
+        "type": "unstyled",
+        "text": " そう感じていませんか。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ClaudeやCodexの進化は目まぐるしい一方でアプデ情報を見るばかりで現場の業務はそこまでラクになってない。むしろ情報キャッチアップだけで労力をかけてしまっている。"
+      },
+      {
+        "type": "unstyled",
+        "text": "全部自分で調べて業務に組み込んでいくのを手動でやっている限りはこの状態は抜け出すことができないと考えています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude や ChatGPT を使っていて、こんな経験はありませんか。"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "質問するたび顧客名・自社の体制・前回の打ち合わせ内容を毎回ゼロから貼り直している"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "議事録を起こしてもどこに保存したか思い出せず、決まったことが結局流れていく"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "2 週間前の商談で合意した条件を聞かれて即答できず、Slack と Drive を 30 分掘り返す"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "AI を業務オペレーションに組み込んだ事例を見ると、自分にも組めるはずなのに着手できていない焦り"
+      },
+      {
+        "type": "unstyled",
+        "text": "これらは AI の能力の問題ではなく、AI 側に「覚えておく場所」を渡していないことから来る、構造の問題です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "この記事を最後まで読めば、Obsidian と Claude を組み合わせて「記憶を持った業務エージェント」を組み立てる道筋が見えるはずです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "今回は海外で話題の記事を土台にしつつ日本のビジネス現場向けに噛み砕いて、独自の知見 (ディレクトリ構成例、Memory ファイルの中身、日本で使える議事録ツール選び) を加えて解説します。全体像を 1 度掴めば、まずは「議事録と顧客情報」の 2 点から組み始められます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "出典：\nhttps://x.com/sourfraser/status/2035454870204100810"
+      },
+      {
+        "type": "header-two",
+        "text": "なぜ Claude は毎回ゼロから始めてしまうのか"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HJHQScCaMAACh8X.jpg",
+        "width": 1672,
+        "height": 941
+      },
+      {
+        "type": "unstyled",
+        "text": "多くの方が AI を、毎週新しく入ってくる派遣スタッフのように扱っています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "会話を開く。前提を貼り付ける。回答をもらう。タブを閉じる。次の会話では、また最初から自己紹介。会社のこと、自分の役割、今抱えているクライアントの状況。全部を毎回ゼロから説明する。これでは AI が記憶を持てないのは当然なんです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "逆の側から考えてみましょう。新しく入った優秀な人材に、毎週月初の朝、何の引き継ぎ資料もなく業務を任せたとしたら。どれだけ優秀でも、その人は能力を発揮できません。引き継ぎ書がない状態で「うちの主要顧客を 5 つあげてみて」と聞いても答えられないのと、Claude に同じことを聞いて答えが薄いのは、同じ構造です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "問題は AI の頭の良さではなく、AI が読む「引き継ぎ書」が用意されていないこと。議事録の整理、顧客情報の検索、過去の商談合意の掘り返し。これらは作業の領域です。本来は人間が判断と関係性に集中するために、AI が引き受けるべき仕事です。判断の手前で消耗していること自体が、ちょっともったいない状態だと思います。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここから先は、AI に「覚えておく場所」をどう渡すかの話に入っていきます。"
+      },
+      {
+        "type": "header-two",
+        "text": "「記憶できる場所」を渡したら何が変わるか"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HJHQZavbEAA_JNq.jpg",
+        "width": 2048,
+        "height": 1152
+      },
+      {
+        "type": "unstyled",
+        "text": "ここで Claude Desktop の「Cowork」というタブの話をします。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Cowork は Anthropic が 2026 年の年明けに Pro 向けに公開し、2026 年 4 月から全 paid プランで使えるようになった、業務作業に特化したエージェント機能です。Claude Desktop アプリを開くと、上部に Chat、Cowork、Code の 3 つのタブがあり、Cowork タブを選ぶと、Claude が指定したフォルダのファイルを読み書きしながら、複数のステップにまたがる業務タスクを実行できるようになります。Chat が「会話相手」、Code が「エンジニアの相棒」だとすると、Cowork は「業務をやってくれる席」に近い役割です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "この Cowork には、Google ドライブ、Gmail、Google カレンダー、Slack、Microsoft 365 など、ビジネスでよく使うツールへの connector が出荷時点で揃っています。「私の Slack を見て、今クライアントごとに何が進行中か教えて」と聞けば、Slack を開かずに状況を把握できる。「今週の予定を出して、それぞれの打ち合わせで前回までに合意したことも添えて」と聞けば、カレンダーと Vault の両方を Claude が見に行って答えてくれる。これが Cowork が「業務エージェント」と呼ばれる所以です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "そこに Obsidian Vault という「業務メモリ」を組み合わせると、AI は記憶を持ったメンバーとして振る舞い始めます。打ち合わせの議事録、顧客の進捗、過去の判断ログ。Vault に積み上げていけば、Claude はその蓄積を読みに行きます。最初の数日は「自己紹介を読んだだけの新人」程度の応答だったものが、数週間続けると「先週の打ち合わせでこれを決めましたよね」と AI 側から思い出してくれる状態に変わっていきます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "毎日 vault に情報が積み上がるたびに、Claude が読み込む知識が増える。これは「AI が賢くなった」というよりも、「読む引き継ぎ書が育っている」状態に近いです。使い始めの週と数ヶ月後では、応答の解像度がはっきり変わるはずです。"
+      },
+      {
+        "type": "header-two",
+        "text": "AI 業務メモリを支える 5 つの部品"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HJHQdPbbMAAX_uf.jpg",
+        "width": 2048,
+        "height": 1152
+      },
+      {
+        "type": "unstyled",
+        "text": "実際に組み立てる部品は 5 つです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "1 つ目は Obsidian Vault。これは無料の Markdown ベースのノートアプリで、ファイルは全てローカルのテキストとして手元に残ります。サブスクなし、ベンダーロックインなし。フォルダと Markdown ファイルの組み合わせだけで動く、シンプルな箱です。ただのメモアプリと違うのは、ファイル同士をリンクで繋いで「業務のグラフ構造」を作れることと、後述の MCP 経由で AI が直接読み書きできること。これが業務メモリの本体になります。",
+        "inlineStyleRanges": [
+          {
+            "length": 14,
+            "offset": 6,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "2 つ目は 議事録の流し込み。打ち合わせの音声を文字起こしして、毎回手で整理する作業を、ツール任せで自動化する仕組みです。Notta や tl;dv のような議事録ツールが録画と文字起こしを担当し、出来上がったテキストファイルが Google ドライブの決まったフォルダに自動で落ちる。ここまでが「素材を集める工程」です。",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 6,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "3 つ目は Obsidian MCP。これは Claude と Obsidian Vault を繋ぐ橋にあたります。AI が Vault のファイルを読み、検索し、新しいノートを書き込めるようにするための小さなサーバーです。これを入れないと、Vault は AI から見えない箱のまま。入れた瞬間に「箱の中身を AI が触れる」状態に変わります。",
+        "inlineStyleRanges": [
+          {
+            "length": 12,
+            "offset": 6,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "4 つ目は Claude Desktop の Cowork + 各種 MCP connectors。Cowork タブを起点に、Obsidian MCP に加えて、Google ドライブ、カレンダー、Slack、Gmail などの connector を有効にしておきます。Claude はそれらを横断して、必要な情報を引っ張り出してきます。",
+        "inlineStyleRanges": [
+          {
+            "length": 43,
+            "offset": 6,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "5 つ目は 1 行の Custom Instructions。Claude Desktop の設定の中に、AI 全体への指示を書ける欄があります。そこに「回答の前に常に Obsidian vault の関連ノートを検索して、その内容を踏まえて回答してください」と 1 行入れる。たった 1 行で、毎回のセッションで Claude が Vault を読みに行く挙動になります。組み立ての最後のピースです。",
+        "inlineStyleRanges": [
+          {
+            "length": 24,
+            "offset": 6,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "5 つ全部を 1 日で組まなくても大丈夫です。最小構成は「Vault を作る + Memory ファイルを 1 枚書く + Custom Instructions に 1 行入れる」の 3 ステップ。この 3 ステップで「Claude が私の Memory ファイルを毎回読む」状態が動き出します。議事録の自動化と Slack 連携は、必要を感じてから順に足していけば十分です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "次の章から、各部品の中身に入っていきます。最も重い部品である Vault の中身から見ていきましょう。"
+      },
+      {
+        "type": "header-two",
+        "text": "Obsidian Vault の中身を日本のビジネス現場向けに組む"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HJHQhKsawAA7tYR.jpg",
+        "width": 2048,
+        "height": 1152
+      },
+      {
+        "type": "unstyled",
+        "text": "ここが本記事の中心です。Vault に何を入れるかが、AI 業務メモリの精度を 8 割決めます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ディレクトリ構成は 6 フォルダから始める",
+        "inlineStyleRanges": [
+          {
+            "length": 21,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "まずは Vault の中に、以下の 6 つのフォルダ (または起点ファイル) を置きます。日本のビジネス現場で実際に回ることを意識した最小構成です。"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "00_Memory.md：自分・自社の引き継ぎ書を 1 枚にまとめる中心ファイル。Vault に入る Claude が最初に読む場所。Markdown ファイル 1 つで十分"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "10_Clients/：顧客 1 社につき 1 ファイル。社名・担当者・契約状況・進行中の論点・過去の合意をストックする場所"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "20_Actions.md：オープンなタスク一覧。担当者と期日、関連顧客を 1 行で書く台帳"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "30_Library/：自社のフレームワーク、SOP、判断軸、価格表、よくある質問。「考え方の本棚」にあたる場所"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "40_Templates/：議事録テンプレ、提案書テンプレ、フォローアップメールテンプレ。Claude が穴埋めできる雛形群"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "50_Transcripts/：会議の文字起こしテキストを日付付きで積む保管庫。2026-05-24_クライアントA_定例.md のように命名"
+      },
+      {
+        "type": "unstyled",
+        "text": "フォルダ名の頭に 00_ 10_ の番号を付けているのは、Obsidian のサイドバーで並び順を固定するためです。アルファベット順に並ぶので、よく見るものを上に置けます。最初は厳密に守らなくても良くて、「議事録は議事録のフォルダに入れる」「顧客の情報は顧客のフォルダに入れる」が決まっていれば、Claude は迷わず拾います。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Memory ファイルに書くこと",
+        "inlineStyleRanges": [
+          {
+            "length": 16,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "00_Memory.md は、新しく入った優秀な人に渡す引き継ぎ書だと考えてください。Claude が毎回のセッションで最初に読むものなので、ここの密度がそのまま応答の質に直結します。最低限、以下の 7 項目を埋めることをおすすめします。"
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "事業概要：何を売っていて、誰に届けているかを 3 〜 5 行で。例「中堅 SaaS 企業向けに、海外マーケティング戦略の設計と運用代行を提供。主要顧客は IT 業界の事業責任者・マーケ責任者。受注単価は月額 80 万円〜」"
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "体制：自分の役割と、社内のメンバー構成。例「代表 1 名 + プロジェクトマネージャー 2 名 + フリーランス 5 名。意思決定は代表、施策実行は PM が分担」"
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "顧客一覧：現在進行中のクライアント名と契約状況を 1 行ずつ。詳細は 10_Clients/ 配下の個別ファイルへリンクする。例「A 社：年間契約、リード獲得が KPI / B 社：3 ヶ月スポット、新規ブランディング」"
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "進行中プロジェクト：今クォーターで動いている案件と現在地。例「A 社 LP リニューアル：第 2 稿レビュー中、5 月末納品 / 自社サービスのプライシング改定：6 月公開予定」"
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "主要プロセス：商談から納品までの自社の標準フロー。例「初回ヒアリング → 提案書 → 契約 → キックオフ → 月次定例 → 四半期レビュー。提案書は雛形 40_Templates/proposal.md を使う」"
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "コミュニケーション様式：トーン、好み、避けたい表現。例「クライアント向けは敬体、社内は常体。専門用語は使うが、初出時に括弧で噛み砕く。煽り表現と曖昧表現は避ける」"
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "判断基準：判断に迷ったときの軸を 3 〜 5 個。例「短期売上より長期信頼を優先 / 案件は同時 5 件まで / 新規受注は単価 50 万円以上のみ」"
+      },
+      {
+        "type": "unstyled",
+        "text": "書く量は多くなくて構いません。1 項目あたり 5 〜 10 行で十分。完璧を目指すよりも、まず書き始めることが大事です。Memory ファイルは「育てていくもの」なので、最初は荒くて構いません。クライアントとのやり取りや判断の中で「これは Claude に共有しておくべきだった」と気付いた瞬間に、その場で追記する。これを続けると、3 ヶ月後にはかなり厚みのある引き継ぎ書になっています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ファイル間をリンクで繋ぐ",
+        "inlineStyleRanges": [
+          {
+            "length": 12,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Obsidian の特長は [[ファイル名]] という記法で、ファイル同士をリンクで繋げることです。例えば Memory ファイルの「顧客一覧」セクションで [[10_Clients/A社]] と書けば、A 社の個別ファイルへの導線が貼られます。Claude もこのリンク構造を理解するので、「A 社の最新の合意事項を教えて」と聞いたとき、Memory → Clients/A社 → 関連議事録、と辿って答えてくれます。Vault が育つほど、リンクのグラフ構造が業務全体を写し取る形になっていきます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここまでが Vault の中身です。Memory ファイルを 1 枚書ければ、それだけで Claude の応答が変わり始めます。Memory ファイルは「自分の判断基準を AI に移植する装置」で、書き上げた瞬間から、議事録整理や顧客対応の手前にある「毎回貼り直す説明」が消えていきます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "次は、ここに毎日の会議や打ち合わせから情報を流し込む仕組みです。"
+      },
+      {
+        "type": "header-two",
+        "text": "議事録を自動で流し込む仕組みと日本で使える選択肢"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HJHQnsTasAAOKSD.jpg",
+        "width": 2048,
+        "height": 1152
+      },
+      {
+        "type": "unstyled",
+        "text": "毎週増えていく打ち合わせの議事録を、手で起こして手で整理するのは現実的ではありません。ここはツール任せにします。"
+      },
+      {
+        "type": "unstyled",
+        "text": "組み立てる流れは 4 ステップです。"
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "Zoom や Google Meet で打ち合わせを行う"
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "議事録ツールが録画して、自動で文字起こしテキストを作る"
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "文字起こしテキストが Google ドライブの所定フォルダに保存される"
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "Claude が Google ドライブから新しい議事録を拾い、要約・タスク抽出・関連ファイルへの書き戻しを行う"
+      },
+      {
+        "type": "unstyled",
+        "text": "ステップ 4 を Cowork に任せるなら「ドライブの Transcripts フォルダから今週の新着を全部読んで、それぞれ要約・決定事項・宿題を抜き出して、該当する 10_Clients/ 配下のファイルに追記してください」と頼めば、まとめて処理してくれます。これを毎朝の 5 分でやれば、議事録が流れることはなくなります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "日本で使える議事録ツールの選び方",
+        "inlineStyleRanges": [
+          {
+            "length": 16,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "海外で広く使われている Fathom は確かに便利な選択肢ですが、日本市場では同等以上に使える国内ツールがあります。3 つの判断軸で選ぶのがおすすめです。"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "日本語の精度を最優先するなら Notta。日本発のサービスで、日本語の Zoom 会議における文字起こし精度が他のツールより明確に高いという比較記事が複数出ています。30 以上の言語に対応していて、商談や定例のような議事録ニーズには十分応えてくれます。",
+        "inlineStyleRanges": [
+          {
+            "length": 20,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "コストを抑えて始めたいなら tl;dv。海外発ですが日本語にも対応しており、無料プランで録画・文字起こし・AI による要約まで含めて寛容な制限になっています。「まず無料で動かしてみる」が一番ハードルが低い選択肢です。",
+        "inlineStyleRanges": [
+          {
+            "length": 19,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "すでに Zoom や Google Meet を中心に動かしているなら、それぞれの公式録画と文字起こし機能で十分。専用ツールを追加せずとも、Zoom Cloud Recording や Google Meet の文字起こし機能で十分に素材は作れます。あとは出来上がったテキストファイルを Google ドライブの所定フォルダに保存する手間だけです。",
+        "inlineStyleRanges": [
+          {
+            "length": 56,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "逆に、避けたほうが良いのが Otter AI です。海外で人気のサービスですが、対応言語が英語・スペイン語・フランス語に限られていて、日本語のビジネス会話には実用的に使えません。海外記事を参考にして真っ先に Otter を選びがちですが、日本のビジネス現場では別の選択肢を取ったほうが安全です。",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 14,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "ちなみに私たちは「tl;dv」を活用しています。ここは正直好みな部分もあり、API連携等が使えればAIエージェントネイティブな設計が可能なのでその点と費用やチームの状況に応じて選択するのがいいと思います。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Google ドライブへの自動保存の組み立て",
+        "inlineStyleRanges": [
+          {
+            "length": 22,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "ツールを決めたら、Google ドライブの専用フォルダに自動で議事録テキストが落ちる経路を作ります。多くの議事録ツールはドライブへの自動保存連携を持っていますし、無い場合は Zapier や Make のような自動化サービスで「ツールから出力 → ドライブ指定フォルダに保存」を組めば 5 分で繋がります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "完璧な自動化を最初から目指さなくても良いです。最初は「打ち合わせが終わったら、文字起こしテキストを手でダウンロードしてドライブにドロップする」だけでも、Claude から見れば結果は同じです。完璧を目指して着手が止まるくらいなら、手動でも始めたほうが効きます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここまでで素材が揃いました。Notta なり tl;dv なりが議事録を作り、ドライブに溜まる。Memory ファイルと顧客フォルダは Vault に並んでいる。最後に Claude 側でこれを読みに行く設定を入れていきます。"
+      },
+      {
+        "type": "header-two",
+        "text": "Claude 側の設定で必要なのは Obsidian MCP と 1 行の Custom Instructions"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HJHROIcakAAU3L3.jpg",
+        "width": 2048,
+        "height": 1152
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude 側で必要な設定は 3 つだけです。「Obsidian MCP を入れる」「必要な connector を有効化する」「Custom Instructions に 1 行書く」。順に見ていきます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Obsidian MCP の導入",
+        "inlineStyleRanges": [
+          {
+            "length": 16,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Obsidian と Claude を繋ぐ橋には、いくつかの選択肢があります。最も実績があるのは MarkusPfundstein 氏が公開している mcp-obsidian です。Obsidian 側に「Local REST API」というコミュニティプラグインを入れて API を有効化し、Claude Desktop 側の MCP 設定ファイルにこの MCP サーバーを登録する、という流れです。設定の手順は GitHub のリポジトリ (リンクは記事末尾に集約) に丁寧に書かれていて、5 〜 10 分で動かせます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "セマンティック検索 (意味で検索する機能) を重視したいなら jacksteamdev 氏の obsidian-mcp-tools という選択肢もあります。Claude Code と Claude Desktop の両方で動かしたいなら iansinnott 氏の obsidian-claude-code-mcp が便利です。最初は MarkusPfundstein 版から試してみて、必要を感じたら乗り換える、という順番でも問題ありません。"
+      },
+      {
+        "type": "unstyled",
+        "text": "connector の有効化",
+        "inlineStyleRanges": [
+          {
+            "length": 14,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Cowork タブでは、Obsidian MCP に加えて Google ドライブ、Gmail、カレンダー、Slack などの connector を有効化できます。Cowork は出荷時点でこれらの connector を備えているので、画面の指示通りに OAuth で繋ぐだけです。Vault と議事録を流し込む構成だけなら、最初は「Obsidian MCP + Google ドライブ」の 2 つで十分。Slack や Gmail への接続は、必要が出てから足せば良いです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Custom Instructions に 1 行",
+        "inlineStyleRanges": [
+          {
+            "length": 25,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "最後に、Claude Desktop の Settings から Custom Instructions (アカウントによっては Personalization や Preferences と呼ばれる場所) を開いて、こう書き加えます。"
+      },
+      {
+        "type": "blockquote",
+        "text": "回答の前に、Obsidian vault の関連ノートを必ず検索してください。検索結果を踏まえて回答し、新しい決定事項やタスクは該当ファイルに追記してください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "たった数行の指示が、AI の挙動を「毎回ゼロから話す存在」から「Vault を読んでから話す存在」に変えます。書き戻しの指示まで含めておくと、議事録を読んだ Claude が 20_Actions.md や 10_Clients/A社.md に決定事項を追記する、という挙動も自動で組み込まれます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Vault の置き場所を決める (注意点)",
+        "inlineStyleRanges": [
+          {
+            "length": 21,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "ここで補足しておきたい点があります。元記事では「Obsidian Vault を Google ドライブに置けば、ネイティブに同期できる」と書かれていますが、これは少し補正が必要です。Obsidian 本体には、クラウド同期機能は内蔵されていません。Vault のフォルダをどこに置くかで同期方法が変わります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "実用的な選択肢は 3 つです。Apple 製品だけで使うなら iCloud Drive に置くのが最も手軽で、Mac と iPhone と iPad の間で勝手に同期されます。複数の OS を跨いで使うなら、Obsidian Sync という公式の有料サービスが最も安全で、エンドツーエンド暗号化と版履歴も付いてきます。Google ドライブの中に Vault を置く運用も可能ですが、これは OS の Google Drive 同期機能か、サードパーティの Obsidian プラグインを通すので、まれに同期の競合 (コピーファイルが大量に発生する状態) が起きることが報告されています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "注意点として、1 つの Vault を 2 つ以上のクラウドサービスに同時に同期させない。この点を守れば、同期競合で Vault が壊れる事故はほぼ避けられます。",
+        "inlineStyleRanges": [
+          {
+            "length": 37,
+            "offset": 7,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude Code でも同じ思想で組める",
+        "inlineStyleRanges": [
+          {
+            "length": 22,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "最後に補足を 1 つ。本記事は Claude Desktop の Cowork を中心に話していますが、Claude Code を使っている方にも同じ構造が当てはまります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude Desktop の Custom Instructions に書く 1 行は、Claude Code でいう CLAUDE.md (プロジェクトの起動時に毎回読まれる指示ファイル) に書く 1 行と、ほぼ同じ役割を果たします。Obsidian MCP は Claude Code でも動きますし、connector の概念も MCP という共通規格の上にあるので、Vault を中心に組む発想は両方で活きます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "普段 Claude Code を使っている方は、CLAUDE.md と Obsidian MCP の組み合わせで同じ業務メモリが組めると考えて差し支えありません。"
+      },
+      {
+        "type": "header-two",
+        "text": "まとめと、今日から始める最小一歩"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここまでの話を整理します。保存して見返せる形にしておくので、組み始めるときの地図として使ってください。"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "AI が毎回ゼロから話してしまうのは、AI の能力の問題ではなく、こちらが「覚えておく場所」を渡していない構造の問題"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "Obsidian Vault を AI に渡し、Claude Desktop の Cowork タブから読み書きさせると、AI は記憶を持った業務メンバーとして振る舞い始める"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "必要な部品は 5 つ。Obsidian Vault / 議事録の流し込み / Obsidian MCP / Claude Desktop の Cowork + 各種 connector / 1 行の Custom Instructions"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "Vault の中身は 6 フォルダ構成 (Memory / Clients / Actions / Library / Templates / Transcripts) と、7 項目の Memory ファイル (事業概要・体制・顧客一覧・進行中プロジェクト・主要プロセス・コミュニケーション様式・判断基準) から始める"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "議事録ツールは Notta (日本語精度重視) か tl;dv (無料で始める) が日本のビジネス現場では現実的。Otter は日本語非対応なので避ける"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "1 日で全部組まなくても、Memory ファイル 1 枚と直近の議事録 1 週間分と Custom Instructions 1 行から動き出す"
+      },
+      {
+        "type": "unstyled",
+        "text": "この記事が組み立ての地図として役に立った方へ。"
+      },
+      {
+        "type": "unstyled",
+        "text": "東大 Claude Code 研究所（ @ClaudeCode_UT ）は、現役東大生でClaude Codeにどハマりしているメンバー達で運営しているアカウントです。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HJHSPG6aYAE9FvZ.jpg",
+        "width": 1194,
+        "height": 1046
+      },
+      {
+        "type": "unstyled",
+        "text": "大手企業とも連携しながら業務にAIエージェントをどのように活用するかを日々徹底検証しています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "■ 実務で使える Claude Code スキルの無料公開\n■ ClaudeCodeとCodexの比較解説\n■ 海外の AI 一次情報を日本のビジネス文脈に置き換えて解説"
+      },
+      {
+        "type": "unstyled",
+        "text": "海外の最新AI活用事例を毎日発信しています。次の記事もお楽しみに。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ご興味を持っていただけた方は、ぜひフォローしてチェックしてみてください❗️"
+      }
+    ]
+  },
+  "status": "success",
+  "msg": "success",
+  "_handle": "ClaudeCode_UT"
+}

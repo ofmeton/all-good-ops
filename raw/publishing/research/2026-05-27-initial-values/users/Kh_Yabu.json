@@ -1,0 +1,44 @@
+{
+  "status": "success",
+  "msg": "success",
+  "data": {
+    "id": "3502421846",
+    "name": "やぶ",
+    "userName": "Kh_Yabu",
+    "location": "",
+    "url": "",
+    "description": "Project Researcher at Earthquake Research Institute, @UTokyo_News",
+    "entities": {
+      "description": {
+        "user_mentions": [
+          {
+            "id_str": "",
+            "indices": [
+              53,
+              65
+            ],
+            "name": "",
+            "screen_name": "UTokyo_News"
+          }
+        ]
+      }
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": false,
+    "verifiedType": null,
+    "followers": 1158,
+    "following": 974,
+    "favouritesCount": 5995,
+    "statusesCount": 14194,
+    "mediaCount": 872,
+    "createdAt": "2015-09-09T08:45:54.000000Z",
+    "coverPicture": "",
+    "profilePicture": "https://pbs.twimg.com/profile_images/1934216233471324160/DzVcZGfb_normal.jpg",
+    "canDm": false,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": []
+  }
+}

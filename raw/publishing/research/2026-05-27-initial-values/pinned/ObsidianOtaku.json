@@ -1,0 +1,106 @@
+{
+  "handle": "ObsidianOtaku",
+  "tweet_id": "2058665087876165671",
+  "body": {
+    "tweets": [
+      {
+        "type": "tweet",
+        "id": "2058665087876165671",
+        "url": "https://x.com/ObsidianOtaku/status/2058665087876165671",
+        "twitterUrl": "https://twitter.com/ObsidianOtaku/status/2058665087876165671",
+        "text": "https://t.co/lwCvhfzsBL",
+        "source": "",
+        "retweetCount": 2,
+        "replyCount": 1,
+        "likeCount": 82,
+        "quoteCount": 7,
+        "viewCount": 57733,
+        "createdAt": "Sun May 24 21:42:59 +0000 2026",
+        "lang": "zxx",
+        "bookmarkCount": 209,
+        "isReply": false,
+        "inReplyToId": "",
+        "conversationId": "2058665087876165671",
+        "displayTextRange": [
+          0,
+          23
+        ],
+        "inReplyToUserId": "",
+        "inReplyToUsername": "",
+        "isPinned": false,
+        "author": {
+          "type": "user",
+          "userName": "ObsidianOtaku",
+          "url": "https://x.com/ObsidianOtaku",
+          "twitterUrl": "https://twitter.com/ObsidianOtaku",
+          "id": "2045403336451710976",
+          "name": "東大Obsidianオタク｜仕事で使える第2の脳構築",
+          "isVerified": false,
+          "isBlueVerified": true,
+          "verifiedType": null,
+          "profilePicture": "https://pbs.twimg.com/profile_images/2045403747116081152/ICOUL3T2_normal.jpg",
+          "coverPicture": "https://pbs.twimg.com/profile_banners/2045403336451710976/1776497381",
+          "description": "東大卒メンバーによるObsidianの活用術を毎日発信｜仕事で使えるObsidianを学べるメディア｜Claude CodeやCodexと組み合わせて使うノウハウを学びたい人はフォロー必須！",
+          "location": "Obsidianで第二の脳を作りたいならフォロー❗️",
+          "followers": 1069,
+          "following": 4,
+          "status": "",
+          "canDm": false,
+          "canMediaTag": true,
+          "createdAt": "Sat Apr 18 07:26:24 +0000 2026",
+          "entities": {
+            "description": {}
+          },
+          "fastFollowersCount": 0,
+          "favouritesCount": 0,
+          "hasCustomTimelines": true,
+          "isTranslator": false,
+          "mediaCount": 41,
+          "statusesCount": 55,
+          "withheldInCountries": [],
+          "affiliatesHighlightedLabel": {},
+          "possiblySensitive": false,
+          "pinnedTweetIds": [
+            "2058665087876165671"
+          ],
+          "profile_bio": {
+            "description": "東大卒メンバーによるObsidianの活用術を毎日発信｜仕事で使えるObsidianを学べるメディア｜Claude CodeやCodexと組み合わせて使うノウハウを学びたい人はフォロー必須！",
+            "entities": {
+              "description": {}
+            }
+          },
+          "isAutomated": false,
+          "automatedBy": null
+        },
+        "extendedEntities": {},
+        "card": {
+          "rest_id": "https://t.co/lwCvhfzsBL"
+        },
+        "place": {},
+        "entities": {
+          "urls": [
+            {
+              "display_url": "x.com/i/article/2058…",
+              "expanded_url": "http://x.com/i/article/2058458570321195008",
+              "indices": [
+                0,
+                23
+              ],
+              "url": "https://t.co/lwCvhfzsBL"
+            }
+          ]
+        },
+        "isRetweet": false,
+        "isQuote": false,
+        "isConversationControlled": false,
+        "quoted_tweet": null,
+        "retweeted_tweet": null,
+        "isLimitedReply": false,
+        "communityInfo": null
+      }
+    ],
+    "status": "success",
+    "msg": "success",
+    "code": 0
+  }
+}

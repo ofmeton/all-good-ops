@@ -1,0 +1,38 @@
+{
+  "name": "01_initial_values",
+  "description": "buildInitialState() の出力が initial-values §8.1 採用初期値と一致するか確認。posterior の mean が采用比率に近い (Beta α/(α+β))。",
+  "scenario": "initial_state",
+  "signals": [],
+  "expected": {
+    "postingTime": {
+      "morning_mean": [0.25, 0.35],
+      "noon_mean": [0.1, 0.2],
+      "afternoon_mean": [0.25, 0.35],
+      "evening_mean": [0.15, 0.25],
+      "midnight_mean": [0.0, 0.1]
+    },
+    "hookDistribution": {
+      "number_lead_mean": [0.2, 0.3],
+      "negation_lead_mean": [0.03, 0.08],
+      "question_lead_mean": [0.07, 0.13],
+      "emotion_lead_mean": [0.1, 0.2],
+      "authority_lead_mean": [0.07, 0.13],
+      "promise_lead_mean": [0.1, 0.2],
+      "other_mean": [0.15, 0.25],
+      "failure_story_thompson_exempt": true,
+      "failure_story_cap_alpha_beta": [4, 26]
+    },
+    "contentAxis_dirichlet_alphas": [1, 2, 3, 4],
+    "citationExplicitRate_mean": [0.6, 0.7],
+    "xFormatRatio_priors": {
+      "short_alpha_beta": [2, 8],
+      "medium_alpha_beta": [2, 8],
+      "long_alpha_beta": [2, 8],
+      "thread_alpha_beta": [2, 8]
+    },
+    "visualizerMode_alphas": [7, 1.5, 1.5],
+    "visualizerImageAiGen_mean": [0.0, 0.1],
+    "industrySopRate_mean": [0.15, 0.25],
+    "styleGuideVersion": "v1.3"
+  }
+}

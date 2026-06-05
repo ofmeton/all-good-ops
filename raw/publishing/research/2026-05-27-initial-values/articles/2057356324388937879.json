@@ -1,0 +1,410 @@
+{
+  "article": {
+    "id": "QXJ0aWNsZUVudGl0eToyMDU2NzA1NjA2NDg1MTcyMjI0",
+    "author": {
+      "type": "user",
+      "userName": "claudecode_lab",
+      "url": "https://x.com/claudecode_lab",
+      "twitterUrl": "https://twitter.com/claudecode_lab",
+      "id": "1807726847154847744",
+      "name": "Claude Code研究所|スパルタClaude Code塾",
+      "isVerified": false,
+      "isBlueVerified": true,
+      "verifiedType": null,
+      "profilePicture": "https://pbs.twimg.com/profile_images/2047553749867216896/_SKwpHqG_normal.jpg",
+      "coverPicture": "https://pbs.twimg.com/profile_banners/1807726847154847744/1777009967",
+      "description": "東京大学にてAI研究に従事していたエンジニアメンバーがClaude Codeに特化した最新情報をお届け。経営者・士業向け名物研修「スパルタClaude Code塾」も運営。\nnote:https://t.co/VAtJlAXlsF\n研修のご依頼などDMでも受付しております✉️",
+      "location": "東京都",
+      "followers": 19619,
+      "following": 377,
+      "status": "",
+      "canDm": true,
+      "canMediaTag": true,
+      "createdAt": "Mon Jul 01 10:45:57 +0000 2024",
+      "entities": {
+        "description": {
+          "urls": [
+            {
+              "display_url": "note.com/claudecode_lab",
+              "expanded_url": "https://note.com/claudecode_lab",
+              "indices": [
+                92,
+                115
+              ],
+              "url": "https://t.co/VAtJlAXlsF"
+            }
+          ]
+        },
+        "url": {
+          "urls": [
+            {
+              "display_url": "claude-code-lab.com",
+              "expanded_url": "https://claude-code-lab.com/",
+              "indices": [
+                0,
+                23
+              ],
+              "url": "https://t.co/8oWsTCy0do"
+            }
+          ]
+        }
+      },
+      "fastFollowersCount": 0,
+      "favouritesCount": 12964,
+      "hasCustomTimelines": false,
+      "isTranslator": false,
+      "mediaCount": 79,
+      "statusesCount": 276,
+      "withheldInCountries": [],
+      "affiliatesHighlightedLabel": {},
+      "possiblySensitive": false,
+      "pinnedTweetIds": [
+        "2059090665716552166"
+      ],
+      "profile_bio": {},
+      "isAutomated": false,
+      "automatedBy": null
+    },
+    "replyCount": 1,
+    "likeCount": 173,
+    "quoteCount": 3,
+    "viewCount": "39233",
+    "createdAt": "Thu May 21 07:02:26 +0000 2026",
+    "title": "もうClaude Codeを監視しなくていい！/goalで自律実行する完全ガイド",
+    "preview_text": "Claude Codeを使っていて結局プロンプトを打って確認するのにイライラしたことはありませんか？\nプロンプトを入力する。\nClaudeが作業する。\n止まる。また入力する。\n作業する。止まる。",
+    "cover_media_img_url": "https://pbs.twimg.com/media/HI0ymEia8AA-LkH.jpg",
+    "contents": [
+      {
+        "type": "unstyled",
+        "text": "Claude Codeを使っていて結局プロンプトを打って確認するのにイライラしたことはありませんか？"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "プロンプトを入力する。"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "Claudeが作業する。"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "止まる。また入力する。"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "作業する。止まる。"
+      },
+      {
+        "type": "unstyled",
+        "text": "1つのタスクを仕上げるまでに「続けて」「次に進んで」と十回以上打ち続ける。実際に手を動かしているのはClaude Codeなのに、画面の前から一切離れられない。"
+      },
+      {
+        "type": "unstyled",
+        "text": "/goal コマンドは、その仕組みを根本から変えます。コマンドを1つ打って、台所へ行ってコーヒーを淹れて戻ってきたら作業が終わっている。それが現実になります。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HI0wilNbYAA9DHj.jpg",
+        "width": 1448,
+        "height": 1086
+      },
+      {
+        "type": "header-one",
+        "text": "/goalとは：ループを人から機械へ渡すskill"
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude Codeの通常の動作は「1ターン実行 → 停止 → 次の入力を待つ」の繰り返しです。毎ターン、あなたが次の指示を出さないと何も動きません。あなたがループの一部に組み込まれている状態です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "/goal を使うとこの構造が変わります。"
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "/goal の後に「完了条件」を書いて実行する"
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "Claude Codeが1ターン分の作業をする"
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "Haiku（評価専用の軽量モデル）が会話ログを読み、「条件は満たされたか？」を判定する"
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "まだなら即座に次のターンへ。条件が満たされたら「Goal achieved」と表示して停止する"
+      },
+      {
+        "type": "unstyled",
+        "text": "↓プロンプト例↓"
+      },
+      {
+        "type": "markdown",
+        "text": "```\n# 認証モジュールのテストが全件通るまで自律実行\n/goal test/auth のすべてのテストが通り、npm test が exit 0 で完了する\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "ループを回すのが人間ではなくなる。それだけのことですが、AIに張り付く時間が大きく変わります。"
+      },
+      {
+        "type": "header-one",
+        "text": "条件の書き方で9割が決まる"
+      },
+      {
+        "type": "unstyled",
+        "text": "/goal のアウトプットの質は、条件の書き方でほぼ確定します。Haiku評価器は会話ログだけを読んで判定するため、「ログを見れば30秒で確認できる」レベルの具体性が必要です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "通る条件の例："
+      },
+      {
+        "type": "markdown",
+        "text": "```\n# ✅ 観測可能・測定可能・ログから検証できる\n/goal test/auth のテストがすべて通り、lint がクリーンな状態\n/goal 今週マージされた全PRのエントリがCHANGELOG.mdに存在する状態\n/goal 旧APIの呼び出し箇所が全件移行済みでビルドが成功する状態\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "うまくいかない条件の例："
+      },
+      {
+        "type": "markdown",
+        "text": "```\n# ❌ 曖昧・主観的・ログから検証不能\n/goal コードをきれいにしておいて\n/goal 良い感じに仕上げて\n/goal だいたいできたら教えて\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "曖昧な条件は2種類の失敗で終わることが多いです。"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "Claudeが「何をもって完了か」を判断できずに同じ作業を繰り返す。"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "評価器が証拠のないまま「完了した」と誤判定する。"
+      },
+      {
+        "type": "unstyled",
+        "text": "どちらもトークンの無駄遣いで、作業は進みません。"
+      },
+      {
+        "type": "unstyled",
+        "text": "裁判の証拠のように考えると判断が楽になります。「この条件が満たされたという証拠が、会話ログの中に存在するか」そう問いかけて書き直せる形が良い条件です。"
+      },
+      {
+        "type": "header-one",
+        "text": "長時間の作業には4ブロック構造を使う"
+      },
+      {
+        "type": "unstyled",
+        "text": "数分で終わる作業なら1行の条件で十分です。1時間を超えるような大きなタスクには、構造化した書き方が安定します。"
+      },
+      {
+        "type": "unstyled",
+        "text": "以下が完全なプロンプト例です。"
+      },
+      {
+        "type": "markdown",
+        "text": "```\n/goal [達成したいゴール]\n\ncontext:\n[プロジェクトの構成・使用技術・今回の作業背景など判断に必要な情報]\n\ndone when:\n- [測定可能な完了条件1]\n- [測定可能な完了条件2]\n\ndo not:\n- [触らないファイル・変更してはいけない設定・避けるべきアプローチ]\n\nprogress tracking:\ncompleted steps を progress.md に随時記録すること\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "最後の progress tracking が特に重要です。長時間の実行では、Claudeが前のターンで何を決定したかを忘れ始め、矛盾した行動を取ることがあります。progress.md に進捗を書き出させておくと外部メモリとして機能し、実行が安定します。"
+      },
+      {
+        "type": "unstyled",
+        "text": "さらに複数時間かかる作業には plan.md（開始前の方針）と decisions.md（なぜその選択をしたか）を追加すると、長い実行全体の一貫性が保たれます。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HI0u50MbIAAJ12G.jpg",
+        "width": 1448,
+        "height": 1086
+      },
+      {
+        "type": "header-one",
+        "text": "/goalを最大化する3つの環境設定"
+      },
+      {
+        "type": "header-two",
+        "text": "CLAUDE.md にプロジェクトのルールを書いておく"
+      },
+      {
+        "type": "unstyled",
+        "text": "/goal は毎ターン、プロジェクトルートと ~/.claude/ の CLAUDE.md を自動で読み込みます。ここにアーキテクチャの方針・コーディング規約・完了の定義を書いておくと、Claudeがすべてのターンで「このプロジェクトでの正解」を参照しながら動きます。"
+      },
+      {
+        "type": "markdown",
+        "text": "```\n## CLAUDE.md の記載例\n\n### コーディング規約\n- TypeScriptを使用。any型は禁止\n- テストはvitest。カバレッジ80%以上を維持すること\n\n### 完了の定義\n- lint・型チェック・テストがすべてパスしている\n- 変更したファイル以外のテストが壊れていない\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "設定を省いて実行すると、Claudeはゴールだけを手がかりに動きます。CLAUDE.mdが充実しているほど、ゴール条件を短く書いても高精度な結果が返ってきます。"
+      },
+      {
+        "type": "header-two",
+        "text": "Auto Mode で承認プロンプトをなくす"
+      },
+      {
+        "type": "unstyled",
+        "text": "デフォルトのClaude Codeは、ファイル書き込みやコマンド実行のたびに確認を求めます。/goal で自律実行しても、途中で承認待ちが発生したら無人実行の意味がなくなります。"
+      },
+      {
+        "type": "markdown",
+        "text": "```\n# 承認プロンプトをすべてオフにして起動\nclaude --approval-mode full-auto\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "/goal と Auto Mode を組み合わせると、条件が満たされるか上限に達するまで、何も確認を求めてこない状態で動き続けます。"
+      },
+      {
+        "type": "header-two",
+        "text": "–resume でクラッシュ後も再開できる"
+      },
+      {
+        "type": "unstyled",
+        "text": "長時間実行中にセッションが切れた場合、--resume または --continue でセッションを再開すると、アクティブだった /goal の条件が自動で復元されます。夜間実行が途中で落ちていても、朝に起動し直せばそこから続きます。"
+      },
+      {
+        "type": "header-one",
+        "text": "コーディング以外の3領域で使う"
+      },
+      {
+        "type": "unstyled",
+        "text": "/goal はコードを書くためだけのコマンドではありません。もっとさまざまな業務効率化に使えます。\n具体的には、「測定可能な完了条件がある作業」ならほぼ何でも使えます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "リサーチ・情報収集："
+      },
+      {
+        "type": "markdown",
+        "text": "```\n/goal [テーマ]に関して過去90日以内の信頼できるソースを20件以上収集し、\n著者・日付付きで構造化したサマリーを research/output.md に保存する。\n低信頼性サイトからのソースは除外すること\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "コンテンツ制作："
+      },
+      {
+        "type": "markdown",
+        "text": "```\n/goal [テーマ]の1500字記事を、/writing-samples のサンプルに対して\n「明確さ・独自性・文体の一致」の3観点で自己レビューをパスするまで書き続ける。\nstyle-guide.md の禁止表現は一切使わない\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "依存関係の監査："
+      },
+      {
+        "type": "markdown",
+        "text": "```\n/goal package.json の全パッケージについて、バージョン・最終更新日・\n既知の脆弱性・推奨アクション（維持/更新/置換）を一覧にした\naudit-report.md を作成する。実際の依存関係は変更しない\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "パターンは共通です。「何を作るか・合格基準は何か・やってはいけないことは何か」の3点が書ければ、業種や作業の種類を問わず使えます。"
+      },
+      {
+        "type": "header-one",
+        "text": "/goal・/loop・Stop Hooks の使い分け"
+      },
+      {
+        "type": "unstyled",
+        "text": "目的使うコマンド条件が満たされたら自動停止したい/goal一定間隔で繰り返し実行したい/loopセッションを閉じていても定期実行したい/scheduleスクリプトで停止条件を細かく制御したいStop Hooks（スクリプト型）全セッションに同じ評価ロジックを適用したいStop Hooks（プロンプト型）完全無人で動かしたい/goal + Auto Mode"
+      },
+      {
+        "type": "unstyled",
+        "text": "/goal と Stop Hooks の違いは1点です。/goal はそのセッション限定で使い捨て。Stop Hooks は settings.json に書くため全セッションに恒久的に適用されます。実は /goal の内部はStop Hookの仕組みで動いています。"
+      },
+      {
+        "type": "header-one",
+        "text": "上級：複数の /goal を並列で走らせる"
+      },
+      {
+        "type": "unstyled",
+        "text": "3つのターミナルウィンドウを開いて、別のプロジェクトをさせましょう。夜寝る前にそれぞれに/goal を設定して、実行すると朝起きた時に、3タスクが完了しているでしょう。"
+      },
+      {
+        "type": "markdown",
+        "text": "```\n# ターミナル1：フロントエンドのリファクタリング\n/goal src/components の全コンポーネントをTypeScriptに移行し、型エラーが0件になる\n\n# ターミナル2：テストカバレッジの改善\n/goal カバレッジが60%を下回っているモジュールのテストを追加し、全体を80%以上にする\n\n# ターミナル3：ドキュメントの更新\n/goal 先週のPRで変更されたAPIエンドポイントのドキュメントをすべて最新の仕様に揃える\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "単純に「3倍速い」というより、1人のエンジニアが物理的に同時進行できない並列ストリームを走らせていることになります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "制約はClaude側にはありません。「3つの条件を前日に明確に書けるか」というユーザーの側にあります。"
+      },
+      {
+        "type": "header-one",
+        "text": "/goal が苦手なこと"
+      },
+      {
+        "type": "unstyled",
+        "text": "正直に申し上げると、すべての作業に向いているわけではありません。"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リアルタイムの外部検証が必要な作業（本番APIの応答を確認しながら進める場合など）"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "完了基準が主観的・審美的な作業（「良いデザインになったら止めて」は判定不能）"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "隠れた依存関係がある作業（Claudeがアクセスできないデータが判断に必要な場合、ループが止まらない）"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "間違った方向にゴールを設定した場合（正しい方向なら速く完了し、間違った方向でも速く完了してしまう）"
+      },
+      {
+        "type": "unstyled",
+        "text": "最後の点が一番重要です。/goal は自律性を増幅させる仕組みなので、方向が正しいときは強力ですが、方向が間違っているときも強力に動いてしまいます。大きなゴールを設定する前に、方針が正しいことを確認しましょう。"
+      },
+      {
+        "type": "header-one",
+        "text": "クイックリファレンス"
+      },
+      {
+        "type": "markdown",
+        "text": "```\n# ゴールを設定する\n/goal [条件]\n\n# 現在の状態を確認する（進行ターン数・使用トークン・評価結果）\n/goal\n\n# 途中で止める（off / cancel / reset / none も同じ効果）\n/goal clear\n\n# ターミナルから直接実行（CI・自動化での活用）\nclaude -p \"/goal [条件]\"\n\n# 安全装置：Nターンまたは指定時間で強制停止\n/goal [条件], or stop after 10 turns\n/goal [条件], or stop after 30 minutes\n\n# 完全無人モードで起動\nclaude --approval-mode full-auto\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "今日のタスクで1つ試してみましょう。どんな条件を書けばいいか迷ったときは、「コードを読まない人が30秒で確認できるか」を基準にするのがいちばん早い解決策です。"
+      },
+      {
+        "type": "header-one",
+        "text": "参照・関連記事"
+      },
+      {
+        "type": "unstyled",
+        "text": "この記事を書くにあたって、以下の記事・投稿を参考にしました。"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "The Complete Guide to /goal, /loop, /schedule & Stop Hooks in Claude Code — @sairahul1 の投稿"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "Just 1 command that changed my whole life — @defileo の投稿"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "How to Use /goal to Build an Entire SEO Content System While You Sleep —@cyrilXBT の投稿"
+      },
+      {
+        "type": "unstyled",
+        "text": "経営者・士業・営業職等、全てのビジネスパーソンの方で、\n「Claude Codeを使いこなしたい」\n「AIを活用してもっと業務を効率化したい」\nといったお悩みをお持ちの方は、ぜひ一度ご相談ください。\n▼ スパルタClaude Code塾\nhttps://www.claude-code-lab.com"
+      },
+      {
+        "type": "unstyled",
+        "text": "#ClaudeCode #AI活用 #業務効率化 #ノーコード #AIツール #生成AI #Claude #仕事効率化"
+      }
+    ]
+  },
+  "status": "success",
+  "msg": "success",
+  "_handle": "claudecode_lab"
+}

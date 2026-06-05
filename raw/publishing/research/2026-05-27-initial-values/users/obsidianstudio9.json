@@ -1,0 +1,34 @@
+{
+  "status": "success",
+  "msg": "success",
+  "data": {
+    "id": "2043209661525209088",
+    "name": "りゅう@Obsidianガチ勢",
+    "userName": "obsidianstudio9",
+    "location": "",
+    "url": "",
+    "description": "Claude × Obsidianで“第2の脳”を構築中｜海外の事例を参考にしたナレッジ・コンテキスト管理法を毎日発信｜中の人はコンテキスト総量100億字規模で運用してます｜思考と情報を永久にローカル資産化したい方はフォロー推奨👆",
+    "entities": {
+      "description": {}
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 2802,
+    "following": 16,
+    "favouritesCount": 531,
+    "statusesCount": 317,
+    "mediaCount": 225,
+    "createdAt": "2026-04-12T06:09:49.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/2043209661525209088/1776848297",
+    "profilePicture": "https://pbs.twimg.com/profile_images/2043613057184845824/Ea6O-2j__normal.jpg",
+    "canDm": true,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": [
+      "2058424814637809933"
+    ]
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "handle": "cyrilXBT",
+  "response_text": "```json\n{\n  \"information_source\": \"海外X/GitHub/Podcast/公式ブログ/YouTube\",\n  \"publishing_lag_hours\": 6,\n  \"selection_criteria\": \"AI・開発ツール（主にAnthropic/Claude関連）と生産性ハック（Obsidian等）に絞り、バイラル性の高い「無料リソース発見」「数字で示せるインパクト」ネタを優先選別する\",\n  \"translation_rate_pct\": 0,\n  \"paraphrase_rate_pct\": 15,\n  \"opinion_rate_pct\": 10,\n  \"original_rate_pct\": 75,\n  \"citation_explicit_rate_pct\": 30,\n  \"cross_platform_intake_rate_pct\": 75,\n  \"notes\": \"実態は「キュレーション型オリジナル執筆」—他媒体のリリースや話題を素材に、全大文字ヘッドライン＋箇条書き構造のスレッドとして独自に再構成するパターンが大半。情報源（Podcast回/GitHubリポジトリ/YouTube動画/公式発表）はほぼ明示されず引用率は低い。publishing_lagは数時間〜半日程度と推定されるが、投稿[17]（Claude Mythosリーク）のような速報性ネタは1〜2時間以内の可能性もあり下振れ自信度やや低め。\"\n}\n```",
+  "parsed": {
+    "information_source": "海外X/GitHub/Podcast/公式ブログ/YouTube",
+    "publishing_lag_hours": 6,
+    "selection_criteria": "AI・開発ツール（主にAnthropic/Claude関連）と生産性ハック（Obsidian等）に絞り、バイラル性の高い「無料リソース発見」「数字で示せるインパクト」ネタを優先選別する",
+    "translation_rate_pct": 0,
+    "paraphrase_rate_pct": 15,
+    "opinion_rate_pct": 10,
+    "original_rate_pct": 75,
+    "citation_explicit_rate_pct": 30,
+    "cross_platform_intake_rate_pct": 75,
+    "notes": "実態は「キュレーション型オリジナル執筆」—他媒体のリリースや話題を素材に、全大文字ヘッドライン＋箇条書き構造のスレッドとして独自に再構成するパターンが大半。情報源（Podcast回/GitHubリポジトリ/YouTube動画/公式発表）はほぼ明示されず引用率は低い。publishing_lagは数時間〜半日程度と推定されるが、投稿[17]（Claude Mythosリーク）のような速報性ネタは1〜2時間以内の可能性もあり下振れ自信度やや低め。"
+  },
+  "usage": {
+    "input_tokens": 2950,
+    "output_tokens": 419,
+    "cache_read_input_tokens": 0,
+    "cache_creation_input_tokens": 0
+  }
+}

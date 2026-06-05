@@ -1,0 +1,27 @@
+{
+  "name": "03_risk_high_pending",
+  "description": "riskLevel='high' + highRiskApproved=false → blocked risk_high_pending_approval",
+  "input": {
+    "draftId": "pub-03",
+    "body": "業法 risk を含むテスト本文。",
+    "fmat": "short",
+    "dryRun": false,
+    "highRiskApproved": false,
+    "editorOutput": {
+      "draftId": "pub-03",
+      "decision": "approved",
+      "rejectReasons": [],
+      "rules": [],
+      "riskLevel": "high",
+      "riskReasons": ["業法独占キーワード: 税務代理"],
+      "businessLawRiskFlag": true,
+      "businessLawKeywords": ["税務代理"],
+      "totalDurationMs": 100,
+      "llmCostUsd": 0
+    }
+  },
+  "expected": {
+    "status": "blocked",
+    "blockedReason": "risk_high_pending_approval"
+  }
+}

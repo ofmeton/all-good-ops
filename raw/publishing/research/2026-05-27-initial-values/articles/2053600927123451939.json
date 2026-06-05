@@ -1,0 +1,730 @@
+{
+  "article": {
+    "id": "QXJ0aWNsZUVudGl0eToyMDUzNTg3NDY0NzExOTgzMTA0",
+    "author": {
+      "type": "user",
+      "userName": "ObsidianOtaku",
+      "url": "https://x.com/ObsidianOtaku",
+      "twitterUrl": "https://twitter.com/ObsidianOtaku",
+      "id": "2045403336451710976",
+      "name": "東大Obsidianオタク｜仕事で使える第2の脳構築",
+      "isVerified": false,
+      "isBlueVerified": true,
+      "verifiedType": null,
+      "profilePicture": "https://pbs.twimg.com/profile_images/2045403747116081152/ICOUL3T2_normal.jpg",
+      "coverPicture": "https://pbs.twimg.com/profile_banners/2045403336451710976/1776497381",
+      "description": "東大卒メンバーによるObsidianの活用術を毎日発信｜仕事で使えるObsidianを学べるメディア｜Claude CodeやCodexと組み合わせて使うノウハウを学びたい人はフォロー必須！",
+      "location": "Obsidianで第二の脳を作りたいならフォロー❗️",
+      "followers": 1069,
+      "following": 4,
+      "status": "",
+      "canDm": false,
+      "canMediaTag": true,
+      "createdAt": "Sat Apr 18 07:26:24 +0000 2026",
+      "entities": {
+        "description": {}
+      },
+      "fastFollowersCount": 0,
+      "favouritesCount": 12,
+      "hasCustomTimelines": false,
+      "isTranslator": false,
+      "mediaCount": 41,
+      "statusesCount": 55,
+      "withheldInCountries": [],
+      "affiliatesHighlightedLabel": {},
+      "possiblySensitive": false,
+      "pinnedTweetIds": [
+        "2058665087876165671"
+      ],
+      "profile_bio": {},
+      "isAutomated": false,
+      "automatedBy": null
+    },
+    "replyCount": 2,
+    "likeCount": 317,
+    "quoteCount": 9,
+    "viewCount": "262596",
+    "createdAt": "Sun May 10 22:19:49 +0000 2026",
+    "title": "【保存版】勝手に賢くなるObsidianの作り方大全",
+    "preview_text": "『先週ブックマークした記事、今週も読まないまま月曜が来た』\n『ChatGPTに毎回同じ説明しないとちゃんと動いてくれない』\n『AIがそれっぽい回答しかしてくれなくてしんどい』",
+    "cover_media_img_url": "https://pbs.twimg.com/media/HH_PNrGbQAAGDRf.jpg",
+    "contents": [
+      {
+        "type": "unstyled",
+        "text": "『先週ブックマークした記事、今週も読まないまま月曜が来た』"
+      },
+      {
+        "type": "unstyled",
+        "text": "『ChatGPTに毎回同じ説明しないとちゃんと動いてくれない』"
+      },
+      {
+        "type": "unstyled",
+        "text": "『AIがそれっぽい回答しかしてくれなくてしんどい』"
+      },
+      {
+        "type": "unstyled",
+        "text": "これに心当たりがある方はAIをあと10倍よく使う方法があります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "AIはかなり優秀になりましたがこんな悩みを持つ人も同時に増えています"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "記事をブックマークしても結局読み返さないまま、メモの量だけ増えていく"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "AIに同じ案件を毎週ゼロから説明し直して、月曜の朝はいつも初対面で始まる"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "フォルダ構造を3時間考えた末に、結局Appleのメモに戻ってしまった"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "半年メモを取ったのに、自分の知識がどこにも積み上がっていない"
+      },
+      {
+        "type": "unstyled",
+        "text": "この記事を最後まで読めば、5つのフォルダと1つの設定ファイルだけで、毎朝Obsidianがあなたに「昨日の記事と先月の議論の繋がり」を渡してくる状態が作れます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "『Obsidian？なにそれ？』って方にも分かりやすく解説していくのでご安心ください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "海外のXコミュニティでClaude Code系のワークフローを毎週配信しているフォロワー17万人超のクリエイターが書いた1本の記事が、最近すごく注目を集めています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "そのタイトルは「How to Build an Obsidian Knowledge Vault That Gets Smarter Every Day Without You Doing Anything」"
+      },
+      {
+        "type": "unstyled",
+        "text": "日本語だと『労力ゼロで毎日賢くなるObsidianの設計図』です"
+      },
+      {
+        "type": "unstyled",
+        "text": "今日はこれについて日本語で噛み砕いて解説します。"
+      },
+      {
+        "type": "unstyled",
+        "text": "元記事はこちら：\nhttps://x.com/cyrilxbt/status/2052235121416188114?s=46&t=IH8QkiWXRw4m2b5InFN8cQ"
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "header-two",
+        "text": "①月曜朝6時にObsidianがブリーフィングしてくる世界"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HH_Qx83bgAAiQdn.jpg",
+        "width": 1672,
+        "height": 941
+      },
+      {
+        "type": "unstyled",
+        "text": "具体的に想像してみてください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "平日の朝6時、あなたが起きる前にObsidianの中で1本のプロンプトが自動起動します。先週ブックマークしたまま開いていなかった記事14本と、ここ7日間のあなたのメモ全部をAIが読み終え、出社前のあなたに3つの情報を共有してきます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "CONNECTIONS：\nあなたが気づいていなかった、最近の発見と過去ノートの繋がり3つを、原文を引用付きで具体的にまとめる",
+        "inlineStyleRanges": [
+          {
+            "length": 12,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "PATTERN：\nこの1週間、あなたの脳が暗黙に取り組んでいた1つのテーマ",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "QUESTION：\nそのテーマを基に、今日1日抱えるべき1つの問い。\"タスクではなく問い\"です",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "これがDaily Brief。Obsidianに住んでいるAIから、あなたへの朝会です。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HH_RSn-aYAA4maE.jpg",
+        "width": 2048,
+        "height": 1152
+      },
+      {
+        "type": "unstyled",
+        "text": "「ChatGPTもClaudeも、月曜の朝はいつも初対面」状態が、「AIから話しかけてくる」状態に置き換わります。AIに毎回ゼロから説明し直すループが消える理由は、AIが文脈を持つ参謀になったからです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここまで読んで「自分には無理」と感じたなら、それは仕組みの不在のせいではありません。多くの第二の脳が、同じ場所で死んでいるからです。"
+      },
+      {
+        "type": "header-two",
+        "text": "②なぜほとんどの第二の脳が立派な倉庫付き墓地で終わるのか"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HH_R2hmasAAp5Po.jpg",
+        "width": 2048,
+        "height": 1152
+      },
+      {
+        "type": "unstyled",
+        "text": "第二の脳が\"倉庫\"で終わる理由を3つに分解します："
+      },
+      {
+        "type": "unstyled",
+        "text": "1つ目はcapture friction、つまり取り込みの摩擦です。何かをVaultに入れるのに10秒以上の手作業が要ると、本当に忙しい日には絶対に続けない。Obsidianは最初の30秒で死ぬ、と言っていいくらいです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "2つ目はconnection layer、ノート同士をつなぐ層が存在しないことです。多くのVaultは孤立したノートの集合になっていて、ノート同士の関係を発見する仕組みがない。原文では「検索機能のない図書館」と表現されています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "3つ目はno reason to return、Vaultを開き直す理由がないことです。Vaultの方からあなたに気づきを返してくれない構造だと、人間側が「思い出してVaultを開く」ことを毎回しなければいけない。誰もそんなことは覚えていません。"
+      },
+      {
+        "type": "unstyled",
+        "text": "この3つが揃うと、立派な倉庫付き墓地ができあがります。著者の原文表現が刺さります。"
+      },
+      {
+        "type": "blockquote",
+        "text": "A second brain that never talks back is not a second brain. It is a very organized way to forget things."
+      },
+      {
+        "type": "unstyled",
+        "text": "意訳すると「あなたに話しかけてこない第二の脳は、整然と物事を忘れていく装置」。"
+      },
+      {
+        "type": "unstyled",
+        "text": "「フォルダ構造を3時間かけて考えた末に2週間でアプリを開かなくなった」経験は、あなたの根性の問題ではなく、構造の欠如です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "フォルダで分類すれば整う、という前提自体が取り込みの摩擦を生む。突っ込み先で迷う時間が積み重なるほど、Vaultは静かに閉じられていきます。フィードバックループが回らない構造のまま、いくら整理してもVaultは黙ったままです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "知識は構造化されて初めて資産になる。フォルダに突っ込んだメモは、形式が整っていても死蔵品です。整理することと、AIが読める形に記憶を設計することは、別の仕事だと一度切り分けてください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "では、構造の欠如をどう構造で埋めるのか。著者の設計図は、4つの層に分かれていました。"
+      },
+      {
+        "type": "header-two",
+        "text": "③4層でObsidianをAIの記憶基盤に組み替える設計図"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HH_SLXbbEAAnuCn.jpg",
+        "width": 2048,
+        "height": 1152
+      },
+      {
+        "type": "unstyled",
+        "text": "設計の全体像はこうです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Layer 1はcaptureです。生の情報をVaultに入れる入口。著者が使っているツールは4つです。Readwiseが記事ハイライトを取り込み、Airrがポッドキャストの瞬間を切り抜き、Whisperが音声をテキストに起こし、Telegram botがスマホからのメモを即送信する。"
+      },
+      {
+        "type": "unstyled",
+        "text": "やっていることは「30秒で消える前に、何でもいいから一時保管する」だけです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Layer 2はpipelineです。ワークフロー自動化ツールのN8Nが各captureソースを監視し、入ってきた内容を正しいフォルダに振り分け、整形します。原文では3ノード構成のサンプルが提示されています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Telegram Triggerでメッセージをイベントとして受け取り、Codeノードで「inbox/{{date}}-quick-capture.md」というファイル名と本文に整形し、Write Fileノードがあなたのobsidian/inbox配下にmarkdownとして書き出す。スマホからメモを送れば、寝ている間にinboxに整列している状態になります。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HH_Ss36boAA5pOn.jpg",
+        "width": 2048,
+        "height": 1152
+      },
+      {
+        "type": "unstyled",
+        "text": "Layer 3はObsidianです。あなたのローカルマシンにあるmarkdownファイルの集合で、思考の原本がただひとつ置かれている場所。原文ではground truthと呼ばれています。クラウドではなくあなたのファイル。電源を抜いても消えません。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Layer 4はClaudeです。CLAUDE.mdで自分の長期記憶を宣言し、Daily Brief / Weekly SynthesisでVault全体を横断して読み、結果をあなたに返す知性層。原文の表現を借りると「アーカイブではなく思考のパートナー」になります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "注目すべきは「Nothing overlaps. Everything flows in one direction.」という設計原則です。Layer 1からLayer 4まで、責任が重ならず一方向に流れる。"
+      },
+      {
+        "type": "unstyled",
+        "text": "だから労力分岐点がきれいに移動します。あなたが手で運ぶ作業はLayer 1の30秒だけ。整理と要約はLayer 2と4、つまり機械が引き受けます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Obsidianの位置づけがこの瞬間に変わります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ノートアプリではなく、AIの記憶基盤。Layer 4のClaudeは、ファイルシステムを記憶として持つから判断の質が上がる。記憶のないAIは便利な道具で終わり、記憶のあるAIだけがあなたの参謀になります。4層全体が一つのフィードバックループとして連動するから、参謀としての精度が時間で上がっていく構造になっています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Telegram botは、Claude Codeとn8nがあれば30分で組めるそうです。とはいえ「n8nに詳しくなくても問題ない」を先にお伝えします。今夜あなたが手を付けるのは、次章の5フォルダとCLAUDE.mdだけで十分です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "個人的にはAIエージェント時代にn8nが活躍する場所はあまり多くなく、学習コストの割に享受できるメリットは少ないと思っています。むしろそれよりAIエージェントの知識や活用法をインプットして使いこなす方が圧倒的にいいと考えています。"
+      },
+      {
+        "type": "header-two",
+        "text": "④5フォルダとCLAUDE.mdだけで今夜から始められる最小構成"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HH_TU_qbcAADqUa.jpg",
+        "width": 2048,
+        "height": 1152
+      },
+      {
+        "type": "unstyled",
+        "text": "設計の核は、Obsidian側ではフォルダがたった5つしかないことです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "■ Inbox：\n全ての自動キャプチャがまず着地する場所。未処理、生のまま、選別前",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "■ Notes：\n整形済みのハイライト、記事、ポッドキャストの切り抜き。1ソースにつき1ファイル",
+        "inlineStyleRanges": [
+          {
+            "length": 9,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "■ Ideas：\nあなた自身の思考。気づき、観察、音声メモの書き起こし。他人の入力ではなくあなたの脳の出力"
+      },
+      {
+        "type": "unstyled",
+        "text": "■ Projects：\nアクティブな業務。プロジェクト1つにつき1フォルダ。プロジェクト固有の判断をClaudeに求めたとき、ここを読み込ませる"
+      },
+      {
+        "type": "unstyled",
+        "text": "■ CLAUDE.md：\nClaudeが全セッションの最初に読む、あなた専用の指示書のことです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここに、絶対に外せない原文ルールが1つあります。"
+      },
+      {
+        "type": "blockquote",
+        "text": "One rule: when in doubt, put it in inbox."
+      },
+      {
+        "type": "unstyled",
+        "text": "迷ったらinboxに置く、です。フォルダ構造で3時間悩んでアプリを閉じる癖は、このルール1行で完全に消えます。仕分けはあとから機械がやります。あなたは流れを止めないことだけ守ればよい。"
+      },
+      {
+        "type": "unstyled",
+        "text": "AIエージェント登場以前は自分で知識構造の管理などをする必要があったのですが、ここをAIが自動でうまく構造化してくれるのであなたはただ情報を共有していけばほぼやることがなくなります。それだけでAIの応答が見違えるので圧倒的におすすめです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "そしてCLAUDE.md。"
+      },
+      {
+        "type": "unstyled",
+        "text": "これは設定ファイルではなく、記憶の入口です。重要なのはファイルを置くことではなく、「何を長期記憶にし、何を毎回の文脈に流すか」を分けること。原文では5セクションのテンプレートが提示されています。日本語に置き換えるとこうなります。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HH_UAeXbcAAh8hf.jpg",
+        "width": 1672,
+        "height": 941
+      },
+      {
+        "type": "markdown",
+        "text": "```markdown\n## 私は誰か\n- 名前\n- 仕事\n- 今のフォーカス\n- 2026年のゴール\n## 現在のプロジェクト\n- アクティブ\n- 詰まっているところ\n- 次のマイルストーン\n## このVaultの使い方\n- Inbox: /inbox\n- Notes: /notes\n- Ideas: /ideas\n- Projects: /projects\n## AIに期待する仕事\n- 私が見落としている繋がりを浮かび上がらせる\n- 私の前提に同意する前に挑戦する\n- 何にフォーカスすべきかを聞かれたら、Vaultの文脈で答える。一般論で答えない\n- 過去の発言と矛盾していたら指摘する\n## 今読んでいるもの\n[週1で更新]\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "このCLAUDE.mdで決まる差は、自分の仕事を構造化して説明できるかどうかだけです。プログラミング経験は要りません。"
+      },
+      {
+        "type": "unstyled",
+        "text": "「私は誰で、何を読んでいて、何を始めたいか」を5分で書ければ、次のセッションからClaudeはまったく別物になります。原文の表現を借りれば、CLAUDE.mdなしのClaudeは毎回ゼロから始まる初対面ですが、CLAUDE.mdがあると「あなたのノートを数ヶ月読み続けてきた協働者」として現れます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "フォルダと記憶の入口が揃ったら、次はAI側を朝会と週次戦略会議のリズムで動かします。"
+      },
+      {
+        "type": "header-two",
+        "text": "⑤Daily BriefとWeekly SynthesisでAI側から話しかけてくる仕組みを作る"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HH_UQsubwAAF1j0.jpg",
+        "width": 2048,
+        "height": 1152
+      },
+      {
+        "type": "unstyled",
+        "text": "Daily Briefは要約ではなく参謀からの朝会、Weekly Synthesisは週次戦略会議です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Daily Briefは平日の朝6時に自動起動するプロンプト1本で、Vaultを横断して3種類のフィードバックを返します。"
+      },
+      {
+        "type": "unstyled",
+        "text": "■ CONNECTIONS：\n直近24時間のinboxと、過去7日間のnotesから、あなたが気づかないでいる繋がりを3つ。原文も引用して具体的に",
+        "inlineStyleRanges": [
+          {
+            "length": 14,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "■ PATTERN：\nこの1週間、あなたが明示的に言わずとも脳が取り組んでいる1つのテーマ",
+        "inlineStyleRanges": [
+          {
+            "length": 11,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "■ QUESTION：\nそのPATTERNから、今日1日抱えて回るべき1つの問い。タスクではなく問い",
+        "inlineStyleRanges": [
+          {
+            "length": 11,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "このプロンプトをN8Nから平日6:00に発火させれば、出社前にあなたの机の上に「3つの繋がり、1つのテーマ、1つの問い」が並んでいる状態が毎朝つくれます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Weekly Synthesisは週1回、15分かけてVault全体をAIに棚卸しさせるプロンプトです。返してほしいのは4つ。"
+      },
+      {
+        "type": "unstyled",
+        "text": "■ EMERGING THESIS：\nこの1〜2週間で形を取り始めている、あなたの暫定的な主張",
+        "inlineStyleRanges": [
+          {
+            "length": 18,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "■ CONTRADICTIONS：\n過去のあなたの発言と最近の発言で食い違っている点",
+        "inlineStyleRanges": [
+          {
+            "length": 17,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "■ KNOWLEDGE GAPS：\nこのまま行くと判断を誤る、知識の空白",
+        "inlineStyleRanges": [
+          {
+            "length": 17,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "■ ONE ACTION：\n来週の自分が今この瞬間に取るべき1手",
+        "inlineStyleRanges": [
+          {
+            "length": 13,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "このプロンプトの末尾には「率直に。私の意見にも反論してください」と入れます。原文の表現は「Be direct. Challenge me.」です。著者の言葉では「the synthesis session is where the real compounding happens」、複利が本当に発生するのはこの週次戦略会議の時間です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここが大事なところです。「勝手に賢くなる」と聞くと全自動を想像しますが、元記事自身が冷静にそれを否定しています。"
+      },
+      {
+        "type": "blockquote",
+        "text": "A stale CLAUDE.md produces stale answers."
+      },
+      {
+        "type": "unstyled",
+        "text": "更新されないCLAUDE.mdは、古い回答しか返さない。だからCLAUDE.mdの「現在のプロジェクト」「今読んでいるもの」は月曜の朝に5分だけ更新します。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Weekly Synthesisも15分。あなたが手で握る時間は、月曜5分と週1で15分、合わせて週20分だけ。残りはcaptureとpipelineとDaily Briefがすべて引き受けます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "「勝手に賢くなる」を分解するとこうなります。週20分だけ人が握り、残りの6日と23時間40分はAIが勝手に動く構造です。これがフィードバックループの実装です。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HH_U3XFb0AApXB2.jpg",
+        "width": 2048,
+        "height": 1152
+      },
+      {
+        "type": "unstyled",
+        "text": "20分のリズムを1ヶ月続けると何が起きるか。元記事の中で最も誠実な章に進みます。"
+      },
+      {
+        "type": "header-two",
+        "text": "⑥1ヶ月でツール3ヶ月でパートナー6ヶ月で別物になる時間の差"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HH_VYjJbkAAB08V.jpg",
+        "width": 2048,
+        "height": 1152
+      },
+      {
+        "type": "unstyled",
+        "text": "この章は、続けたら何が変わるのか、を時間軸で書いている章です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "■ 1ヶ月時点：\nVaultは「便利なツール」段階です。保存量が増え、失われるアイデアが減り、Daily Briefがたまに面白いものを浮かび上がらせる。「使えてる感」はあるけれど、まだ驚きはありません。",
+        "inlineStyleRanges": [
+          {
+            "length": 9,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "■ 3ヶ月時点：\n質感が変わります。原文の言い方を借りるなら、現在の問題について質問すると、8週間前に書いてすっかり忘れていたノートを引っ張り出してくる。",
+        "inlineStyleRanges": [
+          {
+            "length": 9,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "「自分の脳が無意識に考えていたことをAIが先に思い出してくれる」感覚が出始めます。Vaultはあなたの思考について、あなた自身が意識的に覚えていないことを知るようになる。便利なツールから、あなた専用の参謀に格上げされる地点です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "■ 6ヶ月時点：\n著者の表現が一番強い章です。"
+      },
+      {
+        "type": "blockquote",
+        "text": "The AI you have after six months of this is not the same one you started with. It has been reading your mind while you were busy living your life."
+      },
+      {
+        "type": "unstyled",
+        "text": "意訳すると「6ヶ月経ったあなたのAIは、最初のAIとは別物。"
+      },
+      {
+        "type": "unstyled",
+        "text": "あなたが人生を営んでいる裏側で、ずっとあなたの思考を読み続けていた」。意識的に認識する前から、あなたの読書傾向に現れていた執着、議論で繰り返している論点、無自覚な意思決定の癖を、AIが先に言語化して返してくる。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Karpathy氏のLLM Wikiのような全自動アプローチも魅力的ですが、運用コストが過大で日常運用には乗りにくい。"
+      },
+      {
+        "type": "unstyled",
+        "text": "本記事の4層は人間とAIの分業設計です。だから6ヶ月続けられる。整理しきれずに止まるのではなく、最低20分のフィードバックループで複利が立ち上がるからです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "そして、原文がCTA直前に置く一言が決定打です。"
+      },
+      {
+        "type": "blockquote",
+        "text": "That gap does not close by working harder. It only closes by starting earlier."
+      },
+      {
+        "type": "unstyled",
+        "text": "3ヶ月後、競合があなたの今ブックマークしている記事を、あなたのAIはすでに過去ノートと結びつけて文脈の中で扱っている。この差は努力では埋まらず、始めた時期でしか埋まらない。フォルダで分類しているだけでは絶対に生まれない複利が、AI記憶設計の側にだけあるからです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "6ヶ月後に立つ場所が見えたら、残るのは今夜の5ノートだけです。"
+      },
+      {
+        "type": "header-two",
+        "text": "⑦今夜Obsidianに5ノート置けば1日目が始まる"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HH_Vs7Ca4AA3K39.jpg",
+        "width": 1672,
+        "height": 941
+      },
+      {
+        "type": "unstyled",
+        "text": "ここまで読んだあなたが今夜やることは、たった5ステップです。"
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "Obsidianを開いて、Inbox / Notes / Ideas / Projectsの4フォルダとCLAUDE.mdを作る"
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "先週ブックマークしたまま読んでいない記事から5本だけ選び、本文と一緒にNotesに貼る"
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "CLAUDE.mdに、第④章のテンプレートで「私は誰か」「現在のプロジェクト」「今読んでいるもの」を5分で書く"
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "Daily Briefプロンプトを保存しておく。平日6時の自動起動はあとからN8Nを足せば動く"
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "ClaudeをそのVaultに接続して、最後にこう聞く。「この5ノートのあいだに、私が気づいていない繋がりは何ですか」"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここが本日の山場です。原文の言葉を借りるとこうなります。"
+      },
+      {
+        "type": "blockquote",
+        "text": "It will find something you missed. It always does."
+      },
+      {
+        "type": "unstyled",
+        "text": "コネクティングドット的な話ですね。\n何かを必ず見つけます。Claudeが「あなたが完全に無関係だと思っていた2つの間に繋がりを浮かび上がらせる」その瞬間が、システムが概念ではなくなる瞬間です。あなたは毎日餌をやりたくなる。Vaultの方は静かに残りを引き受け始めます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "設計の重さはここで消えます。今夜30分。それが1日目のフィードバックループです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "整理ではなくAI記憶設計を、今日から取り組んでみましょう。"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "第二の脳が「倉庫」で終わる構造的な失敗モードは、capture friction、connection layer不在、no reason to returnの3つに分解できる"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "解決策は4層アーキテクチャ。Layer 1のcaptureはReadwise・Airr・Whisper・Telegram bot、Layer 2のpipelineはn8n（最近はClaude CodeでもOK）、Layer 3のObsidianはInbox / Notes / Ideas / Projects / CLAUDE.mdの5フォルダ、Layer 4のClaudeはCLAUDE.md・Daily Brief・Weekly Synthesisで動く"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "5フォルダの設計は「迷ったらinbox」の1ルールで完結する。フォルダ構造で3時間悩む癖はこの一行で消える"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "CLAUDE.mdは設定ファイルではなく記憶の入口。5セクションを月曜朝5分で更新するだけで、Claudeが毎セッションを協働者として始める"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "Daily Briefは平日6時に自動起動、Weekly Synthesisは週1で15分。AI側から話しかけてくる仕組みが立ち上がり、人間の総作業時間は週20分に収まる"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "Compound Effectは1ヶ月でツール、3ヶ月でパートナー、6ヶ月で別物。差は努力では埋まらず、始めた時期でしか埋まらない"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "今夜30分の5ノートとCLAUDE.md 5分から、フィードバックループの1日目が始まる。Vaultは静かに残りを引き受ける"
+      },
+      {
+        "type": "unstyled",
+        "text": "この記事が少しでも参考になった方へ。"
+      },
+      {
+        "type": "unstyled",
+        "text": "東大ObsidianオタクはObsidianとAIを組み合わせて自分自身やチームの分身を作る取り組みを研究しているチームです。AIエージェントと組み合わせてあらゆる仕事の品質を向上させるための手法を実践しています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "■ AI記憶設計の実装パターンの公開\n■ Obsidian活用のトレンドとノウハウ解説\n■ 独自構築した今日から使えるObsidian設計情報のシェア"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HH_WzHKbEAA5YDA.jpg",
+        "width": 1672,
+        "height": 941
+      },
+      {
+        "type": "unstyled",
+        "text": "Obsidian × AIで記憶を持つAIを作る方法を発信しています。次の記事もお楽しみに。"
+      }
+    ]
+  },
+  "status": "success",
+  "msg": "success",
+  "_handle": "ObsidianOtaku"
+}

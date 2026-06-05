@@ -1,0 +1,21 @@
+{
+  "name": "04_existing_query_preserve",
+  "description": "既存 query string がある URL に UTM 付与。元 query は保持される。",
+  "input": {
+    "url": "https://note.com/ofmeton/n/ghi789?promo=may26",
+    "params": {
+      "source": "x",
+      "medium": "pinned",
+      "campaign": "phase1_month1"
+    }
+  },
+  "expected": {
+    "trackedUrlContains": [
+      "promo=may26",
+      "utm_source=x",
+      "utm_medium=pinned",
+      "utm_campaign=phase1_month1"
+    ],
+    "parseRoundtripMatches": true
+  }
+}

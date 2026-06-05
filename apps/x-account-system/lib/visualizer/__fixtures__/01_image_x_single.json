@@ -1,0 +1,27 @@
+{
+  "name": "01_image_x_single",
+  "description": "X 単発投稿向け 1024x1024 画像 1 枚 stub。",
+  "request": {
+    "draftId": "draft-test-01",
+    "idea": {
+      "id": "idea-img-01",
+      "topic": "請求書発行ワークフローの仕組み化",
+      "primaryHook": "first_hand",
+      "fmat": "short",
+      "contentType": "first_hand",
+      "audience": "経理担当者の方",
+      "sourceMaterialIds": ["mat-fh-001"]
+    },
+    "mode": "image",
+    "platform": "x",
+    "imageCount": 1
+  },
+  "expected": {
+    "kind": "image",
+    "imagesCount": 1,
+    "generator": "stub",
+    "costUsd": 0,
+    "urlIncludes": "1024x1024",
+    "promptIncludes": "はぐりん"
+  }
+}

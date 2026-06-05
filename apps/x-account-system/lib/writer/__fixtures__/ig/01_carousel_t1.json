@@ -1,0 +1,26 @@
+{
+  "name": "01_carousel_t1",
+  "description": "Instagram カルーセル T1_hook_evidence 9 枚 + caption stub。",
+  "request": {
+    "idea": {
+      "id": "idea-ig-01",
+      "topic": "Claude Code 自動化の入門",
+      "primaryHook": "tips_enum",
+      "fmat": "long",
+      "contentType": "industry_sop",
+      "audience": "中小事業者の方",
+      "sourceMaterialIds": ["mat-tip-001"]
+    },
+    "kind": "carousel",
+    "carouselTemplateId": "T1_hook_evidence"
+  },
+  "expected": {
+    "kind": "carousel",
+    "generator": "stub",
+    "slideCount": 9,
+    "carouselTemplateId": "T1_hook_evidence",
+    "captionMustContain": ["中小事業者の方", "私は"],
+    "captionMaxChars": 200,
+    "hashtagsLength": 0
+  }
+}

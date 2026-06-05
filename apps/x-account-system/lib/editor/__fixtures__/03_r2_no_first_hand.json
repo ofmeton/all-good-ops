@@ -1,0 +1,21 @@
+{
+  "name": "03_r2_no_first_hand",
+  "description": "実体験 1 行 (私は/僕は + 過去形) が無い → R2 fail。",
+  "input": {
+    "traceId": "trace-03",
+    "draftId": "draft-03",
+    "coreIdeaId": "core-03",
+    "platform": "x",
+    "body": "経営者向け業務自動化の仕組み化を考察する。テンプレート化と判断軸固定は毎週の業務手順を安定させる。3 段階のチェックリストで意思決定の負荷が減る。これは知見である。",
+    "fmat": "short",
+    "sourceMaterialIds": [],
+    "hasAffiliateLink": false
+  },
+  "expected": {
+    "decision": "approved",
+    "rejectReasons": [],
+    "warningsAtLeast": [
+      "R2_first_hand_line"
+    ]
+  }
+}

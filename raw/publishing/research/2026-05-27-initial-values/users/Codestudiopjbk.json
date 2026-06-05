@@ -1,0 +1,47 @@
+{
+  "status": "success",
+  "msg": "success",
+  "data": {
+    "id": "2048622181790470144",
+    "name": "Codex Studio",
+    "userName": "Codestudiopjbk",
+    "location": "サイトはこちら👉",
+    "url": "https://t.co/8pM3Az1DRu",
+    "description": "Codexガチ勢３人で運営｜実務レベルのCLI活用・自動化を毎日発信｜大学院生・ポスドク対象の開発プログラム参加｜賞金30万円獲得｜現在は上場企業とAIエージェントを共同開発中｜AI時代はコンテキスト/ナレッジ管理が９割｜組織全体への「 Codex × Obsidian 」の導入は下のHPからご相談ください👇",
+    "entities": {
+      "description": {},
+      "url": {
+        "urls": [
+          {
+            "display_url": "plai-ai.com",
+            "expanded_url": "http://plai-ai.com",
+            "indices": [
+              0,
+              23
+            ],
+            "url": "https://t.co/8pM3Az1DRu"
+          }
+        ]
+      }
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 8834,
+    "following": 10,
+    "favouritesCount": 485,
+    "statusesCount": 238,
+    "mediaCount": 157,
+    "createdAt": "2026-04-27T04:37:22.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/2048622181790470144/1777265728",
+    "profilePicture": "https://pbs.twimg.com/profile_images/2048623292484136960/-bDB5XH6_normal.jpg",
+    "canDm": true,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": [
+      "2058552181763309605"
+    ]
+  }
+}

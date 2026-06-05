@@ -1,0 +1,22 @@
+{
+  "handle": "Fluyeporlaweb",
+  "response_text": "```json\n{\n  \"information_source\": \"GitHub/海外X\",\n  \"publishing_lag_hours\": 12,\n  \"selection_criteria\": \"GitHub上の注目オープンソースプロジェクトを中心に、有料SaaSの代替となる無料・ローカル実行可能なツールを選別。スター数や「GitHub Trending」入りなど話題性・実用性を重視する。\",\n  \"translation_rate_pct\": 0,\n  \"paraphrase_rate_pct\": 10,\n  \"opinion_rate_pct\": 5,\n  \"original_rate_pct\": 85,\n  \"citation_explicit_rate_pct\": 30,\n  \"cross_platform_intake_rate_pct\": 20,\n  \"notes\": \"投稿の大半はGitHubリポジトリを自ら発掘・要約したスペイン語オリジナル解説ツイート。「有料X→無料OSS代替」という固定テンプレートで再加工率は高いが翻訳ではなく独自ライティング。引用元URLは画像内やリプライ経由で補足されることが多く明示率は低め。cross_platform_intake推定の信頼度はやや低い。\"\n}\n```",
+  "parsed": {
+    "information_source": "GitHub/海外X",
+    "publishing_lag_hours": 12,
+    "selection_criteria": "GitHub上の注目オープンソースプロジェクトを中心に、有料SaaSの代替となる無料・ローカル実行可能なツールを選別。スター数や「GitHub Trending」入りなど話題性・実用性を重視する。",
+    "translation_rate_pct": 0,
+    "paraphrase_rate_pct": 10,
+    "opinion_rate_pct": 5,
+    "original_rate_pct": 85,
+    "citation_explicit_rate_pct": 30,
+    "cross_platform_intake_rate_pct": 20,
+    "notes": "投稿の大半はGitHubリポジトリを自ら発掘・要約したスペイン語オリジナル解説ツイート。「有料X→無料OSS代替」という固定テンプレートで再加工率は高いが翻訳ではなく独自ライティング。引用元URLは画像内やリプライ経由で補足されることが多く明示率は低め。cross_platform_intake推定の信頼度はやや低い。"
+  },
+  "usage": {
+    "input_tokens": 3306,
+    "output_tokens": 349,
+    "cache_read_input_tokens": 0,
+    "cache_creation_input_tokens": 0
+  }
+}

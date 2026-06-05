@@ -1,0 +1,46 @@
+{
+  "status": "success",
+  "msg": "success",
+  "data": {
+    "id": "1326316157557592065",
+    "name": "ミヤマ",
+    "userName": "mmmiyama_D",
+    "location": "",
+    "url": "",
+    "description": "デザインだけじゃ足りない！即戦力AI×マーケ×忙しい人の働き方を考える、営業部デザイナー｜双子育児＆出社のすき間で発信中｜ゆる〜く配信中の無料ニュースレターも！⇨ https://t.co/Tb5cBz9EYx",
+    "entities": {
+      "description": {
+        "urls": [
+          {
+            "display_url": "mmmiyama.com/lp/miya_new/",
+            "expanded_url": "https://mmmiyama.com/lp/miya_new/",
+            "indices": [
+              82,
+              105
+            ],
+            "url": "https://t.co/Tb5cBz9EYx"
+          }
+        ]
+      }
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 77405,
+    "following": 438,
+    "favouritesCount": 21906,
+    "statusesCount": 14754,
+    "mediaCount": 3089,
+    "createdAt": "2020-11-11T00:10:31.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/1326316157557592065/1757417746",
+    "profilePicture": "https://pbs.twimg.com/profile_images/1627120001655398400/pDN7o_Fz_normal.jpg",
+    "canDm": true,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": [
+      "1804839863365382236"
+    ]
+  }
+}

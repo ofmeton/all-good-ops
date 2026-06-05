@@ -1,0 +1,516 @@
+{
+  "handle": "masahirochaen",
+  "tweet_id": "2051192248503873589",
+  "body": {
+    "tweets": [
+      {
+        "type": "tweet",
+        "id": "2051192248503873589",
+        "url": "https://x.com/masahirochaen/status/2051192248503873589",
+        "twitterUrl": "https://twitter.com/masahirochaen/status/2051192248503873589",
+        "text": "【note公開】Claude Code Desktopアプリ完全解説マニュアル\n\nDesktopアプリが便利すぎて、普段の研修でもかなり推しています。\n\n特に非エンジニアの方は、ターミナルよりもDesktopアプリの方が圧倒的に始めやすいです。\n\n今回、そのノウハウを全部詰め込んだnoteを書きました。\n\nGW中にかなり時間をかけて作った、5.5万文字超えの決定版です。\n\n無料部分だけでも約1万文字ありますので、まずはぜひ読んでみてください。\n\n学べることはこんな感じです。\n\n・Claude / Cowork / Claude Codeの違い\n・なぜDesktopアプリが非エンジニア向きなのか\n・プラン選びの結論\n・macOS / Windowsのインストール手順\n・デスクトップ版限定機能の全体像\n・Codeタブの使い方\n・並列セッション / Git Worktree\n・Routinesによる自動化\n・Computer Useの安全な使い方\n・MCP / Connector / Skillの活用法\n・チャエン愛用Skillの実例\n・明日から使える業務自動化レシピ\n・7日間で習得するロードマップ\n\nClaude Codeは、もうエンジニアだけのツールではないです。\n\nメール、議事録、提案書、請求書、リサーチ、フォルダ整理、日報作成など、普段のPC業務をかなり自動化できます。\n\n「Claude Codeを触ってみたいけど、何から始めればいいか分からない」\n\n「ターミナルは苦手だけど、AIで業務を自動化したい」\n「Claude Desktopアプリを本格的に使い倒したい」\n\nという方に向けて、かなり細かく書きました。\n\nClaude Code Desktopアプリをマスターしたい方は、ぜひ読んでください。\n\n有料部分は期間限定なので興味ある方はお早めに。\n\n随時アップデートもしていきます。\n\n○noteはこちら\nhttps://t.co/zwu7uXGV0z",
+        "source": "",
+        "retweetCount": 93,
+        "replyCount": 11,
+        "likeCount": 1101,
+        "quoteCount": 16,
+        "viewCount": 283672,
+        "createdAt": "Mon May 04 06:48:36 +0000 2026",
+        "lang": "ja",
+        "bookmarkCount": 1408,
+        "isReply": false,
+        "inReplyToId": "",
+        "conversationId": "2051192248503873589",
+        "displayTextRange": [
+          0,
+          152
+        ],
+        "inReplyToUserId": "",
+        "inReplyToUsername": "",
+        "isPinned": false,
+        "author": {
+          "type": "user",
+          "userName": "masahirochaen",
+          "url": "https://x.com/masahirochaen",
+          "twitterUrl": "https://twitter.com/masahirochaen",
+          "id": "3120155797",
+          "name": "チャエン | デジライズ CEO《重要AIニュースを毎日最速で発信⚡️》",
+          "isVerified": false,
+          "isBlueVerified": true,
+          "verifiedType": null,
+          "profilePicture": "https://pbs.twimg.com/profile_images/1689665533929725953/fClFlzLd_normal.jpg",
+          "coverPicture": "https://pbs.twimg.com/profile_banners/3120155797/1767361689",
+          "description": "Xで一番分かりやすく最速でAI情報発信 | 法人向け AI開発・研修、500社・4万人支援 | GMO他複数上場企業顧問 | テレビ出演多数 | Gemini AI アドバイザー | 年間登壇150件以上・日本一｜Youtube4万人｜https://t.co/bU7rVyHIFU｜AI業界最速上場準備中｜ClaudeCode開発",
+          "location": "自己紹介｜問い合わせ｜メルマガ｜AIスクール｜アプリ👇",
+          "followers": 194126,
+          "following": 471,
+          "status": "",
+          "canDm": true,
+          "canMediaTag": true,
+          "createdAt": "Tue Mar 31 12:40:24 +0000 2015",
+          "entities": {
+            "description": {
+              "urls": [
+                {
+                  "display_url": "tr.ee/youtube-ai",
+                  "expanded_url": "http://tr.ee/youtube-ai",
+                  "indices": [
+                    118,
+                    141
+                  ],
+                  "url": "https://t.co/bU7rVyHIFU"
+                }
+              ]
+            },
+            "url": {
+              "urls": [
+                {
+                  "display_url": "linktr.ee/chaen",
+                  "expanded_url": "https://linktr.ee/chaen",
+                  "indices": [
+                    0,
+                    23
+                  ],
+                  "url": "https://t.co/BAL9S2Oc8d"
+                }
+              ]
+            }
+          },
+          "fastFollowersCount": 0,
+          "favouritesCount": 0,
+          "hasCustomTimelines": true,
+          "isTranslator": false,
+          "mediaCount": 8591,
+          "statusesCount": 18469,
+          "withheldInCountries": [],
+          "affiliatesHighlightedLabel": {},
+          "possiblySensitive": false,
+          "pinnedTweetIds": [
+            "2051192248503873589"
+          ],
+          "profile_bio": {
+            "description": "Xで一番分かりやすく最速でAI情報発信 | 法人向け AI開発・研修、500社・4万人支援 | GMO他複数上場企業顧問 | テレビ出演多数 | Gemini AI アドバイザー | 年間登壇150件以上・日本一｜Youtube4万人｜https://t.co/bU7rVyHIFU｜AI業界最速上場準備中｜ClaudeCode開発",
+            "entities": {
+              "description": {
+                "urls": [
+                  {
+                    "display_url": "tr.ee/youtube-ai",
+                    "expanded_url": "http://tr.ee/youtube-ai",
+                    "indices": [
+                      118,
+                      141
+                    ],
+                    "url": "https://t.co/bU7rVyHIFU"
+                  }
+                ]
+              },
+              "url": {
+                "urls": [
+                  {
+                    "display_url": "linktr.ee/chaen",
+                    "expanded_url": "https://linktr.ee/chaen",
+                    "indices": [
+                      0,
+                      23
+                    ],
+                    "url": "https://t.co/BAL9S2Oc8d"
+                  }
+                ]
+              }
+            }
+          },
+          "isAutomated": false,
+          "automatedBy": null
+        },
+        "extendedEntities": {
+          "media": [
+            {
+              "allow_download_status": {
+                "allow_download": true
+              },
+              "display_url": "pic.twitter.com/5rNLNHrGyq",
+              "expanded_url": "https://twitter.com/masahirochaen/status/2051192248503873589/photo/1",
+              "ext_master_playlist_only": [],
+              "ext_media_availability": {
+                "status": "Available"
+              },
+              "ext_playlists": [],
+              "features": {
+                "large": {
+                  "faces": [
+                    {
+                      "h": 98,
+                      "w": 98,
+                      "x": 780,
+                      "y": 227
+                    }
+                  ]
+                },
+                "orig": {
+                  "faces": [
+                    {
+                      "h": 98,
+                      "w": 98,
+                      "x": 780,
+                      "y": 227
+                    }
+                  ]
+                }
+              },
+              "id_str": "2051189854239903744",
+              "indices": [
+                153,
+                176
+              ],
+              "media_key": "3_2051189854239903744",
+              "media_results": {
+                "id": "QXBpTWVkaWFSZXN1bHRzOgwAAQoAARx3Sk4E2tAACgACHHdMe3obsDUAAA==",
+                "result": {
+                  "__typename": "ApiMedia",
+                  "id": "QXBpTWVkaWE6DAABCgABHHdKTgTa0AAKAAIcd0x7ehuwNQAA",
+                  "media_key": "3_2051189854239903744"
+                }
+              },
+              "media_url_https": "https://pbs.twimg.com/media/HHdKTgTa0AAfqK8.jpg",
+              "original_info": {
+                "focus_rects": [
+                  {
+                    "h": 670,
+                    "w": 1196,
+                    "x": 8,
+                    "y": 0
+                  },
+                  {
+                    "h": 670,
+                    "w": 670,
+                    "x": 271,
+                    "y": 0
+                  },
+                  {
+                    "h": 670,
+                    "w": 588,
+                    "x": 312,
+                    "y": 0
+                  },
+                  {
+                    "h": 670,
+                    "w": 335,
+                    "x": 439,
+                    "y": 0
+                  },
+                  {
+                    "h": 670,
+                    "w": 1280,
+                    "x": 0,
+                    "y": 0
+                  }
+                ],
+                "height": 670,
+                "width": 1280
+              },
+              "sizes": {
+                "large": {
+                  "h": 670,
+                  "w": 1280
+                }
+              },
+              "type": "photo",
+              "url": "https://t.co/5rNLNHrGyq"
+            },
+            {
+              "allow_download_status": {
+                "allow_download": true
+              },
+              "display_url": "pic.twitter.com/5rNLNHrGyq",
+              "expanded_url": "https://twitter.com/masahirochaen/status/2051192248503873589/photo/1",
+              "ext_master_playlist_only": [],
+              "ext_media_availability": {
+                "status": "Available"
+              },
+              "ext_playlists": [],
+              "features": {
+                "large": {
+                  "faces": []
+                },
+                "orig": {
+                  "faces": []
+                }
+              },
+              "id_str": "2051191856638345216",
+              "indices": [
+                153,
+                176
+              ],
+              "media_key": "3_2051191856638345216",
+              "media_results": {
+                "id": "QXBpTWVkaWFSZXN1bHRzOgwAAQoAARx3TCA9GkAACgACHHdMe3obsDUAAA==",
+                "result": {
+                  "__typename": "ApiMedia",
+                  "id": "QXBpTWVkaWE6DAABCgABHHdMID0aQAAKAAIcd0x7ehuwNQAA",
+                  "media_key": "3_2051191856638345216"
+                }
+              },
+              "media_url_https": "https://pbs.twimg.com/media/HHdMID0aQAA5vLB.jpg",
+              "original_info": {
+                "focus_rects": [
+                  {
+                    "h": 936,
+                    "w": 1672,
+                    "x": 0,
+                    "y": 0
+                  },
+                  {
+                    "h": 941,
+                    "w": 941,
+                    "x": 324,
+                    "y": 0
+                  },
+                  {
+                    "h": 941,
+                    "w": 825,
+                    "x": 382,
+                    "y": 0
+                  },
+                  {
+                    "h": 941,
+                    "w": 471,
+                    "x": 559,
+                    "y": 0
+                  },
+                  {
+                    "h": 941,
+                    "w": 1672,
+                    "x": 0,
+                    "y": 0
+                  }
+                ],
+                "height": 941,
+                "width": 1672
+              },
+              "sizes": {
+                "large": {
+                  "h": 941,
+                  "w": 1672
+                }
+              },
+              "type": "photo",
+              "url": "https://t.co/5rNLNHrGyq"
+            },
+            {
+              "allow_download_status": {
+                "allow_download": true
+              },
+              "display_url": "pic.twitter.com/5rNLNHrGyq",
+              "expanded_url": "https://twitter.com/masahirochaen/status/2051192248503873589/photo/1",
+              "ext_master_playlist_only": [],
+              "ext_media_availability": {
+                "status": "Available"
+              },
+              "ext_playlists": [],
+              "features": {
+                "large": {
+                  "faces": [
+                    {
+                      "h": 84,
+                      "w": 84,
+                      "x": 1482,
+                      "y": 400
+                    },
+                    {
+                      "h": 75,
+                      "w": 75,
+                      "x": 777,
+                      "y": 659
+                    }
+                  ]
+                },
+                "orig": {
+                  "faces": [
+                    {
+                      "h": 84,
+                      "w": 84,
+                      "x": 1482,
+                      "y": 400
+                    },
+                    {
+                      "h": 75,
+                      "w": 75,
+                      "x": 777,
+                      "y": 659
+                    }
+                  ]
+                }
+              },
+              "id_str": "2051191995390201856",
+              "indices": [
+                153,
+                176
+              ],
+              "media_key": "3_2051191995390201856",
+              "media_results": {
+                "id": "QXBpTWVkaWFSZXN1bHRzOgwAAQoAARx3TECLW5AACgACHHdMe3obsDUAAA==",
+                "result": {
+                  "__typename": "ApiMedia",
+                  "id": "QXBpTWVkaWE6DAABCgABHHdMQItbkAAKAAIcd0x7ehuwNQAA",
+                  "media_key": "3_2051191995390201856"
+                }
+              },
+              "media_url_https": "https://pbs.twimg.com/media/HHdMQItbkAAcHgh.jpg",
+              "original_info": {
+                "focus_rects": [
+                  {
+                    "h": 936,
+                    "w": 1672,
+                    "x": 0,
+                    "y": 0
+                  },
+                  {
+                    "h": 941,
+                    "w": 941,
+                    "x": 491,
+                    "y": 0
+                  },
+                  {
+                    "h": 941,
+                    "w": 825,
+                    "x": 549,
+                    "y": 0
+                  },
+                  {
+                    "h": 941,
+                    "w": 471,
+                    "x": 726,
+                    "y": 0
+                  },
+                  {
+                    "h": 941,
+                    "w": 1672,
+                    "x": 0,
+                    "y": 0
+                  }
+                ],
+                "height": 941,
+                "width": 1672
+              },
+              "sizes": {
+                "large": {
+                  "h": 941,
+                  "w": 1672
+                }
+              },
+              "type": "photo",
+              "url": "https://t.co/5rNLNHrGyq"
+            },
+            {
+              "allow_download_status": {
+                "allow_download": true
+              },
+              "display_url": "pic.twitter.com/5rNLNHrGyq",
+              "expanded_url": "https://twitter.com/masahirochaen/status/2051192248503873589/photo/1",
+              "ext_master_playlist_only": [],
+              "ext_media_availability": {
+                "status": "Available"
+              },
+              "ext_playlists": [],
+              "features": {
+                "large": {
+                  "faces": []
+                },
+                "orig": {
+                  "faces": []
+                }
+              },
+              "id_str": "2051192078189895680",
+              "indices": [
+                153,
+                176
+              ],
+              "media_key": "3_2051192078189895680",
+              "media_results": {
+                "id": "QXBpTWVkaWFSZXN1bHRzOgwAAQoAARx3TFPSmqAACgACHHdMe3obsDUAAA==",
+                "result": {
+                  "__typename": "ApiMedia",
+                  "id": "QXBpTWVkaWE6DAABCgABHHdMU9KaoAAKAAIcd0x7ehuwNQAA",
+                  "media_key": "3_2051192078189895680"
+                }
+              },
+              "media_url_https": "https://pbs.twimg.com/media/HHdMU9KaoAAmfr6.jpg",
+              "original_info": {
+                "focus_rects": [
+                  {
+                    "h": 936,
+                    "w": 1672,
+                    "x": 0,
+                    "y": 0
+                  },
+                  {
+                    "h": 941,
+                    "w": 941,
+                    "x": 407,
+                    "y": 0
+                  },
+                  {
+                    "h": 941,
+                    "w": 825,
+                    "x": 465,
+                    "y": 0
+                  },
+                  {
+                    "h": 941,
+                    "w": 471,
+                    "x": 642,
+                    "y": 0
+                  },
+                  {
+                    "h": 941,
+                    "w": 1672,
+                    "x": 0,
+                    "y": 0
+                  }
+                ],
+                "height": 941,
+                "width": 1672
+              },
+              "sizes": {
+                "large": {
+                  "h": 941,
+                  "w": 1672
+                }
+              },
+              "type": "photo",
+              "url": "https://t.co/5rNLNHrGyq"
+            }
+          ]
+        },
+        "card": null,
+        "place": {},
+        "entities": {
+          "hashtags": [],
+          "symbols": [],
+          "urls": [
+            {
+              "display_url": "note.com/chaen_channel/…",
+              "expanded_url": "https://note.com/chaen_channel/n/n8a93a5e955f8?sub_rt=share_pb",
+              "indices": [
+                817,
+                840
+              ],
+              "url": "https://t.co/zwu7uXGV0z"
+            }
+          ],
+          "user_mentions": []
+        },
+        "isRetweet": false,
+        "isQuote": false,
+        "isConversationControlled": false,
+        "quoted_tweet": null,
+        "retweeted_tweet": null,
+        "isLimitedReply": false,
+        "communityInfo": null
+      }
+    ],
+    "status": "success",
+    "msg": "success",
+    "code": 0
+  }
+}

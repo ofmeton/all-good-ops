@@ -1,0 +1,106 @@
+{
+  "handle": "obsidianstudio9",
+  "tweet_id": "2058424814637809933",
+  "body": {
+    "tweets": [
+      {
+        "type": "tweet",
+        "id": "2058424814637809933",
+        "url": "https://x.com/obsidianstudio9/status/2058424814637809933",
+        "twitterUrl": "https://twitter.com/obsidianstudio9/status/2058424814637809933",
+        "text": "https://t.co/lD0hotpjU2",
+        "source": "",
+        "retweetCount": 1,
+        "replyCount": 0,
+        "likeCount": 23,
+        "quoteCount": 0,
+        "viewCount": 921,
+        "createdAt": "Sun May 24 05:48:14 +0000 2026",
+        "lang": "zxx",
+        "bookmarkCount": 26,
+        "isReply": false,
+        "inReplyToId": "",
+        "conversationId": "2058424814637809933",
+        "displayTextRange": [
+          0,
+          23
+        ],
+        "inReplyToUserId": "",
+        "inReplyToUsername": "",
+        "isPinned": false,
+        "author": {
+          "type": "user",
+          "userName": "obsidianstudio9",
+          "url": "https://x.com/obsidianstudio9",
+          "twitterUrl": "https://twitter.com/obsidianstudio9",
+          "id": "2043209661525209088",
+          "name": "りゅう@Obsidianガチ勢",
+          "isVerified": false,
+          "isBlueVerified": true,
+          "verifiedType": null,
+          "profilePicture": "https://pbs.twimg.com/profile_images/2043613057184845824/Ea6O-2j__normal.jpg",
+          "coverPicture": "https://pbs.twimg.com/profile_banners/2043209661525209088/1776848297",
+          "description": "Claude × Obsidianで“第2の脳”を構築中｜海外の事例を参考にしたナレッジ・コンテキスト管理法を毎日発信｜中の人はコンテキスト総量100億字規模で運用してます｜思考と情報を永久にローカル資産化したい方はフォロー推奨👆",
+          "location": "",
+          "followers": 2802,
+          "following": 16,
+          "status": "",
+          "canDm": true,
+          "canMediaTag": true,
+          "createdAt": "Sun Apr 12 06:09:49 +0000 2026",
+          "entities": {
+            "description": {}
+          },
+          "fastFollowersCount": 0,
+          "favouritesCount": 0,
+          "hasCustomTimelines": true,
+          "isTranslator": false,
+          "mediaCount": 225,
+          "statusesCount": 317,
+          "withheldInCountries": [],
+          "affiliatesHighlightedLabel": {},
+          "possiblySensitive": false,
+          "pinnedTweetIds": [
+            "2058424814637809933"
+          ],
+          "profile_bio": {
+            "description": "Claude × Obsidianで“第2の脳”を構築中｜海外の事例を参考にしたナレッジ・コンテキスト管理法を毎日発信｜中の人はコンテキスト総量100億字規模で運用してます｜思考と情報を永久にローカル資産化したい方はフォロー推奨👆",
+            "entities": {
+              "description": {}
+            }
+          },
+          "isAutomated": false,
+          "automatedBy": null
+        },
+        "extendedEntities": {},
+        "card": {
+          "rest_id": "https://t.co/lD0hotpjU2"
+        },
+        "place": {},
+        "entities": {
+          "urls": [
+            {
+              "display_url": "x.com/i/article/2058…",
+              "expanded_url": "http://x.com/i/article/2058404147180048384",
+              "indices": [
+                0,
+                23
+              ],
+              "url": "https://t.co/lD0hotpjU2"
+            }
+          ]
+        },
+        "isRetweet": false,
+        "isQuote": false,
+        "isConversationControlled": false,
+        "quoted_tweet": null,
+        "retweeted_tweet": null,
+        "isLimitedReply": false,
+        "communityInfo": null
+      }
+    ],
+    "status": "success",
+    "msg": "success",
+    "code": 0
+  }
+}

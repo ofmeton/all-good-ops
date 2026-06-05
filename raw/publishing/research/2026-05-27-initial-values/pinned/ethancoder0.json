@@ -1,0 +1,383 @@
+{
+  "handle": "ethancoder0",
+  "tweet_id": "2058842151371641182",
+  "body": {
+    "tweets": [
+      {
+        "type": "tweet",
+        "id": "2058842151371641182",
+        "url": "https://x.com/ethancoder0/status/2058842151371641182",
+        "twitterUrl": "https://twitter.com/ethancoder0/status/2058842151371641182",
+        "text": "10 GitHub repos that print money while you sleep:\n\n1. AutoHedge\nhttps://t.co/xpTKDYYXyZ…\n\n2. Vibe-Trading\nhttps://t.co/t2l5RoaZMZ…\n\n3. Claude Ads\nhttps://t.co/OcZsracu3X…\n\n4. Toprank\nhttps://t.co/Nfzu6Xzo8E…\n\n5. Fincept Terminal\nhttps://t.co/Z20oWDMx6x…\n\n6. Agentic Inbox\nhttps://t.co/Ugr078Ri8C…\n\n7. ClawRouter\nhttps://t.co/pJRuhEuubG…\n\n8. Camofox Browser\nhttps://t.co/DHtX1Epe9I…\n\n9. Open Higgsfield AI\nhttps://t.co/OHMf4Lcq7I…\n\n10. Hyperframes\nhttps://t.co/oFDWEK4Ivd…",
+        "source": "",
+        "retweetCount": 87,
+        "replyCount": 32,
+        "likeCount": 486,
+        "quoteCount": 3,
+        "viewCount": 31931,
+        "createdAt": "Mon May 25 09:26:34 +0000 2026",
+        "lang": "en",
+        "bookmarkCount": 943,
+        "isReply": false,
+        "inReplyToId": "",
+        "conversationId": "2058842151371641182",
+        "displayTextRange": [
+          0,
+          271
+        ],
+        "inReplyToUserId": "",
+        "inReplyToUsername": "",
+        "isPinned": false,
+        "author": {
+          "type": "user",
+          "userName": "ethancoder0",
+          "url": "https://x.com/ethancoder0",
+          "twitterUrl": "https://twitter.com/ethancoder0",
+          "id": "1994298965542809600",
+          "name": "Ethan Walker",
+          "isVerified": false,
+          "isBlueVerified": true,
+          "verifiedType": null,
+          "profilePicture": "https://pbs.twimg.com/profile_images/2033320475548651521/6UOJkfIv_normal.jpg",
+          "coverPicture": "https://pbs.twimg.com/profile_banners/1994298965542809600/1773616443",
+          "description": "100K+ AI Community | AI Creator | Sharing AI news, tools & tutorials | DM or Mail for Collabs↓ 📥 ethancoder01@gmail.com",
+          "location": "Worldwide",
+          "followers": 10453,
+          "following": 6425,
+          "status": "",
+          "canDm": true,
+          "canMediaTag": true,
+          "createdAt": "Fri Nov 28 06:56:17 +0000 2025",
+          "entities": {
+            "description": {},
+            "url": {
+              "urls": [
+                {
+                  "display_url": "passionfroot.me/ethan-walker",
+                  "expanded_url": "https://www.passionfroot.me/ethan-walker",
+                  "indices": [
+                    0,
+                    23
+                  ],
+                  "url": "https://t.co/5o5kdWePQo"
+                }
+              ]
+            }
+          },
+          "fastFollowersCount": 0,
+          "favouritesCount": 0,
+          "hasCustomTimelines": true,
+          "isTranslator": false,
+          "mediaCount": 45,
+          "statusesCount": 1140,
+          "withheldInCountries": [],
+          "affiliatesHighlightedLabel": {},
+          "possiblySensitive": false,
+          "pinnedTweetIds": [
+            "2058842151371641182"
+          ],
+          "profile_bio": {
+            "description": "100K+ AI Community | AI Creator | Sharing AI news, tools & tutorials | DM or Mail for Collabs↓ 📥 ethancoder01@gmail.com",
+            "entities": {
+              "description": {},
+              "url": {
+                "urls": [
+                  {
+                    "display_url": "passionfroot.me/ethan-walker",
+                    "expanded_url": "https://www.passionfroot.me/ethan-walker",
+                    "indices": [
+                      0,
+                      23
+                    ],
+                    "url": "https://t.co/5o5kdWePQo"
+                  }
+                ]
+              }
+            }
+          },
+          "isAutomated": false,
+          "automatedBy": null
+        },
+        "extendedEntities": {
+          "media": [
+            {
+              "display_url": "pic.twitter.com/xM3BS4NBUR",
+              "expanded_url": "https://twitter.com/ethancoder0/status/2058842151371641182/photo/1",
+              "ext_master_playlist_only": [],
+              "ext_media_availability": {
+                "status": "Available"
+              },
+              "ext_playlists": [],
+              "features": {
+                "large": {
+                  "faces": [
+                    {
+                      "h": 166,
+                      "w": 166,
+                      "x": 512,
+                      "y": 145
+                    }
+                  ]
+                },
+                "orig": {
+                  "faces": [
+                    {
+                      "h": 166,
+                      "w": 166,
+                      "x": 512,
+                      "y": 145
+                    }
+                  ]
+                }
+              },
+              "id_str": "2058842148372713472",
+              "indices": [
+                272,
+                295
+              ],
+              "media_key": "3_2058842148372713472",
+              "media_results": {
+                "id": "QXBpTWVkaWFSZXN1bHRzOgwAAQoAARySegaWW5AACgACHJJ6B0kbkV4AAA==",
+                "result": {
+                  "__typename": "ApiMedia",
+                  "id": "QXBpTWVkaWE6DAABCgABHJJ6BpZbkAAKAAIcknoHSRuRXgAA",
+                  "media_key": "3_2058842148372713472"
+                }
+              },
+              "media_url_https": "https://pbs.twimg.com/media/HJJ6BpZbkAAHMGv.jpg",
+              "original_info": {
+                "focus_rects": [
+                  {
+                    "h": 717,
+                    "w": 1280,
+                    "x": 0,
+                    "y": 184
+                  },
+                  {
+                    "h": 1046,
+                    "w": 1046,
+                    "x": 117,
+                    "y": 0
+                  },
+                  {
+                    "h": 1046,
+                    "w": 918,
+                    "x": 181,
+                    "y": 0
+                  },
+                  {
+                    "h": 1046,
+                    "w": 523,
+                    "x": 379,
+                    "y": 0
+                  },
+                  {
+                    "h": 1046,
+                    "w": 1280,
+                    "x": 0,
+                    "y": 0
+                  }
+                ],
+                "height": 1046,
+                "width": 1280
+              },
+              "sizes": {
+                "large": {
+                  "h": 1046,
+                  "w": 1280
+                }
+              },
+              "type": "photo",
+              "url": "https://t.co/xM3BS4NBUR"
+            },
+            {
+              "display_url": "pic.twitter.com/xM3BS4NBUR",
+              "expanded_url": "https://twitter.com/ethancoder0/status/2058842151371641182/photo/1",
+              "ext_master_playlist_only": [],
+              "ext_media_availability": {
+                "status": "Available"
+              },
+              "ext_playlists": [],
+              "features": {
+                "large": {
+                  "faces": []
+                },
+                "orig": {
+                  "faces": []
+                }
+              },
+              "id_str": "2058842148569747456",
+              "indices": [
+                272,
+                295
+              ],
+              "media_key": "3_2058842148569747456",
+              "media_results": {
+                "id": "QXBpTWVkaWFSZXN1bHRzOgwAAQoAARySegaiGhAACgACHJJ6B0kbkV4AAA==",
+                "result": {
+                  "__typename": "ApiMedia",
+                  "id": "QXBpTWVkaWE6DAABCgABHJJ6BqIaEAAKAAIcknoHSRuRXgAA",
+                  "media_key": "3_2058842148569747456"
+                }
+              },
+              "media_url_https": "https://pbs.twimg.com/media/HJJ6BqIaEAA6cEf.jpg",
+              "original_info": {
+                "focus_rects": [
+                  {
+                    "h": 717,
+                    "w": 1280,
+                    "x": 0,
+                    "y": 0
+                  },
+                  {
+                    "h": 1148,
+                    "w": 1148,
+                    "x": 98,
+                    "y": 0
+                  },
+                  {
+                    "h": 1148,
+                    "w": 1007,
+                    "x": 169,
+                    "y": 0
+                  },
+                  {
+                    "h": 1148,
+                    "w": 574,
+                    "x": 385,
+                    "y": 0
+                  },
+                  {
+                    "h": 1148,
+                    "w": 1280,
+                    "x": 0,
+                    "y": 0
+                  }
+                ],
+                "height": 1148,
+                "width": 1280
+              },
+              "sizes": {
+                "large": {
+                  "h": 1148,
+                  "w": 1280
+                }
+              },
+              "type": "photo",
+              "url": "https://t.co/xM3BS4NBUR"
+            }
+          ]
+        },
+        "card": null,
+        "place": {},
+        "entities": {
+          "hashtags": [],
+          "symbols": [],
+          "urls": [
+            {
+              "display_url": "github.com/The-Swarm-Corp",
+              "expanded_url": "http://github.com/The-Swarm-Corp",
+              "indices": [
+                64,
+                87
+              ],
+              "url": "https://t.co/xpTKDYYXyZ"
+            },
+            {
+              "display_url": "github.com/HKUDS/Vibe-Tra",
+              "expanded_url": "http://github.com/HKUDS/Vibe-Tra",
+              "indices": [
+                106,
+                129
+              ],
+              "url": "https://t.co/t2l5RoaZMZ"
+            },
+            {
+              "display_url": "github.com/AgriciDaniel/c",
+              "expanded_url": "http://github.com/AgriciDaniel/c",
+              "indices": [
+                146,
+                169
+              ],
+              "url": "https://t.co/OcZsracu3X"
+            },
+            {
+              "display_url": "github.com/nowork-studio/",
+              "expanded_url": "http://github.com/nowork-studio/",
+              "indices": [
+                183,
+                206
+              ],
+              "url": "https://t.co/Nfzu6Xzo8E"
+            },
+            {
+              "display_url": "github.com/Fincept-Corpor",
+              "expanded_url": "http://github.com/Fincept-Corpor",
+              "indices": [
+                229,
+                252
+              ],
+              "url": "https://t.co/Z20oWDMx6x"
+            },
+            {
+              "display_url": "github.com/cloudflare/age",
+              "expanded_url": "http://github.com/cloudflare/age",
+              "indices": [
+                272,
+                295
+              ],
+              "url": "https://t.co/Ugr078Ri8C"
+            },
+            {
+              "display_url": "github.com/mksglu/context",
+              "expanded_url": "http://github.com/mksglu/context",
+              "indices": [
+                312,
+                335
+              ],
+              "url": "https://t.co/pJRuhEuubG"
+            },
+            {
+              "display_url": "github.com/jo-inc/camofox",
+              "expanded_url": "http://github.com/jo-inc/camofox",
+              "indices": [
+                357,
+                380
+              ],
+              "url": "https://t.co/DHtX1Epe9I"
+            },
+            {
+              "display_url": "github.com/Anil-matcha/Op",
+              "expanded_url": "http://github.com/Anil-matcha/Op",
+              "indices": [
+                405,
+                428
+              ],
+              "url": "https://t.co/OHMf4Lcq7I"
+            },
+            {
+              "display_url": "github.com/heygen-com/hyp",
+              "expanded_url": "http://github.com/heygen-com/hyp",
+              "indices": [
+                447,
+                470
+              ],
+              "url": "https://t.co/oFDWEK4Ivd"
+            }
+          ],
+          "user_mentions": []
+        },
+        "isRetweet": false,
+        "isQuote": false,
+        "isConversationControlled": false,
+        "quoted_tweet": null,
+        "retweeted_tweet": null,
+        "isLimitedReply": false,
+        "communityInfo": null
+      }
+    ],
+    "status": "success",
+    "msg": "success",
+    "code": 0
+  }
+}

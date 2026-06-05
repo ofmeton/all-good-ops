@@ -1,0 +1,22 @@
+{
+  "handle": "Shimayus",
+  "response_text": "```json\n{\n  \"information_source\": \"海外X/GitHub/Discord\",\n  \"publishing_lag_hours\": 6,\n  \"selection_criteria\": \"Claude Code・Hermes Agent・ローカルLLM等のAIエージェント/開発ツール領域で「日本語コンテンツがまだ少ない」または「炎上・急上昇中」のネタを優先的に選別。実機検証・自身の使用体験を加えた一次情報性を重視。\",\n  \"translation_rate_pct\": 5,\n  \"paraphrase_rate_pct\": 35,\n  \"opinion_rate_pct\": 35,\n  \"citation_explicit_rate_pct\": 40,\n  \"cross_platform_intake_rate_pct\": 70,\n  \"original_rate_pct\": 25,\n  \"notes\": \"r/ClaudeAI・r/ClaudeCode等のRedditスレッドupvote数を明示引用するパターンが複数あり、Redditを主要なシグナル源として使っていると推定。自身のVPS構成やskillファイルの変化など実機体験を織り交ぜる投稿が多く、opinion_rate・original_rateは高めだが推定自信度は中程度。publishing_lagはReddit炎上ネタを当日〜翌日に拾うケースが多いことから6hと推定したが、ツールリリース系は数時間以内の場合もあり幅がある。\"\n}\n```",
+  "parsed": {
+    "information_source": "海外X/GitHub/Discord",
+    "publishing_lag_hours": 6,
+    "selection_criteria": "Claude Code・Hermes Agent・ローカルLLM等のAIエージェント/開発ツール領域で「日本語コンテンツがまだ少ない」または「炎上・急上昇中」のネタを優先的に選別。実機検証・自身の使用体験を加えた一次情報性を重視。",
+    "translation_rate_pct": 5,
+    "paraphrase_rate_pct": 35,
+    "opinion_rate_pct": 35,
+    "citation_explicit_rate_pct": 40,
+    "cross_platform_intake_rate_pct": 70,
+    "original_rate_pct": 25,
+    "notes": "r/ClaudeAI・r/ClaudeCode等のRedditスレッドupvote数を明示引用するパターンが複数あり、Redditを主要なシグナル源として使っていると推定。自身のVPS構成やskillファイルの変化など実機体験を織り交ぜる投稿が多く、opinion_rate・original_rateは高めだが推定自信度は中程度。publishing_lagはReddit炎上ネタを当日〜翌日に拾うケースが多いことから6hと推定したが、ツールリリース系は数時間以内の場合もあり幅がある。"
+  },
+  "usage": {
+    "input_tokens": 3984,
+    "output_tokens": 421,
+    "cache_read_input_tokens": 0,
+    "cache_creation_input_tokens": 0
+  }
+}

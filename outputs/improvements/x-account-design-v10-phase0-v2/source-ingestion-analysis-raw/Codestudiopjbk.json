@@ -1,0 +1,22 @@
+{
+  "handle": "Codestudiopjbk",
+  "response_text": "```json\n{\n  \"information_source\": \"海外X/公式ブログ/GitHub/Podcast\",\n  \"publishing_lag_hours\": 6,\n  \"selection_criteria\": \"Codex・Claude Code関連の新機能・OSSツール・海外ガチ勢の活用法に絞り、バズ・Star数・公式発信を優先してキュレーション。日本語圏への速報性を重視。\",\n  \"translation_rate_pct\": 25,\n  \"paraphrase_rate_pct\": 45,\n  \"opinion_rate_pct\": 15,\n  \"original_rate_pct\": 15,\n  \"citation_explicit_rate_pct\": 40,\n  \"cross_platform_intake_rate_pct\": 70,\n  \"notes\": \"海外X投稿・公式PDF・YouTube動画・GitHubトレンドを複合的にインテークし、日本語に意訳・感情語強化して再加工するパターンが主体。「速報」「保存版」「事件」などのラベルで感情トリガーを統一設計しており、独自取材・一次情報生成はほぼなく原典引用の明示率も低め。publishing_lagは公式発表当日～翌日が多いが推定精度は中程度。\"\n}\n```",
+  "parsed": {
+    "information_source": "海外X/公式ブログ/GitHub/Podcast",
+    "publishing_lag_hours": 6,
+    "selection_criteria": "Codex・Claude Code関連の新機能・OSSツール・海外ガチ勢の活用法に絞り、バズ・Star数・公式発信を優先してキュレーション。日本語圏への速報性を重視。",
+    "translation_rate_pct": 25,
+    "paraphrase_rate_pct": 45,
+    "opinion_rate_pct": 15,
+    "original_rate_pct": 15,
+    "citation_explicit_rate_pct": 40,
+    "cross_platform_intake_rate_pct": 70,
+    "notes": "海外X投稿・公式PDF・YouTube動画・GitHubトレンドを複合的にインテークし、日本語に意訳・感情語強化して再加工するパターンが主体。「速報」「保存版」「事件」などのラベルで感情トリガーを統一設計しており、独自取材・一次情報生成はほぼなく原典引用の明示率も低め。publishing_lagは公式発表当日～翌日が多いが推定精度は中程度。"
+  },
+  "usage": {
+    "input_tokens": 6392,
+    "output_tokens": 364,
+    "cache_read_input_tokens": 0,
+    "cache_creation_input_tokens": 0
+  }
+}

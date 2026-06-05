@@ -1,0 +1,18 @@
+{
+  "name": "01_baseline_pass",
+  "description": "全 11 ルール pass する baseline。primary_hook=tips_enum (default)、hasAffiliateLink=false、業法・PII なし。",
+  "input": {
+    "traceId": "trace-01",
+    "draftId": "draft-01",
+    "coreIdeaId": "core-01",
+    "platform": "x",
+    "body": "経営者向けに業務の仕組み化を共有します。私は請求書発行ワークフローを自動化した。テンプレート化して 30 分を 3 分に短縮。判断軸を 3 段階で固定すれば毎週の業務手順が安定する。これが仕組み化の基本だ。",
+    "fmat": "short",
+    "sourceMaterialIds": [],
+    "hasAffiliateLink": false
+  },
+  "expected": {
+    "decision": "approved",
+    "rejectReasons": []
+  }
+}

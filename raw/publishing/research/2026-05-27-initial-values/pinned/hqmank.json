@@ -1,0 +1,233 @@
+{
+  "handle": "hqmank",
+  "tweet_id": "2058404814036652186",
+  "body": {
+    "tweets": [
+      {
+        "type": "tweet",
+        "id": "2058404814036652186",
+        "url": "https://x.com/hqmank/status/2058404814036652186",
+        "twitterUrl": "https://twitter.com/hqmank/status/2058404814036652186",
+        "text": "1/ \n🎯X notifications can quietly destroy your focus.\n\nWhen a post takes off, the browser keeps pulling you back:\n\n(5) Home / X\nred favicon dot\n\nLikes. Reposts. Follows.\n\nSo I made a small tool to make X quiet again.\n\nDetails below 👇 https://t.co/T3J9uAay18",
+        "source": "",
+        "retweetCount": 0,
+        "replyCount": 1,
+        "likeCount": 4,
+        "quoteCount": 0,
+        "viewCount": 4053,
+        "createdAt": "Sun May 24 04:28:45 +0000 2026",
+        "lang": "en",
+        "bookmarkCount": 2,
+        "isReply": false,
+        "inReplyToId": "",
+        "conversationId": "2058404814036652186",
+        "displayTextRange": [
+          0,
+          232
+        ],
+        "inReplyToUserId": "",
+        "inReplyToUsername": "",
+        "isPinned": false,
+        "author": {
+          "type": "user",
+          "userName": "hqmank",
+          "url": "https://x.com/hqmank",
+          "twitterUrl": "https://twitter.com/hqmank",
+          "id": "1260921",
+          "name": "Kai",
+          "isVerified": false,
+          "isBlueVerified": true,
+          "verifiedType": null,
+          "profilePicture": "https://pbs.twimg.com/profile_images/2001227557765832707/XG7mxw62_normal.jpg",
+          "coverPicture": "https://pbs.twimg.com/profile_banners/1260921/1680585361",
+          "description": "AI Builder 🛠️ | Daily AI coding tips\nPractical workflows you can actually use\nCore Member @aibuilderclub_ | DM for Collabs",
+          "location": "",
+          "followers": 4718,
+          "following": 255,
+          "status": "",
+          "canDm": false,
+          "canMediaTag": false,
+          "createdAt": "Fri Mar 16 02:21:19 +0000 2007",
+          "entities": {
+            "description": {
+              "user_mentions": [
+                {
+                  "id_str": "",
+                  "indices": [
+                    90,
+                    105
+                  ],
+                  "name": "",
+                  "screen_name": "aibuilderclub_"
+                }
+              ]
+            }
+          },
+          "fastFollowersCount": 0,
+          "favouritesCount": 0,
+          "hasCustomTimelines": true,
+          "isTranslator": false,
+          "mediaCount": 612,
+          "statusesCount": 2727,
+          "withheldInCountries": [],
+          "affiliatesHighlightedLabel": {},
+          "possiblySensitive": false,
+          "pinnedTweetIds": [
+            "2058404814036652186"
+          ],
+          "profile_bio": {
+            "description": "AI Builder 🛠️ | Daily AI coding tips\nPractical workflows you can actually use\nCore Member @aibuilderclub_ | DM for Collabs",
+            "entities": {
+              "description": {
+                "user_mentions": [
+                  {
+                    "id_str": "",
+                    "indices": [
+                      90,
+                      105
+                    ],
+                    "name": "",
+                    "screen_name": "aibuilderclub_"
+                  }
+                ]
+              }
+            }
+          },
+          "isAutomated": false,
+          "automatedBy": null
+        },
+        "extendedEntities": {
+          "media": [
+            {
+              "display_url": "pic.twitter.com/T3J9uAay18",
+              "expanded_url": "https://twitter.com/hqmank/status/2058404814036652186/photo/1",
+              "ext_master_playlist_only": [],
+              "ext_media_availability": {
+                "status": "Available"
+              },
+              "ext_playlists": [],
+              "features": {
+                "large": {
+                  "faces": [
+                    {
+                      "h": 79,
+                      "w": 79,
+                      "x": 1031,
+                      "y": 473
+                    },
+                    {
+                      "h": 185,
+                      "w": 185,
+                      "x": 1184,
+                      "y": 779
+                    },
+                    {
+                      "h": 245,
+                      "w": 245,
+                      "x": 1225,
+                      "y": 757
+                    }
+                  ]
+                },
+                "orig": {
+                  "faces": [
+                    {
+                      "h": 107,
+                      "w": 107,
+                      "x": 1386,
+                      "y": 636
+                    },
+                    {
+                      "h": 249,
+                      "w": 249,
+                      "x": 1591,
+                      "y": 1048
+                    },
+                    {
+                      "h": 330,
+                      "w": 330,
+                      "x": 1647,
+                      "y": 1018
+                    }
+                  ]
+                }
+              },
+              "id_str": "2058403847174049792",
+              "indices": [
+                233,
+                256
+              ],
+              "media_key": "3_2058403847174049792",
+              "media_results": {
+                "id": "QXBpTWVkaWFSZXN1bHRzOgwAAQoAARyQ62SjG1AACgACHJDsRcCb0JoAAA==",
+                "result": {
+                  "__typename": "ApiMedia",
+                  "id": "QXBpTWVkaWE6DAABCgABHJDrZKMbUAAKAAIckOxFwJvQmgAA",
+                  "media_key": "3_2058403847174049792"
+                }
+              },
+              "media_url_https": "https://pbs.twimg.com/media/HJDrZKMbUAA1B6D.jpg",
+              "original_info": {
+                "focus_rects": [
+                  {
+                    "h": 1536,
+                    "w": 2743,
+                    "x": 9,
+                    "y": 0
+                  },
+                  {
+                    "h": 1536,
+                    "w": 1536,
+                    "x": 810,
+                    "y": 0
+                  },
+                  {
+                    "h": 1536,
+                    "w": 1347,
+                    "x": 905,
+                    "y": 0
+                  },
+                  {
+                    "h": 1536,
+                    "w": 768,
+                    "x": 1194,
+                    "y": 0
+                  },
+                  {
+                    "h": 1536,
+                    "w": 2752,
+                    "x": 0,
+                    "y": 0
+                  }
+                ],
+                "height": 1536,
+                "width": 2752
+              },
+              "sizes": {
+                "large": {
+                  "h": 1143,
+                  "w": 2048
+                }
+              },
+              "type": "photo",
+              "url": "https://t.co/T3J9uAay18"
+            }
+          ]
+        },
+        "card": null,
+        "place": {},
+        "entities": {},
+        "isRetweet": false,
+        "isQuote": false,
+        "isConversationControlled": false,
+        "quoted_tweet": null,
+        "retweeted_tweet": null,
+        "isLimitedReply": false,
+        "communityInfo": null
+      }
+    ],
+    "status": "success",
+    "msg": "success",
+    "code": 0
+  }
+}

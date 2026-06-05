@@ -1,0 +1,34 @@
+{
+  "status": "success",
+  "msg": "success",
+  "data": {
+    "id": "2045403336451710976",
+    "name": "東大Obsidianオタク｜仕事で使える第2の脳構築",
+    "userName": "ObsidianOtaku",
+    "location": "Obsidianで第二の脳を作りたいならフォロー❗️",
+    "url": "",
+    "description": "東大卒メンバーによるObsidianの活用術を毎日発信｜仕事で使えるObsidianを学べるメディア｜Claude CodeやCodexと組み合わせて使うノウハウを学びたい人はフォロー必須！",
+    "entities": {
+      "description": {}
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 1069,
+    "following": 4,
+    "favouritesCount": 12,
+    "statusesCount": 55,
+    "mediaCount": 41,
+    "createdAt": "2026-04-18T07:26:24.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/2045403336451710976/1776497381",
+    "profilePicture": "https://pbs.twimg.com/profile_images/2045403747116081152/ICOUL3T2_normal.jpg",
+    "canDm": false,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": [
+      "2058665087876165671"
+    ]
+  }
+}

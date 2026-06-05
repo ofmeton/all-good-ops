@@ -1,0 +1,92 @@
+{
+  "handle": "jason_coder0",
+  "tweet_id": "2059303346876633266",
+  "body": {
+    "tweets": [
+      {
+        "type": "tweet",
+        "id": "2059303346876633266",
+        "url": "https://x.com/jason_coder0/status/2059303346876633266",
+        "twitterUrl": "https://twitter.com/jason_coder0/status/2059303346876633266",
+        "text": "GOODBYE, FUND MANAGERS. GOODBYE, BLOOMBERG TERMINAL.\n\nNo more $24,000/year subscriptions.\nClaude just turned my laptop into a private quant analyst.\n\nHere are 07 prompts to build your own hedge fund at home ↓",
+        "source": "",
+        "retweetCount": 36,
+        "replyCount": 18,
+        "likeCount": 50,
+        "quoteCount": 2,
+        "viewCount": 5028,
+        "createdAt": "Tue May 26 15:59:12 +0000 2026",
+        "lang": "en",
+        "bookmarkCount": 40,
+        "isReply": false,
+        "inReplyToId": "",
+        "conversationId": "2059303346876633266",
+        "displayTextRange": [
+          0,
+          208
+        ],
+        "inReplyToUserId": "",
+        "inReplyToUsername": "",
+        "isPinned": false,
+        "author": {
+          "type": "user",
+          "userName": "jason_coder0",
+          "url": "https://x.com/jason_coder0",
+          "twitterUrl": "https://twitter.com/jason_coder0",
+          "id": "1947941249455198208",
+          "name": "Mr. Jason💡",
+          "isVerified": false,
+          "isBlueVerified": true,
+          "verifiedType": null,
+          "profilePicture": "https://pbs.twimg.com/profile_images/1962130802738941952/PLUJ7ETX_normal.jpg",
+          "coverPicture": "https://pbs.twimg.com/profile_banners/1947941249455198208/1763396796",
+          "description": "AI & Tech Strategist | Elevating Brands with Advanced AI Innovation | Expert Ghostwriter | Email : leocoder56@gmail.com | 📥 |",
+          "location": "Australia",
+          "followers": 21878,
+          "following": 522,
+          "status": "",
+          "canDm": true,
+          "canMediaTag": false,
+          "createdAt": "Wed Jul 23 08:46:19 +0000 2025",
+          "entities": {
+            "description": {}
+          },
+          "fastFollowersCount": 0,
+          "favouritesCount": 0,
+          "hasCustomTimelines": true,
+          "isTranslator": false,
+          "mediaCount": 706,
+          "statusesCount": 41873,
+          "withheldInCountries": [],
+          "affiliatesHighlightedLabel": {},
+          "possiblySensitive": false,
+          "pinnedTweetIds": [
+            "2059303346876633266"
+          ],
+          "profile_bio": {
+            "description": "AI & Tech Strategist | Elevating Brands with Advanced AI Innovation | Expert Ghostwriter | Email : leocoder56@gmail.com | 📥 |",
+            "entities": {
+              "description": {}
+            }
+          },
+          "isAutomated": false,
+          "automatedBy": null
+        },
+        "extendedEntities": {},
+        "card": null,
+        "place": {},
+        "entities": {},
+        "isRetweet": false,
+        "isQuote": false,
+        "isConversationControlled": false,
+        "quoted_tweet": null,
+        "retweeted_tweet": null,
+        "isLimitedReply": false,
+        "communityInfo": null
+      }
+    ],
+    "status": "success",
+    "msg": "success",
+    "code": 0
+  }
+}

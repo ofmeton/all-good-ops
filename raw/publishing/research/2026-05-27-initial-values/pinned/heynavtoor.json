@@ -1,0 +1,123 @@
+{
+  "handle": "heynavtoor",
+  "tweet_id": "2044433988312560051",
+  "body": {
+    "tweets": [
+      {
+        "type": "tweet",
+        "id": "2044433988312560051",
+        "url": "https://x.com/heynavtoor/status/2044433988312560051",
+        "twitterUrl": "https://twitter.com/heynavtoor/status/2044433988312560051",
+        "text": "Your smart TV is taking screenshots of your screen every 15 seconds.\n\nNot a guess. Not a theory.\n\nA peer-reviewed study by researchers at UC Davis, UCL, and UC3M tested it.\n\nSamsung TVs: every minute.\nLG TVs: every 15 seconds.\n\nEven when you're just using it as a monitor.\n\nHere's how to turn it off for every brand:",
+        "source": "",
+        "retweetCount": 6758,
+        "replyCount": 859,
+        "likeCount": 26565,
+        "quoteCount": 675,
+        "viewCount": 6540564,
+        "createdAt": "Wed Apr 15 15:13:41 +0000 2026",
+        "lang": "en",
+        "bookmarkCount": 39817,
+        "isReply": false,
+        "inReplyToId": "",
+        "conversationId": "2044433988312560051",
+        "displayTextRange": [
+          0,
+          280
+        ],
+        "inReplyToUserId": "",
+        "inReplyToUsername": "",
+        "isPinned": false,
+        "author": {
+          "type": "user",
+          "userName": "heynavtoor",
+          "url": "https://x.com/heynavtoor",
+          "twitterUrl": "https://twitter.com/heynavtoor",
+          "id": "1916904726295453696",
+          "name": "Nav Toor",
+          "isVerified": false,
+          "isBlueVerified": true,
+          "verifiedType": null,
+          "profilePicture": "https://pbs.twimg.com/profile_images/2017556052938788865/3E6CcSFP_normal.jpg",
+          "coverPicture": "https://pbs.twimg.com/profile_banners/1916904726295453696/1769272939",
+          "description": "Helping you master AI daily with step-by-step AI guides, latest news, & practical tools • DM for Collabs",
+          "location": "Free Products + Sponsorships →",
+          "followers": 140851,
+          "following": 251,
+          "status": "",
+          "canDm": true,
+          "canMediaTag": true,
+          "createdAt": "Mon Apr 28 17:18:09 +0000 2025",
+          "entities": {
+            "description": {},
+            "url": {
+              "urls": [
+                {
+                  "display_url": "linktr.ee/navtoor",
+                  "expanded_url": "https://linktr.ee/navtoor",
+                  "indices": [
+                    0,
+                    23
+                  ],
+                  "url": "https://t.co/b36GQWSNBh"
+                }
+              ]
+            }
+          },
+          "fastFollowersCount": 0,
+          "favouritesCount": 0,
+          "hasCustomTimelines": true,
+          "isTranslator": false,
+          "mediaCount": 937,
+          "statusesCount": 6195,
+          "withheldInCountries": [],
+          "affiliatesHighlightedLabel": {},
+          "possiblySensitive": false,
+          "pinnedTweetIds": [
+            "2044433988312560051"
+          ],
+          "profile_bio": {
+            "description": "Helping you master AI daily with step-by-step AI guides, latest news, & practical tools • DM for Collabs",
+            "entities": {
+              "description": {},
+              "url": {
+                "urls": [
+                  {
+                    "display_url": "linktr.ee/navtoor",
+                    "expanded_url": "https://linktr.ee/navtoor",
+                    "indices": [
+                      0,
+                      23
+                    ],
+                    "url": "https://t.co/b36GQWSNBh"
+                  }
+                ]
+              }
+            }
+          },
+          "isAutomated": false,
+          "automatedBy": null
+        },
+        "extendedEntities": {},
+        "card": null,
+        "place": {},
+        "entities": {
+          "hashtags": [],
+          "symbols": [],
+          "urls": [],
+          "user_mentions": []
+        },
+        "isRetweet": false,
+        "isQuote": false,
+        "isConversationControlled": false,
+        "quoted_tweet": null,
+        "retweeted_tweet": null,
+        "isLimitedReply": false,
+        "communityInfo": null
+      }
+    ],
+    "status": "success",
+    "msg": "success",
+    "code": 0
+  }
+}

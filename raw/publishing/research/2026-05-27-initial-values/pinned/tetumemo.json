@@ -1,0 +1,740 @@
+{
+  "handle": "tetumemo",
+  "tweet_id": "2059353577551012134",
+  "body": {
+    "tweets": [
+      {
+        "type": "tweet",
+        "id": "2059353577551012134",
+        "url": "https://x.com/tetumemo/status/2059353577551012134",
+        "twitterUrl": "https://twitter.com/tetumemo/status/2059353577551012134",
+        "text": "📝【週刊ニュースレター発行】今日から始めるAI生活\nXサブスク（月額980円）でX検索AIを手に入れた。Hermes AgentのWindows導入手順と効率化Skills3本をシェア\n\nAPI不要でもHermes Agentが月額980円のXサブスクでX検索できるようになった！\n\n私のWindowsで実際に動かした検証ログと、CodexやClaude Codeから呼び出せるSkills3点\n\n・X検索Skill\n・X記事Markdown保存Skill\n・画像動画化Skill\nの3本をまるごとシェアします！\n\n好きなAIから自由自在にHermes Agentを呼び出し、X検索やGrokのクリエイティブを活用できるのは楽しいですよ\n――――\n✅ニュースレターが発行は5/27 7:30に配信\n\nぜひ、購読登録してお待ち下さい♪\n📰発行プラットフォームは 「みんなのニュースレター」\n数千人が購読するニュースレターを発行しているジャバ(@nodenodenode1)さんが運営してしています。\n誰でも簡単に無料でニュースレターが発行できるのでオススメです♪\nニュースレターの購読URLはリプ欄へ　>>>\n――――",
+        "source": "",
+        "retweetCount": 1,
+        "replyCount": 1,
+        "likeCount": 7,
+        "quoteCount": 1,
+        "viewCount": 9666,
+        "createdAt": "Tue May 26 19:18:48 +0000 2026",
+        "lang": "ja",
+        "bookmarkCount": 14,
+        "isReply": false,
+        "inReplyToId": "",
+        "conversationId": "2059353577551012134",
+        "displayTextRange": [
+          0,
+          177
+        ],
+        "inReplyToUserId": "",
+        "inReplyToUsername": "",
+        "isPinned": false,
+        "author": {
+          "type": "user",
+          "userName": "tetumemo",
+          "url": "https://x.com/tetumemo",
+          "twitterUrl": "https://twitter.com/tetumemo",
+          "id": "131867975",
+          "name": "テツメモ｜AI図解×検証｜Newsletter",
+          "isVerified": false,
+          "isBlueVerified": true,
+          "verifiedType": null,
+          "profilePicture": "https://pbs.twimg.com/profile_images/1740572915685584896/7nsuwNFv_normal.jpg",
+          "coverPicture": "https://pbs.twimg.com/profile_banners/131867975/1703859714",
+          "description": "ニュースレター×AIクリエイター×図解する人🔳｜AIを中心に図解・検証を発信中→結果はハイライト&記事へ｜ 他Web3・Tech・Gadget・Game・3DCG等発信中｜本業 新規事業開発 GtoC向けApp｜筋トレ、写真、映像、アニメ｜ ⇨ https://t.co/qqv5Zts5V4",
+          "location": "📒毎週火曜日ニュースレター発行：今日からはじまるAI生活",
+          "followers": 48413,
+          "following": 388,
+          "status": "",
+          "canDm": false,
+          "canMediaTag": true,
+          "createdAt": "Sun Apr 11 15:47:48 +0000 2010",
+          "entities": {
+            "description": {
+              "urls": [
+                {
+                  "display_url": "tetumemo.m-newsletter.com",
+                  "expanded_url": "https://tetumemo.m-newsletter.com/",
+                  "indices": [
+                    123,
+                    146
+                  ],
+                  "url": "https://t.co/qqv5Zts5V4"
+                }
+              ]
+            },
+            "url": {
+              "urls": [
+                {
+                  "display_url": "lit.link/tetumemo",
+                  "expanded_url": "https://lit.link/tetumemo",
+                  "indices": [
+                    0,
+                    23
+                  ],
+                  "url": "https://t.co/pn5QpvZzOH"
+                }
+              ]
+            }
+          },
+          "fastFollowersCount": 0,
+          "favouritesCount": 0,
+          "hasCustomTimelines": true,
+          "isTranslator": false,
+          "mediaCount": 15554,
+          "statusesCount": 48069,
+          "withheldInCountries": [],
+          "affiliatesHighlightedLabel": {},
+          "possiblySensitive": false,
+          "pinnedTweetIds": [
+            "2059353577551012134"
+          ],
+          "profile_bio": {
+            "description": "ニュースレター×AIクリエイター×図解する人🔳｜AIを中心に図解・検証を発信中→結果はハイライト&記事へ｜ 他Web3・Tech・Gadget・Game・3DCG等発信中｜本業 新規事業開発 GtoC向けApp｜筋トレ、写真、映像、アニメ｜ ⇨ https://t.co/qqv5Zts5V4",
+            "entities": {
+              "description": {
+                "urls": [
+                  {
+                    "display_url": "tetumemo.m-newsletter.com",
+                    "expanded_url": "https://tetumemo.m-newsletter.com/",
+                    "indices": [
+                      123,
+                      146
+                    ],
+                    "url": "https://t.co/qqv5Zts5V4"
+                  }
+                ]
+              },
+              "url": {
+                "urls": [
+                  {
+                    "display_url": "lit.link/tetumemo",
+                    "expanded_url": "https://lit.link/tetumemo",
+                    "indices": [
+                      0,
+                      23
+                    ],
+                    "url": "https://t.co/pn5QpvZzOH"
+                  }
+                ]
+              }
+            }
+          },
+          "isAutomated": false,
+          "automatedBy": null
+        },
+        "extendedEntities": {
+          "media": [
+            {
+              "display_url": "pic.twitter.com/YIgDHsxvGL",
+              "expanded_url": "https://twitter.com/tetumemo/status/2059353577551012134/video/1",
+              "ext_master_playlist_only": [],
+              "ext_media_availability": {
+                "status": "Available"
+              },
+              "ext_playlists": [],
+              "features": {
+                "large": {
+                  "faces": [
+                    {
+                      "h": 148,
+                      "w": 148,
+                      "x": 1446,
+                      "y": 410
+                    }
+                  ]
+                },
+                "orig": {
+                  "faces": [
+                    {
+                      "h": 148,
+                      "w": 148,
+                      "x": 1446,
+                      "y": 410
+                    }
+                  ]
+                }
+              },
+              "id_str": "2059352491469455360",
+              "indices": [
+                178,
+                201
+              ],
+              "media_key": "3_2059352491469455360",
+              "media_results": {
+                "id": "QXBpTWVkaWFSZXN1bHRzOgwAAQoAARyUSi4ZWkAACgACHJRLKvjboSYAAA==",
+                "result": {
+                  "__typename": "ApiMedia",
+                  "id": "QXBpTWVkaWE6DAABCgABHJRKLhlaQAAKAAIclEsq+NuhJgAA",
+                  "media_key": "3_2059352491469455360"
+                }
+              },
+              "media_url_https": "https://pbs.twimg.com/media/HJRKLhlaQAAFt9B.jpg",
+              "original_info": {
+                "focus_rects": [
+                  {
+                    "h": 997,
+                    "w": 1780,
+                    "x": 106,
+                    "y": 0
+                  },
+                  {
+                    "h": 997,
+                    "w": 997,
+                    "x": 498,
+                    "y": 0
+                  },
+                  {
+                    "h": 997,
+                    "w": 875,
+                    "x": 559,
+                    "y": 0
+                  },
+                  {
+                    "h": 997,
+                    "w": 499,
+                    "x": 747,
+                    "y": 0
+                  },
+                  {
+                    "h": 997,
+                    "w": 1904,
+                    "x": 0,
+                    "y": 0
+                  }
+                ],
+                "height": 997,
+                "width": 1904
+              },
+              "sizes": {
+                "large": {
+                  "h": 997,
+                  "w": 1904
+                }
+              },
+              "type": "photo",
+              "url": "https://t.co/YIgDHsxvGL"
+            },
+            {
+              "display_url": "pic.twitter.com/YIgDHsxvGL",
+              "expanded_url": "https://twitter.com/tetumemo/status/2059353577551012134/video/1",
+              "ext_master_playlist_only": [],
+              "ext_media_availability": {
+                "status": "Available"
+              },
+              "ext_playlists": [],
+              "features": {
+                "large": {
+                  "faces": []
+                },
+                "orig": {
+                  "faces": []
+                }
+              },
+              "id_str": "2059352700056424448",
+              "indices": [
+                178,
+                201
+              ],
+              "media_key": "3_2059352700056424448",
+              "media_results": {
+                "id": "QXBpTWVkaWFSZXN1bHRzOgwAAQoAARyUSl6qGtAACgACHJRLKvjboSYAAA==",
+                "result": {
+                  "__typename": "ApiMedia",
+                  "id": "QXBpTWVkaWE6DAABCgABHJRKXqoa0AAKAAIclEsq+NuhJgAA",
+                  "media_key": "3_2059352700056424448"
+                }
+              },
+              "media_url_https": "https://pbs.twimg.com/media/HJRKXqoa0AAuw-4.png",
+              "original_info": {
+                "focus_rects": [
+                  {
+                    "h": 329,
+                    "w": 588,
+                    "x": 0,
+                    "y": 27
+                  },
+                  {
+                    "h": 362,
+                    "w": 362,
+                    "x": 0,
+                    "y": 0
+                  },
+                  {
+                    "h": 362,
+                    "w": 318,
+                    "x": 0,
+                    "y": 0
+                  },
+                  {
+                    "h": 362,
+                    "w": 181,
+                    "x": 0,
+                    "y": 0
+                  },
+                  {
+                    "h": 362,
+                    "w": 588,
+                    "x": 0,
+                    "y": 0
+                  }
+                ],
+                "height": 362,
+                "width": 588
+              },
+              "sizes": {
+                "large": {
+                  "h": 362,
+                  "w": 588
+                }
+              },
+              "type": "photo",
+              "url": "https://t.co/YIgDHsxvGL"
+            },
+            {
+              "display_url": "pic.twitter.com/YIgDHsxvGL",
+              "expanded_url": "https://twitter.com/tetumemo/status/2059353577551012134/video/1",
+              "ext_master_playlist_only": [],
+              "ext_media_availability": {
+                "status": "Available"
+              },
+              "ext_playlists": [],
+              "features": {
+                "large": {
+                  "faces": [
+                    {
+                      "h": 38,
+                      "w": 38,
+                      "x": 292,
+                      "y": 500
+                    }
+                  ]
+                },
+                "orig": {
+                  "faces": [
+                    {
+                      "h": 38,
+                      "w": 38,
+                      "x": 292,
+                      "y": 500
+                    }
+                  ]
+                }
+              },
+              "id_str": "2059352725046128640",
+              "indices": [
+                178,
+                201
+              ],
+              "media_key": "3_2059352725046128640",
+              "media_results": {
+                "id": "QXBpTWVkaWFSZXN1bHRzOgwAAQoAARyUSmR7m3AACgACHJRLKvjboSYAAA==",
+                "result": {
+                  "__typename": "ApiMedia",
+                  "id": "QXBpTWVkaWE6DAABCgABHJRKZHubcAAKAAIclEsq+NuhJgAA",
+                  "media_key": "3_2059352725046128640"
+                }
+              },
+              "media_url_https": "https://pbs.twimg.com/media/HJRKZHubcAAPVXs.png",
+              "original_info": {
+                "focus_rects": [
+                  {
+                    "h": 425,
+                    "w": 759,
+                    "x": 0,
+                    "y": 186
+                  },
+                  {
+                    "h": 611,
+                    "w": 611,
+                    "x": 0,
+                    "y": 0
+                  },
+                  {
+                    "h": 611,
+                    "w": 536,
+                    "x": 0,
+                    "y": 0
+                  },
+                  {
+                    "h": 611,
+                    "w": 306,
+                    "x": 0,
+                    "y": 0
+                  },
+                  {
+                    "h": 611,
+                    "w": 759,
+                    "x": 0,
+                    "y": 0
+                  }
+                ],
+                "height": 611,
+                "width": 759
+              },
+              "sizes": {
+                "large": {
+                  "h": 611,
+                  "w": 759
+                }
+              },
+              "type": "photo",
+              "url": "https://t.co/YIgDHsxvGL"
+            },
+            {
+              "additional_media_info": {
+                "monetizable": true
+              },
+              "display_url": "pic.twitter.com/YIgDHsxvGL",
+              "expanded_url": "https://twitter.com/tetumemo/status/2059353577551012134/video/1",
+              "ext_master_playlist_only": [],
+              "ext_media_availability": {
+                "status": "Available"
+              },
+              "ext_playlists": [],
+              "id_str": "2059353098586603520",
+              "indices": [
+                178,
+                201
+              ],
+              "media_key": "13_2059353098586603520",
+              "media_results": {
+                "id": "QXBpTWVkaWFSZXN1bHRzOgwABAoAARyUSrt0WsAAAAA=",
+                "result": {
+                  "__typename": "ApiMedia",
+                  "id": "QXBpTWVkaWE6DAAECgABHJRKu3RawAAAAA==",
+                  "media_key": "13_2059353098586603520"
+                }
+              },
+              "media_url_https": "https://pbs.twimg.com/amplify_video_thumb/2059353098586603520/img/8-GT9WibCDkEz9Lb.jpg",
+              "original_info": {
+                "focus_rects": [],
+                "height": 720,
+                "width": 720
+              },
+              "sizes": {
+                "large": {
+                  "h": 720,
+                  "w": 720
+                }
+              },
+              "type": "video",
+              "url": "https://t.co/YIgDHsxvGL",
+              "video_info": {
+                "aspect_ratio": [
+                  1,
+                  1
+                ],
+                "duration_millis": 3088,
+                "variants": [
+                  {
+                    "content_type": "application/x-mpegURL",
+                    "url": "https://video.twimg.com/amplify_video/2059353098586603520/pl/eJjGCcB4TZ-myUIe.m3u8?tag=27"
+                  },
+                  {
+                    "bitrate": 432000,
+                    "content_type": "video/mp4",
+                    "url": "https://video.twimg.com/amplify_video/2059353098586603520/vid/avc1/320x320/j3cU9bT41RxErarh.mp4?tag=27"
+                  },
+                  {
+                    "bitrate": 832000,
+                    "content_type": "video/mp4",
+                    "url": "https://video.twimg.com/amplify_video/2059353098586603520/vid/avc1/540x540/EsWHJz7mEV9BqmeO.mp4?tag=27"
+                  },
+                  {
+                    "bitrate": 1280000,
+                    "content_type": "video/mp4",
+                    "url": "https://video.twimg.com/amplify_video/2059353098586603520/vid/avc1/720x720/d2I19ds7ynpc7B38.mp4?tag=27"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "card": null,
+        "place": {},
+        "entities": {
+          "hashtags": [],
+          "symbols": [],
+          "urls": [],
+          "user_mentions": [
+            {
+              "id_str": "954400685013065728",
+              "indices": [
+                420,
+                434
+              ],
+              "name": "ジャバ・ザ・ハットリ🇩🇪←🇸🇬←🇯🇵",
+              "screen_name": "nodenodenode1"
+            }
+          ]
+        },
+        "isRetweet": false,
+        "isQuote": true,
+        "isConversationControlled": false,
+        "quoted_tweet": {
+          "type": "tweet",
+          "id": "2056800774391554537",
+          "url": "https://x.com/tetumemo/status/2056800774391554537",
+          "twitterUrl": "https://twitter.com/tetumemo/status/2056800774391554537",
+          "text": "📝【週刊ニュースレター発行】今日から始めるAI生活\n誰でもManusで拡張機能が作れる時代。Substackの記事をMarkdownで取り出せるツールを配布＋制作の全プロセスを公開します！\n\nコードが書けなくても、ManusがあればChrome拡張機能は作れます。\n\n前回のnote版・X記事版のダウンローダー拡張機能制作は18,000クレジット（約16,000円）かかりましたが、今回のSubstack版は1,200クレジット（約1,000円）で完成！\n\nコスト差を生んだ「頼み方の秘訣」と、完成した拡張機能の配布・全指示プロンプトをこの記事でまとめてお渡しします\n\n――――\n✅ニュースレターが発行は5/20 7:30に配信\n\nぜひ、購読登録してお待ち下さい♪\n📰発行プラットフォームは 「みんなのニュースレター」\n数千人が購読するニュースレターを発行しているジャバ(@nodenodenode1)さんが運営してしています。\n誰でも簡単に無料でニュースレターが発行できるのでオススメです♪\nニュースレターの購読URLはリプ欄へ　>>>\n――――",
+          "source": "",
+          "retweetCount": 1,
+          "replyCount": 2,
+          "likeCount": 26,
+          "quoteCount": 1,
+          "viewCount": 22069,
+          "createdAt": "Tue May 19 18:14:52 +0000 2026",
+          "lang": "ja",
+          "bookmarkCount": 19,
+          "isReply": false,
+          "inReplyToId": "",
+          "conversationId": "2056800774391554537",
+          "displayTextRange": [
+            0,
+            132
+          ],
+          "inReplyToUserId": "",
+          "inReplyToUsername": "",
+          "isPinned": false,
+          "author": {
+            "type": "user",
+            "userName": "tetumemo",
+            "url": "https://x.com/tetumemo",
+            "twitterUrl": "https://twitter.com/tetumemo",
+            "id": "131867975",
+            "name": "テツメモ｜AI図解×検証｜Newsletter",
+            "isVerified": false,
+            "isBlueVerified": true,
+            "verifiedType": null,
+            "profilePicture": "https://pbs.twimg.com/profile_images/1740572915685584896/7nsuwNFv_normal.jpg",
+            "coverPicture": "https://pbs.twimg.com/profile_banners/131867975/1703859714",
+            "description": "ニュースレター×AIクリエイター×図解する人🔳｜AIを中心に図解・検証を発信中→結果はハイライト&記事へ｜ 他Web3・Tech・Gadget・Game・3DCG等発信中｜本業 新規事業開発 GtoC向けApp｜筋トレ、写真、映像、アニメ｜ ⇨ https://t.co/qqv5Zts5V4",
+            "location": "📒毎週火曜日ニュースレター発行：今日からはじまるAI生活",
+            "followers": 48413,
+            "following": 388,
+            "status": "",
+            "canDm": false,
+            "canMediaTag": true,
+            "createdAt": "Sun Apr 11 15:47:48 +0000 2010",
+            "entities": {
+              "description": {
+                "urls": [
+                  {
+                    "display_url": "tetumemo.m-newsletter.com",
+                    "expanded_url": "https://tetumemo.m-newsletter.com/",
+                    "indices": [
+                      123,
+                      146
+                    ],
+                    "url": "https://t.co/qqv5Zts5V4"
+                  }
+                ]
+              },
+              "url": {
+                "urls": [
+                  {
+                    "display_url": "lit.link/tetumemo",
+                    "expanded_url": "https://lit.link/tetumemo",
+                    "indices": [
+                      0,
+                      23
+                    ],
+                    "url": "https://t.co/pn5QpvZzOH"
+                  }
+                ]
+              }
+            },
+            "fastFollowersCount": 0,
+            "favouritesCount": 0,
+            "hasCustomTimelines": true,
+            "isTranslator": false,
+            "mediaCount": 15554,
+            "statusesCount": 48069,
+            "withheldInCountries": [],
+            "affiliatesHighlightedLabel": {},
+            "possiblySensitive": false,
+            "pinnedTweetIds": [
+              "2059353577551012134"
+            ],
+            "profile_bio": {
+              "description": "ニュースレター×AIクリエイター×図解する人🔳｜AIを中心に図解・検証を発信中→結果はハイライト&記事へ｜ 他Web3・Tech・Gadget・Game・3DCG等発信中｜本業 新規事業開発 GtoC向けApp｜筋トレ、写真、映像、アニメ｜ ⇨ https://t.co/qqv5Zts5V4",
+              "entities": {
+                "description": {
+                  "urls": [
+                    {
+                      "display_url": "tetumemo.m-newsletter.com",
+                      "expanded_url": "https://tetumemo.m-newsletter.com/",
+                      "indices": [
+                        123,
+                        146
+                      ],
+                      "url": "https://t.co/qqv5Zts5V4"
+                    }
+                  ]
+                },
+                "url": {
+                  "urls": [
+                    {
+                      "display_url": "lit.link/tetumemo",
+                      "expanded_url": "https://lit.link/tetumemo",
+                      "indices": [
+                        0,
+                        23
+                      ],
+                      "url": "https://t.co/pn5QpvZzOH"
+                    }
+                  ]
+                }
+              }
+            },
+            "isAutomated": false,
+            "automatedBy": null
+          },
+          "extendedEntities": {
+            "media": [
+              {
+                "additional_media_info": {
+                  "monetizable": true
+                },
+                "display_url": "pic.twitter.com/9I4sidSD6q",
+                "expanded_url": "https://twitter.com/tetumemo/status/2056800774391554537/video/1",
+                "ext_master_playlist_only": [],
+                "ext_media_availability": {
+                  "status": "Available"
+                },
+                "ext_playlists": [],
+                "id_str": "2056799292686495744",
+                "indices": [
+                  133,
+                  156
+                ],
+                "media_key": "13_2056799292686495744",
+                "media_results": {
+                  "id": "QXBpTWVkaWFSZXN1bHRzOgwABAoAARyLOA8u2nAAAAA=",
+                  "result": {
+                    "__typename": "ApiMedia",
+                    "id": "QXBpTWVkaWE6DAAECgABHIs4Dy7acAAAAA==",
+                    "media_key": "13_2056799292686495744"
+                  }
+                },
+                "media_url_https": "https://pbs.twimg.com/amplify_video_thumb/2056799292686495744/img/UbCDCtdZfi30py-Y.jpg",
+                "original_info": {
+                  "focus_rects": [],
+                  "height": 1080,
+                  "width": 1920
+                },
+                "sizes": {
+                  "large": {
+                    "h": 1080,
+                    "w": 1920
+                  }
+                },
+                "type": "video",
+                "url": "https://t.co/9I4sidSD6q",
+                "video_info": {
+                  "aspect_ratio": [
+                    16,
+                    9
+                  ],
+                  "duration_millis": 18266,
+                  "variants": [
+                    {
+                      "content_type": "application/x-mpegURL",
+                      "url": "https://video.twimg.com/amplify_video/2056799292686495744/pl/X8kt20D7O4pOLOEN.m3u8?tag=27&v=cfc"
+                    },
+                    {
+                      "bitrate": 256000,
+                      "content_type": "video/mp4",
+                      "url": "https://video.twimg.com/amplify_video/2056799292686495744/vid/avc1/480x270/SrOpMATUBznPRd9Q.mp4?tag=27"
+                    },
+                    {
+                      "bitrate": 832000,
+                      "content_type": "video/mp4",
+                      "url": "https://video.twimg.com/amplify_video/2056799292686495744/vid/avc1/640x360/Ul9TEcLghKlPr5KD.mp4?tag=27"
+                    },
+                    {
+                      "bitrate": 2176000,
+                      "content_type": "video/mp4",
+                      "url": "https://video.twimg.com/amplify_video/2056799292686495744/vid/avc1/1280x720/tHDrLqyO-bl2HN9e.mp4?tag=27"
+                    },
+                    {
+                      "bitrate": 10368000,
+                      "content_type": "video/mp4",
+                      "url": "https://video.twimg.com/amplify_video/2056799292686495744/vid/avc1/1920x1080/8WATy6n7ts4mnhtk.mp4?tag=27"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          "card": null,
+          "place": {},
+          "entities": {
+            "hashtags": [],
+            "symbols": [],
+            "timestamps": [],
+            "urls": [],
+            "user_mentions": [
+              {
+                "id_str": "954400685013065728",
+                "indices": [
+                  386,
+                  400
+                ],
+                "name": "ジャバ・ザ・ハットリ🇩🇪←🇸🇬←🇯🇵",
+                "screen_name": "nodenodenode1"
+              }
+            ]
+          },
+          "isRetweet": false,
+          "isQuote": true,
+          "isConversationControlled": false,
+          "quoted_tweet": {
+            "type": "tweet",
+            "id": "2054283599135031302",
+            "url": "",
+            "twitterUrl": "",
+            "text": "",
+            "source": "",
+            "retweetCount": 0,
+            "replyCount": 0,
+            "likeCount": 0,
+            "quoteCount": 0,
+            "viewCount": 0,
+            "createdAt": "",
+            "lang": "",
+            "bookmarkCount": 0,
+            "isReply": false,
+            "inReplyToId": "",
+            "conversationId": "",
+            "displayTextRange": [],
+            "inReplyToUserId": "",
+            "inReplyToUsername": "",
+            "isPinned": false,
+            "author": {},
+            "extendedEntities": {},
+            "card": null,
+            "place": {},
+            "entities": {},
+            "isRetweet": false,
+            "isQuote": false,
+            "isConversationControlled": false,
+            "quoted_tweet": null,
+            "retweeted_tweet": null,
+            "isLimitedReply": false,
+            "communityInfo": null
+          },
+          "retweeted_tweet": null,
+          "isLimitedReply": false,
+          "communityInfo": null
+        },
+        "retweeted_tweet": null,
+        "isLimitedReply": false,
+        "communityInfo": null
+      }
+    ],
+    "status": "success",
+    "msg": "success",
+    "code": 0
+  }
+}

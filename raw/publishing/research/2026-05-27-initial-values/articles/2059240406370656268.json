@@ -1,0 +1,1658 @@
+{
+  "article": {
+    "id": "QXJ0aWNsZUVudGl0eToyMDU5MTg0OTE5ODY4NDg1NjMz",
+    "author": {
+      "type": "user",
+      "userName": "TensyokuRmla",
+      "url": "https://x.com/TensyokuRmla",
+      "twitterUrl": "https://twitter.com/TensyokuRmla",
+      "id": "1965999844054675459",
+      "name": "かがり",
+      "isVerified": false,
+      "isBlueVerified": true,
+      "verifiedType": null,
+      "profilePicture": "https://pbs.twimg.com/profile_images/2057093808257687552/yDcUSSWJ_normal.jpg",
+      "coverPicture": "https://pbs.twimg.com/profile_banners/1965999844054675459/1779338913",
+      "description": "独立を企む悪いマーケター｜ある企業に潜入してマーケ知識を盗んでます｜今はAIアフィリで月7桁稼いでます｜夢は億企業を自分で持つこと｜これまで稼いできたAI情報や副業情報を発信",
+      "location": "会社に縛られず生きるAIマネタイズ戦略はこちら→",
+      "followers": 574,
+      "following": 16,
+      "status": "",
+      "canDm": true,
+      "canMediaTag": true,
+      "createdAt": "Thu Sep 11 04:44:33 +0000 2025",
+      "entities": {
+        "description": {},
+        "url": {
+          "urls": [
+            {
+              "display_url": "lin.ee/6B5xfUm",
+              "expanded_url": "https://lin.ee/6B5xfUm",
+              "indices": [
+                0,
+                23
+              ],
+              "url": "https://t.co/Ix6Pmd5m69"
+            }
+          ]
+        }
+      },
+      "fastFollowersCount": 0,
+      "favouritesCount": 1754,
+      "hasCustomTimelines": false,
+      "isTranslator": false,
+      "mediaCount": 6,
+      "statusesCount": 672,
+      "withheldInCountries": [],
+      "affiliatesHighlightedLabel": {},
+      "possiblySensitive": false,
+      "pinnedTweetIds": [],
+      "profile_bio": {},
+      "isAutomated": false,
+      "automatedBy": null
+    },
+    "replyCount": 0,
+    "likeCount": 5,
+    "quoteCount": 1,
+    "viewCount": "1473",
+    "createdAt": "Tue May 26 11:49:06 +0000 2026",
+    "title": "【削除前提】Codexに\"全部\"やらせて月100万を勝手に生む完全自動システム説明書",
+    "preview_text": "最初にハッキリ言っておきます。\nこれは\"普通の副業記事\"じゃありません。",
+    "cover_media_img_url": "https://pbs.twimg.com/media/HJO1cftaIAASfc9.jpg",
+    "contents": [
+      {
+        "type": "unstyled",
+        "text": "最初にハッキリ言っておきます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "これは\"普通の副業記事\"じゃありません。",
+        "inlineStyleRanges": [
+          {
+            "length": 20,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "書いてあるのは、Codex(OpenAIの自律実行型AI)に、Xでの集客から、note記事の生産から、LINE登録から、セールス、そして決済直前のクロージングまで、副業の全工程を\"丸ごと丸投げ\"する方法です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ぶっちゃけ、ここまで全部書いてある日本語の記事、いまの時点でほぼ存在しません。理由は単純で、書いた瞬間にライバルが増えるから。みんな黙って自分だけ稼ぎたいんです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "正直に言いますね。"
+      },
+      {
+        "type": "unstyled",
+        "text": "3年前にこの仕組みを手にしていたら、月100万なんて余裕でした。でも残酷なことに、いまはCodexが進化しすぎていて、この記事を読んだ瞬間から3ヶ月、本気で動いた人だけが残れるフェーズに入っています。半年後にはもう遅い。",
+        "inlineStyleRanges": [
+          {
+            "length": 29,
+            "offset": 59,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "「AIで自動化」と言ってる発信者は山ほどいます。でも、彼らの99%は「ChatGPTで投稿のネタを出してます」レベルで止まっています。投稿のネタを出すだけなら、月3万円が限界です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "本当の自動化は、そんなレベルじゃない。"
+      },
+      {
+        "type": "unstyled",
+        "text": "朝起きたらXに3投稿アップされてる、noteの新記事が公開されてる、LINEに10件の新規登録、自動配信で温められて、夕方には案件成約の通知が来てる。",
+        "inlineStyleRanges": [
+          {
+            "length": 75,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "これが、Codexで本気で組んだときの世界線です。完全に労働から解放されます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "この記事には、その世界線に行くための約40個の仕組みを、コピペするだけで動くプロンプト付きで全部書きました。Codexを触ったことがない人でも、上から順番に進めれば組み上がるように構成しています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "最後まで読み終えたとき、あなたの目の前には「月100万を勝手に稼ぐ装置の設計図」が広がっています。あとは作るか、作らないかだけ。"
+      },
+      {
+        "type": "unstyled",
+        "text": "それでは、行きましょう。"
+      },
+      {
+        "type": "header-two",
+        "text": "第1章:全体構造を脳に焼き付ける ─ \"全自動アフィリ\"の地図はこれだ"
+      },
+      {
+        "type": "unstyled",
+        "text": "まず最初に、あなたが組もうとしている全体像を頭に叩き込みます。ここを飛ばすと、後ろの章で必ず迷子になります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "仕組みの全体像はこうです。",
+        "inlineStyleRanges": [
+          {
+            "length": 13,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "X(集客) → note(教育) → LINE(関係構築) → セールス(成約) → 振込"
+      },
+      {
+        "type": "unstyled",
+        "text": "この5段階を、全部Codexに任せます。やってることはシンプル。でも、ほとんどの人は1段階目のXすら自動化できずに脱落します。"
+      },
+      {
+        "type": "unstyled",
+        "text": "1. Money Map Generator ─ 月100万の構造を可視化する"
+      },
+      {
+        "type": "unstyled",
+        "text": "まずは数字から逃げない。月100万は感情論で達成するものじゃなく、単価×成約数×流入数の掛け算で達成するものです。Codexにあなた専用のマネーマップを作らせます。",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 33,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "▼コピペ用プロンプト",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "あなたは凄腕のアフィリエイトコンサルタントです。\n月商100万円を達成するための現実的なマネーマップを、\n以下の5パターンで設計してください。\n\nA. 高単価少件数型(単価10万円×月10件)\nB. 中単価中件数型(単価3万円×月33件)\nC. 低単価大件数型(単価5千円×月200件)\nD. 継続報酬積み上げ型(月額3千円×継続333件)\nE. 高単価×継続のハイブリッド型\n\n各パターンで必要となる\n・X日次インプレッション\n・LINE月間登録数\n・note月間PV\n・案件成約率の現実ライン\nを表で出力してください。\n\n最後に、初心者が3〜6ヶ月で組み立てやすい順にランクづけしてください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "2. Asset Inventory ─ いまあなたが持っている武器を全部出す"
+      },
+      {
+        "type": "unstyled",
+        "text": "ゼロからは始めません。あなたには使える武器が必ずあります。本業のスキル、過去の経験、人脈、機材。これを全部Codexに棚卸しさせて、最短ルートを選ばせます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "▼コピペ用プロンプト",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "私の保有資産を以下に書きます。\nこれをもとに、Codexで自動化する高単価アフィリの最短ルートを\n3案提案してください。\n\n【現在の保有資産】\n・本業:[ ]\n・スキル:[ ]\n・人脈・繋がり:[ ]\n・既存SNSアカウント:[ ]\n・自由に使える時間:平日[ ]時間/休日[ ]時間\n・初期投資できる金額:月[ ]円\n・興味があるジャンル:[ ]\n\n各案について\n・選定理由\n・3ヶ月後の現実的な売上シミュレーション\n・直近30日でやるべき5つの行動\nを出してください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "3. 90-Day Blueprint ─ 90日でやることを数字で固定する"
+      },
+      {
+        "type": "unstyled",
+        "text": "「いつか」は永遠に来ません。90日でやることを日割りで決めます。Codexがカレンダーを作ってくれるので、あなたは消化していくだけです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "▼コピペ用プロンプト",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "以下の前提で、Codexで自動化する高単価アフィリの\n90日ブループリントを設計してください。\n\n【前提】\n・参戦ジャンル:[ ]\n・想定マネーマップ:[第1章のテクニック1で選んだもの]\n・1日に確保できる時間:[ ]時間\n\n【出力】\n30日刻みで以下を表にしてください。\n\n・主目標(数字で)\n・週ごとの実行タスク\n・チェックポイント\n・90日後の目標数値\n\n「いつか動く」を完全に消す精度で書いてください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここまでで、あなたは\"全自動アフィリ\"の地図を手にしました。 あとはこの地図通りに、Codexに作業を割り振っていくだけです。",
+        "inlineStyleRanges": [
+          {
+            "length": 24,
+            "offset": 6,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "第2章:Xアカウントを\"集金装置\"に変える設計"
+      },
+      {
+        "type": "unstyled",
+        "text": "ほとんどの人がXで失敗するのは、最初の設計を「なんとなく」で済ませてるからです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "コンセプト・ペルソナ・トーン・固定ツイ・プロフ・ヘッダー。",
+        "inlineStyleRanges": [
+          {
+            "length": 29,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "この6つを最初にガチガチに固めると、あとはCodexが自走します。"
+      },
+      {
+        "type": "unstyled",
+        "text": "4. Concept Sniper ─ 1点突破のコンセプトを生成する"
+      },
+      {
+        "type": "unstyled",
+        "text": "「副業」「AI」「自由」みたいなふんわりコンセプトは、誰の心にも刺さらないので即死亡確定です。1点突破のコンセプトを、Codexに刺せる角度で削り出させます。",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 47,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "▼コピペ用プロンプト",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "以下のジャンルで、Xアカウントの「1点突破コンセプト」を\n10案生成してください。\n\n【条件】\n・ターゲット読者は3秒でドンピシャ自分のことだと思える\n・既存の有名アカウントと丸かぶりしない\n・1年後に飽きずに継続できる\n・高単価アフィリ案件と接続しやすい\n\n各案について\n・コンセプト一文(40字以内)\n・刺さる読者の解像度高い人物像\n・想定される反論や懸念\n・既存有名アカウントとの差別化ポイント\nを出してください。\n\n最後に、最も尖っていて再現性が高い1案を選び、\n選定理由を3行で書いてください。\n\n参戦ジャンル:[ ]"
+      },
+      {
+        "type": "unstyled",
+        "text": "5. Avatar Forge ─ プロフ・固定ツイ・ヘッダーを一気に作る"
+      },
+      {
+        "type": "unstyled",
+        "text": "第一印象は3秒で決まります。アイコン・名前・プロフ・固定ツイ・ヘッダーが全部噛み合ってないと、フォローボタンは押されません。Codexにセットで作らせます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "▼コピペ用プロンプト",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "以下のコンセプトに完全フィットするXアカウントの\nブランディング一式を生成してください。\n\n【生成するもの】\n・アカウント名(本名 or ハンドル+肩書)\n・プロフィール文(160字以内、改行込み)\n・固定ツイ文案3パターン\n  (権威証明型/共感ストーリー型/即ベネフィット型)\n・ヘッダー画像のキャッチコピー(20字以内)×3案\n・ヘッダーに入れる訴求要素3つ\n\n【条件】\n・売り込み感ゼロ\n・誰のためのアカウントか3秒でわかる\n・3年後も恥ずかしくないトーン\n\nコンセプト:[第2章のテクニック4で選んだもの]"
+      },
+      {
+        "type": "unstyled",
+        "text": "6. Voice Cloning Prompt ─ \"あなたっぽさ\"を再現する"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここが超重要。Codexの出力は「お前っぽさ」がないから、続けても伸びないんです。あなたの過去投稿や音声書き起こしを読ませて、トーンを完全再現するプロンプトを作らせます。",
+        "inlineStyleRanges": [
+          {
+            "length": 19,
+            "offset": 7,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "▼コピペ用プロンプト",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "以下のサンプル文章(あなたが過去に書いた・話したもの)を分析し、\n「ボイステンプレ」を生成してください。\n\n【分析項目】\n・好きな語尾と頻度\n・好きな接続詞\n・避けている言い回し\n・改行と空白行のリズム\n・絵文字の使い方\n・断定する場面と濁す場面の傾向\n・ユーモアや皮肉の入れ方\n\n【出力】\nこのボイステンプレを、今後Codexで文章を生成するときの\n冒頭システムプロンプトとして使える形式でまとめてください。\n\nサンプル文章:[ ]"
+      },
+      {
+        "type": "unstyled",
+        "text": "これさえ作っておけば、以降の全プロンプトの冒頭にこれを置くだけで、出力が一気に\"あなたっぽく\"なります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "7. Niche Domination Map ─ 同ジャンルの\"空席\"を見つける"
+      },
+      {
+        "type": "unstyled",
+        "text": "ライバルが座ってない椅子を見つける。これだけで勝負が決まります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "▼コピペ用プロンプト",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "以下のジャンルで、X上の主要発信者を10アカウント分析してください。\n\n【分析項目】\n・各アカウントが扱っているテーマ範囲\n・各アカウントの強い訴求軸\n・各アカウントが避けているテーマ\n・各アカウントが弱い時間帯と曜日\n\n【出力】\n1. 全アカウントのテーマ被りマップ(マトリクス形式)\n2. 誰もまだ座っていない\"空席トピック\"を10個\n3. その空席に座るための初期コンセプト案を3つ\n\nジャンル:[ ]\n分析対象アカウント:[ ]"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここまでで、Xアカウントの金型は完成です。あとはCodexにこの金型に沿って投稿を量産させるだけ。",
+        "inlineStyleRanges": [
+          {
+            "length": 2,
+            "offset": 13,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "第3章:投稿を完全自動化する ─ 1日3投稿×30日でも疲労ゼロ"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここからが、いよいよ\"労働解放フェーズ\"です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "毎日のネタ出し、文章作成、推敲、予約投稿。全部Codexに丸投げします。 あなたがやることは、朝に通知を確認するだけ。",
+        "inlineStyleRanges": [
+          {
+            "length": 15,
+            "offset": 21,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "8. Daily Cannon ─ 1日3投稿×30日分のネタを一発生成"
+      },
+      {
+        "type": "unstyled",
+        "text": "毎日ネタ出ししてる時点で負けです。月1回まとめて90投稿分のネタを出させるのが正解。",
+        "inlineStyleRanges": [
+          {
+            "length": 20,
+            "offset": 17,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "▼コピペ用プロンプト",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "以下のコンセプトとボイステンプレで、\n30日分のX投稿ネタ(1日3投稿×30日=90投稿)を一気に生成してください。\n\n【ネタの種類分け】\n・朝(7-8時): 当日の気合い入れ系/学び系(30本)\n・昼(12-13時): バズ狙いの強主張系(30本)\n・夜(21-22時): 共感・物語・本音系(30本)\n\n【条件】\n・同じテーマの繰り返し禁止\n・各投稿にCTAは入れず純粋な発信内容に絞る\n・各ネタには「想定エンゲージメント」も併記\n  (高/中/低の3段階)\n\n【出力形式】\n日付 / 時間帯 / テーマ / 投稿文(280字以内) / 想定反応\n\nコンセプト:[ ]\nボイステンプレ:[第2章のテクニック6で生成したもの]"
+      },
+      {
+        "type": "unstyled",
+        "text": "9. Viral Skeleton Library ─ バズ構文を50個ストックする"
+      },
+      {
+        "type": "unstyled",
+        "text": "バズる投稿には型があります。バズ構文の引き出しを50個持っておけば、ネタ切れは概念ごと消滅します。",
+        "inlineStyleRanges": [
+          {
+            "length": 35,
+            "offset": 14,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "▼コピペ用プロンプト",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "過去にX上でエンゲージメント率5%以上だったバズ投稿を、\n私が以下に貼ります。これを分析し、\n汎用化できる「バズ構文」を50パターン抽出してください。\n\n【各構文について出力】\n・構文名(覚えやすい名前)\n・構造(穴埋め式テンプレ)\n・使用に向く場面\n・想定される反応\n・既存バズ事例1つ\n\n【最終アウトプット】\n私のジャンル用にカスタマイズした、\nすぐ使える穴埋めテンプレ集としてまとめてください。\n\nサンプル投稿:[ ]\n私のジャンル:[ ]"
+      },
+      {
+        "type": "unstyled",
+        "text": "10. Engagement Bait Detector ─ 反応しないネタを公開前に消す"
+      },
+      {
+        "type": "unstyled",
+        "text": "書く労力をかけても、反応しなければ意味がない。公開前に「これは伸びない」を弾く仕組みを作ります。",
+        "inlineStyleRanges": [
+          {
+            "length": 19,
+            "offset": 23,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "▼コピペ用プロンプト",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "以下の投稿候補リストを評価してください。\n\n【評価軸】\n①フックの強さ(0-10)\n②具体性の濃度(0-10)\n③続きが気になる構造かどうか(0-10)\n④共感トリガーの含有(0-10)\n⑤バズる読者層の広さ(0-10)\n\n合計40点未満は「公開前ボツ」と判定してください。\nボツ判定された投稿には、改善方向性も併記してください。\n\n投稿候補:[ ]"
+      },
+      {
+        "type": "unstyled",
+        "text": "11. Trend Hijacker ─ 朝のトレンドを瞬時にネタ化"
+      },
+      {
+        "type": "unstyled",
+        "text": "トレンドに乗るのは速度勝負。朝のトレンドを15分以内に投稿に変換するプロンプトです。",
+        "inlineStyleRanges": [
+          {
+            "length": 25,
+            "offset": 14,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "▼コピペ用プロンプト",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "以下の「今朝のX上のトレンドワード」を読み、\n私のジャンル[ ]と接続できる投稿案を5つ生成してください。\n\n【条件】\n・トレンドへの便乗感は薄める\n・自然に自分の専門性に話を着地させる\n・批判系の投稿は避ける\n・280字以内\n・15分以内に投稿できる完成度\n\nトレンドワード:[ ]\n私のジャンル:[ ]"
+      },
+      {
+        "type": "unstyled",
+        "text": "12. Reply Magnet ─ 引用リポストを誘発する投稿の型"
+      },
+      {
+        "type": "unstyled",
+        "text": "伸びる投稿の8割は「他人が引用したくなる投稿」です。引用される構造をCodexに作らせます。",
+        "inlineStyleRanges": [
+          {
+            "length": 7,
+            "offset": 26,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "▼コピペ用プロンプト",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "以下のテーマで、引用リポストされやすい投稿を5本生成してください。\n\n【引用されやすい投稿の特徴】\n・読者が\"自分の意見\"を上に乗せたくなる余白がある\n・賛否がきっぱり分かれる主張\n・具体的な数字や固有名詞が入っている\n・反論したくなる強い断定\n\n各投稿について\n・想定される引用パターン\n・予想される炎上リスク(低/中/高)\nも併記してください。\n\nテーマ:[ ]"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここまでで、Xの投稿マシーンは完成です。月1回30分の作業で、1ヶ月分のXコンテンツが全部用意されます。",
+        "inlineStyleRanges": [
+          {
+            "length": 32,
+            "offset": 20,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "第4章:フォロワーを\"濃く\"集める ─ 媚びずに人が集まる構造"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここで重要なのは、フォロワーは数より質ということ。1万人の無関心フォロワーより、1000人の濃いフォロワーのほうが、月100万に近いです。",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 9,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "13. Power Reply Generator ─ 大物アカウントへの神リプを自動生成"
+      },
+      {
+        "type": "unstyled",
+        "text": "大物のポストに刺さるリプライを書ければ、それだけで毎日数十フォロワー増えます。神リプは才能じゃなく、構造です。",
+        "inlineStyleRanges": [
+          {
+            "length": 13,
+            "offset": 39,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "▼コピペ用プロンプト",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "以下の大物アカウントのポストに対し、\n\"神リプ\"と呼ばれる質のリプライを5パターン生成してください。\n\n【神リプの条件】\n・元ポストの主張を3歩進める\n・自分の体験談を1行で混ぜる\n・誰も書いてない切り口\n・媚びゼロ\n・140字以内\n\n各パターンについて\n・狙っている読者層\n・想定いいね数\n・ポスト主からの反応可能性\nも併記してください。\n\n大物アカウントのポスト:[ ]\n私のジャンル:[ ]"
+      },
+      {
+        "type": "unstyled",
+        "text": "14. DM Cold Opener ─ 警戒されないDM文"
+      },
+      {
+        "type": "unstyled",
+        "text": "フォロワー1000人を超えたら、能動的にDMで案件接続もアリです。警戒されない、無料相談から始まるDM文をCodexに作らせます。",
+        "inlineStyleRanges": [
+          {
+            "length": 19,
+            "offset": 33,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "▼コピペ用プロンプト",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "以下の条件で、初接触のDM文を3パターン生成してください。\n\n【条件】\n・売り込み感ゼロ\n・最初の1文目で警戒を解く\n・相手のメリットを先に提示\n・返信ハードルを最小化\n・150字以内\n\n【3パターンの方向性】\n①相手の発信を褒めて入る型\n②共通点を見つけて入る型\n③こちらから価値提供する型\n\nターゲット属性:[ ]\n私の提供価値:[ ]"
+      },
+      {
+        "type": "unstyled",
+        "text": "15. Quote Counter-Punch ─ 引用ポストで持っていく型"
+      },
+      {
+        "type": "unstyled",
+        "text": "他人のポストを\"利用\"して伸びる、ハイレベルな戦法。反論じゃなく\"拡張\"する形の引用をCodexに設計させます。",
+        "inlineStyleRanges": [
+          {
+            "length": 16,
+            "offset": 26,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "▼コピペ用プロンプト",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "以下のポストに対する\"拡張型引用ポスト\"を5案生成してください。\n\n【拡張型引用とは】\n元ポストを否定せず、こちらの専門性で深掘り or 別角度から補強する形式。\n元ポスト主と読者の両方から好意を持たれる。\n\n各案について\n・拡張の方向性\n・想定エンゲージメント\n・自然に自分の発信に着地する構造\nも含めてください。\n\n元ポスト:[ ]\n私の専門性:[ ]"
+      },
+      {
+        "type": "unstyled",
+        "text": "16. Follow Filter ─ ノイズフォロワーを自動的に寄せ付けない"
+      },
+      {
+        "type": "unstyled",
+        "text": "濃いフォロワーが欲しいなら、ノイズの寄り付かない設計が必要です。プロフと固定ツイで自然にスクリーニングします。",
+        "inlineStyleRanges": [
+          {
+            "length": 12,
+            "offset": 14,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "▼コピペ用プロンプト",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "私のアカウントのプロフィール文と固定ツイを再設計してください。\n\n【目的】\n本気のフォロワーだけが残り、\n冷やかし・反対層・釣られた層が\n自然に去っていく構造にする。\n\n【条件】\n・直接的な排除文言は使わない(「冷やかしお断り」等は禁止)\n・トーンと言葉選びで、本気層だけが反応する設計\n・読者を選別している\"感じ\"を出さずに選別する\n\n現プロフ:[ ]\n現固定ツイ:[ ]\n私の本気ターゲット:[ ]"
+      },
+      {
+        "type": "header-two",
+        "text": "第5章:noteを\"自動印刷機\"にする ─ 月10本の濃い記事が勝手に上がる"
+      },
+      {
+        "type": "unstyled",
+        "text": "Xで興味を引いたあと、note記事でしっかり\"教育\"します。ここで信頼が積めるかで、LINE登録率もLPの成約率も2倍3倍変わります。",
+        "inlineStyleRanges": [
+          {
+            "length": 37,
+            "offset": 30,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "17. Topic Tunnel ─ X投稿の連鎖からnoteのネタを抽出"
+      },
+      {
+        "type": "unstyled",
+        "text": "毎月のnoteのネタは、その月のX投稿の中に全部隠れています。Codexに連鎖を発見させて、自動でネタ化します。",
+        "inlineStyleRanges": [
+          {
+            "length": 21,
+            "offset": 31,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "▼コピペ用プロンプト",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "私が直近30日にX上で投稿した内容を以下に貼ります。\nこの中から、note記事として深掘りできるテーマを10本抽出してください。\n\n【選定基準】\n・複数の投稿で繰り返し触れているテーマを優先\n・読者の反応(いいね・コメント)が大きかったものを優先\n・5000-8000字で書ける深さがあるもの\n\n各テーマについて\n・想定タイトル\n・想定章立て\n・想定読者の悩み\n・無料部分と有料部分の切り分け案\nを出してください。\n\n直近30日のX投稿:[ ]"
+      },
+      {
+        "type": "unstyled",
+        "text": "18. Hook-First Drafter ─ 読まれる冒頭を先に固定"
+      },
+      {
+        "type": "unstyled",
+        "text": "note記事の8割は冒頭で離脱します。冒頭500字を5パターン作って、一番強いものを採用します。",
+        "inlineStyleRanges": [
+          {
+            "length": 25,
+            "offset": 19,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "▼コピペ用プロンプト",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "以下のテーマでnote記事を書きます。\n冒頭500字のフックを5パターン生成してください。\n\n【5パターンの方向性】\n①衝撃的事実型(数字や事実で殴る)\n②共感ストーリー型(主人公の悩みから始める)\n③ベネフィット予告型(読み終わったあとの未来を見せる)\n④逆張り宣言型(常識を否定するところから始める)\n⑤質問投げかけ型(読者に問いを立てて入る)\n\n各パターンについて\n・想定離脱率(低/中/高)\n・刺さる読者層\n・続きへの引力度合い\nも併記してください。\n\nテーマ:[ ]\nターゲット読者:[ ]"
+      },
+      {
+        "type": "unstyled",
+        "text": "19. Sectional Auto-Builder ─ 各章を並列生成して合成"
+      },
+      {
+        "type": "unstyled",
+        "text": "頭から書かせると、必ず後半が失速します。章だけ先に並列で作って、あとから肉付けします。",
+        "inlineStyleRanges": [
+          {
+            "length": 19,
+            "offset": 20,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "▼コピペ用プロンプト",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "以下のnote記事のテーマで、章立て(H2×6+各H3×3)を\n先に並列で全部並べてください。\n\n次に、各H2を独立タスクとして扱い、\n各章1000字で肉付けしてください。\n\n最後に全体を統合し、論理重複と矛盾だけを潰した\n完成版を出してください。\n\n【条件】\n・冒頭500字は別途指定するので、章は1章目から書き始める\n・各章末で読者の興味を次章に繋ぐ一文を入れる\n・有料部分への自然な切れ目を設計する\n\nテーマ:[ ]\n冒頭フック:[第5章のテクニック18で選んだもの]"
+      },
+      {
+        "type": "unstyled",
+        "text": "20. Free-to-Paid Bridge ─ 無料部分→有料部分の自然な接続"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここの設計を雑にやると、有料部分への購入率が一桁台です。逆に、ここを完璧に組むと購入率は2桁に乗ります。",
+        "inlineStyleRanges": [
+          {
+            "length": 24,
+            "offset": 28,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "▼コピペ用プロンプト",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "以下のnote記事について、\n無料部分の最後と有料部分の最初の\"橋渡し文章\"を3パターン生成してください。\n\n【3パターン】\n①情報量の差で煽る型(「ここから本当の価値が始まる」)\n②損失回避型(「ここで読むのをやめると損する理由」)\n③続編予告型(「ここから先で公開する具体的な方法」)\n\n各パターンについて\n・想定の購入率変化\n・購入後の満足度への影響\nも併記してください。\n\n無料部分の最後の3段落:[ ]\n有料部分の最初の3段落:[ ]"
+      },
+      {
+        "type": "header-two",
+        "text": "第6章:LINEで関係を温める ─ 登録から成約まで触らず回す"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここまでの仕組みで集めた人を、LINEで温めて、自動でセールスまで運ぶフェーズです。ここを自動化できないと、結局あなたは毎日LINEを返信する作業に追われます。それは\"自動化\"とは呼びません。",
+        "inlineStyleRanges": [
+          {
+            "length": 24,
+            "offset": 15,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "21. Welcome Architect ─ 登録直後30秒の歓迎設計"
+      },
+      {
+        "type": "unstyled",
+        "text": "登録直後の30秒で、その後の継続率が決まります。ここで離脱する人と残る人を最初に振り分けます。",
+        "inlineStyleRanges": [
+          {
+            "length": 20,
+            "offset": 24,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "▼コピペ用プロンプト",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "LINE登録直後に届く\"歓迎メッセージ\"を、3パターン設計してください。\n\n【条件】\n・登録の御礼は1行以内\n・期待値を即座に提示\n・即時行動できるアクションを1つだけ提示\n  (スタンプ反応 or 簡単アンケート)\n・読了時間30秒以内\n・絵文字適度\n\n3パターンの方向性:\n①即特典型(無料コンテンツを即座に渡す)\n②アンケート型(相手を知る質問から入る)\n③ストーリー型(自分の物語から入る)\n\n各パターンについて\n・想定継続率\n・想定スタンプ反応率\nも併記してください。\n\n提供する無料特典:[ ]\n最終的に売りたい商品:[ ]"
+      },
+      {
+        "type": "unstyled",
+        "text": "22. Drip Sequence Builder ─ 7日間の温めシナリオを自動生成"
+      },
+      {
+        "type": "unstyled",
+        "text": "LINE登録から7日間で、相手の感情を\"購入レディ\"な状態まで持っていきます。この7通の設計が、全体の収益の半分を作ります。",
+        "inlineStyleRanges": [
+          {
+            "length": 23,
+            "offset": 39,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "▼コピペ用プロンプト",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "LINE登録後7日間のステップ配信シナリオを設計してください。\n\n【各日のテーマ】\n1日目:登録御礼+期待値設計+即時価値提供\n2日目:あなたの物語(共感ストーリー)\n3日目:なぜこの方法が他と違うのか(差別化)\n4日目:具体的な事例3つ(社会的証明)\n5日目:よくある反論への先回り回答\n6日目:オファーの予告(明日紹介します宣言)\n7日目:オファー本番\n\n各日について\n・件名(プッシュ通知に表示される最初の30字)\n・本文(500-800字)\n・末尾のCTA\n・想定離脱率\nを出してください。\n\n提供商品:[ ]\nターゲットペルソナ:[ ]"
+      },
+      {
+        "type": "unstyled",
+        "text": "23. Stamp Branching ─ スタンプ反応で分岐する仕組み"
+      },
+      {
+        "type": "unstyled",
+        "text": "LINEは\"スタンプ\"で反応をもらうだけで分岐できます。スタンプを押した人と押さない人で、その後の配信内容を変える設計を作ります。",
+        "inlineStyleRanges": [
+          {
+            "length": 31,
+            "offset": 28,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "▼コピペ用プロンプト",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "LINEステップ配信内で、スタンプ反応によって分岐させる\n配信シナリオを設計してください。\n\n【分岐ポイント】\n①2日目末尾「興味あれば👍を」\n  →👍した人:濃いコンテンツ配信ルート\n  →押さない人:興味喚起ルート\n\n②4日目末尾「事例を見て興味度を3段階で」\n  →高:オファー早期提示ルート\n  →中:追加情報配信ルート\n  →低:再教育ルート\n\n各ルートの分岐後の配信内容(各3通)を設計してください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "24. Cold-List Reviver ─ 沈黙登録者を起こす"
+      },
+      {
+        "type": "unstyled",
+        "text": "LINEリストの3〜4割は、登録後すぐに沈黙します。この沈黙層を起こせるかで、リスト価値が2倍変わります。",
+        "inlineStyleRanges": [
+          {
+            "length": 27,
+            "offset": 26,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "▼コピペ用プロンプト",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "LINE登録後30日以上反応がない\"沈黙ユーザー\"を再起動するための\n配信メッセージを5パターン設計してください。\n\n【方向性】\n①直球で「読まれてますか?」と聞く型\n②強烈な事実で目を覚まさせる型\n③無料の超価値コンテンツを再投下する型\n④期間限定オファーで動かす型\n⑤\"あなただけ\"の個別感を出す型\n\n各パターンの本文と、想定再起動率も併記してください。\n\n私の提供商品:[ ]"
+      },
+      {
+        "type": "header-two",
+        "text": "第7章:セールス文をCodexに磨かせ続ける ─ 数字を見て勝手に改善"
+      },
+      {
+        "type": "unstyled",
+        "text": "セールス文は1回書いて終わりじゃありません。数字を見ながら、毎週Codexに改善案を出させるのがプロのやり方です。",
+        "inlineStyleRanges": [
+          {
+            "length": 24,
+            "offset": 22,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "25. Headline Spawner ─ 見出し50パターンを一発生成"
+      },
+      {
+        "type": "unstyled",
+        "text": "LPの成約率の40%は、最初の見出し1行で決まります。50パターン作って、上位5つをABテストにかけます。",
+        "inlineStyleRanges": [
+          {
+            "length": 20,
+            "offset": 27,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "▼コピペ用プロンプト",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "以下のオファーについて、LP冒頭の見出しを50パターン生成してください。\n\n【50パターンの内訳】\n・恐怖訴求型 ×10\n・利得訴求型 ×10\n・好奇心刺激型 ×10\n・権威証明型 ×10\n・限定/緊急訴求型 ×10\n\n各見出しについて\n・40字以内\n・想定CTR(高/中/低)\n・刺さる読者の心理状態\nを出してください。\n\n最後に「ABテスト推奨の5案」を選定し、選定理由も書いてください。\n\nオファー:[ ]\nターゲット:[ ]"
+      },
+      {
+        "type": "unstyled",
+        "text": "26. Objection Killer ─ 反論を10個先回り処理"
+      },
+      {
+        "type": "unstyled",
+        "text": "LPで離脱が起きる箇所は決まっています。読者が頭の中で唱えてる反論を、先に潰しておく仕組みです。",
+        "inlineStyleRanges": [
+          {
+            "length": 25,
+            "offset": 20,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "▼コピペ用プロンプト",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "以下のオファーについて、購入前に読者が抱く反論を10個列挙し、\nそれぞれの反論処理文を生成してください。\n\n【条件】\n・押し付け感ゼロ\n・読者の不安を一度受け止めてから解消\n・各反論処理は200字以内\n・データや事例を含める\n\n最後に、LPの中で各反論処理を配置すべき位置も指定してください。\n\nオファー:[ ]\n価格帯:[ ]\nターゲット属性:[ ]"
+      },
+      {
+        "type": "unstyled",
+        "text": "27. Social Proof Injector ─ 証拠の置き場所をAIに設計させる"
+      },
+      {
+        "type": "unstyled",
+        "text": "お客様の声を雑にズラズラ並べても効きません。LPのどこにどの種類の証拠を置くかで、成約率は劇的に変わります。",
+        "inlineStyleRanges": [
+          {
+            "length": 32,
+            "offset": 22,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "▼コピペ用プロンプト",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "以下のLP本文と、私が持っている社会的証明素材リストを読み込み、\n\"最大限の説得力\"を発揮する配置設計をしてください。\n\n【社会的証明の種類】\n・お客様の声/レビュー\n・実績データ(金額・人数・期間)\n・メディア掲載歴\n・有名人推薦\n・受賞歴\n・Before/After\n\n各素材について\n・LP内のどの位置に置くべきか\n・その位置に置く理由\n・代替案\nを表で出してください。\n\nLP本文:[ ]\n私の社会的証明素材リスト:[ ]"
+      },
+      {
+        "type": "unstyled",
+        "text": "28. Closing Architect ─ クロージング文を3パターン量産"
+      },
+      {
+        "type": "unstyled",
+        "text": "LPの最後の決め文句で、購入を踏み切るかどうかが決まります。3パターン作って週次でABにかけます。",
+        "inlineStyleRanges": [
+          {
+            "length": 13,
+            "offset": 30,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "▼コピペ用プロンプト",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "以下のオファーの\"クロージング部分\"を3パターン生成してください。\n\n【3パターンの方向性】\n①未来想像型(購入後の未来を鮮明に描く)\n②機会損失型(買わなかった場合の損失を描く)\n③決断強要型(YESかNOかを優しく迫る)\n\n各パターンについて\n・500-800字\n・CTAボタン直前で読者の手を止めない構造\n・想定成約率(高/中/低)\nを出してください。\n\nオファー:[ ]\n価格:[ ]"
+      },
+      {
+        "type": "header-two",
+        "text": "第8章:MCPとCodex Automationsで\"完全自動運転\"にする"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここまでで仕組みは完成しました。次はそれを毎日勝手に動く状態にします。MCPで手足を、Codex Automationsで心臓をつけます。",
+        "inlineStyleRanges": [
+          {
+            "length": 9,
+            "offset": 21,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "29. Firecrawl MCP ─ 競合分析を自動化"
+      },
+      {
+        "type": "unstyled",
+        "text": "競合のLPやXアカウントを毎週Codexに分析させます。手動でやってたら絶対に追いつけない速度で、競合の動きが手に取るようにわかります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "▼使い方の例",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "以下の競合アカウント/競合LPを、\nFirecrawlでMarkdown化したうえで、\n週次の変化(新しい訴求軸/新規追加コンテンツ/価格変更)を\nレポート化してください。\n\n競合リスト:[ ]"
+      },
+      {
+        "type": "unstyled",
+        "text": "30. Memory MCP ─ あなたの全データをCodexに記憶させる"
+      },
+      {
+        "type": "unstyled",
+        "text": "毎回前提を貼り直す作業から完全に解放されます。ペルソナ、案件情報、過去の検証結果、ボイステンプレ、全部Codexの長期記憶に保存します。",
+        "inlineStyleRanges": [
+          {
+            "length": 41,
+            "offset": 23,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "▼使い方の例",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "以下の情報を永続記憶に登録してください。\n\n①参戦ジャンル:[ ]\n②マネーマップ:[第1章のテクニック1]\n③コンセプト:[第2章のテクニック4]\n④ボイステンプレ:[第2章のテクニック6]\n⑤90日ブループリント:[第1章のテクニック3]\n\n今後のセッションでは、毎回これを最初に参照してから作業してください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "31. Sheets MCP ─ 数字を毎日Codexに見させる"
+      },
+      {
+        "type": "unstyled",
+        "text": "Xインプレッション、LINE登録数、note売上、案件成約数。これを全部スプレッドシートに集約させて、毎朝Codexに集計と分析をさせます。",
+        "inlineStyleRanges": [
+          {
+            "length": 19,
+            "offset": 51,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "▼使い方の例",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "スプレッドシート「収益管理」から、\n昨日のX/LINE/note/案件の数字を取得し、\n以下の観点で分析してください。\n\n・前日比/前週比/前月比\n・異常値の検出\n・改善余地のある指標\n・今日アクションすべき優先タスク\n\nレポートはSlackに通知してください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "32. Daily X Cannon Automation ─ 朝7時に投稿が3本生まれる"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここから先は\"スケジュール実行\"です。**ChatGPT Plus(月20ドル)**でAutomations機能が使えます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "▼設定用プロンプト",
+        "inlineStyleRanges": [
+          {
+            "length": 9,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "以下のスケジュールでStandalone Automationを作成してください。\n\n【スケジュール】毎日朝7:00\n\n【タスク】\n①バズ構文ライブラリ(第3章テクニック9)から3パターン選択\n②本日のテーマ(./topics/YYYY-MM-DD.md参照)で投稿を3本生成\n③Engagement Bait Detector(第3章テクニック10)で評価\n④40点未満の投稿は再生成\n⑤Bufferに予約投稿\n⑥完成リストをSlackに通知"
+      },
+      {
+        "type": "unstyled",
+        "text": "33. Weekly P&L Automation ─ 毎週月曜に成績表が届く"
+      },
+      {
+        "type": "unstyled",
+        "text": "毎週月曜の朝、先週の数字レポートが自動で届きます。もう数字管理に時間を使う必要がありません。",
+        "inlineStyleRanges": [
+          {
+            "length": 21,
+            "offset": 25,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "▼設定用プロンプト",
+        "inlineStyleRanges": [
+          {
+            "length": 9,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "以下のスケジュールでAutomationを作成してください。\n\n【スケジュール】毎週月曜朝8:00\n\n【タスク】\n①スプレッドシート「収益管理」から先週の全データ取得\n②X/LINE/note/案件のKPIを集計\n③前週比/前月比のグラフ生成\n④ハイライト3つ・課題3つ・今週の重点アクション3つを抽出\n⑤./reports/YYYY-WW.mdとして保存\n⑥Slackに通知"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここまで揃えば、完全自動運転の完成です。 あなたがやることは、Slack通知を見て、最終承認を出すだけ。",
+        "inlineStyleRanges": [
+          {
+            "length": 12,
+            "offset": 8,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "第9章:BANされない・燃えない・信用を失わない ─ リスク管理"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここを軽視すると、せっかく作った仕組みが1夜にして消えます。 高単価ジャンルほどリスク管理が命綱です。",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 20,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "34. BAN-Proof Filter ─ X規約・薬機法・景表法の自動チェック"
+      },
+      {
+        "type": "unstyled",
+        "text": "X規約違反、薬機法違反、景表法違反。これらは公開前にCodexに必ずチェックさせてください。",
+        "inlineStyleRanges": [
+          {
+            "length": 24,
+            "offset": 22,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "▼コピペ用プロンプト",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "以下の投稿/LP/note記事を読み、\nリスク表現を全て抽出してください。\n\n【チェック観点】\n①X利用規約(スパム/誤誘導/過度な勧誘)\n②薬機法(効果効能の断定/医療類似)\n③景表法(優良誤認/有利誤認)\n④特定商取引法(必須表記の漏れ)\n\n各リスクについて\n・該当法令/規約\n・違反レベル(高/中/低)\n・代替表現案\nを表で出力してください。\n\nグレーゾーンも遠慮なく指摘してください。\n\n対象テキスト:[ ]"
+      },
+      {
+        "type": "unstyled",
+        "text": "35. Tone Calibrator ─ 煽りすぎを抑える調整"
+      },
+      {
+        "type": "unstyled",
+        "text": "煽りは効きますが、煽りすぎると信用を失います。Codexに「煽り度」を数値で測らせて、適切なラインに調整します。",
+        "inlineStyleRanges": [
+          {
+            "length": 29,
+            "offset": 23,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "▼コピペ用プロンプト",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "以下のセールス文の\"煽り度\"を10段階で評価してください。\n\n【評価軸】\n・断定の強さ\n・恐怖訴求の濃度\n・限定/緊急性の演出強度\n・読者を不安にさせる表現の量\n\n【判定】\n・1-3:弱すぎ(動かない)\n・4-6:適切(信用維持+成約)\n・7-8:強め(高成約だが信用低下リスク)\n・9-10:危険(炎上リスク高)\n\n7以上の場合、6に調整した修正版も出力してください。\n\n対象テキスト:[ ]"
+      },
+      {
+        "type": "unstyled",
+        "text": "36. Trust Building Architect ─ 信用を積む仕組み"
+      },
+      {
+        "type": "unstyled",
+        "text": "短期で稼ぎたい人ほど、信用構築を軽視します。逆に長く稼ぎたいなら、信用構築のための定期発信をCodexに任せます。",
+        "inlineStyleRanges": [
+          {
+            "length": 35,
+            "offset": 22,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "▼コピペ用プロンプト",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "信用構築のための\"地味だが効く\"発信を、\n月間カレンダー形式で20本設計してください。\n\n【発信の種類】\n・失敗談・反省ポスト\n・他者推薦(自分以外の商品/人を褒める)\n・無料ノウハウの大放出\n・読者の質問への丁寧な公開回答\n・データ・統計ベースの分析発信\n\n各発信について\n・想定エンゲージメント\n・信用構築への寄与度\nを併記してください。\n\n私のジャンル:[ ]"
+      },
+      {
+        "type": "unstyled",
+        "text": "37. Backup Account Designer ─ サブ垢の構造設計"
+      },
+      {
+        "type": "unstyled",
+        "text": "メインアカウントがBANされたら、収入はゼロになります。メインBAN対策のサブ垢設計を予め組んでおきます。",
+        "inlineStyleRanges": [
+          {
+            "length": 14,
+            "offset": 28,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "▼コピペ用プロンプト",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "メインアカウントBANに備えた、サブアカウント運用設計を提案してください。\n\n【設計項目】\n・サブアカウントの数と用途分け\n・各サブアカのコンセプトとの距離感\n  (近すぎ:バレる/離れすぎ:無駄)\n・運用デバイス・IPの分離方法\n・万一の移行手順(フォロワー誘導の方法)\n・サブアカ運用にかかる時間/コスト見積\n\n私のメインアカウントのコンセプト:[ ]"
+      },
+      {
+        "type": "header-two",
+        "text": "第10章:凡人が必ず失敗する3つの習慣をぶっ壊す"
+      },
+      {
+        "type": "unstyled",
+        "text": "最後は引き算です。やめられない人は、どれだけCodexを使っても伸びません。",
+        "inlineStyleRanges": [
+          {
+            "length": 29,
+            "offset": 9,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "38. 「毎日5時間努力」をやめる"
+      },
+      {
+        "type": "unstyled",
+        "text": "副業初心者の99%は「時間を多く投下すれば結果が出る」と思っています。違います。Codexがある時代に毎日5時間労働してる時点で戦略ミスです。",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 64,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "正しいのは「1日30分の戦略思考+残りはCodexに丸投げ」。労働量で勝負するフェーズはとっくに終わってます。",
+        "inlineStyleRanges": [
+          {
+            "length": 24,
+            "offset": 31,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "39. 「アカウント1個に依存」をやめる"
+      },
+      {
+        "type": "unstyled",
+        "text": "メインのXアカウント1個に全収益が依存している状態は、自爆スイッチを持って走ってるのと同じです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "X複数アカウント、note、ブログ、LINE、YouTube Shorts、Threads。最低5つに分散して、どれか1つが消えても収益が半分以下にならない構造に必ずします。",
+        "inlineStyleRanges": [
+          {
+            "length": 87,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "40. 「AIに最終チェックも任せる」をやめる"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここがいちばん大事です。",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 3,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Codexは平均的な間違いはしませんが、年に数回致命的な間違いをします。コンプライアンス違反、誤った数字、案件名の誤記。これらは公開前30秒の人間の目視で防げます。",
+        "inlineStyleRanges": [
+          {
+            "length": 18,
+            "offset": 64,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "自動化を進めれば進めるほど、この30秒を惜しむようになります。それが破滅の入り口です。最終ゲートだけは絶対に人間が握る。 これが長く稼ぐ人の唯一の共通点です。",
+        "inlineStyleRanges": [
+          {
+            "length": 17,
+            "offset": 43,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "おわりに ─ 月100万は\"魔法\"じゃなく\"装置\"だ"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここまで約40個の仕組みを一気に書きました。最後にもう一度、最初の1行を繰り返します。"
+      },
+      {
+        "type": "unstyled",
+        "text": "これは普通の副業記事じゃない。",
+        "inlineStyleRanges": [
+          {
+            "length": 15,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "書いてあるのは、朝起きたら勝手に投稿が出て、勝手に登録が増えて、勝手にセールスが進んで、勝手に売上が立つ\"装置\"の設計図です。",
+        "inlineStyleRanges": [
+          {
+            "length": 52,
+            "offset": 8,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "第1章で全体図を焼き付け、第2章でXアカウントを金型化し、第3章で投稿を量産マシーン化し、第4章で濃いフォロワーを集め、第5章でnoteを自動印刷機にし、第6章でLINEを温め装置にし、第7章でセールス文を磨き続けさせ、第8章でMCPとAutomationsで完全自動運転にし、第9章でリスクを潰し、第10章で凡人の習慣を捨てる。"
+      },
+      {
+        "type": "unstyled",
+        "text": "この10章全部に共通しているのは、「人間がやる作業を限界まで消して、Codexにやらせる作業を限界まで増やす」という思想だけです。",
+        "inlineStyleRanges": [
+          {
+            "length": 65,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "あなたが寝ている間に仕組みは回る。会社で会議してる間にもLINEに登録が増える。デートしてる間にも案件が成約する。これが、Codex時代の月100万の正体です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "そして、今日から始めるなら、最初の一歩は決まっています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "いますぐ第1章のテクニック1「Money Map Generator」のプロンプトをコピペして、Codexに投げてください。 月100万の現実的な内訳が15分で目の前に出てきます。そこから先は、この記事を順番に進めるだけです。",
+        "inlineStyleRanges": [
+          {
+            "length": 62,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "「読んで満足」して終わる人が99%。「動いて手に入れる」のが1%。どっち側に立つかは、いまこの瞬間の判断で決まります。",
+        "inlineStyleRanges": [
+          {
+            "length": 26,
+            "offset": 33,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "ここまで読んだあなたへ"
+      },
+      {
+        "type": "unstyled",
+        "text": "最後まで読み切った方は、おそらく全体の3%です。 そして、この内容を実際に手を動かして仕組みに落とす方は、そのうちの1%。"
+      },
+      {
+        "type": "unstyled",
+        "text": "つまり、ここまで読み切った時点で、あなたはもう普通の副業民じゃない側です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "そんな本気で取り組む方のために、本編に入りきらなかった"
+      },
+      {
+        "type": "unstyled",
+        "text": "「Codex × 高単価アフィリ 90日完全実装ロードマップ」",
+        "inlineStyleRanges": [
+          {
+            "length": 31,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "を、LINEで無料配布しています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "中身はこんな感じです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "・第1章〜第10章を90日で実装する順序と日次チェックリスト"
+      },
+      {
+        "type": "unstyled",
+        "text": "・40プロンプトをそのまま叩ける1ファイルテンプレ集"
+      },
+      {
+        "type": "unstyled",
+        "text": "・初心者がつまずく順番に並べた「最初の30日の動き方」"
+      },
+      {
+        "type": "unstyled",
+        "text": "・私がいま実際に使ってる案件選定の判断軸"
+      },
+      {
+        "type": "unstyled",
+        "text": "LINEに登録して、メッセージ欄に「ロードマップ」と送るだけで、自動で届きます。",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 18,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "→無料ロードマップを受け取る"
+      },
+      {
+        "type": "unstyled",
+        "text": "動く側の1%に入りたい方は、いまのうちに。"
+      }
+    ]
+  },
+  "status": "success",
+  "msg": "success",
+  "_handle": "TensyokuRmla"
+}

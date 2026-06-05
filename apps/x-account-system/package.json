@@ -1,0 +1,60 @@
+{
+  "name": "@ofmeton/x-account-system",
+  "version": "0.1.0",
+  "private": true,
+  "description": "ofmeton AI 業務自動化発信システム (X / Instagram / note 3 媒体)",
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "type": "module",
+  "scripts": {
+    "budget": "tsx lib/cost/budget-cli.ts",
+    "oauth:test": "tsx lib/oauth/pkce-test.ts",
+    "fallback:dry-run": "tsx lib/fallback/trigger-cli.ts --dry-run",
+    "relabel": "python3 scripts/relabel-tweets.py",
+    "dlp:lint": "tsx lib/dlp/lint.ts",
+    "test": "IN_MEMORY_FALLBACK=true jest",
+    "test:worker-live": "jest lib/editor/llm-judge.live.test.ts lib/optimizer/supabase-store.test.ts lib/dashboard/digest-persist.test.ts lib/publisher/x-publisher-db-gate.test.ts lib/interviewer/line-flow-db.test.ts src/",
+    "editor:test": "IN_MEMORY_FALLBACK=true jest lib/editor",
+    "editor:cli": "tsx lib/editor/cli.ts",
+    "publisher:test": "IN_MEMORY_FALLBACK=true jest lib/publisher",
+    "writer:test": "IN_MEMORY_FALLBACK=true jest lib/writer",
+    "pipeline:dryrun": "IN_MEMORY_FALLBACK=true tsx lib/pipeline/e2e-dryrun.ts",
+    "interviewer:test": "IN_MEMORY_FALLBACK=true jest lib/interviewer",
+    "dashboard:test": "IN_MEMORY_FALLBACK=true jest lib/dashboard",
+    "safety:test": "IN_MEMORY_FALLBACK=true jest lib/safety",
+    "ma:test": "IN_MEMORY_FALLBACK=true jest lib/ma",
+    "digest:cli": "IN_MEMORY_FALLBACK=true tsx lib/dashboard/digest-cli.ts",
+    "optimizer:test": "IN_MEMORY_FALLBACK=true jest lib/optimizer",
+    "visualizer:test": "IN_MEMORY_FALLBACK=true jest lib/visualizer",
+    "attribution:test": "IN_MEMORY_FALLBACK=true jest lib/attribution",
+    "writer:note:test": "IN_MEMORY_FALLBACK=true jest lib/writer/writer-note.test.ts",
+    "writer:ig:test": "IN_MEMORY_FALLBACK=true jest lib/writer/writer-ig.test.ts",
+    "worker:typecheck": "tsc -p src/tsconfig.json --noEmit",
+    "worker:dev": "wrangler dev",
+    "worker:deploy": "wrangler deploy",
+    "worker:bundle-check": "bash scripts/bundle-check.sh",
+    "build:registry": "tsx scripts/build-registry.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.36.0",
+    "@supabase/supabase-js": "^2.45.0",
+    "axios": "^1.16.1",
+    "dotenv": "^16.4.5",
+    "js-yaml": "^4.1.0",
+    "openai": "^4.65.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20260529.1",
+    "@types/jest": "^29.5.12",
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^22.7.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.5",
+    "tsx": "^4.19.1",
+    "typescript": "^5.6.0",
+    "wrangler": "^4.14.0"
+  }
+}

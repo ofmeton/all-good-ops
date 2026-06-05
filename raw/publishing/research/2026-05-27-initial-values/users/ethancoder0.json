@@ -1,0 +1,47 @@
+{
+  "status": "success",
+  "msg": "success",
+  "data": {
+    "id": "1994298965542809600",
+    "name": "Ethan Walker",
+    "userName": "ethancoder0",
+    "location": "Worldwide",
+    "url": "https://t.co/5o5kdWePQo",
+    "description": "100K+ AI Community | AI Creator | Sharing AI news, tools & tutorials | DM or Mail for Collabs↓ 📥 ethancoder01@gmail.com",
+    "entities": {
+      "description": {},
+      "url": {
+        "urls": [
+          {
+            "display_url": "passionfroot.me/ethan-walker",
+            "expanded_url": "https://www.passionfroot.me/ethan-walker",
+            "indices": [
+              0,
+              23
+            ],
+            "url": "https://t.co/5o5kdWePQo"
+          }
+        ]
+      }
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 10453,
+    "following": 6425,
+    "favouritesCount": 1356,
+    "statusesCount": 1140,
+    "mediaCount": 45,
+    "createdAt": "2025-11-28T06:56:17.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/1994298965542809600/1773616443",
+    "profilePicture": "https://pbs.twimg.com/profile_images/2033320475548651521/6UOJkfIv_normal.jpg",
+    "canDm": true,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": [
+      "2058842151371641182"
+    ]
+  }
+}

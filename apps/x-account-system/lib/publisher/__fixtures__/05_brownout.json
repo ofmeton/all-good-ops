@@ -1,0 +1,29 @@
+{
+  "name": "05_brownout",
+  "description": "brownout on → blocked brownout",
+  "input": {
+    "draftId": "pub-05",
+    "body": "通常本文",
+    "fmat": "short",
+    "dryRun": false,
+    "editorOutput": {
+      "draftId": "pub-05",
+      "decision": "approved",
+      "rejectReasons": [],
+      "rules": [],
+      "riskLevel": "low",
+      "riskReasons": [],
+      "businessLawRiskFlag": false,
+      "businessLawKeywords": [],
+      "totalDurationMs": 100,
+      "llmCostUsd": 0
+    }
+  },
+  "overrides": {
+    "brownout": true
+  },
+  "expected": {
+    "status": "blocked",
+    "blockedReason": "brownout"
+  }
+}

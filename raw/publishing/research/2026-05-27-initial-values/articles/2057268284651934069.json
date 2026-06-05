@@ -1,0 +1,781 @@
+{
+  "article": {
+    "id": "QXJ0aWNsZUVudGl0eToyMDU3MjYwMTgyNjIzOTIwMTI4",
+    "author": {
+      "type": "user",
+      "userName": "ObsidianOtaku",
+      "url": "https://x.com/ObsidianOtaku",
+      "twitterUrl": "https://twitter.com/ObsidianOtaku",
+      "id": "2045403336451710976",
+      "name": "東大Obsidianオタク｜仕事で使える第2の脳構築",
+      "isVerified": false,
+      "isBlueVerified": true,
+      "verifiedType": null,
+      "profilePicture": "https://pbs.twimg.com/profile_images/2045403747116081152/ICOUL3T2_normal.jpg",
+      "coverPicture": "https://pbs.twimg.com/profile_banners/2045403336451710976/1776497381",
+      "description": "東大卒メンバーによるObsidianの活用術を毎日発信｜仕事で使えるObsidianを学べるメディア｜Claude CodeやCodexと組み合わせて使うノウハウを学びたい人はフォロー必須！",
+      "location": "Obsidianで第二の脳を作りたいならフォロー❗️",
+      "followers": 1069,
+      "following": 4,
+      "status": "",
+      "canDm": false,
+      "canMediaTag": true,
+      "createdAt": "Sat Apr 18 07:26:24 +0000 2026",
+      "entities": {
+        "description": {}
+      },
+      "fastFollowersCount": 0,
+      "favouritesCount": 12,
+      "hasCustomTimelines": false,
+      "isTranslator": false,
+      "mediaCount": 41,
+      "statusesCount": 55,
+      "withheldInCountries": [],
+      "affiliatesHighlightedLabel": {},
+      "possiblySensitive": false,
+      "pinnedTweetIds": [
+        "2058665087876165671"
+      ],
+      "profile_bio": {},
+      "isAutomated": false,
+      "automatedBy": null
+    },
+    "replyCount": 0,
+    "likeCount": 173,
+    "quoteCount": 5,
+    "viewCount": "94450",
+    "createdAt": "Thu May 21 01:12:35 +0000 2026",
+    "title": "ブクマしてるだけでCodexが勝手に賢くなるObsidian活用術",
+    "preview_text": "『毎週議事録を書いているのに、先月の決定事項がどこにあるか思い出せない』\n『新しい Codex のセッションを開くたびに、案件の前提を 5 分かけて説明し直している』\n『同じ顧客から 3",
+    "cover_media_img_url": "https://pbs.twimg.com/media/HIzgSjma4AAHTm3.jpg",
+    "contents": [
+      {
+        "type": "unstyled",
+        "text": "『毎週議事録を書いているのに、先月の決定事項がどこにあるか思い出せない』\n『新しい Codex のセッションを開くたびに、案件の前提を 5 分かけて説明し直している』\n『同じ顧客から 3 回目の質問が来た。前回の自分の回答を探すのに 20 分かかった』"
+      },
+      {
+        "type": "unstyled",
+        "text": "普段AIコンサルでサポートしている経営者・担当者から、こういう声をよくもらいます。AI はかなり優秀になりましたが、それと同時にこんな悩みを持つ人も増えています。"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "会議のたびに議事録を書いているのに半年後にはどれも開かれないまま埋もれていく"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "Slack でスターを付けた重要発言をいざ提案書で参照したいときに検索しても出てこない"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "AI に同じ案件をゼロから説明し直して新しいセッションはいつも初対面から始まる"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "これを半年続けても自分の業務知識がどこにも積み上がっていない"
+      },
+      {
+        "type": "unstyled",
+        "text": "この記事を最後まで読めば、過去の議事録や Slack や商談メモを Codex が夜の間に Vault へ取り込み、朝には今日やるべきことが 1 枚にまとまっている状態を、5 層構造の Vault と 4 つの自動化プロンプトで今週末から作れます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "『Codex って何、AGENTS.md って何』という方にも分かるように噛み砕いて解説していくので、ご安心ください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "海外で「How to Build Codex Knowledge Vault That Gets Smarter Every Day Without You Doing Anything」という記事が最近話題になっています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "日本語にすると『何もしなくても毎日賢くなる Codex Knowledge Vault の作り方』。今日はこれを日本語で噛み砕き、日本の業務文脈で動く形まで落として解説します。"
+      },
+      {
+        "type": "unstyled",
+        "text": "元記事はこちら：\nhttps://x.com/ziwenxu_/status/2053241837453029439"
+      },
+      {
+        "type": "header-two",
+        "text": "①議事録もSlackも書いているのにいざというとき探し出せない"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIzb7uQbAAA_GJ_.jpg",
+        "width": 2048,
+        "height": 1152
+      },
+      {
+        "type": "unstyled",
+        "text": "業務記録が活用されない感覚は、おそらく多くの方が共有していると思います。毎週議事録を書いている、毎日 Slack でやり取りしている、商談ごとに iOS Notes にメモを残している。"
+      },
+      {
+        "type": "unstyled",
+        "text": "それでも次のミーティングの直前に、その記録が探し出せず、結局カレンダーと過去メールを開いて記憶を再構築している。気がつくとひと月で 50 件を超える業務記録が積み上がっているのに、それらは「探せない記録」「読み返さない記録」として埃をかぶります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "同じ構造が AI とのやり取りでも起きています。Claude や ChatGPT、最近では Codex を開くたびに、私たちは自分の文脈をゼロから説明し直しています。「今、こういう案件を抱えていて」「先週こんな議論があって」「相手のキーパーソンはこの方で、前回はこういう合意でした」を毎回打ち込む 5 分が、週単位で積み上がると相当な時間になります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "なぜこうなるのか。AI モデルの性能が低いからではありません。AI に渡す記憶層が設計されていないからです。新しいセッションを開いた瞬間に過去が消える設計のままなら、Obsidian を入れて Vault を整えても「いつか役に立つはずの議事録置き場」が増えるだけで終わります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "先日扱った Karpathy 起点の話と、同じシリーズで紹介した Vault 設計をすでに組んだ方も、おそらくここで詰まっています。フォルダ階層を作ったところまでは進んだが、毎週の議事録が Codex から参照される状態に到達できない。ここが今日の出発点です。"
+      },
+      {
+        "type": "header-two",
+        "text": "②業務記録がAIに渡されない限り存在しないも同然な理由"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIzcBiCawAAQFNK.jpg",
+        "width": 2048,
+        "height": 1152
+      },
+      {
+        "type": "unstyled",
+        "text": "業務記録が活用されない理由を、もう少し構造で言語化させてください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "私たちは AI を 2 通りの使い方で動かせます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "1 つ目は Chat Window の中で完結する使い方です。質問する、答えが返ってくる、タブを閉じる、次の質問でゼロからやり直す。会話履歴は残っても、それは AI 側の記憶ではなく、私たちが見返せる過去ログにすぎません。次に同じ案件の文脈を扱うとき、AI は私たちのことを覚えていません。"
+      },
+      {
+        "type": "unstyled",
+        "text": "2 つ目は、ファイルシステムの上で記憶を積んでいく使い方です。議事録や Slack のスター付きや商談メモを Vault に取り込み、AI がそれらを読み、構造化された業務概念ページを書きます。1 ヶ月後の質問は、1 ヶ月分の業務記録を参照しながら作られます。半年後の質問は、半年分の意思決定履歴を持った答えになります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "問題はここです。Obsidian を入れる方の多くは、1 つ目の使い方のまま 2 つ目の容れ物だけを増やします。フォルダを 5 個作って、ブックマーク拡張を入れて、これでセットアップ完了と感じる。けれど、肝心の AI が Vault を読み、書き、整える仕組みがありません。だから半年経っても Vault は単なる議事録置き場のままです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "元記事の筆者この状態を一言で表現しています。「The bottleneck isn't the model. It's Context Debt.」ボトルネックは AI モデルではなく Context Debt (文脈負債) だ、と。私たちが毎朝 AI に状況を説明し直しているのは、生産性に対する税金 (a tax on your productivity) を払っている状態だと指摘しています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "彼が示した解決の方向はこうです。「We're moving away from the 'Chat Window' and into a Persistent Knowledge Layer.」Chat Window から、Vault に積み上げられる記憶層へ。Obsidian Vault は図書館 (library) ではなく、自分の personal assistant の脳 (the Brain) として動かす。これが本記事で扱う設計の根本になります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "では、その記憶層をどう設計すれば、業務記録が AI に渡る状態に到達できるのか。実装を見ていきましょう。"
+      },
+      {
+        "type": "header-two",
+        "text": "③AGENTS.mdは自分のglobal variableでありCodexが必ず最初に読むファイル"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIzcXC3bgAAOnfK.jpg",
+        "width": 2048,
+        "height": 1152
+      },
+      {
+        "type": "unstyled",
+        "text": "設計は 5 層のフラット構造 (Flat Architecture) です。原文ではこう書かれています。「we stop organizing for humans and start organizing for the machine. I use a Flat Architecture that Codex navigates like a mental map.」人間が見やすいフォルダ階層ではなく、Codex が地図のように navigate できる構造を選ぶ、と。"
+      },
+      {
+        "type": "unstyled",
+        "text": "5 層の中心にあるのが AGENTS.md です。これは Codex が起動時に最初に読む 1 ファイル。原文では「the 'Global Variable' of your life」と書かれています。プログラミングで global variable がプロセス全体から参照される変数であるように、AGENTS.md は Codex の全セッションから参照される 1 ファイルです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "中身として書くべきは 3 つ。自分が誰か、今期の目標、絶対に守るべきルール (Non-negotiable Rules)。例えば「Never give me boilerplate」(ありきたりの回答を返すな)「Always check my /notes before suggesting anything」(提案する前に必ず /notes/ を確認しろ) のようなルールです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここで一つ補足させてください。Codex の AGENTS.md と、Claude Code の CLAUDE.md は、同じ Markdown ファイルで動きます。書き方も役割もほぼ同じです。両方を Vault のトップに併存させれば、Codex でセッションを開いたときは AGENTS.md が、Claude Code でセッションを開いたときは CLAUDE.md が読まれます。「Codex に乗り換えると Vault を作り直しになる」ことはありません。ツールが変わっても記憶層は同じ Markdown ファイルとして残り続けます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "AGENTS.md の周りを 4 つのフォルダが囲みます。inbox / notes / ideas / projects です。それぞれの役割は次の章で詳しく見ますが、まず Vault 全体のディレクトリツリーを示します。今夜コピペで作れる形にしてあります。"
+      },
+      {
+        "type": "markdown",
+        "text": "```bash\n~/Vault/\n├── AGENTS.md                 # Codex 用 master file = global variable\n├── CLAUDE.md                 # Claude Code 用 (AGENTS.md と内容ほぼ同じで OK)\n│\n├── inbox/                    # 整理しない、Codex が後で取り込む生素材\n│   ├── 2026-05-18_clientA-kickoff.md         (議事録)\n│   ├── 2026-05-18_voice-memo-monday.md        (音声メモの書き起こし)\n│   ├── 2026-05-18_slack-stars.md              (Slack スター付き投稿)\n│   ├── 2026-05-19_X-Insights.md               (X Bookmark 抽出結果)\n│   ├── 2026-05-19_yt-transcripts.md           (YouTube Watch Later 抽出結果)\n│   └── 2026-05-19_competitor-deck.pdf         (PDF そのまま)\n│\n├── notes/                    # Codex が inbox を読んで書く、構造化された業務概念\n│   ├── clients/\n│   │   ├── client-A-context.md                (案件全体像)\n│   │   └── client-A-stakeholders.md           (キーパーソン)\n│   ├── competitors/\n│   │   └── competitor-X-positioning.md         (競合分析)\n│   ├── process/\n│   │   └── proposal-pattern-2026.md            (提案パターン)\n│   ├── decisions/\n│   │   └── 2026-04-pricing-strategy.md         (意思決定履歴)\n│   └── index.md                                (Codex が自動メンテ)\n│\n├── ideas/                    # 自分の判断軸を Codex に渡す装置\n│   ├── why-we-win.md                          (自社が勝てる理由)\n│   ├── pricing-philosophy.md                  (価格設定の思想)\n│   ├── hire-criteria.md                       (採用判断基準)\n│   └── refuse-reasons.md                      (受けない案件のパターン)\n│\n├── projects/                 # 現在進行中の案件 (notes/ の隣に置く)\n│   ├── client-A-proposal-q2/\n│   ├── marketing-pivot/\n│   └── q3-okr-draft/\n│\n├── DAILY-BRIEF.md            # 毎朝 Codex が生成する朝のブリーフィング\n└── .claude/ または .codex/    # Skill / Subagent の置き場 (必要なら)\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "フォルダ名は英語のままにしています。Codex が /inbox /notes のように navigate するため、ASCII の方が指示が安定するからです。ファイル名の日付やトピック名は自分の業務に合わせて自由に変えて構いません。@ziwenxu_ の原文では予測市場や LLM Fine-tuning が中心ですが、これは「中に入れるデータの例」であって「構造そのもの」ではありません。AGENTS.md + 4 フォルダという構造そのものはデータに依存しません。"
+      },
+      {
+        "type": "unstyled",
+        "text": "続いて、Vault のトップに置く AGENTS.md のテンプレを示します。日本の業務文脈で動く完成版です。"
+      },
+      {
+        "type": "markdown",
+        "text": "```bash\n# AGENTS.md\n# Codex 用 master file = 自分の global variable\n# (Claude Code 用 CLAUDE.md として同内容で併存可)\n## Who I Am\n- 名前: 自分の氏名\n- 役割: (例) 1 人事業主 / 業務コンサル / マーケ責任者 / R&#x26;D マネージャー\n- 利用者: 自分 + (共同経営者 / アシスタント / チームメンバーがいれば明示)\n- 機密扱い: 顧客名と契約条件と売上数値は notes/clients/ と inbox/ のみ。reports/ では匿名化推奨\n- 言語: 日本語が基本。外資クライアント関連は原文 (英語) を保持\n## 2026 Goals\n- Q2 (4-6 月): 主要 3 案件のクロージング + 週次レビューの仕組み化\n- Q3 (7-9 月): 採用 2 名 + ナレッジ Vault の共同編集体制\n- 年間: 個人事業から 3 名チームへ\n## Non-negotiable Rules\n- Never give me boilerplate (ありきたりの回答を返すな)\n- Always check /notes/ before making any suggestion (提案する前に必ず /notes/ を読む)\n- 顧客名と数値を含む reports/ は外部に出さない\n- 3 ヶ月前の /notes/decisions/ と矛盾する提案を出す前に、必ず私に確認\n## Vault Layout\n- inbox/      ← 議事録 / Slack スター付き / 商談メモ / ブックマーク取り込み結果が生のまま入る\n- notes/      ← inbox/ を読んで構造化した業務概念ページ (clients / competitors / process / decisions)\n- ideas/      ← 私の判断軸 (why-we-win / pricing-philosophy / hire-criteria / refuse-reasons)\n- projects/   ← 現在進行中の案件 (notes/ の隣に置くことで cross-reference を容易にする)\ninbox/ は読み取り専用扱い (整理しない、リネームしない、削除しない)。\nnotes/ と ideas/ と projects/ は Codex が自由に編集してよい。\n## How to Compile (inbox/ から notes/ への書き方)\n- 1 概念につき 1 ファイル (kebab-case、例: client-A-context.md)\n- frontmatter に sources: [inbox/xxx.md, inbox/yyy.md] と書く\n- 必ず 1 段落以内の定義から始める\n- 関連ページへの [[wikilink]] を最低 2 つ\n- 索引: notes/index.md に概念名と 1 行サマリを追記\n## How to Report (notes/ から reports/ への書き方)\n- ファイル名: {YYYY-MM-DD}_{topic-slug}.md\n- frontmatter に used_notes: [...] を必ず書く\n- 結論を冒頭に置く (3 行リード)\n- 出典として参照した notes/ ページへのリンクを末尾に列挙\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "このファイルが Vault のトップに 1 つ置かれていれば、Codex は新しいセッションを開いたときに最初にこれを読みます。「あなた誰?」から始まる毎朝の儀式が消える瞬間です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "同じ Codex を使っているのに出力品質に差がつくのは、AGENTS.md の有無と質によります。プロンプトの巧さよりも、AGENTS.md にどんな global variable を書いたかが効きます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "では、5 層それぞれに何を入れるのか、業務文脈で具体的に見ていきましょう。"
+      },
+      {
+        "type": "header-two",
+        "text": "④inboxはRaw RAMでnotesはSource of Truthでideasは自分の判断軸でprojectsは作業現場"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIzdHg3boAA2S5i.jpg",
+        "width": 2048,
+        "height": 1152
+      },
+      {
+        "type": "unstyled",
+        "text": "この設計では各層に 1 つずつメタファーを当てています。原文をそのまま引きながら、業務文脈に翻訳していきます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "inbox/ は Raw RAM",
+        "inlineStyleRanges": [
+          {
+            "length": 16,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "原文では「The staging area. Every article, technical doc, or voice note lands here first. No manual filing, no tagging, no friction. This is the 'Raw RAM' of your system.」と書かれています。すべての素材が最初に着地する場所、整理もタグ付けも一切なし、と。"
+      },
+      {
+        "type": "unstyled",
+        "text": "業務文脈でいえば、議事録は会議が終わった直後に inbox/ に放り込みます。Slack のスター付き投稿は週末に export して inbox/ に置きます。商談メモは iOS Notes から自動同期します。RFP の PDF は受け取った直後に inbox/ に放り込みます。外部の参考記事は Web Clipper でクリップして inbox/ に。X のブックマークと YouTube の Watch Later は、後述の自動化プロンプトが inbox/ に取り込みます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここで自分の判断は一切入れません。整理しようとした瞬間に Vault は失速します。「inbox は触らない」のが鉄則です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "notes/ は Personal Wikipedia / Source of Truth",
+        "inlineStyleRanges": [
+          {
+            "length": 45,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "原文では「Your personal Wikipedia. Once information is processed, it lives here as interlinked facts API schemas, framework deep-dives, and research papers. This is the 'Source of Truth.'」と書かれています。inbox/ から処理された情報が、相互リンクされた事実として住む場所、と。"
+      },
+      {
+        "type": "unstyled",
+        "text": "業務文脈で notes/ に育つのは、案件 (clients/)、競合 (competitors/)、プロセス (process/)、意思決定 (decisions/) の概念ページ群です。notes/clients/client-A-context.md は inbox/ にある議事録 5 件と商談メモ 3 件を Codex がスキャンして書き出した「クライアント A の文脈全体像」のページ。notes/competitors/competitor-X-positioning.md は inbox/ の競合分析 PDF と業界 newsletter から Codex が書く「競合 X のポジショニング」のページ。"
+      },
+      {
+        "type": "unstyled",
+        "text": "元記事では研究者向けの例 (API schemas、framework deep-dives) が中心ですが、業務向けでは案件と顧客とプロセスに全置換します。構造は同じです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ideas/ は自分の判断軸",
+        "inlineStyleRanges": [
+          {
+            "length": 14,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "元の記事では、「This is the most important part. It's your original thinking and your 'vibe.' Storing your unique logic here is what prevents Codex from giving you generic AI answers and forces it to solve problems the way you would.」と書かれています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "つまり、ideas/ に入れるのは外部から仕入れた情報ではなく、自分が考えたこと、自分の判断軸、自分の vibe です。ideas/why-we-win.md には「自社が顧客に選ばれている独自の価値」を書きます。ideas/pricing-philosophy.md には「価格設定で大事にしている思想」を書きます。ideas/hire-criteria.md には「採用で見るポイント」を書きます。ideas/refuse-reasons.md には「受けない案件のパターン」を書きます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "これが Codex の出力品質を決めます。ideas/ が無い Codex は generic な (どこにでもある) 答えしか返しません。ideas/ にあなたの判断軸が入っていれば、Codex はあなたの考え方を真似て答えを書きます。同じ Codex でも記憶設計で差が出るのは、ここに何を書いたかで分かれます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "projects/ は作業現場",
+        "inlineStyleRanges": [
+          {
+            "length": 15,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "原文では「Where the work happens. Because your projects sit next to your notes, Codex can grab an insight from a paper you read three months ago and apply it to the code you are shipping right now.」と書かれています。projects/ が notes/ の隣に置かれていることで、Codex は 3 ヶ月前に読んだドキュメントの insight を今書いているコードに反映できる、と。"
+      },
+      {
+        "type": "unstyled",
+        "text": "業務文脈で projects/ に置くのは、現在進行中の案件、書きかけの提案書、四半期 OKR のドラフトです。projects/client-A-proposal-q2/ には案件 A の提案書ドラフトと相手会社向けの prep メモが入ります。projects/marketing-pivot/ には現在検討中のマーケ方針転換の検討資料が入ります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "これらが notes/ の隣にあることで、Codex に「client-A-proposal-q2 のリードを書いて」と頼んだとき、Codex は notes/clients/client-A-context.md と notes/decisions/2026-04-pricing-strategy.md と ideas/pricing-philosophy.md を全部読みながらリードを書いてくれます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "5 層が揃って初めて、Codex は「あなたの判断軸を持って」「あなたの過去案件を参照しながら」「今の作業を進める」存在になります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ただ、これを毎日手動で取り込み続けるのは続きません。そこで @ziwenxu_ は「夜の間に Codex が取り込む」仕組みを 4 つのプロンプトで自動化しました。次章で全文を公開します。"
+      },
+      {
+        "type": "header-two",
+        "text": "⑤ブクマしてるだけでCodexが夜の間に取り込む4つの自動化プロンプト"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIzdk_zbEAAtPDz.jpg",
+        "width": 2048,
+        "height": 1152
+      },
+      {
+        "type": "unstyled",
+        "text": "元の記事では、ここで保存の摩擦 (Capture Friction) の話を持ち出します。原文では「The number one reason knowledge systems fail is Capture Friction. I built a 'Passive Ingest' system so I don't 'do' the work; the pipes do.」と書かれています。Vault が続かない最大の理由は保存の摩擦であり、自分が手を動かすのではなくパイプ (仕組み) を動かす、と。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Browser-use または Computer Use を Codex から起動して、ブラウザの「digital highlights」を 1 日 1 回 scrape します。Browser-use はブラウザを Codex が自動操作するための OSS、Computer Use は画面を見て操作するベータ機能のことです。難しい話に聞こえますが、要は「Codex が代わりに X の Bookmarks ページや YouTube の Watch Later ページを開いて、内容を抽出する」装置です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "読者がやるのは普段通り、X で気になった投稿にブックマークボタンを押す、YouTube で後で見たい動画を Watch Later に入れる、それだけです。「ブクマしてるだけ」が成立する根拠がここにあります。それ以外の取り込み、要約、Markdown 化、inbox/ への保存はすべて Codex が夜間に実行します。"
+      },
+      {
+        "type": "unstyled",
+        "text": "仕組みは 4 つのプロンプトで動きます。コピペで Codex に投入できる形で全文を公開します。"
+      },
+      {
+        "type": "unstyled",
+        "text": "プロンプト 1: X (Twitter) Extraction Prompt",
+        "inlineStyleRanges": [
+          {
+            "length": 38,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "markdown",
+        "text": "```markdown\n\"use @computer Navigate to my X Bookmarks. Extract the content of every\nthread saved in the last 24 hours. Strip out the ads and engagement bait.\nConvert the core insights into a clean Markdown file titled\nYYYY-MM-DD-X-Insights.md and save it to my /inbox.\"\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "意訳: 「@computer (画面操作機能) で X のブックマークページに移動して、過去 24 時間に保存されたスレッドをすべて抽出して。広告と engagement bait は削って、中核の insight だけを YYYY-MM-DD-X-Insights.md の Markdown ファイルにまとめて、/inbox に保存して。」"
+      },
+      {
+        "type": "unstyled",
+        "text": "業務向けにカスタマイズするなら、最後の to my /inbox は変えなくて構いません。ただし、ブックマークするときに業務関連 (案件 A / 競合 X / 業界トレンド) のタグを付ける運用を入れると、Codex に「#案件A タグだけ抽出して inbox/2026-05-19_clientA-related.md に保存」のような変則指示も投げられるようになります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "プロンプト 2: YouTube Knowledge Prompt",
+        "inlineStyleRanges": [
+          {
+            "length": 33,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "markdown",
+        "text": "```markdown\n\"Access my YouTube with @computer 'Watch Later' list. For every video added\ntoday, pull the full transcript. Use your internal logic to summarize the\ntechnical 'How-To' or 'Big Idea' from each. Save these as individual\nMarkdown files in my /inbox so I can search them locally.\"\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "意訳: 「@computer で YouTube の Watch Later にアクセスして、今日追加された動画ごとに transcript を全文取得して。各動画から技術的な How-To か Big Idea を要約して、個別の Markdown ファイルにして /inbox に保存して。後でローカル検索できるように。」"
+      },
+      {
+        "type": "unstyled",
+        "text": "業務向けには、社内研修動画や業界カンファ動画の transcript を inbox/ に流し込む用途で使えます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "プロンプト 3: Daily Evolution Prompt",
+        "inlineStyleRanges": [
+          {
+            "length": 31,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "markdown",
+        "text": "```markdown\n\"Audit all new files in the /inbox and /notes from the last 24 hours.\nCross-reference them with our roadmap in AGENTS.md.\nMEMORY ENHANCEMENT: Identify new technical patterns or logic I need to\ninternalize for our current projects.\nSTRATEGIC SHIFT: Does this new information suggest a better way to execute\nour current tasks? If so, flag the contradiction.\nIMMEDIATE ACTION: Based on these upgrades, what is the single most\nhigh-leverage task for today? Update your internal memory and save the\nstrategy to DAILY-BRIEF.md.\"\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "意訳: 「過去 24 時間に /inbox と /notes に追加されたファイルをすべて監査して、AGENTS.md にあるロードマップと cross-reference して。"
+      },
+      {
+        "type": "unstyled",
+        "text": "MEMORY ENHANCEMENT: 現在進行中のプロジェクトで内面化すべき新しい技術パターンやロジックを特定して。"
+      },
+      {
+        "type": "unstyled",
+        "text": "STRATEGIC SHIFT: 新しい情報が、現在のタスクの実行方法を変えるべきだと示唆していないか。もしあれば、矛盾点をフラグ立てして。"
+      },
+      {
+        "type": "unstyled",
+        "text": "IMMEDIATE ACTION: 以上を踏まえて、今日最もレバレッジが効く 1 タスクは何か。内部記憶を更新して、戦略を DAILY-BRIEF.md に保存して。」"
+      },
+      {
+        "type": "unstyled",
+        "text": "業務向けに書き換えるなら、our current projects を 現在進行中の案件 (案件 A / 案件 B / 案件 C) に、technical patterns を 業務パターン (提案構造 / 価格交渉ロジック / 競合対抗策) に置き換えます。MEMORY ENHANCEMENT / STRATEGIC SHIFT / IMMEDIATE ACTION の 3 セクション構造はそのまま残してください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "このプロンプトを毎日 1 回 (夜間でも朝方でも) Codex に投げると、~/Vault/DAILY-BRIEF.md が更新されます。朝起きてこのファイルを開くと、昨日のすべての業務記録から抽出された「今日の最高レバレッジタスク」が 1 つ書かれている状態になります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "プロンプト 4: Weekly Self-Management Prompt",
+        "inlineStyleRanges": [
+          {
+            "length": 38,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "markdown",
+        "text": "```markdown\n\"Analyze all Daily Briefs and new intelligence from the past 7 days.\nEMERGING THESIS: What high-level skill or concept have we mastered this week?\nARCHITECTURAL EVOLUTION: Reorganize our folders and concepts to reflect our\ncurrent level of understanding. Create new specialized directories if our\nfocus has shifted.\nFIRMWARE UPGRADE: Rewrite the 'Core Logic' section of AGENTS.md. Integrate\neverything we've learned this week so you start Monday morning as a more\ncapable, more senior version of yourself.\"\n\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "意訳: 「過去 7 日間の Daily Brief と新しい情報を分析して。"
+      },
+      {
+        "type": "unstyled",
+        "text": "EMERGING THESIS: 今週マスターした高次のスキルや概念は何か。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ARCHITECTURAL EVOLUTION: 現在の理解水準を反映してフォルダと概念を再構成して。フォーカスがシフトしているなら新しい専門ディレクトリを作って。"
+      },
+      {
+        "type": "unstyled",
+        "text": "FIRMWARE UPGRADE: AGENTS.md の 'Core Logic' セクションを書き直して。今週学んだことをすべて統合して、来週のはじめには今週よりも有能でシニアなバージョンの自分として始まるように。」"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここが本当に効くポイントです。Weekly Self-Management Prompt は AGENTS.md (= 自分の global variable) を Codex が自分で書き換える仕組みです。来週の Codex は、今週の業務から学習されたバージョンで起動します。先週よりも少しだけ自分の文脈を深く理解した状態で。"
+      },
+      {
+        "type": "unstyled",
+        "text": "4 つのプロンプトの実装は OSS として GitHub で公開されています (github.com/duolahypercho/codex-knowledge-llm)。Browser-use や Computer Use のセットアップ、cron / launchd を使った夜間自動実行の設定、ファイル監視と通知連携のスクリプトはここを参照してください。本記事は日本の業務文脈での翻訳と AGENTS.md / プロンプトの業務向けカスタマイズに集中しているので、生の実装は OSS リポジトリと役割を分けています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Browser-use や Computer Use が無くても動かす最小実装はこうです。X のブックマークは手動で copy-paste して inbox/2026-05-19_X-Insights.md に貼り付け、YouTube の Watch Later はブラウザ拡張で transcript を export して inbox/ に置き、Daily Evolution Prompt だけは毎晩手動で Codex に投げる。これだけでも、Daily Brief が生成されて翌朝届く状態には到達します。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここまでで「夜の間に Vault が育つ仕組み」が手に入りました。ただし、Vault が育つと別の問題が出てきます。Codex が「もう知ってる」と shortcut を取り始める \"cocky\" 現象です。それを防ぐのが次章の Freshman Rule です。"
+      },
+      {
+        "type": "header-two",
+        "text": "⑥Vaultが育つほどCodexが横着になるのを防ぐFreshman Rule"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIzd--ObcAA-lct.jpg",
+        "width": 2048,
+        "height": 1152
+      },
+      {
+        "type": "unstyled",
+        "text": "元記事でこう書かれています。「As your vault grows, agents get 'cocky.' They take shortcuts.」Vault が育つほど agent は cocky (横着、過信気味) になり、shortcut を取り始める、と。"
+      },
+      {
+        "type": "unstyled",
+        "text": "具体的にはこういう現象です。Vault が 30-50 ページのうちは Codex も毎回 /notes/ を確認します。それが 200 ページに到達すると、Codex は「もう知ってる」「以前 read 済み」を前提に、必要な参照を skip するようになります。3 ヶ月前の意思決定と矛盾する提案を「最新の方が正しい」と勝手に判断して出してくることもあります。元記事の筆者はRule (新入生ルール = 謙虚さの強制) と呼ぶ 3 つを AGENTS.md に追記しています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Cite the Source",
+        "inlineStyleRanges": [
+          {
+            "length": 15,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "原文では「Tell your agent it isn't allowed to make a technical decision unless it can link back to a specific file in your /notes. If the info isn't in the vault, the agent has to admit it's guessing.」と書かれています。/notes/ の特定ファイルへのリンクが張れない限り技術判断を許さない、Vault にない情報なら agent は「これは推測です」と認めなければならない、と。"
+      },
+      {
+        "type": "unstyled",
+        "text": "業務向けには「/notes/clients/ または /notes/decisions/ にあるファイル名を引用できない限り、案件についての提案を出さない」と書き換えます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Plan-First Checkpoint",
+        "inlineStyleRanges": [
+          {
+            "length": 21,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "原文では「Never let an agent just start typing code. Force it to write a 3-sentence 'Battle Plan' based on your current AGENTS.md before it touches the keyboard.」と書かれています。Codex に code を打ち始める前に、AGENTS.md ベースで 3 文の Battle Plan を書かせる、と。"
+      },
+      {
+        "type": "unstyled",
+        "text": "業務向けには「提案書を書き始める前に、AGENTS.md と notes/clients/ を読んで 3 文の Battle Plan を書き、私が承認してから書き始めること」と書き換えます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Kill the Assumptions",
+        "inlineStyleRanges": [
+          {
+            "length": 20,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "原文では「If a task contradicts a note you saved three months ago, the agent shouldn't try to be 'clever.' It needs to stop and ask you for the tie-breaker.」と書かれています。3 ヶ月前の note と矛盾する task では agent が「clever」になろうとせず、必ず人間に確認させる、と。"
+      },
+      {
+        "type": "unstyled",
+        "text": "業務向けには「3 ヶ月以上前の /notes/decisions/ と矛盾する提案を出す前に、必ず私に確認すること」と書き換えます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "3 つを AGENTS.md の Non-negotiable Rules セクションに追記すると、こうなります。"
+      },
+      {
+        "type": "markdown",
+        "text": "```markdown\n## Non-negotiable Rules (Freshman Rule 追加版)\n- Never give me boilerplate\n- Always check /notes/ before making any suggestion\n### Cite the Source\n技術判断や案件への提案を出す前に、必ず /notes/ の特定ファイル名を引用すること。\nVault に出典がない場合は「これは推測です」と明示して。\n### Plan-First Checkpoint\n提案書 / コード / 戦略ドラフトを書き始める前に、AGENTS.md と関連 /notes/ を\n読み、3 文の Battle Plan を書いて私に提示すること。承認後に着手。\n### Kill the Assumptions\n3 ヶ月以上前の /notes/decisions/ と矛盾する判断を提案する前に、agent は\n必ず手を止めて私に確認すること。最新が正しいとは限らない。\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "このセクションを AGENTS.md に追記するだけで、Vault が 200 ページに育っても Codex は「もう知ってる」を理由に shortcut を取らなくなります。半年後の Vault も、初日と同じ謙虚さで動き続けます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "仕組みが揃いました。今週末セットアップしてから 30 日後、6 ヶ月後、12 ヶ月後、Vault はどう変わっていくのか。次章で見ていきます。"
+      },
+      {
+        "type": "header-two",
+        "text": "⑦Codexを使うのを辞めCodexを指揮する立場に変わる"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIzermdbgAAKnLK.jpg",
+        "width": 2048,
+        "height": 1152
+      },
+      {
+        "type": "unstyled",
+        "text": "30 日目には、inbox/ と notes/ を合わせて 30-50 ページに達しています。毎朝の DAILY-BRIEF.md が安定して届くようになり、Codex に新しい問いを投げるたびに、過去の議事録や Slack スター付きや商談メモが自然に引用される回答が返ってきます。「あの件、先週合意した方向で進めましょう」ではなく、「2026 年 4 月 28 日のクライアント A 議事録 (notes/clients/client-A-context.md:L42) で合意した方向で、競合 X の最新動向 (notes/competitors/competitor-X-positioning.md) を加味して、今週は次の 3 つを進めましょう」と返ってくる質感に変わります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "3 ヶ月目には、notes/ が 100-150 ページに到達し、ideas/ にも 10-15 個の判断軸が蓄積されています。Codex の回答が「業務固有のニュアンス」を持ち始めます。新しい案件の提案書を書く依頼を投げたとき、Codex は ideas/why-we-win.md と ideas/pricing-philosophy.md を読み、過去 3 ヶ月の似た案件の議事録を引きながら、あなたが書いたような提案書を返してきます。一般的な AI 回答ではなく、「あなたの考え方を真似て書いた」提案書です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "6 ヶ月目には、Weekly Self-Management Prompt が AGENTS.md の Core Logic を毎週書き換えてきた結果が積み上がります。今の AGENTS.md は、6 ヶ月前のあなたが書いた初版とはまったく違う、もっと精度の高い「自分の global variable」になっています。Codex は「先週より少しシニアなバージョンの自分」として起動し続けます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "12 ヶ月目には、Vault が個人専用のファインチューニングコーパスとして使えるレベルに育ちます。@ziwenxu_ は元記事の結びでこう書きます。「By the time I sit down at my M4 Mac Mini, my Codex has already spent the night scraping my bookmarks and updating its internal logic. I don't wake up to a blank screen; I wake up to a Jarvis-style briefing from a partner that's been working while I slept.」朝、机に座る頃には Codex は夜の間に Vault を更新し終えていて、白紙画面で 1 日が始まるのではなく、Jarvis 型のブリーフィングを partner から受け取る朝に到達している、と。"
+      },
+      {
+        "type": "unstyled",
+        "text": "そして結びはこう続きます。「I've stopped 'using' AI. I've started directing it. Treat it like a partner. Give it the keys to your office.」AI を「使う」のを辞め、AI を「指揮する」立場に変わった。partner として扱い、自分のオフィスの鍵を渡せ、と。"
+      },
+      {
+        "type": "unstyled",
+        "text": "これは大げさな話ではありません。30 日から 12 ヶ月までの変化は、Daily Evolution Prompt が毎日 inbox/ を取り込み、Weekly Self-Management Prompt が毎週 AGENTS.md を書き換える、という単純なループを回し続けた結果です。複利が効く仕組みは「追加する」だけではなく、Daily/Weekly の整理し直しと AGENTS.md の自己書き換えが組み合わさったところで生まれます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "では、12 ヶ月後の Codex を持つために、今週末は何から始めればいいでしょうか。"
+      },
+      {
+        "type": "header-two",
+        "text": "⑧今週末2日間でCodex Knowledge Vaultを動かすDay1とDay2"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIzew5Na4AAtEXa.jpg",
+        "width": 2048,
+        "height": 1152
+      },
+      {
+        "type": "unstyled",
+        "text": "最初の 2 日間で動かす範囲を絞ります。完璧を目指すと挫折します。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Day 1: Vault のセットアップだけに集中する",
+        "inlineStyleRanges": [
+          {
+            "length": 27,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "初日の 90 分でやることは、Obsidian インストール、Vault ディレクトリ作成、AGENTS.md 初版の投入、これだけです。"
+      },
+      {
+        "type": "markdown",
+        "text": "```bash\n# Obsidian の Vault ディレクトリを作る\nmkdir -p ~/Vault/{inbox,notes,ideas,projects}\nmkdir -p ~/Vault/notes/{clients,competitors,process,decisions}\n# AGENTS.md の初版を投入する\ncat &#x3C;&#x3C; 'EOF' > ~/Vault/AGENTS.md\n# AGENTS.md (Codex 用 master file = global variable)\n## Who I Am\n- 名前: あなたの氏名\n- 役割: あなたの役割 (1 人事業主 / コンサル / マーケ責任者 等)\n- 言語: 日本語が基本\n## 2026 Goals\n- Q2: あなたの今期目標を 2-3 個\n- Q3: あなたの来期目標を 2-3 個\n## Non-negotiable Rules\n- Never give me boilerplate\n- Always check /notes/ before making any suggestion\n- 3 ヶ月前の /notes/decisions/ と矛盾する提案を出す前に必ず私に確認\n## Vault Layout\n- inbox/      ← 議事録 / Slack スター付き / 商談 / ブックマーク取り込み結果\n- notes/      ← 構造化された業務概念ページ\n- ideas/      ← 私の判断軸 (why-we-win / pricing-philosophy / hire-criteria)\n- projects/   ← 現在進行中の案件\nEOF\n# Claude Code 派の方は CLAUDE.md にも同内容をコピー\ncp ~/Vault/AGENTS.md ~/Vault/CLAUDE.md\n# Obsidian でこのディレクトリを Vault として開く\n# (Obsidian → 「フォルダを Vault として開く」→ ~/Vault を選択)\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここまで来れば、Day 1 は終わりです。残りの時間は「ideas/why-we-win.md を 200 字で書く」「過去 1 週間の議事録 1-2 件を inbox/ に置く」など、軽い手動投入で Vault に魂を入れる作業に使います。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Day 2: 4 つのプロンプトを Codex に投入する",
+        "inlineStyleRanges": [
+          {
+            "length": 29,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "2 日目の 90 分でやることは、Codex の起動、AGENTS.md を読ませる、Daily Evolution Prompt を 1 回手動で実行、DAILY-BRIEF.md を確認、これだけです。"
+      },
+      {
+        "type": "markdown",
+        "text": "```bash\n# Codex を起動して Vault ディレクトリで作業\ncd ~/Vault\ncodex\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "Codex の対話に入ったら、まず AGENTS.md を読ませます。"
+      },
+      {
+        "type": "markdown",
+        "text": "```markdown\n> AGENTS.md を読んで、今日からのセッションで Non-negotiable Rules を必ず\n守ってください。inbox/ に何があるか教えてください。\n\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "次に、Daily Evolution Prompt を手動で投げます。前章の Prompt 3 全文をコピペして、our current projects と technical patterns を業務向けに書き換えたものを投入します。"
+      },
+      {
+        "type": "markdown",
+        "text": "```markdown\n> 過去 24 時間に /inbox と /notes に追加されたファイルをすべて監査して、\nAGENTS.md にあるロードマップと cross-reference して。\nMEMORY ENHANCEMENT: 現在進行中の案件 (...) で内面化すべき新しい業務\nパターン (提案構造 / 価格交渉ロジック / 競合対抗策) を特定して。\nSTRATEGIC SHIFT: 新しい情報が、現在の案件の進め方を変えるべきだと\n示唆していないか。あれば矛盾点をフラグ立てして。\nIMMEDIATE ACTION: 以上を踏まえて、明日最もレバレッジが効く\n1 タスクは何か。DAILY-BRIEF.md に保存して。\n\n```"
+      },
+      {
+        "type": "unstyled",
+        "text": "~/Vault/DAILY-BRIEF.md が生成されます。開いて、翌朝の業務に届いた Jarvis 型ブリーフィングの最初の 1 通を確認してください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここまでが今週末の最小実装です。X Bookmark Extraction Prompt と YouTube Knowledge Prompt の自動化、cron / launchd を使った夜間実行、Weekly Self-Management Prompt の週次自動化は、3 週目以降に少しずつ組み込んでいけば十分です。実装の生コードは OSS リポジトリ (github.com/duolahypercho/codex-knowledge-llm) を参照してください。"
+      },
+      {
+        "type": "unstyled",
+        "text": "12 ヶ月後の Codex が「自分より自分を知っている partner」として朝待っている状態の、最初の一歩がこの 2 日間です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "12 ヶ月続けると、AI を「使う」関係から、AI を「指揮する (direct)」関係に変わります。けれど今週末やることは、5 層のディレクトリ作成と AGENTS.md 初版投入だけです。それで十分です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "要点を整理します。"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "ボトルネックは AI モデルではなく Context Debt (文脈負債) = 業務記録が AI に渡されない状態。Chat Window から Persistent Knowledge Layer (Vault に積み上げられる記憶層) に移すと出力が桁違いに変わる"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "AGENTS.md は Codex が起動時に必ず最初に読む 1 ファイル = 自分の global variable。Claude Code 派は CLAUDE.md として同内容で併存させればツールが変わっても Vault は変わらない"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "Vault は AGENTS.md + inbox + notes + ideas + projects の 5 層フラット構造で動かす。ideas/ に自分の判断軸を入れるかどうかで Codex の出力品質が決まる"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "4 つの自動化プロンプト (X Bookmark Extraction / YouTube Knowledge / Daily Evolution / Weekly Self-Management) で夜の間に Codex が Vault を育てる。Browser-use / Computer Use が前提だが、手動 export でも最小実装は動く"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "Vault が育つと Codex が cocky (横着) になる現象を Freshman Rule (Cite the Source / Plan-First Checkpoint / Kill the Assumptions) で防ぐ。AGENTS.md の Non-negotiable Rules に追記するだけ"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "Weekly Self-Management Prompt が AGENTS.md の Core Logic を毎週書き換える仕組みが複利の中身。先週よりも少しシニアなバージョンの Codex として来週が始まる"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "今週末は Day 1 (5 層ディレクトリ + AGENTS.md 初版) と Day 2 (Daily Evolution Prompt 投入 + 最初の DAILY-BRIEF.md 確認) だけで「Jarvis briefing が届く朝」の入口に立てる"
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "unstyled",
+        "text": "AIエージェントの記憶設計に興味がある方へ。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HIzgHI9a4AAT7Xm.jpg",
+        "width": 1196,
+        "height": 998
+      },
+      {
+        "type": "unstyled",
+        "text": "東大Obsidianオタク（ @ObsidianOtaku ）はObsidianとAIを組み合わせて自分自身やチームの分身を作る取り組みを研究しているチームです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "AIエージェントと組み合わせてあらゆる仕事の品質を向上させるための手法を実践しています👇"
+      },
+      {
+        "type": "unstyled",
+        "text": "■ AI記憶設計の実装パターンの公開\n■ Obsidian活用のトレンドとノウハウ解説\n■ 独自構築した今日から使えるObsidian設計情報のシェア"
+      },
+      {
+        "type": "unstyled",
+        "text": "今後も実践的な情報を積極的に発信していきます！フォローをお願いします^^"
+      }
+    ]
+  },
+  "status": "success",
+  "msg": "success",
+  "_handle": "ObsidianOtaku"
+}

@@ -1,0 +1,1553 @@
+{
+  "article": {
+    "id": "QXJ0aWNsZUVudGl0eToyMDUyNTczNTE3MDI0MjMxNDI0",
+    "author": {
+      "type": "user",
+      "userName": "obsidianstudio9",
+      "url": "https://x.com/obsidianstudio9",
+      "twitterUrl": "https://twitter.com/obsidianstudio9",
+      "id": "2043209661525209088",
+      "name": "りゅう@Obsidianガチ勢",
+      "isVerified": false,
+      "isBlueVerified": true,
+      "verifiedType": null,
+      "profilePicture": "https://pbs.twimg.com/profile_images/2043613057184845824/Ea6O-2j__normal.jpg",
+      "coverPicture": "https://pbs.twimg.com/profile_banners/2043209661525209088/1776848297",
+      "description": "Claude × Obsidianで“第2の脳”を構築中｜海外の事例を参考にしたナレッジ・コンテキスト管理法を毎日発信｜中の人はコンテキスト総量100億字規模で運用してます｜思考と情報を永久にローカル資産化したい方はフォロー推奨👆",
+      "location": "",
+      "followers": 2802,
+      "following": 16,
+      "status": "",
+      "canDm": true,
+      "canMediaTag": true,
+      "createdAt": "Sun Apr 12 06:09:49 +0000 2026",
+      "entities": {
+        "description": {}
+      },
+      "fastFollowersCount": 0,
+      "favouritesCount": 531,
+      "hasCustomTimelines": false,
+      "isTranslator": false,
+      "mediaCount": 225,
+      "statusesCount": 317,
+      "withheldInCountries": [],
+      "affiliatesHighlightedLabel": {},
+      "possiblySensitive": false,
+      "pinnedTweetIds": [
+        "2058424814637809933"
+      ],
+      "profile_bio": {},
+      "isAutomated": false,
+      "automatedBy": null
+    },
+    "replyCount": 1,
+    "likeCount": 113,
+    "quoteCount": 0,
+    "viewCount": "35719",
+    "createdAt": "Thu May 14 09:02:11 +0000 2026",
+    "title": "【最新版】Codex×Obsidianの『第2の脳』を構築の仕方",
+    "preview_text": "Claude Code × Obsidian",
+    "cover_media_img_url": "https://pbs.twimg.com/media/HIKNAlLbEAMB6Qg.jpg",
+    "contents": [
+      {
+        "type": "unstyled",
+        "text": "Claude Code × Obsidian だけで『第2の脳』を育てれると思ってる人は必ずこの記事をみてください。時代はCodex×Obsidianです。『2つの本当の違い』と『使い分けの新常識』をこの記事で徹底解説していきます。ClaudeCodeとCodexの力を300％引き出したい人は必ずチェックしてください。",
+        "inlineStyleRanges": [
+          {
+            "length": 22,
+            "offset": 78,
+            "style": "Italic"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "1年運用してきて、ここ2ヶ月のモヤモヤが無視できなくなった話",
+        "inlineStyleRanges": [
+          {
+            "length": 30,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "「Claude Code × Obsidian で第2の脳を構築する」というテーマでこのアカウントを運用してきて、ちょうど1年が経ちました。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HHxyZ10aQAA1ORq.jpg",
+        "width": 1672,
+        "height": 941
+      },
+      {
+        "type": "unstyled",
+        "text": "最初の Vault を作ったのは去年の春のこと。Andrej Karpathy 氏（OpenAI 創設メンバー）が提唱した「使うほど賢くなるパーソナルナレッジベース」というコンセプトに引き込まれて、raw/ と wiki/ の2フォルダから始めました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "そこから3層アーキテクチャ（Raw / Wiki / Schema）を組み立てて、CLAUDE.md で Wiki の構造と命名規則を定義し、Ingest / Compile / Query / Lint の4サイクルで運用するところまで完成させました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "毎朝、新しい記事を raw/ にコピペして「インデックスを踏まえて処理して」と指示する。週末には /wiki-lint で矛盾チェックを回す。Vault のグラフビューは最初は10ノードしかなかったのに、いつの間にか 300ノード超 になっていました。",
+        "inlineStyleRanges": [
+          {
+            "length": 7,
+            "offset": 109,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "「使うほど賢くなる」を実感した1年でした。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ただ、ここ2ヶ月くらいから、ふとした瞬間に「これ、本当にスケールするのかな」と立ち止まる場面が増えてきました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Vault のサイズが大きくなるにつれて、Claude Code が Vault 全体を把握するのにかかる時間が長くなる。Skill の発動が前ほど安定しない。気がつくと、メンテナンス自体が面倒な作業に逆戻りしている時間がある。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Karpathy 氏は「メンテナンスはただのコマンドになる」と書いていたはずなのに、私の運用ではコマンドを実行する前に「どのコマンドを使うべきか」を考える時間が増えていました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "そんなタイミングで、Codex × Obsidian という選択肢が、思った以上に成熟してきていることに気づきました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ここからが本題です。"
+      },
+      {
+        "type": "header-two",
+        "text": "【Before の限界】Claude Code × Obsidian で詰まった5つのモヤモヤ",
+        "inlineStyleRanges": [
+          {
+            "length": 47,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "正直に書きます。Claude Code × Obsidian で運用してきて感じていたモヤモヤは、5つありました。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HHxydDhbcAAdc5z.jpg",
+        "width": 1672,
+        "height": 941
+      },
+      {
+        "type": "unstyled",
+        "text": "モヤモヤ1: コンテキストがすぐ枯渇する",
+        "inlineStyleRanges": [
+          {
+            "length": 20,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "これが一番大きかったです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Vault が大きくなるにつれて、「この概念について Vault 横断で整理して」と頼むと、コンテキストウィンドウの 30% があっという間に消えていく。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 59,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "実は海外の検証データでも、Claude Code は同じタスクで Codex の 3.2〜4.2倍のトークンを消費しているという結果が出ています（DataCamp / MorphLLM のベンチマーク比較）。",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 41,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "精度を担保するために徹底的に文脈を読み込む設計なので、品質的には正しいんです。でも Vault 全体把握型のクエリを1日に何度も投げる運用だと、コストもセッション分割の手間も無視できないサイズになってきます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "モヤモヤ2: 5時間の利用制限が運用リズムと噛み合わない",
+        "inlineStyleRanges": [
+          {
+            "length": 28,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude Code の5時間ローリング制限。これが Vault 運用と相性が悪いと感じる場面が増えました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "朝の Ingest で30%、昼の Query で20%、夕方の Lint で25%、夜の記事化で30%。体感ですが、これくらいの分配で1日が動きます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "でも記事化のフェーズで核心的なクエリを投げたタイミングで制限に当たることが、月に何度かありました。FastDoctor のチームも同じ問題を Zenn で報告していて、「5時間制限・コンテキスト30%消費・品質不安定」が Codex への並走検証を始めたきっかけだったそうです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "モヤモヤ3: モデル更新で挙動が変わる怖さ",
+        "inlineStyleRanges": [
+          {
+            "length": 21,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "これは Claude Code というより Anthropic 側の話ですが、Opus 4.7 にアップデートされてから明らかに挙動が変わりました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ツール呼び出しの回数が減って、推論で済ませようとする傾向が強くなった。Vault のファイルを Read せずに「このファイルにはこう書いてあるはず」と推測で答えてしまう場面が、目に見えて増えました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "エージェント生成も明らかに減りました。「3つの観点で並列調査して」と頼んでも、サブエージェントを使わず1つの推論で済ませようとする。これは記事執筆や Vault 監査のような並列作業で痛い。"
+      },
+      {
+        "type": "unstyled",
+        "text": "モデル更新そのものは進化なんですが、運用ロジックを組み直す必要があるレベルの挙動変化が、半年に1回くらい起きるリズム。これは PKM の長期運用と相性がよくないと感じました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "モヤモヤ4: Skill の発動が不安定",
+        "inlineStyleRanges": [
+          {
+            "length": 20,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "ここが意外と大きかった。"
+      },
+      {
+        "type": "unstyled",
+        "text": ".claude/skills/ 配下に Skill ファイルを置いて、ユーザーの発言にトリガーが含まれたら自動発動する設計。これがうまく嵌ると気持ちいいんですが、嵌らない時も結構ありました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "「Karpathy 式 Vault 運用」というトリガーで該当 Skill が発動するように書いたつもりが、別の Skill が先に発動して上書きされる、というパターン。Skill が増えると干渉が起きやすくなって、結局「まず /skill-name で明示起動」する習慣が抜けなくなりました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "これは Skill 設計の問題でもあるんですが、ホスト側の発動ロジックがブラックボックスなので、運用でリカバーしきれない部分がありました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "モヤモヤ5: 「コード生成」前提の思想とのズレ",
+        "inlineStyleRanges": [
+          {
+            "length": 23,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "これが一番、思想的なモヤモヤでした。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Karpathy 氏が2026年4月3日に X で書いていた一文があります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "A large fraction of my recent token throughput is going less into manipulating code, and more into manipulating markdown.",
+        "inlineStyleRanges": [
+          {
+            "length": 121,
+            "offset": 0,
+            "style": "Italic"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "（最近のトークン消費は、コードをいじることより、マークダウンをいじることに使われている）",
+        "inlineStyleRanges": [
+          {
+            "length": 44,
+            "offset": 0,
+            "style": "Italic"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "これ、めちゃくちゃ象徴的でした。LLM の用途が「コード生成ツール」から「知識を整理する道具」へシフトし始めている。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ところが Claude Code は名前の通り「Code」が中心の設計で、Vault 運用は副次的な使い方。コード生成は強いんですが、マークダウンを媒体にした知識整理に最適化されているわけではない。"
+      },
+      {
+        "type": "unstyled",
+        "text": "このズレが、Vault が大きくなるほど顕在化してきました。"
+      },
+      {
+        "type": "header-two",
+        "text": "【転換点】Codex に何が起きていたか — 12ヶ月の進化史",
+        "inlineStyleRanges": [
+          {
+            "length": 31,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "ちょうどこのタイミングで、Codex 側で大きな動きがありました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "12ヶ月で 177倍 — npm の数字が示す転換",
+        "inlineStyleRanges": [
+          {
+            "length": 25,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HHxygRqbQAAXdu4.jpg",
+        "width": 1672,
+        "height": 941
+      },
+      {
+        "type": "unstyled",
+        "text": "Codex CLI の npm 月次ダウンロード数が、初期の 8.2万 から2026年3月時点で 1,453万まで伸びていました。1年で 177倍増 です。",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 31,
+            "style": "Bold"
+          },
+          {
+            "length": 6,
+            "offset": 49,
+            "style": "Bold"
+          },
+          {
+            "length": 5,
+            "offset": 69,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "正直、私も Codex は「OpenAI 版の Claude Code」くらいの認識で止まっていました。1年前の Codex は CLI ツールとして出始めたばかりで、機能セットも控えめだった印象です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "でも数字を見直してみると、エンタープライズ向け生成 AI 支出における Anthropic のシェアが2025年初の 10% から2026年2月で 65% まで伸びる中で、Codex 側もまったく別の軸で爆発していたという話でした。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 59,
+            "style": "Bold"
+          },
+          {
+            "length": 3,
+            "offset": 74,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Terminal-Bench 2.0 で立場が逆転",
+        "inlineStyleRanges": [
+          {
+            "length": 25,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "決定打はベンチマークでした。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HHxyirobwAAlsCE.jpg",
+        "width": 1672,
+        "height": 941
+      },
+      {
+        "type": "unstyled",
+        "text": "Terminal-Bench 2.0 という、CLI 環境で複雑なタスクをこなす能力を測るベンチマーク。2026年2月時点では Codex（GPT-5.3-Codex）が77.3%、Claude Code（Opus 4.6）が65.4% で、12ポイントの差がついていました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "そして 2026年4月のアップデートで、GPT-5.5 搭載の Codex が 82.7%、Claude Opus 4.7 が 69.4% となり、差は 13.3ポイントに拡大。同時に「同等タスクで 72% トークン効率優位」という結果も発表されました。",
+        "inlineStyleRanges": [
+          {
+            "length": 5,
+            "offset": 40,
+            "style": "Bold"
+          },
+          {
+            "length": 5,
+            "offset": 64,
+            "style": "Bold"
+          },
+          {
+            "length": 8,
+            "offset": 77,
+            "style": "Bold"
+          },
+          {
+            "length": 12,
+            "offset": 100,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "「速度・自律性は Codex / 品質は Claude Code」と単純に住み分けで片付けられない場面が、CLI ベースの作業では確実に増えていました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "OpenAI 公式が「ほぼ何でもできる」と宣言",
+        "inlineStyleRanges": [
+          {
+            "length": 23,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "そして 2026年4月16日、OpenAI が「Codex for (almost) everything」というブログを公開しました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Codex can now operate your computer alongside you, work with more of the tools and apps you use everyday, generate images, remember your preferences, learn from previous actions, and take on ongoing and repeatable work.",
+        "inlineStyleRanges": [
+          {
+            "length": 219,
+            "offset": 0,
+            "style": "Italic"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "（Codex はあなたのコンピュータをあなたと並んで操作し、日常的に使うツールやアプリと連携し、画像生成・記憶・過去のアクションからの学習・継続的タスクの自走を担う）",
+        "inlineStyleRanges": [
+          {
+            "length": 83,
+            "offset": 0,
+            "style": "Italic"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "90以上のプラグイン、メモリ機能、マルチデイ自動化。CLI ツールという範疇を超えて、汎用エージェントへの格上げが宣言されました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "これは TechCrunch でも「OpenAI takes aim at Anthropic with beefed-up Codex」という見出しで取り上げられた、戦略レベルの転換でした。"
+      },
+      {
+        "type": "unstyled",
+        "text": "開発者コミュニティでも、4月後半には「Everyone I know switched to Codex」というポストが流れ始めていました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "正直、ここまで動いているとは思っていなかったです。"
+      },
+      {
+        "type": "header-two",
+        "text": "【After】Codex × Obsidian — 構築した「密閉型ナレッジ工房」",
+        "inlineStyleRanges": [
+          {
+            "length": 41,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "ということで、1ヶ月だけ Codex × Obsidian の並走運用を始めてみました。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HHxynPKaoAAskHX.jpg",
+        "width": 1672,
+        "height": 941
+      },
+      {
+        "type": "unstyled",
+        "text": "正直、1ヶ月では結論を出すには短いんですが、それでも明らかに違うなと感じる部分がいくつもあったので、書いていきます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "私はこのセットアップを 「密閉型ナレッジ工房」 と呼んでいます。理由は後で説明します。",
+        "inlineStyleRanges": [
+          {
+            "length": 11,
+            "offset": 12,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HHxyu1_bwAAqW1N.jpg",
+        "width": 1672,
+        "height": 941
+      },
+      {
+        "type": "unstyled",
+        "text": "5-1. Codex CLI と Obsidian Vault の連携",
+        "inlineStyleRanges": [
+          {
+            "length": 35,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "セットアップは想像以上に簡潔でした。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Obsidian の API キーを生成し、bin ファイルパスを確認したら、ターミナルで以下のコマンドを1行打つだけ。"
+      },
+      {
+        "type": "unstyled",
+        "text": "codex mcp add obsidian-mcp-tools"
+      },
+      {
+        "type": "unstyled",
+        "text": "これで Codex CLI から Obsidian Vault に直接アクセスできるようになります。「今日の worklog を Obsidian に作って」「仕様をまとめて」「インシデントレポートを横断検索して」のようなプロンプトが、CLI から直接通る状態になりました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Zenn の tenkei さんが書いていた手順そのままで動いたので、再現性も高いと思います。"
+      },
+      {
+        "type": "unstyled",
+        "text": "5-2. ~/.codex/skills/ の自由度が違う",
+        "inlineStyleRanges": [
+          {
+            "length": 29,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HHxyzsxa0AAqOCI.jpg",
+        "width": 1672,
+        "height": 941
+      },
+      {
+        "type": "unstyled",
+        "text": "ここが一番大きい違いでした。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude Code の Skill は .claude/skills/ に置きますが、ホスト側の発動ロジックが見えにくい。Codex の Skill は ~/.codex/skills/ に置く設計で、AGENTS.md でルールを Vault 内に書ける。人間と AI が同じファイルを読んでいる状態が作りやすいです。",
+        "inlineStyleRanges": [
+          {
+            "length": 22,
+            "offset": 131,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "私の場合、Claude Code と Codex の両方で使う共通スキルを _shared-ai/skills/ というディレクトリに集約していて、Codex 側は ~/.codex/skills/shared/ に junction で接続しています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "これで、Claude Code を使うときも Codex を使うときも、同じ Skill が動く。ベストプラクティス準拠チェック、引き継ぎプロンプト整形、AI×AI の2系統ファクトチェック、こういう共通スキルを両方のツールから呼び出せます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "そして Obsidian の CEO である kepano 氏が公式に公開している obsidian-skills リポジトリ（GitHub で 12,900 スター超）が Claude Code / Codex の双方に対応しているので、Skill の側からも「ホスト中立」で動かせる構造になりました。",
+        "inlineStyleRanges": [
+          {
+            "length": 11,
+            "offset": 73,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "CEO 自身がこの方向性を定義してくれたのは大きいです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "5-3. コンテキスト管理の体感差",
+        "inlineStyleRanges": [
+          {
+            "length": 17,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HHxy3L6a4AErvtY.jpg",
+        "width": 1672,
+        "height": 941
+      },
+      {
+        "type": "unstyled",
+        "text": "これが一番、運用で実感した違いです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "同じ Vault に対して同じ「全ノートを横断して矛盾検出して」というクエリを投げる。Claude Code はコンテキストの30%を使って徹底的に読み込んでくれるので、品質は高い。一方で5時間制限の中で消費が早い。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Codex の方はトークン効率が高いので、同じクエリに対する消費がベースで7割程度。マルチデイで継続的に走らせる用途とすごく噛み合いました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ただし精度は Claude Code の方が確実に上です。SWE-Bench Verified で Claude Code が 80.8%、Codex は SWE-Bench Pro で 56.8%。「徹底的に読んで答える」用途では Claude Code が頭ひとつ抜けています。",
+        "inlineStyleRanges": [
+          {
+            "length": 5,
+            "offset": 64,
+            "style": "Bold"
+          },
+          {
+            "length": 5,
+            "offset": 94,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "要するに、用途によって明確に使い分けが必要 ということが、1ヶ月で身に染みました。",
+        "inlineStyleRanges": [
+          {
+            "length": 16,
+            "offset": 5,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "5-4. 実際の1日の運用フロー",
+        "inlineStyleRanges": [
+          {
+            "length": 16,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HHxy7mzb0AI7eSL.jpg",
+        "width": 1672,
+        "height": 941
+      },
+      {
+        "type": "unstyled",
+        "text": "参考までに、1ヶ月運用してみた1日の流れを書いておきます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "朝（5〜10分）",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Codex の /update を実行する。daily メモを整理、inbox のノート化、コメント付きハイライトの処理、推奨読書の生成までを自動で回す。人間は「今朝この記事面白かった」のメモを raw/ に放り込むだけ。"
+      },
+      {
+        "type": "unstyled",
+        "text": "これは Zenn の wakachikooo さんの記事で紹介されていた運用パターンを、自分の Vault に合わせてカスタマイズしたものです。AGENTS.md で指示を Vault 内に書けるので、毎日 GitHub PR で変更が自動テストされる仕組みも一緒に構築できます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "昼（深掘りクエリ）",
+        "inlineStyleRanges": [
+          {
+            "length": 9,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude Code を起動。「この概念について Vault 横断で整理して」のような 品質を最優先するクエリ はClaude Code に投げる。出力は wiki/ に保存します。",
+        "inlineStyleRanges": [
+          {
+            "length": 11,
+            "offset": 45,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "夕方（リサーチ）",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Codex でリサーチ系の自動化を回す。6レンズ分析（テクニカル / エコノミクス / ヒストリカル / 地政学 / コントラリアン / ファーストプリンシプル）を並列で実行。結果はすべてresearch-skill-graph/ 配下にティア付きで保存します。"
+      },
+      {
+        "type": "unstyled",
+        "text": "夜（記事化）",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "記事の構成設計と執筆は Claude Code。ただし初稿のリサーチブリーフ生成は Codex に並列で走らせる。役割分担で安定するようになりました。",
+        "inlineStyleRanges": [
+          {
+            "length": 20,
+            "offset": 27,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "体感として、人間の手作業は 3分の1以下に減りました。元の Vault 運用に Codex のレイヤーが追加された、という感覚に近いです。",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 14,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "【Before vs After】5観点で徹底比較",
+        "inlineStyleRanges": [
+          {
+            "length": 25,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "ここまでの話を、表で整理しておきます。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HHzly16a0AA2lNF.jpg",
+        "width": 1672,
+        "height": 941
+      },
+      {
+        "type": "unstyled",
+        "text": "| 観点 | Claude Code × Obsidian | Codex × Obsidian | どちらが強い |"
+      },
+      {
+        "type": "unstyled",
+        "text": "|---|---|---|---|"
+      },
+      {
+        "type": "unstyled",
+        "text": "| ターミナル系タスク（Terminal-Bench 2.0） | 69.4% | 82.7% | Codex が 13.3pt 上 |",
+        "inlineStyleRanges": [
+          {
+            "length": 5,
+            "offset": 42,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "| コード品質（SWE-Bench Verified / Pro） | 80.8% | 56.8% | Claude Code が 24pt 上 |",
+        "inlineStyleRanges": [
+          {
+            "length": 5,
+            "offset": 36,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "| トークン効率 | ベース×3.2〜4.2倍消費 | 72%効率優位 | Codex |",
+        "inlineStyleRanges": [
+          {
+            "length": 7,
+            "offset": 28,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "| 自律性・継続実行 | 5時間制限あり | マルチデイ自動化 | Codex |",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 23,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "| 日本語処理品質 | 高い | やや劣る | Claude Code |",
+        "inlineStyleRanges": [
+          {
+            "length": 2,
+            "offset": 12,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "数字だけ見ると Codex が圧勝に見えるんですが、現場で運用してみると 5観点それぞれが効く場面が違います。"
+      },
+      {
+        "type": "unstyled",
+        "text": "速度を取りに行きたい場面 → Codex",
+        "inlineStyleRanges": [
+          {
+            "length": 20,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "朝の Ingest のような「素材を捌く」タスクや、「Vault に新しい構造を一気に展開する」ようなマルチデイ自動化は、Codex が圧倒的に楽でした。GPT-5.5 が 82.7% を叩き出しているターミナル系タスクは、CLI ベースの Vault 運用と相性がいい。",
+        "inlineStyleRanges": [
+          {
+            "length": 5,
+            "offset": 87,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "品質を担保したい場面 → Claude Code",
+        "inlineStyleRanges": [
+          {
+            "length": 24,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "逆に、「全ノート横断で矛盾検出」「核心的なクエリへの引用付き回答」のような品質クリティカルなタスクは、Claude Code の 80.8% が効きます。トークンは食うんですが、徹底的に読み込んで答える設計なので、思わぬ抜けが少ない。",
+        "inlineStyleRanges": [
+          {
+            "length": 5,
+            "offset": 65,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "コストを最適化したい場面 → Codex",
+        "inlineStyleRanges": [
+          {
+            "length": 20,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "ChatGPT Plus サブスクの中で Codex がほぼ追加課金なしで使える。一方で Claude Code は従量課金で、トークン消費の多さが効いてきます。Vault 全体把握型のクエリを1日10回投げる運用だと、コスト差は無視できません。"
+      },
+      {
+        "type": "unstyled",
+        "text": "日本語の品質を取る場面 → Claude Code",
+        "inlineStyleRanges": [
+          {
+            "length": 25,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "これは sutero さんも Note で指摘していたんですが、Codex の日本語処理は Claude Code と比べると一段落ちます。記事執筆や日本語ドキュメントの整形は、現状 Claude Code の方が自然な日本語が出てきます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "自律的に動いてほしい場面 → Codex",
+        "inlineStyleRanges": [
+          {
+            "length": 20,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "OpenAI が「Codex for (almost) everything」で宣言した通り、マルチデイ自動化、メモリ機能、90以上のプラグイン連携で、CLI ツールの枠を超えた汎用エージェントとして動きます。「夜中に走らせて朝結果を確認」のような運用は、Codex の独壇場でした。",
+        "inlineStyleRanges": [
+          {
+            "length": 21,
+            "offset": 76,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "1ヶ月使ってわかった『時代の転換点』3つ",
+        "inlineStyleRanges": [
+          {
+            "length": 20,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "数字や機能比較とは別に、1ヶ月運用してみて思想レベルで「これは時代が動いた」と感じた瞬間が3つありました。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HHzl_9FbcAA7oRZ.jpg",
+        "width": 1672,
+        "height": 941
+      },
+      {
+        "type": "unstyled",
+        "text": "転換点1: AI が「補助」から「相棒」になった",
+        "inlineStyleRanges": [
+          {
+            "length": 24,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "これは OpenAI が「Codex for (almost) everything」で書いた一文に集約されています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Codex can now operate your computer alongside you.",
+        "inlineStyleRanges": [
+          {
+            "length": 50,
+            "offset": 0,
+            "style": "Italic"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "（Codex はあなたと並んで、あなたのコンピュータを操作する）",
+        "inlineStyleRanges": [
+          {
+            "length": 32,
+            "offset": 0,
+            "style": "Italic"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "「alongside you」という表現が象徴的でした。これまでの AI ツールは「人間が依頼して、AI が応答する」という非対称な関係でした。Claude Code もそうです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "でも Codex が宣言したのは、並走関係 です。あなたと同じデスクトップを共有し、あなたが日常的に使うアプリ群と連携し、過去のアクションから学習する。",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 17,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "実運用でも、「夜中に Codex に Vault のリサーチを並走させて、朝起きたら結果が揃っている」という状態が成立し始めました。「自分が作業している横で、もう1人の自分が作業している」という感覚に近い。"
+      },
+      {
+        "type": "unstyled",
+        "text": "これは思想レベルの転換だなと感じました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "転換点2: ナレッジ工房が「重い建築物」から「機動的な工房」になった",
+        "inlineStyleRanges": [
+          {
+            "length": 34,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HHzmD8raUAA-JYP.jpg",
+        "width": 1672,
+        "height": 941
+      },
+      {
+        "type": "unstyled",
+        "text": "Karpathy 氏が4月3日に書いていた一文が、もう一つの象徴でした。"
+      },
+      {
+        "type": "unstyled",
+        "text": "...going less into manipulating code, and more into manipulating markdown.",
+        "inlineStyleRanges": [
+          {
+            "length": 74,
+            "offset": 0,
+            "style": "Italic"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "LLM の用途が「コード生成ツール」から「知識を整理する道具」へシフトし始めている。これは私自身の運用感覚と完全に一致しました。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude Code × Obsidian を1年運用していたとき、私の Vault は徐々に 重い建築物 になっていきました。300ノード超の Vault は、それ自体が把握・メンテナンスのコストを発生させ続ける構造でした。",
+        "inlineStyleRanges": [
+          {
+            "length": 5,
+            "offset": 49,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Codex × Obsidian に移行してみたら、Vault が 機動的な工房 に変わりました。kepano 氏が公式に公開している obsidian-skills を Codex から呼び出すと、Vault に対する操作が「コマンド実行」レベルまで軽くなる。重い建築物を維持するのではなく、日々作り直しながら使う工房型の Vault 運用が、現実的に成立しました。",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 34,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "私が「密閉型ナレッジ工房」と呼んでいるのは、この感覚です。閉じた空間の中で、AI と人間が並走しながら作り直し続ける場所、という意味です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "転換点3: 統合が「コミュニティ駆動」から「公式駆動」になった",
+        "inlineStyleRanges": [
+          {
+            "length": 31,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "これは技術基盤の話です。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HHzmOiNbIAAnae1.jpg",
+        "width": 1672,
+        "height": 941
+      },
+      {
+        "type": "unstyled",
+        "text": "これまで Claude Code × Obsidian の統合は、コミュニティ製のプラグイン（Claudian、obsidian-claude-code-mcp など）が主役でした。完成度は高かったんですが、公式の保証はありませんでした。",
+        "inlineStyleRanges": [
+          {
+            "length": 11,
+            "offset": 104,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "ところが2026年に入ってから、Obsidian CEO の kepano 氏自身が obsidian-skills というリポジトリを公開し、12,900スター超に伸びました。これは Claude Code / Codex の 両方に対応する Agent Skills 集で、CEO が直接「公式統合の方向性」を定義した形です。",
+        "inlineStyleRanges": [
+          {
+            "length": 7,
+            "offset": 115,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Robert Cincotta 氏は4,663ファイル・16GB の研究Vault で Obsidian CLI + Claude Code を検証し、大規模ファイル扱いの性能が 54〜70,000倍改善 したと報告しています。",
+        "inlineStyleRanges": [
+          {
+            "length": 12,
+            "offset": 90,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "つまり、これまで「コミュニティの熱量」で動いていた領域が、公式・実証・大規模対応 のフェーズに入った。Codex × Obsidian の優位性を支えているのは、Codex 単体の進化ではなく、この「公式駆動」への移行です。",
+        "inlineStyleRanges": [
+          {
+            "length": 11,
+            "offset": 29,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "ここまでが、1ヶ月使ってみて感じた『時代の転換点』3つでした。"
+      },
+      {
+        "type": "header-two",
+        "text": "でも Claude Code × Obsidian が完全に終わったわけではない — 棲み分け論",
+        "inlineStyleRanges": [
+          {
+            "length": 48,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "ここまで Codex × Obsidian の優位性を中心に書きましたが、正直に言うと 完全乗り換えは現実的ではないというのが私の1ヶ月の結論です。",
+        "inlineStyleRanges": [
+          {
+            "length": 14,
+            "offset": 44,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HHzmQ5OboAASqr0.jpg",
+        "width": 1672,
+        "height": 941
+      },
+      {
+        "type": "unstyled",
+        "text": "実は sutero さんは Note の別記事で「Codex は Claude Code の代わりにならない」と書いていました。理由は3つ。日本語処理品質の差、両方を構築する設定コスト、Claude Code への既存投資。補完ツールとしてはOKだが、主軸切り替えには不向き という判断です。",
+        "inlineStyleRanges": [
+          {
+            "length": 25,
+            "offset": 112,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "私もこの結論にほぼ同意します。"
+      },
+      {
+        "type": "unstyled",
+        "text": "DeNA の南場智子会長が AI 活用について語った話の中で、「Perplexity / NotebookLM / ChatGPT / Cursor を場面で使い分ける」というフレームを紹介していました。1つの最強ツールではなく、用途別の道具箱という発想。これが今の状態に一番近いです。",
+        "inlineStyleRanges": [
+          {
+            "length": 7,
+            "offset": 115,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "具体的には、こう棲み分けています。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HHzmVguaYAAWpJQ.jpg",
+        "width": 1672,
+        "height": 941
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude Code が向いているのは、品質クリティカルな核心クエリ（全ノート横断で矛盾検出 / 引用付き回答）、日本語ドキュメントの執筆・整形、5時間以内に集中して終わらせる作業。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Codex が向いているのは、マルチデイ自動化（夜中走らせて朝結果確認）、大量素材の Ingest と構造化、90以上のプラグインを使った外部連携、ChatGPT Plus サブスク内で済ませたいコスト最適化。"
+      },
+      {
+        "type": "unstyled",
+        "text": "山岡敏夫さんが Note で書いていた「セカンドオピニオン」モデルも参考になります。Claude Code を主、Codex をレビュー役として並走させる設計。/codex:review（通常レビュー）、/codex:adversarial-review（厳しめチェック）、/codex:rescue（バグ調査）のように役割分担する形です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "つまり、Codex × Obsidian が来たからClaude Code × Obsidian を捨てる、という二項対立ではなく、両者を使い分けるのが新しいスタンダード ということです。",
+        "inlineStyleRanges": [
+          {
+            "length": 19,
+            "offset": 66,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "Karpathy 提唱の『コンパイラ兼司書』を Codex でどう実装するか",
+        "inlineStyleRanges": [
+          {
+            "length": 38,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "最後に、思想と実装の橋渡しの話を1セクション。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HHzmXmMa0AASasa.jpg",
+        "width": 1672,
+        "height": 941
+      },
+      {
+        "type": "unstyled",
+        "text": "Karpathy 氏が提唱した「LLM を知識のコンパイラ兼司書として使う」というフレーム。これを Codex × Obsidian でどう実装するかは、運用上の最大のポイントです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "コンパイラとしての役割",
+        "inlineStyleRanges": [
+          {
+            "length": 11,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "raw/ に放り込まれた素材（記事・論文・YouTube 書き起こし・PDF）を、構造化された Wiki にコンパイルする役割。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Codex 側では /update のような自動化コマンドで、毎朝この処理が回ります。AGENTS.md で「raw/ に新しい素材があれば要約・概念ページ化・既存インデックスとの接続を自動生成する」と定義しておけば、人間は素材を放り込むだけ。"
+      },
+      {
+        "type": "unstyled",
+        "text": "軽量な処理（要約・分類・タグ付け）は Codex が圧倒的に楽でした。"
+      },
+      {
+        "type": "unstyled",
+        "text": "司書としての役割",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Wiki に対して「あの概念とこの概念の関連性は？」と質問する。ここが Claude Code の出番です。"
+      },
+      {
+        "type": "unstyled",
+        "text": "/wiki-query のようなスラッシュコマンドで、品質クリティカルな質問は Claude Code に投げる。Vault 横断の検索、引用付き回答、未解決の論点抽出。コンテキストを徹底的に使う設計が、ここで効きます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Skill の役割分担",
+        "inlineStyleRanges": [
+          {
+            "length": 11,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "_shared-ai/skills/ に置く共通スキルを、両ツールから呼び出す設計が現状ベストでした。"
+      },
+      {
+        "type": "unstyled",
+        "text": "軽量な処理は Codex、重量な処理（横断検索・矛盾検出・引用統合）は Claude Code、ベストプラクティス準拠チェックや引き継ぎプロンプト整形は両者共通。"
+      },
+      {
+        "type": "unstyled",
+        "text": "kepano 氏の obsidian-skills を junction で両ツールに接続しておくと、CEO が公式に定義した Skill セットを Codex / Claude Code どちらからでも呼べる状態になります。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Karpathy フレームの再構築",
+        "inlineStyleRanges": [
+          {
+            "length": 17,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "「コンパイラ兼司書」というフレーズは、Karpathy 氏が直接の言葉で書いたものではないんですが、私はこのフレームを 「ナレッジ工房の主任技師」 と呼び替えています。コンパイラはタフな素材を組み立てる現場仕事、司書は問いに答える知的仕事。両方を1人で担当する主任技師像のほうが、運用イメージに合っていました。",
+        "inlineStyleRanges": [
+          {
+            "length": 13,
+            "offset": 60,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "このイメージで Vault を運用すると、何をCodex に頼んで何を Claude Code に頼むか の境界が、ぐっと明確になります。",
+        "inlineStyleRanges": [
+          {
+            "length": 31,
+            "offset": 21,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "まとめ — Before/After で「卒業した3つのこと」",
+        "inlineStyleRanges": [
+          {
+            "length": 31,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "1年運用してきて、ここ1ヶ月で 卒業した ことが3つあります。",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 16,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HHzmwq1bsAAzKGe.jpg",
+        "width": 1672,
+        "height": 941
+      },
+      {
+        "type": "unstyled",
+        "text": "1. 「単一AI依存」を卒業する",
+        "inlineStyleRanges": [
+          {
+            "length": 16,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Claude Code 一本足から、Codex との並走へ。1つの最強ツールに依存するのではなく、用途別の道具箱に持ち替える。"
+      },
+      {
+        "type": "unstyled",
+        "text": "2. 「重い建築物的Vault運用」を卒業する",
+        "inlineStyleRanges": [
+          {
+            "length": 23,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "300ノード超の Vault を維持する重さから、機動的に作り直し続ける工房型へ。「密閉型ナレッジ工房」という運用イメージに移行する。"
+      },
+      {
+        "type": "unstyled",
+        "text": "3. 「コミュニティ頼みの統合」を卒業する",
+        "inlineStyleRanges": [
+          {
+            "length": 21,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Claudian や obsidian-claude-code-mcp に依存する状態から、Obsidian CEO 公式の obsidian-skills を起点にした 公式駆動の Vault 運用 へ。",
+        "inlineStyleRanges": [
+          {
+            "length": 14,
+            "offset": 86,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "「Claude Code × Obsidian は時代遅れだ」という二項対立で語るのではなく、ツールの組み合わせを再設計する時代に入ったというのが、この1ヶ月の結論です。",
+        "inlineStyleRanges": [
+          {
+            "length": 21,
+            "offset": 47,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "明日からの運用を見直すきっかけになれば、嬉しいです。"
+      },
+      {
+        "type": "unstyled",
+        "text": ""
+      },
+      {
+        "type": "unstyled",
+        "text": "この記事が少しでも参考になった方へ。"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HHzms0_bgAAvsyW.jpg",
+        "width": 1192,
+        "height": 796
+      },
+      {
+        "type": "unstyled",
+        "text": "@obsidianstudio9（りゅう@Obsidianガチ勢）です。Obsidian で「第2の脳」を構築するためのナレッジ設計を毎日発信しています。表層ではなく本質にフォーカスした情報を届けています。中の人はコンテキスト総量100億字規模で Obsidian を運用中。思考と情報を永久にローカル資産化したい方はフォロー推奨👆"
+      },
+      {
+        "type": "unstyled",
+        "text": "普段の発信内容は、Obsidian × AI 実践的構築法、海外 PKM 最新手法、プラグイン活用、Karpathy 式ナレッジベース解説などです。"
+      },
+      {
+        "type": "unstyled",
+        "text": "「メモを溜めるだけ」で終わらせない。「使えば使うほど賢くなるナレッジシステム」の作り方を発信しています。"
+      },
+      {
+        "type": "unstyled",
+        "text": "ご関心のある方は、ぜひフォローしてチェックしてみてください👀有益だと思います！"
+      },
+      {
+        "type": "header-two",
+        "text": "参考・引用",
+        "inlineStyleRanges": [
+          {
+            "length": 5,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "● [OpenAI（公式）— Introducing GPT-5.5](https://openai.com/index/introducing-gpt-5-5/) (2026-04) — GPT-5.5 + Codex 統合の公式発表、Terminal-Bench 2.0 で 82.7% を確定"
+      },
+      {
+        "type": "unstyled",
+        "text": "● [OpenAI（公式）— Codex for (almost) everything](https://openai.com/index/codex-for-almost-everything/) (2026-04-16) — Codex のスーパーアプリ化宣言、90+ プラグイン・メモリ・マルチデイ自動化"
+      },
+      {
+        "type": "unstyled",
+        "text": ""
+      }
+    ]
+  },
+  "status": "success",
+  "msg": "success",
+  "_handle": "obsidianstudio9"
+}

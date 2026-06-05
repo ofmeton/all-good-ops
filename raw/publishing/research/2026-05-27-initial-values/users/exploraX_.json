@@ -1,0 +1,47 @@
+{
+  "status": "success",
+  "msg": "success",
+  "data": {
+    "id": "1168877404598808577",
+    "name": "m0h",
+    "userName": "exploraX_",
+    "location": "multiverse",
+    "url": "https://t.co/W8H7BI49FM",
+    "description": "sharing daily contents that helps you make the most from AI •",
+    "entities": {
+      "description": {},
+      "url": {
+        "urls": [
+          {
+            "display_url": "substack.com/@explorax",
+            "expanded_url": "https://substack.com/@explorax",
+            "indices": [
+              0,
+              23
+            ],
+            "url": "https://t.co/W8H7BI49FM"
+          }
+        ]
+      }
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 25067,
+    "following": 689,
+    "favouritesCount": 77068,
+    "statusesCount": 57454,
+    "mediaCount": 3874,
+    "createdAt": "2019-09-03T13:24:53.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/1168877404598808577/1778581923",
+    "profilePicture": "https://pbs.twimg.com/profile_images/1946598926255095810/fTXuaBJp_normal.jpg",
+    "canDm": true,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": [
+      "2039269234253934811"
+    ]
+  }
+}

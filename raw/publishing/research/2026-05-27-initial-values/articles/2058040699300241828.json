@@ -1,0 +1,612 @@
+{
+  "article": {
+    "id": "QXJ0aWNsZUVudGl0eToyMDU3NTY4NTMzMzU0MzU2NzM2",
+    "author": {
+      "type": "user",
+      "userName": "cyrilXBT",
+      "url": "https://x.com/cyrilXBT",
+      "twitterUrl": "https://twitter.com/cyrilXBT",
+      "id": "1373665408193036293",
+      "name": "CyrilXBT",
+      "isVerified": false,
+      "isBlueVerified": true,
+      "verifiedType": null,
+      "profilePicture": "https://pbs.twimg.com/profile_images/2035229727414534145/aWap3Jbq_normal.jpg",
+      "coverPicture": "https://pbs.twimg.com/profile_banners/1373665408193036293/1775621295",
+      "description": "AI • Tech • Crypto | Sharing what I see before everyone else does.",
+      "location": "",
+      "followers": 180822,
+      "following": 442,
+      "status": "",
+      "canDm": true,
+      "canMediaTag": false,
+      "createdAt": "Sun Mar 21 15:58:58 +0000 2021",
+      "entities": {
+        "description": {},
+        "url": {
+          "urls": [
+            {
+              "display_url": "linktr.ee/cyrilxbt",
+              "expanded_url": "https://linktr.ee/cyrilxbt",
+              "indices": [
+                0,
+                23
+              ],
+              "url": "https://t.co/mO8iEkuR3J"
+            }
+          ]
+        }
+      },
+      "fastFollowersCount": 0,
+      "favouritesCount": 35443,
+      "hasCustomTimelines": true,
+      "isTranslator": false,
+      "mediaCount": 7238,
+      "statusesCount": 40324,
+      "withheldInCountries": [],
+      "affiliatesHighlightedLabel": {},
+      "possiblySensitive": false,
+      "pinnedTweetIds": [
+        "2058373087330959829"
+      ],
+      "profile_bio": {},
+      "isAutomated": false,
+      "automatedBy": null
+    },
+    "replyCount": 17,
+    "likeCount": 296,
+    "quoteCount": 6,
+    "viewCount": "285891",
+    "createdAt": "Sat May 23 04:21:53 +0000 2026",
+    "title": "How to Link Notes Together in Obsidian and Why It Changes Everything",
+    "preview_text": "Most people use Obsidian as a filing cabinet.\nNotes go in. Notes stay there. Occasionally you search for one and find it. You read it. You close it. It goes back to sitting alone in its folder.\nThat",
+    "cover_media_img_url": "https://pbs.twimg.com/media/HI8jaV1WYAAl5RB.jpg",
+    "contents": [
+      {
+        "type": "unstyled",
+        "text": "Most people use Obsidian as a filing cabinet."
+      },
+      {
+        "type": "unstyled",
+        "text": "Notes go in. Notes stay there. Occasionally you search for one and find it. You read it. You close it. It goes back to sitting alone in its folder."
+      },
+      {
+        "type": "unstyled",
+        "text": "That is not a second brain."
+      },
+      {
+        "type": "unstyled",
+        "text": "That is an expensive text editor."
+      },
+      {
+        "type": "unstyled",
+        "text": "The feature that transforms Obsidian from a filing cabinet into a thinking system is linking. Specifically the ability to create connections between notes that mirror the way ideas actually relate to each other in your mind."
+      },
+      {
+        "type": "unstyled",
+        "text": "When your notes are linked they stop being isolated documents and start being a network of knowledge."
+      },
+      {
+        "type": "unstyled",
+        "text": "A thought you captured six months ago becomes visible when you are working on something related today."
+      },
+      {
+        "type": "unstyled",
+        "text": "A pattern that exists across twelve different notes becomes identifiable without you manually reading all twelve."
+      },
+      {
+        "type": "unstyled",
+        "text": "A decision you made in January becomes context for a decision you are making in May without you having to remember that January even happened."
+      },
+      {
+        "type": "unstyled",
+        "text": "This article is the complete guide to linking in Obsidian. What it is, how it works, every linking method available, and the specific practices that turn a collection of connected notes into genuine intellectual leverage."
+      },
+      {
+        "type": "header-two",
+        "text": "What Linking Actually Does to Your Thinking"
+      },
+      {
+        "type": "unstyled",
+        "text": "Before the mechanics understand the principle."
+      },
+      {
+        "type": "unstyled",
+        "text": "Human memory is associative. You do not remember things in isolation. You remember them in relation to other things. A smell triggers a memory. A word triggers a concept. A concept triggers a connected concept."
+      },
+      {
+        "type": "unstyled",
+        "text": "The traditional folder system ignores this. It organizes notes by category the way a library organizes books by subject. The chemistry books are in the chemistry section. The history books are in the history section. A book that connects chemistry to history is shelved in one place or the other. The connection is lost in the shelving decision."
+      },
+      {
+        "type": "unstyled",
+        "text": "Obsidian's linking system does not make you choose."
+      },
+      {
+        "type": "unstyled",
+        "text": "A note about a chemistry concept can be linked to a note about a historical event without either note moving anywhere. The connection exists independently of the storage location."
+      },
+      {
+        "type": "unstyled",
+        "text": "Over time your vault stops being a collection of categorized notes and starts being a map of how your ideas connect."
+      },
+      {
+        "type": "unstyled",
+        "text": "That map is where the real thinking lives."
+      },
+      {
+        "type": "header-two",
+        "text": "The Three Types of Links in Obsidian"
+      },
+      {
+        "type": "unstyled",
+        "text": "Obsidian has three distinct linking mechanisms. Each one serves a different purpose and creates a different kind of connection."
+      },
+      {
+        "type": "unstyled",
+        "text": "Internal Links"
+      },
+      {
+        "type": "unstyled",
+        "text": "Internal links connect one note to another note inside your vault."
+      },
+      {
+        "type": "unstyled",
+        "text": "The syntax is double brackets around the note name:"
+      },
+      {
+        "type": "unstyled",
+        "text": "[[Note Name]]"
+      },
+      {
+        "type": "unstyled",
+        "text": "When you type this in any note Obsidian creates a clickable link to the referenced note. Click the link and you navigate to that note instantly."
+      },
+      {
+        "type": "unstyled",
+        "text": "If the referenced note does not exist yet Obsidian creates an unresolved link shown in a different color. This is actually a feature not a bug. You can reference a note you intend to create before you create it and Obsidian tracks the connection as a placeholder."
+      },
+      {
+        "type": "unstyled",
+        "text": "Internal links are the foundation of every linked vault. Every other linking mechanism builds on top of them."
+      },
+      {
+        "type": "unstyled",
+        "text": "Block Links"
+      },
+      {
+        "type": "unstyled",
+        "text": "Block links connect to a specific paragraph or section within a note rather than to the entire note."
+      },
+      {
+        "type": "unstyled",
+        "text": "The syntax adds a caret and a block identifier:"
+      },
+      {
+        "type": "unstyled",
+        "text": "[[Note Name#^block-id]]"
+      },
+      {
+        "type": "unstyled",
+        "text": "You do not write the block identifier manually. Type the double brackets and the note name, add the caret, and Obsidian shows you a list of blocks in that note to select from. It generates the identifier automatically."
+      },
+      {
+        "type": "unstyled",
+        "text": "Block links are valuable when the specific context matters. Linking to an entire note about a project pulls everything in that note into the connection. Linking to the specific paragraph about a decision pulls only that decision into the connection."
+      },
+      {
+        "type": "unstyled",
+        "text": "Use block links when precision matters more than breadth."
+      },
+      {
+        "type": "unstyled",
+        "text": "Heading Links"
+      },
+      {
+        "type": "unstyled",
+        "text": "Heading links connect to a specific section of a note identified by its heading."
+      },
+      {
+        "type": "unstyled",
+        "text": "The syntax adds a hash and the heading name:"
+      },
+      {
+        "type": "unstyled",
+        "text": "[[Note Name#Heading Name]]"
+      },
+      {
+        "type": "unstyled",
+        "text": "Heading links occupy the middle ground between note links and block links. They connect to a section of a note rather than the entire note or a single paragraph."
+      },
+      {
+        "type": "unstyled",
+        "text": "Use heading links when a note has multiple distinct sections and you want to reference one section specifically without creating a separate note for it."
+      },
+      {
+        "type": "header-two",
+        "text": "Creating Links: The Practical Workflow"
+      },
+      {
+        "type": "unstyled",
+        "text": "The mechanical process of creating links is simple. The judgment about when and what to link is the skill that develops over time."
+      },
+      {
+        "type": "unstyled",
+        "text": "Linking while writing:",
+        "inlineStyleRanges": [
+          {
+            "length": 22,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "As you write any note you will naturally reference things that exist or should exist elsewhere in your vault. The habit to build is creating the link at the moment of reference rather than after the fact."
+      },
+      {
+        "type": "unstyled",
+        "text": "When you write about a concept and realize you have notes on that concept somewhere in your vault stop and create the link immediately. Type the double brackets and start typing the note name. Obsidian autocompletes from your existing notes."
+      },
+      {
+        "type": "unstyled",
+        "text": "Linking during review:",
+        "inlineStyleRanges": [
+          {
+            "length": 22,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Set aside time periodically to review recent notes and add links you did not create while writing. The connections that are visible on review are often different from the ones that were obvious while writing. Both are valuable."
+      },
+      {
+        "type": "unstyled",
+        "text": "Creating new notes from links:",
+        "inlineStyleRanges": [
+          {
+            "length": 30,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "When you reference something that does not have its own note yet create an unresolved link first. The unresolved link acts as a placeholder and a reminder. When you have enough material for a proper note on that concept you create it and the link resolves automatically."
+      },
+      {
+        "type": "header-two",
+        "text": "The Backlink Panel: Where the Magic Happens"
+      },
+      {
+        "type": "unstyled",
+        "text": "Creating links is the input."
+      },
+      {
+        "type": "unstyled",
+        "text": "The backlink panel is where the value appears."
+      },
+      {
+        "type": "unstyled",
+        "text": "Every note in Obsidian has a backlink panel that shows every other note in the vault that links to the current note."
+      },
+      {
+        "type": "unstyled",
+        "text": "This is the feature that makes linking transformative."
+      },
+      {
+        "type": "unstyled",
+        "text": "When you open a note and check its backlinks you see every context in which you referenced that idea across your entire vault. Every project that mentioned it. Every decision that referenced it. Every daily note that brought it up."
+      },
+      {
+        "type": "unstyled",
+        "text": "Without backlinks: you remember a concept exists. You search for the note. You read it in isolation."
+      },
+      {
+        "type": "unstyled",
+        "text": "With backlinks: you open the note and immediately see the full constellation of contexts where that concept appeared in your thinking. The concept is not isolated. It is embedded in your intellectual history."
+      },
+      {
+        "type": "unstyled",
+        "text": "The pattern that emerges from seeing backlinks over time is the most underrated feature in any note-taking tool. You thought you referenced something three or four times. The backlinks show you referenced it twenty-two times across three years. That frequency is itself information. It tells you what ideas are actually structuring your thinking versus the ones you think are important."
+      },
+      {
+        "type": "header-two",
+        "text": "The Graph View: Seeing Your Knowledge As a Network"
+      },
+      {
+        "type": "unstyled",
+        "text": "The graph view renders every note in your vault as a node and every link as a connection between nodes."
+      },
+      {
+        "type": "unstyled",
+        "text": "The visual that emerges is a map of your knowledge."
+      },
+      {
+        "type": "unstyled",
+        "text": "Notes with many connections appear as large nodes at the center of clusters. Notes with few connections appear as small nodes at the periphery."
+      },
+      {
+        "type": "unstyled",
+        "text": "The clusters themselves reveal structure you did not consciously create. Topics you think about frequently and from many angles cluster together naturally. Topics you captured once and never connected sit alone at the edges."
+      },
+      {
+        "type": "unstyled",
+        "text": "The graph view is not primarily a navigation tool. You rarely use it to find a specific note. Its value is in the perspective it provides on your knowledge as a whole."
+      },
+      {
+        "type": "unstyled",
+        "text": "Opening the graph view after six months of consistent linking and seeing the clusters that have formed shows you something you could not see from inside any individual note. It shows you what your thinking is actually about versus what you think it is about."
+      },
+      {
+        "type": "unstyled",
+        "text": "The most connected nodes are your genuine intellectual interests."
+      },
+      {
+        "type": "unstyled",
+        "text": "The isolated nodes are the ideas you collected but never integrated."
+      },
+      {
+        "type": "unstyled",
+        "text": "Both insights are valuable."
+      },
+      {
+        "type": "header-two",
+        "text": "Aliases: Linking to the Same Note Multiple Ways"
+      },
+      {
+        "type": "unstyled",
+        "text": "Real concepts have multiple names."
+      },
+      {
+        "type": "unstyled",
+        "text": "You might have a note called \"Second-Order Thinking\" but refer to it as \"downstream effects\" or \"thinking about consequences\" in different notes."
+      },
+      {
+        "type": "unstyled",
+        "text": "Without aliases you would have to use the exact note name every time or create multiple notes for the same concept."
+      },
+      {
+        "type": "unstyled",
+        "text": "Aliases let you create multiple names for a single note. Every alias links to the same note."
+      },
+      {
+        "type": "unstyled",
+        "text": "Add aliases in the note's frontmatter:"
+      },
+      {
+        "type": "unstyled",
+        "text": "---\naliases: [downstream effects, thinking about consequences, second-order effects]\n---"
+      },
+      {
+        "type": "unstyled",
+        "text": "Now when you type any of these phrases in double brackets Obsidian recognizes them as references to the Second-Order Thinking note."
+      },
+      {
+        "type": "unstyled",
+        "text": "Aliases keep your network coherent when your vocabulary for a concept evolves over time. The connections accumulate in one place rather than fragmenting across multiple notes."
+      },
+      {
+        "type": "header-two",
+        "text": "Unlinked Mentions: Finding Connections You Missed"
+      },
+      {
+        "type": "unstyled",
+        "text": "The unlinked mentions panel shows every note in your vault that mentions the current note's name or its aliases without linking to it."
+      },
+      {
+        "type": "unstyled",
+        "text": "These are connections that exist as words but have not been formalized as links."
+      },
+      {
+        "type": "unstyled",
+        "text": "Checking unlinked mentions regularly reveals the connections your past self created through writing but never captured as explicit links."
+      },
+      {
+        "type": "unstyled",
+        "text": "The workflow: open a note you consider important. Check unlinked mentions. Review each one and decide whether the mention warrants a formal link. If it does add the link in one click directly from the unlinked mentions panel."
+      },
+      {
+        "type": "unstyled",
+        "text": "This practice is one of the highest-leverage maintenance activities in a linked vault. It turns accidental connections into intentional ones and dramatically increases the density of your knowledge network over time."
+      },
+      {
+        "type": "header-two",
+        "text": "MOCs: The Structure Layer for Large Vaults"
+      },
+      {
+        "type": "unstyled",
+        "text": "As your vault grows the flat network of linked notes benefits from a structural layer."
+      },
+      {
+        "type": "unstyled",
+        "text": "Maps of Content are notes whose primary purpose is to link to other notes rather than to contain original ideas."
+      },
+      {
+        "type": "unstyled",
+        "text": "A MOC for a topic you think about frequently might contain nothing but links organized under headings."
+      },
+      {
+        "type": "unstyled",
+        "text": "# Second-Order Thinking MOC\n\n## Core Concept Notes\n[[What Second-Order Thinking Is]]\n[[Why First-Order Thinking Fails]]\n[[The Chesterton's Fence Principle]]\n\n## Applications\n[[Second-Order Thinking in Investing]]\n[[Second-Order Thinking in Product Decisions]]\n[[Second-Order Thinking in Hiring]]\n\n## Related Concepts\n[[Systems Thinking]]\n[[Feedback Loops]]\n[[Unintended Consequences]]\n\n## My Applications\n[[Decision: Pricing Change 2025]]\n[[Decision: New Client Acceptance Criteria]]"
+      },
+      {
+        "type": "unstyled",
+        "text": "The MOC is not a folder. You do not move notes into it. You link to notes from it."
+      },
+      {
+        "type": "unstyled",
+        "text": "The MOC can itself be linked from other notes and from your daily notes. It becomes a hub that makes any cluster of related notes navigable from a single reference point."
+      },
+      {
+        "type": "unstyled",
+        "text": "MOCs are optional. Many excellent vaults never use them. They become valuable when a topic has accumulated enough notes that navigating the cluster through backlinks alone becomes difficult."
+      },
+      {
+        "type": "header-two",
+        "text": "The Daily Note as a Linking Hub"
+      },
+      {
+        "type": "unstyled",
+        "text": "Daily notes are the most natural place to build linking habits."
+      },
+      {
+        "type": "unstyled",
+        "text": "Every daily note you write is a timestamped context layer for your vault. The ideas, projects, meetings, and decisions that appear in a daily note are connected to a specific moment in time."
+      },
+      {
+        "type": "unstyled",
+        "text": "When you link from daily notes to concept notes you create a temporal trail through your knowledge. You can look at any concept note and see through its backlinks exactly when and in what contexts you were thinking about it."
+      },
+      {
+        "type": "unstyled",
+        "text": "The linking habit that delivers the most value in daily notes is simple: any time you write about a concept, project, person, or decision that has or should have its own note add the double bracket link."
+      },
+      {
+        "type": "unstyled",
+        "text": "Over time your daily notes become a navigable record of your intellectual history rather than a diary that has to be read chronologically to be useful."
+      },
+      {
+        "type": "header-two",
+        "text": "Claude Code and Smart Linking"
+      },
+      {
+        "type": "unstyled",
+        "text": "Connected to your vault via MCP, Claude Code transforms linking from a manual practice into an intelligent automated process."
+      },
+      {
+        "type": "unstyled",
+        "text": "Three specific prompts that use the connection layer to produce outputs that isolated notes cannot:"
+      },
+      {
+        "type": "unstyled",
+        "text": "The connection finder:",
+        "inlineStyleRanges": [
+          {
+            "length": 22,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Read the note [[NOTE NAME]] and search my entire vault for \nnotes that are related but not yet linked.\n\nFor each potential connection identify:\n- The related note\n- The specific reason these notes should be connected\n- Whether the connection is strong enough to warrant a link \n  or just a passing mention\n\nOnly surface non-obvious connections. Skip anything that is \nalready linked or obviously related by keyword."
+      },
+      {
+        "type": "unstyled",
+        "text": "This prompt finds the connections that exist in the content but never became explicit links. Run it on your most important notes and you will find connections you missed."
+      },
+      {
+        "type": "unstyled",
+        "text": "The synthesis prompt:",
+        "inlineStyleRanges": [
+          {
+            "length": 21,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Read the note [[CONCEPT NOTE]] and all notes that link to it.\n\nSynthesize what my vault as a whole says about this concept.\nWhat is the consistent thread across all the notes?\nWhat tension or contradiction exists between different notes?\nWhat is the most important insight that emerges from \nseeing all these notes together that no single note contains?\n\nThis synthesis does not exist in any individual note. \nIt only exists across the network."
+      },
+      {
+        "type": "unstyled",
+        "text": "This is where linked notes become more than the sum of their parts. Claude reads the entire connected cluster and produces insight that requires seeing all of them together."
+      },
+      {
+        "type": "unstyled",
+        "text": "The gap finder:",
+        "inlineStyleRanges": [
+          {
+            "length": 15,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Read my MOC for [[TOPIC]].\n\nBased on all the notes linked from this MOC and their \nbacklinks, identify:\n- What aspects of this topic are well-covered\n- What aspects have only one or two notes (fragile coverage)\n- What aspects appear in other notes but have no dedicated \n  note of their own\n- What note would add the most value to this cluster \n  if I wrote it this week"
+      },
+      {
+        "type": "unstyled",
+        "text": "This prompt turns your linked vault into a research agenda. It shows you where your thinking is developed and where it has gaps worth filling."
+      },
+      {
+        "type": "header-two",
+        "text": "The Compounding Effect of Consistent Linking"
+      },
+      {
+        "type": "unstyled",
+        "text": "The value of a linked vault does not increase linearly."
+      },
+      {
+        "type": "unstyled",
+        "text": "It compounds."
+      },
+      {
+        "type": "unstyled",
+        "text": "In the first month you have dozens of notes with a handful of connections each. The graph view shows a sparse network. The backlinks panel is thin. The unlinked mentions finder does not find much."
+      },
+      {
+        "type": "unstyled",
+        "text": "In month six you have hundreds of notes with dozens of connections each. The graph view shows clear clusters. The backlinks panel reveals the full context of every important concept. The synthesis prompts produce insights that genuinely surprise you."
+      },
+      {
+        "type": "unstyled",
+        "text": "In year two you have thousands of notes with hundreds of connections across the most important concepts. The vault has become a genuine external memory that holds intellectual context you could never hold in your head."
+      },
+      {
+        "type": "unstyled",
+        "text": "The concepts you think about most frequently have the richest networks."
+      },
+      {
+        "type": "unstyled",
+        "text": "The decisions you made in the past are visible in their full context."
+      },
+      {
+        "type": "unstyled",
+        "text": "The patterns in your thinking are identifiable from the graph."
+      },
+      {
+        "type": "unstyled",
+        "text": "The synthesis available from any cluster of connected notes is greater than what any individual note contains."
+      },
+      {
+        "type": "unstyled",
+        "text": "This is what a second brain actually means."
+      },
+      {
+        "type": "unstyled",
+        "text": "Not a place to store notes."
+      },
+      {
+        "type": "unstyled",
+        "text": "A network of connected knowledge that thinks alongside you."
+      },
+      {
+        "type": "unstyled",
+        "text": "Start linking every note you write today."
+      },
+      {
+        "type": "unstyled",
+        "text": "The network compounds from the first connection."
+      },
+      {
+        "type": "unstyled",
+        "text": "Follow @cyrilXBT for every Obsidian practice, Claude Code prompt, and vault architecture that makes your knowledge system compound over time."
+      }
+    ]
+  },
+  "status": "success",
+  "msg": "success",
+  "_handle": "cyrilXBT"
+}

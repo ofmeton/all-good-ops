@@ -1,0 +1,21 @@
+{
+  "name": "02_r1_no_workflow",
+  "description": "業務仕組み化キーワードが本文にない → R1 fail。",
+  "input": {
+    "traceId": "trace-02",
+    "draftId": "draft-02",
+    "coreIdeaId": "core-02",
+    "platform": "x",
+    "body": "経営者向けに、私は今日見つけた花について語る。私は花を見た。きれいだった。読者の方も見てみてほしい。色合いが美しい。",
+    "fmat": "short",
+    "sourceMaterialIds": [],
+    "hasAffiliateLink": false
+  },
+  "expected": {
+    "decision": "approved",
+    "rejectReasons": [],
+    "warningsAtLeast": [
+      "R1_workflow_theme"
+    ]
+  }
+}

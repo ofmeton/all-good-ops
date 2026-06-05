@@ -1,0 +1,427 @@
+{
+  "handle": "claudecode_lab",
+  "tweet_id": "2059090665716552166",
+  "body": {
+    "tweets": [
+      {
+        "type": "tweet",
+        "id": "2059090665716552166",
+        "url": "https://x.com/claudecode_lab/status/2059090665716552166",
+        "twitterUrl": "https://twitter.com/claudecode_lab/status/2059090665716552166",
+        "text": "【速報】\n\nGrok版Claude Code/Codexである「Grok Build」が登場🚀\n\n課金ユーザーのみにベータ版が公開されています。\n\nhttps://t.co/TWSKqpgfRx\n\nからお試し可能なので必見です！ https://t.co/xuYVWIovwF",
+        "source": "",
+        "retweetCount": 3,
+        "replyCount": 0,
+        "likeCount": 43,
+        "quoteCount": 1,
+        "viewCount": 12735,
+        "createdAt": "Tue May 26 01:54:05 +0000 2026",
+        "lang": "ja",
+        "bookmarkCount": 27,
+        "isReply": false,
+        "inReplyToId": "",
+        "conversationId": "2059090665716552166",
+        "displayTextRange": [
+          0,
+          114
+        ],
+        "inReplyToUserId": "",
+        "inReplyToUsername": "",
+        "isPinned": false,
+        "author": {
+          "type": "user",
+          "userName": "claudecode_lab",
+          "url": "https://x.com/claudecode_lab",
+          "twitterUrl": "https://twitter.com/claudecode_lab",
+          "id": "1807726847154847744",
+          "name": "Claude Code研究所|スパルタClaude Code塾",
+          "isVerified": false,
+          "isBlueVerified": true,
+          "verifiedType": null,
+          "profilePicture": "https://pbs.twimg.com/profile_images/2047553749867216896/_SKwpHqG_normal.jpg",
+          "coverPicture": "https://pbs.twimg.com/profile_banners/1807726847154847744/1777009967",
+          "description": "東京大学にてAI研究に従事していたエンジニアメンバーがClaude Codeに特化した最新情報をお届け。経営者・士業向け名物研修「スパルタClaude Code塾」も運営。\nnote:https://t.co/VAtJlAXlsF\n研修のご依頼などDMでも受付しております✉️",
+          "location": "東京都",
+          "followers": 19619,
+          "following": 377,
+          "status": "",
+          "canDm": true,
+          "canMediaTag": true,
+          "createdAt": "Mon Jul 01 10:45:57 +0000 2024",
+          "entities": {
+            "description": {
+              "urls": [
+                {
+                  "display_url": "note.com/claudecode_lab",
+                  "expanded_url": "https://note.com/claudecode_lab",
+                  "indices": [
+                    92,
+                    115
+                  ],
+                  "url": "https://t.co/VAtJlAXlsF"
+                }
+              ]
+            },
+            "url": {
+              "urls": [
+                {
+                  "display_url": "claude-code-lab.com",
+                  "expanded_url": "https://claude-code-lab.com/",
+                  "indices": [
+                    0,
+                    23
+                  ],
+                  "url": "https://t.co/8oWsTCy0do"
+                }
+              ]
+            }
+          },
+          "fastFollowersCount": 0,
+          "favouritesCount": 0,
+          "hasCustomTimelines": true,
+          "isTranslator": false,
+          "mediaCount": 79,
+          "statusesCount": 276,
+          "withheldInCountries": [],
+          "affiliatesHighlightedLabel": {},
+          "possiblySensitive": false,
+          "pinnedTweetIds": [
+            "2059090665716552166"
+          ],
+          "profile_bio": {
+            "description": "東京大学にてAI研究に従事していたエンジニアメンバーがClaude Codeに特化した最新情報をお届け。経営者・士業向け名物研修「スパルタClaude Code塾」も運営。\nnote:https://t.co/VAtJlAXlsF\n研修のご依頼などDMでも受付しております✉️",
+            "entities": {
+              "description": {
+                "urls": [
+                  {
+                    "display_url": "note.com/claudecode_lab",
+                    "expanded_url": "https://note.com/claudecode_lab",
+                    "indices": [
+                      92,
+                      115
+                    ],
+                    "url": "https://t.co/VAtJlAXlsF"
+                  }
+                ]
+              },
+              "url": {
+                "urls": [
+                  {
+                    "display_url": "claude-code-lab.com",
+                    "expanded_url": "https://claude-code-lab.com/",
+                    "indices": [
+                      0,
+                      23
+                    ],
+                    "url": "https://t.co/8oWsTCy0do"
+                  }
+                ]
+              }
+            }
+          },
+          "isAutomated": false,
+          "automatedBy": null
+        },
+        "extendedEntities": {
+          "media": [
+            {
+              "additional_media_info": {
+                "monetizable": true
+              },
+              "display_url": "pic.twitter.com/xuYVWIovwF",
+              "expanded_url": "https://twitter.com/claudecode_lab/status/2059090665716552166/video/1",
+              "ext_master_playlist_only": [],
+              "ext_media_availability": {
+                "status": "Available"
+              },
+              "ext_playlists": [],
+              "id_str": "2059090610158739457",
+              "indices": [
+                115,
+                138
+              ],
+              "media_key": "13_2059090610158739457",
+              "media_results": {
+                "id": "QXBpTWVkaWFSZXN1bHRzOgwABAoAARyTXAAa2qABAAA=",
+                "result": {
+                  "__typename": "ApiMedia",
+                  "id": "QXBpTWVkaWE6DAAECgABHJNcABraoAEAAA==",
+                  "media_key": "13_2059090610158739457"
+                }
+              },
+              "media_url_https": "https://pbs.twimg.com/amplify_video_thumb/2059090610158739457/img/4AFe4wi7d8L-w_GG.jpg",
+              "original_info": {
+                "focus_rects": [],
+                "height": 1080,
+                "width": 1920
+              },
+              "sizes": {
+                "large": {
+                  "h": 1080,
+                  "w": 1920
+                }
+              },
+              "type": "video",
+              "url": "https://t.co/xuYVWIovwF",
+              "video_info": {
+                "aspect_ratio": [
+                  16,
+                  9
+                ],
+                "duration_millis": 43543,
+                "variants": [
+                  {
+                    "content_type": "application/x-mpegURL",
+                    "url": "https://video.twimg.com/amplify_video/2059090610158739457/pl/vutxmjA6C-zMzWvG.m3u8?tag=27&v=cfc"
+                  },
+                  {
+                    "bitrate": 256000,
+                    "content_type": "video/mp4",
+                    "url": "https://video.twimg.com/amplify_video/2059090610158739457/vid/avc1/480x270/LEaHNu8lnBSD2bql.mp4?tag=27"
+                  },
+                  {
+                    "bitrate": 832000,
+                    "content_type": "video/mp4",
+                    "url": "https://video.twimg.com/amplify_video/2059090610158739457/vid/avc1/640x360/vLGYKCT328VGSWEa.mp4?tag=27"
+                  },
+                  {
+                    "bitrate": 2176000,
+                    "content_type": "video/mp4",
+                    "url": "https://video.twimg.com/amplify_video/2059090610158739457/vid/avc1/1280x720/wbrD0tPpX66_bN7G.mp4?tag=27"
+                  },
+                  {
+                    "bitrate": 10368000,
+                    "content_type": "video/mp4",
+                    "url": "https://video.twimg.com/amplify_video/2059090610158739457/vid/avc1/1920x1080/7Kuu8Pf0d3WYH932.mp4?tag=27"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "card": null,
+        "place": {},
+        "entities": {
+          "urls": [
+            {
+              "display_url": "x.ai/cli",
+              "expanded_url": "https://x.ai/cli",
+              "indices": [
+                74,
+                97
+              ],
+              "url": "https://t.co/TWSKqpgfRx"
+            }
+          ]
+        },
+        "isRetweet": false,
+        "isQuote": true,
+        "isConversationControlled": false,
+        "quoted_tweet": {
+          "type": "tweet",
+          "id": "2058973760708091907",
+          "url": "https://x.com/xai/status/2058973760708091907",
+          "twitterUrl": "https://twitter.com/xai/status/2058973760708091907",
+          "text": "Grok Build is now available in Beta for all SuperGrok and X Premium+ users.\n\nUse Plan Mode, create images and videos with Imagine, and build automations or orchestrators with the CLI.\n\nVisit https://t.co/bpTHpjivWD to get started. https://t.co/OZ0kjtkpUf",
+          "source": "",
+          "retweetCount": 1749,
+          "replyCount": 854,
+          "likeCount": 8879,
+          "quoteCount": 340,
+          "viewCount": 47698969,
+          "createdAt": "Mon May 25 18:09:33 +0000 2026",
+          "lang": "en",
+          "bookmarkCount": 2109,
+          "isReply": false,
+          "inReplyToId": "",
+          "conversationId": "2058973760708091907",
+          "displayTextRange": [
+            0,
+            230
+          ],
+          "inReplyToUserId": "",
+          "inReplyToUsername": "",
+          "isPinned": false,
+          "author": {
+            "type": "user",
+            "userName": "xai",
+            "url": "https://x.com/xai",
+            "twitterUrl": "https://twitter.com/xai",
+            "id": "1661523610111193088",
+            "name": "xAI",
+            "isVerified": false,
+            "isBlueVerified": true,
+            "verifiedType": "Business",
+            "profilePicture": "https://pbs.twimg.com/profile_images/1769430779845611520/lIgjSJGU_normal.jpg",
+            "coverPicture": "https://pbs.twimg.com/profile_banners/1661523610111193088/1710700105",
+            "description": "",
+            "location": "",
+            "followers": 1993133,
+            "following": 5,
+            "status": "",
+            "canDm": true,
+            "canMediaTag": false,
+            "createdAt": "Thu May 25 00:06:30 +0000 2023",
+            "entities": {
+              "description": {},
+              "url": {
+                "urls": [
+                  {
+                    "display_url": "x.ai",
+                    "expanded_url": "http://x.ai",
+                    "indices": [
+                      0,
+                      23
+                    ],
+                    "url": "https://t.co/pBuv1ZMyrR"
+                  }
+                ]
+              }
+            },
+            "fastFollowersCount": 0,
+            "favouritesCount": 0,
+            "hasCustomTimelines": true,
+            "isTranslator": false,
+            "mediaCount": 122,
+            "statusesCount": 282,
+            "withheldInCountries": [],
+            "affiliatesHighlightedLabel": {},
+            "possiblySensitive": false,
+            "pinnedTweetIds": [
+              "2035562571932024842"
+            ],
+            "profile_bio": {
+              "description": "",
+              "entities": {
+                "description": {},
+                "url": {
+                  "urls": [
+                    {
+                      "display_url": "x.ai",
+                      "expanded_url": "http://x.ai",
+                      "indices": [
+                        0,
+                        23
+                      ],
+                      "url": "https://t.co/pBuv1ZMyrR"
+                    }
+                  ]
+                }
+              }
+            },
+            "isAutomated": false,
+            "automatedBy": null
+          },
+          "extendedEntities": {
+            "media": [
+              {
+                "additional_media_info": {
+                  "monetizable": true
+                },
+                "allow_download_status": {
+                  "allow_download": true
+                },
+                "display_url": "pic.twitter.com/OZ0kjtkpUf",
+                "expanded_url": "https://twitter.com/xai/status/2058973760708091907/video/1",
+                "ext_master_playlist_only": [],
+                "ext_media_availability": {
+                  "status": "Available"
+                },
+                "ext_playlists": [],
+                "id_str": "2058971119064080384",
+                "indices": [
+                  231,
+                  254
+                ],
+                "media_key": "13_2058971119064080384",
+                "media_results": {
+                  "id": "QXBpTWVkaWFSZXN1bHRzOgwABAoAARyS71LqmmAAAAA=",
+                  "result": {
+                    "__typename": "ApiMedia",
+                    "id": "QXBpTWVkaWE6DAAECgABHJLvUuqaYAAAAA==",
+                    "media_key": "13_2058971119064080384"
+                  }
+                },
+                "media_url_https": "https://pbs.twimg.com/amplify_video_thumb/2058971119064080384/img/t1ObF9jNbStKxLpe.jpg",
+                "original_info": {
+                  "focus_rects": [],
+                  "height": 1080,
+                  "width": 1920
+                },
+                "sizes": {
+                  "large": {
+                    "h": 1080,
+                    "w": 1920
+                  }
+                },
+                "type": "video",
+                "url": "https://t.co/OZ0kjtkpUf",
+                "video_info": {
+                  "aspect_ratio": [
+                    16,
+                    9
+                  ],
+                  "duration_millis": 43543,
+                  "variants": [
+                    {
+                      "content_type": "application/x-mpegURL",
+                      "url": "https://video.twimg.com/amplify_video/2058971119064080384/pl/Mz1lDs2eA5guS2vi.m3u8?tag=27&v=cfc"
+                    },
+                    {
+                      "bitrate": 256000,
+                      "content_type": "video/mp4",
+                      "url": "https://video.twimg.com/amplify_video/2058971119064080384/vid/avc1/480x270/O0koWzCPRRKpuWjf.mp4?tag=27"
+                    },
+                    {
+                      "bitrate": 832000,
+                      "content_type": "video/mp4",
+                      "url": "https://video.twimg.com/amplify_video/2058971119064080384/vid/avc1/640x360/zpWix3TQGDuVdEvH.mp4?tag=27"
+                    },
+                    {
+                      "bitrate": 2176000,
+                      "content_type": "video/mp4",
+                      "url": "https://video.twimg.com/amplify_video/2058971119064080384/vid/avc1/1280x720/0V7wyTcPIVelq92_.mp4?tag=27"
+                    },
+                    {
+                      "bitrate": 10368000,
+                      "content_type": "video/mp4",
+                      "url": "https://video.twimg.com/amplify_video/2058971119064080384/vid/avc1/1920x1080/LSGG9VvFLRiVYXR_.mp4?tag=27"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          "card": null,
+          "place": {},
+          "entities": {
+            "urls": [
+              {
+                "display_url": "x.ai/cli",
+                "expanded_url": "http://x.ai/cli",
+                "indices": [
+                  191,
+                  214
+                ],
+                "url": "https://t.co/bpTHpjivWD"
+              }
+            ]
+          },
+          "isRetweet": false,
+          "isQuote": false,
+          "isConversationControlled": false,
+          "quoted_tweet": null,
+          "retweeted_tweet": null,
+          "isLimitedReply": false,
+          "communityInfo": null
+        },
+        "retweeted_tweet": null,
+        "isLimitedReply": false,
+        "communityInfo": null
+      }
+    ],
+    "status": "success",
+    "msg": "success",
+    "code": 0
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "name": "04_paid_long_xl_1480",
+  "description": "有料 1480 円 long_xl how_to_summary (完全保存版)。teaserBoundary 1200 字。",
+  "request": {
+    "idea": {
+      "id": "idea-note-04",
+      "topic": "Claude Code で業務を完全自動化する 7 ステップ",
+      "primaryHook": "tips_enum",
+      "fmat": "article",
+      "contentType": "industry_sop",
+      "audience": "中小事業者の方",
+      "sourceMaterialIds": ["mat-fullguide-001"]
+    },
+    "templateId": "how_to_summary",
+    "priceTier": 1480,
+    "teaserBoundary": 1200
+  },
+  "expected": {
+    "templateId": "how_to_summary",
+    "priceTier": 1480,
+    "generator": "stub",
+    "hasPaidBody": true,
+    "freeBodyMaxChars": 1200,
+    "freeBodyMustContain": ["中小事業者の方", "有料部"],
+    "paidBodyMustContain": ["結論", "ハマりどころ"]
+  }
+}

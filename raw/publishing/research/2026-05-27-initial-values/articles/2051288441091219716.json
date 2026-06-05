@@ -1,0 +1,2889 @@
+{
+  "article": {
+    "id": "QXJ0aWNsZUVudGl0eToyMDQ4Njc5NjY5NTgzNDc0Njg4",
+    "author": {
+      "type": "user",
+      "userName": "claudecode_lab",
+      "url": "https://x.com/claudecode_lab",
+      "twitterUrl": "https://twitter.com/claudecode_lab",
+      "id": "1807726847154847744",
+      "name": "Claude Code研究所|スパルタClaude Code塾",
+      "isVerified": false,
+      "isBlueVerified": true,
+      "verifiedType": null,
+      "profilePicture": "https://pbs.twimg.com/profile_images/2047553749867216896/_SKwpHqG_normal.jpg",
+      "coverPicture": "https://pbs.twimg.com/profile_banners/1807726847154847744/1777009967",
+      "description": "東京大学にてAI研究に従事していたエンジニアメンバーがClaude Codeに特化した最新情報をお届け。経営者・士業向け名物研修「スパルタClaude Code塾」も運営。\nnote:https://t.co/VAtJlAXlsF\n研修のご依頼などDMでも受付しております✉️",
+      "location": "東京都",
+      "followers": 19619,
+      "following": 377,
+      "status": "",
+      "canDm": true,
+      "canMediaTag": true,
+      "createdAt": "Mon Jul 01 10:45:57 +0000 2024",
+      "entities": {
+        "description": {
+          "urls": [
+            {
+              "display_url": "note.com/claudecode_lab",
+              "expanded_url": "https://note.com/claudecode_lab",
+              "indices": [
+                92,
+                115
+              ],
+              "url": "https://t.co/VAtJlAXlsF"
+            }
+          ]
+        },
+        "url": {
+          "urls": [
+            {
+              "display_url": "claude-code-lab.com",
+              "expanded_url": "https://claude-code-lab.com/",
+              "indices": [
+                0,
+                23
+              ],
+              "url": "https://t.co/8oWsTCy0do"
+            }
+          ]
+        }
+      },
+      "fastFollowersCount": 0,
+      "favouritesCount": 12964,
+      "hasCustomTimelines": false,
+      "isTranslator": false,
+      "mediaCount": 79,
+      "statusesCount": 276,
+      "withheldInCountries": [],
+      "affiliatesHighlightedLabel": {},
+      "possiblySensitive": false,
+      "pinnedTweetIds": [
+        "2059090665716552166"
+      ],
+      "profile_bio": {},
+      "isAutomated": false,
+      "automatedBy": null
+    },
+    "replyCount": 0,
+    "likeCount": 0,
+    "quoteCount": 0,
+    "viewCount": "7192",
+    "createdAt": "Mon May 04 13:10:50 +0000 2026",
+    "title": "【永久保存版】Claude Codeスキル67選　計画・コーディング・デザイン・マーケ全対応",
+    "preview_text": "月々わずか$20のサブスクリプションで、Claudeを設計・code review・デバッガー・文書作成、全兼任の開発チームに変えられるとしたら？\nMr. Buzzoni（@polydao）が投稿した「Top 67 Claude Skills That Turn a $20",
+    "cover_media_img_url": "https://pbs.twimg.com/media/HG9pmz2aUAAdMZ8.jpg",
+    "contents": [
+      {
+        "type": "unstyled",
+        "text": "月々わずか$20のサブスクリプションで、Claudeを設計・code review・デバッガー・文書作成、全兼任の開発チームに変えられるとしたら？"
+      },
+      {
+        "type": "unstyled",
+        "text": "Mr. Buzzoni（@polydao）が投稿した「Top 67 Claude Skills That Turn a $20 Subscription Into a Full Dev Team」では、インストールコマンドとリンク付きで67のClaudeスキルをユースケース別に整理して公開しています。4.1M回以上表示されたこの投稿の全内容を、日本語でお届けします。"
+      },
+      {
+        "type": "unstyled",
+        "text": "Cluadeを使いこなせている人とそうでない人の最も大きな違いはスキルの存在を知っているかどうかです。",
+        "inlineStyleRanges": [
+          {
+            "length": 51,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-one",
+        "text": "Claudeスキルとは何か"
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HG_8yn-bkAAmrww.jpg",
+        "width": 1672,
+        "height": 941
+      },
+      {
+        "type": "unstyled",
+        "text": "スキルとは、SKILL.mdファイルが入ったフォルダのことで、Claudeに特定の種類の作業をどのようにするかを正確に指示するものです。 ステップバイステップのプロセス、制約、例、そして補助スクリプトやテンプレートが含まれます。",
+        "inlineStyleRanges": [
+          {
+            "length": 68,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "毎セッション同じプロセスを再説明する代わりに、そのプロセスを一度スキルとしてインストールして、永続的に再利用できます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "主要リポジトリ：",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "Anthropic公式スキル：github.com/anthropics/skills"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "Matt Pocockの個人スキル（15,000スター）：github.com/mattpocock/skills"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "コミュニティマーケットプレイス（66,000件以上のスキル）：skillsmp.com"
+      },
+      {
+        "type": "blockquote",
+        "text": "📝 補足： Matt Pocockは「Total TypeScript」の著者として知られるTypeScript教育の第一人者です。彼のスキルリポジトリはGitHubで15,000スターを超え、Claude Codeコミュニティで最も活発に利用されているスキルセットのひとつです。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 2,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "blockquote",
+        "text": "📝 補足： SkillsMPは、Claude Code向けスキルを66,000件以上収録するコミュニティマーケットプレイスです。npmのパッケージ検索のように、用途別にスキルを検索・インストールできます。新しいスキルを自作する前に、まずここで検索することが推奨されています。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 2,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-one",
+        "text": "メタスキル──AIワークスペースを管理する"
+      },
+      {
+        "type": "unstyled",
+        "text": "他のすべてのスキルを構築・テスト・整理するためのスキルです。"
+      },
+      {
+        "type": "header-two",
+        "text": "Skill Creator"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "できること： あなたのタスクでClaudeをベンチマークし、実際の実行結果をもとに新しいスキルのドラフトを作成・反復させます。",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "使う場面： 散らかったワークフローを1つのきれいなSKILL.mdに変えたいとき。",
+        "inlineStyleRanges": [
+          {
+            "length": 5,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/anthropics/skills/tree/main/skills/skill-creator",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "使い方：",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "ワークフローを箇条書きで説明する"
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "Skill Creatorに最初のSKILL.mdを提案させる"
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "3〜5回テストプロンプトを実行し、失敗を確認して、指示を洗練させる"
+      },
+      {
+        "type": "header-two",
+        "text": "Write a Skill"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "できること： 適切な構造、段階的な開示、バンドルされたリソースを使って、新しいスキルをClaudeが書くよう誘導します。",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "これが、時間が経っても壊れないスキルを作る正しい方法です。"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/mattpocock/skills/tree/main/write-a-skill",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "インストール： npx skills@latest add mattpocock/skills/write-a-skill",
+        "inlineStyleRanges": [
+          {
+            "length": 7,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "Skill Creatorが生のドラフトを出力したとき、構造を整理するのに使います。"
+      },
+      {
+        "type": "header-two",
+        "text": "Find Skills"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "できること： SkillsMPなどの公開マーケットプレイスで、あなたのユースケースに合ったスキルを検索します。",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "マーケットプレイス例： skillsmp.com",
+        "inlineStyleRanges": [
+          {
+            "length": 11,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "ヒント：スキルを「見つける」ことを、パッケージ管理のように扱いましょう。新しいスキルを書く前に、既存のスキルを検索してフォークしてください。",
+        "inlineStyleRanges": [
+          {
+            "length": 70,
+            "offset": 0,
+            "style": "Italic"
+          }
+        ]
+      },
+      {
+        "type": "header-one",
+        "text": "計画・設計スキル"
+      },
+      {
+        "type": "unstyled",
+        "text": "これらのスキルは、間違ったものを作ることを防いでくれます。"
+      },
+      {
+        "type": "header-two",
+        "text": "Grill Me"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： 機能について容赦なく明確化の質問をClaudeに投げさせます。意思決定ツリーのすべての分岐が解決されるまで、一度に1つずつ質問します。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "使用場面： 新機能、リファクタリング、危険なマイグレーション。",
+        "inlineStyleRanges": [
+          {
+            "length": 5,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "インストール： npx skills@latest add mattpocock/skills/grill-me",
+        "inlineStyleRanges": [
+          {
+            "length": 7,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/mattpocock/skills/tree/main/grill-me",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "データモデル、エッジケース、障害モード、既存システムについての質問を受け取ることになります。後で消火活動をする代わりに、一度じっくり答えましょう。"
+      },
+      {
+        "type": "header-two",
+        "text": "Write a PRD"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： インタラクティブなインタビュー、コードベースの探索、モジュール設計を通してPRDを作成します。GitHubのイシューとしてファイリングします。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "インストール： npx skills@latest add mattpocock/skills/write-a-prd",
+        "inlineStyleRanges": [
+          {
+            "length": 7,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/mattpocock/skills/tree/main/write-a-prd",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "指示できること：",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "ゴール、非ゴール、ユーザーストーリーを記録する"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "成功指標と制約を列挙する"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "触れる予定の既存システムにリンクする"
+      },
+      {
+        "type": "blockquote",
+        "text": "📝 補足： PRD（Product Requirements Document：製品要求仕様書）とは、機能の「何を・なぜ・誰のために」を明文化したドキュメントです。開発前にチーム全員が合意するための設計書として使われます。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 2,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "PRD to Plan"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： PRDをトレーサーバレット式の垂直スライスを使った複数フェーズの実装計画に変換します。単なるタスク分解ではなく、統合リスクを実際に減らすシーケンスを提供します。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "インストール： npx skills@latest add mattpocock/skills/prd-to-plan",
+        "inlineStyleRanges": [
+          {
+            "length": 7,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/mattpocock/skills/tree/main/prd-to-plan",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "PRD to Issuesとの違い：プランは順序立てられてステージングされ、イシューは独立しています。両方を使いましょう。"
+      },
+      {
+        "type": "header-two",
+        "text": "PRD to Issues"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： PRDを、垂直スライスとブロッキング関係を持つ、独立して取り組めるGitHubイシューに分解します。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "インストール： npx skills@latest add mattpocock/skills/prd-to-issues",
+        "inlineStyleRanges": [
+          {
+            "length": 7,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/mattpocock/skills/tree/main/prd-to-issues",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "指示文：",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "「上記のPRDにPRD to Issuesを使用して。ブロッカーを明示しながら、エピック別にグループ化されたGitHubイシューを出力して」"
+      },
+      {
+        "type": "header-two",
+        "text": "Design an Interface"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： 並列サブエージェントを使って、モジュールのためのラジカルに異なる複数のインターフェースデザインを生成します。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "インストール： npx skills@latest add mattpocock/skills/design-an-interface",
+        "inlineStyleRanges": [
+          {
+            "length": 7,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/mattpocock/skills/tree/main/design-an-interface",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "1つのデザインだけでなく、異なるトレードオフを持つ3〜5の競合オプションが得られます。制約に合ったものを選んでください。"
+      },
+      {
+        "type": "header-two",
+        "text": "Request Refactor Plan"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： ユーザーインタビューを通じて小さなコミット単位の詳細なリファクタリング計画を作成し、GitHubイシューとしてファイリングします。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "インストール： npx skills@latest add mattpocock/skills/request-refactor-plan",
+        "inlineStyleRanges": [
+          {
+            "length": 7,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/mattpocock/skills/tree/main/request-refactor-plan",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-one",
+        "text": "コード開発スキル"
+      },
+      {
+        "type": "unstyled",
+        "text": "これらのスキルはClaudeを、コードオートコンプリートのおもちゃではなく、規律あるエンジニアリングパートナーに変えます。"
+      },
+      {
+        "type": "header-two",
+        "text": "TDD"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： 厳格なテストファーストのred-green-refactorループを強制します。一度に1つの垂直スライスで機能を構築したりバグを修正したりします。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "インストール： npx skills@latest add mattpocock/skills/tdd",
+        "inlineStyleRanges": [
+          {
+            "length": 7,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/mattpocock/skills/tree/main/tdd",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "得られるもの：",
+        "inlineStyleRanges": [
+          {
+            "length": 7,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "まず失敗するテスト"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "次にそれをパスする最小限のコード"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "その後、テスト下でのリファクタリングパス"
+      },
+      {
+        "type": "blockquote",
+        "text": "📝 補足： TDD（Test-Driven Development：テスト駆動開発）とは、コードを書く前にテストを書く手法です。「失敗（Red）→最小実装でパス（Green）→リファクタリング（Refactor）」のサイクルを繰り返します。バグが少なく変更に強いコードを生みやすい、エンジニアリングの標準的な実践手法です。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 2,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "Triage Issue"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： バグを調査してコードベースを探索し、根本原因を特定して、TDDベースの修正計画を含むGitHubイシューをファイリングします。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "インストール： npx skills@latest add mattpocock/skills/triage-issue",
+        "inlineStyleRanges": [
+          {
+            "length": 7,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/mattpocock/skills/tree/main/triage-issue",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "これは「なぜ壊れているのかまったくわからない」スキルです。まず探偵仕事をして、その後適切に修正するための構造化された計画を提供します。"
+      },
+      {
+        "type": "header-two",
+        "text": "QA"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： ブロッキング関係を含むイシュー分解を伴う、機能の完全なQAパスを実行します。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "インストール： npx skills@latest add mattpocock/skills/qa",
+        "inlineStyleRanges": [
+          {
+            "length": 7,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/mattpocock/skills/tree/main/qa",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "PRごとに使用する：",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "すべてのエッジケースをサーフェスする"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "何が何をブロックするかの順番でイシューをファイリングする"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リグレッションなしでリリースする"
+      },
+      {
+        "type": "header-two",
+        "text": "Improve Codebase Architecture"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： 浅いモジュールを深くし、テスト容易性を向上させることに焦点を当てて、アーキテクチャ改善の機会をコードベースで探索します。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "インストール： npx skills@latest add mattpocock/skills/improve-codebase-architecture",
+        "inlineStyleRanges": [
+          {
+            "length": 7,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/mattpocock/skills/tree/main/improve-codebase-architecture",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "指示できること：",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "ホットスポットを特定する"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "2〜3のリファクタリング戦略を提案する"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "それぞれのリスク・労力・影響を詳述する"
+      },
+      {
+        "type": "header-two",
+        "text": "Scaffold Exercises"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： セクション、問題、解答、解説を含む演習ディレクトリ構造を作成します。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "インストール： npx skills@latest add mattpocock/skills/scaffold-exercises",
+        "inlineStyleRanges": [
+          {
+            "length": 7,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/mattpocock/skills/tree/main/scaffold-exercises",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "最適な用途：",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "コースコンテンツの構築"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "チーム向けオンボーディング資料の作成"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "複雑なシステムをインタラクティブな演習としてドキュメント化"
+      },
+      {
+        "type": "header-two",
+        "text": "Auto-Commit Messages"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： ステージされたdiffを読み取り、タイプ・スコープ・本文を含むconventional commitメッセージを生成します。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "使う場面： 深夜2時に「fix stuff」と書くのに疲れたとき。",
+        "inlineStyleRanges": [
+          {
+            "length": 5,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "インストール： npx skills@latest add anthropics/skills/auto-commit",
+        "inlineStyleRanges": [
+          {
+            "length": 7,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/anthropics/skills/tree/main/skills/auto-commit",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "Code Review"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： セキュリティ・パフォーマンス・エラーハンドリング・アーキテクチャの系統的なレビューを提供します。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/anthropics/skills（“Code Review”で検索）",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "依頼できること：",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "「セキュリティファーストレビュー」"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "「パフォーマンスファーストレビュー」"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "または完全なチェックリストパス"
+      },
+      {
+        "type": "header-two",
+        "text": "Systematic Debugging"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "出典： Superpowersリポジトリ",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： ランダムな「とりあえず変えてみる」的な編集を禁止する、4フェーズのデバッグ手法です。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/obra/superpowers/tree/main/skills/systematic-debugging",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "典型的なフロー：",
+        "inlineStyleRanges": [
+          {
+            "length": 8,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "最小限の失敗テストを再現して作成する"
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "根本原因を絞り込む"
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "単一の修正を適用する"
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "テストとログで確認する"
+      },
+      {
+        "type": "header-two",
+        "text": "Brainstorming"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： 生のアイデアを詳細なフローと構成に変換します。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "実装前に使用：データシェイプの設計、APIサーフェス、障害とロールバックのストーリー"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/obra/superpowers/tree/main/skills/brainstorming",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "Change Log Generator"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： コミットを読み込み、人間向けまたは開発者向けの変更ログを生成します。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "用途： リリース、内部アップデート、投資家向けサマリー",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/ComposioHQ/awesome-claude-skills/tree/master/changelog-generator",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "Simplification Cascade"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： 複雑に絡み合ったロジックを特定し、より小さく構成可能な部品に書き直します。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "最適な用途： 誰も触れたくないレガシーな「神関数」",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： mcpmarket.com/tools/skills/simplification-cascades-1",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "Superpowers"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "概要： TDD・デバッグ・リファクタリング・実行のための実戦テスト済みスキルのフルスイートです。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/obra/superpowers",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "デフォルトの「エンジニアリングブレイン」レイヤーとして使いましょう。"
+      },
+      {
+        "type": "header-two",
+        "text": "React Best Practices"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： ReactコードにVercel/Next.jsスタイルのベストプラクティスを適用します。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "使う場面： Nextへの移行、レガシーReactアプリのクリーンアップ、ジュニア開発者のトレーニング",
+        "inlineStyleRanges": [
+          {
+            "length": 5,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/vercel-labs/agent-skills/tree/main/skills/react-best-practices",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "File Search"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： ripgrepやast-grepなどのツールを使って大規模なコードベースを素早くナビゲートする方法をClaudeに教えます。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/massgen/massgen",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "Context Optimization"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： 重要なものを保持しながら、コンテキストサイズとトークンコストを削減します。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/muratcankoylan/agent-skills-for-context-engineering",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-one",
+        "text": "ツールとセットアップのスキル"
+      },
+      {
+        "type": "unstyled",
+        "text": "「一度やったら、永遠に忘れられる」スキルです。",
+        "inlineStyleRanges": [
+          {
+            "length": 23,
+            "offset": 0,
+            "style": "Italic"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "Setup Pre-Commit"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： lint-staged、Prettier、型チェック、テストを含むHuskyのpre-commitフックをセットアップします。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "インストール： npx skills@latest add mattpocock/skills/setup-pre-commit",
+        "inlineStyleRanges": [
+          {
+            "length": 7,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/mattpocock/skills/tree/main/setup-pre-commit",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "すべての新しいリポジトリで実行しましょう。未来の自分が感謝するはずです。"
+      },
+      {
+        "type": "header-two",
+        "text": "Git Guardrails for Claude Code"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： push、reset –hard、cleanなどの危険なgitコマンドを実行前にブロックするClaude Codeのフックをセットアップします。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "インストール： npx skills@latest add mattpocock/skills/git-guardrails-claude-code",
+        "inlineStyleRanges": [
+          {
+            "length": 7,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/mattpocock/skills/tree/main/git-guardrails-claude-code",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "本番リポジトリでClaude Codeを使う場合、これはオプションではありません。Claudeは役立つ──そうでなくなるまでは。このスキルがあなたのセーフティネットです。"
+      },
+      {
+        "type": "header-two",
+        "text": "Dependency Auditor"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： package.jsonをスキャンして、古い・脆弱・廃棄されたパッケージを検出し、優先度付きの修正リストを出力します。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "使う場面： 6ヶ月間触れていないリポジトリで、npm auditが怖いとき。",
+        "inlineStyleRanges": [
+          {
+            "length": 5,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "インストール： npx skills@latest add ComposioHQ/awesome-claude-skills/dependency-auditor",
+        "inlineStyleRanges": [
+          {
+            "length": 7,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/ComposioHQ/awesome-claude-skills",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "Git Work Trees"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： メインプロジェクトを壊さずに、隔離されたブランチでの安全なフィーチャー開発を管理します。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "使う場面： 隔離された実験的ブランチや並行フィーチャーが必要なとき。",
+        "inlineStyleRanges": [
+          {
+            "length": 5,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-one",
+        "text": "イシュー・プロジェクト管理スキル"
+      },
+      {
+        "type": "header-two",
+        "text": "GitHub Triage"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： エージェントブリーフとスコープ外ドキュメントを使って受信GitHubイシューをトリアージし、Claudeが何を調査すべきか・何をスキップすべきかを正確に把握できるようにします。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "インストール： npx skills@latest add mattpocock/skills/github-triage",
+        "inlineStyleRanges": [
+          {
+            "length": 7,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/mattpocock/skills/tree/main/github-triage",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "使い道：",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "大量のイシューバックログを素早く処理する"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "自動でラベリング・カテゴリ分類する"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "適切な担当者やエピックにイシューをルーティングする"
+      },
+      {
+        "type": "header-one",
+        "text": "ライティング・ナレッジスキル"
+      },
+      {
+        "type": "header-two",
+        "text": "Edit Article"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： セクションの再構成、明確性の向上、散漫な文章の整理によって、記事を編集・改善します。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "インストール： npx skills@latest add mattpocock/skills/edit-article",
+        "inlineStyleRanges": [
+          {
+            "length": 7,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/mattpocock/skills/tree/main/edit-article",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "これは「文法を直す」スキルではありません。議論を再構成し、無駄を削り、各セクションのポイントを鋭くします。"
+      },
+      {
+        "type": "header-two",
+        "text": "Ubiquitous Language"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： 現在の会話からDDDスタイルのユビキタス言語グロッサリーを抽出します。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "インストール： npx skills@latest add mattpocock/skills/ubiquitous-language",
+        "inlineStyleRanges": [
+          {
+            "length": 7,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/mattpocock/skills/tree/main/ubiquitous-language",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "なぜ重要か：",
+        "inlineStyleRanges": [
+          {
+            "length": 6,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "どのチームにも固有のボキャブラリーがあります。「event」「order」「user」は人によって意味が違う"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "このスキルはClaudeに、コードが書かれる前にあなたのドメイン言語を表面化・定義させます"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "コードベース・ドキュメント・会話がすべて同じことに同じ言葉を使うようになります"
+      },
+      {
+        "type": "blockquote",
+        "text": "📝 補足： DDD（Domain-Driven Design：ドメイン駆動設計）は、ビジネスドメインの概念を中心にソフトウェアを設計する手法です。「ユビキタス言語」はDDDの核心概念で、開発者・ビジネス担当者・クライアント全員が同じ言葉を使うことで認識のズレをなくす語彙体系のことです。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 2,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "API Documentation Generator"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： ルートを読み取り、例・エラーコード・認証要件を含むOpenAPI / Swagger形式のドキュメントを生成します。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "使う場面： APIをリリースしたがドキュメントを書いていないとき。",
+        "inlineStyleRanges": [
+          {
+            "length": 5,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "インストール： npx skills@latest add ComposioHQ/awesome-claude-skills/api-docs-generator",
+        "inlineStyleRanges": [
+          {
+            "length": 7,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/ComposioHQ/awesome-claude-skills",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "READMEに貼り付けるか、Swagger UIでホストしましょう。30秒でできます。"
+      },
+      {
+        "type": "header-two",
+        "text": "Content Researcher"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： あなたの文体を学習し、実際の引用を含む長文ブログやニュースレターの下書きを作成します。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "用途： TwitterのトーンをブログポストにCloneする、SEOブログ記事を作成する",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/ComposioHQ/awesome-claude-skills/blob/master/content-research-writer/SKILL.md",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "Obsidian Vault"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： wikilinksとインデックスノートを使って、Obsidianのvaultでノートを検索・作成・管理します。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "インストール： npx skills@latest add mattpocock/skills/obsidian-vault",
+        "inlineStyleRanges": [
+          {
+            "length": 7,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/mattpocock/skills/tree/main/obsidian-vault",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "自動タグ付けを行うKepano Obsidianスキルとは異なります。こちらはインタラクティブで、vaultをナビゲートし、新しいノートを作成し、リンクの一貫性を維持します。"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "別バリアント（自動タグ付け）：github.com/kepano/obsidian-skills"
+      },
+      {
+        "type": "header-one",
+        "text": "UI・デザイン・フロントエンドスキル"
+      },
+      {
+        "type": "header-two",
+        "text": "Frontend Design"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： モダンでクリーンなUIを生成するようClaudeを誘導します。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/anthropics/skills/tree/main/skills/frontend-design",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "Awesome-design"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： Notion・FigmaなどにインスパイアされたMarkdownテンプレートを使って、UIの思考を構造化します。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "用途： ランディングページ、ダッシュボード、設定ページ",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/VoltAgent/awesome-design-md",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "Theme Factory"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： 1つのテキストプロンプトから完全なカラーパレットとテーマを生成します。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/anthropics/skills/tree/main/skills/theme-factory",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unstyled",
+        "text": "ワークフロー：",
+        "inlineStyleRanges": [
+          {
+            "length": 7,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "ブランドを説明する：「落ち着いたフィンテック、信頼感、ダークアクセント」"
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "トークン付きパレットを取得する"
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "Tailwind / CSS変数に適用する"
+      },
+      {
+        "type": "header-two",
+        "text": "Canvas Design"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： テキストプロンプトをSNSグラフィック・ポスター・カバーに変換します。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/anthropics/skills/tree/main/skills/canvas-design",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "Web Artifacts Builder"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： 自然言語からインタラクティブなダッシュボード・計算機・ツールを構築します。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/anthropics/skills/tree/main/skills/web-artifacts-builder",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "Algorithmic Art"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： p5.jsを使ってアルゴリズミックなビジュアルを生成します。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/anthropics/skills/tree/main/skills/algorithmic-art",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "Brand Guidelines"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： すべての新しいコンポーネントにわたってブランドシステムを強制します。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/anthropics/skills/tree/main/skills/brand-guidelines",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-one",
+        "text": "ビジネス・営業・マーケティングスキル"
+      },
+      {
+        "type": "header-two",
+        "text": "Domain Name Brainstormer"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： プロダクト名を生成し、ドメインの空き状況を確認します。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "使う場面： 新しいアプリやマイクロブランドを立ち上げるとき。",
+        "inlineStyleRanges": [
+          {
+            "length": 5,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/Microck/ordinary-claude-skills",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "Stripe Integration"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： 初心者的なAPIミスなしに、安全な支払いフロー・Webhook・サブスクリプションをセットアップします。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/wshobson/agents/tree/main/plugins/payment-processing/skills/stripe-integration",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "Lead Research Assistant"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： ICP（理想の顧客プロファイル）に基づいてターゲット企業と意思決定者を見つけます。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "用途： B2Bアウトリーチリスト、パートナーシップ開拓",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/ComposioHQ/awesome-claude-skills/blob/master/lead-research-assistant/SKILL.md",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "Marketing Skills"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "概要： CRO・コピーライティング・メールフロー等のための20以上のスキルをまとめたリポジトリです。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/coreyhaines31/marketingskills",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "Claude SEO"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： 完全な技術的SEO監査・スキーマ・オンページ最適化を行います。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/AgriciDaniel/claude-seo",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "Idea Mining / YouTube Weekly Roundup"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： コメント・競合動画・ニッチなトレンドをスクレイピングして、週次のアイデアバンク + SWOT PDFにまとめます。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： https://github.com/AgriciDaniel/claude-youtube",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "インストール： npx skills@latest add AgriciDaniel/claude-youtube",
+        "inlineStyleRanges": [
+          {
+            "length": 7,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-one",
+        "text": "メディア生成スキル"
+      },
+      {
+        "type": "header-two",
+        "text": "Image Generator"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： Nano Banana Proなどの外部APIに接続して、写真品質の画像を生成します。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "Nano Banana Pro： github.com/feedtailor/ccskill-nanobanana",
+        "inlineStyleRanges": [
+          {
+            "length": 16,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "Nano Banana 2： github.com/kingbootoshi/nano-banana-2-skill",
+        "inlineStyleRanges": [
+          {
+            "length": 14,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "Local Image Gen"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： ローカルのPythonスクリプトを実行してアバターやアイコンを生成します。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/jezweb/claude-skills/blob/main/plugins/design-assets/skills/ai-image-generator/SKILL.md",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "Image Optimizer"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： 高速なウェブパフォーマンスのために画像をリサイズしてWebPに変換します。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： mcpmarket.com/tools/skills/image-optimizer",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "Remotion Best Practices"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： Remotionを使ってビデオとモーショングラフィックを生成するためのベストプラクティスをエンコードします。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/remotion-dev/remotion",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "blockquote",
+        "text": "📝 補足： Remotionは、ReactとTypeScriptでプログラム的にビデオを作成できるライブラリです。コードでタイムラインやアニメーションを記述し、mp4などの動画ファイルとして書き出せます。デザイナーなしでプログラマーが動画を量産できる点が特徴です。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 2,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "Emotion"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： スクリプト化されたプログラム的なビデオアニメーション",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/wilwaldon/Claude-Code-Video-Toolkit",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-one",
+        "text": "オフィス・ドキュメント・生産性スキル"
+      },
+      {
+        "type": "header-two",
+        "text": "PDF Processing"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： 表の抽出、フォームの入力、PDFのマージを行います。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/anthropics/skills/tree/main/skills/pdf",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "DOCX"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： 変更履歴とフォーマットを保持したまま、Wordドキュメントを編集します。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/anthropics/skills/tree/main/skills/docx",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "PPTX"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： スライドデッキ・レイアウト・スピーカーノートを作成・編集します。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/anthropics/skills/tree/main/skills/pptx",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "XLSX"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： 平易な文章からExcelの数式・ピボットテーブル・チャートを作成します。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/anthropics/skills/tree/main/skills/xlsx",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "Excel MCP Server"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： MCPを通じてExcelファイルを直接操作します。デスクトップ版Excelは不要です。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/haris-musa/excel-mcp-server",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "Doc Co-Authoring"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： あなたとClaudeの間のリアルタイム共同ライティングを実現します。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/anthropics/skills/tree/main/skills/doc-coauthoring",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "NotebookLM Integration"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： ClaudeとGoogleのNotebookLMを橋渡しして、要約とフラッシュカードを生成します。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/PleasePrompto/notebooklm-skill",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "GWS (Google Workspace)"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： Google Calendar・Drive・Docsを自動化します。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "ユースケース： 会議のリスケジュール、共有ドライブの整理、テンプレートからのドキュメント生成",
+        "inlineStyleRanges": [
+          {
+            "length": 7,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： https://github.com/googleworkspace/cli",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-one",
+        "text": "マルチエージェントオーケストレーションとウェブサーフィン"
+      },
+      {
+        "type": "header-two",
+        "text": "Stochastic Multi-Agent Consensus"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： 多数のサブエージェントを生成して同じ問題を解かせ、回答を集約します。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "用途： 戦略的決定、アーキテクチャの選択、リスク分析",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/hungv47/meta-skills",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "Model-chat (Debate)"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： 複数のClaudeインスタンスをディベートに参加させてアイデアをストレステストします。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "使う場面： 2〜3の大きな選択肢の間で決断しているとき。",
+        "inlineStyleRanges": [
+          {
+            "length": 5,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/tommasinigiovanni/conclave",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "Custom YT Search"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： YouTubeコンテンツを自律的に検索・分析します。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/ZeroPointRepo/youtube-skills/blob/main/README.md",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "Playwright CLI"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： UIリグレッションチェックとファネルウォークスルーのために、Playwrightを通じてリアルブラウザを制御します。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/microsoft/playwright",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "blockquote",
+        "text": "📝 補足： PlaywrightはMicrosoftが開発したブラウザ自動化フレームワークです。Chrome・Firefox・Safariを実際に操作するテストコードを書けます。E2Eテスト（エンドツーエンドテスト）の標準ツールとして広く使われています。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 2,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-two",
+        "text": "Firecrawl Skill"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "目的： ナイーブなスクレイパーをブロックする敵対的または複雑なサイトから、構造化データをスクレイピングします。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "リンク： github.com/mendableai/firecrawl",
+        "inlineStyleRanges": [
+          {
+            "length": 4,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "blockquote",
+        "text": "📝 補足： FirecrawlはMendable AIが開発したウェブスクレイピングAPIです。JavaScriptレンダリングが必要なページや、Cloudflareなどのボット対策が入ったサイトからもデータを取得できます。",
+        "inlineStyleRanges": [
+          {
+            "length": 3,
+            "offset": 2,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "url": "https://pbs.twimg.com/media/HG_84k6aUAAgWg5.jpg",
+        "width": 1361,
+        "height": 781
+      },
+      {
+        "type": "header-one",
+        "text": "ワークフローへの組み込み方"
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "メタスキルから始める ─ Write a SkillとSkill Creatorをインストールして、初日から適切にスキルを構築・修正できる状態にする。",
+        "inlineStyleRanges": [
+          {
+            "length": 10,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "まず計画スキルを追加する ─ Grill Me、Write a PRD、PRD to Plan、PRD to Issues、Design an Interface。これらが手戻りの80%を防いでくれる。",
+        "inlineStyleRanges": [
+          {
+            "length": 12,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "コードの安全性を固定する ─ Git Guardrails、Setup Pre-Commit、TDD、Systematic Debugging、Triage Issue。すべてのリポジトリにインストールすること。",
+        "inlineStyleRanges": [
+          {
+            "length": 12,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "エンジニアリングベースとしてSuperpowersを追加する ─github.com/obra/superpowers",
+        "inlineStyleRanges": [
+          {
+            "length": 30,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "ビジネススキルを上に重ねる ─ Marketing Skills、Claude SEO、Lead Research、Content Researcher。",
+        "inlineStyleRanges": [
+          {
+            "length": 13,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "ordered-list-item",
+        "text": "SkillsMPでギャップを埋める ─ skillsmp.com ─ 新しい問題に当たったときは、作る前に検索する。",
+        "inlineStyleRanges": [
+          {
+            "length": 17,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "header-one",
+        "text": "忘れる前に保存を"
+      },
+      {
+        "type": "unstyled",
+        "text": "これでClaudeのフルスキルスタックができます。"
+      },
+      {
+        "type": "unstyled",
+        "text": "しかし、ほとんどの人はこれをざっと読んで、タブを閉じて、2024年と変わらないやり方でClaudeにプロンプトを打ち続けるでしょう。"
+      },
+      {
+        "type": "unstyled",
+        "text": "そんな人になってはいけません。",
+        "inlineStyleRanges": [
+          {
+            "length": 15,
+            "offset": 0,
+            "style": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "今すぐこの投稿をブックマークする"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "フルリンクインデックスを自分のドキュメントにコピーする"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "各セクションから1つスキルを選んで、今日インストールする"
+      },
+      {
+        "type": "unordered-list-item",
+        "text": "1週間後、なくては仕事できないと気づいたときにまた戻ってくる"
+      },
+      {
+        "type": "unstyled",
+        "text": "claude skillマスターになりましょう！"
+      },
+      {
+        "type": "unstyled",
+        "text": "経営者・士業・営業職等、全てのビジネスパーソンの方で、\n「Claude Codeを使いこなしたい」\n「AIを活用してもっと業務を効率化したい」\nといったお悩みをお持ちの方は、ぜひ一度ご相談ください。\n▼ スパルタClaude Code塾\nhttps://www.claude-code-lab.com"
+      },
+      {
+        "type": "unstyled",
+        "text": "#ClaudeCode #AI活用 #業務効率化 #ノーコード #AIツール #生成AI #Claude #仕事効率化 #ClaudeSkills #開発効率化 #TDD #テスト駆動開発 #TypeScript"
+      }
+    ]
+  },
+  "status": "success",
+  "msg": "success",
+  "_handle": "claudecode_lab"
+}

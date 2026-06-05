@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "msg": "success",
+  "data": {
+    "id": "2022024503371739136",
+    "name": "セロイ@AIで起業",
+    "userName": "saeroyi_ican",
+    "location": "",
+    "url": "",
+    "description": "毎日15時間労働どブラックの社畜→退職して無職。実家住み。文系、知識ゼロだけどAI使って起業します。月100万稼ぐビジネス立ち上げる奮闘記🍡",
+    "entities": {
+      "description": {}
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 1878,
+    "following": 487,
+    "favouritesCount": 10275,
+    "statusesCount": 6992,
+    "mediaCount": 230,
+    "createdAt": "2026-02-12T19:08:11.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/2022024503371739136/1774327941",
+    "profilePicture": "https://pbs.twimg.com/profile_images/2036291475433230336/nM2royKn_normal.jpg",
+    "canDm": false,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": []
+  }
+}

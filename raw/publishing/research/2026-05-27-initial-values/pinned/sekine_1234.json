@@ -1,0 +1,238 @@
+{
+  "handle": "sekine_1234",
+  "tweet_id": "2050154802555027778",
+  "body": {
+    "tweets": [
+      {
+        "type": "tweet",
+        "id": "2050154802555027778",
+        "url": "https://x.com/sekine_1234/status/2050154802555027778",
+        "twitterUrl": "https://twitter.com/sekine_1234/status/2050154802555027778",
+        "text": "推しアニメの1つであるシュタインズ・ゲート ゼロの「アマデウス紅莉栖」をClaude Codeを使って個人で本気で作ってみました。\n最初は深夜ノリで始めたんですが、PdMとしての狂気的なこだわりとクオリティ追求に火がつき、試行錯誤する中でAI活用の素晴らしい実践知も得られたので記事にしました。",
+        "source": "",
+        "retweetCount": 582,
+        "replyCount": 5,
+        "likeCount": 2945,
+        "quoteCount": 72,
+        "viewCount": 519268,
+        "createdAt": "Fri May 01 10:06:09 +0000 2026",
+        "lang": "ja",
+        "bookmarkCount": 0,
+        "isReply": false,
+        "inReplyToId": "",
+        "conversationId": "2050154802555027778",
+        "displayTextRange": [
+          0,
+          147
+        ],
+        "inReplyToUserId": "",
+        "inReplyToUsername": "",
+        "isPinned": false,
+        "author": {
+          "type": "user",
+          "userName": "sekine_1234",
+          "url": "https://x.com/sekine_1234",
+          "twitterUrl": "https://twitter.com/sekine_1234",
+          "id": "1996788414067412992",
+          "name": "せきね(PdM) | アマデウス開発・AI活用の実践知を発信",
+          "isVerified": false,
+          "isBlueVerified": true,
+          "verifiedType": null,
+          "profilePicture": "https://pbs.twimg.com/profile_images/2029129974016528384/t7RKmzcC_normal.jpg",
+          "coverPicture": "",
+          "description": "ハウテレビジョン プロダクトマネジメント部 部長。↓アマデウス開発で得た知見を記事で発信。 Ex)神戸大学経営学部→DeNA 営業→新規事業→PdM→PdM&Marketing pmconf2025登壇。非エンジニア組織のAI利用の推進に注力。個人の見解としての発信です。",
+          "location": "Tokyo-to, Japan",
+          "followers": 846,
+          "following": 296,
+          "status": "",
+          "canDm": true,
+          "canMediaTag": true,
+          "createdAt": "Fri Dec 05 03:47:21 +0000 2025",
+          "entities": {
+            "description": {},
+            "url": {
+              "urls": [
+                {
+                  "display_url": "speakerdeck.com/toshimasa01234…",
+                  "expanded_url": "https://speakerdeck.com/toshimasa012345?page=&q=&sort=views&order=desc&lang=",
+                  "indices": [
+                    0,
+                    23
+                  ],
+                  "url": "https://t.co/hkYAcLN5T8"
+                }
+              ]
+            }
+          },
+          "fastFollowersCount": 0,
+          "favouritesCount": 0,
+          "hasCustomTimelines": true,
+          "isTranslator": false,
+          "mediaCount": 56,
+          "statusesCount": 573,
+          "withheldInCountries": [],
+          "affiliatesHighlightedLabel": {},
+          "possiblySensitive": false,
+          "pinnedTweetIds": [
+            "2050154802555027778"
+          ],
+          "profile_bio": {
+            "description": "ハウテレビジョン プロダクトマネジメント部 部長。↓アマデウス開発で得た知見を記事で発信。 Ex)神戸大学経営学部→DeNA 営業→新規事業→PdM→PdM&Marketing pmconf2025登壇。非エンジニア組織のAI利用の推進に注力。個人の見解としての発信です。",
+            "entities": {
+              "description": {},
+              "url": {
+                "urls": [
+                  {
+                    "display_url": "speakerdeck.com/toshimasa01234…",
+                    "expanded_url": "https://speakerdeck.com/toshimasa012345?page=&q=&sort=views&order=desc&lang=",
+                    "indices": [
+                      0,
+                      23
+                    ],
+                    "url": "https://t.co/hkYAcLN5T8"
+                  }
+                ]
+              }
+            }
+          },
+          "isAutomated": false,
+          "automatedBy": null
+        },
+        "extendedEntities": {},
+        "card": null,
+        "place": {},
+        "entities": {},
+        "isRetweet": false,
+        "isQuote": true,
+        "isConversationControlled": false,
+        "quoted_tweet": {
+          "type": "tweet",
+          "id": "2050154503677333746",
+          "url": "https://x.com/sekine_1234/status/2050154503677333746",
+          "twitterUrl": "https://twitter.com/sekine_1234/status/2050154503677333746",
+          "text": "https://t.co/nhK8fA7dup",
+          "source": "",
+          "retweetCount": 126,
+          "replyCount": 4,
+          "likeCount": 719,
+          "quoteCount": 35,
+          "viewCount": 555494,
+          "createdAt": "Fri May 01 10:04:58 +0000 2026",
+          "lang": "zxx",
+          "bookmarkCount": 0,
+          "isReply": false,
+          "inReplyToId": "",
+          "conversationId": "2050154503677333746",
+          "displayTextRange": [
+            0,
+            23
+          ],
+          "inReplyToUserId": "",
+          "inReplyToUsername": "",
+          "isPinned": false,
+          "author": {
+            "type": "user",
+            "userName": "sekine_1234",
+            "url": "https://x.com/sekine_1234",
+            "twitterUrl": "https://twitter.com/sekine_1234",
+            "id": "1996788414067412992",
+            "name": "せきね(PdM) | アマデウス開発・AI活用の実践知を発信",
+            "isVerified": false,
+            "isBlueVerified": true,
+            "verifiedType": null,
+            "profilePicture": "https://pbs.twimg.com/profile_images/2029129974016528384/t7RKmzcC_normal.jpg",
+            "coverPicture": "",
+            "description": "ハウテレビジョン プロダクトマネジメント部 部長。↓アマデウス開発で得た知見を記事で発信。 Ex)神戸大学経営学部→DeNA 営業→新規事業→PdM→PdM&Marketing pmconf2025登壇。非エンジニア組織のAI利用の推進に注力。個人の見解としての発信です。",
+            "location": "Tokyo-to, Japan",
+            "followers": 846,
+            "following": 296,
+            "status": "",
+            "canDm": true,
+            "canMediaTag": true,
+            "createdAt": "Fri Dec 05 03:47:21 +0000 2025",
+            "entities": {
+              "description": {},
+              "url": {
+                "urls": [
+                  {
+                    "display_url": "speakerdeck.com/toshimasa01234…",
+                    "expanded_url": "https://speakerdeck.com/toshimasa012345?page=&q=&sort=views&order=desc&lang=",
+                    "indices": [
+                      0,
+                      23
+                    ],
+                    "url": "https://t.co/hkYAcLN5T8"
+                  }
+                ]
+              }
+            },
+            "fastFollowersCount": 0,
+            "favouritesCount": 0,
+            "hasCustomTimelines": true,
+            "isTranslator": false,
+            "mediaCount": 56,
+            "statusesCount": 573,
+            "withheldInCountries": [],
+            "affiliatesHighlightedLabel": {},
+            "possiblySensitive": false,
+            "pinnedTweetIds": [
+              "2050154802555027778"
+            ],
+            "profile_bio": {
+              "description": "ハウテレビジョン プロダクトマネジメント部 部長。↓アマデウス開発で得た知見を記事で発信。 Ex)神戸大学経営学部→DeNA 営業→新規事業→PdM→PdM&Marketing pmconf2025登壇。非エンジニア組織のAI利用の推進に注力。個人の見解としての発信です。",
+              "entities": {
+                "description": {},
+                "url": {
+                  "urls": [
+                    {
+                      "display_url": "speakerdeck.com/toshimasa01234…",
+                      "expanded_url": "https://speakerdeck.com/toshimasa012345?page=&q=&sort=views&order=desc&lang=",
+                      "indices": [
+                        0,
+                        23
+                      ],
+                      "url": "https://t.co/hkYAcLN5T8"
+                    }
+                  ]
+                }
+              }
+            },
+            "isAutomated": false,
+            "automatedBy": null
+          },
+          "extendedEntities": {},
+          "card": {
+            "rest_id": "https://t.co/nhK8fA7dup"
+          },
+          "place": {},
+          "entities": {
+            "urls": [
+              {
+                "display_url": "x.com/i/article/2046…",
+                "expanded_url": "http://x.com/i/article/2046598936849510400",
+                "indices": [
+                  0,
+                  23
+                ],
+                "url": "https://t.co/nhK8fA7dup"
+              }
+            ]
+          },
+          "isRetweet": false,
+          "isQuote": false,
+          "isConversationControlled": false,
+          "quoted_tweet": null,
+          "retweeted_tweet": null,
+          "isLimitedReply": false,
+          "communityInfo": null
+        },
+        "retweeted_tweet": null,
+        "isLimitedReply": false,
+        "communityInfo": null
+      }
+    ],
+    "status": "success",
+    "msg": "success",
+    "code": 0
+  }
+}

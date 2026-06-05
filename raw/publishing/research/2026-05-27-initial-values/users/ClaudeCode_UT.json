@@ -1,0 +1,46 @@
+{
+  "status": "success",
+  "msg": "success",
+  "data": {
+    "id": "2045207585574539264",
+    "name": "東大ClaudeCode研究所",
+    "userName": "ClaudeCode_UT",
+    "location": "実務で使えるClaudeCodeならここ一択！",
+    "url": "",
+    "description": "Claude Codeを極めた現役東大生集団が運営｜実務で使えるノウハウと最新情報を毎日発信｜大手企業とのAIエージェント開発で現場導入実績あり｜研究レベルの技術を応用して社会実装｜AIエージェントの導入相談はDMまでお願いします📩｜独自ニュースと活用法はLINEで：https://t.co/078j7qOKUH",
+    "entities": {
+      "description": {
+        "urls": [
+          {
+            "display_url": "lin.ee/quYxNMc",
+            "expanded_url": "https://lin.ee/quYxNMc",
+            "indices": [
+              134,
+              157
+            ],
+            "url": "https://t.co/078j7qOKUH"
+          }
+        ]
+      }
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 19704,
+    "following": 10,
+    "favouritesCount": 310,
+    "statusesCount": 351,
+    "mediaCount": 213,
+    "createdAt": "2026-04-17T18:29:47.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/2045207585574539264/1776499582",
+    "profilePicture": "https://pbs.twimg.com/profile_images/2045968105172766720/_u891Zxq_normal.jpg",
+    "canDm": false,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": [
+      "2058664601085157559"
+    ]
+  }
+}

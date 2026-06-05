@@ -1,0 +1,21 @@
+{
+  "name": "06_r6_hedged",
+  "description": "末尾に hedge (なのかな) → R6 fail。",
+  "input": {
+    "traceId": "trace-06",
+    "draftId": "draft-06",
+    "coreIdeaId": "core-06",
+    "platform": "x",
+    "body": "経営者向け業務の仕組み化を共有。私は請求書発行ワークフローを自動化した。テンプレ化して 30 分 → 3 分に短縮した。これが仕組み化の本質なのかな",
+    "fmat": "short",
+    "sourceMaterialIds": [],
+    "hasAffiliateLink": false
+  },
+  "expected": {
+    "decision": "approved",
+    "rejectReasons": [],
+    "warningsAtLeast": [
+      "R6_assertive_conclusion"
+    ]
+  }
+}

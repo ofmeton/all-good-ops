@@ -1,0 +1,18 @@
+{
+  "name": "11_x5_pii_leak",
+  "description": "本文に電話番号 + email + 円金額 が残っている → DLP highRiskHits>0 → X5 fail。",
+  "input": {
+    "traceId": "trace-11",
+    "draftId": "draft-11",
+    "coreIdeaId": "core-11",
+    "platform": "x",
+    "body": "経営者向け業務の仕組み化を共有する。私は田中様の請求書 ¥120,000 を発行した。連絡先は 03-1234-5678 と info@example.com まで。テンプレート化で 30 分 → 3 分になった。判断軸を 3 段階で固定すれば安定する。",
+    "fmat": "short",
+    "sourceMaterialIds": [],
+    "hasAffiliateLink": false
+  },
+  "expected": {
+    "decision": "rejected",
+    "rejectReasons": ["X5_dlp_and_proper_noun"]
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "handle": "so_ainsight",
+  "response_text": "```json\n{\n  \"information_source\": \"GitHub/海外X/公式ブログ/公式ドキュメント\",\n  \"publishing_lag_hours\": 18,\n  \"selection_criteria\": \"GitHub急上昇リポジトリ・海外XのAI/OSS系バズ投稿を主軸に、Claude Code/Cursor/Codex等AIコーディングツールと開発者の生産性向上に直結するトピックを優先選別。リーク・比較検証・コスト削減系も積極採用。\",\n  \"translation_rate_pct\": 30,\n  \"paraphrase_rate_pct\": 45,\n  \"opinion_rate_pct\": 10,\n  \"original_rate_pct\": 15,\n  \"citation_explicit_rate_pct\": 40,\n  \"cross_platform_intake_rate_pct\": 70,\n  \"original_rate_pct\": 15,\n  \"notes\": \"海外Xの話題・GitHub Trending・公式ドキュメントを日本語で要約・箇条書き化する再加工が中心。元ソースURLを添付するケースは約4割だが出典名の明示は曖昧なものも多い。「海外で話題」「海外アカウントが」という表現が頻出し、海外X起点の情報流入率が高いと推定。GitHubリポジトリ紹介まとめ系投稿が高エンゲージメントを獲得する傾向あり。publishing_lag・original_rateの推定自信度はやや低い。\"\n}\n```",
+  "parsed": {
+    "information_source": "GitHub/海外X/公式ブログ/公式ドキュメント",
+    "publishing_lag_hours": 18,
+    "selection_criteria": "GitHub急上昇リポジトリ・海外XのAI/OSS系バズ投稿を主軸に、Claude Code/Cursor/Codex等AIコーディングツールと開発者の生産性向上に直結するトピックを優先選別。リーク・比較検証・コスト削減系も積極採用。",
+    "translation_rate_pct": 30,
+    "paraphrase_rate_pct": 45,
+    "opinion_rate_pct": 10,
+    "original_rate_pct": 15,
+    "citation_explicit_rate_pct": 40,
+    "cross_platform_intake_rate_pct": 70,
+    "notes": "海外Xの話題・GitHub Trending・公式ドキュメントを日本語で要約・箇条書き化する再加工が中心。元ソースURLを添付するケースは約4割だが出典名の明示は曖昧なものも多い。「海外で話題」「海外アカウントが」という表現が頻出し、海外X起点の情報流入率が高いと推定。GitHubリポジトリ紹介まとめ系投稿が高エンゲージメントを獲得する傾向あり。publishing_lag・original_rateの推定自信度はやや低い。"
+  },
+  "usage": {
+    "input_tokens": 5165,
+    "output_tokens": 442,
+    "cache_read_input_tokens": 0,
+    "cache_creation_input_tokens": 0
+  }
+}

@@ -1,0 +1,53 @@
+◇ injected env (4) from .env.local // tip: ⌘ override existing { override: true }
+=== MA Interviewer Sample ===
+started_at: 2026-05-24T10:20:02.000Z
+agent_id:       agent_01UkCNChCLGNKH61CvbDXp6w
+environment_id: env_01Rf6cjbGPqUTELKwWbGtTsM
+
+session_id: sesn_01Eo4gUGMQYLPvJbSrJ5DwBi
+initial_status: idle
+turn 1: 0.7s, in=0 out=0 status=idle
+turn 2: 14.2s, in=1826 out=295 status=idle
+turn 3: 0.7s, in=1826 out=295 status=idle
+turn 4: 10.9s, in=1832 out=665 status=idle
+turn 5: 0.7s, in=1832 out=665 status=idle
+[ERROR] BadRequestError: 400 {"type":"error","error":{"type":"invalid_request_error","message":"Session sesn_01Eo4gUGMQYLPvJbSrJ5DwBi cannot be archived while its status is \"running\". Only pending or idle sessions may be archived."},"request_id":"req_011CbME3Syad9EAiDLa2d8wQ"}
+    at APIError.generate (/Users/rikukudo/Projects/private-agents/all-good-ops/outputs/improvements/x-account-design-v9-verification/B3-ma-cost-script/node_modules/@anthropic-ai/sdk/src/core/error.ts:75:14)
+    at Anthropic.makeStatusError (/Users/rikukudo/Projects/private-agents/all-good-ops/outputs/improvements/x-account-design-v9-verification/B3-ma-cost-script/node_modules/@anthropic-ai/sdk/src/client.ts:817:28)
+    at Anthropic.makeRequest (/Users/rikukudo/Projects/private-agents/all-good-ops/outputs/improvements/x-account-design-v9-verification/B3-ma-cost-script/node_modules/@anthropic-ai/sdk/src/client.ts:1077:24)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async main (/Users/rikukudo/Projects/private-agents/all-good-ops/outputs/improvements/x-account-design-v9-verification/B3-ma-cost-script/interviewer-sample.ts:149:3) {
+  status: 400,
+  headers: Headers {
+    date: 'Sun, 24 May 2026 10:20:29 GMT',
+    'content-type': 'application/json',
+    'transfer-encoding': 'chunked',
+    connection: 'keep-alive',
+    'accept-encoding': 'gzip',
+    'anthropic-organization-id': 'eb2e8ffb-35a1-4418-8afa-e0c3d738b559',
+    'anthropic-ratelimit-requests-limit': '600',
+    'anthropic-ratelimit-requests-remaining': '587',
+    'anthropic-ratelimit-requests-reset': '2026-05-24T10:21:02Z',
+    'request-id': 'req_011CbME3Syad9EAiDLa2d8wQ',
+    'x-envoy-upstream-service-time': '144',
+    'content-encoding': 'gzip',
+    vary: 'Accept-Encoding',
+    server: 'cloudflare',
+    'server-timing': 'x-originResponse;dur=146',
+    'set-cookie': '_cfuvid=yabuFvPTdzRlm5p874XXK7dlxl_A9c1Uque_oPtfCXM-1779618029.6204653-1.0.1.1-rBhshJqll_qrjMbqljpg.jomEGswXc8TOVUKaJA0OFE; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.anthropic.com',
+    'x-robots-tag': 'none',
+    'cf-cache-status': 'DYNAMIC',
+    'content-security-policy': "default-src 'none'; frame-ancestors 'none'",
+    'cf-ray': 'a00b916d1acce389-NRT'
+  },
+  requestID: 'req_011CbME3Syad9EAiDLa2d8wQ',
+  error: {
+    type: 'error',
+    error: {
+      type: 'invalid_request_error',
+      message: 'Session sesn_01Eo4gUGMQYLPvJbSrJ5DwBi cannot be archived while its status is "running". Only pending or idle sessions may be archived.'
+    },
+    request_id: 'req_011CbME3Syad9EAiDLa2d8wQ'
+  },
+  type: 'invalid_request_error'
+}

@@ -1,28 +1,30 @@
 #!/usr/bin/env bash
 # pre-commit hook: 1セッション = 1 task ブランチ ルール強制
 #
-# main / master / improve/iteration-* への直 commit を拒否する。
-# 複数セッションが同じブランチに乗ってきて commit 主題が混ざる事故を予防。
+# 2 重チェック:
+#   (A) main / master / improve/iteration-* への直 commit を拒否
+#   (B) 現在のブランチが別 worktree で同時 active になっていないか確認
+#       （通常 git が防ぐが、--force 等で発生した場合の保険）
 #
 # 緊急時の脱出口:
-#   ALLOW_MAIN_COMMIT=1 git commit ...
+#   ALLOW_MAIN_COMMIT=1 git commit ...        ← (A) 用
+#   ALLOW_BRANCH_CONFLICT=1 git commit ...    ← (B) 用
 #
 # install: bash scripts/install-git-hooks.sh
 
 set -euo pipefail
 
 current_branch="$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo unknown)"
+current_wt="$(git rev-parse --show-toplevel 2>/dev/null || echo unknown)"
 
-# 保護対象ブランチ
+# (A) 保護対象ブランチ
 protected_pattern='^(main|master|improve/iteration-.*)$'
 
 if [[ "$current_branch" =~ $protected_pattern ]]; then
   if [[ "${ALLOW_MAIN_COMMIT:-0}" == "1" ]]; then
     echo "⚠️  保護ブランチ '$current_branch' への commit を許可（ALLOW_MAIN_COMMIT=1）" >&2
-    exit 0
-  fi
-
-  cat >&2 <<EOF
+  else
+    cat >&2 <<EOF
 
 ❌ 保護ブランチ '$current_branch' への直 commit はできません。
 
@@ -31,16 +33,48 @@ if [[ "$current_branch" =~ $protected_pattern ]]; then
   1セッション = 1 task ブランチ が原則。
 
 対処（推奨）:
-  1) task ブランチを切る:
-       git checkout -b task/\$(date +%y%m%d)-<topic>
-  2) そのブランチで commit
-  3) 完了時に main に merge → task ブランチ削除
+  bash scripts/wt-new.sh <topic>
+  → 新 worktree が origin/main 派生で生まれる
+  cd /Users/.../all-good-ops-<topic>
 
 緊急時の脱出口:
   ALLOW_MAIN_COMMIT=1 git commit ...
 
 EOF
-  exit 1
+    exit 1
+  fi
+fi
+
+# (B) 別 worktree でも active になっていないか
+if [[ "${ALLOW_BRANCH_CONFLICT:-0}" != "1" ]]; then
+  conflict_paths="$(git worktree list --porcelain 2>/dev/null | awk -v target="$current_branch" -v self="$current_wt" '
+    /^worktree / { path=$2 }
+    /^branch refs\/heads\// {
+      sub("refs/heads/", "", $2)
+      if ($2 == target && path != self) print path
+    }
+  ')"
+
+  if [[ -n "$conflict_paths" ]]; then
+    cat >&2 <<EOF
+
+❌ ブランチ '$current_branch' は別 worktree でも active です:
+$(echo "$conflict_paths" | sed 's/^/    /')
+
+  現在 cwd: $current_wt
+
+これは通常 git が防ぎますが、--force checkout 等で発生し得ます。
+このまま commit すると別 worktree との同期事故が起きる可能性があります。
+
+対処:
+  (a) 不要な worktree を削除:
+      git worktree remove <path>
+  (b) 強制実行:
+      ALLOW_BRANCH_CONFLICT=1 git commit ...
+
+EOF
+    exit 1
+  fi
 fi
 
 exit 0

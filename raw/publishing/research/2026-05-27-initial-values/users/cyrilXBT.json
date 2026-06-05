@@ -1,0 +1,47 @@
+{
+  "status": "success",
+  "msg": "success",
+  "data": {
+    "id": "1373665408193036293",
+    "name": "CyrilXBT",
+    "userName": "cyrilXBT",
+    "location": "",
+    "url": "https://t.co/mO8iEkuR3J",
+    "description": "AI • Tech • Crypto | Sharing what I see before everyone else does.",
+    "entities": {
+      "description": {},
+      "url": {
+        "urls": [
+          {
+            "display_url": "linktr.ee/cyrilxbt",
+            "expanded_url": "https://linktr.ee/cyrilxbt",
+            "indices": [
+              0,
+              23
+            ],
+            "url": "https://t.co/mO8iEkuR3J"
+          }
+        ]
+      }
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 180822,
+    "following": 442,
+    "favouritesCount": 35443,
+    "statusesCount": 40324,
+    "mediaCount": 7238,
+    "createdAt": "2021-03-21T15:58:58.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/1373665408193036293/1775621295",
+    "profilePicture": "https://pbs.twimg.com/profile_images/2035229727414534145/aWap3Jbq_normal.jpg",
+    "canDm": true,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": [
+      "2058373087330959829"
+    ]
+  }
+}

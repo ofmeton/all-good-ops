@@ -1,0 +1,47 @@
+{
+  "status": "success",
+  "msg": "success",
+  "data": {
+    "id": "137353984",
+    "name": "shimayuz ⤴️ AI影分身構築",
+    "userName": "Shimayus",
+    "location": "日本 東京",
+    "url": "https://t.co/pMbg2fQiVH",
+    "description": "AIエージェント専門家 | 株式会社quai CEO 医師免許を持つ起業家 | 複雑な業務をAIエージェントで自動化するノウハウを公開 | 始動10期SV選抜 | AGI研究所主催AIエージェントハッカソン2026優勝 | 誰でも使えるAI活用術と最新AIエージェント情報をお届け | フォローで生産性が変わります📝",
+    "entities": {
+      "description": {},
+      "url": {
+        "urls": [
+          {
+            "display_url": "quai.new",
+            "expanded_url": "https://www.quai.new/",
+            "indices": [
+              0,
+              23
+            ],
+            "url": "https://t.co/pMbg2fQiVH"
+          }
+        ]
+      }
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 11940,
+    "following": 989,
+    "favouritesCount": 32897,
+    "statusesCount": 9143,
+    "mediaCount": 2024,
+    "createdAt": "2010-04-26T14:24:40.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/137353984/1771422394",
+    "profilePicture": "https://pbs.twimg.com/profile_images/2018684367116328960/SOl0Qt1M_normal.jpg",
+    "canDm": true,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": [
+      "2029419109562433750"
+    ]
+  }
+}

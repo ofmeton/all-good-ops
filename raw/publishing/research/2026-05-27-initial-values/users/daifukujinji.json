@@ -1,0 +1,57 @@
+{
+  "status": "success",
+  "msg": "success",
+  "data": {
+    "id": "860452523085185025",
+    "name": "たか田",
+    "userName": "daifukujinji",
+    "location": "Gemとかツール配信します→",
+    "url": "https://t.co/H3mDWP3sf0",
+    "description": "削られる時間を取り戻すAI屋｜SNSも日々の仕事も「やらなくても進む」仕組みを発信｜もう時間に追われない働き方へ｜生粋のGeminiスト｜#今日から使えるAIを発信　X運用・AI研修の相談はDMへ",
+    "entities": {
+      "description": {
+        "hashtags": [
+          {
+            "indices": [
+              69,
+              82
+            ],
+            "text": "今日から使えるAIを発信"
+          }
+        ]
+      },
+      "url": {
+        "urls": [
+          {
+            "display_url": "lin.ee/uGqLmPs",
+            "expanded_url": "https://lin.ee/uGqLmPs",
+            "indices": [
+              0,
+              23
+            ],
+            "url": "https://t.co/H3mDWP3sf0"
+          }
+        ]
+      }
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 52204,
+    "following": 604,
+    "favouritesCount": 273756,
+    "statusesCount": 104882,
+    "mediaCount": 2004,
+    "createdAt": "2017-05-05T11:14:02.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/860452523085185025/1755501229",
+    "profilePicture": "https://pbs.twimg.com/profile_images/1925886647725375488/A2Y6510O_normal.jpg",
+    "canDm": true,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": [
+      "2028032559657947312"
+    ]
+  }
+}

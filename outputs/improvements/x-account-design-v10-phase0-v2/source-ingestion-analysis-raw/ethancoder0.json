@@ -1,0 +1,22 @@
+{
+  "handle": "ethancoder0",
+  "response_text": "```json\n{\n  \"information_source\": \"海外X/本/案件メモ\",\n  \"publishing_lag_hours\": 12,\n  \"selection_criteria\": \"AI(Claude)活用術・就職/転職ハック・リモートワーク求人サイト紹介など「すぐ使える実用Tips」に特化し、エンゲージメントを取りやすいリスト形式コンテンツを優先的に選んでいる。\",\n  \"translation_rate_pct\": 0,\n  \"paraphrase_rate_pct\": 15,\n  \"opinion_rate_pct\": 10,\n  \"citation_explicit_rate_pct\": 8,\n  \"cross_platform_intake_rate_pct\": 20,\n  \"original_rate_pct\": 75,\n  \"notes\": \"投稿の大半は自作プロンプト集やWebサイトリストをスレッド形式で展開するパターンであり、外部引用はほぼ皆無。Luma Labs AI(投稿5)など新サービス言及は海外Xから着想を得た可能性があるが根拠は薄い。original_rateは高く見えるが内容の独自性は低く『フォーマット再利用型量産コンテンツ』と判断した。\"\n}\n```",
+  "parsed": {
+    "information_source": "海外X/本/案件メモ",
+    "publishing_lag_hours": 12,
+    "selection_criteria": "AI(Claude)活用術・就職/転職ハック・リモートワーク求人サイト紹介など「すぐ使える実用Tips」に特化し、エンゲージメントを取りやすいリスト形式コンテンツを優先的に選んでいる。",
+    "translation_rate_pct": 0,
+    "paraphrase_rate_pct": 15,
+    "opinion_rate_pct": 10,
+    "citation_explicit_rate_pct": 8,
+    "cross_platform_intake_rate_pct": 20,
+    "original_rate_pct": 75,
+    "notes": "投稿の大半は自作プロンプト集やWebサイトリストをスレッド形式で展開するパターンであり、外部引用はほぼ皆無。Luma Labs AI(投稿5)など新サービス言及は海外Xから着想を得た可能性があるが根拠は薄い。original_rateは高く見えるが内容の独自性は低く『フォーマット再利用型量産コンテンツ』と判断した。"
+  },
+  "usage": {
+    "input_tokens": 2740,
+    "output_tokens": 366,
+    "cache_read_input_tokens": 0,
+    "cache_creation_input_tokens": 0
+  }
+}

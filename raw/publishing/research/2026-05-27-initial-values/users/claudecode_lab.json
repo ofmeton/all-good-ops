@@ -1,0 +1,59 @@
+{
+  "status": "success",
+  "msg": "success",
+  "data": {
+    "id": "1807726847154847744",
+    "name": "Claude Code研究所|スパルタClaude Code塾",
+    "userName": "claudecode_lab",
+    "location": "東京都",
+    "url": "https://t.co/8oWsTCy0do",
+    "description": "東京大学にてAI研究に従事していたエンジニアメンバーがClaude Codeに特化した最新情報をお届け。経営者・士業向け名物研修「スパルタClaude Code塾」も運営。\nnote:https://t.co/VAtJlAXlsF\n研修のご依頼などDMでも受付しております✉️",
+    "entities": {
+      "description": {
+        "urls": [
+          {
+            "display_url": "note.com/claudecode_lab",
+            "expanded_url": "https://note.com/claudecode_lab",
+            "indices": [
+              92,
+              115
+            ],
+            "url": "https://t.co/VAtJlAXlsF"
+          }
+        ]
+      },
+      "url": {
+        "urls": [
+          {
+            "display_url": "claude-code-lab.com",
+            "expanded_url": "https://claude-code-lab.com/",
+            "indices": [
+              0,
+              23
+            ],
+            "url": "https://t.co/8oWsTCy0do"
+          }
+        ]
+      }
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 19619,
+    "following": 377,
+    "favouritesCount": 12964,
+    "statusesCount": 276,
+    "mediaCount": 79,
+    "createdAt": "2024-07-01T10:45:57.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/1807726847154847744/1777009967",
+    "profilePicture": "https://pbs.twimg.com/profile_images/2047553749867216896/_SKwpHqG_normal.jpg",
+    "canDm": true,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": [
+      "2059090665716552166"
+    ]
+  }
+}
