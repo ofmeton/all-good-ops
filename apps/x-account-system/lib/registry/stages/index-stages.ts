@@ -4,6 +4,7 @@ export const STAGES: StageMeta[] = [
   {
     id: "buzz-ingest", label: "Buzz Ingest", group: "ingest",
     purpose: "twitterapi.io の seed アカウントから日次 buzz を取得し materials_store へ。",
+    objectiveFunction: "一次ソースの網羅性と鮮度を最大化（取りこぼし最小化）",
     inputs: ["twitterapi.io seed accounts"], outputs: ["xad.materials_store (x_inspirations)"],
     keyVariables: [{ name: "seed accounts", desc: "取得対象アカウント群" }],
     logicKind: "io", sourcePaths: ["apps/x-account-system/lib/ingest/"],
@@ -12,6 +13,7 @@ export const STAGES: StageMeta[] = [
   {
     id: "inspirations-ingest", label: "Inspirations Ingest", group: "ingest",
     purpose: "週次で X/note seeds を取得し materials_store へ。",
+    objectiveFunction: "週次インスピレーションの多様性とカバレッジを最大化",
     inputs: ["X seeds", "note seeds"], outputs: ["xad.materials_store"],
     keyVariables: [{ name: "overseas≥6 / domestic≥18 / note≥3", desc: "取得本数下限" }],
     logicKind: "io", sourcePaths: ["apps/x-account-system/lib/ingest/"],
@@ -20,6 +22,7 @@ export const STAGES: StageMeta[] = [
   {
     id: "ideation", label: "Ideation", group: "ideation",
     purpose: "materials_store から core_ideas を LLM 生成。",
+    objectiveFunction: "ターゲット適合 × ネタの多様性を最大化（カテゴリ/フックのバランス）",
     inputs: ["xad.materials_store"], outputs: ["xad.core_ideas"],
     keyVariables: [{ name: "batch limit", desc: "1 回の claim 対象数" }],
     logicKind: "llm", promptRef: "apps/x-account-system/lib/ideation/ideate.ts",
@@ -29,6 +32,7 @@ export const STAGES: StageMeta[] = [
   {
     id: "writer", label: "Writer", group: "generate",
     purpose: "core_idea から draft 本文を生成。",
+    objectiveFunction: "保存・反応につながる訴求力を最大化（チャエン【速報】黄金型への適合）",
     inputs: ["xad.core_ideas"], outputs: ["xad.post_drafts.body"],
     keyVariables: [
       { name: "max_tokens", desc: "format 別" },
@@ -41,6 +45,7 @@ export const STAGES: StageMeta[] = [
   {
     id: "hook-classifier", label: "Hook Classifier", group: "review",
     purpose: "hook を規則ベース(regex/scoring)で分類。LLM ではない。",
+    objectiveFunction: "hook 分類の正確性を最大化（誤分類を最小化）",
     inputs: ["draft body"], outputs: ["primary_hook (4分類)"],
     keyVariables: [{ name: "classifyRules", desc: "device/score 規則" }],
     logicKind: "deterministic",
@@ -50,6 +55,7 @@ export const STAGES: StageMeta[] = [
   {
     id: "editor", label: "Editor (6+5)", group: "review",
     purpose: "6+5 ルール判定。hard 却下 / soft 警告。LLM judge + factuality judge を含む。",
+    objectiveFunction: "公開リスク（業法/DLP/誤報）を最小化しつつ過剰却下を抑える",
     inputs: ["draft body", "materials (出典)"], outputs: ["decision(approved/rejected)", "warnings"],
     keyVariables: [
       { name: "hard rules", desc: "R3/R4/X2/X3/X5(real PII)" },
@@ -62,6 +68,7 @@ export const STAGES: StageMeta[] = [
   {
     id: "line-approval", label: "LINE Approval", group: "approve",
     purpose: "LINE Flex で承認依頼を push し、承認/却下/修正を取り込む。承認は予約待ちストックへ積む。",
+    objectiveFunction: "人の承認コストを最小化（軽量・即時の可否判断で誤公開を防ぐ）",
     inputs: ["post_drafts"], outputs: ["承認状態", "予約待ちストック (approved)"],
     keyVariables: [{ name: "LINE_USER_ID", desc: "承認者限定" }],
     logicKind: "io",
@@ -71,6 +78,7 @@ export const STAGES: StageMeta[] = [
   {
     id: "scheduled-publish", label: "Scheduled Publish (chrome-devtools)", group: "publish",
     purpose: "承認済みストックを人のPC起動時に chrome-devtools で X 公式予約投稿UIへ登録する半自動投稿。source=本人クライアントを保ち X API 直投はしない。",
+    objectiveFunction: "ピーク帯への最適割当で到達を最大化（source=本人を維持し誤報リスクは人手で抑制）",
     inputs: ["承認済 post_drafts (scheduled_for IS NULL)"],
     outputs: ["X 予約投稿", "xad.post_drafts.scheduled_for / scheduled_post_id"],
     keyVariables: [
@@ -84,6 +92,7 @@ export const STAGES: StageMeta[] = [
   {
     id: "safety", label: "Safety (brownout)", group: "review",
     purpose: "handleJob 冒頭の brownout 4段階ゲート。許可外 job を skip する。",
+    objectiveFunction: "コスト超過時の被害を最小化（許可 job の段階制御で予算を死守）",
     inputs: ["当月コスト (cost_ledger)"], outputs: ["allowedJobs 判定", "skip"],
     keyVariables: [{ name: "brownout status", desc: "4段階" }],
     logicKind: "deterministic",
@@ -93,6 +102,7 @@ export const STAGES: StageMeta[] = [
   {
     id: "dlp", label: "DLP", group: "review",
     purpose: "editor 内包の PII redact / lint（決定的）。MVP は定義のみ（trace は editor 内）。",
+    objectiveFunction: "PII / 顧客機密の漏洩をゼロにする（再現率最優先）",
     inputs: ["draft body"], outputs: ["redacted text", "PII findings"],
     keyVariables: [{ name: "REDACTION_PATTERNS", desc: "PII 検出パターン" }],
     logicKind: "deterministic", sourcePaths: ["apps/x-account-system/lib/dlp/redact.ts"],
@@ -101,6 +111,7 @@ export const STAGES: StageMeta[] = [
   {
     id: "optimizer", label: "Optimizer", group: "learn",
     purpose: "Thompson Sampling で 8 パラメータ posterior を更新（optimizer-update cron）。MVP は定義のみ。",
+    objectiveFunction: "各パラメータの posterior を更新し長期 reward（エンゲージ/転換）を最大化",
     inputs: ["posts_performance (reward)"], outputs: ["optimizer_state"],
     keyVariables: [{ name: "8 parameters", desc: "段階別 posterior は Phase 2" }],
     logicKind: "deterministic", sourcePaths: ["apps/x-account-system/lib/optimizer/"],

@@ -5,6 +5,8 @@ export interface StageMeta {
   label: string;
   group: string;
   purpose: string;
+  /** フェーズ別の目的関数 (Kくん参考設計): この工程が何に最適化するか */
+  objectiveFunction: string;
   inputs: string[];
   outputs: string[];
   keyVariables: { name: string; desc: string }[];
