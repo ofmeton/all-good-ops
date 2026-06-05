@@ -167,4 +167,4 @@ document.querySelectorAll(".fade-in").forEach(e => e.classList.add("visible"))
 
 - `frontend-design` プラグインスキル（実装着手前に必ず起動）
 - [[motion-techniques]] — LP/HP 演出技法カタログ（spade-co.jp 解析由来）
-- `.claude/skills/chromakey-grid-split.md` — LP素材切り出し
+- `.claude/skills/chromakey-grid-split/SKILL.md` — LP素材切り出し
