@@ -122,7 +122,10 @@ export async function handleJob(
     // 投稿系 (X API 100/月上限 → Phase 1 は人間承認必須)
     // ----------------------------------------------------------------
     case "post-morning":
+    case "post-morning2":
     case "post-noon":
+    case "post-afternoon":
+    case "post-afternoon2":
     case "post-evening": {
       // W3-2: idea→draft→editor→LINE承認依頼
       // 手動起動(manual)は標準スロットを占有しないよう manual-xxx slot で投稿する。
