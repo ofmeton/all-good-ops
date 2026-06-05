@@ -1,11 +1,16 @@
 ---
 date: 2026-05-22
-status: draft
+status: abandoned
 type: implementation-spec
 parent:
   - docs/superpowers/specs/2026-05-20-publishing-pivot-design.md
   - docs/superpowers/specs/2026-05-21-summer-income-bridge-design.md
 ---
+
+> **(廃止 2026-06-05)** money-bot は解体された。設計100%だが SDK/API/route 実装0%（残工数10-15h）で、
+> 設計後に apps/x-account-system が本番化し X投稿/LINE承認が重複。投資対効果が見合わずユーザー判断で撤退。
+> `money-bot/` ディレクトリ削除済み。共有していた credential 金庫（旧 `money-bot/.env.local`）は repo-root `.env.local` へ集約。
+> 本 spec は設計記録として保全。
 
 # 2026-05-22 Money-Bot Design — 24時間自律エージェントで月1万円稼ぐ
 

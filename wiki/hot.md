@@ -14,7 +14,7 @@ updated: 2026-06-05
 ## Current Focus
 - **スキル体系**: 22 SKILL.md 常時 on。使用頻度を一定期間監視し、低頻度を off 既定 plugin に逃がして起動メタ分(~1.3k tok/session)を回収する（revisit ~2026-07-05、頻度は `~/.claude/projects/**/*.jsonl` から集計）。
 - **🔴 はぐりん persona 運用**: monetize-os 廃止で収益化委譲先が消失 → 名義境界の戦略再判断が未着手。
-- **運用ハイジーン残課題**: cron 安全網の再建（cron復活 or hook化）は未着手。cron 系統は INACTIVE で棚卸し済。
+- **運用ハイジーン**: 安全網を **hook化で再建済**（cron復活せず）。`scripts/hooks/worktree-hygiene-scan.sh`(ゾンビworktree/merged済ブランチ検知をSessionStart常時化) + `stop-hygiene-reminder.sh`(Stop hook 未コミット警告)。決定論的・トークンゼロ。
 - **🔴 ミナト広告設定（再開待ち）**: chrome-devtools MCP 接続待ち。[[project-minato-ad-settings]]
 
 ## Recently Touched
@@ -27,7 +27,7 @@ updated: 2026-06-05
 ## Open Questions / Frontiers
 - はぐりん収益化: monetize-os 廃止後の委譲先・運用をどうするか（戦略再判断）
 - スキル頻度監視: revisit 時に low-freq を plugin 化するか、常時 on のままにするか
-- 運用ハイジーン: cron復活 vs hook化で安全網を再建するか
+- money-bot 解体で発信ピボットの note有料/IG/Stock 自動化は空白に → 役割を別系統で持つか、x-account 拡張で吸収するか
 
 ## Conventions
 - 500 words 以内 / declarative present tense / 全置換更新（古い項目は間引く）

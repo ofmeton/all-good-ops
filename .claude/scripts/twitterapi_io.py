@@ -38,7 +38,9 @@ from typing import Any
 
 
 WRAPPER_VERSION = "0.2.0"
-DEFAULT_ENV = Path("/Users/rikukudo/Projects/private-agents/all-good-ops/money-bot/.env.local")
+# 共有クレデンシャル金庫（旧 money-bot/.env.local）。money-bot 解体時(2026-06-05)に
+# repo-root へ集約。TWITTERAPI_IO_KEY 等はプロジェクト共通の鍵置き場として here に集約。
+DEFAULT_ENV = Path("/Users/rikukudo/Projects/private-agents/all-good-ops/.env.local")
 BASE_URL = "https://api.twitterapi.io"
 DEFAULT_PACING = 2.0
 RETRY_WAITS = [15, 30, 60, 120]
