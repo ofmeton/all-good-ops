@@ -185,13 +185,13 @@
       "id": "line-approval",
       "label": "LINE Approval",
       "group": "approve",
-      "purpose": "LINE Flex で承認依頼を push し、承認/却下/修正の応答を取り込む。",
+      "purpose": "LINE Flex で承認依頼を push し、承認/却下/修正を取り込む。承認は予約待ちストックへ積む。",
       "inputs": [
         "post_drafts"
       ],
       "outputs": [
         "承認状態",
-        "publish トリガ"
+        "予約待ちストック (approved)"
       ],
       "keyVariables": [
         {
@@ -208,30 +208,35 @@
         "editor"
       ],
       "downstream": [
-        "publisher"
+        "scheduled-publish"
       ]
     },
     {
-      "id": "publisher",
-      "label": "Publisher (X)",
+      "id": "scheduled-publish",
+      "label": "Scheduled Publish (chrome-devtools)",
       "group": "publish",
-      "purpose": "承認後に X へ投稿。OAuth token 自動 refresh 込み。",
+      "purpose": "承認済みストックを人のPC起動時に chrome-devtools で X 公式予約投稿UIへ登録する半自動投稿。source=本人クライアントを保ち X API 直投はしない。",
       "inputs": [
-        "承認済 post_drafts"
+        "承認済 post_drafts (scheduled_for IS NULL)"
       ],
       "outputs": [
-        "X 投稿",
-        "xad.posts_performance"
+        "X 予約投稿",
+        "xad.post_drafts.scheduled_for / scheduled_post_id"
       ],
       "keyVariables": [
         {
-          "name": "AUTONOMOUS_PUBLISH",
-          "desc": "Phase1=false(承認制)"
+          "name": "trigger",
+          "desc": "人のPC起動時『翌日分を予約して』(manual)"
+        },
+        {
+          "name": "peak slots",
+          "desc": "朝6-8 / 昼12 / 夕15-17 に割当"
         }
       ],
       "logicKind": "io",
       "sourcePaths": [
-        "apps/x-account-system/lib/publisher/"
+        ".claude/skills/x-scheduled-publish/SKILL.md",
+        "apps/x-account-system/src/jobs/line-event.ts"
       ],
       "upstream": [
         "line-approval"
