@@ -31,12 +31,26 @@ const MAX_RETRIES = 3;
 /** kill-switch / brownout 判定 (env または in-memory override) */
 let _killSwitchOverride: boolean | null = null;
 let _brownoutOverride: boolean | null = null;
+/**
+ * X API 直投の封印フラグ (チャエン半自動設計)。本番は常に封印され、実投稿は
+ * chrome-devtools 予約投稿 (.claude/skills/x-scheduled-publish) が担う。
+ * テストで posting 経路を検証する場合のみ __setDirectApiEnabled(true) で開ける。
+ */
+let _directApiOverride: boolean | null = null;
 
 export function __setKillSwitchOverride(v: boolean | null) {
   _killSwitchOverride = v;
 }
 export function __setBrownoutOverride(v: boolean | null) {
   _brownoutOverride = v;
+}
+export function __setDirectApiEnabled(v: boolean | null) {
+  _directApiOverride = v;
+}
+
+function isDirectApiEnabled(): boolean {
+  if (_directApiOverride !== null) return _directApiOverride;
+  return process.env.X_DIRECT_API_ENABLED === "true";
 }
 
 function isKillSwitchOn(): boolean {
@@ -206,6 +220,18 @@ export async function publishToX(req: PublishRequest): Promise<PublishResult> {
     };
   }
 
+  // ---- Gate 5.5: X API 直投の恒久封印 (チャエン半自動設計) ----
+  // dry-run は上で返るので影響なし。実 POST 直前で必ず封じる。実投稿は
+  // chrome-devtools 予約投稿 (.claude/skills/x-scheduled-publish) が担う。
+  if (!isDirectApiEnabled()) {
+    return {
+      draftId: req.draftId,
+      status: "blocked",
+      blockedReason: "direct_api_disabled",
+      retryCount: 0,
+    };
+  }
+
   // ---- Token retrieval (Phase 0.5: env or in-memory) ----
   let token = await getXAccessToken();
   if (!token) {
@@ -309,4 +335,5 @@ export const BLOCKED_REASONS: BlockedReason[] = [
   "brownout",
   "editor_rejected",
   "risk_high_pending_approval",
+  "direct_api_disabled",
 ];
