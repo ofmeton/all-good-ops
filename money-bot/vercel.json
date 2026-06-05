@@ -1,5 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "_comment_status": "2026-06-05 時点 INACTIVE: Vercel に deployment が 1 件も存在せず (vercel ls = No deployments)、かつ cron が指す /api/cron/daily-publish の route 実体が未実装 (app/ は空、ロジックは workflows/daily-publish.ts のみ)。よってこの cron はどこでも実行されていない (課金/トークン消費ゼロ)。稼働させる際は route 実装 + deploy が前提。",
   "_comment_about_layout": "money-bot は all-good-ops worktree のサブディレクトリ。Vercel project を money-bot/ をルートとして link する想定 (vercel link 時に Root Directory = money-bot を指定)。app router or standalone functions のどちらでも動く構成。Phase 1 着手時に Next.js App Router を入れるか、純粋な Vercel Functions スタンドアロンにするかを確定する。",
   "crons": [
     {

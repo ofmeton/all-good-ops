@@ -1,4 +1,5 @@
 {
+  "_comment_status": "2026-06-05 時点 INACTIVE: 本プロジェクトは Vercel 未デプロイ・未 link (.vercel なし) のため、以下の crons はどこでも実行されていない。デプロイ (vercel link + deploy) するまで定義のみ。稼働させる際は CRON_SECRET 等の env 投入と Hobby plan の cron 制約 (1日1回) を要確認。",
   "crons": [
     { "path": "/api/cron/fetch", "schedule": "0 */6 * * *" },
     { "path": "/api/cron/self-watch", "schedule": "0 1 * * *" },
