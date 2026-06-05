@@ -69,38 +69,100 @@ export const SEED_SOURCES: readonly SeedSource[] = [
 export const SEED_HANDLES: readonly string[] = SEED_SOURCES.map((s) => s.handle);
 
 // ---------------------------------------------------------------------------
-// キュレーション (スコアリング)
-//   ※ 条件本体は TBD。現状は「枠」だけ用意し、足切りは無効 (全件通過) にしてある。
-//      重み・しきい値・新規性判定は別セッションで詰める (plan k-x-drifting-lark Phase 4)。
+// キュレーション (スコアリング v2)
+//   方針 (2026-06-05 確定): バズ速度主軸 + 足切りは緩め (取りこぼさない)。
+//   シグナル:
+//     - velocity (主軸): (like+RT) / 経過時間h の対数。「伸び始め」を拾う = チャエンの肝
+//     - engagement rate (品質補助): (like+RT) / view。少view高反応を拾う
+//     - category: ai_official +2 / en_curator +1 (一次ソース優先)
+//     - 日本語圏新規性: official/curator の非ja に +1 (海外発の翻訳ネタ優遇)
+//     - 鮮度ペナルティ: 48h超 -1 / 1週間超 -3 (古い情報を落とす)
 // ---------------------------------------------------------------------------
 export interface BuzzScore {
   score: number;
   reasons: string[];
 }
 
+/** velocity の重み (主軸なので最大)。 */
+const W_VELOCITY = 2.0;
+/** engagement rate の重み (rate は 0..1 なので大きめ係数)。 */
+const W_ENGAGEMENT_RATE = 50;
+
 /**
- * 取得ツイートの重要度スコア (暫定)。
- *   - ai_official を加点 (一次ソース優先)
- *   - エンゲージメント (like + retweet) の対数を加点
- * TODO(TBD): RT/いいね速度・日本語圏での新規性・トピック新鮮度を組み込む。
+ * 取得ツイートの重要度スコア。バズ速度を主軸に、品質・一次ソース性・新規性・鮮度で補正。
+ * @param now テスト用に現在時刻を注入可能 (既定は実時刻)。
  */
-export function scoreBuzz(tweet: Tweet, source: SeedSource): BuzzScore {
+export function scoreBuzz(tweet: Tweet, source: SeedSource, now: number = Date.now()): BuzzScore {
   const reasons: string[] = [];
   let score = 0;
-  if (source.category === "ai_official") {
-    score += 2;
-    reasons.push("ai_official");
-  }
+
   const engagement = (tweet.likeCount ?? 0) + (tweet.retweetCount ?? 0);
-  if (engagement > 0) {
+
+  // 経過時間 (h)。createdAt が不正なら velocity/鮮度補正は控えめに (古い扱いにしない)。
+  const createdMs = Date.parse(tweet.createdAt ?? "");
+  const ageHours = Number.isNaN(createdMs)
+    ? null
+    : Math.max((now - createdMs) / 3_600_000, 0.5);
+
+  // --- 主軸: バズ速度 (単位時間あたりの伸び) ---
+  if (ageHours !== null) {
+    const velocity = engagement / ageHours;
+    if (velocity > 0) {
+      score += W_VELOCITY * Math.log10(velocity + 1);
+      reasons.push(`velocity:${velocity.toFixed(1)}/h`);
+    }
+  } else if (engagement > 0) {
+    // 時刻不明時は絶対エンゲージの対数でフォールバック
     score += Math.log10(engagement + 1);
     reasons.push(`engagement:${engagement}`);
   }
+
+  // --- 品質補助: engagement rate ---
+  const view = tweet.viewCount ?? 0;
+  if (view > 0 && engagement > 0) {
+    const erate = engagement / view;
+    score += W_ENGAGEMENT_RATE * erate;
+    reasons.push(`erate:${(erate * 100).toFixed(2)}%`);
+  }
+
+  // --- 一次ソース性 ---
+  if (source.category === "ai_official") {
+    score += 2;
+    reasons.push("ai_official");
+  } else if (source.category === "en_curator") {
+    score += 1;
+    reasons.push("en_curator");
+  }
+
+  // --- 日本語圏新規性: 公式/解説者の非ja は翻訳ネタとして優遇 ---
+  if (
+    (source.category === "ai_official" || source.category === "en_curator") &&
+    tweet.lang &&
+    tweet.lang !== "ja"
+  ) {
+    score += 1;
+    reasons.push("novel_overseas");
+  }
+
+  // --- 鮮度ペナルティ ---
+  if (ageHours !== null) {
+    if (ageHours > 168) {
+      score -= 3;
+      reasons.push("stale_1wk");
+    } else if (ageHours > 48) {
+      score -= 1;
+      reasons.push("stale_48h");
+    }
+  }
+
   return { score, reasons };
 }
 
-/** 足切りしきい値。TBD: >0 に上げるとキュレーション (足切り) が有効になる。 */
-export const CURATION_MIN_SCORE = 0;
+/**
+ * 足切りしきい値。緩め (取りこぼさない): 1週間以上前 × 無反応 (score ≈ -3) のような
+ * 明らかなノイズだけ落とし、鮮度のある/反応のあるものは ideation 側で選ばせる。
+ */
+export const CURATION_MIN_SCORE = -2;
 
 /** Max tweets to fetch per seed handle */
 const MAX_TWEETS_PER_HANDLE = 10;
