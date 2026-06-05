@@ -1,1 +1,1 @@
-proposal-20260517-it6.md
+proposal-20260524-it6.md
