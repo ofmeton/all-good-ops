@@ -11,7 +11,7 @@ status: active
 # 画像処理ノウハウカタログ
 
 > 使用環境: macOS Apple Silicon (MPS) / Python / `~/.venvs/img-tools/`
-> 関連スキル: `.claude/skills/print-data-prep.md` / `.claude/skills/chromakey-grid-split.md`
+> 関連スキル: `.claude/skills/print-data-prep/SKILL.md` / `.claude/skills/chromakey-grid-split/SKILL.md`
 
 ---
 
@@ -54,7 +54,7 @@ print(out.min().item(), out.max().item(), out.mean().item())
 
 ### 備考
 - CPU fallback は遅すぎる（1054×1492px で数分以上）→ MPS タイルを第一選択
-- タイル推論コード全文: `.claude/skills/print-data-prep.md`
+- タイル推論コード全文: `.claude/skills/print-data-prep/SKILL.md`
 - モデル配置先: `~/.local/share/realesrgan/`
 
 ---
@@ -83,7 +83,7 @@ gap_cols = np.where(bg_col > 0.99)[0]
 ### 注意
 - 行/列の数が想定通りでも**幅/高さが不均等なケース**を必ず仮定する
 - `outputs/templates/chromakey_grid_split.py` の `detect_split_axis` が3階層実装済み
-- 関連スキル: `.claude/skills/chromakey-grid-split.md`
+- 関連スキル: `.claude/skills/chromakey-grid-split/SKILL.md`
 
 ---
 
@@ -141,6 +141,6 @@ else:
 |---|---|
 | img-tools venv | `~/.venvs/img-tools/`（numpy/Pillow/scipy/torch/spandrel）|
 | Real-ESRGAN モデル | `~/.local/share/realesrgan/` |
-| タイル推論コード | `.claude/skills/print-data-prep.md` |
+| タイル推論コード | `.claude/skills/print-data-prep/SKILL.md` |
 | グリッド切り出しテンプレ | `outputs/templates/chromakey_grid_split.py` |
-| Chroma-key スキル | `.claude/skills/chromakey-grid-split.md` |
+| Chroma-key スキル | `.claude/skills/chromakey-grid-split/SKILL.md` |

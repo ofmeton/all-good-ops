@@ -1,3 +1,8 @@
+---
+name: vercel-env-bulk-add
+description: ".env.local から Vercel project の Environment Variables へ stdin 経由で一括投入し、シェル履歴に値を残さない。「.env.local の値を Vercel に投入して」「Vercel env を一括設定」依頼時に使う。"
+---
+
 # Vercel env 一括投入
 
 ## 概要

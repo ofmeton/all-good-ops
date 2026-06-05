@@ -1,3 +1,8 @@
+---
+name: print-data-prep
+description: "PNG を印刷所（accea 等）入稿データに仕上げる。Real-ESRGAN アップスケール→塗り足し→CMYK→トンボ→PDF 出力まで一気通貫。「accea に入稿したい」「塗り足し/トンボ/CMYK 対応して」依頼時に使う。"
+---
+
 # 印刷データ入稿準備（Print Data Prep）
 
 ## 概要

@@ -1,3 +1,8 @@
+---
+name: design-spec-iterative-pr
+description: "大規模設計書を複数の独立 PR として反復起草し最終統合版を作るフロー。v8→v9 のように base 版から設計書を作り直し、章ごとの追加詰めが想定される改訂時に使う。"
+---
+
 # Design Spec Iterative PR Skill
 
 ## 概要

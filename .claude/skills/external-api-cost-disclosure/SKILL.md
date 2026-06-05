@@ -1,3 +1,8 @@
+---
+name: external-api-cost-disclosure
+description: "従量課金の外部 API（twitterapi.io / Firecrawl / X API / OpenAI 互換 / Resend 等）を新規に叩く時、プラン提示と同じターンに円/回コストを併記する規約。新規の従量課金 API 呼び出しを伴うタスクで自動適用する（Claude Code/Anthropic API はサブスク内のため対象外）。"
+---
+
 # 外部 API コスト開示 (External API Cost Disclosure)
 
 ## 概要

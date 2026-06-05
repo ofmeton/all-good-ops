@@ -68,7 +68,7 @@
 |---|---|
 | `hypothesis-thinking.md` | **必須** — 全ての起動時に参照 |
 | `brainstorming.md` | アイデア出しが必要な場合 |
-| `deliberation.md` | 熟議プロセスのリード時 |
+| `deliberation` | 熟議プロセスのリード時 |
 | `scqa-writing-framework.md` | 参考 — 「提案する一手」を S→C→Q→A で言語化すると伝わりやすい |
 | `superpowers:brainstorming` | 熟議・戦略発散の前に、ユーザー意図・制約・成功条件を深く探索する時（ローカル `brainstorming.md` と併用可） |
 

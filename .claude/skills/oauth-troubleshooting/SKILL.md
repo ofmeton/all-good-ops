@@ -1,3 +1,8 @@
+---
+name: oauth-troubleshooting
+description: "OAuth プロバイダ（Meta/Google Cloud/Stripe/Vercel/Supabase 等）の認証エラー・TOPページ表示エラーの定型対処。「アクセス権がありません」「ログインできない」「TOP が開かない」等のエラーが報告された時に使う。"
+---
+
 # OAuth トラブルシューティング
 
 ## 概要

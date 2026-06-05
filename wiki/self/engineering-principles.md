@@ -51,6 +51,17 @@ fallback 経路（`IN_MEMORY_FALLBACK=true` 等）だけが緑でも、本番経
 
 - **事例**: 「14:21 のエラー」を x-account 側で探したが、実は `[money-bot]` の別システムだった（`publish_queue upsert: fetch failed`）。発信元未確認で誤った調査に時間を使った。
 
+## 原則6（運用）: エージェントシステム構成は Anthropic 公式パターンに準拠する
+
+このリポジトリ自体（CLAUDE.md / skills / agents / hooks / memory）の作り方も、振り返りと同様に公式ベストプラクティスへ収束させる。
+
+- **CLAUDE.md は「消すと Claude がミスするか？」で各行を維持**。肥大すると指示が埋もれて無視される。ドメイン知識・領域手順は常時ロードの CLAUDE.md でなく skill へ逃がす。
+- **自動起動させたいローカルスキルは `<name>/SKILL.md` 形式 + 三人称 description（何をする＋いつ使う）**。flat `.md` は frontmatter があっても自動検出されない（progressive disclosure に乗らない）。`name` に予約語 `claude`/`anthropic` 不可。
+- **context は有限資源**: サブエージェントで隔離、just-in-time 取得、永続メモリ（raw/wiki/memory）で working context を膨らませない。← 原則2 の end-to-end 実走とも整合。
+- **完了主張の前に検証 evidence**（verification-before-completion）。
+- **事例 (2026-06-05)**: ローカル 48 skill の大半が frontmatter 無し flat `.md` で自動検出されず、CLAUDE.md の手動誘導（起動マップ+ls+Read）に依存していた → 横断ツール系 22 個を SKILL.md 化し自動起動可能に。
+- 運用点検は `claude-md-health-check` スキル item 8（公式チェックリスト）に集約。出典: [Best practices for Claude Code](https://code.claude.com/docs/en/best-practices) / [Skill authoring best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices) / [Effective context engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)。
+
 ---
 
 ## メモ

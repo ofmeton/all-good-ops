@@ -1,3 +1,8 @@
+---
+name: nextjs-supabase-site-gotchas
+description: "Next.js(App Router)+Supabase でのサイト/CMS 構築・移植で繰り返し踏むハマり（白紙・空一覧・予約ズレ・404・TZ ズレ）を着手/実装/デプロイ時のチェックリストに型化。Next.js+Supabase でサイトを作る・移植する・別クライアントへ複製する時に使う。"
+---
+
 # Next.js + Supabase サイト/CMS 構築 定番ハマりチェックリスト
 
 ## 概要

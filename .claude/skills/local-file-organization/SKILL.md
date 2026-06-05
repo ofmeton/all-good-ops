@@ -1,3 +1,8 @@
+---
+name: local-file-organization
+description: "Downloads/Desktop/Documents/iCloud Drive 等の大型ファイル整理タスクを5フェーズで標準化する。「〇〇フォルダ整理して」「散らかってる」「片付けたい」と依頼された時に使う。"
+---
+
 # ローカルファイル整理プロトコル
 
 ローカルディレクトリ（Downloads / Desktop / Documents / iCloud Drive 等）の大型整理タスクを5フェーズで標準化する。情報取得・方針合意・実行を最短で進めるためのテンプレ。

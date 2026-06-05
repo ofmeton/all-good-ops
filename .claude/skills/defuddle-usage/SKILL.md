@@ -1,3 +1,8 @@
+---
+name: defuddle-usage
+description: "URL→ingest フローで HTML を読みやすい markdown に剥がす CLI ツール defuddle の運用ガイド。広告・装飾を除去し LLM token を 40-60% 削減する。URL を ingest・取り込みする時の第一選択として使う（失敗時 WebFetch fallback）。"
+---
+
 # defuddle 運用ガイド
 
 ## 用途

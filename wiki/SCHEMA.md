@@ -68,7 +68,7 @@ status: draft | active | archived
 3. ない: WebFetch fallback で取得し同パスに保存
 4. 以降は通常 ingest フロー（手順 3-）に合流
 
-詳細: `.claude/skills/defuddle-usage.md`
+詳細: `.claude/skills/defuddle-usage/SKILL.md`
 
 **重要原則**:
 - 一度に 1 件（複数の raw を一括処理しない）
@@ -146,7 +146,7 @@ updated: YYYY-MM-DD
 - ingest 完了後（publishing/inspirations の自動 ingest 含む）
 - 大きな query 合成完了後
 - 戦略変更 commit 後（CLAUDE.md / SCHEMA 改定 等）
-- セッション振り返り完了時（`session-retrospective.md` フローに組込）
+- セッション振り返り完了時（`session-retrospective` フローに組込）
 
 ### 更新ルール
 - 500 words 以内厳守。超過したら古い項目を間引く

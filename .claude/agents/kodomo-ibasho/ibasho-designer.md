@@ -31,7 +31,7 @@
 |---|---|
 | `brainstorming.md` | アイデア出し時 |
 | `hypothesis-thinking.md` | 戦略的判断時 |
-| `deliberation.md` | 大きな方針決定時 |
+| `deliberation` | 大きな方針決定時 |
 
 ## 他エージェントとの連携ルール
 - **nonprofit-advisor**: 法人設立と居場所運営の整合性を確認

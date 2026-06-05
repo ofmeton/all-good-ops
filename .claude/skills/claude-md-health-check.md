@@ -66,6 +66,14 @@ ls -la knowledge/context/ knowledge/INDEX.md 2>/dev/null
 - [ ] 陳腐化したメモリの削除・更新
 - [ ] reference 系で「〇本」等の数字が実態と合うか
 
+### 8. Anthropic 公式ベストプラクティス整合
+出典: [Best practices for Claude Code](https://code.claude.com/docs/en/best-practices) / [Skill authoring best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)
+- [ ] **CLAUDE.md 肥大検査**: 各行「消すと Claude がミスするか？No なら削る」。常時ロードに値しないドメイン知識・手順は skill へ逃がす（肥大すると指示が埋もれ無視される）
+- [ ] **skill 形式**: 自動起動させたいローカルスキルは `<name>/SKILL.md` ディレクトリ形式か（flat `.md` は frontmatter があっても自動検出されない）
+- [ ] **description 規約**: 三人称で「何をする＋いつ使う(トリガ語)」を含むか。`name` に予約語 `claude`/`anthropic` を含まない・kebab-case か
+- [ ] **progressive disclosure**: SKILL.md 本体 500 行以内 / 参照は SKILL.md から 1 階層まで（深いネストは部分読みで欠落）
+- [ ] **verification**: 完了主張の前に検証 evidence を出す運用（verification-before-completion）が CLAUDE.md/skill で担保されているか
+
 ## アウトプット形式
 
 検出された乖離を以下のフォーマットで列挙：
@@ -84,5 +92,5 @@ ls -la knowledge/context/ knowledge/INDEX.md 2>/dev/null
 ## 注意事項
 - **会話冒頭の `git status` は snapshot time のため古い**。作業開始時に必ず最新を取り直す
 - untracked ファイルは最初の status では見落としやすい。`ls -la` や `find` で念入りに確認
-- エージェント新設が絡む場合は `agent-onboarding.md` スキルに従う
+- エージェント新設が絡む場合は `agent-onboarding` スキルに従う
 - 書き換え前にユーザー承認を取る（CLAUDE.md の変更は「戦略変更」カテゴリに近い）

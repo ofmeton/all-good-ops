@@ -1,3 +1,8 @@
+---
+name: sample-site-onboarding
+description: "outputs/lp-experiments/ で作った静的サンプル LP を portfolio サイトに実績として組み込む標準手順。INDEX ボタン忘れ・サムネ忘れ・author 不一致 deploy ERROR を防ぐ。サンプルを portfolio に出すと決まった時に使う。"
+---
+
 # サンプルサイト組込みプロトコル — portfolio に追加する手順
 
 ## 概要
