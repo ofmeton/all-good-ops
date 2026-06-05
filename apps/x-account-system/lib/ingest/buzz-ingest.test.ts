@@ -323,27 +323,66 @@ describe("runBuzzIngest", () => {
     expect(buzzIngest!.SEED_SOURCES.some((s) => s.category === "en_curator")).toBe(true);
   });
 
-  test("scoreBuzz: ai_official 加点 + engagement 対数加点 (枠)", async () => {
-    let buzzIngest: typeof import("./buzz-ingest.ts");
-    jest.isolateModules(() => {
-      jest.doMock("@supabase/supabase-js", () => ({
-        __esModule: true,
-        createClient: jest.fn(() => ({ from: jest.fn() })),
-      }));
-      buzzIngest = require("./buzz-ingest.ts");
+  describe("scoreBuzz v2 (バズ速度主軸 + 緩め足切り)", () => {
+    function load(): typeof import("./buzz-ingest.ts") {
+      let m: typeof import("./buzz-ingest.ts");
+      jest.isolateModules(() => {
+        jest.doMock("@supabase/supabase-js", () => ({
+          __esModule: true,
+          createClient: jest.fn(() => ({ from: jest.fn() })),
+        }));
+        m = require("./buzz-ingest.ts");
+      });
+      return m!;
+    }
+
+    const NOW = Date.parse("2026-06-05T12:00:00Z");
+    const iso = (hoursAgo: number) => new Date(NOW - hoursAgo * 3_600_000).toISOString();
+
+    test("velocity 主軸: 同エンゲージでも新しい方が高スコア (伸び始めを拾う)", () => {
+      const b = load();
+      const fresh = { id: "f", text: "x", createdAt: iso(2), likeCount: 100, retweetCount: 0 } as never;
+      const old = { id: "o", text: "x", createdAt: iso(40), likeCount: 100, retweetCount: 0 } as never;
+      const src = { handle: "Shimayus", category: "jp_publisher" as const };
+      const sFresh = b.scoreBuzz(fresh, src, NOW);
+      const sOld = b.scoreBuzz(old, src, NOW);
+      expect(sFresh.score).toBeGreaterThan(sOld.score);
+      expect(sFresh.reasons.some((r) => r.startsWith("velocity:"))).toBe(true);
     });
 
-    const tweet = { id: "t1", text: "x", likeCount: 99, retweetCount: 0 } as never;
-    const official = buzzIngest!.scoreBuzz(tweet, { handle: "OpenAI", category: "ai_official" });
-    const jp = buzzIngest!.scoreBuzz(tweet, { handle: "Shimayus", category: "jp_publisher" });
+    test("ai_official 加点 + 非ja で novel_overseas 加点", () => {
+      const b = load();
+      const tw = { id: "t", text: "x", createdAt: iso(3), likeCount: 50, retweetCount: 10, lang: "en" } as never;
+      const official = b.scoreBuzz(tw, { handle: "OpenAI", category: "ai_official" }, NOW);
+      const jp = b.scoreBuzz({ ...tw, lang: "ja" }, { handle: "Shimayus", category: "jp_publisher" }, NOW);
+      expect(official.score).toBeGreaterThan(jp.score);
+      expect(official.reasons).toContain("ai_official");
+      expect(official.reasons).toContain("novel_overseas");
+    });
 
-    // ai_official は +2 加点される
-    expect(official.score).toBeGreaterThan(jp.score);
-    expect(official.reasons).toContain("ai_official");
-    // engagement(99) → log10(100)=2 を加点
-    expect(jp.score).toBeCloseTo(2, 5);
-    // 足切りは無効 (全件通過)
-    expect(buzzIngest!.CURATION_MIN_SCORE).toBe(0);
+    test("1週間以上前×無反応は score≈-3 で足切り対象 (CURATION_MIN_SCORE=-2)", () => {
+      const b = load();
+      const stale = { id: "s", text: "x", createdAt: iso(200), likeCount: 0, retweetCount: 0 } as never;
+      const s = b.scoreBuzz(stale, { handle: "Shimayus", category: "jp_publisher" }, NOW);
+      expect(s.reasons).toContain("stale_1wk");
+      expect(s.score).toBeLessThan(b.CURATION_MIN_SCORE);
+      expect(b.CURATION_MIN_SCORE).toBe(-2);
+    });
+
+    test("新しく無反応でも足切りされない (取りこぼさない)", () => {
+      const b = load();
+      const quiet = { id: "q", text: "x", createdAt: iso(3), likeCount: 0, retweetCount: 0 } as never;
+      const s = b.scoreBuzz(quiet, { handle: "Shimayus", category: "jp_publisher" }, NOW);
+      expect(s.score).toBeGreaterThanOrEqual(b.CURATION_MIN_SCORE);
+    });
+
+    test("createdAt 不正は絶対エンゲージにフォールバック (古い扱いにしない)", () => {
+      const b = load();
+      const tw = { id: "n", text: "x", createdAt: "", likeCount: 99, retweetCount: 0 } as never;
+      const s = b.scoreBuzz(tw, { handle: "Shimayus", category: "jp_publisher" }, NOW);
+      expect(s.reasons).toContain("engagement:99");
+      expect(s.score).toBeCloseTo(2, 5);
+    });
   });
 });
 
