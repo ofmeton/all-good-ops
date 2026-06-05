@@ -28,7 +28,8 @@ export type BlockedReason =
   | "kill_switch"
   | "brownout"
   | "editor_rejected"
-  | "risk_high_pending_approval";
+  | "risk_high_pending_approval"
+  | "direct_api_disabled";
 
 export type PublishStatus =
   | "published"

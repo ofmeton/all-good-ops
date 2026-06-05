@@ -7,6 +7,9 @@ import fs from "node:fs";
 import path from "node:path";
 
 process.env.IN_MEMORY_FALLBACK = "true";
+// 本番は X API 直投を封印 (direct_api_disabled)。この test は posting 経路自体を
+// 検証するため、明示的に直投を有効化する。
+process.env.X_DIRECT_API_ENABLED = "true";
 
 import {
   publishToX,
