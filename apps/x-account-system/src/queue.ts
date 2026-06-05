@@ -90,7 +90,10 @@ export async function handleJob(
       const rid = runId ?? "";
       if (rid) {
         await withTrace(ctx, { runId: rid, stageId: "ideation" }, async () => {
-          const count = await runIdeation(env);
+          let traceMeta: import("../lib/trace/types.js").TraceMeta | undefined;
+          const count = await runIdeation(env, 5, (m) => {
+            traceMeta = m;
+          });
           console.log(
             JSON.stringify({
               level: "info",
@@ -99,7 +102,7 @@ export async function handleJob(
               inserted: count,
             }),
           );
-          return { result: count, output: { inserted: count } };
+          return { result: count, output: { inserted: count }, meta: traceMeta };
         });
       } else {
         const count = await runIdeation(env);

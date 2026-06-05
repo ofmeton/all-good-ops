@@ -61,4 +61,9 @@ export type DraftOutput = {
   llmCostUsd: number;
   /** Phase 0.5 stub では "stub"、live API では "anthropic-sonnet-4.6" 等 */
   generator: "stub" | "anthropic-sonnet-4.6";
+  /**
+   * 観測ダッシュボード計装用 LLM trace meta (prompt/tokens)。
+   * live API 経路でのみ付与。stub では undefined。optional なので後方互換。
+   */
+  _trace?: import("../trace/types.ts").TraceMeta;
 };

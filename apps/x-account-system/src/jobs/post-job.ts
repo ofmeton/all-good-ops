@@ -13,6 +13,7 @@
 import { createClient } from "@supabase/supabase-js";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { withTrace, recordSkip } from "../../lib/trace/with-trace.js";
+import type { TraceMeta } from "../../lib/trace/types.js";
 import { draftForX } from "../../lib/writer/writer-x.js";
 import { runEditor } from "../../lib/editor/pipeline.js";
 import { classifyRules } from "../../lib/hook-classifier/classify-rules.js";
@@ -486,7 +487,7 @@ async function traced<T>(
   rid: string,
   stageId: string,
   input: unknown,
-  fn: () => Promise<{ result: T; output?: unknown; outcome?: string }>,
+  fn: () => Promise<{ result: T; output?: unknown; outcome?: string; meta?: TraceMeta }>,
 ): Promise<T> {
   if (!rid) return (await fn()).result;
   return withTrace(ctx, { runId: rid, stageId, input }, fn);
@@ -521,7 +522,7 @@ export async function runPostJob(
   // Writer
   const draft = await traced(ctx, rid, "writer", { core_idea: idea.topic }, async () => {
     const d = await draftForX(idea, refFb);
-    return { result: d, output: { body: d.body, primary_hook: d.primaryHook } };
+    return { result: d, output: { body: d.body, primary_hook: d.primaryHook }, meta: d._trace };
   });
 
   const dbDraftId = crypto.randomUUID();
@@ -543,6 +544,7 @@ export async function runPostJob(
       result: e,
       output: { decision: e.decision, warnings: e.warnings },
       outcome: editorOutcome(e),
+      meta: e._trace,
     };
   });
 

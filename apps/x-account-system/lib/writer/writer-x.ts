@@ -16,6 +16,8 @@
 import type { CoreIdea, DraftOutput, DraftRequest } from "./types.ts";
 import { buildWriterSystemPrompt, FORMAT_MAX_CHARS } from "./system-prompts.ts";
 import { THREAD_DELIMITER } from "../publisher/thread-format.ts";
+import { callClaudeTraced } from "../trace/llm-trace.ts";
+import type { TraceMeta } from "../trace/types.ts";
 
 /**
  * X はプレーンテキスト。人間は `*` `#` を投稿に使わない。
@@ -125,22 +127,19 @@ function dropTruncatedTail(text: string, fmat: string): string {
 async function callAnthropicWriter(
   idea: CoreIdea,
   systemPrompt: string,
-): Promise<{ body: string; costUsd: number }> {
+): Promise<{ body: string; costUsd: number; meta: TraceMeta }> {
   // Anthropic SDK lazy import (Phase 0.5 では import すらしない)
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const Anthropic = (await import("@anthropic-ai/sdk")).default;
   const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
   const maxTokens = MAX_TOKENS_BY_FORMAT[idea.fmat] ?? 4096;
+  const model = "claude-sonnet-4-5";
+  const userPrompt = `topic: ${idea.topic}\nprimary_hook: ${idea.primaryHook}\nformat: ${idea.fmat}\n\n上記要件に従って X 投稿用の本文を生成してください。`;
   const response = await client.messages.create({
-    model: "claude-sonnet-4-5",
+    model,
     max_tokens: maxTokens,
     system: systemPrompt,
-    messages: [
-      {
-        role: "user",
-        content: `topic: ${idea.topic}\nprimary_hook: ${idea.primaryHook}\nformat: ${idea.fmat}\n\n上記要件に従って X 投稿用の本文を生成してください。`,
-      },
-    ],
+    messages: [{ role: "user", content: userPrompt }],
   });
   let text =
     response.content.find((b) => b.type === "text")?.text ??
@@ -152,7 +151,15 @@ async function callAnthropicWriter(
   // 概算 cost (Sonnet 4.5 USD: input $3/M tok, output $15/M tok)
   const inputCost = (response.usage.input_tokens / 1_000_000) * 3;
   const outputCost = (response.usage.output_tokens / 1_000_000) * 15;
-  return { body: text, costUsd: inputCost + outputCost };
+  // 観測 trace 用 meta (prompt/tokens)。stop_reason ベース truncation を保つため
+  // callClaudeTraced は通さず、ここで meta を直接組む。
+  const meta: TraceMeta = {
+    promptText: `${systemPrompt}\n\n---\n\n${userPrompt}`,
+    model,
+    tokensIn: response.usage.input_tokens,
+    tokensOut: response.usage.output_tokens,
+  };
+  return { body: text, costUsd: inputCost + outputCost, meta };
 }
 
 /**
@@ -185,7 +192,7 @@ export async function draftForX(
 
   const systemPrompt =
     buildWriterSystemPrompt(idea) + buildReferenceFeedbackSection(referenceFeedback);
-  const { body, costUsd } = await callAnthropicWriter(idea, systemPrompt);
+  const { body, costUsd, meta } = await callAnthropicWriter(idea, systemPrompt);
   return {
     draftId,
     body: stripMarkdownForX(body), // X はプレーンテキスト: Markdown 記法を最終本文から除去
@@ -193,6 +200,7 @@ export async function draftForX(
     estimatedScore: 0.7, // live でも初期値、後段の Editor / Analyst で更新
     llmCostUsd: costUsd,
     generator: "anthropic-sonnet-4.6",
+    _trace: meta,
   };
 }
 
@@ -236,21 +244,18 @@ export async function reviseDraftForX(
   const systemPrompt =
     buildWriterSystemPrompt(idea) + buildReferenceFeedbackSection(referenceFeedback);
   const maxTokens = MAX_TOKENS_BY_FORMAT[idea.fmat] ?? 4096;
+  const model = "claude-sonnet-4-5";
+  const userPrompt =
+    `以下は X 投稿の元本文です。\n\n--- 元本文 ---\n${originalBody}\n--- ここまで ---\n\n` +
+    `ユーザーから次の修正方針が来ました（強い制約ではなく参考として、できるだけ反映してください）:\n` +
+    `「${instruction}」\n\n` +
+    `元本文の良い点は活かしつつ、上記の方針を可能な範囲で取り入れて X 投稿用の本文を書き直してください。` +
+    `本文のみを出力してください。`;
   const response = await client.messages.create({
-    model: "claude-sonnet-4-5",
+    model,
     max_tokens: maxTokens,
     system: systemPrompt,
-    messages: [
-      {
-        role: "user",
-        content:
-          `以下は X 投稿の元本文です。\n\n--- 元本文 ---\n${originalBody}\n--- ここまで ---\n\n` +
-          `ユーザーから次の修正方針が来ました（強い制約ではなく参考として、できるだけ反映してください）:\n` +
-          `「${instruction}」\n\n` +
-          `元本文の良い点は活かしつつ、上記の方針を可能な範囲で取り入れて X 投稿用の本文を書き直してください。` +
-          `本文のみを出力してください。`,
-      },
-    ],
+    messages: [{ role: "user", content: userPrompt }],
   });
   let text =
     response.content.find((b) => b.type === "text")?.text ?? originalBody;
@@ -267,6 +272,12 @@ export async function reviseDraftForX(
     estimatedScore: 0.7,
     llmCostUsd: inputCost + outputCost,
     generator: "anthropic-sonnet-4.6",
+    _trace: {
+      promptText: `${systemPrompt}\n\n---\n\n${userPrompt}`,
+      model,
+      tokensIn: response.usage.input_tokens,
+      tokensOut: response.usage.output_tokens,
+    },
   };
 }
 

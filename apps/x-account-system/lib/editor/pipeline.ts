@@ -216,6 +216,16 @@ export async function runEditor(input: EditorInput): Promise<EditorOutput> {
     riskReasons,
     businessLawRiskFlag: businessLawResult.flag,
     businessLawKeywords: businessLawResult.keywords,
+    // 観測 trace: 主 judge (llm-judge) の prompt/model を基に、judge + factuality の
+    // tokens を合算して載せる。stub 経路では judge._trace が undefined → _trace も undefined。
+    _trace: judge._trace
+      ? {
+          promptText: judge._trace.promptText,
+          model: judge._trace.model,
+          tokensIn: (judge._trace.tokensIn ?? 0) + (factuality.tokensIn ?? 0),
+          tokensOut: (judge._trace.tokensOut ?? 0) + (factuality.tokensOut ?? 0),
+        }
+      : undefined,
     totalDurationMs: Date.now() - totalStart,
     llmCostUsd: judge.costUsd + factuality.costUsd,
   };

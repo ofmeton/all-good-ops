@@ -18,6 +18,8 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import type { PrimaryHook, WriterFormat } from "../writer/types.ts";
 import type { Env } from "../../src/worker.ts";
+import { callClaudeTraced } from "../trace/llm-trace.ts";
+import type { TraceMeta } from "../trace/types.ts";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -294,9 +296,15 @@ async function markMaterialsIdeated(env: Env, ids: string[]): Promise<void> {
  *
  * @param env   Cloudflare Worker Env
  * @param count Max ideas to request from LLM (default 5)
+ * @param onTrace optional: LLM trace meta (prompt/tokens) を受け取るコールバック。
+ *   戻り値型は number のまま (後方互換)。観測ダッシュボード計装の queue.ts から渡す。
  * @returns Number of core_ideas inserted
  */
-export async function runIdeation(env: Env, count = 5): Promise<number> {
+export async function runIdeation(
+  env: Env,
+  count = 5,
+  onTrace?: (meta: TraceMeta) => void,
+): Promise<number> {
   // Step 1: Atomic claim of unconsumed materials
   const materials = await fetchUnideatedMaterials(env, 20);
 
@@ -322,33 +330,34 @@ export async function runIdeation(env: Env, count = 5): Promise<number> {
   const Anthropic = (await import("@anthropic-ai/sdk")).default;
   const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });
 
-  const res = await client.messages.create({
-    model: "claude-sonnet-4-5",
-    max_tokens: 2048,
-    system: buildIdeationSystemPrompt(),
-    tools: [IDEA_TOOL as never],
-    tool_choice: { type: "tool", name: "core_ideas" },
-    messages: [
-      {
-        role: "user",
-        content:
-          `以下の素材 ${materials.length} 件から X 投稿ネタを最大 ${count} 件生成してください。\n` +
-          `各ネタに topic / primary_hook / fmat / category / audience / source_material_ids を付与してください。\n\n` +
-          `## 素材\n\n${materialContext}`,
-      },
-    ],
+  const systemPrompt = buildIdeationSystemPrompt();
+  const userPrompt =
+    `以下の素材 ${materials.length} 件から X 投稿ネタを最大 ${count} 件生成してください。\n` +
+    `各ネタに topic / primary_hook / fmat / category / audience / source_material_ids を付与してください。\n\n` +
+    `## 素材\n\n${materialContext}`;
+
+  const out = await callClaudeTraced(client as never, {
+    params: {
+      model: "claude-sonnet-4-5",
+      max_tokens: 2048,
+      system: systemPrompt,
+      tools: [IDEA_TOOL as never],
+      tool_choice: { type: "tool", name: "core_ideas" },
+      messages: [{ role: "user", content: userPrompt }],
+    },
+    promptText: `${systemPrompt}\n\n---\n\n${userPrompt}`,
   });
 
-  const tu = res.content.find((b) => b.type === "tool_use");
-  if (!tu || tu.type !== "tool_use") {
+  if (out.toolUse == null) {
     throw new Error("[ideation] no tool_use in Anthropic response");
   }
+  onTrace?.(out.meta);
 
-  const ideas = (tu.input as { ideas: GeneratedIdea[] }).ideas;
+  const ideas = (out.toolUse as { ideas: GeneratedIdea[] }).ideas;
 
   const costUsd =
-    (res.usage.input_tokens / 1_000_000) * 3 +
-    (res.usage.output_tokens / 1_000_000) * 15;
+    ((out.meta.tokensIn ?? 0) / 1_000_000) * 3 +
+    ((out.meta.tokensOut ?? 0) / 1_000_000) * 15;
 
   console.log(
     JSON.stringify({
