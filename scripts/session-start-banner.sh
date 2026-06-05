@@ -72,4 +72,10 @@ if [[ "$family_total" -gt "$ALERT_THRESHOLD" ]]; then
 EOF
 fi
 
+# --- worktree/ブランチ 棚卸し検知（決定論的・トークンゼロ）-----------------
+# ゾンビ worktree (N日 commit なし) / merged 済み local task ブランチを検出。
+# monthly-audit の最強検知を always-on hook 経路へ移設したもの。健全なら無音。
+hygiene_scan="${CLAUDE_PROJECT_DIR:-$PWD}/scripts/hooks/worktree-hygiene-scan.sh"
+[ -x "$hygiene_scan" ] && bash "$hygiene_scan"
+
 exit 0

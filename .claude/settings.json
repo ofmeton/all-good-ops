@@ -138,6 +138,10 @@
         "hooks": [
           {
             "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/scripts/hooks/stop-hygiene-reminder.sh\""
+          },
+          {
+            "type": "command",
             "command": "osascript -e 'display notification \"応答が完了しました\" with title \"all-good-ops\" sound name \"Ping\"'"
           }
         ]
