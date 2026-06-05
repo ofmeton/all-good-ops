@@ -1,26 +1,31 @@
 {
-  "name": "hello-world",
-  "version": "1.0.0",
-  "description": "Minimal hello-world video — renders in 2 minutes, zero API keys",
+  "name": "minpaku-cleaning-demo-video",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Playwright + Remotion で StayClean の営業デモ動画を生成",
+  "type": "module",
   "scripts": {
-    "studio": "npx remotion studio",
-    "render": "npx remotion render src/index.ts SprintReview out/video.mp4",
-    "render:preview": "npx remotion render src/index.ts SprintReview out/preview.mp4 --scale=0.5",
-    "build": "npx remotion bundle src/index.ts",
-    "upgrade": "npx remotion upgrade"
+    "seed": "tsx src/seed.ts",
+    "record": "tsx src/record.ts",
+    "render": "remotion render src/remotion/index.ts Demo output/demo.mp4 --props=./output/recordings/demoProps.json",
+    "preview": "remotion studio src/remotion/index.ts --props=./output/recordings/demoProps.json",
+    "demo": "npm run seed && npm run record && npm run render"
   },
   "dependencies": {
-    "@remotion/cli": "4.0.425",
-    "@remotion/google-fonts": "^4.0.425",
-    "@remotion/paths": "4.0.425",
-    "@remotion/shapes": "4.0.425",
-    "@remotion/transitions": "4.0.425",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "remotion": "4.0.425"
+    "@remotion/cli": "4.0.420",
+    "@remotion/eslint-config": "4.0.420",
+    "@supabase/supabase-js": "2.45.4",
+    "playwright": "1.47.2",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "remotion": "4.0.420"
   },
   "devDependencies": {
-    "@types/react": "^18.2.0",
-    "typescript": "^5.0.0"
+    "@types/node": "22.7.4",
+    "@types/react": "19.0.0",
+    "@types/react-dom": "19.0.0",
+    "dotenv": "16.4.5",
+    "tsx": "4.19.1",
+    "typescript": "5.6.2"
   }
 }

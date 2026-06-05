@@ -1,46 +1,95 @@
-# StayClean デモ動画 生成パイプライン
+# StayClean 営業デモ動画パイプライン
 
-操作画面キャプチャ＋テロップ型のSNS縦型デモ動画を、**無料・半自動**で再生成する手順。
-本番DBは一切触らず、ローカル Supabase の架空データで撮影する。
+Playwright で実 UI 操作を録画し、Remotion で字幕・タイトル・transition をオーバーレイして 1080p / 30fps の mp4 を生成する。
 
-## スタック（すべて無料）
-- ローカル Supabase（Docker）= 本番から隔離した撮影用DB
-- Playwright = 操作録画（webm）
-- ffmpeg = webm→mp4 変換 / フレーム確認
-- Remotion = テロップ・intro/outro・縦型化（個人/3名以下は商用無料・透かしなし）
-- 日本語フォント = @remotion/google-fonts/NotoSansJP（ローカル無料）
+最終出力: `output/demo.mp4`（~80-90 秒、横 16:9）
 
-## 再生成手順
+---
 
-### 1. 録画（操作映像を撮る）
+## 構成
+
+| ファイル | 役割 |
+|---|---|
+| `src/scenes.ts` | 脚本 SSOT。scene の id / 字幕 / 尺 / 録画有無 |
+| `src/seed.ts` | local Supabase に「見せても問題ない」ダミーデータを投入 |
+| `src/record.ts` | Playwright で実 UI を再演・録画。scene 境界の timing を JSON で出力 |
+| `src/remotion/` | Demo / Intro / Outro / LineNotifyMock / OwnerViewMock / SceneCard |
+
+---
+
+## 前提
+
+- Node 22+（リポ全体と同じ）
+- `app/` 配下が `npm run dev` で立ち上がる（http://localhost:3100）
+- local Supabase が起動済み（`cd ../app && npx supabase start`）
+- `app/.env.local` に `NEXT_PUBLIC_SUPABASE_URL` と `SUPABASE_SERVICE_ROLE_KEY` がある
+
+---
+
+## 初回セットアップ
+
 ```bash
-cd ../app
-supabase start                 # ローカルSupabase起動（初回はimage DL）
-supabase db reset              # migrations適用・クリーン化
-# ローカルJWTキーは `supabase status -o env` で確認（.env.demo に設定済み）
-npx playwright test --config playwright.demo.config.ts
-#  → app/demo-output/.../video.webm が生成
-supabase stop                  # 撮影後に停止（ローカルデータ破棄）
+cd outputs/clients/minpaku-cleaning/demo-video
+npm install
+npx playwright install chromium
 ```
-- 録画スクリプト: `../app/e2e/demo-record.spec.ts`（架空データseed + 6ステップ + slowMo/beat）
-- 設定: `../app/playwright.demo.config.ts`（baseURL:3200, video:on, .env.demo注入）
 
-### 2. 仕上げ（テロップ・縦型化）
+---
+
+## 撮影 → 合成 → 出力
+
+ターミナル 2 つ使う:
+
+**Terminal A** — app dev server を立ち上げ続ける:
 ```bash
-# webm→mp4（このプロジェクトの public/screen.mp4 へ）
-ffmpeg -i ../app/demo-output/*/video.webm -c:v libx264 -pix_fmt yuv420p -an public/screen.mp4 -y
-npm install                    # 初回のみ（cp由来のnode_modulesは使わずクリーンinstall）
-npx remotion render src/index.ts StayCleanDemo out/stayclean-demo.mp4
+cd outputs/clients/minpaku-cleaning/app
+npm run dev -- --port 3100
 ```
-- 構成: `src/StayCleanDemo.tsx`（1080×1920 / 1.5倍速 / STEP1-7テロップ）
-- テロップ文言・配色・タイミングは `TELOPS` 配列と定数を編集
 
-## 注意・教訓
-- **本番DBに実データあり** → 録画は必ずローカルで（admin画面に顧客名が映るため）
-- 既存 `e2e/request-flow.spec.ts` のセレクタは旧UI。StayCleanリデザイン後は使えない
-- `cp -r` で node_modules をコピーすると `.bin` symlink が壊れる → クリーン `npm install`
-- 通知系env（RESEND/LINE）はローカルではダミー（外部送信させない）
+**Terminal B** — seed → record → render を 1 発で:
+```bash
+cd outputs/clients/minpaku-cleaning/demo-video
+npm run demo
+```
 
-## 横型・別フォーマット
-- 横型(16:9)が必要なら Composition の width/height を 1920×1080 に、レイアウトを調整
-- 営業デモ用は `TELOPS` を機能淡々紹介トーンに差し替え
+順番に走るもの:
+1. `npm run seed`: DB を wipe して「渋谷ベイサイドハウス 301 / 佐藤 美咲」等を seed
+2. `npm run record`: Playwright で UI 操作を録画 → `output/recordings/full.webm` + `timings.json`
+3. `npm run render`: Remotion が `full.webm` + `timings.json` を合成 → `output/demo.mp4`
+
+---
+
+## プレビュー（編集ループ）
+
+Remotion Studio で字幕やタイトルを iterate:
+```bash
+npm run preview
+```
+ブラウザ (http://localhost:3000) で各 scene のフレームを scrub できる。録画 webm が無くてもプレースホルダ表示で進められる。
+
+---
+
+## 脚本変更
+
+`src/scenes.ts` の `SCENES` 配列を編集:
+- 字幕: `title` / `subtitle`
+- 録画 scene の尺: `record.ts` の挙動で実測される（`scenes.ts` の `durationSec` は非録画 scene のみ使用）
+- 録画 scene の追加: `scenes.ts` に entry → `record.ts` の `captureScene("new-id", ...)` を追加 → Remotion `Demo.tsx` の `SceneBody` switch に case を増やす（カスタム UI が要るなら）
+
+---
+
+## 営業資料への組み込み
+
+- Vimeo / YouTube に unlisted で upload → 提案書 / LP に埋め込み
+- 直接 mp4 を pptx に貼る場合は出力サイズに注意（ファイル 50MB 超なら Vimeo 経由推奨）
+
+---
+
+## トラブルシュート
+
+| 症状 | 対処 |
+|---|---|
+| `SUPABASE_SERVICE_ROLE_KEY が未設定` | `cd ../app && cat .env.local` で key を確認。無ければ `npx supabase start` の出力からコピー |
+| Playwright が dev server に接続不可 | Terminal A で `npm run dev` が `http://localhost:3100` で起動しているか確認 |
+| Remotion が `recordings/full.webm not found` | 先に `npm run record` を走らせる。または Studio プレビューならプレースホルダ表示で OK |
+| 録画クリップが scene と尺合わず微妙にずれる | Playwright recordVideo は ~25fps。`src/remotion/Demo.tsx` の `SOURCE_FPS` を実 fps に合わせる（`ffprobe output/recordings/full.webm` で確認） |
