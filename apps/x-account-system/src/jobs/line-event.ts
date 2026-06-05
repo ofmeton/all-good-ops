@@ -55,6 +55,7 @@ import {
 import type { Answer } from "../../lib/interviewer/types.js";
 import { lookupDraftByMessage } from "../../lib/line/message-map.js";
 import { classifyReplyIntent } from "../../lib/feedback/intent-classifier.js";
+import { withTrace } from "../../lib/trace/with-trace.js";
 
 // ============================================================
 // Supabase client factory (same pattern as post-job.ts)
@@ -83,7 +84,21 @@ type PostDraftRow = {
   published_at: string | null;
   human_approval_status: string;
   editor_output: EditorOutput | null;
+  run_id?: string | null;
 };
+
+// ============================================================
+// resolveRunIdForDraft — draft の run_id を引いて trace 相関に使う。
+//   fetchDraft は draftId → { run_id? } | null を返す関数 (DI でテスト可能)。
+//   run_id 無し / draft 無しなら undefined (後方互換: trace を諦め既存処理のみ)。
+// ============================================================
+export async function resolveRunIdForDraft(
+  draftId: string,
+  fetchDraft: (id: string) => Promise<{ run_id?: string | null } | null>,
+): Promise<string | undefined> {
+  const d = await fetchDraft(draftId);
+  return d?.run_id ?? undefined;
+}
 
 // ============================================================
 // LINE helpers
@@ -147,7 +162,11 @@ function parseApprovalIntent(
 // ============================================================
 // handleApprove — load draft, claim, publish, record results
 // ============================================================
-async function handleApprove(draftId: string, env: Env): Promise<void> {
+async function handleApprove(
+  draftId: string,
+  env: Env,
+  ctx?: ExecutionContext,
+): Promise<void> {
   const sb = getSupabase(env);
   if (!sb) {
     console.error("[line-event] Supabase not configured");
@@ -157,7 +176,7 @@ async function handleApprove(draftId: string, env: Env): Promise<void> {
   // 1. Load post_drafts row
   const { data, error } = await sb
     .from("post_drafts")
-    .select("id, core_idea_id, body, fmat, published_at, human_approval_status, editor_output")
+    .select("id, core_idea_id, body, fmat, published_at, human_approval_status, editor_output, run_id")
     .eq("id", draftId)
     .maybeSingle();
 
@@ -191,6 +210,20 @@ async function handleApprove(draftId: string, env: Env): Promise<void> {
   const priorApprovalStatus = draft.human_approval_status;
   const nowIso = new Date().toISOString();
 
+  // A10: 元の post run(run_id) があれば line-approval / publisher の trace を
+  //      その run に追記する。run_id 無し (旧 draft) なら trace を付けず素通し。
+  const runId = draft.run_id ?? undefined;
+  if (runId) {
+    await withTrace(
+      ctx,
+      { runId, stageId: "line-approval", input: { draftId, response: true } },
+      async () => ({ result: undefined, outcome: "approved" }),
+    );
+  }
+
+  // publish 本体 (claim→publish→records)。trace は付帯物であり publish は
+  // run_id の有無に依存しない。runId があれば publisher stage として記録する。
+  const doPublish = async (): Promise<void> => {
   // 4. Atomic claim: set published_at + approved ONLY if published_at IS NULL.
   //    If another invocation already claimed it, .select("id") returns 0 rows.
   const { data: claimData, error: claimErr } = await sb
@@ -281,12 +314,30 @@ async function handleApprove(draftId: string, env: Env): Promise<void> {
         : result.error ?? "unknown error";
     await notify(env, `⚠️ 投稿失敗 (${result.status}): ${reason}\ndraft_id: ${draftId}`);
   }
+  };
+
+  if (runId) {
+    await withTrace(
+      ctx,
+      { runId, stageId: "publisher", input: { draftId } },
+      async () => {
+        await doPublish();
+        return { result: undefined };
+      },
+    );
+  } else {
+    await doPublish();
+  }
 }
 
 // ============================================================
 // handleReject — mark draft rejected and return core_idea to queue
 // ============================================================
-async function handleReject(draftId: string, env: Env): Promise<void> {
+async function handleReject(
+  draftId: string,
+  env: Env,
+  ctx?: ExecutionContext,
+): Promise<void> {
   const sb = getSupabase(env);
   if (!sb) {
     console.error("[line-event] Supabase not configured");
@@ -298,7 +349,7 @@ async function handleReject(draftId: string, env: Env): Promise<void> {
     .from("post_drafts")
     .update({ human_approval_status: "rejected" })
     .eq("id", draftId)
-    .select("id, core_idea_id");
+    .select("id, core_idea_id, run_id");
 
   if (error) {
     console.error("[line-event] post_drafts reject update error:", error.message);
@@ -308,9 +359,20 @@ async function handleReject(draftId: string, env: Env): Promise<void> {
 
   // 2. Return the core_idea to the queue (status → 'draft') so it can be re-processed
   const rows = Array.isArray(draftData) ? draftData : [];
-  const coreIdeaId: string | null = rows.length > 0
-    ? (rows[0] as { id: string; core_idea_id: string }).core_idea_id
+  const rejRow = rows.length > 0
+    ? (rows[0] as { id: string; core_idea_id: string; run_id?: string | null })
     : null;
+  const coreIdeaId: string | null = rejRow ? rejRow.core_idea_id : null;
+
+  // A10: 元 run があれば line-approval を rejected として記録 (publisher は無し)。
+  const runId = rejRow?.run_id ?? undefined;
+  if (runId) {
+    await withTrace(
+      ctx,
+      { runId, stageId: "line-approval", input: { draftId, response: false } },
+      async () => ({ result: undefined, outcome: "rejected" }),
+    );
+  }
 
   if (coreIdeaId) {
     const { error: ideaErr } = await sb
@@ -368,6 +430,7 @@ type ReviseDraftRow = {
   fmat: string | null;
   scheduled_date: string | null;
   slot: string | null;
+  run_id?: string | null;
 };
 
 // ============================================================
@@ -408,7 +471,7 @@ async function loadTargetDraftForRevise(
   if (targetDraftId) {
     const { data, error } = await sb
       .from("post_drafts")
-      .select("id, core_idea_id, body, fmat, scheduled_date, slot")
+      .select("id, core_idea_id, body, fmat, scheduled_date, slot, run_id")
       .eq("id", targetDraftId)
       .is("published_at", null)
       .maybeSingle();
@@ -419,7 +482,7 @@ async function loadTargetDraftForRevise(
 
   const { data, error } = await sb
     .from("post_drafts")
-    .select("id, core_idea_id, body, fmat, scheduled_date, slot")
+    .select("id, core_idea_id, body, fmat, scheduled_date, slot, run_id")
     .eq("human_approval_status", "pending")
     .is("published_at", null)
     .order("created_at", { ascending: false })
@@ -438,6 +501,7 @@ async function handleReviseFeedback(
   instruction: string,
   env: Env,
   targetDraftId: string | null = null,
+  ctx?: ExecutionContext,
 ): Promise<void> {
   const sb = getSupabase(env);
   if (!sb) {
@@ -461,15 +525,41 @@ async function handleReviseFeedback(
   const draft = data;
   const idea = await loadCoreIdeaForRevise(sb, draft);
 
+  // A10: 元 run があれば writer/editor 再実行を revision として記録する。
+  //      run_id 無し (旧 draft) なら trace を諦め既存処理のみ (後方互換)。
+  const runId = draft.run_id ?? undefined;
+
   // 2. 過去フィードバックを SOFT reference として注入し書き直す。
   const refFb = await getRecentStyleFeedback(env);
-  const revised = await reviseDraftForX(draft.body, instruction, idea, refFb);
+  const revised = runId
+    ? await withTrace(
+        ctx,
+        { runId, stageId: "writer", input: { revision: true } },
+        async () => {
+          const d = await reviseDraftForX(draft.body, instruction, idea, refFb);
+          return { result: d, output: { body: d.body } };
+        },
+      )
+    : await reviseDraftForX(draft.body, instruction, idea, refFb);
 
   // 3. 同じ dbDraftId / 行で editor を再実行。
   //    X6 出典グラウンディング (事実チェック) 用に素材本文を取得して渡す。
   const sourceTexts = await fetchSourceMaterialTexts(env, idea.sourceMaterialIds);
   const ein = buildEditorInput(idea, revised.body, draft.id, sourceTexts);
-  const out = await runEditor(ein);
+  const out = runId
+    ? await withTrace(
+        ctx,
+        { runId, stageId: "editor", input: { revision: true } },
+        async () => {
+          const e = await runEditor(ein);
+          return {
+            result: e,
+            output: { decision: e.decision },
+            outcome: e.decision,
+          };
+        },
+      )
+    : await runEditor(ein);
 
   // 4. 同じ post_drafts 行を upsert (id / scheduled_date / slot を維持)。
   await persistDraft(env, {
@@ -486,7 +576,18 @@ async function handleReviseFeedback(
 
   // 6. editor 判定に応じて再送 / 却下理由を返す。
   if (out.decision === "approved") {
-    await pushApproval(env, draft.id, revised.body, out, idea.fmat);
+    if (runId) {
+      await withTrace(
+        ctx,
+        { runId, stageId: "line-approval", input: { revision: true } },
+        async () => {
+          await pushApproval(env, draft.id, revised.body, out, idea.fmat);
+          return { result: undefined, outcome: "requested" };
+        },
+      );
+    } else {
+      await pushApproval(env, draft.id, revised.body, out, idea.fmat);
+    }
   } else {
     const reasons = out.rejectReasons.join(", ") || "(no reasons)";
     await notify(
@@ -575,6 +676,7 @@ async function handleFreeTextIntent(
   text: string,
   env: Env,
   targetDraftId: string | null,
+  ctx?: ExecutionContext,
 ): Promise<void> {
   const result = await classifyReplyIntent(text);
 
@@ -585,7 +687,7 @@ async function handleFreeTextIntent(
         await notify(env, "承認対象の下書きが見つかりません");
         return;
       }
-      await handleApprove(id, env);
+      await handleApprove(id, env, ctx);
       return;
     }
     case "reject": {
@@ -594,12 +696,12 @@ async function handleFreeTextIntent(
         await notify(env, "却下対象の下書きが見つかりません");
         return;
       }
-      await handleReject(id, env);
+      await handleReject(id, env, ctx);
       return;
     }
     case "revise": {
       const instruction = result.instruction || text;
-      await handleReviseFeedback(instruction, env, targetDraftId);
+      await handleReviseFeedback(instruction, env, targetDraftId, ctx);
       return;
     }
     case "remember": {
@@ -608,7 +710,7 @@ async function handleFreeTextIntent(
     }
     case "approve_and_remember": {
       const id = await resolveLatestPendingDraftId(env, targetDraftId);
-      if (id) await handleApprove(id, env);
+      if (id) await handleApprove(id, env, ctx);
       await addStyleFeedback(env, "remember", result.note || text, id ?? undefined);
       await notify(env, "覚えました（今後の参考にします）");
       return;
@@ -727,7 +829,11 @@ function eventSenderId(payload: unknown): string | null {
 // ============================================================
 // Main export
 // ============================================================
-export async function handleLineEvent(payload: unknown, env: Env): Promise<void> {
+export async function handleLineEvent(
+  payload: unknown,
+  env: Env,
+  ctx?: ExecutionContext,
+): Promise<void> {
   // Authorization: only the admin (operator) may drive any LINE action.
   // The webhook signature proves the request came from LINE, but NOT who sent it —
   // without this, any LINE user could send `approve:<id>` and trigger a public X post.
@@ -742,9 +848,9 @@ export async function handleLineEvent(payload: unknown, env: Env): Promise<void>
   const intent = parseApprovalIntent(payload);
   if (intent) {
     if (intent.action === "approve") {
-      await handleApprove(intent.draftId, env);
+      await handleApprove(intent.draftId, env, ctx);
     } else {
-      await handleReject(intent.draftId, env);
+      await handleReject(intent.draftId, env, ctx);
     }
     return;
   }
@@ -762,7 +868,7 @@ export async function handleLineEvent(payload: unknown, env: Env): Promise<void>
       await handleRememberFeedback(fb.instruction, env);
     } else {
       // 修正: 引用先 draft → なければ latest-pending。
-      await handleReviseFeedback(fb.instruction, env, quotedDraftId);
+      await handleReviseFeedback(fb.instruction, env, quotedDraftId, ctx);
     }
     return;
   }
@@ -774,5 +880,5 @@ export async function handleLineEvent(payload: unknown, env: Env): Promise<void>
   }
 
   // 5. else 自由文 → Haiku で意図判定して処理 (free-text のみ LLM)。
-  await handleFreeTextIntent(textMsg.text, env, quotedDraftId);
+  await handleFreeTextIntent(textMsg.text, env, quotedDraftId, ctx);
 }

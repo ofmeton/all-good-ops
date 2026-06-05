@@ -205,9 +205,23 @@ afterAll(() => {
 });
 
 // ---- 6. imports AFTER mocks ----
-import { handleLineEvent } from "./line-event.ts";
+import { handleLineEvent, resolveRunIdForDraft } from "./line-event.ts";
 import { __setFetchImpl } from "../../lib/publisher/x-publisher.ts";
 import type { Env } from "../worker.ts";
+
+// ============================================================
+// resolveRunIdForDraft — draft の run_id を相関に使う
+// ============================================================
+describe("resolveRunIdForDraft", () => {
+  test("draft の run_id を引いて相関に使う", async () => {
+    const fakeFetch = async () => ({ run_id: "R1" });
+    expect(await resolveRunIdForDraft("draft-1", fakeFetch as never)).toBe("R1");
+  });
+  test("draft が無ければ undefined", async () => {
+    const fakeFetch = async () => null;
+    expect(await resolveRunIdForDraft("x", fakeFetch as never)).toBeUndefined();
+  });
+});
 
 // ---- helpers ----
 function makeEnv(overrides: Partial<Env> = {}): Env {

@@ -45,11 +45,16 @@ function makeEnv(overrides: Partial<Env> = {}): Env & { JOBS: { send: jest.Mock 
 }
 
 // ---- helper: build a minimal ExecutionContext mock ----
-function makeCtx(): ExecutionContext {
+// waitUntil に渡された promise を保持し、テスト側で flush できるようにする。
+// run lifecycle 配線後は enqueue が insertRun→send の deferred IIFE になるため、
+// 同期アサーション前に flushWaitUntil() で待つ。
+function makeCtx(): ExecutionContext & { flushWaitUntil: () => Promise<void> } {
+  const pending: Promise<unknown>[] = [];
   return {
-    waitUntil: (p: Promise<unknown>) => { void p; },
+    waitUntil: (p: Promise<unknown>) => { pending.push(Promise.resolve(p)); },
     passThroughOnException: () => {},
-  } as ExecutionContext;
+    flushWaitUntil: () => Promise.all(pending).then(() => undefined),
+  } as ExecutionContext & { flushWaitUntil: () => Promise<void> };
 }
 
 // ---- imports AFTER mocks (none needed here) ----
@@ -102,7 +107,7 @@ function makeRequest(body: string, sig: string | null): Request {
 
 describe("LINE /line/webhook", () => {
   let env: ReturnType<typeof makeEnv>;
-  let ctx: ExecutionContext;
+  let ctx: ReturnType<typeof makeCtx>;
 
   beforeEach(() => {
     env = makeEnv();
@@ -116,6 +121,7 @@ describe("LINE /line/webhook", () => {
     const req = makeRequest(bodyOneEvent, sig);
 
     const res = await worker.fetch(req, env, ctx);
+    await ctx.flushWaitUntil();
 
     expect(res.status).toBe(200);
     const mockSend = (env.JOBS as unknown as { send: jest.Mock }).send;
@@ -131,6 +137,7 @@ describe("LINE /line/webhook", () => {
     const req = makeRequest(bodyTwoEvents, sig);
 
     const res = await worker.fetch(req, env, ctx);
+    await ctx.flushWaitUntil();
 
     expect(res.status).toBe(200);
     const mockSend = (env.JOBS as unknown as { send: jest.Mock }).send;

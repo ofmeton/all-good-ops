@@ -12,6 +12,7 @@
 
 import { createClient } from "@supabase/supabase-js";
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { withTrace, recordSkip } from "../../lib/trace/with-trace.js";
 import { draftForX } from "../../lib/writer/writer-x.js";
 import { runEditor } from "../../lib/editor/pipeline.js";
 import { classifyRules } from "../../lib/hook-classifier/classify-rules.js";
@@ -164,14 +165,18 @@ export async function persistDraft(
     out: EditorOutput;
     slot: string;
     date: string;        // YYYY-MM-DD JST
+    /** 計装で確定済みの hook 分類。未指定時は本文を分類器にかける (従来挙動)。 */
+    primaryHook?: string;
+    /** 観測ダッシュボード run_id (0013)。指定時のみ run_id カラムに記録。 */
+    runId?: string;
   },
 ): Promise<void> {
   const sb = getSupabase(env);
   if (!sb) throw new Error("persistDraft: Supabase not configured");
 
-  const { id, idea, draft, out, slot, date } = opts;
+  const { id, idea, draft, out, slot, date, primaryHook, runId } = opts;
 
-  const row = {
+  const row: Record<string, unknown> = {
     id,
     trace_id: id,                                    // reuse dbDraftId as trace_id
     core_idea_id: idea.id,
@@ -185,13 +190,14 @@ export async function persistDraft(
     writer_draft_id: draft.draftId,                  // writer's non-UUID id
     // post_drafts.primary_hook は Editor の 4 分類 (failure_story/business_repro/critique/tips_enum)。
     // idea.primaryHook は Writer 12 種で CHECK 制約に違反するため、本文を分類器にかけた 4 種を使う。
-    primary_hook: classifyRules(draft.body).primary_hook,
+    primary_hook: primaryHook ?? classifyRules(draft.body).primary_hook,
     scheduled_date: date,
     slot,
     risk_level: out.riskLevel,
     risk_reasons: out.riskReasons,
     cost_usd: (draft.llmCostUsd ?? 0) + (out.llmCostUsd ?? 0),
   };
+  if (runId) row.run_id = runId;
 
   const { error } = await sb
     .from("post_drafts")
@@ -461,9 +467,44 @@ async function logRejectToDigest(
 }
 
 // ============================================================
-// runPostJob — main entry point
+// editorOutcome — editor の business 判定を run_trace の outcome に導出
+//   rejected            → "rejected"
+//   approved + warnings  → "warned"
+//   approved + 警告なし   → "approved"
 // ============================================================
-export async function runPostJob(slot: string, env: Env): Promise<void> {
+export function editorOutcome(e: Pick<EditorOutput, "decision" | "warnings">): string {
+  if (e.decision === "rejected") return "rejected";
+  return (e.warnings?.length ?? 0) > 0 ? "warned" : "approved";
+}
+
+// ============================================================
+// traced — rid があれば withTrace で包み、無ければ素通し (完全後方互換)
+//   rid === "" の経路は trace を一切呼ばず既存挙動を維持する。
+// ============================================================
+async function traced<T>(
+  ctx: ExecutionContext | undefined,
+  rid: string,
+  stageId: string,
+  input: unknown,
+  fn: () => Promise<{ result: T; output?: unknown; outcome?: string }>,
+): Promise<T> {
+  if (!rid) return (await fn()).result;
+  return withTrace(ctx, { runId: rid, stageId, input }, fn);
+}
+
+// ============================================================
+// runPostJob — main entry point
+//   ctx/runId は観測ダッシュボード計装用 (A9)。runId が無ければ trace は一切付かず
+//   従来挙動を完全維持する (後方互換)。
+// ============================================================
+export async function runPostJob(
+  slot: string,
+  env: Env,
+  ctx?: ExecutionContext,
+  runId?: string,
+): Promise<void> {
+  const rid = runId ?? "";
+
   if (!(await guardsPass(env, slot))) return;
 
   const row = await dequeueIdeaRow(env, slot);
@@ -476,15 +517,34 @@ export async function runPostJob(slot: string, env: Env): Promise<void> {
 
   // 過去のユーザー指摘を SOFT reference として draft 生成に注入する。
   const refFb = await getRecentStyleFeedback(env);
-  const draft = await draftForX(idea, refFb);
+
+  // Writer
+  const draft = await traced(ctx, rid, "writer", { core_idea: idea.topic }, async () => {
+    const d = await draftForX(idea, refFb);
+    return { result: d, output: { body: d.body, primary_hook: d.primaryHook } };
+  });
 
   const dbDraftId = crypto.randomUUID();
+
+  // Hook 分類 (本文 → 4 分類)。persistDraft でも使う primary_hook を確定する。
+  const hook = await traced(ctx, rid, "hook-classifier", { body: draft.body }, async () => {
+    const h = classifyRules(draft.body);
+    return { result: h, output: { primary_hook: h.primary_hook } };
+  });
 
   // X6 出典グラウンディング (事実チェック) 用に素材本文を取得して editor に渡す。
   const sourceTexts = await fetchSourceMaterialTexts(env, idea.sourceMaterialIds);
   const ein = buildEditorInput(idea, draft.body, dbDraftId, sourceTexts);
 
-  const out = await runEditor(ein);
+  // Editor
+  const out = await traced(ctx, rid, "editor", { body: draft.body }, async () => {
+    const e = await runEditor(ein);
+    return {
+      result: e,
+      output: { decision: e.decision, warnings: e.warnings },
+      outcome: editorOutcome(e),
+    };
+  });
 
   await persistDraft(env, {
     id: dbDraftId,
@@ -493,11 +553,23 @@ export async function runPostJob(slot: string, env: Env): Promise<void> {
     out,
     slot,
     date: jstDate(new Date()),
+    primaryHook: hook.primary_hook,
+    runId: rid || undefined,
   });
 
   if (out.decision === "approved") {
-    await pushApproval(env, dbDraftId, draft.body, out, idea.fmat);
+    await traced(ctx, rid, "line-approval", { draft_id: dbDraftId }, async () => {
+      await pushApproval(env, dbDraftId, draft.body, out, idea.fmat);
+      return { result: undefined, outcome: "requested" };
+    });
   } else {
+    if (rid) {
+      await recordSkip(ctx, {
+        runId: rid,
+        stageId: "line-approval",
+        outcome: "editor_rejected",
+      });
+    }
     await logRejectToDigest(env, dbDraftId, out.rejectReasons);
   }
 }

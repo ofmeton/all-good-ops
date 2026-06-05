@@ -104,8 +104,23 @@ afterAll(() => {
 });
 
 // ---- 7. imports AFTER mocks ----
-import { runPostJob } from "./post-job.ts";
+import { runPostJob, editorOutcome } from "./post-job.ts";
 import type { Env } from "../worker.ts";
+
+// ============================================================
+// editorOutcome — business 判定 (approved/rejected/warned) 導出
+// ============================================================
+describe("editorOutcome", () => {
+  test("rejected は rejected", () => {
+    expect(editorOutcome({ decision: "rejected", warnings: [] } as never)).toBe("rejected");
+  });
+  test("approved + warnings>0 は warned", () => {
+    expect(editorOutcome({ decision: "approved", warnings: [{ rule: "R1", reason: "x" }] } as never)).toBe("warned");
+  });
+  test("approved + warnings0 は approved", () => {
+    expect(editorOutcome({ decision: "approved", warnings: [] } as never)).toBe("approved");
+  });
+});
 
 // ---- helpers ----
 function makeEnv(overrides: Partial<Env> = {}): Env {

@@ -24,8 +24,27 @@ import { runRollbackMonitor } from "./jobs/rollback-job.js";
 import { runRotationNotice } from "./jobs/rotation-job.js";
 import { evaluateBrownout } from "../lib/safety/brownout-handler.js";
 import { makeProductionDeps } from "../lib/dashboard/kpi-collector.js";
+import { recordSkip, withTrace } from "../lib/trace/with-trace.js";
 
-export async function handleJob(msg: JobMessage, env: Env): Promise<void> {
+export const MAX_ATTEMPTS = 4; // = 1 + wrangler.toml max_retries(3)。変更時は wrangler.toml と両方
+
+export interface HandleJobResult {
+  skipped: boolean;
+}
+
+export function decideRunStatus(
+  a: { ok: boolean; attempt: number; maxAttempts: number },
+): "ok" | "running" | "error" {
+  if (a.ok) return "ok";
+  return a.attempt >= a.maxAttempts ? "error" : "running";
+}
+
+export async function handleJob(
+  msg: JobMessage,
+  env: Env,
+  ctx?: ExecutionContext,
+): Promise<HandleJobResult> {
+  const runId = (msg as { runId?: string }).runId;
   // ----------------------------------------------------------------
   // W5-7: brownout 4-stage guard
   //   当月コストを cost_ledger から取得し、4-stage 判定を行う。
@@ -57,8 +76,9 @@ export async function handleJob(msg: JobMessage, env: Env): Promise<void> {
           allowed: decision.allowedJobs,
         }),
       );
+      if (runId) await recordSkip(ctx, { runId, stageId: "safety", outcome: `brownout:${decision.status}` });
       // ACK: リトライしない (予算回復まで次の cron 発火を待つ)
-      return;
+      return { skipped: true };
     }
   }
 
@@ -67,15 +87,31 @@ export async function handleJob(msg: JobMessage, env: Env): Promise<void> {
     // ideation: materials_store → core_ideas LLM 自動生成 (W5-2)
     // ----------------------------------------------------------------
     case "ideation": {
-      const count = await runIdeation(env);
-      console.log(
-        JSON.stringify({
-          level: "info",
-          msg: "[ideation] materials→core_ideas 生成 完了",
-          date: msg.date,
-          inserted: count,
-        }),
-      );
+      const rid = runId ?? "";
+      if (rid) {
+        await withTrace(ctx, { runId: rid, stageId: "ideation" }, async () => {
+          const count = await runIdeation(env);
+          console.log(
+            JSON.stringify({
+              level: "info",
+              msg: "[ideation] materials→core_ideas 生成 完了",
+              date: msg.date,
+              inserted: count,
+            }),
+          );
+          return { result: count, output: { inserted: count } };
+        });
+      } else {
+        const count = await runIdeation(env);
+        console.log(
+          JSON.stringify({
+            level: "info",
+            msg: "[ideation] materials→core_ideas 生成 完了",
+            date: msg.date,
+            inserted: count,
+          }),
+        );
+      }
       break;
     }
 
@@ -91,7 +127,7 @@ export async function handleJob(msg: JobMessage, env: Env): Promise<void> {
       const slot = msg.manual
         ? `manual-${msg.slot}-${crypto.randomUUID().slice(0, 8)}`
         : msg.slot;
-      await runPostJob(slot, env);
+      await runPostJob(slot, env, ctx, runId);
       break;
     }
 
@@ -100,15 +136,31 @@ export async function handleJob(msg: JobMessage, env: Env): Promise<void> {
     // ----------------------------------------------------------------
     case "buzz-ingest": {
       // W5-1: twitterapi.io seed accounts → xad.materials_store (x_inspirations)
-      const count = await runBuzzIngest(env);
-      console.log(
-        JSON.stringify({
-          level: "info",
-          msg: "[buzz-ingest] twitterapi.io 日次取得 完了",
-          date: msg.date,
-          inserted: count,
-        }),
-      );
+      const rid = runId ?? "";
+      if (rid) {
+        await withTrace(ctx, { runId: rid, stageId: "buzz-ingest" }, async () => {
+          const count = await runBuzzIngest(env);
+          console.log(
+            JSON.stringify({
+              level: "info",
+              msg: "[buzz-ingest] twitterapi.io 日次取得 完了",
+              date: msg.date,
+              inserted: count,
+            }),
+          );
+          return { result: count, output: { inserted: count } };
+        });
+      } else {
+        const count = await runBuzzIngest(env);
+        console.log(
+          JSON.stringify({
+            level: "info",
+            msg: "[buzz-ingest] twitterapi.io 日次取得 完了",
+            date: msg.date,
+            inserted: count,
+          }),
+        );
+      }
       break;
     }
 
@@ -117,15 +169,31 @@ export async function handleJob(msg: JobMessage, env: Env): Promise<void> {
     // ----------------------------------------------------------------
     case "inspirations-ingest": {
       // X seeds (overseas ≥6 / domestic ≥18) + note seeds (≥3) → materials_store
-      const count = await runInspirationsIngest(env);
-      console.log(
-        JSON.stringify({
-          level: "info",
-          msg: "[inspirations-ingest] 週次 ingest 完了",
-          date: msg.date,
-          inserted: count,
-        }),
-      );
+      const rid = runId ?? "";
+      if (rid) {
+        await withTrace(ctx, { runId: rid, stageId: "inspirations-ingest" }, async () => {
+          const count = await runInspirationsIngest(env);
+          console.log(
+            JSON.stringify({
+              level: "info",
+              msg: "[inspirations-ingest] 週次 ingest 完了",
+              date: msg.date,
+              inserted: count,
+            }),
+          );
+          return { result: count, output: { inserted: count } };
+        });
+      } else {
+        const count = await runInspirationsIngest(env);
+        console.log(
+          JSON.stringify({
+            level: "info",
+            msg: "[inspirations-ingest] 週次 ingest 完了",
+            date: msg.date,
+            inserted: count,
+          }),
+        );
+      }
       break;
     }
 
@@ -203,7 +271,9 @@ export async function handleJob(msg: JobMessage, env: Env): Promise<void> {
     case "line-event": {
       // W4-2: approve/reject postback → publish
       // W4-3 will extend for interviewer text flow
-      await handleLineEvent(msg.payload, env);
+      // A10: handleLineEvent は ctx を受け取り、承認/却下/修正の trace を
+      //      元の post run(run_id) に追記する。
+      await handleLineEvent(msg.payload, env, ctx);
       break;
     }
 
@@ -219,4 +289,6 @@ export async function handleJob(msg: JobMessage, env: Env): Promise<void> {
       );
     }
   }
+
+  return { skipped: false };
 }

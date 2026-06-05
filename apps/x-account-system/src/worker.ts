@@ -14,7 +14,8 @@
  */
 
 import { bridgeEnv } from "./env-bridge.js";
-import { handleJob } from "./queue.js";
+import { handleJob, MAX_ATTEMPTS, decideRunStatus, type HandleJobResult } from "./queue.js";
+import { insertRun, updateRun } from "../lib/trace/trace-store.js";
 import { verifyLineSignature, pkceChallenge, randomVerifier } from "../lib/crypto/webcrypto.js";
 import { exchangeCode } from "../lib/oauth/token-exchange.js";
 import { createClient } from "@supabase/supabase-js";
@@ -67,6 +68,8 @@ export type JobMessage =
       // 手動起動 (/admin/enqueue) は true。標準スロットを占有せず manual-xxx slot で投稿し、
       // 「各スロット投稿済み」管理は自動(cron)起動のみに反映させる。
       manual?: boolean;
+      // 観測ダッシュボード用 run id (xad.run.id)。enqueue 時に発番。
+      runId?: string;
     }
   | {
       job:
@@ -78,8 +81,9 @@ export type JobMessage =
         | "inspirations-ingest"
         | "rotation-notice";
       date: string;
+      runId?: string;
     }
-  | { job: "line-event"; date: string; payload: unknown };
+  | { job: "line-event"; date: string; payload: unknown; runId?: string };
 
 /** Asia/Tokyo YYYY-MM-DD 文字列を返す（datetime-local は固定TZで解釈する設計原則に従う） */
 function jstDate(d: Date): string {
@@ -144,7 +148,16 @@ export default {
       ? ({ job, date, slot } as JobMessage)
       : ({ job, date } as JobMessage);
 
-    ctx.waitUntil(env.JOBS.send(msg));
+    // run lifecycle: runId 発番 → insert(running) → send。
+    // FK (run_trace.run_id → run.id) のため insert→send を 1 つの waitUntil で直列化。
+    const runId = crypto.randomUUID();
+    const withId = { ...msg, runId } as JobMessage;
+    ctx.waitUntil(
+      (async () => {
+        await insertRun({ id: runId, job, trigger: "cron", date, status: "running", attempt: 1 });
+        await env.JOBS.send(withId);
+      })(),
+    );
   },
 
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
@@ -164,7 +177,21 @@ export default {
       const parsed = JSON.parse(body) as { events?: unknown[] };
       const date = jstDate(new Date());
       for (const ev of parsed.events ?? []) {
-        ctx.waitUntil(env.JOBS.send({ job: "line-event", date, payload: ev }));
+        // run lifecycle: event ごとに webhook run を発番 → insert(running) → send。
+        const webhookRunId = crypto.randomUUID();
+        ctx.waitUntil(
+          (async () => {
+            await insertRun({
+              id: webhookRunId,
+              job: "line-event",
+              trigger: "webhook",
+              date,
+              status: "running",
+              attempt: 1,
+            });
+            await env.JOBS.send({ job: "line-event", date, payload: ev, runId: webhookRunId } as JobMessage);
+          })(),
+        );
       }
       log(env, "info", `LINE webhook: enqueued ${(parsed.events ?? []).length} event(s)`);
       return new Response("OK", { status: 200 });
@@ -187,9 +214,12 @@ export default {
       const date = jstDate(new Date());
       const slot = POST_SLOTS[job as keyof typeof POST_SLOTS];
       // 手動起動は manual:true。標準スロットを占有しない (handleJob 側で manual-xxx slot に振る)。
+      // run lifecycle: runId 発番 → insert(running, trigger=manual) → send を直列化。
+      const runId = crypto.randomUUID();
       const msg: JobMessage = slot
-        ? ({ job, date, slot, manual: true } as JobMessage)
-        : ({ job, date } as JobMessage);
+        ? ({ job, date, slot, manual: true, runId } as JobMessage)
+        : ({ job, date, runId } as JobMessage);
+      await insertRun({ id: runId, job, trigger: "manual", date, status: "running", attempt: 1 });
       await env.JOBS.send(msg);
       log(env, "info", `admin: enqueued job=${job} (manual)`);
       return Response.json({ ok: true, enqueued: msg });
@@ -302,10 +332,26 @@ export default {
     bridgeEnv(env as unknown as Record<string, unknown>);
 
     for (const m of batch.messages) {
+      const runId = (m.body as { runId?: string }).runId;
       try {
-        await handleJob(m.body, env);
+        const r: HandleJobResult = await handleJob(m.body, env, ctx);
+        if (runId)
+          await updateRun(
+            runId,
+            r.skipped
+              ? { status: "skipped", finished: true }
+              : { status: "ok", finished: true },
+          );
         m.ack();
       } catch (e) {
+        const status = decideRunStatus({ ok: false, attempt: m.attempts, maxAttempts: MAX_ATTEMPTS });
+        if (runId)
+          await updateRun(runId, {
+            status,
+            attempt: m.attempts,
+            error: String(e),
+            finished: status === "error",
+          });
         console.error("job failed", m.body, e);
         m.retry();
       }
