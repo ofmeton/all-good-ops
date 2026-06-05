@@ -39,6 +39,15 @@ git log --oneline -10
 git remote -v
 git branch -a
 
+# A2. 複数リポ走査（必須）— VSCode バッジは workspace 全 git リポを「ファイル単位」で合算する。
+#     cwd の git status が少ないのにバッジが大きい時は、本体以外（兄弟 worktree + 隣接リポ）に沈殿している。
+#     -uall で未追跡ディレクトリを展開し、各リポをファイル単位で数える（--short の畳み込み行数と混同しない）。
+git worktree list                                                                                # 兄弟 worktree
+for d in /Users/rikukudo/Projects/*/ /Users/rikukudo/Projects/private-agents/*/; do \
+  [ -e "$d/.git" ] && n=$(git -C "$d" status --porcelain -uall 2>/dev/null | wc -l | tr -d ' ') && \
+  [ "$n" != "0" ] && echo "  $n : $d"; done                                                      # 全リポの未コミット数
+# 詳細: memory feedback_vscode_badge_multi_repo_diagnosis.md
+
 # B. 隠れた要素の検出（ここを抜くと後段で詰まる）
 git ls-files -o --exclude-standard | wc -l                                                      # untracked ファイル数
 git ls-files -o --exclude-standard | xargs du -ch 2>/dev/null | tail -1                         # untracked 総サイズ
