@@ -46,6 +46,10 @@ outputs/**/tmp/
 outputs/**/_local-check/
 outputs/**/_check/
 
+# 再生成可能な生成物（ローカル保管のみ。git には載せない）
+/session-report-*.html
+outputs/clients/minpaku-cleaning/app/demo-output/
+
 # responsive-snap / responsive-audit 生成物
 /tmp/
 scripts/.responsive-tools/node_modules/
