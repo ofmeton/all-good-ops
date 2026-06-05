@@ -1,3 +1,8 @@
+---
+name: prod-lib-diag
+description: "本番 env の実 secret でローカル tsx から lib 関数を直接実行し、queue/cron 経路の本番バグ調査・特定 idea/draft の再生成を行う診断ハーネス。wrangler tail が不安定な時、テスト緑でも本番で壊れる時、「この draftID 生成し直して」依頼時に使う。"
+---
+
 # prod-lib-diag — 本番 env で lib 関数をローカル実行する診断/再生成ハーネス
 
 ## 概要

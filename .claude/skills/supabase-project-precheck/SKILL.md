@@ -1,3 +1,8 @@
+---
+name: supabase-project-precheck
+description: "Supabase MCP create_project の前に list_organizations + list_projects + Free tier 制限消費を確認し「現在 N/2」形式で先出しする。「Supabase の新 project 作って」「DB 用意して」依頼時に使う。"
+---
+
 # Supabase project 作成前提チェック
 
 ## 概要

@@ -1,3 +1,8 @@
+---
+name: lp-optimization-playbook
+description: "LP/HP の軽量化を3ステップ（各 commit 分離で revert 可能）で行うプレイブック。「サイト重い」「LP 軽量化」「Lighthouse 改善」「FCP 短く」要請時に使う。static/Vite 両構成に適用可。"
+---
+
 # LP 軽量化プレイブック
 
 ## 概要

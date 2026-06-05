@@ -1,3 +1,8 @@
+---
+name: chromakey-grid-split
+description: "マゼンタ/シアン等のフラット背景上にグリッド配置された素材シート画像を、1ファイル=1素材のRGBA透過PNGに分割する。「グリッド画像を切り出して透過化」「素材シートを分解」「カテゴリ別フォルダに分けて」と依頼された時に使う。"
+---
+
 # Chroma-key グリッド切り出し（Chromakey Grid Split）
 
 ## 概要

@@ -1,3 +1,8 @@
+---
+name: large-pptx-generation
+description: "50p 以上の大型 PPTX を python-pptx + Part 別ビルド + PDF 結合で制作する標準フロー。「100ページのパワポ作って」「資料 200p 書いて」等、50p以上が想定される PPTX 制作依頼時に使う（50p未満は presentation-reviewer 直行）。"
+---
+
 # 大型PPTX生成（Large PPTX Generation）
 
 ## 概要

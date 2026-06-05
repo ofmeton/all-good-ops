@@ -1,3 +1,8 @@
+---
+name: vercel-headless-deploy
+description: "agent セッションから Vercel に新規プロジェクトをローカル vercel deploy で立てて公開する定型手順。env add の空文字 bug と team SSO 保護のトラップを回避。モノレポ内の単体 Next.js アプリを headless で初公開する時に使う。"
+---
+
 # Vercel headless デプロイ（CLI token + REST）
 
 ## 概要

@@ -1,3 +1,8 @@
+---
+name: git-repo-cleanup-protocol
+description: "コミットしてないものの整理・リポジトリ最新化依頼を、初動スキャン→方針合意→.gitignore 投入→Phase 分割→commit→push まで1セッションで完結させる標準フロー。「git整理して」「push してないやつ片付けて」「最新化して」依頼時に使う。"
+---
+
 # Git リポジトリ整理プロトコル（Git Repo Cleanup Protocol）
 
 ## 概要

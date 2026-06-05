@@ -1,3 +1,8 @@
+---
+name: vercel-team-deploy-checklist
+description: "Vercel team/Pro プロジェクト（team_* ID）に GitHub 連携 push する前のチェックリスト。認可外 git author email の commit が silent ERROR で reject されるトラップを回避。portfolio/ai-radar 等の team プロジェクトに push する前に使う。"
+---
+
 # Vercel team プロジェクト デプロイ前チェックリスト
 
 ## 概要

@@ -1,3 +1,8 @@
+---
+name: session-retrospective
+description: "セッションの作業・やり取りを振り返り、気づき抽出→反映先候補提示→人間確認→memory/improvement-log/CLAUDE.md/エージェント定義/新規スキルへの反映までを標準化する。ユーザーが「振り返って」「セッション振り返り」と明示要求した時に使う。"
+---
+
 # セッション振り返り（Session Retrospective）
 
 ## 概要
