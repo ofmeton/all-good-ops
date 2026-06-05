@@ -1,0 +1,20 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans CJK JP", sans-serif; padding: 1.5rem; background: #f8f8f8; color: #222; line-height: 1.5; }
+h1 { font-size: 1.4rem; margin-bottom: 1rem; }
+h2 { font-size: 1.1rem; margin: 1rem 0 0.5rem; }
+.card { background: #fff; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+.score { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 0.85rem; font-weight: bold; }
+.score-high { background: #fee2e2; color: #b91c1c; }
+.score-mid { background: #fef3c7; color: #92400e; }
+.score-low { background: #e5e7eb; color: #444; }
+button { padding: 0.5rem 1rem; border: 0; border-radius: 4px; cursor: pointer; background: #1d4ed8; color: #fff; font-weight: bold; margin-right: 0.5rem; font-size: 0.9rem; }
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+button.secondary { background: #e5e7eb; color: #222; }
+button.danger { background: #dc2626; }
+nav { padding-bottom: 0.5rem; border-bottom: 1px solid #e5e7eb; }
+nav a { margin-right: 1rem; color: #1d4ed8; text-decoration: none; font-weight: 500; }
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 0.5rem; text-align: left; border-bottom: 1px solid #e5e7eb; }
+input, select { padding: 0.4rem 0.6rem; border: 1px solid #d1d5db; border-radius: 4px; font-size: 0.9rem; margin-right: 0.5rem; }
+pre { font-size: 0.85rem; overflow: auto; max-height: 300px; margin-top: 0.5rem; padding: 0.5rem; background: #f4f4f4; border-radius: 4px; }
+.muted { color: #666; font-size: 0.85rem; }

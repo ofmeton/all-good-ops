@@ -1,0 +1,8 @@
+node_modules/
+.next/
+.env*.local
+.env
+out/
+remotion-renders/
+*.tsbuildinfo
+next-env.d.ts

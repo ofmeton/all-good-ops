@@ -1,0 +1,12 @@
+{
+  "crons": [
+    { "path": "/api/cron/fetch", "schedule": "0 */6 * * *" },
+    { "path": "/api/cron/self-watch", "schedule": "0 1 * * *" },
+    { "path": "/api/cron/weekly-improve", "schedule": "0 1 * * 0" }
+  ],
+  "functions": {
+    "src/app/api/cron/fetch/route.ts": { "maxDuration": 300 },
+    "src/app/api/cron/self-watch/route.ts": { "maxDuration": 300 },
+    "src/app/api/cron/weekly-improve/route.ts": { "maxDuration": 300 }
+  }
+}

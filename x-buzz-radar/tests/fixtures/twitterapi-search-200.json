@@ -1,0 +1,16 @@
+{
+  "data": [
+    {
+      "id": "1234567890",
+      "url": "https://twitter.com/user/status/1234567890",
+      "text": "Claude Code completely changed how I ship features. Built an entire MCP integration in 30 minutes.",
+      "author": { "userName": "demo_user", "id": "9999" },
+      "createdAt": "2026-05-23T01:00:00Z",
+      "lang": "en",
+      "likeCount": 1245,
+      "retweetCount": 187,
+      "replyCount": 53,
+      "viewCount": 25000
+    }
+  ]
+}
