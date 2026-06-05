@@ -48,15 +48,18 @@ order by human_approved_at asc;
 
 ### 3. chrome-devtools でX予約投稿を作成（1件ずつ）
 各 draft について:
-1. `mcp__chrome-devtools__navigate_page` で `https://x.com/compose/post` を開く
-2. `take_snapshot` で compose UI の要素を取得
-3. 本文を入力（`fill` / `type_text`）。`body` はプレーンテキスト（Markdown不可）
-4. メディアがあれば添付（`upload_file` で `local_path`）。**著作権/規約ガード**: 他者メディア再アップは
-   引用RT基本＋出典明記＋拡散歓迎系限定（compliance 確認）
-5. **予約**ボタン（スケジュール）を開き、割当した予約日時(JST)を設定 → 予約確定
-6. 確定後、画面から予約の識別子/URL を控える（`scheduled_post_id` 相当）
+1. `mcp__chrome-devtools__new_page` で `https://x.com/compose/post` を開く（作業中タブを奪わない）。
+   - SPA なので navigation timeout が出ても **タブは開いている**。`list_pages` → `take_snapshot` で続行。
+2. `take_snapshot` で compose UI の要素を取得。ログイン済みか（自分のプロフィール画像が出るか）を確認。
+3. 本文を **textbox「ポスト本文」** に入力（`fill` / `type_text`）。`body` はプレーンテキスト（Markdown不可）。
+4. メディアがあれば **「画像や動画を追加」/「ファイル選択」** に `upload_file` で `local_path` を添付。
+   **著作権/規約ガード**: 他者メディア再アップは引用RT基本＋出典明記＋拡散歓迎系限定（compliance 確認）。
+5. **button「ポストを予約」** を押し、割当した予約日時(JST)を設定 → 予約確定。
+6. 確定後、画面から予約の識別子/URL を控える（`scheduled_post_id` 相当）。
 
-> X の web UI 構造は変わりうる。`take_snapshot` で都度セレクタを確認し、決め打ちしない。
+> 実機疎通済 (2026-06-05): ログイン済み個人Chrome では a11y ツリーをフル取得でき、
+> 「ポスト本文」textbox・「ポストを予約」button・「ファイル選択」が到達可能と確認。
+> ただし X の web UI 構造は変わりうるので、`take_snapshot` で都度ラベルを確認し決め打ちしない。
 
 ### 4. DBへ予約状態を記録
 予約確定できたものだけ、**1件ずつ** UPDATE（冪等）:
