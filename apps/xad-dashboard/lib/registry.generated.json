@@ -6,6 +6,7 @@
       "label": "Buzz Ingest",
       "group": "ingest",
       "purpose": "twitterapi.io の seed アカウントから日次 buzz を取得し materials_store へ。",
+      "objectiveFunction": "一次ソースの網羅性と鮮度を最大化（取りこぼし最小化）",
       "inputs": [
         "twitterapi.io seed accounts"
       ],
@@ -32,6 +33,7 @@
       "label": "Inspirations Ingest",
       "group": "ingest",
       "purpose": "週次で X/note seeds を取得し materials_store へ。",
+      "objectiveFunction": "週次インスピレーションの多様性とカバレッジを最大化",
       "inputs": [
         "X seeds",
         "note seeds"
@@ -59,6 +61,7 @@
       "label": "Ideation",
       "group": "ideation",
       "purpose": "materials_store から core_ideas を LLM 生成。",
+      "objectiveFunction": "ターゲット適合 × ネタの多様性を最大化（カテゴリ/フックのバランス）",
       "inputs": [
         "xad.materials_store"
       ],
@@ -89,6 +92,7 @@
       "label": "Writer",
       "group": "generate",
       "purpose": "core_idea から draft 本文を生成。",
+      "objectiveFunction": "保存・反応につながる訴求力を最大化（チャエン【速報】黄金型への適合）",
       "inputs": [
         "xad.core_ideas"
       ],
@@ -123,6 +127,7 @@
       "label": "Hook Classifier",
       "group": "review",
       "purpose": "hook を規則ベース(regex/scoring)で分類。LLM ではない。",
+      "objectiveFunction": "hook 分類の正確性を最大化（誤分類を最小化）",
       "inputs": [
         "draft body"
       ],
@@ -151,6 +156,7 @@
       "label": "Editor (6+5)",
       "group": "review",
       "purpose": "6+5 ルール判定。hard 却下 / soft 警告。LLM judge + factuality judge を含む。",
+      "objectiveFunction": "公開リスク（業法/DLP/誤報）を最小化しつつ過剰却下を抑える",
       "inputs": [
         "draft body",
         "materials (出典)"
@@ -185,13 +191,14 @@
       "id": "line-approval",
       "label": "LINE Approval",
       "group": "approve",
-      "purpose": "LINE Flex で承認依頼を push し、承認/却下/修正の応答を取り込む。",
+      "purpose": "LINE Flex で承認依頼を push し、承認/却下/修正を取り込む。承認は予約待ちストックへ積む。",
+      "objectiveFunction": "人の承認コストを最小化（軽量・即時の可否判断で誤公開を防ぐ）",
       "inputs": [
         "post_drafts"
       ],
       "outputs": [
         "承認状態",
-        "publish トリガ"
+        "予約待ちストック (approved)"
       ],
       "keyVariables": [
         {
@@ -208,30 +215,36 @@
         "editor"
       ],
       "downstream": [
-        "publisher"
+        "scheduled-publish"
       ]
     },
     {
-      "id": "publisher",
-      "label": "Publisher (X)",
+      "id": "scheduled-publish",
+      "label": "Scheduled Publish (chrome-devtools)",
       "group": "publish",
-      "purpose": "承認後に X へ投稿。OAuth token 自動 refresh 込み。",
+      "purpose": "承認済みストックを人のPC起動時に chrome-devtools で X 公式予約投稿UIへ登録する半自動投稿。source=本人クライアントを保ち X API 直投はしない。",
+      "objectiveFunction": "ピーク帯への最適割当で到達を最大化（source=本人を維持し誤報リスクは人手で抑制）",
       "inputs": [
-        "承認済 post_drafts"
+        "承認済 post_drafts (scheduled_for IS NULL)"
       ],
       "outputs": [
-        "X 投稿",
-        "xad.posts_performance"
+        "X 予約投稿",
+        "xad.post_drafts.scheduled_for / scheduled_post_id"
       ],
       "keyVariables": [
         {
-          "name": "AUTONOMOUS_PUBLISH",
-          "desc": "Phase1=false(承認制)"
+          "name": "trigger",
+          "desc": "人のPC起動時『翌日分を予約して』(manual)"
+        },
+        {
+          "name": "peak slots",
+          "desc": "朝6-8 / 昼12 / 夕15-17 に割当"
         }
       ],
       "logicKind": "io",
       "sourcePaths": [
-        "apps/x-account-system/lib/publisher/"
+        ".claude/skills/x-scheduled-publish/SKILL.md",
+        "apps/x-account-system/src/jobs/line-event.ts"
       ],
       "upstream": [
         "line-approval"
@@ -243,6 +256,7 @@
       "label": "Safety (brownout)",
       "group": "review",
       "purpose": "handleJob 冒頭の brownout 4段階ゲート。許可外 job を skip する。",
+      "objectiveFunction": "コスト超過時の被害を最小化（許可 job の段階制御で予算を死守）",
       "inputs": [
         "当月コスト (cost_ledger)"
       ],
@@ -269,6 +283,7 @@
       "label": "DLP",
       "group": "review",
       "purpose": "editor 内包の PII redact / lint（決定的）。MVP は定義のみ（trace は editor 内）。",
+      "objectiveFunction": "PII / 顧客機密の漏洩をゼロにする（再現率最優先）",
       "inputs": [
         "draft body"
       ],
@@ -294,6 +309,7 @@
       "label": "Optimizer",
       "group": "learn",
       "purpose": "Thompson Sampling で 8 パラメータ posterior を更新（optimizer-update cron）。MVP は定義のみ。",
+      "objectiveFunction": "各パラメータの posterior を更新し長期 reward（エンゲージ/転換）を最大化",
       "inputs": [
         "posts_performance (reward)"
       ],

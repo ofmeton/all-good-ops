@@ -30,6 +30,9 @@ export function NodePanel({ stageId, onClose }: { stageId: string; onClose: () =
       {tab === "def" ? (
         <div className="text-sm space-y-2">
           <p>{s.purpose}</p>
+          <p className="rounded bg-amber-50 border border-amber-200 px-2 py-1">
+            <b>🎯 目的関数:</b> {s.objectiveFunction}
+          </p>
           <p><b>logic:</b> {s.logicKind}</p>
           <p><b>入力:</b> {s.inputs.join(", ")}</p>
           <p><b>出力:</b> {s.outputs.join(", ")}</p>
