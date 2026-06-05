@@ -49,4 +49,27 @@ elif [[ "$current_wt" == "$main_wt" ]] && [[ "$wt_count" -ge 2 ]]; then
 EOF
 fi
 
+# --- 沈殿アラート（運用ハイジーン）---------------------------------------
+# 未コミットが溜まり続ける「ぐちゃぐちゃ化」を session 開始時に早期検知する。
+# この repo family（全 worktree）の未コミットを -uall（未追跡 dir 展開）で合算。
+ALERT_THRESHOLD="${UNCOMMITTED_ALERT_THRESHOLD:-20}"
+family_total=0
+while IFS= read -r wt; do
+  [[ -z "$wt" ]] && continue
+  n="$(git -C "$wt" status --porcelain -uall 2>/dev/null | wc -l | xargs)"
+  family_total=$((family_total + n))
+done < <(git worktree list --porcelain 2>/dev/null | awk '/^worktree / {print $2}')
+
+if [[ "$family_total" -gt "$ALERT_THRESHOLD" ]]; then
+  cat <<EOF
+
+🧹 整理推奨: repo family の未コミットが閾値 ${ALERT_THRESHOLD} 超 = ${family_total} ファイル
+   内訳 cwd repo: ${uncommitted} / 全 worktree -uall 合算: ${family_total}
+   → 終了前にコミット or 整理を。放置の沈殿が「ぐちゃぐちゃ」の根因。
+   手順: .claude/skills/git-repo-cleanup-protocol.md
+   ※ portfolio 等の別リポは非対象。全 workspace 走査は同スキル参照。
+
+EOF
+fi
+
 exit 0
