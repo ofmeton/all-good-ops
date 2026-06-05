@@ -369,6 +369,16 @@ git log --oneline @{u}..HEAD   # or main..HEAD
 
 詳細: memory `feedback_one_session_one_branch.md` / `feedback_git_push_log_verify.md`
 
+### 運用ハイジーン（沈殿防止）
+
+**根因（2026-06-05）**: 開発仕事は worktree→commit→PR で着地レールがあるが、**秘書・運用の副産物（raw/facts・outputs・wiki・振り返り・新スキル）はメイン本体に着地レールが無く**、cron 安全網も死亡していたため 2 週間で 149 件が沈殿した。分析: `outputs/improvements/2026-06-05-ops-hygiene-root-cause.md`。
+
+- **メイン本体の終了儀式**: セッション終了時、メイン repo は「`main` 上・未コミット 0」を目標にする。秘書が `raw/` `outputs/` `wiki/` 等に書いた運用副産物は、**そのセッション内でコミットまで完了**する（残して終わらない）
+- **メイン本体を task ブランチに居座らせない**: 作業終了後は `main` に戻す。古い task ブランチに長期間留まらない
+- **沈殿の早期検知**: SessionStart hook（`scripts/session-start-banner.sh`）が repo family の未コミットを `-uall` 合算し、閾値（既定 20）超で「🧹 整理推奨」を出す。出たら整理を優先
+- **整理依頼時は全リポ走査**: 「バッジが巨大」「整理して」系は cwd だけ見ない。workspace 全 git リポを `git status --porcelain -uall` で走査（VSCodeバッジは複数リポ合算）。手順 `git-repo-cleanup-protocol.md` / memory `feedback_vscode_badge_multi_repo_diagnosis.md`
+- **月次ハイジーン**: stale ローカルブランチ / worktree / origin ブランチを棚卸し（`monthly-audit`）
+
 ---
 
 ## 自動化スケジュール
