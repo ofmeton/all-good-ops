@@ -73,7 +73,20 @@ where id = '<draftId>' and scheduled_for is null;
 
 `core_ideas.status` は `approved` のまま（公開時に別途 `published` へ）。
 
-### 5. 出典の自己リプライ（任意）
+### 5. 観測トレースを記録（フロー全体を一望可能にする）
+予約確定した分を **観測ダッシュボードに残す**。Worker 外の工程なので queue は trace を
+書けない → この CLI で `xad.run` / `xad.run_trace` に 1 run + 予約件数分の trace を記録する。
+
+```bash
+cd apps/x-account-system
+npx tsx scripts/record-scheduled-publish.ts \
+  '[{"draftId":"<id>","scheduledFor":"2026-06-07T07:00:00+09:00","scheduledPostId":"<x識別子>"}]'
+```
+
+これで dashboard の `scheduled-publish` ノード「実行」タブに「どの draft を / いつの予約に /
+どの識別子で 登録したか」が出て、**収集→投稿予約までフロー全体の実行中身が追える**ようになる。
+
+### 6. 出典の自己リプライ（任意）
 出典 URL を持つ投稿は、予約投稿への**自己リプライ**としてスレッド予約 or メモ化し、
 公開後に出典を担保する（チャエンの疑似スレッド化）。
 
