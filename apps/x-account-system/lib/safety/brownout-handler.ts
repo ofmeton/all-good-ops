@@ -37,7 +37,10 @@ export type BrownoutStatus = "ok" | "reduce" | "stop_posting" | "cron_halt" | "e
 /** ALL job names known to the queue consumer */
 const ALL_JOBS: string[] = [
   "post-morning",
+  "post-morning2",
   "post-noon",
+  "post-afternoon",
+  "post-afternoon2",
   "post-evening",
   "ideation",
   "buzz-ingest",

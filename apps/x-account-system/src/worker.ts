@@ -4,7 +4,8 @@
  * 役割:
  *   1. scheduled(): cron triggers (wrangler.toml) を Queue に enqueue するだけ。
  *      重い処理は queue() consumer 側 (src/queue.ts) に移譲。
- *      Phase 1 は「人間承認つき 1 投稿/日」。X API 100/月上限 → 投稿 cron は 3 本。
+ *      投稿 cron は draft 生成 + LINE 承認依頼のみ (実投稿は人の承認 → chrome-devtools 予約)。
+ *      チャエン実測リズムに合わせ 6 本 (朝6-8/昼12/夕15-17 主軸)。X API 直投は廃止済。
  *   2. fetch(): LINE Webhook 受信 (設計 L1098)。承認タップ → queue にも enqueue。
  *   3. queue(): MessageBatch<JobMessage> を受け取り handleJob へ dispatch。
  *
@@ -62,9 +63,21 @@ export interface Env {
  */
 export type JobMessage =
   | {
-      job: "post-morning" | "post-noon" | "post-evening";
+      job:
+        | "post-morning"
+        | "post-morning2"
+        | "post-noon"
+        | "post-afternoon"
+        | "post-afternoon2"
+        | "post-evening";
       date: string;
-      slot: "morning" | "noon" | "evening";
+      slot:
+        | "morning"
+        | "morning2"
+        | "noon"
+        | "afternoon"
+        | "afternoon2"
+        | "evening";
       // 手動起動 (/admin/enqueue) は true。標準スロットを占有せず manual-xxx slot で投稿し、
       // 「各スロット投稿済み」管理は自動(cron)起動のみに反映させる。
       manual?: boolean;
@@ -96,7 +109,10 @@ const CRON_JOBS: Record<string, JobMessage["job"]> = {
   "0 21 * * *": "buzz-ingest",       // 06:00 JST (素材収集を最初に)
   "30 21 * * *": "ideation",         // 06:30 JST (buzz の後で素材→ネタ変換)
   "0 22 * * *": "post-morning",      // 07:00 JST
+  "0 23 * * *": "post-morning2",     // 08:00 JST (朝ピーク2本目)
   "0 3 * * *": "post-noon",          // 12:00 JST
+  "0 6 * * *": "post-afternoon",     // 15:00 JST (夕ピーク1)
+  "0 8 * * *": "post-afternoon2",    // 17:00 JST (夕ピーク2)
   "0 10 * * *": "post-evening",      // 19:00 JST (note 送客)
   "0 12 * * *": "daily-digest",      // 21:00 JST
   "0 14 * * *": "optimizer-update",  // 23:00 JST
@@ -108,7 +124,10 @@ const CRON_JOBS: Record<string, JobMessage["job"]> = {
 /** 投稿 job → slot 名のマップ */
 const POST_SLOTS = {
   "post-morning": "morning",
+  "post-morning2": "morning2",
   "post-noon": "noon",
+  "post-afternoon": "afternoon",
+  "post-afternoon2": "afternoon2",
   "post-evening": "evening",
 } as const;
 
@@ -117,7 +136,10 @@ const CRON_JOBS_BY_NAME: Record<string, true> = {
   ideation: true,
   "buzz-ingest": true,
   "post-morning": true,
+  "post-morning2": true,
   "post-noon": true,
+  "post-afternoon": true,
+  "post-afternoon2": true,
   "post-evening": true,
   "daily-digest": true,
   "optimizer-update": true,
