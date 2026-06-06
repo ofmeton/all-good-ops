@@ -32,6 +32,7 @@ export default function RootLayout({
           <span className="font-bold">xad observability</span>
           <a href="/" className="text-blue-600 hover:underline">工程図</a>
           <a href="/runs" className="text-blue-600 hover:underline">Runs</a>
+          <a href="/curation" className="text-blue-600 hover:underline">Curation</a>
         </header>
         {children}
       </body>
