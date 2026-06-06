@@ -34,6 +34,7 @@ status: active
 
 - **必須 2 観点**: `code-reviewer`（総合品質・バグ）+ `silent-failure-hunter`（エラーハンドリング・サイレント失敗。ウチの教訓が最も多い領域）
 - **案件で追加**: `type-design-analyzer`（型設計が要の時）/ `pr-test-analyzer`（テスト網羅が要の時）
+- **別モデル観点（任意）**: Codex レビュー（`mcp__codex__codex`）。重要・複雑な変更でセカンドオピニオンが欲しい時に回す。Claude 系レビュアー同士は盲点が共通しがちなので、別モデルが異なる指摘傾向で見落としを拾える。Codex MCP は導入済
 
 ## ワークフロー
 
