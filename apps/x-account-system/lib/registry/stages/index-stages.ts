@@ -2,6 +2,19 @@ import type { StageMeta } from "../types.js";
 
 export const STAGES: StageMeta[] = [
   {
+    id: "collect", label: "Collector Agent", group: "ingest",
+    purpose: "エージェントが探索的にネタを集め(固定/海外トレンド/キーワード/新ソース/スレ復元)、全件3軸スコア＋理由を付けて materials_store へ全保存。",
+    objectiveFunction: "速報性×velocity×ターゲット適合の高いネタの網羅性を最大化（除外は人間UIに委ね、収集網羅性を最大化）",
+    inputs: ["twitterapi.io (advanced_search/trends/users/followings/thread)"],
+    outputs: ["xad.materials_store (x_inspirations, scores/discovery付き)"],
+    keyVariables: [
+      { name: "探索スコープ", desc: "固定watchlist＋海外トレンド＋キーワード＋新ソース発見" },
+      { name: "scoring weights", desc: "freshness/velocity/target_fit (collector-config)" },
+    ],
+    logicKind: "llm", sourcePaths: ["apps/x-account-system/lib/ingest/collector.ts"],
+    upstream: [], downstream: ["ideation"],
+  },
+  {
     id: "buzz-ingest", label: "Buzz Ingest", group: "ingest",
     purpose: "twitterapi.io の seed アカウントから日次 buzz を取得し materials_store へ。",
     objectiveFunction: "一次ソースの網羅性と鮮度を最大化（取りこぼし最小化）",
@@ -27,7 +40,7 @@ export const STAGES: StageMeta[] = [
     keyVariables: [{ name: "batch limit", desc: "1 回の claim 対象数" }],
     logicKind: "llm", promptRef: "apps/x-account-system/lib/ideation/ideate.ts",
     sourcePaths: ["apps/x-account-system/lib/ideation/ideate.ts"],
-    upstream: ["buzz-ingest", "inspirations-ingest"], downstream: ["writer"],
+    upstream: ["collect", "buzz-ingest", "inspirations-ingest"], downstream: ["writer"],
   },
   {
     id: "writer", label: "Writer", group: "generate",

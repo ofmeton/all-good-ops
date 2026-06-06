@@ -171,6 +171,45 @@ export async function handleJob(
     }
 
     // ----------------------------------------------------------------
+    // collect: Collector Agent — 探索的ネタ収集 + 3軸スコア → materials_store
+    // ----------------------------------------------------------------
+    case "collect": {
+      const rid = runId ?? "";
+      const { createClient } = await import("@supabase/supabase-js");
+      const Anthropic = (await import("@anthropic-ai/sdk")).default;
+      const sb = createClient(env.SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY, {
+        db: { schema: process.env.SUPABASE_SCHEMA || "xad" },
+      });
+      const anthropic = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });
+      const { runCollect } = await import("../lib/ingest/collector.js");
+      if (rid) {
+        await withTrace(ctx, { runId: rid, stageId: "collect" }, async () => {
+          let traceMeta: import("../lib/trace/types.js").TraceMeta | undefined;
+          const inserted = await runCollect({
+            anthropic: anthropic as never,
+            sb: sb as never,
+            twitterApiKey: env.TWITTERAPI_IO_KEY,
+            fetchImpl: fetch,
+            onTrace: (m) => {
+              traceMeta = m;
+            },
+          });
+          console.log(JSON.stringify({ level: "info", msg: "[collect] 完了", date: msg.date, inserted }));
+          return { result: inserted, output: { inserted }, meta: traceMeta };
+        });
+      } else {
+        const inserted = await runCollect({
+          anthropic: anthropic as never,
+          sb: sb as never,
+          twitterApiKey: env.TWITTERAPI_IO_KEY,
+          fetchImpl: fetch,
+        });
+        console.log(JSON.stringify({ level: "info", msg: "[collect] 完了(untraced)", date: msg.date, inserted }));
+      }
+      break;
+    }
+
+    // ----------------------------------------------------------------
     // inspirations-ingest: 週次 inspirations 取得 (W5-3)
     // ----------------------------------------------------------------
     case "inspirations-ingest": {
