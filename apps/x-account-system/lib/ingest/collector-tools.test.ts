@@ -54,4 +54,38 @@ describe("collector-tools", () => {
     expect(r.candidates).toHaveLength(0);
     expect(r.toolResultText).toContain("#AI");
   });
+
+  test("dispatch get_thread tags discovery {via:'fixed', query:'thread:<cid>'} and returns candidates", async () => {
+    const deps = {
+      key: "k",
+      fetchImpl: undefined as never,
+      api: {
+        searchTweets: async () => [],
+        getTrends: async () => [],
+        searchUsers: async () => [],
+        getUserFollowings: async () => [],
+        getThread: async () => [tweet],
+      },
+    };
+    const r = await dispatchTool("get_thread", { conversationId: "99" }, deps);
+    expect(r.candidates).toHaveLength(1);
+    expect(r.candidates[0].discovery).toEqual({ via: "fixed", query: "thread:99" });
+  });
+
+  test("dispatch unknown tool returns empty candidates and 'unknown tool' text", async () => {
+    const deps = {
+      key: "k",
+      fetchImpl: undefined as never,
+      api: {
+        searchTweets: async () => [],
+        getTrends: async () => [],
+        searchUsers: async () => [],
+        getUserFollowings: async () => [],
+        getThread: async () => [],
+      },
+    };
+    const r = await dispatchTool("no_such_tool", {}, deps);
+    expect(r.candidates).toHaveLength(0);
+    expect(r.toolResultText).toContain("unknown tool");
+  });
 });

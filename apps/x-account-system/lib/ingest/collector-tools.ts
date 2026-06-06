@@ -23,7 +23,7 @@ export const COLLECTOR_TOOLS = [
         queryType: { type: "string", enum: ["Latest", "Top"] },
         via: {
           type: "string",
-          enum: ["fixed", "keyword", "trend", "following"],
+          enum: ["fixed", "keyword", "trend", "user_search", "following"],
           description: "この検索の発見経路。固定watchlist=fixed, 自由検索=keyword, トレンド由来=trend",
         },
       },
