@@ -1,60 +1,84 @@
-# MA Session Teardown (PR-D)
+# Managed Agents (GA) セッション駆動
 
-Managed Agents (Anthropic beta) session の teardown を **固定 order** で実行。
-race condition と「retrieve できないまま archive して stats を失う」課金リーク
-を防ぐ。
+`@anthropic-ai/sdk` の **Managed Agents**（beta header `managed-agents-2026-04-01`）を
+Cloudflare Workers の queue consumer から駆動する。本実装 = `run-session.ts`。
 
-SSoT: feedback `feedback_ma_session_teardown.md` + main-design-all-versions.md §2.12
+> 旧 `teardown.ts`（`send→running→idle→retrieve→archive` 固定 order / `active_seconds`
+> 課金 / archive 前 retrieve しないと idle 課金リーク）は **現行 GA API に存在しない
+> 前提**だったため削除した。GA は **トークン課金**（`session.usage` /
+> `span.model_request_end.model_usage`）で、archive は単なる後始末。
 
-## 固定 order
+## アーキテクチャ（GA・task1 で workerd 実証済）
 
 ```
-send  →  running  →  idle  →  retrieve  →  archive
+Agent (永続/versioned: model+system+tools)  ← 1回作る
+  └─ Session (毎回)  ── Environment (cloud コンテナ雛形)
+        ↑ events.stream (SSE) / events.send (user.message, custom_tool_result)
 ```
 
-| Step | 関数 | 目的 |
-|---|---|---|
-| send       | `waitForSendCompletion`  | 最終 send が flush 済か確認 |
-| running    | `waitForRunningToIdle`   | active 処理が完了するまで wait |
-| idle       | (同上の結果)             | session が idle 落ちした状態 |
-| retrieve   | `retrieveFinalArtifacts` | stats / messages を確保 (**archive 前に必須**) |
-| archive    | `archiveSession`         | session 終了マーク |
+- Anthropic 側が agent ループを実行。worker は **session を作って SSE で駆動**するだけ。
+- tool: `web_search` / `bash` / file 系は `agent_toolset_20260401` 内蔵（**Exa 不要**）。
+- 自前道具（twitterapi / Supabase 等）は **custom tool**: agent が `agent.custom_tool_use`
+  を出す → **host 側（worker）で実行** → `user.custom_tool_result` を返す。
 
-### なぜ順序が必要か
+## フロー（run-session.ts）
 
-- `archive` を `retrieve` 前に呼ぶと session が finalize されて stats
-  (`active_seconds` / `duration_seconds` / `input_tokens` / `output_tokens`)
-  が取れなくなる → 課金検証不能
-- `running` 状態のまま `archive` を呼ぶと 400 エラー
-- 各 step の guard:
-  - `retrieve` は phase=`idle` でないと throw
-  - `archive` は phase=`retrieved` でないと throw
+```
+environments.create({config:{type:"cloud", networking:{type:"unrestricted"}}})
+→ agents.create({name, model, system, tools:[custom...]})
+→ sessions.create({agent:{type:"agent",id,version}, environment_id})
+→ stream = sessions.events.stream(id)        # 先に開く (stream-first)
+→ sessions.events.send(id, {events:[{type:"user.message", content:[{type:"text",text}]}]})
+→ for await (ev of stream):
+     agent.message            → content[].text を累積
+     agent.custom_tool_use    → customToolHandler(name,input) 実行 →
+                                 events.send(user.custom_tool_result, custom_tool_use_id=ev.id)
+     span.model_request_end   → model_usage 記録
+     session.status_idle      → stop_reason.type!=="requires_action" で終了
+     session.status_terminated→ 終了
+→ sessions.retrieve(id).usage   # トークン課金
+→ sessions.archive(id)          # 後始末（固定 order 不要）
+```
 
 ## 使い方
 
 ```ts
-import { teardownMaSession, initSessionState } from "./teardown.ts";
+import { runMaSession } from "./run-session.js";
 
-const sessionId = "ma_xxx";
-initSessionState(sessionId); // 実環境では SDK の sessions.create 結果
-
-// 仕事の本体 (SDK 経由) 完了後...
-const { artifacts, transitions } = await teardownMaSession(sessionId);
-console.log(transitions);
-// → ['init', 'sending', 'running', 'idle', 'retrieved', 'archived']
+const r = await runMaSession({
+  agent: {
+    name: "x-writer",
+    model: "claude-haiku-4-5",        // or sonnet/opus
+    system: "...",
+    tools: [{ name: "get_material", description: "...", input_schema: { type: "object", properties: {} } }],
+  },
+  userMessage: "...",
+  customToolHandler: async (name, input) => {   // 道具実行を host 側に DI
+    if (name === "get_material") return await fetchMaterial(input);
+    return "unknown tool";
+  },
+  onTrace: (m) => { /* withTrace に接続。tokensIn/out/model */ },
+});
+// r: { ok, transitions, agentText, toolCalls, modelUsage, sessionUsage, wallClockMs, ids, error? }
 ```
 
-## Phase 0.5 fallback
+queue case からは collector と同じく `(await import("@anthropic-ai/sdk")).default` を遅延
+import し、`withTrace(ctx,{runId,stageId},…)` で計装する（`onTrace` で meta を返す）。
 
-- `IN_MEMORY_FALLBACK=true` で in-memory state machine 動作
-- `__advancePhase(session_id, phase)` で手動遷移 (テスト用)
-- 実環境では `@anthropic-ai/sdk` の `client.beta.agents.sessions.*` で各 step
-  を SDK 経由に差し替える
+## テスト
 
-## Phase 1+ TODO
+- `IN_MEMORY_FALLBACK=true` or APIキー無 → 実 API を叩かない **stub fallback**
+  （`writer-x.ts` の `useStub` と同型）。
+- 実経路の単体テストは `deps.client` に mock SDK を注入（`run-session.test.ts` 参照）。
 
-- `@anthropic-ai/sdk` の `sessions.retrieve(id)` を呼び `active_seconds`
-  `duration_seconds` `input_tokens` `output_tokens` を回収
-- 回収値を `usage_events` テーブルに書く (PR-A 既設 schema)
-- `sessions.archive(id)` を呼ぶ
-- teardown 失敗時の retry / DLQ (一度だけ retry 後 alert)
+## bundle 注意
+
+SDK 0.101 の self-hosted agent-toolset（`tools/agent-toolset/*` → `node:fs`/
+`node:child_process`）が静的 import graph に含まれるが **cloud MA + SSE では未実行**。
+`wrangler.toml [alias]` で `node:*` を `src/stubs/node-empty.js` に置換して bundle から
+除外している（`scripts/bundle-check.sh` は実 `*.js` のみ検査）。
+
+## 参照
+
+- API 詳細: `/claude-api` skill（Managed Agents セクション）/ `.claude/skills/anthropic-beta-sdk-setup.md`
+- 実証記録: memory `project_x_agentic_rearchitecture`（task1 verdict）

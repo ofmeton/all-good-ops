@@ -759,7 +759,7 @@ v10.3 で「全レビュー指摘 50+ 件オールクリア」を宣言済。残
 - **異常検知ロールバック**: 反映後 7 日間モニタ、PCR -30% / インプ -50% で自動ロールバック
 - **キルスイッチ**: LINE `!stop` で全自動反映 48 時間停止 + 自動投稿停止
 - **brownout mode**: 費用上限 ¥10,000 到達時、投稿停止 + 計測継続 + 通知継続 + バックアップ継続
-- **MA Session 即 archive**: 全 MA session 終了時に retrieve → archive を強制 (v9 B-3 発見、idle 課金リーク防止)
+- **MA Session 即 archive**: 全 MA session 終了時に retrieve → archive を強制 (v9 B-3 発見、idle 課金リーク防止) 〔**2026-06-07 訂正**: GA API(`managed-agents-2026-04-01`) は**トークン課金**(`session.usage`/`model_request_end.model_usage`)で **active_seconds/idle 課金リークは存在しない**。retrieve→archive 固定 order も不要(archive は後始末のみ)。実証=memory `project_x_agentic_rearchitecture` task1〕
 
 ---
 
@@ -923,7 +923,7 @@ v10.3 で「全レビュー指摘 50+ 件オールクリア」を宣言済。残
 | **顧客素材方針** | 投稿生成可 | 同 | 同 | 同 | 同 | "Phase 1 は顧客素材投入禁止、本人事業のみ" (CR-2 + Codex 10-2) | **撤回**、許諾済前提全投入 OK + 投稿文に固有名詞出さない (Editor +5 DLP redaction 一本化) |
 | **non_engineer_rate** | (定義なし) | (定義なし) | (定義なし) | (定義なし) | ≥ 0.30 固定 | 同 | **Phase 別段階運用** (Phase 1 W1-4 ≥ 0.20 / M2-3 ≥ 0.30 / Phase 2+ 0.30-0.40、B-3) |
 | **新類型認定 (Hook)** | HDBSCAN min_cluster_size=5 | 同 | 同 | 同 | Phase 1 緩和 (+10% PCR 改善幅 ≥ 5 件) | **Phase 1 停止** (1 投稿/日 = 月 30 投稿、未知 ~6 件 = HDBSCAN 不可) | Phase 2 以降 (unknown ≥ 50 + impressions ≥ 1,000) |
-| **MA active vs duration billing** | duration_seconds × $0.08/h で保守的試算 (B-3) | 同 | 同 | 同 | 同 | + cost_model.csv 作成 + Phase 1 予算 commit (CR-3) | + expected ¥9,154 / low ¥6,500 / p95 ¥13,800 |
+| **MA active vs duration billing** | duration_seconds × $0.08/h で保守的試算 (B-3) 〔**2026-06-07 訂正**: GA はトークン課金。duration(秒)課金は現行 API に無し〕 | 同 | 同 | 同 | 同 | + cost_model.csv 作成 + Phase 1 予算 commit (CR-3) | + expected ¥9,154 / low ¥6,500 / p95 ¥13,800 |
 | **OAuth PKCE gate** | 言及なし | — | — | — | — | **新章 §3.5 (CR-4)** Phase 1 着手前の実機テスト 4 項目 | 同 |
 | **業種フォーカス順** | (定義なし) | — | — | — | 税理士 → 社労士 → 士業 → 製造 → 教育 → 法務 → AI 委託 → まとめ | 同 | **逆順** (経理 → 製造 → 教育 → AI 委託 → 税理士 → 社労士 → 行政 / 司法 → まとめ + 弁護士)、業法独占薄い順 |
 
@@ -1931,6 +1931,12 @@ v10.2 で追加の発動条件 4 件 (CR-3):
 
 全 MA session 終了時に **retrieve → archive を強制** (idle 課金リーク防止)。
 
+> **【2026-06-07 訂正・実証済】** 上記は pre-GA/憶測の API 形に基づく **stale**。
+> GA Managed Agents(`managed-agents-2026-04-01`) は **トークン課金**で active_seconds /
+> idle 課金リークは存在せず、retrieve→archive の固定 order も不要(archive は単なる
+> 後始末)。実装は `apps/x-account-system/lib/ma/run-session.ts`(SSE-drain)。
+> 旧 `lib/ma/teardown.ts` は削除。根拠: memory `project_x_agentic_rearchitecture` task1 verdict。
+
 ### 8.2 法務章 §10.4 / §10.5 / §10.6 細目 (補完: A-14)
 
 *Version History*: v9 §10 章新設 (10.1-10.6 全項目) → v10 §10 統合 → v10.2 §10.7 公開許諾 gate 追加 (CR-2) → v10.3 §10.7-10.9 (顧客素材方針変更 + note 販売 + 業法ガード)
@@ -2176,7 +2182,7 @@ sampling:
 | **Optimizer Phase 1 (Sonnet weekly)** | 月 4 (週次) | 30,000 (週次データ) | 5,000 (数値ファクト) | 0% | Sonnet 4.6 | $3/$15 per MTok | **¥125** |
 | **Optimizer Phase 2 (Opus weekly + thinking)** | 月 4 | 50,000 (Phase 1 出力 + 過去 Style Guide) | 12,000 (thinking 5,000 + 仮説 7,000) | 0% | Opus 4.7 + extended thinking | $15/$75 per MTok | **¥702** |
 | **Optimizer Phase 3 (施策立案、Sonnet)** | 月 4 | 20,000 | 5,000 | 0% | Sonnet 4.6 | $3/$15 per MTok | **¥110** |
-| **MA session overhead (active_seconds 課金)** | 60 + 4 + 4 + 4 = 72 sessions | — | — | — | MA | $0.005/sec × avg 1.3 min | **¥84** |
+| **MA session overhead (active_seconds 課金)** | 60 + 4 + 4 + 4 = 72 sessions | — | — | — | MA | $0.005/sec × avg 1.3 min | **¥84** 〔**2026-06-07 訂正**: GA はトークン課金で session-hour/active_seconds 課金は無し。この ¥84 行は計上不要〕 |
 | **Image (low 120 / medium 30 / high 0 / edit 0)** | 150 | — | — | 0% | gpt-image-2 | low $0.00816, medium $0.03168 | **¥321** |
 | **X API (1 日 5 投稿 = URL 付き 1 + URL なし 4)** | 月 150 | — | — | — | X PPP | URL 付 $0.200, URL なし $0.015 | **¥1,287** |
 | **twitterapi.io (海外/国内追跡 + transfer learning)** | 月 50 query | — | — | — | $0.15/1000 tweets | — | **¥100** |
@@ -2247,7 +2253,7 @@ sampling:
 | E-11 | AgentRunner 抽象化設計 | ✅ §3.4 採用判断 |
 | E-12 | 初月モニタリング → B-3 実測ベース更新済 | ✅ §3.3 コスト試算更新 |
 | E-13 | research preview 機能を使わない判断 | ✅ §3.4 リスク 3 で対応 |
-| E-14 | active vs duration billing → Console で確認済 (¥3) | ✅ §3.4 B-3 実測知見 |
+| E-14 | active vs duration billing → Console で確認済 (¥3) 〔**2026-06-07 訂正**: GA はトークン課金。active/duration(秒)課金は現行 API に無し〕 | ✅ §3.4 B-3 実測知見 |
 
 ### 11.5 v9 自動反映 (E-8, E-18, E-19, E-20)
 
