@@ -45,6 +45,7 @@ const ALL_JOBS: string[] = [
   "ideation",
   "buzz-ingest",
   "collect",
+  "compose",
   "inspirations-ingest",
   "daily-digest",
   "optimizer-update",

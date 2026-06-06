@@ -13,6 +13,12 @@ function scored(id: string): ScoredCandidate {
       isReply: false,
       conversationId: "c1",
       tweetUrl: "https://x.com/a/status/" + id,
+      likeCount: 10,
+      retweetCount: 2,
+      replyCount: 1,
+      quoteCount: 3,
+      bookmarkCount: 4,
+      viewCount: 100,
     },
     discovery: { via: "keyword", query: "Claude" },
     scores: { freshness: 1, velocity: 2, target_fit: 3, overall: 4 },
@@ -45,5 +51,13 @@ describe("collector-persist", () => {
     expect(row.meta.discovery.via).toBe("keyword");
     expect(row.meta.media).toEqual([{ type: "photo", url: "u" }]);
     expect(row.meta.selection_status).toBe("collected");
+    expect(row.meta.engagement).toEqual({
+      like: 10,
+      retweet: 2,
+      reply: 1,
+      quote: 3,
+      bookmark: 4,
+      view: 100,
+    });
   });
 });

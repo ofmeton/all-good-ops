@@ -12,7 +12,7 @@ export const STAGES: StageMeta[] = [
       { name: "scoring weights", desc: "freshness/velocity/target_fit (collector-config)" },
     ],
     logicKind: "llm", sourcePaths: ["apps/x-account-system/lib/ingest/collector.ts"],
-    upstream: [], downstream: ["ideation"],
+    upstream: [], downstream: ["ideation", "compose"],
   },
   {
     id: "buzz-ingest", label: "Buzz Ingest", group: "ingest",
@@ -31,6 +31,16 @@ export const STAGES: StageMeta[] = [
     keyVariables: [{ name: "overseas≥6 / domestic≥18 / note≥3", desc: "取得本数下限" }],
     logicKind: "io", sourcePaths: ["apps/x-account-system/lib/ingest/"],
     upstream: [], downstream: ["ideation"],
+  },
+  {
+    id: "compose", label: "Compose (writer stub)", group: "generate",
+    purpose: "人間が選抜(queued)した素材から投稿ドラフトを生成する執筆工程。現状は配管 stub（queued 素材の件数/IDを trace 記録）。実 writer 本体は後続ステージ。",
+    objectiveFunction: "選抜素材→チャエン層に刺さる投稿ドラフトの質を最大化（後続実装）",
+    inputs: ["xad.materials_store (selection_status=queued)"],
+    outputs: ["（stub）trace のみ / 後続: post_drafts"],
+    keyVariables: [{ name: "選抜トリガ", desc: "/curation の『執筆へ送る』→ /admin/enqueue?job=compose" }],
+    logicKind: "llm", sourcePaths: ["apps/x-account-system/lib/curation/compose-stub.ts"],
+    upstream: ["collect"], downstream: [],
   },
   {
     id: "ideation", label: "Ideation", group: "ideation",

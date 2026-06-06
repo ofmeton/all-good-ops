@@ -210,6 +210,29 @@ export async function handleJob(
     }
 
     // ----------------------------------------------------------------
+    // compose: 執筆配管 stub — queued 素材の件数/ID を trace 記録
+    // ----------------------------------------------------------------
+    case "compose": {
+      const rid = runId ?? "";
+      const { createClient } = await import("@supabase/supabase-js");
+      const sb = createClient(env.SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY, {
+        db: { schema: process.env.SUPABASE_SCHEMA || "xad" },
+      });
+      const { runComposeStub } = await import("../lib/curation/compose-stub.js");
+      if (rid) {
+        await withTrace(ctx, { runId: rid, stageId: "compose" }, async () => {
+          const out = await runComposeStub(sb as never);
+          console.log(JSON.stringify({ level: "info", msg: "[compose] stub", date: msg.date, count: out.count }));
+          return { result: out.count, output: out };
+        });
+      } else {
+        const out = await runComposeStub(sb as never);
+        console.log(JSON.stringify({ level: "info", msg: "[compose] stub(untraced)", count: out.count }));
+      }
+      break;
+    }
+
+    // ----------------------------------------------------------------
     // inspirations-ingest: 週次 inspirations 取得 (W5-3)
     // ----------------------------------------------------------------
     case "inspirations-ingest": {
