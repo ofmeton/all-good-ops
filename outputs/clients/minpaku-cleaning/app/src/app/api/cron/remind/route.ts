@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createServiceClient } from "@/lib/supabase-server";
 import { isCronAuthenticated } from "@/lib/cron-auth";
+import { serverErrorResponse } from "@/lib/api-error";
 import { notify, resolveStaffRecipients } from "@/lib/notify";
 import { tomorrowInJST } from "@/lib/date";
 
@@ -20,7 +21,7 @@ export async function GET(req: NextRequest) {
     .eq("status", "assigned")
     .not("assigned_staff_id", "is", null);
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return serverErrorResponse(error, "cron/remind");
   }
   const list = (requests ?? []) as unknown as Array<{
     id: string;

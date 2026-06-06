@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createServiceClient } from "@/lib/supabase-server";
 import { isCronAuthenticated } from "@/lib/cron-auth";
+import { serverErrorResponse } from "@/lib/api-error";
 import {
   notify,
   resolveAllAdmins,
@@ -21,7 +22,7 @@ export async function GET(req: NextRequest) {
     .eq("status", "unassigned")
     .lt("assignment_deadline", now);
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return serverErrorResponse(error, "cron/unassigned-alerts");
   }
   const list = (requests ?? []) as unknown as Array<{
     id: string;
