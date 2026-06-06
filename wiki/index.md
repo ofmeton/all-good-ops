@@ -53,7 +53,7 @@
 
 ## dev
 
-- [standards](dev/standards.md) — 開発設計 SSOT（Next.js+Supabase 横断規約・フェーズ別チェックリスト・architect 必読）
+- [standards](dev/standards.md) — 開発設計 SSOT（A:スタック非依存の設計規律 + B:スタック別規約[採用時のみ]・architect 必読）
 
 ## ibasho
 
