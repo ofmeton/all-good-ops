@@ -1,0 +1,115 @@
+import { fetchUserTweets } from "./twitterapi-client.ts";
+import {
+  searchTweets,
+  getTrends,
+  searchUsers,
+  getUserFollowings,
+  getThread,
+  type Tweet,
+} from "./twitterapi-client.ts";
+
+// Existing fetchUserTweets tests
+describe("fetchUserTweets", () => {
+  test("returns mapped tweets from json.tweets", async () => {
+    const mockFetch = (async () => ({
+      ok: true,
+      status: 200,
+      statusText: "OK",
+      json: async () => ({
+        tweets: [{ id: "1", text: "hi", author: { userName: "a" }, createdAt: "x" }],
+      }),
+    })) as unknown as typeof fetch;
+    const out = await fetchUserTweets("a", "k", 20, mockFetch);
+    expect(out).toHaveLength(1);
+    expect(out[0].id).toBe("1");
+  });
+
+  test("throws on non-ok response", async () => {
+    const mockFetch = (async () => ({
+      ok: false,
+      status: 500,
+      statusText: "ERR",
+      json: async () => ({}),
+    })) as unknown as typeof fetch;
+    await expect(fetchUserTweets("a", "k", 20, mockFetch)).rejects.toThrow(
+      /twitterapi.io error/,
+    );
+  });
+});
+
+function jsonFetch(body: unknown, ok = true): typeof fetch {
+  return (async () =>
+    ({
+      ok,
+      status: ok ? 200 : 500,
+      statusText: ok ? "OK" : "ERR",
+      json: async () => body,
+    }) as Response) as unknown as typeof fetch;
+}
+
+describe("twitterapi-client extended", () => {
+  test("searchTweets returns mapped tweets with extended fields", async () => {
+    const fetchImpl = jsonFetch({
+      tweets: [
+        {
+          id: "1",
+          text: "hi",
+          createdAt: "Sat May 23 13:23:33 +0000 2026",
+          lang: "en",
+          isReply: true,
+          conversationId: "99",
+          url: "https://x.com/a/status/1",
+          likeCount: 10,
+          retweetCount: 2,
+          bookmarkCount: 1,
+          quoteCount: 0,
+          viewCount: 100,
+          author: { userName: "a", isBlueVerified: true },
+          extendedEntities: {
+            media: [{ type: "photo", media_url_https: "https://img/1.jpg" }],
+          },
+        },
+      ],
+    });
+    const out = await searchTweets("Claude min_faves:5", "Latest", "k", fetchImpl);
+    expect(out).toHaveLength(1);
+    const t = out[0];
+    expect(t.isReply).toBe(true);
+    expect(t.conversationId).toBe("99");
+    expect(t.tweetUrl).toBe("https://x.com/a/status/1");
+    expect(t.media).toEqual([{ type: "photo", url: "https://img/1.jpg" }]);
+    expect(t.author.isBlueVerified).toBe(true);
+  });
+
+  test("getTrends returns trend names", async () => {
+    const fetchImpl = jsonFetch({ trends: [{ name: "#AI" }, { name: "Claude" }] });
+    const out = await getTrends(1, "k", fetchImpl);
+    expect(out).toEqual(["#AI", "Claude"]);
+  });
+
+  test("searchUsers returns handles", async () => {
+    const fetchImpl = jsonFetch({ users: [{ userName: "x" }, { userName: "y" }] });
+    const out = await searchUsers("AI news", "k", fetchImpl);
+    expect(out).toEqual(["x", "y"]);
+  });
+
+  test("getUserFollowings returns handles", async () => {
+    const fetchImpl = jsonFetch({ followings: [{ userName: "f1" }] });
+    const out = await getUserFollowings("a", "k", fetchImpl);
+    expect(out).toEqual(["f1"]);
+  });
+
+  test("getThread returns tweets in conversation", async () => {
+    const fetchImpl = jsonFetch({
+      tweets: [{ id: "2", text: "t", createdAt: "x", author: { userName: "a" } }],
+    });
+    const out = await getThread("99", "k", fetchImpl);
+    expect(out[0].id).toBe("2");
+  });
+
+  test("searchTweets throws on non-ok", async () => {
+    await expect(
+      searchTweets("q", "Latest", "k", jsonFetch({}, false)),
+    ).rejects.toThrow(/twitterapi.io error/);
+  });
+});
