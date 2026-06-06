@@ -1,5 +1,6 @@
 import "server-only";
 import { createServiceClient } from "@/lib/supabase-server";
+import { startOfTodayJstIso } from "@/lib/date";
 
 export type NotificationChannel = "line" | "email";
 export type NotificationStatus = "queued" | "sent" | "failed" | "skipped";
@@ -57,15 +58,14 @@ export async function hasSentToday(
   recipient: string,
 ): Promise<boolean> {
   const db = createServiceClient();
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  // 「当日」は JST 基準。サーバ(UTC)ローカルの 0:00 で判定すると JST 早朝に取りこぼす。
   const { data, error } = await db
     .from("notifications_log")
     .select("id")
     .eq("kind", kind)
     .eq("recipient", recipient)
     .eq("status", "sent")
-    .gte("sent_at", today.toISOString())
+    .gte("sent_at", startOfTodayJstIso())
     .limit(1);
   if (error) throw error;
   return (data?.length ?? 0) > 0;

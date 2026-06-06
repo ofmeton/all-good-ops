@@ -34,6 +34,8 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> },
 ) {
   const { id } = await params;
+  if (!z.string().uuid().safeParse(id).success)
+    return NextResponse.json({ error: "id が不正です" }, { status: 400 });
   const parsed = patchSchema.safeParse(await req.json());
   if (!parsed.success)
     return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
@@ -67,6 +69,8 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> },
 ) {
   const { id } = await params;
+  if (!z.string().uuid().safeParse(id).success)
+    return NextResponse.json({ error: "id が不正です" }, { status: 400 });
   const parsed = reportSchema.safeParse(await req.json());
   if (!parsed.success)
     return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });

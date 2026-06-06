@@ -2,24 +2,17 @@ import { NextResponse, type NextRequest } from "next/server";
 import { createServiceClient } from "@/lib/supabase-server";
 import { isCronAuthenticated } from "@/lib/cron-auth";
 import { notify, resolveStaffRecipients } from "@/lib/notify";
-
-// 翌日の YYYY-MM-DD（UTC 基準）。Cron は UTC 08:00 起動（vercel.json）で
-// その時点では UTC 日付と JST 日付が一致するため、JST「明日」の依頼を正しく拾える。
-// Cron 時刻を 00:00〜14:59 UTC 範囲に変える場合は日付ずれが起きるので注意。
-function tomorrowDateStr(): string {
-  const d = new Date();
-  d.setDate(d.getDate() + 1);
-  return d.toISOString().slice(0, 10);
-}
+import { tomorrowInJST } from "@/lib/date";
 
 // 前日17:00 に Vercel Cron で呼ばれ、翌日チェックインの assigned 依頼の担当スタッフへ
 // リマインドを送る。dedupeToday=true で重複起動を防御する。
+// 「翌日」は JST 基準（tomorrowInJST）で算出するため Cron の起動時刻に依存しない。
 export async function GET(req: NextRequest) {
   if (!isCronAuthenticated(req)) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
   const db = createServiceClient();
-  const tomorrow = tomorrowDateStr();
+  const tomorrow = tomorrowInJST();
   const { data: requests, error } = await db
     .from("cleaning_requests")
     .select("id, property_id, checkin_date, checkout_date, assigned_staff_id, properties(name)")

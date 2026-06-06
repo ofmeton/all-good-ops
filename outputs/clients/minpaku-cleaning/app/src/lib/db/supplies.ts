@@ -33,6 +33,18 @@ export async function createSupplyRequest(
     .eq("property_id", input.property_id)
     .maybeSingle();
   if (!assignment) throw new Error("この物件の担当ではありません");
+  // request_id を紐付ける場合、その依頼が同じ物件のものか検証する（IDOR 防止）。
+  if (input.request_id) {
+    const { data: req } = await db
+      .from("cleaning_requests")
+      .select("property_id")
+      .eq("id", input.request_id)
+      .maybeSingle();
+    if (!req) throw new Error("依頼が見つかりません");
+    if (req.property_id !== input.property_id) {
+      throw new Error("依頼と物件が一致しません");
+    }
+  }
   const { data, error } = await db
     .from("supply_requests")
     .insert({
