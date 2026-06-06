@@ -58,8 +58,8 @@ export async function enqueueCompose(): Promise<string | null> {
   const base = process.env.WORKER_BASE_URL;
   const key = process.env.OAUTH_ADMIN_SECRET;
   if (!base || !key) throw new Error("WORKER_BASE_URL / OAUTH_ADMIN_SECRET 未設定");
-  const url = `${base.replace(/\/$/, "")}/admin/enqueue?job=compose&key=${encodeURIComponent(key)}`;
-  const res = await fetch(url, { method: "GET" });
+  const url = `${base.replace(/\/$/, "")}/admin/enqueue?job=compose`;
+  const res = await fetch(url, { method: "GET", headers: { Authorization: `Bearer ${key}` } });
   if (!res.ok) throw new Error(`enqueue compose failed: HTTP ${res.status}`);
   const body = (await res.json()) as { ok?: boolean; enqueued?: { runId?: string } };
   return body.enqueued?.runId ?? null;

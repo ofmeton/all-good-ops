@@ -227,7 +227,9 @@ export default {
     // 管理用: cron job を手動で enqueue（OAUTH_ADMIN_SECRET ゲート）。
     // GET /admin/enqueue?job=<name>&key=<secret>  → 該当 job を即 enqueue（consumer が処理）
     if (url.pathname === "/admin/enqueue") {
-      const key = url.searchParams.get("key");
+      const authHeader = request.headers.get("authorization");
+      const bearer = authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : null;
+      const key = bearer ?? url.searchParams.get("key");
       if (!env.OAUTH_ADMIN_SECRET || key !== env.OAUTH_ADMIN_SECRET) {
         return new Response("unauthorized", { status: 401 });
       }
