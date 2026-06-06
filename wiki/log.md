@@ -335,3 +335,9 @@ ai-radar プロジェクトを完全撤廃。Free tier 枠空け含む整理。
 - dev クラスタ新設: dev/standards.md（Next.js+Supabase 横断規約・フェーズ別チェックリスト・architect 必読）
 - 散在素材（engineering-principles 6 原則 / skills 6 / feedback 7+）を「地図＋1行規約」として集約。原文は各 skill が正本（drift 防止）
 - agent teams 開発オーケストレーション体制構築の第1工程（spec: ~/.claude/plans/ok-lazy-hellman.md）
+
+## [2026-06-06] phase | agent-teams 体制 Phase 1-3 - architect 新設・implementer 拡張・playbook
+- standards をスタック非依存 A / スタック別 B に再構成（技術スタック固定を解消・選定は案件ごと architect 判断）
+- architect 新設（設計専任・読み取り専用・SSOT 必読・ユーザー/改善シナリオ網羅を設計ステップ化）
+- system-engineer を実装担当に拡張（陳腐化参照 mcp-architect/quality-auditor を修正・agent teams 振る舞い追加）
+- dev/agent-teams-playbook.md 新設（1案件=1worktree=1team・最大4人・reviewer レシピ・ガードレール・有効化手順）
