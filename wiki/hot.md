@@ -1,7 +1,7 @@
 ---
 type: meta
 title: "Hot Cache"
-updated: 2026-06-06
+updated: 2026-06-07
 ---
 
 # Recent Context
@@ -9,23 +9,23 @@ updated: 2026-06-06
 > セッション間で保持される ~500 words のコンテキストキャッシュ。セッション開始時に最優先で読む。詳細: [[SCHEMA]] §ホットキャッシュ。
 
 ## Last Updated
-2026-06-06 — **agent teams 開発オーケストレーション体制を構築**（Claude Code 並列チーム機能）。1案件=1worktree=1team・最大4人（lead/architect/implementer/reviewer）。設計 SSOT [[dev/standards]] 新設（A:スタック非依存の設計規律 + B:スタック別規約[採用時のみ]、**技術スタックは案件ごと選定**）。**architect 新設**（設計専任・読み取り専用・opus・ユーザー/改善シナリオ網羅を設計ステップ化）。**system-engineer を implementer に拡張**（陳腐化参照 mcp-architect/quality-auditor 修正）。運用正本 [[dev/agent-teams-playbook]]。`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` 投入済（要 v2.1.32+）。
+2026-06-07 — **session-retrospective スキルを実働化 + memory 棚卸し**（PR#117/#118）。スキル改訂: ①ループを閉じる §0.5 前回フォローアップ（improvement-log を読み返し status 更新・再計測。cron停止中の唯一の消費経路）②保存関門（memory/skill は「既存追記 or 保留」がデフォルト・一般化原則は wiki へ）③観点レンズ（未活用資産/プロンプト改善/Claude機能/トークンコスパ、ヒット時のみ）。191→125行に短縮。memory 棚卸し: 236→206件（project6件索引降格・廃止案件9件削除・クラスタ21件を wiki playbook へ集約）。
 
 ## Current Focus
-- **agent teams 初実走（次の実開発）**: playbook に沿って 1 案件で設計→承認→実装→レビュー→人間ゲートを 1 サイクル。手戻り減・トークン対効果を usage-log で評価。品質 hook（テスト緑強制 TaskCompleted）は効果を見てから追加。
+- **新 retro スキルの定着確認（次回）**: 「振り返って」で §0.5 が前回 improvement-log を読み返し再計測から始まるか / 保存関門で新規memoryが抑制されるか。
+- **agent teams 初実走（次の実開発）**: playbook に沿って設計→承認→実装→レビュー→人間ゲートを 1 サイクル。手戻り減・トークン対効果を usage-log で評価。
 - **🔴 はぐりん persona 運用**: monetize-os 廃止で収益化委譲先が消失 → 名義境界の戦略再判断が未着手。
-- **運用ハイジーン**: hook 化で再建済（cron復活せず）。worktree-hygiene-scan / stop-hygiene-reminder。
 - **🔴 ミナト広告設定（再開待ち）**: chrome-devtools MCP 接続待ち。[[project-minato-ad-settings]]
 
 ## Recently Touched
-- [[dev/standards]] / [[dev/agent-teams-playbook]] / `.claude/agents/dev-automation/architect.md`（新設）
-- `.claude/agents/dev-automation/system-engineer.md`（implementer 拡張）/ `.claude/settings.json`（agent teams flag）/ spec `~/.claude/plans/ok-lazy-hellman.md`
-- [[../outputs/retrospectives/2026-06-05-2147-anthropic-skill-alignment]] / PR#94(22スキルSKILL.md化)
+- `.claude/skills/session-retrospective/SKILL.md`（実働化）/ [[dev/external-api-ops]] [[dev/vercel-deploy-gotchas]] [[dev/subagent-dispatch]] [[business/freee-invoice]]（クラスタ集約・新設）
+- memory MEMORY.md（索引10行除去）/ [[../outputs/retrospectives/2026-06-07-0026-retro-skill-and-memory-cleanup]]
+- [[dev/standards]] / [[dev/agent-teams-playbook]]（前回 agent teams 体制）
 
 ## Open Questions / Frontiers
+- retro スキル: §0.5 の再計測が機能し改善が定着するか / memory 肥大が再発しないか
 - agent teams: 実走でトークン対効果が見合うか / 品質 hook を入れるタイミング
 - はぐりん収益化: monetize-os 廃止後の委譲先（戦略再判断）
-- スキル頻度監視: revisit 時に low-freq を plugin 化するか
 
 ## Conventions
 - 500 words 以内 / declarative present tense / 全置換更新（古い項目は間引く）
