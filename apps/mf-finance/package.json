@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node --test test/",
+    "test": "node --test test/*.mjs",
     "normalize": "node scripts/normalize.mjs",
     "detect": "node scripts/detect-recurring.mjs",
     "load": "node scripts/load.mjs"
