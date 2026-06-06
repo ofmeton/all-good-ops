@@ -38,7 +38,7 @@
     "build:registry": "tsx scripts/build-registry.ts"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.36.0",
+    "@anthropic-ai/sdk": "^0.101.0",
     "@supabase/supabase-js": "^2.45.0",
     "axios": "^1.16.1",
     "dotenv": "^16.4.5",

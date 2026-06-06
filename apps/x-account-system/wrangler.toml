@@ -20,6 +20,19 @@ main = "src/worker.ts"
 compatibility_date = "2026-05-01"
 compatibility_flags = ["nodejs_compat"]
 
+# --------------------------------------------------------------------
+# モジュール alias: @anthropic-ai/sdk(0.101) の self-hosted agent-toolset が
+# 静的 import graph 経由で node:fs/node:fs/promises/node:child_process を
+# bundle に持ち込む。本 worker は cloud Managed Agents + SSE のみ使用し当該
+# コードは実行されない (task1 実証) ため空 stub に置換して bundle から除外。
+# workerd は node:child_process 非対応。本番自前コードは node:fs/child_process
+# 不使用 (使用は *.test.ts のみ=bundle 対象外)。詳細: src/stubs/node-empty.js
+# --------------------------------------------------------------------
+[alias]
+"node:child_process" = "./src/stubs/node-empty.js"
+"node:fs" = "./src/stubs/node-empty.js"
+"node:fs/promises" = "./src/stubs/node-empty.js"
+
 # 観測性 (設計 §observability、cron run を root span として記録)
 [observability]
 enabled = true
