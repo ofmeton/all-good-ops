@@ -76,6 +76,14 @@ export function buildMaterialRow(
       collected_at,
       selection_status: "collected",
       cost_jpy: c.costJpy,
+      engagement: {
+        like: c.tweet.likeCount ?? 0,
+        retweet: c.tweet.retweetCount ?? 0,
+        reply: c.tweet.replyCount ?? 0,
+        quote: c.tweet.quoteCount ?? 0,
+        bookmark: c.tweet.bookmarkCount ?? 0,
+        view: c.tweet.viewCount ?? 0,
+      },
     },
   };
 }
