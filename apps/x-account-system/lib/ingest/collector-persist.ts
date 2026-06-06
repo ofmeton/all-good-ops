@@ -91,7 +91,11 @@ export async function saveScoredMaterials(
     const { redactedText, highRiskHits } = redact(c.tweet.text);
     const row = buildMaterialRow(c, redactedText, highRiskHits > 0);
     const { error } = await sb.from("materials_store").insert(row);
-    if (!error) saved += 1;
+    if (error) {
+      console.warn(JSON.stringify({ level: "warn", msg: "[collect] material insert failed", tweet_id: c.tweet.id, error: error.message }));
+    } else {
+      saved += 1;
+    }
   }
   return saved;
 }

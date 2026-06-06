@@ -198,12 +198,13 @@ export async function handleJob(
           return { result: inserted, output: { inserted }, meta: traceMeta };
         });
       } else {
-        await runCollect({
+        const inserted = await runCollect({
           anthropic: anthropic as never,
           sb: sb as never,
           twitterApiKey: env.TWITTERAPI_IO_KEY,
           fetchImpl: fetch,
         });
+        console.log(JSON.stringify({ level: "info", msg: "[collect] 完了(untraced)", date: msg.date, inserted }));
       }
       break;
     }
