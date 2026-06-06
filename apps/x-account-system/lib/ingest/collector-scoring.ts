@@ -86,6 +86,12 @@ interface RawScore {
   reason: string;
 }
 
+/** LLM 出力の数値フィールドを安全に number へ変換。NaN/null/文字列は 0 */
+function toNum(v: unknown): number {
+  const n = Number(v);
+  return Number.isFinite(n) ? n : 0;
+}
+
 function chunk<T>(arr: T[], n: number): T[][] {
   const out: T[][] = [];
   for (let i = 0; i < arr.length; i += n) out.push(arr.slice(i, i + n));
@@ -135,7 +141,8 @@ export async function scoreCandidates(
       promptText: `${system}\n\n---\n\n${userPrompt}`,
     });
 
-    const rawScores = ((out.toolUse as { scores?: RawScore[] })?.scores ?? []) as RawScore[];
+    const rawRaw = (out.toolUse as { scores?: unknown })?.scores;
+    const rawScores: RawScore[] = Array.isArray(rawRaw) ? (rawRaw as RawScore[]) : [];
     const byId = new Map(rawScores.map((s) => [s.id, s]));
     const costJpy =
       (((out.meta.tokensIn ?? 0) / 1_000_000) * 3 +
@@ -148,10 +155,10 @@ export async function scoreCandidates(
         ...c,
         scores: s
           ? {
-              freshness: s.freshness,
-              velocity: s.velocity,
-              target_fit: s.target_fit,
-              overall: s.overall,
+              freshness: toNum(s.freshness),
+              velocity: toNum(s.velocity),
+              target_fit: toNum(s.target_fit),
+              overall: toNum(s.overall),
             }
           : { freshness: 0, velocity: 0, target_fit: 0, overall: 0 },
         scoreReason: s ? s.reason : "スコア欠落（未採点・全保存方針で保持）",
