@@ -32,7 +32,7 @@ export const COLLECTOR_TOOLS = [
   },
   {
     name: "get_trends",
-    description: "海外トレンド取得（woeid: 1=worldwide, 23424977=US）",
+    description: "海外トレンド取得（woeid: 23424977=US 推奨。海外ネタ先取り用）",
     input_schema: {
       type: "object",
       properties: { woeid: { type: "number" } },

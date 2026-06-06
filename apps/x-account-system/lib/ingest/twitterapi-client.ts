@@ -159,7 +159,7 @@ export async function searchTweets(
   return raw.map(mapTweet);
 }
 
-/** 海外トレンド取得（woeid: 1=worldwide, 23424977=US） */
+/** 海外トレンド取得（woeid: 23424977=US 推奨。woeid=1 は実測で日本が返るため使わない） */
 export async function getTrends(
   woeid: number,
   key: string,
@@ -167,8 +167,9 @@ export async function getTrends(
 ): Promise<string[]> {
   const json = await apiGet("/twitter/trends", { woeid: String(woeid) }, key, fetchImpl);
   const trendsRaw = json.trends ?? [];
-  const trends = (Array.isArray(trendsRaw) ? trendsRaw : []) as Array<{ name?: string }>;
-  return trends.map((t) => t.name ?? "").filter(Boolean);
+  // Real response: { trends: [{ trend: { name: "...", ... } }, ...] }
+  const trends = (Array.isArray(trendsRaw) ? trendsRaw : []) as Array<{ trend?: { name?: string } }>;
+  return trends.map((t) => t.trend?.name ?? "").filter(Boolean);
 }
 
 /** 新ソース候補をキーワードで発見 */
@@ -177,10 +178,12 @@ export async function searchUsers(
   key: string,
   fetchImpl: typeof fetch = fetch,
 ): Promise<string[]> {
-  const json = await apiGet("/twitter/user/search", { keyword }, key, fetchImpl);
+  // Real API param is "query" (NOT "keyword"). Keep function param named `keyword`.
+  const json = await apiGet("/twitter/user/search", { query: keyword }, key, fetchImpl);
   const usersRaw = json.users ?? [];
-  const users = (Array.isArray(usersRaw) ? usersRaw : []) as Array<{ userName?: string }>;
-  return users.map((u) => u.userName ?? "").filter(Boolean);
+  // Real response: { users: [{ screen_name: "..." }] } — no userName field on search results
+  const users = (Array.isArray(usersRaw) ? usersRaw : []) as Array<{ userName?: string; screen_name?: string }>;
+  return users.map((u) => u.screen_name ?? u.userName ?? "").filter(Boolean);
 }
 
 /** 信頼ソースのフォロー先から新ソース発見 */
@@ -191,8 +194,8 @@ export async function getUserFollowings(
 ): Promise<string[]> {
   const json = await apiGet("/twitter/user/followings", { userName: handle }, key, fetchImpl);
   const followingsRaw = json.followings ?? [];
-  const f = (Array.isArray(followingsRaw) ? followingsRaw : []) as Array<{ userName?: string }>;
-  return f.map((u) => u.userName ?? "").filter(Boolean);
+  const f = (Array.isArray(followingsRaw) ? followingsRaw : []) as Array<{ userName?: string; screen_name?: string }>;
+  return f.map((u) => u.userName ?? u.screen_name ?? "").filter(Boolean);
 }
 
 /** スレッド全文復元 */
@@ -201,9 +204,10 @@ export async function getThread(
   key: string,
   fetchImpl: typeof fetch = fetch,
 ): Promise<Tweet[]> {
+  // Real API param is "tweetId" (NOT "conversationId"). Keep function param named `conversationId`.
   const json = await apiGet(
     "/twitter/tweet/thread_context",
-    { conversationId },
+    { tweetId: conversationId },
     key,
     fetchImpl,
   );

@@ -88,13 +88,13 @@ describe("twitterapi-client extended", () => {
   });
 
   test("getTrends returns trend names", async () => {
-    const fetchImpl = jsonFetch({ trends: [{ name: "#AI" }, { name: "Claude" }] });
+    const fetchImpl = jsonFetch({ trends: [{ trend: { name: "#AI" } }, { trend: { name: "Claude" } }] });
     const out = await getTrends(1, "k", fetchImpl);
     expect(out).toEqual(["#AI", "Claude"]);
   });
 
   test("searchUsers returns handles", async () => {
-    const fetchImpl = jsonFetch({ users: [{ userName: "x" }, { userName: "y" }] });
+    const fetchImpl = jsonFetch({ users: [{ screen_name: "x" }, { screen_name: "y" }] });
     const out = await searchUsers("AI news", "k", fetchImpl);
     expect(out).toEqual(["x", "y"]);
   });

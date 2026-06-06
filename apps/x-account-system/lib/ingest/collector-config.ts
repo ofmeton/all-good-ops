@@ -11,7 +11,7 @@ export interface CollectorWatchSource {
 export interface CollectorConfig {
   /** L1: 固定 watchlist（初期ソース） */
   watchlist: CollectorWatchSource[];
-  /** L4: 海外トレンド woeid（1=worldwide, 23424977=US） */
+  /** L4: 海外トレンド woeid（海外=US(23424977)。woeid=1 は実測で日本が返るため使わない） */
   trendWoeids: number[];
   /** L5(数値側): 3軸の重み（overall 算出の参考。LLM に rubric として渡す） */
   scoringWeights: { freshness: number; velocity: number; target_fit: number };
@@ -68,7 +68,7 @@ export const COLLECTOR_CONFIG: CollectorConfig = {
     // --- en_curator: 英語 AI 解説者（海外バズ早期検知）---
     { handle: "gerardsans", category: "en_curator" },
   ],
-  trendWoeids: [1, 23424977],
+  trendWoeids: [23424977],
   scoringWeights: { freshness: 0.3, velocity: 0.3, target_fit: 0.4 },
   maxFetchPerRun: 120,
   maxExploreIterations: 8,
