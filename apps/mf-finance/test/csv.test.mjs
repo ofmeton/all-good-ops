@@ -12,3 +12,8 @@ test('空行を無視しヘッダ込み全行返す', () => {
   const text = '"日付","金額"\n"2026/05/29","-400"\n\n';
   assert.deepEqual(parseCsv(text), [['日付','金額'],['2026/05/29','-400']]);
 });
+
+test('引用符内の改行を含むフィールドを結合して1行にする', () => {
+  const text = '"1","#メモ\n続き","ID1"\n"2","normal","ID2"';
+  assert.deepEqual(parseCsv(text), [['1','#メモ\n続き','ID1'],['2','normal','ID2']]);
+});
