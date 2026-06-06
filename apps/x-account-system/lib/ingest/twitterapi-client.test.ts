@@ -1,5 +1,5 @@
-import { fetchUserTweets } from "./twitterapi-client.ts";
 import {
+  fetchUserTweets,
   searchTweets,
   getTrends,
   searchUsers,
@@ -66,7 +66,10 @@ describe("twitterapi-client extended", () => {
           viewCount: 100,
           author: { userName: "a", isBlueVerified: true },
           extendedEntities: {
-            media: [{ type: "photo", media_url_https: "https://img/1.jpg" }],
+            media: [
+              { type: "photo", media_url_https: "https://img/1.jpg" },
+              { type: "animated_gif", media_url_https: "https://img/2.gif" },
+            ],
           },
         },
       ],
@@ -77,7 +80,10 @@ describe("twitterapi-client extended", () => {
     expect(t.isReply).toBe(true);
     expect(t.conversationId).toBe("99");
     expect(t.tweetUrl).toBe("https://x.com/a/status/1");
-    expect(t.media).toEqual([{ type: "photo", url: "https://img/1.jpg" }]);
+    expect(t.media).toEqual([
+      { type: "photo", url: "https://img/1.jpg" },
+      { type: "gif", url: "https://img/2.gif" },
+    ]);
     expect(t.author.isBlueVerified).toBe(true);
   });
 

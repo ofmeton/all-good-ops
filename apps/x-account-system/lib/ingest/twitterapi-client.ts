@@ -99,7 +99,7 @@ async function apiGet(
   const qs = new URLSearchParams(params).toString();
   const res = await fetchImpl(`${BASE_URL}${path}?${qs}`, {
     method: "GET",
-    headers: { "x-api-key": key, "Content-Type": "application/json" },
+    headers: { "x-api-key": key, "Accept": "application/json" },
   });
   if (!res.ok) {
     throw new Error(`twitterapi.io error: ${res.status} ${res.statusText} for ${path}`);
@@ -127,27 +127,16 @@ export async function fetchUserTweets(
   maxResults = 20,
   fetchImpl: typeof fetch = fetch,
 ): Promise<Tweet[]> {
-  const query = `from:${userName} -is:retweet`;
-  const url = `${BASE_URL}/twitter/tweet/advanced_search?query=${encodeURIComponent(query)}&queryType=Latest`;
-
-  const res = await fetchImpl(url, {
-    method: "GET",
-    headers: {
-      "x-api-key": key,
-      "Content-Type": "application/json",
-    },
-  });
-
-  if (!res.ok) {
-    throw new Error(
-      `twitterapi.io error: ${res.status} ${res.statusText} for user=${userName}`,
-    );
-  }
-
-  const json = (await res.json()) as TwitterApiResponse;
+  const json = await apiGet(
+    "/twitter/tweet/advanced_search",
+    { query: `from:${userName} -is:retweet`, queryType: "Latest" },
+    key,
+    fetchImpl,
+  );
   // Real API returns json.tweets (NOT json.data — legacy fallback included defensively)
-  const tweets = (json.tweets ?? json.data ?? []).slice(0, maxResults);
-  return tweets.map(mapTweet);
+  const arr = json.tweets ?? json.data ?? [];
+  const raw = (Array.isArray(arr) ? arr : []) as RawTweet[];
+  return raw.slice(0, maxResults).map(mapTweet);
 }
 
 export type QueryType = "Latest" | "Top";
@@ -165,7 +154,8 @@ export async function searchTweets(
     key,
     fetchImpl,
   );
-  const raw = (json.tweets ?? json.data ?? []) as RawTweet[];
+  const arr = json.tweets ?? json.data ?? [];
+  const raw = (Array.isArray(arr) ? arr : []) as RawTweet[];
   return raw.map(mapTweet);
 }
 
@@ -176,7 +166,8 @@ export async function getTrends(
   fetchImpl: typeof fetch = fetch,
 ): Promise<string[]> {
   const json = await apiGet("/twitter/trends", { woeid: String(woeid) }, key, fetchImpl);
-  const trends = (json.trends ?? []) as Array<{ name?: string }>;
+  const trendsRaw = json.trends ?? [];
+  const trends = (Array.isArray(trendsRaw) ? trendsRaw : []) as Array<{ name?: string }>;
   return trends.map((t) => t.name ?? "").filter(Boolean);
 }
 
@@ -187,7 +178,8 @@ export async function searchUsers(
   fetchImpl: typeof fetch = fetch,
 ): Promise<string[]> {
   const json = await apiGet("/twitter/user/search", { keyword }, key, fetchImpl);
-  const users = (json.users ?? []) as Array<{ userName?: string }>;
+  const usersRaw = json.users ?? [];
+  const users = (Array.isArray(usersRaw) ? usersRaw : []) as Array<{ userName?: string }>;
   return users.map((u) => u.userName ?? "").filter(Boolean);
 }
 
@@ -198,7 +190,8 @@ export async function getUserFollowings(
   fetchImpl: typeof fetch = fetch,
 ): Promise<string[]> {
   const json = await apiGet("/twitter/user/followings", { userName: handle }, key, fetchImpl);
-  const f = (json.followings ?? []) as Array<{ userName?: string }>;
+  const followingsRaw = json.followings ?? [];
+  const f = (Array.isArray(followingsRaw) ? followingsRaw : []) as Array<{ userName?: string }>;
   return f.map((u) => u.userName ?? "").filter(Boolean);
 }
 
@@ -214,6 +207,7 @@ export async function getThread(
     key,
     fetchImpl,
   );
-  const raw = (json.tweets ?? json.data ?? []) as RawTweet[];
+  const arr = json.tweets ?? json.data ?? [];
+  const raw = (Array.isArray(arr) ? arr : []) as RawTweet[];
   return raw.map(mapTweet);
 }
