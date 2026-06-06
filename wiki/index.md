@@ -51,6 +51,10 @@
 - [streams](self/streams.md) — 現在の収入源ポートフォリオ（BSA・RICE CREAM・Shopify・稼働時間）
 - [engineering-principles](self/engineering-principles.md) — 振り返り由来のエンジニアリング/プロセス原則（連結学びノート・成長型）
 
+## dev
+
+- [standards](dev/standards.md) — 開発設計 SSOT（Next.js+Supabase 横断規約・フェーズ別チェックリスト・architect 必読）
+
 ## ibasho
 
 - [overview](ibasho/overview.md) — 子どもの居場所構想 SSOT（draft、ingest で育てる）
@@ -76,7 +80,7 @@
 ---
 
 ## 統計（lint で更新）
-- 総ページ数: 23（SCHEMA/index/log 3 + コンテンツ 20：bsa 6 + icecream 1 + portfolio 1 + personal 1 + lp-hp-design 3 + image-processing 1 + ai-industry 1 + people 1 + self 3 + ibasho 1 + external 1）
+- 総ページ数: 24（SCHEMA/index/log 3 + コンテンツ 21：bsa 6 + icecream 1 + portfolio 1 + personal 1 + lp-hp-design 3 + image-processing 1 + ai-industry 1 + people 1 + self 3 + dev 1 + ibasho 1 + external 1）
 - 最終 ingest: 2026-05-10 (memory → raw 4本 → wiki 5ページ一括 ingest)
 - 最終 lint: 2026-05-10 (Phase 3 区切り lint - orphan 4 件全解消・曖昧 wikilink 修正)
-- 最終 phase: 2026-05-15 (Phase 3 完了 - external クラスタ作成・context → wiki 移行完了)
+- 最終 phase: 2026-06-06 (agent-teams 体制 Phase 0 - dev クラスタ作成・設計 SSOT standards.md 追加)
