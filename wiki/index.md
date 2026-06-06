@@ -9,6 +9,8 @@
 
 ## business
 
+- [freee-invoice](business/freee-invoice.md) — freee 請求書(invoice/iv API)運用 SSOT（company_id バグ・立替分類・POST 最小ペイロード）
+
 ### bsa
 - [overview](business/bsa/overview.md) — BSA 戦略全体像（4 ヶ月タイムボックス）
 - [pricing-catalog](business/bsa/pricing-catalog.md) — 商品ライン L1/L2/L3/L4 価格・納期・オプション SSOT
@@ -55,6 +57,9 @@
 
 - [standards](dev/standards.md) — 開発設計 SSOT（A:スタック非依存の設計規律 + B:スタック別規約[採用時のみ]・architect 必読）
 - [agent-teams-playbook](dev/agent-teams-playbook.md) — agent teams 運用正本（チーム編成・ワークフロー・ガードレール・有効化手順）
+- [external-api-ops](dev/external-api-ops.md) — 外部 API 運用 playbook（コスト先出し・料金 WebSearch・curl 事前確認・wrapper 1 ファイル化・社会 API first try・SDK deploy 検証）
+- [vercel-deploy-gotchas](dev/vercel-deploy-gotchas.md) — Vercel デプロイ ハマり集（env REST API 投入・env pull 罠・deploy 切り分け・Hobby cron・team author email・monorepo cwd）
+- [subagent-dispatch](dev/subagent-dispatch.md) — サブエージェント dispatch playbook（検証コマンド必須・固定制約・branch 報告・ts-jest CJS NG list・並列 shared file 直列化）
 
 ## ibasho
 
