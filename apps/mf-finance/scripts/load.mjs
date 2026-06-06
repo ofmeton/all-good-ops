@@ -3,8 +3,9 @@ import { readFileSync } from 'node:fs';
 import { createClient } from '@supabase/supabase-js';
 
 const url = process.env.SUPABASE_URL;
-const key = process.env.SUPABASE_SERVICE_KEY;
-if (!url || !key) { console.error('SUPABASE_URL / SUPABASE_SERVICE_KEY 未設定'); process.exit(1); }
+// 金庫(repo-root .env.local)は SUPABASE_SERVICE_ROLE_KEY 名。後方互換で SUPABASE_SERVICE_KEY も許容。
+const key = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
+if (!url || !key) { console.error('SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY 未設定'); process.exit(1); }
 
 const supabase = createClient(url, key, { db: { schema: 'mf_finance' } });
 const records = JSON.parse(readFileSync('data/normalized.json', 'utf8'));
