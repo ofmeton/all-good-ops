@@ -64,11 +64,17 @@ export async function runCollect(deps: RunCollectDeps): Promise<number> {
     messages.push({ role: "assistant", content: res.content });
     const toolResults: Array<Record<string, unknown>> = [];
     for (const tu of toolUses) {
-      const r = await dispatchTool(tu.name ?? "", (tu.input ?? {}) as Record<string, unknown>, {
-        key: deps.twitterApiKey,
-        fetchImpl: deps.fetchImpl,
-        api: deps.api,
-      });
+      let r;
+      try {
+        r = await dispatchTool(tu.name ?? "", (tu.input ?? {}) as Record<string, unknown>, {
+          key: deps.twitterApiKey,
+          fetchImpl: deps.fetchImpl,
+          api: deps.api,
+        });
+      } catch (e) {
+        console.warn(JSON.stringify({ level: "warn", msg: "[collect] tool dispatch failed (fail-open)", tool: tu.name, error: String(e) }));
+        r = { candidates: [], toolResultText: `[error] ${String(e)}` };
+      }
       candidates.push(...r.candidates);
       toolResults.push({
         type: "tool_result",
