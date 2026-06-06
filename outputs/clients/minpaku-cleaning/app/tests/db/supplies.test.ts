@@ -54,4 +54,51 @@ describe("supply_requests データアクセス", () => {
     const list = await listSupplyRequests(admin);
     expect(list).toHaveLength(2);
   });
+
+  it("他物件の request_id を紐付けた備品依頼は拒否する（IDOR 防止）", async () => {
+    // 別物件 B に属する依頼を作る（担当物件 A とは無関係）
+    const { data: owner2 } = await db.from("owners").insert({ name: "オーナーB" }).select().single();
+    const { data: prop2 } = await db
+      .from("properties").insert({ owner_id: owner2!.id, name: "物件B" }).select().single();
+    const { data: foreignReq } = await db
+      .from("cleaning_requests")
+      .insert({
+        property_id: prop2!.id,
+        checkin_date: "2099-01-02",
+        checkout_date: "2099-01-03",
+        guest_count: 1,
+        status: "unassigned",
+      })
+      .select()
+      .single();
+
+    // 担当物件 A の備品依頼に、他物件 B の request_id を紐付けようとする
+    await expect(
+      createSupplyRequest(staffActor, {
+        property_id: propertyId,
+        request_id: foreignReq!.id,
+        items: "x",
+      }),
+    ).rejects.toThrow("依頼と物件が一致しません");
+  });
+
+  it("自物件の request_id を紐付けた備品依頼は作成できる", async () => {
+    const { data: ownReq } = await db
+      .from("cleaning_requests")
+      .insert({
+        property_id: propertyId,
+        checkin_date: "2099-01-02",
+        checkout_date: "2099-01-03",
+        guest_count: 1,
+        status: "unassigned",
+      })
+      .select()
+      .single();
+    const created = await createSupplyRequest(staffActor, {
+      property_id: propertyId,
+      request_id: ownReq!.id,
+      items: "y",
+    });
+    expect(created.request_id).toBe(ownReq!.id);
+  });
 });

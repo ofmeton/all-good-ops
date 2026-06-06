@@ -11,6 +11,7 @@ import {
   confirmRequest,
   listRequestsForStaff,
   getRequestForStaff,
+  assertStaffAssignedToRequest,
   RequestAlreadyClaimedError,
 } from "@/lib/db/requests";
 import { createServiceClient } from "@/lib/supabase-server";
@@ -239,5 +240,103 @@ describe("cleaning_requests 割当・進行遷移", () => {
     const { data: outsider } = await db.from("staff").insert({ name: "担当外2" }).select().single();
     const result = await getRequestForStaff({ role: "staff", staffId: outsider!.id }, requestId);
     expect(result).toBeNull();
+  });
+
+  it("assertStaffAssignedToRequest は担当本人なら通過する", async () => {
+    const { staffId, requestId } = await seedAssignedStaffAndRequest();
+    await expect(
+      assertStaffAssignedToRequest({ role: "staff", staffId }, requestId),
+    ).resolves.toBeUndefined();
+  });
+
+  it("assertStaffAssignedToRequest は担当外スタッフを拒否する（写真アップロード IDOR 防止）", async () => {
+    const { requestId } = await seedAssignedStaffAndRequest();
+    const { data: outsider } = await db.from("staff").insert({ name: "担当外3" }).select().single();
+    await expect(
+      assertStaffAssignedToRequest({ role: "staff", staffId: outsider!.id }, requestId),
+    ).rejects.toThrow("この物件の担当ではありません");
+  });
+});
+
+describe("cleaning_requests 競合制御（TOCTOU）", () => {
+  async function seedAssignedStaffAndRequest() {
+    const { data: st } = await db.from("staff").insert({ name: "競合スタッフ" }).select().single();
+    await db.from("staff_assignments").insert({ staff_id: st!.id, property_id: propertyId });
+    const req = await createRequest(admin, {
+      property_id: propertyId,
+      checkin_date: dateStr(3),
+      checkout_date: dateStr(5),
+      guest_count: 2,
+    });
+    return { staffId: st!.id as string, requestId: req.id };
+  }
+
+  it("confirmRequest を同時に二重実行しても確定は1回だけ（重複オーナー通知を防ぐ）", async () => {
+    const { staffId, requestId } = await seedAssignedStaffAndRequest();
+    await db
+      .from("cleaning_requests")
+      .update({ status: "reported", assigned_staff_id: staffId })
+      .eq("id", requestId);
+
+    const results = await Promise.allSettled([
+      confirmRequest(admin, requestId),
+      confirmRequest(admin, requestId),
+    ]);
+    expect(results.filter((r) => r.status === "fulfilled")).toHaveLength(1);
+    expect(results.filter((r) => r.status === "rejected")).toHaveLength(1);
+
+    // 通知は確定した1回ぶんのみ（request 単位で隔離。request_id は payload 内）
+    const { data: logs } = await db
+      .from("notifications_log")
+      .select("id")
+      .eq("kind", "request_confirmed")
+      .eq("payload->>request_id", requestId);
+    expect(logs ?? []).toHaveLength(1);
+  });
+
+  it("cancelRequest を同時に二重実行しても成功は1回だけ", async () => {
+    const { requestId } = await seedAssignedStaffAndRequest();
+    const results = await Promise.allSettled([
+      cancelRequest(admin, requestId),
+      cancelRequest(admin, requestId),
+    ]);
+    expect(results.filter((r) => r.status === "fulfilled")).toHaveLength(1);
+    expect(results.filter((r) => r.status === "rejected")).toHaveLength(1);
+  });
+
+  it("startRequest を同時に二重実行しても開始は1回だけ", async () => {
+    const { staffId, requestId } = await seedAssignedStaffAndRequest();
+    const staffActor: Actor = { role: "staff", staffId };
+    await claimRequest(staffActor, requestId); // assigned
+
+    const results = await Promise.allSettled([
+      startRequest(staffActor, requestId),
+      startRequest(staffActor, requestId),
+    ]);
+    expect(results.filter((r) => r.status === "fulfilled")).toHaveLength(1);
+    expect(results.filter((r) => r.status === "rejected")).toHaveLength(1);
+  });
+
+  it("assignRequest は開始済み依頼を割当で上書きしない（start と競合しても torn state にしない）", async () => {
+    const { staffId, requestId } = await seedAssignedStaffAndRequest();
+    const staffActor: Actor = { role: "staff", staffId };
+    await claimRequest(staffActor, requestId); // assigned to X
+    const { data: stY } = await db.from("staff").insert({ name: "競合Y" }).select().single();
+    await db.from("staff_assignments").insert({ staff_id: stY!.id, property_id: propertyId });
+
+    await Promise.allSettled([
+      startRequest(staffActor, requestId), // assigned → in_progress (X)
+      assignRequest(admin, requestId, stY!.id), // reassign → assigned (Y)
+    ]);
+
+    const req = await getRequest(admin, requestId);
+    // 内部整合: in_progress なら担当は X のまま / assigned なら担当は Y。
+    // start の in_progress(X) を assign が担当だけ Y に書き換える torn state を禁止。
+    if (req?.status === "in_progress") {
+      expect(req?.assigned_staff_id).toBe(staffId);
+    } else {
+      expect(req?.status).toBe("assigned");
+      expect(req?.assigned_staff_id).toBe(stY!.id);
+    }
   });
 });

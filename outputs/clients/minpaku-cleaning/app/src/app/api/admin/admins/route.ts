@@ -71,7 +71,8 @@ export async function DELETE(req: NextRequest) {
   const actor = await resolveAdminActor();
   if (!actor) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   const id = new URL(req.url).searchParams.get("id");
-  if (!id) return NextResponse.json({ error: "id required" }, { status: 400 });
+  if (!id || !z.string().uuid().safeParse(id).success)
+    return NextResponse.json({ error: "id が不正です" }, { status: 400 });
   try {
     await deleteAdmin(actor, id);
     return NextResponse.json({ ok: true });

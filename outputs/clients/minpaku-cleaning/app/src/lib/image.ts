@@ -9,8 +9,18 @@ export async function resizeForUpload(
   inputContentType: string,
 ): Promise<{ buffer: Buffer; contentType: string }> {
   const src = input instanceof Buffer ? input : Buffer.from(new Uint8Array(input));
-  const img = sharp(src, { failOn: "none" }).rotate(); // EXIF 回転を保持
-  const meta = await img.metadata();
+  // failOn: "truncated" で破損画像は弾く（"none" は壊れた入力を黙って通す）。
+  const img = sharp(src, { failOn: "truncated" }).rotate(); // EXIF 回転を保持
+  let meta;
+  try {
+    meta = await img.metadata();
+  } catch {
+    throw new Error("対応していない画像形式です");
+  }
+  // ラスター画像として認識できない（= 画像でない / Content-Type 偽装）入力を拒否する。
+  if (!meta.format) {
+    throw new Error("対応していない画像形式です");
+  }
   const longSide = Math.max(meta.width ?? 0, meta.height ?? 0);
   const needsResize = longSide > 1600;
   if (inputContentType === "image/png") {
