@@ -62,7 +62,8 @@ dead_letter_queue = "xad-jobs-dlq"
 # | 毎月1日 00:00| 15:00 (1日) | rotation-notice (token rotation 通知)       |
 [triggers]
 crons = [
-  "0 21 * * *",    # 06:00 JST buzz-ingest (素材収集を最初に)
+  "30 20 * * *",   # 05:30 JST collect (収集エージェント・最初に)
+  "0 21 * * *",    # 06:00 JST buzz-ingest
   "30 21 * * *",   # 06:30 JST ideation (buzz の後で素材→ネタ変換)
   "0 22 * * *",    # 07:00 JST post-morning (朝ピーク1)
   "0 23 * * *",    # 08:00 JST post-morning2 (朝ピーク2)
