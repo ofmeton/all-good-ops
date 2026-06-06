@@ -29,7 +29,8 @@
       ],
       "upstream": [],
       "downstream": [
-        "ideation"
+        "ideation",
+        "compose"
       ]
     },
     {
@@ -86,6 +87,33 @@
       "downstream": [
         "ideation"
       ]
+    },
+    {
+      "id": "compose",
+      "label": "Compose (writer stub)",
+      "group": "generate",
+      "purpose": "人間が選抜(queued)した素材から投稿ドラフトを生成する執筆工程。現状は配管 stub（queued 素材の件数/IDを trace 記録）。実 writer 本体は後続ステージ。",
+      "objectiveFunction": "選抜素材→チャエン層に刺さる投稿ドラフトの質を最大化（後続実装）",
+      "inputs": [
+        "xad.materials_store (selection_status=queued)"
+      ],
+      "outputs": [
+        "（stub）trace のみ / 後続: post_drafts"
+      ],
+      "keyVariables": [
+        {
+          "name": "選抜トリガ",
+          "desc": "/curation の『執筆へ送る』→ /admin/enqueue?job=compose"
+        }
+      ],
+      "logicKind": "llm",
+      "sourcePaths": [
+        "apps/x-account-system/lib/curation/compose-stub.ts"
+      ],
+      "upstream": [
+        "collect"
+      ],
+      "downstream": []
     },
     {
       "id": "ideation",
