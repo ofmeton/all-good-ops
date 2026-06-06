@@ -1,0 +1,14 @@
+{
+  "name": "mf-finance",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test test/",
+    "normalize": "node scripts/normalize.mjs",
+    "detect": "node scripts/detect-recurring.mjs",
+    "load": "node scripts/load.mjs"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0"
+  }
+}
