@@ -2,6 +2,38 @@
   "version": 1,
   "stages": [
     {
+      "id": "collect",
+      "label": "Collector Agent",
+      "group": "ingest",
+      "purpose": "エージェントが探索的にネタを集め(固定/海外トレンド/キーワード/新ソース/スレ復元)、全件3軸スコア＋理由を付けて materials_store へ全保存。",
+      "objectiveFunction": "速報性×velocity×ターゲット適合の高いネタの網羅性を最大化（除外は人間UIに委ね、収集網羅性を最大化）",
+      "inputs": [
+        "twitterapi.io (advanced_search/trends/users/followings/thread)"
+      ],
+      "outputs": [
+        "xad.materials_store (x_inspirations, scores/discovery付き)"
+      ],
+      "keyVariables": [
+        {
+          "name": "探索スコープ",
+          "desc": "固定watchlist＋海外トレンド＋キーワード＋新ソース発見"
+        },
+        {
+          "name": "scoring weights",
+          "desc": "freshness/velocity/target_fit (collector-config)"
+        }
+      ],
+      "logicKind": "llm",
+      "sourcePaths": [
+        "apps/x-account-system/lib/ingest/collector.ts"
+      ],
+      "upstream": [],
+      "downstream": [
+        "ideation",
+        "compose"
+      ]
+    },
+    {
       "id": "buzz-ingest",
       "label": "Buzz Ingest",
       "group": "ingest",
@@ -57,6 +89,74 @@
       ]
     },
     {
+      "id": "compose",
+      "label": "Compose (MA writer)",
+      "group": "generate",
+      "purpose": "人間が選抜(queued)した素材から、Managed Agents writer がリサーチ付きで投稿ドラフトを生成する執筆工程。core_idea(inline)+post_drafts(pending) を作成。",
+      "objectiveFunction": "選抜素材→チャエン層に刺さる投稿ドラフトの質を最大化（数字は素材/web_search で裏取り＝捏造ゼロ）",
+      "inputs": [
+        "xad.materials_store (selection_status=queued)"
+      ],
+      "outputs": [
+        "xad.core_ideas",
+        "xad.post_drafts (human_approval_status=pending)"
+      ],
+      "keyVariables": [
+        {
+          "name": "選抜トリガ",
+          "desc": "/curation の『執筆へ送る』→ /admin/enqueue?job=compose"
+        },
+        {
+          "name": "改善レバー",
+          "desc": "lib/curation/compose-config.ts(数値) / compose-prompts.ts(判断)"
+        }
+      ],
+      "logicKind": "llm",
+      "sourcePaths": [
+        "apps/x-account-system/lib/curation/run-compose.ts",
+        "apps/x-account-system/lib/ma/run-session.ts"
+      ],
+      "upstream": [
+        "collect"
+      ],
+      "downstream": [
+        "check"
+      ]
+    },
+    {
+      "id": "check",
+      "label": "Check (MA checker)",
+      "group": "review",
+      "purpose": "pending ドラフトを MA チェッカーが重複＋ファクト(web_search で嘘フィルタ)点検。完全 soft（block せず常に approved にして人間 LINE 承認へ）。",
+      "objectiveFunction": "完全な嘘・明らかに変な数字・重複を検知して人間に flag 提示（誇張は許容・出典不要・不明は要確認 flag で通す）",
+      "inputs": [
+        "xad.post_drafts (editor_status=pending, human_approval_status=pending)"
+      ],
+      "outputs": [
+        "xad.post_drafts (editor_status=approved, risk_level/risk_reasons)",
+        "LINE 承認依頼(pushApproval)"
+      ],
+      "keyVariables": [
+        {
+          "name": "改善レバー",
+          "desc": "lib/check/check-config.ts(数値) / check-prompts.ts(判断rubric)"
+        },
+        {
+          "name": "起動",
+          "desc": "compose→check 自動連鎖 / job=check"
+        }
+      ],
+      "logicKind": "llm",
+      "sourcePaths": [
+        "apps/x-account-system/lib/check/run-check.ts",
+        "apps/x-account-system/lib/ma/run-session.ts"
+      ],
+      "upstream": [
+        "compose"
+      ],
+      "downstream": []
+    },
+    {
       "id": "ideation",
       "label": "Ideation",
       "group": "ideation",
@@ -80,6 +180,7 @@
         "apps/x-account-system/lib/ideation/ideate.ts"
       ],
       "upstream": [
+        "collect",
         "buzz-ingest",
         "inspirations-ingest"
       ],

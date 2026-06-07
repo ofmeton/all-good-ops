@@ -219,6 +219,7 @@ export async function handleJob(
         db: { schema: process.env.SUPABASE_SCHEMA || "xad" },
       });
       const { runCompose } = await import("../lib/curation/run-compose.js");
+      let draftCount = 0;
       if (rid) {
         // onTrace は素材ごとに発火するためトークンを合算（last-writer-wins を避ける）。
         let tokensIn = 0, tokensOut = 0, traceModel: string | undefined;
@@ -229,6 +230,7 @@ export async function handleJob(
             runId: rid,
             onTrace: (m) => { tokensIn += m.tokensIn ?? 0; tokensOut += m.tokensOut ?? 0; traceModel = m.model ?? traceModel; },
           });
+          draftCount = out.draftCount;
           // 全件失敗（生成 0 件）は zero-yield として error レベルで可視化（黙って ok にしない）。
           const lvl = out.processed > 0 && out.draftCount === 0 ? "error" : "info";
           console.log(JSON.stringify({ level: lvl, msg: "[compose]", date: msg.date, processed: out.processed, drafts: out.draftCount, errors: out.errorCount }));
@@ -236,8 +238,56 @@ export async function handleJob(
         });
       } else {
         const out = await runCompose({ sb: sb as never, apiKey: env.ANTHROPIC_API_KEY });
+        draftCount = out.draftCount;
         const lvl = out.processed > 0 && out.draftCount === 0 ? "error" : "info";
         console.log(JSON.stringify({ level: lvl, msg: "[compose](untraced)", processed: out.processed, drafts: out.draftCount, errors: out.errorCount }));
+      }
+      // compose→check 自動連鎖: draft が出来たら新 runId で check を enqueue。
+      // FK (run_trace.run_id → run.id) のため insertRun→send を直列化（scheduled handler 流儀）。
+      if (draftCount > 0) {
+        // 連鎖 enqueue の失敗で compose 本体を throw させない（throw→queue retry→ドラフト二重生成
+        // を誘発するため）。drafts は生成済。enqueue 失敗は error ログで可視化（手動/次回 check で回収）。
+        try {
+          const { insertRun } = await import("../lib/trace/trace-store.js");
+          const checkRunId = crypto.randomUUID();
+          const trigger = runId ? "webhook" : "cron";
+          await insertRun({ id: checkRunId, job: "check", trigger, date: msg.date, status: "running", attempt: 1 });
+          await env.JOBS.send({ job: "check", date: msg.date, runId: checkRunId });
+          console.log(JSON.stringify({ level: "info", msg: "[compose] → check enqueued", date: msg.date, drafts: draftCount, checkRunId }));
+        } catch (e) {
+          console.log(JSON.stringify({ level: "error", msg: "[compose] check enqueue failed (drafts created, check未起動)", date: msg.date, drafts: draftCount, error: String(e) }));
+        }
+      }
+      break;
+    }
+
+    // ----------------------------------------------------------------
+    // check: チェックAg(MA checker) — pending draft を重複＋ファクトで点検 → LINE 承認
+    // ----------------------------------------------------------------
+    case "check": {
+      const rid = runId ?? "";
+      const { createClient } = await import("@supabase/supabase-js");
+      const sb = createClient(env.SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY, {
+        db: { schema: process.env.SUPABASE_SCHEMA || "xad" },
+      });
+      const { runCheck } = await import("../lib/check/run-check.js");
+      if (rid) {
+        // onTrace はドラフトごとに発火するためトークンを合算（last-writer-wins を避ける）。
+        let tokensIn = 0, tokensOut = 0, traceModel: string | undefined;
+        await withTrace(ctx, { runId: rid, stageId: "check" }, async () => {
+          const out = await runCheck({
+            env,
+            sb: sb as never,
+            apiKey: env.ANTHROPIC_API_KEY,
+            runId: rid,
+            onTrace: (m) => { tokensIn += m.tokensIn ?? 0; tokensOut += m.tokensOut ?? 0; traceModel = m.model ?? traceModel; },
+          });
+          console.log(JSON.stringify({ level: out.recentFetchFailed ? "warn" : "info", msg: "[check]", date: msg.date, checked: out.checked, flagged: out.flagged, errors: out.errorCount, recentFetchFailed: out.recentFetchFailed ?? false }));
+          return { result: out.checked, output: out, meta: { model: traceModel, tokensIn, tokensOut } };
+        });
+      } else {
+        const out = await runCheck({ env, sb: sb as never, apiKey: env.ANTHROPIC_API_KEY });
+        console.log(JSON.stringify({ level: "info", msg: "[check](untraced)", checked: out.checked, flagged: out.flagged, errors: out.errorCount }));
       }
       break;
     }
