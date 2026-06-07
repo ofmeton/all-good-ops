@@ -33,13 +33,16 @@ export const STAGES: StageMeta[] = [
     upstream: [], downstream: ["ideation"],
   },
   {
-    id: "compose", label: "Compose (writer stub)", group: "generate",
-    purpose: "人間が選抜(queued)した素材から投稿ドラフトを生成する執筆工程。現状は配管 stub（queued 素材の件数/IDを trace 記録）。実 writer 本体は後続ステージ。",
-    objectiveFunction: "選抜素材→チャエン層に刺さる投稿ドラフトの質を最大化（後続実装）",
+    id: "compose", label: "Compose (MA writer)", group: "generate",
+    purpose: "人間が選抜(queued)した素材から、Managed Agents writer がリサーチ付きで投稿ドラフトを生成する執筆工程。core_idea(inline)+post_drafts(pending) を作成。",
+    objectiveFunction: "選抜素材→チャエン層に刺さる投稿ドラフトの質を最大化（数字は素材/web_search で裏取り＝捏造ゼロ）",
     inputs: ["xad.materials_store (selection_status=queued)"],
-    outputs: ["（stub）trace のみ / 後続: post_drafts"],
-    keyVariables: [{ name: "選抜トリガ", desc: "/curation の『執筆へ送る』→ /admin/enqueue?job=compose" }],
-    logicKind: "llm", sourcePaths: ["apps/x-account-system/lib/curation/compose-stub.ts"],
+    outputs: ["xad.core_ideas", "xad.post_drafts (human_approval_status=pending)"],
+    keyVariables: [
+      { name: "選抜トリガ", desc: "/curation の『執筆へ送る』→ /admin/enqueue?job=compose" },
+      { name: "改善レバー", desc: "lib/curation/compose-config.ts(数値) / compose-prompts.ts(判断)" },
+    ],
+    logicKind: "llm", sourcePaths: ["apps/x-account-system/lib/curation/run-compose.ts", "apps/x-account-system/lib/ma/run-session.ts"],
     upstream: ["collect"], downstream: [],
   },
   {

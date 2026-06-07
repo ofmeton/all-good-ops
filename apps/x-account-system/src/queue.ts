@@ -218,16 +218,26 @@ export async function handleJob(
       const sb = createClient(env.SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY, {
         db: { schema: process.env.SUPABASE_SCHEMA || "xad" },
       });
-      const { runComposeStub } = await import("../lib/curation/compose-stub.js");
+      const { runCompose } = await import("../lib/curation/run-compose.js");
       if (rid) {
+        // onTrace は素材ごとに発火するためトークンを合算（last-writer-wins を避ける）。
+        let tokensIn = 0, tokensOut = 0, traceModel: string | undefined;
         await withTrace(ctx, { runId: rid, stageId: "compose" }, async () => {
-          const out = await runComposeStub(sb as never);
-          console.log(JSON.stringify({ level: "info", msg: "[compose] stub", date: msg.date, count: out.count }));
-          return { result: out.count, output: out };
+          const out = await runCompose({
+            sb: sb as never,
+            apiKey: env.ANTHROPIC_API_KEY,
+            runId: rid,
+            onTrace: (m) => { tokensIn += m.tokensIn ?? 0; tokensOut += m.tokensOut ?? 0; traceModel = m.model ?? traceModel; },
+          });
+          // 全件失敗（生成 0 件）は zero-yield として error レベルで可視化（黙って ok にしない）。
+          const lvl = out.processed > 0 && out.draftCount === 0 ? "error" : "info";
+          console.log(JSON.stringify({ level: lvl, msg: "[compose]", date: msg.date, processed: out.processed, drafts: out.draftCount, errors: out.errorCount }));
+          return { result: out.draftCount, output: out, meta: { model: traceModel, tokensIn, tokensOut } };
         });
       } else {
-        const out = await runComposeStub(sb as never);
-        console.log(JSON.stringify({ level: "info", msg: "[compose] stub(untraced)", count: out.count }));
+        const out = await runCompose({ sb: sb as never, apiKey: env.ANTHROPIC_API_KEY });
+        const lvl = out.processed > 0 && out.draftCount === 0 ? "error" : "info";
+        console.log(JSON.stringify({ level: lvl, msg: "[compose](untraced)", processed: out.processed, drafts: out.draftCount, errors: out.errorCount }));
       }
       break;
     }
