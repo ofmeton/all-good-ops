@@ -94,7 +94,8 @@ export type JobMessage =
         | "rollback-monitor"
         | "inspirations-ingest"
         | "rotation-notice"
-        | "compose";
+        | "compose"
+        | "check";
       date: string;
       runId?: string;
     }
@@ -151,6 +152,7 @@ const CRON_JOBS_BY_NAME: Record<string, true> = {
   "inspirations-ingest": true,
   "rotation-notice": true,
   compose: true,
+  check: true,
 };
 
 export default {

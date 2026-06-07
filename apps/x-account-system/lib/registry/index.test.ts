@@ -10,6 +10,6 @@ test("upstream/downstream は対称（A.downstream に B があれば B.upstream
 test("各 stage の logicKind は許可値", () => {
   for (const s of STAGES) expect(["llm", "deterministic", "io"]).toContain(s.logicKind);
 });
-test("13 ノード", () => {
-  expect(STAGES).toHaveLength(13);
+test("14 ノード", () => {
+  expect(STAGES).toHaveLength(14);
 });

@@ -119,6 +119,41 @@
       "upstream": [
         "collect"
       ],
+      "downstream": [
+        "check"
+      ]
+    },
+    {
+      "id": "check",
+      "label": "Check (MA checker)",
+      "group": "review",
+      "purpose": "pending ドラフトを MA チェッカーが重複＋ファクト(web_search で嘘フィルタ)点検。完全 soft（block せず常に approved にして人間 LINE 承認へ）。",
+      "objectiveFunction": "完全な嘘・明らかに変な数字・重複を検知して人間に flag 提示（誇張は許容・出典不要・不明は要確認 flag で通す）",
+      "inputs": [
+        "xad.post_drafts (editor_status=pending, human_approval_status=pending)"
+      ],
+      "outputs": [
+        "xad.post_drafts (editor_status=approved, risk_level/risk_reasons)",
+        "LINE 承認依頼(pushApproval)"
+      ],
+      "keyVariables": [
+        {
+          "name": "改善レバー",
+          "desc": "lib/check/check-config.ts(数値) / check-prompts.ts(判断rubric)"
+        },
+        {
+          "name": "起動",
+          "desc": "compose→check 自動連鎖 / job=check"
+        }
+      ],
+      "logicKind": "llm",
+      "sourcePaths": [
+        "apps/x-account-system/lib/check/run-check.ts",
+        "apps/x-account-system/lib/ma/run-session.ts"
+      ],
+      "upstream": [
+        "compose"
+      ],
       "downstream": []
     },
     {
