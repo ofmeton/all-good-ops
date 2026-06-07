@@ -17,6 +17,7 @@ import { runMaSession } from "../ma/run-session.js";
 import { COMPOSE_CONFIG, type ComposeConfig } from "./compose-config.js";
 import { buildWriterSystemPrompt, SUBMIT_DRAFT_TOOL } from "./compose-prompts.js";
 import { classifyRules } from "../hook-classifier/classify-rules.js";
+import { costUsdFor, costJpyFor } from "../cost/cost-of.js";
 
 export interface RunComposeDeps {
   sb: SupabaseClient;
@@ -78,16 +79,6 @@ const WEB_TOOLSET = {
     { name: "web_fetch", enabled: true },
   ],
 };
-
-function usdFor(model: string, tokensIn = 0, tokensOut = 0): number {
-  // ざっくりレート（/claude-api のモデル表）。cost_usd 概算用。
-  const rate = model.includes("haiku")
-    ? { i: 1, o: 5 }
-    : model.includes("opus")
-      ? { i: 5, o: 25 }
-      : { i: 3, o: 15 }; // sonnet 既定
-  return (tokensIn / 1_000_000) * rate.i + (tokensOut / 1_000_000) * rate.o;
-}
 
 export async function runCompose(deps: RunComposeDeps): Promise<ComposeRunResult> {
   const cfg = deps.config ?? COMPOSE_CONFIG;
@@ -167,7 +158,9 @@ export async function runCompose(deps: RunComposeDeps): Promise<ComposeRunResult
         customToolHandler,
         timeoutMs: cfg.timeoutMs,
         now: deps.now,
-        onTrace: deps.onTrace,
+        // onTrace は runSession に委譲せず、cost-of で costJpy を載せて自前で発火する
+        // （runMaSession の onTrace は tokens のみで costJpy を落とすため。queue 集約が
+        //  cost_jpy/cost_ledger の単一ソースになるよう per-material で 1 回だけ通知）。
       });
     } catch (e) {
       res = { ok: false, terminal: "error" as const, error: String(e) } as Awaited<ReturnType<typeof runMaSession>>;
@@ -175,8 +168,10 @@ export async function runCompose(deps: RunComposeDeps): Promise<ComposeRunResult
 
     const inTok = (res.sessionUsage as { input_tokens?: number } | undefined)?.input_tokens ?? 0;
     const outTok = (res.sessionUsage as { output_tokens?: number } | undefined)?.output_tokens ?? 0;
-    const costUsd = usdFor(cfg.writerModel, inTok, outTok);
-    const costJpy = Math.round(costUsd * 150 * 100) / 100;
+    const costUsd = costUsdFor(cfg.writerModel, inTok, outTok);
+    const costJpy = costJpyFor(cfg.writerModel, inTok, outTok);
+    // trace/cost_ledger 用に costJpy を載せて通知（run_trace.cost_jpy の単一ソース）。
+    deps.onTrace?.({ model: cfg.writerModel, tokensIn: inTok, tokensOut: outTok, costJpy });
 
     // stub が返るのは本番では設定ミス（IN_MEMORY_FALLBACK 誤設定/キー欠落）。draft 化しない。
     if (res.stub) {

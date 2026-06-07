@@ -26,6 +26,7 @@ import { runMaSession } from "../ma/run-session.js";
 import { fetchRecentPostBodies } from "../editor/db.js";
 import { CHECK_CONFIG, type CheckConfig } from "./check-config.js";
 import { buildCheckSystemPrompt, SUBMIT_CHECK_TOOL } from "./check-prompts.js";
+import { costUsdFor, costJpyFor } from "../cost/cost-of.js";
 import type { Env } from "../../src/worker.js";
 
 /** pushApproval の最小シグネチャ（post-job.ts:290 と互換）。注入 or 既定 import。 */
@@ -125,16 +126,6 @@ const WEB_TOOLSET = {
   ],
 };
 
-function usdFor(model: string, tokensIn = 0, tokensOut = 0): number {
-  // ざっくりレート（/claude-api のモデル表）。cost_usd 概算用。
-  const rate = model.includes("haiku")
-    ? { i: 1, o: 5 }
-    : model.includes("opus")
-      ? { i: 5, o: 25 }
-      : { i: 3, o: 15 }; // sonnet 既定
-  return (tokensIn / 1_000_000) * rate.i + (tokensOut / 1_000_000) * rate.o;
-}
-
 export async function runCheck(deps: RunCheckDeps): Promise<CheckRunResult> {
   const cfg = deps.config ?? CHECK_CONFIG;
   const sb = deps.sb;
@@ -210,11 +201,21 @@ export async function runCheck(deps: RunCheckDeps): Promise<CheckRunResult> {
         customToolHandler,
         timeoutMs: cfg.timeoutMs,
         now: deps.now,
-        onTrace: deps.onTrace,
+        // onTrace は runSession に委譲せず自前で発火（costJpy を載せるため。下記参照）。
       });
     } catch (e) {
       res = { ok: false, terminal: "error" as const, error: String(e) } as Awaited<ReturnType<typeof runMaSession>>;
     }
+
+    // cost/trace は token を消費した全経路で発火する（失敗 session も計上）。
+    // run-compose と同じく stub/!ok ガードの前で 1 回だけ通知＝失敗で焼いた token を
+    // 取りこぼさず brownout が暴走（失敗→再 enqueue ループ）を見落とさない。
+    // 計上は token usage のみ。MA built-in web_search のサーバ費は session usage 外＝未計上。
+    const inTok = (res.sessionUsage as { input_tokens?: number } | undefined)?.input_tokens ?? 0;
+    const outTok = (res.sessionUsage as { output_tokens?: number } | undefined)?.output_tokens ?? 0;
+    const costUsd = costUsdFor(cfg.checkerModel, inTok, outTok);
+    const costJpy = costJpyFor(cfg.checkerModel, inTok, outTok);
+    deps.onTrace?.({ model: cfg.checkerModel, tokensIn: inTok, tokensOut: outTok, costJpy });
 
     // stub は本番では設定ミス（IN_MEMORY_FALLBACK 誤設定/キー欠落）。点検成立とみなさず pending 据置。
     if (res.stub) {
@@ -234,14 +235,11 @@ export async function runCheck(deps: RunCheckDeps): Promise<CheckRunResult> {
       continue;
     }
 
-    // 成功 → verdict 別ルーティング。flags/cost を計算。
+    // 成功 → verdict 別ルーティング。flags を計算（cost は上で算出・発火済）。
     // closure(approveAndPush)からの参照で TS が undefined narrowing を失うため非 null const に固定。
     const cap = captured;
     const flags = Array.isArray(cap.flags) ? cap.flags : [];
     const risk: "low" | "high" = cap.risk_level === "high" ? "high" : "low";
-    const inTok = (res.sessionUsage as { input_tokens?: number } | undefined)?.input_tokens ?? 0;
-    const outTok = (res.sessionUsage as { output_tokens?: number } | undefined)?.output_tokens ?? 0;
-    const costUsd = usdFor(cfg.checkerModel, inTok, outTok);
     if (costUsd === 0) log.warn(`[check] cost 0 for checked ${d.id} — sessionUsage missing? (web_search 費は別途未計上)`);
 
     const editorOutputLike: EditorOutput = {
