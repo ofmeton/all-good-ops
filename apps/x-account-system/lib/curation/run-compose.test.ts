@@ -175,4 +175,30 @@ describe("runCompose", () => {
     const r = await runCompose({ sb: makeSb(state), apiKey: "k", runSession: okSession(), logger: silent });
     expect(r.processed).toBe(0);
   });
+
+  test("差し戻し再生成: last_check_flags があれば『前回の指摘』を writer userMessage に同梱", async () => {
+    const state: St = { materials: [mat("m1", { compose_attempts: 1, last_check_flags: ["『〇〇が無料化』は事実と異なる", "直近投稿と重複気味"] })], coreIdeas: [], postDrafts: [] };
+    let seenMsg = "";
+    const capture = (async (deps: any) => {
+      seenMsg = deps.userMessage;
+      deps.customToolHandler?.("submit_draft", { body: "本文", fmat: "short", topic: "t", category: "paraphrase" });
+      return { ok: true, terminal: "idle", stopReason: "end_turn", transitions: [], agentText: "x", toolCalls: [], unhandledTools: [], wallClockMs: 1, ids: {}, sessionUsage: { input_tokens: 10, output_tokens: 5 } };
+    }) as any;
+    await runCompose({ sb: makeSb(state), apiKey: "k", runSession: capture, logger: silent });
+    expect(seenMsg).toContain("# 前回の指摘（必ず避けて書き直す）");
+    expect(seenMsg).toContain("- 『〇〇が無料化』は事実と異なる");
+    expect(seenMsg).toContain("- 直近投稿と重複気味");
+  });
+
+  test("last_check_flags が無い通常生成では『前回の指摘』を入れない", async () => {
+    const state: St = { materials: [mat("m1")], coreIdeas: [], postDrafts: [] };
+    let seenMsg = "";
+    const capture = (async (deps: any) => {
+      seenMsg = deps.userMessage;
+      deps.customToolHandler?.("submit_draft", { body: "本文", fmat: "short", topic: "t", category: "paraphrase" });
+      return { ok: true, terminal: "idle", stopReason: "end_turn", transitions: [], agentText: "x", toolCalls: [], unhandledTools: [], wallClockMs: 1, ids: {}, sessionUsage: { input_tokens: 10, output_tokens: 5 } };
+    }) as any;
+    await runCompose({ sb: makeSb(state), apiKey: "k", runSession: capture, logger: silent });
+    expect(seenMsg).not.toContain("前回の指摘");
+  });
 });

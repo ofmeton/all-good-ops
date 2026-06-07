@@ -130,11 +130,18 @@ export async function runCompose(deps: RunComposeDeps): Promise<ComposeRunResult
     const text = (m.redacted_text || m.raw_text || "").slice(0, 4000);
     const tweetUrl = (baseMeta.tweet_url as string) ?? "";
     const scores = baseMeta.scores ? JSON.stringify(baseMeta.scores) : "";
+    // 差し戻し再生成: チェックAg が付けた前回の指摘があれば writer に渡し、同じ問題を繰り返させない。
+    const lastFlags = Array.isArray(baseMeta.last_check_flags) ? (baseMeta.last_check_flags as string[]) : [];
+    const redoBlock =
+      lastFlags.length > 0
+        ? `# 前回の指摘（必ず避けて書き直す）\n` + lastFlags.map((f) => `- ${f}`).join("\n") + `\n\n`
+        : "";
     const userMessage =
       `次の素材から X 投稿を1本書いてください。\n\n` +
       `# 素材本文\n${text}\n\n` +
       (tweetUrl ? `# 出典URL\n${tweetUrl}\n\n` : "") +
       (scores ? `# 参考スコア\n${scores}\n\n` : "") +
+      redoBlock +
       `必要なら web_search で裏取りし、最後に submit_draft を呼んでください。`;
 
     let captured: SubmitDraft | undefined;

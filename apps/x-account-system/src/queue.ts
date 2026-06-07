@@ -271,6 +271,7 @@ export async function handleJob(
         db: { schema: process.env.SUPABASE_SCHEMA || "xad" },
       });
       const { runCheck } = await import("../lib/check/run-check.js");
+      let sentBack = 0;
       if (rid) {
         // onTrace はドラフトごとに発火するためトークンを合算（last-writer-wins を避ける）。
         let tokensIn = 0, tokensOut = 0, traceModel: string | undefined;
@@ -282,12 +283,29 @@ export async function handleJob(
             runId: rid,
             onTrace: (m) => { tokensIn += m.tokensIn ?? 0; tokensOut += m.tokensOut ?? 0; traceModel = m.model ?? traceModel; },
           });
-          console.log(JSON.stringify({ level: out.recentFetchFailed ? "warn" : "info", msg: "[check]", date: msg.date, checked: out.checked, flagged: out.flagged, errors: out.errorCount, recentFetchFailed: out.recentFetchFailed ?? false }));
+          sentBack = out.sentBack;
+          console.log(JSON.stringify({ level: out.recentFetchFailed ? "warn" : "info", msg: "[check]", date: msg.date, checked: out.checked, approved: out.approved, sentBack: out.sentBack, flagged: out.flagged, errors: out.errorCount, recentFetchFailed: out.recentFetchFailed ?? false }));
           return { result: out.checked, output: out, meta: { model: traceModel, tokensIn, tokensOut } };
         });
       } else {
         const out = await runCheck({ env, sb: sb as never, apiKey: env.ANTHROPIC_API_KEY });
-        console.log(JSON.stringify({ level: "info", msg: "[check](untraced)", checked: out.checked, flagged: out.flagged, errors: out.errorCount }));
+        sentBack = out.sentBack;
+        console.log(JSON.stringify({ level: "info", msg: "[check](untraced)", checked: out.checked, approved: out.approved, sentBack: out.sentBack, flagged: out.flagged, errors: out.errorCount }));
+      }
+      // check→compose 自動連鎖: 差し戻し（sent_back）が出たら素材は再 queue 済なので compose を再起動。
+      // 連鎖 enqueue 失敗で check 本体を throw させない（throw→queue retry→二重点検を誘発するため）。
+      // ループは素材 meta.compose_attempts の上限（cfg.maxRedoAttempts）で必ず停止する。
+      if (sentBack > 0) {
+        try {
+          const { insertRun } = await import("../lib/trace/trace-store.js");
+          const composeRunId = crypto.randomUUID();
+          const trigger = runId ? "webhook" : "cron";
+          await insertRun({ id: composeRunId, job: "compose", trigger, date: msg.date, status: "running", attempt: 1 });
+          await env.JOBS.send({ job: "compose", date: msg.date, runId: composeRunId });
+          console.log(JSON.stringify({ level: "info", msg: "[check] → compose enqueued (sent back for redo)", date: msg.date, sentBack, composeRunId }));
+        } catch (e) {
+          console.log(JSON.stringify({ level: "error", msg: "[check] compose enqueue failed (素材は再queue済、compose未起動)", date: msg.date, sentBack, error: String(e) }));
+        }
       }
       break;
     }

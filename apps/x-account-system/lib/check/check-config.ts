@@ -11,6 +11,8 @@ export interface CheckConfig {
   recentPostsLookbackDays: number;
   /** 1 MA session の wall-clock 上限 */
   timeoutMs: number;
+  /** suspicious/similar で差し戻し再生成する最大回数。これ以上は flag を付けて人間へ回す（ループ停止の上限）。 */
+  maxRedoAttempts: number;
 }
 
 export const CHECK_CONFIG: CheckConfig = {
@@ -18,4 +20,5 @@ export const CHECK_CONFIG: CheckConfig = {
   maxCheckPerRun: 5,
   recentPostsLookbackDays: 14,
   timeoutMs: 120_000,
+  maxRedoAttempts: 2,
 };
