@@ -9,6 +9,7 @@ import { buildExploreSystemPrompt } from "./collector-prompts.js";
 import { COLLECTOR_TOOLS, dispatchTool, type ToolApi } from "./collector-tools.js";
 import { scoreCandidates, type Candidate } from "./collector-scoring.js";
 import { saveScoredMaterials } from "./collector-persist.js";
+import { costUsdFor, USD_JPY_RATE } from "../cost/cost-of.js";
 
 interface AnthropicLike {
   messages: {
@@ -85,8 +86,11 @@ export async function runCollect(deps: RunCollectDeps): Promise<number> {
     messages.push({ role: "user", content: toolResults });
   }
 
+  // explore で焼いた token は候補 0 でも計上する（空 explore 連発も runaway シグナル）。
+  const exploreCostJpy =
+    costUsdFor(COLLECTOR_CONFIG.scoringModel, tokensIn, tokensOut) * USD_JPY_RATE;
   if (candidates.length === 0) {
-    deps.onTrace?.({ tokensIn, tokensOut, model: COLLECTOR_CONFIG.scoringModel });
+    deps.onTrace?.({ tokensIn, tokensOut, model: COLLECTOR_CONFIG.scoringModel, costJpy: exploreCostJpy });
     return 0;
   }
 
@@ -99,8 +103,6 @@ export async function runCollect(deps: RunCollectDeps): Promise<number> {
   const inserted = await saveScoredMaterials(deps.sb, scored);
 
   const scoreCostJpy = scored.reduce((s, c) => s + c.costJpy, 0);
-  const exploreCostJpy =
-    ((tokensIn / 1_000_000) * 3 + (tokensOut / 1_000_000) * 15) * 150;
   deps.onTrace?.({
     model: COLLECTOR_CONFIG.scoringModel,
     tokensIn,

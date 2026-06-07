@@ -25,6 +25,7 @@ import { runRotationNotice } from "./jobs/rotation-job.js";
 import { evaluateBrownout } from "../lib/safety/brownout-handler.js";
 import { makeProductionDeps } from "../lib/dashboard/kpi-collector.js";
 import { recordSkip, withTrace } from "../lib/trace/with-trace.js";
+import { recordCostLedger } from "../lib/cost/cost-ledger.js";
 
 export const MAX_ATTEMPTS = 4; // = 1 + wrangler.toml max_retries(3)。変更時は wrangler.toml と両方
 
@@ -183,8 +184,8 @@ export async function handleJob(
       const anthropic = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });
       const { runCollect } = await import("../lib/ingest/collector.js");
       if (rid) {
+        let traceMeta: import("../lib/trace/types.js").TraceMeta | undefined;
         await withTrace(ctx, { runId: rid, stageId: "collect" }, async () => {
-          let traceMeta: import("../lib/trace/types.js").TraceMeta | undefined;
           const inserted = await runCollect({
             anthropic: anthropic as never,
             sb: sb as never,
@@ -197,6 +198,17 @@ export async function handleJob(
           console.log(JSON.stringify({ level: "info", msg: "[collect] 完了", date: msg.date, inserted }));
           return { result: inserted, output: { inserted }, meta: traceMeta };
         });
+        // cost_ledger 計上（fail-open）。ctx 不在経路（手動/非 Queue）でも握り潰さず await。
+        {
+          const p = recordCostLedger(sb as never, {
+            category: "collector",
+            costJpy: traceMeta?.costJpy ?? 0,
+            unitCount: (traceMeta?.tokensIn ?? 0) + (traceMeta?.tokensOut ?? 0),
+            meta: { model: traceMeta?.model },
+          });
+          if (ctx) ctx.waitUntil(p);
+          else await p;
+        }
       } else {
         const inserted = await runCollect({
           anthropic: anthropic as never,
@@ -221,21 +233,32 @@ export async function handleJob(
       const { runCompose } = await import("../lib/curation/run-compose.js");
       let draftCount = 0;
       if (rid) {
-        // onTrace は素材ごとに発火するためトークンを合算（last-writer-wins を避ける）。
-        let tokensIn = 0, tokensOut = 0, traceModel: string | undefined;
+        // onTrace は素材ごとに発火するためトークン/コストを合算（last-writer-wins を避ける）。
+        let tokensIn = 0, tokensOut = 0, costJpy = 0, traceModel: string | undefined;
         await withTrace(ctx, { runId: rid, stageId: "compose" }, async () => {
           const out = await runCompose({
             sb: sb as never,
             apiKey: env.ANTHROPIC_API_KEY,
             runId: rid,
-            onTrace: (m) => { tokensIn += m.tokensIn ?? 0; tokensOut += m.tokensOut ?? 0; traceModel = m.model ?? traceModel; },
+            onTrace: (m) => { tokensIn += m.tokensIn ?? 0; tokensOut += m.tokensOut ?? 0; costJpy += m.costJpy ?? 0; traceModel = m.model ?? traceModel; },
           });
           draftCount = out.draftCount;
           // 全件失敗（生成 0 件）は zero-yield として error レベルで可視化（黙って ok にしない）。
           const lvl = out.processed > 0 && out.draftCount === 0 ? "error" : "info";
           console.log(JSON.stringify({ level: lvl, msg: "[compose]", date: msg.date, processed: out.processed, drafts: out.draftCount, errors: out.errorCount }));
-          return { result: out.draftCount, output: out, meta: { model: traceModel, tokensIn, tokensOut } };
+          return { result: out.draftCount, output: out, meta: { model: traceModel, tokensIn, tokensOut, costJpy } };
         });
+        // cost_ledger 計上（fail-open）。ctx 不在経路（手動/非 Queue）でも握り潰さず await。
+        {
+          const p = recordCostLedger(sb as never, {
+            category: "writer",
+            costJpy,
+            unitCount: tokensIn + tokensOut,
+            meta: { model: traceModel },
+          });
+          if (ctx) ctx.waitUntil(p);
+          else await p;
+        }
       } else {
         const out = await runCompose({ sb: sb as never, apiKey: env.ANTHROPIC_API_KEY });
         draftCount = out.draftCount;
@@ -273,20 +296,31 @@ export async function handleJob(
       const { runCheck } = await import("../lib/check/run-check.js");
       let sentBack = 0;
       if (rid) {
-        // onTrace はドラフトごとに発火するためトークンを合算（last-writer-wins を避ける）。
-        let tokensIn = 0, tokensOut = 0, traceModel: string | undefined;
+        // onTrace はドラフトごとに発火するためトークン/コストを合算（last-writer-wins を避ける）。
+        let tokensIn = 0, tokensOut = 0, costJpy = 0, traceModel: string | undefined;
         await withTrace(ctx, { runId: rid, stageId: "check" }, async () => {
           const out = await runCheck({
             env,
             sb: sb as never,
             apiKey: env.ANTHROPIC_API_KEY,
             runId: rid,
-            onTrace: (m) => { tokensIn += m.tokensIn ?? 0; tokensOut += m.tokensOut ?? 0; traceModel = m.model ?? traceModel; },
+            onTrace: (m) => { tokensIn += m.tokensIn ?? 0; tokensOut += m.tokensOut ?? 0; costJpy += m.costJpy ?? 0; traceModel = m.model ?? traceModel; },
           });
           sentBack = out.sentBack;
           console.log(JSON.stringify({ level: out.recentFetchFailed ? "warn" : "info", msg: "[check]", date: msg.date, checked: out.checked, approved: out.approved, sentBack: out.sentBack, flagged: out.flagged, errors: out.errorCount, recentFetchFailed: out.recentFetchFailed ?? false }));
-          return { result: out.checked, output: out, meta: { model: traceModel, tokensIn, tokensOut } };
+          return { result: out.checked, output: out, meta: { model: traceModel, tokensIn, tokensOut, costJpy } };
         });
+        // cost_ledger 計上（fail-open）。ctx 不在経路（手動/非 Queue）でも握り潰さず await。
+        {
+          const p = recordCostLedger(sb as never, {
+            category: "checker",
+            costJpy,
+            unitCount: tokensIn + tokensOut,
+            meta: { model: traceModel },
+          });
+          if (ctx) ctx.waitUntil(p);
+          else await p;
+        }
       } else {
         const out = await runCheck({ env, sb: sb as never, apiKey: env.ANTHROPIC_API_KEY });
         sentBack = out.sentBack;
