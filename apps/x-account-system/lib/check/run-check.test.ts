@@ -11,39 +11,70 @@ type Draft = {
   editor_status: string; human_approval_status: string;
   risk_level?: string; risk_reasons?: unknown; editor_output?: unknown;
 };
-type St = { drafts: Draft[]; failUpdate?: boolean };
+type CoreIdea = { id: string; source_material_ids: string[] };
+type Mat = { id: string; meta: Record<string, unknown> };
+type St = { drafts: Draft[]; coreIdeas?: CoreIdea[]; materials?: Mat[]; failUpdate?: boolean; failMatUpdate?: boolean; failCiRead?: boolean };
 
-/** 必要最小の chainable Supabase mock。post_drafts の read(pending) と update(approve)。 */
+/**
+ * 必要最小の chainable Supabase mock。
+ * post_drafts: read(pending) / update(approve or reject, CAS) / materials_store: read(.in) / update(meta) /
+ * core_ideas: read(.single → source_material_ids)。
+ */
 function makeSb(state: St): any {
   function qb(table: string) {
     const ops: Array<{ m: string; a: any[] }> = [];
     const rec = (m: string) => (...a: any[]) => { ops.push({ m, a }); return builder; };
     const eqVal = (col: string) => ops.find((o) => o.m === "eq" && o.a[0] === col)?.a[1];
     const has = (m: string) => ops.some((o) => o.m === m);
-    const resolve = (): { data: any; error: any } => {
-      if (table !== "post_drafts") return { data: null, error: null };
-      if (has("update")) {
-        if (state.failUpdate) return { data: null, error: { message: "upd boom" } };
-        const payload = ops.find((o) => o.m === "update")!.a[0];
-        const id = eqVal("id");
-        const d = state.drafts.find((x) => x.id === id);
-        // CAS: .eq("editor_status","pending") ガードがあれば pending の時だけ成功し [{id}] を返す。
-        const guardPending = ops.some((o) => o.m === "eq" && o.a[0] === "editor_status" && o.a[1] === "pending");
-        if (guardPending && (!d || d.editor_status !== "pending")) return { data: [], error: null };
-        if (d) Object.assign(d, payload);
-        return { data: d ? [{ id: d.id }] : [], error: null };
+    const resolve = (single: boolean): { data: any; error: any } => {
+      if (table === "post_drafts") {
+        if (has("update")) {
+          if (state.failUpdate) return { data: null, error: { message: "upd boom" } };
+          const payload = ops.find((o) => o.m === "update")!.a[0];
+          const id = eqVal("id");
+          const d = state.drafts.find((x) => x.id === id);
+          // CAS: .eq("editor_status","pending") ガードがあれば pending の時だけ成功し [{id}] を返す。
+          const guardPending = ops.some((o) => o.m === "eq" && o.a[0] === "editor_status" && o.a[1] === "pending");
+          if (guardPending && (!d || d.editor_status !== "pending")) return { data: [], error: null };
+          if (d) Object.assign(d, payload);
+          return { data: d ? [{ id: d.id }] : [], error: null };
+        }
+        // read: editor_status='pending' AND human_approval_status='pending'
+        const limit = ops.find((o) => o.m === "limit")?.a[0] ?? 1000;
+        const rows = state.drafts
+          .filter((x) => x.editor_status === "pending" && x.human_approval_status === "pending")
+          .slice(0, limit)
+          .map((x) => ({ id: x.id, body: x.body, fmat: x.fmat, core_idea_id: x.core_idea_id, run_id: x.run_id }));
+        return { data: rows, error: null };
       }
-      // read: editor_status='pending' AND human_approval_status='pending'
-      const limit = ops.find((o) => o.m === "limit")?.a[0] ?? 1000;
-      const rows = state.drafts
-        .filter((x) => x.editor_status === "pending" && x.human_approval_status === "pending")
-        .slice(0, limit)
-        .map((x) => ({ id: x.id, body: x.body, fmat: x.fmat, core_idea_id: x.core_idea_id, run_id: x.run_id }));
-      return { data: rows, error: null };
+      if (table === "core_ideas") {
+        if (state.failCiRead) return { data: null, error: { message: "ci boom" } };
+        const id = eqVal("id");
+        const ci = (state.coreIdeas ?? []).find((c) => c.id === id);
+        const data = ci ? { source_material_ids: ci.source_material_ids } : null;
+        return { data: single ? data : data ? [data] : [], error: null };
+      }
+      if (table === "materials_store") {
+        if (has("update")) {
+          if (state.failMatUpdate) return { data: null, error: { message: "mat boom" } };
+          const payload = ops.find((o) => o.m === "update")!.a[0];
+          const id = eqVal("id");
+          const mt = (state.materials ?? []).find((x) => x.id === id);
+          if (mt) mt.meta = payload.meta;
+          return { data: null, error: null };
+        }
+        // read: .in("id", ids) → {id, meta}
+        const inOp = ops.find((o) => o.m === "in" && o.a[0] === "id");
+        const ids = (inOp?.a[1] ?? []) as string[];
+        const rows = (state.materials ?? []).filter((x) => ids.includes(x.id)).map((x) => ({ id: x.id, meta: x.meta }));
+        return { data: rows, error: null };
+      }
+      return { data: null, error: null };
     };
     const builder: any = {
-      select: rec("select"), eq: rec("eq"), limit: rec("limit"), update: rec("update"),
-      then: (onF: any, onR: any) => Promise.resolve(resolve()).then(onF, onR),
+      select: rec("select"), eq: rec("eq"), in: rec("in"), limit: rec("limit"), update: rec("update"),
+      single: () => Promise.resolve(resolve(true)),
+      then: (onF: any, onR: any) => Promise.resolve(resolve(false)).then(onF, onR),
     };
     return builder;
   }
@@ -83,25 +114,136 @@ describe("runCheck", () => {
     expect(r.perDraft).toHaveLength(0);
   });
 
-  test("正常(approved+flag): 重複flag → approved・risk high・risk_reasons・editor_output・pushApproval", async () => {
+  test("正常(approved+flag): unverifiable flag → approved・risk high・risk_reasons・editor_output・pushApproval", async () => {
     const state: St = { drafts: [draft("d1")] };
+    const rec = recorder();
+    const r = await runCheck(base(state, {
+      runSession: checkSession({ verdict: "flag", risk_level: "high", factcheck: "unverifiable", flags: ["『導入社数1万社』を確認できず（要確認）"] }),
+      pushApproval: rec.fn,
+    }));
+    expect(r).toMatchObject({ checked: 1, approved: 1, sentBack: 0, flagged: 1, errorCount: 0 });
+    const d = state.drafts[0];
+    expect(d.editor_status).toBe("approved");
+    expect(d.risk_level).toBe("high");
+    expect(d.risk_reasons).toEqual(["『導入社数1万社』を確認できず（要確認）"]);
+    expect((d.editor_output as any).decision).toBe("approved");
+    expect((d.editor_output as any).warnings).toEqual([{ rule: "『導入社数1万社』を確認できず（要確認）", reason: "『導入社数1万社』を確認できず（要確認）" }]);
+    expect((d.editor_output as any).riskLevel).toBe("high");
+    expect(rec.calls).toHaveLength(1);
+    expect(rec.calls[0]).toMatchObject({ id: "d1", body: "本文 d1", fmat: "short" });
+    expect(rec.calls[0].out.riskReasons).toEqual(["『導入社数1万社』を確認できず（要確認）"]);
+    expect(r.perDraft[0]).toMatchObject({ draftId: "d1", verdict: "flag", duplicate: "ok", factcheck: "unverifiable", flagCount: 1, outcome: "ok" });
+  });
+
+  test("suspicious → 差し戻し(sent_back): draft rejected・素材 compose_attempts++/composed_at=null/last_check_flags・pushApproval なし", async () => {
+    const state: St = {
+      drafts: [draft("d1", { core_idea_id: "ci1" })],
+      coreIdeas: [{ id: "ci1", source_material_ids: ["m1"] }],
+      materials: [{ id: "m1", meta: { compose_attempts: 0, composed_at: "2026-06-07T00:00:00Z", compose_claimed_at: "2026-06-07T00:00:00Z" } }],
+    };
+    const rec = recorder();
+    const r = await runCheck(base(state, {
+      runSession: checkSession({ verdict: "flag", risk_level: "high", factcheck: "suspicious", flags: ["『〇〇が無料化』は事実と異なる可能性"] }),
+      pushApproval: rec.fn,
+    }));
+    expect(r).toMatchObject({ checked: 1, approved: 0, sentBack: 1, flagged: 1, errorCount: 0 });
+    const d = state.drafts[0];
+    expect(d.editor_status).toBe("rejected");
+    expect((d.editor_output as any).decision).toBe("rejected");
+    expect(d.risk_reasons).toEqual(["『〇〇が無料化』は事実と異なる可能性"]);
+    const m = state.materials![0];
+    expect(m.meta.compose_attempts).toBe(1);
+    expect(m.meta.composed_at).toBeNull();
+    expect(m.meta.compose_claimed_at).toBeNull();
+    expect(m.meta.last_check_flags).toEqual(["『〇〇が無料化』は事実と異なる可能性"]);
+    expect(rec.calls).toHaveLength(0); // 人間へ push しない
+    expect(r.perDraft[0]).toMatchObject({ draftId: "d1", outcome: "sent_back", factcheck: "suspicious", attempts: 1 });
+  });
+
+  test("差し戻しの素材再queue全失敗 → draft を pending に revert・errorCount・requeue_failed（silent loss 防止）", async () => {
+    const state: St = {
+      drafts: [draft("d1", { core_idea_id: "ci1" })],
+      coreIdeas: [{ id: "ci1", source_material_ids: ["m1"] }],
+      materials: [{ id: "m1", meta: { compose_attempts: 0 } }],
+      failMatUpdate: true,
+    };
+    const rec = recorder();
+    const r = await runCheck(base(state, {
+      runSession: checkSession({ verdict: "flag", factcheck: "suspicious", flags: ["嘘"] }),
+      pushApproval: rec.fn,
+    }));
+    expect(r.sentBack).toBe(0);
+    expect(r.errorCount).toBe(1);
+    expect(r.perDraft[0].outcome).toBe("requeue_failed");
+    expect(state.drafts[0].editor_status).toBe("pending"); // revert（rejected のまま消えない）
+    expect(rec.calls).toHaveLength(0);
+  });
+
+  test("差し戻し時の core_idea 読取失敗 → 枯渇扱いせず pending 据置・check_read_failed（suspicious を誤 approve しない）", async () => {
+    const state: St = {
+      drafts: [draft("d1", { core_idea_id: "ci1" })],
+      coreIdeas: [{ id: "ci1", source_material_ids: ["m1"] }],
+      materials: [{ id: "m1", meta: { compose_attempts: 0 } }],
+      failCiRead: true,
+    };
+    const rec = recorder();
+    const r = await runCheck(base(state, {
+      runSession: checkSession({ verdict: "flag", factcheck: "suspicious", flags: ["嘘"] }),
+      pushApproval: rec.fn,
+    }));
+    expect(r.errorCount).toBe(1);
+    expect(r.perDraft[0].outcome).toBe("check_read_failed");
+    expect(state.drafts[0].editor_status).toBe("pending"); // approve しない
+    expect(rec.calls).toHaveLength(0);
+  });
+
+  test("similar → 差し戻し(sent_back): 重複も再生成へ", async () => {
+    const state: St = {
+      drafts: [draft("d1", { core_idea_id: "ci1" })],
+      coreIdeas: [{ id: "ci1", source_material_ids: ["m1"] }],
+      materials: [{ id: "m1", meta: { compose_attempts: 0 } }],
+    };
     const rec = recorder();
     const r = await runCheck(base(state, {
       runSession: checkSession({ verdict: "flag", risk_level: "high", duplicate: "similar", flags: ["直近投稿と内容が重複気味"] }),
       pushApproval: rec.fn,
     }));
-    expect(r).toMatchObject({ checked: 1, flagged: 1, errorCount: 0 });
-    const d = state.drafts[0];
-    expect(d.editor_status).toBe("approved");
-    expect(d.risk_level).toBe("high");
-    expect(d.risk_reasons).toEqual(["直近投稿と内容が重複気味"]);
-    expect((d.editor_output as any).decision).toBe("approved");
-    expect((d.editor_output as any).warnings).toEqual([{ rule: "直近投稿と内容が重複気味", reason: "直近投稿と内容が重複気味" }]);
-    expect((d.editor_output as any).riskLevel).toBe("high");
+    expect(r).toMatchObject({ checked: 1, approved: 0, sentBack: 1 });
+    expect(state.drafts[0].editor_status).toBe("rejected");
+    expect(state.materials![0].meta.compose_attempts).toBe(1);
+    expect(rec.calls).toHaveLength(0);
+    expect(r.perDraft[0]).toMatchObject({ outcome: "sent_back", duplicate: "similar" });
+  });
+
+  test("上限到達 → flagged_max_retry: compose_attempts>=max は差し戻さず approved+flag+人間へ", async () => {
+    const state: St = {
+      drafts: [draft("d1", { core_idea_id: "ci1" })],
+      coreIdeas: [{ id: "ci1", source_material_ids: ["m1"] }],
+      materials: [{ id: "m1", meta: { compose_attempts: 2 } }], // maxRedoAttempts 既定 2 に到達
+    };
+    const rec = recorder();
+    const r = await runCheck(base(state, {
+      runSession: checkSession({ verdict: "flag", risk_level: "high", factcheck: "suspicious", flags: ["直らない嘘"] }),
+      pushApproval: rec.fn,
+    }));
+    expect(r).toMatchObject({ checked: 1, approved: 1, sentBack: 0, flagged: 1 });
+    expect(state.drafts[0].editor_status).toBe("approved"); // 差し戻さず人間へ
+    expect(state.materials![0].meta.compose_attempts).toBe(2); // 素材は触らない（再生成しない）
+    expect(rec.calls).toHaveLength(1); // 人間へ push
+    expect(r.perDraft[0]).toMatchObject({ outcome: "flagged_max_retry", attempts: 2 });
+  });
+
+  test("差し戻し候補だが素材が引けない → flagged_max_retry で人間へ（無言で消さない）", async () => {
+    const state: St = { drafts: [draft("d1", { core_idea_id: null })] };
+    const rec = recorder();
+    const r = await runCheck(base(state, {
+      runSession: checkSession({ verdict: "flag", risk_level: "high", factcheck: "suspicious", flags: ["嘘疑い"] }),
+      pushApproval: rec.fn,
+    }));
+    expect(r).toMatchObject({ approved: 1, sentBack: 0 });
+    expect(state.drafts[0].editor_status).toBe("approved");
     expect(rec.calls).toHaveLength(1);
-    expect(rec.calls[0]).toMatchObject({ id: "d1", body: "本文 d1", fmat: "short" });
-    expect(rec.calls[0].out.riskReasons).toEqual(["直近投稿と内容が重複気味"]);
-    expect(r.perDraft[0]).toMatchObject({ draftId: "d1", verdict: "flag", duplicate: "similar", factcheck: "ok", flagCount: 1, outcome: "ok" });
+    expect(r.perDraft[0].outcome).toBe("flagged_max_retry");
   });
 
   test("ok(flag無し): approved・warnings 空・flagged 0", async () => {
@@ -115,24 +257,14 @@ describe("runCheck", () => {
     expect(rec.calls).toHaveLength(1);
   });
 
-  test("ファクトflag: 完全な嘘は factcheck=suspicious・flag・but approved", async () => {
-    const state: St = { drafts: [draft("d1")] };
-    const r = await runCheck(base(state, {
-      runSession: checkSession({ verdict: "flag", risk_level: "high", factcheck: "suspicious", flags: ["『〇〇が無料化』は事実と異なる可能性"] }),
-    }));
-    expect(r).toMatchObject({ checked: 1, flagged: 1 });
-    expect(state.drafts[0].editor_status).toBe("approved");
-    expect(r.perDraft[0]).toMatchObject({ factcheck: "suspicious", flagCount: 1 });
-  });
-
-  test("不明=flag通す: factcheck=unverifiable でも soft で approved", async () => {
+  test("不明=flag通す: factcheck=unverifiable は差し戻さず soft で approved（従来パス）", async () => {
     const state: St = { drafts: [draft("d1")] };
     const r = await runCheck(base(state, {
       runSession: checkSession({ verdict: "flag", risk_level: "low", factcheck: "unverifiable", flags: ["『導入社数1万社』を確認できず（要確認）"] }),
     }));
-    expect(r).toMatchObject({ checked: 1, errorCount: 0 });
-    expect(state.drafts[0].editor_status).toBe("approved"); // block しない
-    expect(r.perDraft[0]).toMatchObject({ factcheck: "unverifiable" });
+    expect(r).toMatchObject({ checked: 1, approved: 1, sentBack: 0, errorCount: 0 });
+    expect(state.drafts[0].editor_status).toBe("approved"); // block も差し戻しもしない
+    expect(r.perDraft[0]).toMatchObject({ factcheck: "unverifiable", outcome: "ok" });
   });
 
   test("MA失敗: editor_status は pending 据置・errorCount・pushApproval 呼ばない", async () => {
@@ -220,7 +352,7 @@ describe("runCheck", () => {
 
   test("maxCheckPerRun で件数を bound", async () => {
     const state: St = { drafts: [draft("d1"), draft("d2"), draft("d3")] };
-    const r = await runCheck(base(state, { config: { checkerModel: "claude-haiku-4-5", maxCheckPerRun: 2, recentPostsLookbackDays: 14, timeoutMs: 1000 } }));
+    const r = await runCheck(base(state, { config: { checkerModel: "claude-haiku-4-5", maxCheckPerRun: 2, recentPostsLookbackDays: 14, timeoutMs: 1000, maxRedoAttempts: 2 } }));
     expect(r.checked).toBe(2);
   });
 
