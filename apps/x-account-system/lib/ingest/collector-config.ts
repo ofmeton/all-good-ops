@@ -21,6 +21,8 @@ export interface CollectorConfig {
   maxExploreIterations: number;
   /** L7: scoring モデル */
   scoringModel: string;
+  /** L7: 海外ツイート翻訳モデル（Haiku・cost_ledger 配下） */
+  translationModel: string;
   /** L8: scoring の1バッチ件数 */
   scoringBatchSize: number;
   /** L9: dedup ウィンドウ（日。これより古い同一 tweet_id は無視＝実質 tweet_id unique 依存） */
@@ -73,6 +75,7 @@ export const COLLECTOR_CONFIG: CollectorConfig = {
   maxFetchPerRun: 120,
   maxExploreIterations: 8,
   scoringModel: "claude-sonnet-4-5",
+  translationModel: "claude-haiku-4-5-20251001",
   scoringBatchSize: 20,
   dedupWindowDays: 14,
   autoPromoteDiscoveredSources: false,
