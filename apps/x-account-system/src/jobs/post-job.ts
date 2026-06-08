@@ -13,11 +13,7 @@
 import { createClient } from "@supabase/supabase-js";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { classifyRules } from "../../lib/hook-classifier/classify-rules.js";
-import { pushLineMessages } from "../../lib/line/line-client.js";
-import { ruleLabelJa } from "../../lib/editor/rule-labels.js";
-import { recordLineMessage } from "../../lib/line/message-map.js";
-import { segmentForPublish } from "../../lib/publisher/format-post.js";
-import type { PublishFormat } from "../../lib/publisher/types.js";
+import { pushLine } from "../../lib/line/line-client.js";
 import type { CoreIdea } from "../../lib/writer/types.js";
 import type { EditorInput, EditorOutput } from "../../lib/editor/types.js";
 import type { DraftOutput } from "../../lib/writer/types.js";
@@ -197,172 +193,27 @@ export async function fetchSourceMaterialTexts(
 }
 
 // ============================================================
-// fmat → 日本語ラベル
-// ============================================================
-const FMAT_JP_LABEL: Record<string, string> = {
-  short: "短文",
-  medium: "中尺",
-  long: "長文",
-  thread: "スレッド",
-  article: "記事",
-  carousel: "カルーセル",
-};
-
-// ============================================================
-// pushApproval — LINE で承認依頼
-// 2 メッセージを 1 push で送る:
-//   (a) plain text = 投稿本文の全文 (コピーしやすいクリーンな本文)
-//   (b) Flex カード = 形式 / 品質メモ / 承認・却下ボタン / draft_id (本文は省略しメタのみ)
-// W4-2 が postback "approve:<dbDraftId>" / "reject:<dbDraftId>" で処理する。
-// 引用リプライ紐づけ: Flex カードの message_id を line_message_map に保存する。
+// pushApproval — LINE は「承認待ちが出た」通知のみ（承認/編集は承認UIで）
+//   approve/reject ボタン・本文全文 push・Flex カード・line_message_map 紐づけは
+//   廃止した（T3 承認UX 一本化）。署名は維持（run-check / line-event の per-draft
+//   呼び出しと CAS idempotency をそのまま保つ＝draft ごとに 1 通）。
+//   PII 保護: 本文は通知に載せない（承認UIで確認する）。
 // ============================================================
 export async function pushApproval(
   env: Env,
-  dbDraftId: string,
-  body: string,
+  _dbDraftId: string,
+  _body: string,
   out: EditorOutput,
-  fmat: string,
+  _fmat: string,
 ): Promise<void> {
   const to = env.LINE_USER_ID_OFMETON || process.env.LINE_USER_ID_OFMETON || "";
   const token = env.LINE_CHANNEL_ACCESS_TOKEN || process.env.LINE_CHANNEL_ACCESS_TOKEN || "";
-
-  // (a) 実際に投稿されるクリーンなセグメント (足場ラベル・区切りを除去済) を
-  //     プレビューする。thread は 【1/N】 で番号付け表示するが、これは表示専用で
-  //     実投稿ツイートには 【1/N】 は含まれない (publisher が segmentForPublish した本文のみ投稿)。
-  //     LINE text message の上限は 5000 字。控えめに 4900 字で cap。
-  const MAX_TEXT = 4900;
-  const segments = segmentForPublish(body, fmat as PublishFormat);
-  const previewBody =
-    segments.length > 1
-      ? segments
-          .map((seg, i) => `【${i + 1}/${segments.length}】\n${seg}`)
-          .join("\n\n")
-      : (segments[0] ?? body);
-  const fullBody =
-    previewBody.length > MAX_TEXT ? previewBody.slice(0, MAX_TEXT) + "\n…(省略)" : previewBody;
+  const uiUrl = env.APPROVAL_UI_URL || process.env.APPROVAL_UI_URL || "";
 
   const riskBadge = out.riskLevel === "high" ? "⚠️ HIGH RISK" : "✅ low risk";
-  const headerText = `📝 投稿承認依頼 [${riskBadge}]`;
-  const fmatLabel = FMAT_JP_LABEL[fmat] ?? fmat;
-  const formatLine = `形式: ${fmatLabel} / ${body.length}字`;
-
-  // (3) 品質警告を日本語化 (RuleId → JP)。
-  const warnings = out.warnings ?? [];
-  const warnLine =
-    warnings.length > 0
-      ? `⚠️ 品質メモ: ${warnings.map((w) => ruleLabelJa(w.rule)).join(" / ")}`
-      : null;
-
-  // 本文プレビュー (カードは本文を載せず短い先頭プレビューのみ)。
-  const preview = body.length > 60 ? body.slice(0, 60) + "…" : body;
-  const altText = `投稿承認依頼: ${body.slice(0, 80)}`;
-
-  // Flex bubble: header(リスク) + body(形式/品質メモ/プレビュー/draft_id) + footer(ボタン + ヒント)
-  const bodyContents: Array<Record<string, unknown>> = [
-    { type: "text", text: formatLine, size: "sm", color: "#666666", wrap: true },
+  const lines = [
+    `📝 新しい投稿候補が承認待ちです [${riskBadge}]`,
+    uiUrl ? `承認UI: ${uiUrl}` : "承認UIで本文を確認し、承認/却下してください。",
   ];
-  if (warnLine) {
-    bodyContents.push({
-      type: "text",
-      text: warnLine,
-      size: "sm",
-      color: "#C0392B",
-      wrap: true,
-    });
-  }
-  bodyContents.push({ type: "separator", margin: "md" });
-  bodyContents.push({
-    type: "text",
-    text: `本文(全文は上のメッセージ): ${preview}`,
-    wrap: true,
-    size: "sm",
-    color: "#444444",
-    margin: "md",
-  });
-  bodyContents.push({
-    type: "text",
-    text: `draft_id: ${dbDraftId}`,
-    size: "xxs",
-    color: "#AAAAAA",
-    margin: "md",
-    wrap: true,
-  });
-
-  const flexContents = {
-    type: "bubble",
-    header: {
-      type: "box",
-      layout: "vertical",
-      contents: [
-        {
-          type: "text",
-          text: headerText,
-          weight: "bold",
-          size: "md",
-          wrap: true,
-          color: out.riskLevel === "high" ? "#C0392B" : "#1B7F4B",
-        },
-      ],
-    },
-    body: {
-      type: "box",
-      layout: "vertical",
-      contents: bodyContents,
-    },
-    footer: {
-      type: "box",
-      layout: "vertical",
-      spacing: "sm",
-      contents: [
-        {
-          type: "box",
-          layout: "horizontal",
-          spacing: "sm",
-          contents: [
-            {
-              type: "button",
-              style: "primary",
-              color: "#1B7F4B",
-              action: {
-                type: "postback",
-                label: "✅ 承認",
-                data: `approve:${dbDraftId}`,
-                displayText: `approve:${dbDraftId}`,
-              },
-            },
-            {
-              type: "button",
-              style: "secondary",
-              action: {
-                type: "postback",
-                label: "❌ 却下",
-                data: `reject:${dbDraftId}`,
-                displayText: `reject:${dbDraftId}`,
-              },
-            },
-          ],
-        },
-        {
-          type: "text",
-          text: "このカードに引用リプライで「直して」等の自由文でもOK / 修正: <指示> / 覚えて: <指示>",
-          size: "xxs",
-          color: "#888888",
-          wrap: true,
-        },
-      ],
-    },
-  };
-
-  // (1)(4) 1 push で 2 メッセージ送信。レスポンスの sentMessages[1].id (カード) を紐づける。
-  const messages = [
-    { type: "text", text: fullBody },
-    { type: "flex", altText, contents: flexContents },
-  ];
-  const resp = await pushLineMessages(to, messages, token);
-
-  // (4) カード (2件目) の message_id を draft_id と紐づけて保存。
-  const cardMessageId = resp.sentMessages?.[1]?.id;
-  if (cardMessageId) {
-    await recordLineMessage(env, cardMessageId, dbDraftId);
-  }
+  await pushLine(to, lines.join("\n"), token);
 }

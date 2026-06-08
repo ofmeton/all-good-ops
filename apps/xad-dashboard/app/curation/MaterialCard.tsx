@@ -1,5 +1,6 @@
 "use client";
 import type { CurationMaterial } from "@/lib/curation-logic";
+import { MediaThumbs } from "@/components/MediaModal";
 
 function scoreColor(v: number | null): string {
   if (v == null) return "bg-gray-100 text-gray-500";
@@ -55,20 +56,8 @@ export function MaterialCard({
             {m.raw_text}
           </p>
 
-          {/* メディアサムネイル */}
-          {m.media && m.media.length > 0 && (
-            <div className="flex gap-2 mt-2 flex-wrap">
-              {m.media.map((md, i) => (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  key={i}
-                  src={md.url}
-                  alt=""
-                  className="h-20 w-20 object-cover rounded border border-gray-200"
-                />
-              ))}
-            </div>
-          )}
+          {/* メディアサムネイル（クリックで原寸モーダル / video 再生） */}
+          <MediaThumbs media={m.media} />
 
           {/* メタ行: discovery / collected_at / engagement / 原ツイート */}
           <div className="flex flex-wrap items-center gap-2 text-xs text-gray-500 mt-2">

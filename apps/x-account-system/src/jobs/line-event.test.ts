@@ -296,196 +296,55 @@ function approvePayload() {
 }
 
 // ============================================================
-// Test (a): postback approve → 予約待ちストック化 (X API 直投はしない)
+// Test (a): approve/reject は承認UIへ一本化 — LINE では受け付けず案内のみ
 // ============================================================
-describe("handleLineEvent — approve postback → stock (no direct API post)", () => {
-  let fakeFetch: jest.Mock;
-
+describe("handleLineEvent — approve/reject は承認UIへ一本化", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     _updateCallCount = 0;
-    fakeFetch = makeFakeFetch(TWEET_ID) as jest.Mock;
-    __setFetchImpl(fakeFetch as typeof fetch);
-
+    __setFetchImpl(makeFakeFetch(TWEET_ID) as typeof fetch);
     mockDraftMaybeSingle.mockResolvedValue({ data: fakeDraftRow, error: null });
-    // Claim succeeds: 1 row returned (pending → approved)
-    mockDraftClaimSelect.mockResolvedValue({ data: [{ id: DRAFT_ID }], error: null });
-    mockPostedInsert.mockResolvedValue({ error: null });
-    mockIdeaUpdateEq.mockResolvedValue({ error: null });
   });
 
   afterEach(() => {
-    __setFetchImpl(null); // restore globalThis.fetch
+    __setFetchImpl(null);
   });
 
-  test("approve → X API は呼ばれない (直投廃止)", async () => {
+  test("approve postback → no-op（DB 書込なし・push なし・classify 呼ばない）", async () => {
     await handleLineEvent(approvePayload(), makeEnv());
-    expect(fakeFetch).not.toHaveBeenCalled();
-  });
-
-  test("approve → posted_records は作られない (実投稿は Phase2 chrome-devtools)", async () => {
-    await handleLineEvent(approvePayload(), makeEnv());
+    expect(mockDraftUpdate).not.toHaveBeenCalled();
+    expect(mockIdeaUpdate).not.toHaveBeenCalled();
     expect(mockPostedInsert).not.toHaveBeenCalled();
+    expect(mockPushLine).not.toHaveBeenCalled();
+    expect(mockClassifyReplyIntent).not.toHaveBeenCalled();
   });
 
-  test("approve → claim は human_approval_status='approved' + human_approved_at を set、published_at は触らない", async () => {
-    await handleLineEvent(approvePayload(), makeEnv());
-    expect(mockDraftUpdate).toHaveBeenCalled();
-    const claimUpdateArg = mockDraftUpdate.mock.calls[0][0];
-    expect(claimUpdateArg.human_approval_status).toBe("approved");
-    expect(typeof claimUpdateArg.human_approved_at).toBe("string"); // ISO timestamp
-    expect(claimUpdateArg.published_at).toBeUndefined();
-  });
-
-  test("approve → core_ideas.status set to 'approved' (not published)", async () => {
-    await handleLineEvent(approvePayload(), makeEnv());
-    expect(mockIdeaUpdate).toHaveBeenCalled();
-    const ideaUpdateArg = mockIdeaUpdate.mock.calls[0][0];
-    expect(ideaUpdateArg.status).toBe("approved");
-    expect(mockIdeaUpdateEq).toHaveBeenCalledWith("id", CORE_IDEA_ID);
-  });
-
-  test("approve → ストック追加の LINE push が送られる", async () => {
-    await handleLineEvent(approvePayload(), makeEnv());
-    expect(mockPushLine).toHaveBeenCalled();
-    const [, message] = mockPushLine.mock.calls[mockPushLine.mock.calls.length - 1];
-    expect(typeof message).toBe("string");
-    expect(message).toMatch(/ストック|予約待ち|承認しました/);
-  });
-
-  test("approve via text message (fallback) → 同じくストック化", async () => {
+  test("approve: テキスト → 承認UIへ案内、DB 書込なし", async () => {
     const payload = {
       type: "message",
       message: { type: "text", text: `approve:${DRAFT_ID}` },
       source: { type: "user", userId: "U_admin_test" },
     };
-
     await handleLineEvent(payload, makeEnv());
-
-    expect(fakeFetch).not.toHaveBeenCalled();
-    expect(mockDraftUpdate).toHaveBeenCalled();
-    expect(mockDraftUpdate.mock.calls[0][0].human_approval_status).toBe("approved");
-  });
-
-  // claim returns 0 rows → another invocation already stocked → no double-stock
-  test("claim returns 0 rows (already processed) → core_ideas 未更新, 'already' notice", async () => {
-    mockDraftClaimSelect.mockResolvedValueOnce({ data: [], error: null });
-
-    await handleLineEvent(approvePayload(), makeEnv());
-
-    expect(fakeFetch).not.toHaveBeenCalled();
-    expect(mockPostedInsert).not.toHaveBeenCalled();
+    expect(mockDraftUpdate).not.toHaveBeenCalled();
     expect(mockIdeaUpdate).not.toHaveBeenCalled();
     expect(mockPushLine).toHaveBeenCalledTimes(1);
-    const [, message] = mockPushLine.mock.calls[0];
-    expect(message).toMatch(/既に処理済み|既に承認/);
-  });
-});
-
-// ============================================================
-// Test (b): reject postback
-// ============================================================
-describe("handleLineEvent — reject postback", () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-    _updateCallCount = 0;
-    __setFetchImpl(makeFakeFetch(TWEET_ID) as typeof fetch);
-
-    mockDraftMaybeSingle.mockResolvedValue({ data: fakeDraftRow, error: null });
-    // Reject update returns the draft row with core_idea_id
-    mockDraftRejectSelect.mockResolvedValue({
-      data: [{ id: DRAFT_ID, core_idea_id: CORE_IDEA_ID }],
-      error: null,
-    });
-    mockIdeaUpdateEq.mockResolvedValue({ error: null });
+    expect(mockPushLine.mock.calls[0][1]).toMatch(/承認画面|\/approval/);
+    // 明示プレフィックス → LLM を呼ばない
+    expect(mockClassifyReplyIntent).not.toHaveBeenCalled();
   });
 
-  afterEach(() => {
-    __setFetchImpl(null);
-  });
-
-  test("reject postback → post_drafts.human_approval_status='rejected', NO publish", async () => {
+  test("reject: テキスト → 承認UIへ案内、core_ideas 未更新", async () => {
     const payload = {
-      type: "postback",
-      postback: { data: `reject:${DRAFT_ID}` },
+      type: "message",
+      message: { type: "text", text: `reject:${DRAFT_ID}` },
       source: { type: "user", userId: "U_admin_test" },
     };
-
     await handleLineEvent(payload, makeEnv());
-
-    // X API NOT called
-    expect(makeFakeFetch(TWEET_ID)).not.toHaveBeenCalled();
-
-    // post_drafts updated with rejected status
-    expect(mockDraftUpdate).toHaveBeenCalled();
-    const updateArg = mockDraftUpdate.mock.calls[0][0];
-    expect(updateArg.human_approval_status).toBe("rejected");
-
-    // posted_records NOT inserted
-    expect(mockPostedInsert).not.toHaveBeenCalled();
-
-    // LINE push for acknowledgement
-    expect(mockPushLine).toHaveBeenCalled();
-  });
-
-  // FIX 2: reject → core_ideas.status reverts to 'draft'
-  test("FIX2: reject → core_ideas.status reverted to 'draft' so idea re-enters queue", async () => {
-    const payload = {
-      type: "postback",
-      postback: { data: `reject:${DRAFT_ID}` },
-      source: { type: "user", userId: "U_admin_test" },
-    };
-
-    await handleLineEvent(payload, makeEnv());
-
-    // core_ideas.status must be set back to 'draft'
-    expect(mockIdeaUpdate).toHaveBeenCalledTimes(1);
-    const ideaUpdateArg = mockIdeaUpdate.mock.calls[0][0];
-    expect(ideaUpdateArg.status).toBe("draft");
-    expect(mockIdeaUpdateEq).toHaveBeenCalledWith("id", CORE_IDEA_ID);
-  });
-});
-
-// ============================================================
-// Test (c): idempotency — already published
-// ============================================================
-describe("handleLineEvent — idempotency (already published)", () => {
-  let fakeFetch: jest.Mock;
-
-  beforeEach(() => {
-    jest.clearAllMocks();
-    _updateCallCount = 0;
-    fakeFetch = makeFakeFetch(TWEET_ID) as jest.Mock;
-    __setFetchImpl(fakeFetch as typeof fetch);
-
-    // Draft already has published_at set → idempotent fast-path no-op
-    mockDraftMaybeSingle.mockResolvedValue({
-      data: { ...fakeDraftRow, published_at: "2026-06-03T01:00:00.000Z" },
-      error: null,
-    });
-  });
-
-  afterEach(() => {
-    __setFetchImpl(null);
-  });
-
-  test("approve on already-published draft → no second publishToX call (idempotent)", async () => {
-    const payload = {
-      type: "postback",
-      postback: { data: `approve:${DRAFT_ID}` },
-      source: { type: "user", userId: "U_admin_test" },
-    };
-
-    await handleLineEvent(payload, makeEnv());
-
-    // X API must NOT be called again
-    expect(fakeFetch).not.toHaveBeenCalled();
-    // posted_records NOT inserted again
-    expect(mockPostedInsert).not.toHaveBeenCalled();
-    // LINE push for "already published" message
-    expect(mockPushLine).toHaveBeenCalled();
-    const [, message] = mockPushLine.mock.calls[0];
-    expect(message).toContain("既に公開済");
+    expect(mockDraftUpdate).not.toHaveBeenCalled();
+    expect(mockIdeaUpdate).not.toHaveBeenCalled();
+    expect(mockPushLine).toHaveBeenCalledTimes(1);
+    expect(mockPushLine.mock.calls[0][1]).toMatch(/承認画面|\/approval/);
   });
 });
 
@@ -665,7 +524,7 @@ describe("handleLineEvent — 修正 (revise feedback)", () => {
     });
   });
 
-  test("修正: → latest pending draft revised, editor re-run, approved → Flex re-sent + feedback stored", async () => {
+  test("修正: → latest pending draft revised, editor re-run, approved → 承認待ち通知 re-sent + feedback stored", async () => {
     mockDraftMaybeSingle.mockResolvedValue({ data: REVISE_DRAFT_ROW, error: null });
     mockRunEditor.mockResolvedValue(fakeEditorOutput);
 
@@ -697,11 +556,10 @@ describe("handleLineEvent — 修正 (revise feedback)", () => {
     expect(mockAddStyleFeedback.mock.calls[0][2]).toBe("もっと短く");
     expect(mockAddStyleFeedback.mock.calls[0][3]).toBe(DRAFT_ID);
 
-    // approved → approval push (text + Flex) re-sent
-    expect(mockPushLineMessages).toHaveBeenCalledTimes(1);
-    const messages = mockPushLineMessages.mock.calls[0][1] as Array<Record<string, unknown>>;
-    const flexJson = JSON.stringify(messages[1].contents);
-    expect(flexJson).toContain(`approve:${DRAFT_ID}`);
+    // approved → 承認UIへの通知のみ（Flex / 本文全文 push は廃止）
+    expect(mockPushLineMessages).not.toHaveBeenCalled();
+    expect(mockPushLine).toHaveBeenCalledTimes(1);
+    expect(mockPushLine.mock.calls[0][1]).toMatch(/承認待ち|承認UI/);
   });
 
   test("修正: → no pending draft found → '見つかりません'", async () => {
@@ -809,9 +667,10 @@ describe("handleLineEvent — quote-reply resolves target draft", () => {
     // revise ran on the quoted draft body
     expect(mockReviseDraftForX).toHaveBeenCalledTimes(1);
     expect(mockReviseDraftForX.mock.calls[0][0]).toBe(QUOTED_DRAFT_ROW.body);
-    // re-sent approval references the quoted draft id
-    const messages = mockPushLineMessages.mock.calls[0][1] as Array<Record<string, unknown>>;
-    expect(JSON.stringify(messages[1].contents)).toContain(`approve:${QUOTED_DRAFT_ID}`);
+    // 承認UIへの通知のみ（Flex 廃止）。引用先の draft が revise されたことは上で担保。
+    expect(mockPushLineMessages).not.toHaveBeenCalled();
+    expect(mockPushLine).toHaveBeenCalledTimes(1);
+    expect(mockPushLine.mock.calls[0][1]).toMatch(/承認待ち|承認UI/);
   });
 });
 
@@ -847,13 +706,8 @@ describe("handleLineEvent — free-text intent (Haiku)", () => {
     expect(mockPostedInsert).not.toHaveBeenCalled();
   });
 
-  test("free text intent=approve → resolves latest-pending and stocks (no API post)", async () => {
+  test("free text intent=approve → 承認UIへ案内、DB 書込なし", async () => {
     mockClassifyReplyIntent.mockResolvedValue({ intent: "approve" });
-    // resolveLatestPendingDraftId select chain → {id}
-    mockDraftMaybeSingle.mockResolvedValueOnce({ data: { id: DRAFT_ID }, error: null });
-    // then handleApprove loads the full draft row
-    mockDraftMaybeSingle.mockResolvedValueOnce({ data: fakeDraftRow, error: null });
-    mockDraftClaimSelect.mockResolvedValue({ data: [{ id: DRAFT_ID }], error: null });
 
     const payload = {
       type: "message",
@@ -864,18 +718,37 @@ describe("handleLineEvent — free-text intent (Haiku)", () => {
     await handleLineEvent(payload, makeEnv());
 
     expect(mockClassifyReplyIntent).toHaveBeenCalledTimes(1);
-    // 直投しない: posted_records は作られず、claim で approved になる。
+    // 承認は UI 一本化: DB 書込なし・案内 push のみ。
     expect(mockPostedInsert).not.toHaveBeenCalled();
-    const approvedClaim = mockDraftUpdate.mock.calls.some(
-      (c) => (c[0] as Record<string, unknown>).human_approval_status === "approved",
-    );
-    expect(approvedClaim).toBe(true);
+    expect(mockDraftUpdate).not.toHaveBeenCalled();
+    expect(mockIdeaUpdate).not.toHaveBeenCalled();
+    expect(mockPushLine).toHaveBeenCalledTimes(1);
+    expect(mockPushLine.mock.calls[0][1]).toMatch(/承認画面|\/approval/);
   });
 
-  test("button postback approve → classifyReplyIntent NOT called (cheap path)", async () => {
-    mockDraftMaybeSingle.mockResolvedValue({ data: fakeDraftRow, error: null });
-    mockDraftClaimSelect.mockResolvedValue({ data: [{ id: DRAFT_ID }], error: null });
+  test("free text intent=approve_and_remember → メモ保存＋承認UIへ案内（承認はしない）", async () => {
+    mockClassifyReplyIntent.mockResolvedValue({
+      intent: "approve_and_remember",
+      note: "絵文字控えめで",
+    });
 
+    const payload = {
+      type: "message",
+      message: { type: "text", text: "OK、絵文字控えめで覚えといて" },
+      source: { type: "user", userId: "U_admin_test" },
+    };
+
+    await handleLineEvent(payload, makeEnv());
+
+    expect(mockAddStyleFeedback).toHaveBeenCalledTimes(1);
+    expect(mockAddStyleFeedback.mock.calls[0][1]).toBe("remember");
+    expect(mockDraftUpdate).not.toHaveBeenCalled();
+    expect(mockPushLine.mock.calls[mockPushLine.mock.calls.length - 1][1]).toMatch(
+      /承認画面|\/approval/,
+    );
+  });
+
+  test("postback (approve) → text message ではないので no-op（classify 呼ばない）", async () => {
     const payload = {
       type: "postback",
       postback: { data: `approve:${DRAFT_ID}` },
@@ -885,5 +758,6 @@ describe("handleLineEvent — free-text intent (Haiku)", () => {
     await handleLineEvent(payload, makeEnv());
 
     expect(mockClassifyReplyIntent).not.toHaveBeenCalled();
+    expect(mockDraftUpdate).not.toHaveBeenCalled();
   });
 });

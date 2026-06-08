@@ -42,7 +42,6 @@ import {
   toCoreIdea,
 } from "./post-job.js";
 import type { CoreIdeaRow } from "./post-job.js";
-import type { EditorOutput } from "../../lib/editor/types.js";
 import type { CoreIdea } from "../../lib/writer/types.js";
 import type { Env } from "../worker.js";
 import {
@@ -72,21 +71,6 @@ function getSupabase(env: Env): SupabaseClient | null {
   }) as unknown as SupabaseClient;
   return _supabase;
 }
-
-// ============================================================
-// post_drafts row shape (columns we need)
-// ============================================================
-type PostDraftRow = {
-  id: string;
-  core_idea_id: string;
-  body: string;
-  fmat: string | null;
-  published_at: string | null;
-  scheduled_for: string | null;
-  human_approval_status: string;
-  editor_output: EditorOutput | null;
-  run_id?: string | null;
-};
 
 // ============================================================
 // resolveRunIdForDraft — draft の run_id を引いて trace 相関に使う。
@@ -122,211 +106,12 @@ async function notify(env: Env, message: string): Promise<void> {
 }
 
 // ============================================================
-// Extract approve/reject intent from LINE event payload
-// Returns { action: 'approve' | 'reject', draftId: string } or null
+// 承認/却下は承認UI(xad-dashboard /approval)へ一本化した。
+// LINE 側の approve/reject ボタン・ハンドラ・自由文 approve/reject 経路は撤去し、
+// 「承認はUIで」と案内する。LINE に残すのは 修正:/覚えて: と interview のみ。
 // ============================================================
-function parseApprovalIntent(
-  payload: unknown,
-): { action: "approve" | "reject"; draftId: string } | null {
-  if (typeof payload !== "object" || payload === null) return null;
-  const ev = payload as Record<string, unknown>;
-
-  let data: string | null = null;
-
-  // postback event
-  if (ev.type === "postback") {
-    const postback = ev.postback as Record<string, unknown> | undefined;
-    if (typeof postback?.data === "string") {
-      data = postback.data;
-    }
-  }
-
-  // text message fallback
-  if (ev.type === "message") {
-    const msg = ev.message as Record<string, unknown> | undefined;
-    if (msg?.type === "text" && typeof msg?.text === "string") {
-      data = msg.text.trim();
-    }
-  }
-
-  if (!data) return null;
-
-  const approveMatch = data.match(/^approve:(.+)$/);
-  if (approveMatch) return { action: "approve", draftId: approveMatch[1].trim() };
-
-  const rejectMatch = data.match(/^reject:(.+)$/);
-  if (rejectMatch) return { action: "reject", draftId: rejectMatch[1].trim() };
-
-  return null;
-}
-
-// ============================================================
-// handleApprove — 承認 = 「予約待ちストック化」(X API 直投はしない)
-//   承認すると human_approval_status='approved' / human_approved_at にし、
-//   scheduled_for=NULL のまま「予約待ちストック」に積む。実投稿は Phase 2 の
-//   chrome-devtools 予約投稿 (人のPC起動時トリガ) が担う。
-// ============================================================
-async function handleApprove(
-  draftId: string,
-  env: Env,
-  ctx?: ExecutionContext,
-): Promise<void> {
-  const sb = getSupabase(env);
-  if (!sb) {
-    console.error("[line-event] Supabase not configured");
-    return;
-  }
-
-  // 1. Load post_drafts row
-  const { data, error } = await sb
-    .from("post_drafts")
-    .select("id, core_idea_id, body, fmat, published_at, scheduled_for, human_approval_status, editor_output, run_id")
-    .eq("id", draftId)
-    .maybeSingle();
-
-  if (error) {
-    console.error("[line-event] post_drafts select error:", error.message);
-    await notify(env, `⚠️ 承認処理エラー: DBエラー (${error.message})`);
-    return;
-  }
-
-  if (!data) {
-    await notify(env, `⚠️ draft_id=${draftId} が見つかりません`);
-    return;
-  }
-
-  const draft = data as PostDraftRow;
-
-  // 2. Idempotency: 既に承認(ストック) / 予約 / 公開済 → no-op。
-  //    (`!= null` で null/undefined 両方を弾く)
-  if (
-    draft.human_approval_status === "approved" ||
-    draft.scheduled_for != null ||
-    draft.published_at != null
-  ) {
-    await notify(env, `ℹ️ draft_id=${draftId} は既に公開済/承認済(予約待ち)です`);
-    return;
-  }
-
-  // 3. editor が rejected の下書きはストックに積まない (人の承認でも上書きしない)。
-  const editorOutput = draft.editor_output;
-  if (!editorOutput) {
-    await notify(env, `⚠️ draft_id=${draftId} の editor_output が保存されていません`);
-    return;
-  }
-  if (editorOutput.decision === "rejected") {
-    await notify(env, `⚠️ draft_id=${draftId} は editor 却下済みのため承認できません`);
-    return;
-  }
-
-  const nowIso = new Date().toISOString();
-  const runId = draft.run_id ?? undefined;
-
-  // A10: 元 run があれば line-approval を approved として記録 (publisher trace は廃止)。
-  if (runId) {
-    await withTrace(
-      ctx,
-      { runId, stageId: "line-approval", input: { draftId, response: true } },
-      async () => ({ result: undefined, outcome: "approved" }),
-    );
-  }
-
-  // 4. Atomic claim: pending のときだけ approved にする (二重ストック防止)。
-  //    別呼び出しが既に承認済みなら .select("id") は 0 行を返す。
-  const { data: claimData, error: claimErr } = await sb
-    .from("post_drafts")
-    .update({ human_approval_status: "approved", human_approved_at: nowIso })
-    .eq("id", draftId)
-    .eq("human_approval_status", "pending")
-    .select("id");
-
-  if (claimErr) {
-    console.error("[line-event] post_drafts approve-claim error:", claimErr.message);
-    await notify(env, `⚠️ 承認処理エラー: DBエラー (${claimErr.message})`);
-    return;
-  }
-
-  const claimed = Array.isArray(claimData) ? claimData : [];
-  if (claimed.length === 0) {
-    // 別呼び出しが既に承認済み。
-    await notify(env, `ℹ️ draft_id=${draftId} は既に処理済みです`);
-    return;
-  }
-
-  // 5. core_ideas.status='approved' (ストック投入。公開は Phase2 で)。
-  const { error: ideaErr } = await sb
-    .from("core_ideas")
-    .update({ status: "approved" })
-    .eq("id", draft.core_idea_id);
-  if (ideaErr) {
-    console.error("[line-event] core_ideas update error:", ideaErr.message);
-  }
-
-  // 6. 承認 = 予約待ちストック追加の案内。
-  await notify(
-    env,
-    `✅ 承認しました（予約待ちストックに追加）\ndraft_id: ${draftId}\nPCで「翌日分を予約して」と指示すると chrome-devtools で X 予約投稿します。`,
-  );
-}
-
-// ============================================================
-// handleReject — mark draft rejected and return core_idea to queue
-// ============================================================
-async function handleReject(
-  draftId: string,
-  env: Env,
-  ctx?: ExecutionContext,
-): Promise<void> {
-  const sb = getSupabase(env);
-  if (!sb) {
-    console.error("[line-event] Supabase not configured");
-    return;
-  }
-
-  // 1. Update post_drafts.human_approval_status = 'rejected'
-  const { data: draftData, error } = await sb
-    .from("post_drafts")
-    .update({ human_approval_status: "rejected" })
-    .eq("id", draftId)
-    .select("id, core_idea_id, run_id");
-
-  if (error) {
-    console.error("[line-event] post_drafts reject update error:", error.message);
-    await notify(env, `⚠️ 却下処理エラー: DBエラー (${error.message})`);
-    return;
-  }
-
-  // 2. Return the core_idea to the queue (status → 'draft') so it can be re-processed
-  const rows = Array.isArray(draftData) ? draftData : [];
-  const rejRow = rows.length > 0
-    ? (rows[0] as { id: string; core_idea_id: string; run_id?: string | null })
-    : null;
-  const coreIdeaId: string | null = rejRow ? rejRow.core_idea_id : null;
-
-  // A10: 元 run があれば line-approval を rejected として記録 (publisher は無し)。
-  const runId = rejRow?.run_id ?? undefined;
-  if (runId) {
-    await withTrace(
-      ctx,
-      { runId, stageId: "line-approval", input: { draftId, response: false } },
-      async () => ({ result: undefined, outcome: "rejected" }),
-    );
-  }
-
-  if (coreIdeaId) {
-    const { error: ideaErr } = await sb
-      .from("core_ideas")
-      .update({ status: "draft" })
-      .eq("id", coreIdeaId);
-    if (ideaErr) {
-      console.error("[line-event] core_ideas revert error:", ideaErr.message);
-    }
-  } else {
-    console.warn("[line-event] handleReject: could not determine core_idea_id for draft", draftId);
-  }
-
-  await notify(env, `🚫 却下しました\ndraft_id: ${draftId}`);
-}
+const APPROVE_VIA_UI_MSG =
+  "✅ 承認・却下は承認画面（/approval）で行ってください。本文の編集もそこでできます。";
 
 // ============================================================
 // Japanese feedback commands — 覚えて: / 修正:
@@ -620,24 +405,11 @@ async function handleFreeTextIntent(
   const result = await classifyReplyIntent(text);
 
   switch (result.intent) {
-    case "approve": {
-      const id = await resolveLatestPendingDraftId(env, targetDraftId);
-      if (!id) {
-        await notify(env, "承認対象の下書きが見つかりません");
-        return;
-      }
-      await handleApprove(id, env, ctx);
+    case "approve":
+    case "reject":
+      // 承認/却下は承認UIへ一本化。LINE では受け付けず案内する。
+      await notify(env, APPROVE_VIA_UI_MSG);
       return;
-    }
-    case "reject": {
-      const id = await resolveLatestPendingDraftId(env, targetDraftId);
-      if (!id) {
-        await notify(env, "却下対象の下書きが見つかりません");
-        return;
-      }
-      await handleReject(id, env, ctx);
-      return;
-    }
     case "revise": {
       const instruction = result.instruction || text;
       await handleReviseFeedback(instruction, env, targetDraftId, ctx);
@@ -648,49 +420,20 @@ async function handleFreeTextIntent(
       return;
     }
     case "approve_and_remember": {
-      const id = await resolveLatestPendingDraftId(env, targetDraftId);
-      if (id) await handleApprove(id, env, ctx);
-      await addStyleFeedback(env, "remember", result.note || text, id ?? undefined);
-      await notify(env, "覚えました（今後の参考にします）");
+      // メモは保存（remember は残置）。承認自体はUIで。
+      await addStyleFeedback(env, "remember", result.note || text);
+      await notify(env, `覚えました（今後の参考にします）。\n${APPROVE_VIA_UI_MSG}`);
       return;
     }
     case "none":
     default:
       await notify(
         env,
-        "判断できませんでした。「承認」「却下」「修正: <指示>」「覚えて: <指示>」のいずれかで指示してください。" +
-          "（カードに引用リプライすると対象を特定できます）",
+        "判断できませんでした。「修正: <指示>」「覚えて: <指示>」のいずれかで指示してください。" +
+          "（承認・却下は承認画面 /approval で行います）",
       );
       return;
   }
-}
-
-/**
- * approve/reject の対象 draft_id を解決する。
- * targetDraftId (引用先) があればそれを使い、なければ latest-pending を引く。
- */
-async function resolveLatestPendingDraftId(
-  env: Env,
-  targetDraftId: string | null,
-): Promise<string | null> {
-  if (targetDraftId) return targetDraftId;
-  const sb = getSupabase(env);
-  if (!sb) return null;
-  const { data, error } = await sb
-    .from("post_drafts")
-    .select("id")
-    .eq("human_approval_status", "pending")
-    .is("published_at", null)
-    .order("created_at", { ascending: false })
-    .limit(1)
-    .maybeSingle();
-  if (error) {
-    console.error("[line-event] resolveLatestPendingDraftId error:", error.message);
-    return null;
-  }
-  if (!data) return null;
-  const id = (data as { id?: unknown }).id;
-  return typeof id === "string" ? id : null;
 }
 
 async function handleInterviewText(
@@ -783,19 +526,16 @@ export async function handleLineEvent(
     return;
   }
 
-  // 1. approve:/reject: (postback + text) → 即処理 (LLM を呼ばない cheap path)。
-  const intent = parseApprovalIntent(payload);
-  if (intent) {
-    if (intent.action === "approve") {
-      await handleApprove(intent.draftId, env, ctx);
-    } else {
-      await handleReject(intent.draftId, env, ctx);
-    }
-    return;
-  }
-
+  // 承認/却下は承認UIへ一本化（LINE の approve:/reject: postback 経路は撤去）。
+  // text message のみ受け付ける（postback / follow 等は parseTextMessage が null → no-op）。
   const textMsg = parseTextMessage(payload);
   if (!textMsg) return;
+
+  // 旧 approve:/reject: テキストが来た場合は承認UIへ案内（誤操作の取りこぼし防止）。
+  if (/^(approve|reject):/.test(textMsg.text)) {
+    await notify(env, APPROVE_VIA_UI_MSG);
+    return;
+  }
 
   // 引用リプライ先 (あれば) から対象 draft_id を先に解決する。
   const quotedDraftId = await resolveQuotedDraftId(payload, env);

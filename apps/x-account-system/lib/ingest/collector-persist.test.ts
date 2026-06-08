@@ -42,6 +42,18 @@ describe("collector-persist", () => {
     expect(out.map((c) => c.tweet.id)).toEqual(["2"]);
   });
 
+  test("buildMaterialRow without translation → no translation meta", () => {
+    const row = buildMaterialRow(scored("8"), "redacted t8", false);
+    expect(row.meta.translation).toBeUndefined();
+    expect(row.meta.translation_engine).toBeUndefined();
+  });
+
+  test("buildMaterialRow with translation → meta.translation + engine", () => {
+    const row = buildMaterialRow(scored("7"), "redacted t7", false, "日本語訳");
+    expect(row.meta.translation).toBe("日本語訳");
+    expect(row.meta.translation_engine).toBe("claude-haiku");
+  });
+
   test("buildMaterialRow maps all fields", () => {
     const row = buildMaterialRow(scored("9"), "redacted t9", false);
     expect(row.source_type).toBe("x_inspirations");

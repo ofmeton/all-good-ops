@@ -8,6 +8,7 @@ import { COLLECTOR_CONFIG } from "./collector-config.js";
 import { buildExploreSystemPrompt } from "./collector-prompts.js";
 import { COLLECTOR_TOOLS, dispatchTool, type ToolApi } from "./collector-tools.js";
 import { scoreCandidates, type Candidate } from "./collector-scoring.js";
+import { translateCandidates } from "./collector-translate.js";
 import { saveScoredMaterials } from "./collector-persist.js";
 import { costUsdFor, USD_JPY_RATE } from "../cost/cost-of.js";
 
@@ -100,14 +101,21 @@ export async function runCollect(deps: RunCollectDeps): Promise<number> {
     model: COLLECTOR_CONFIG.scoringModel,
   });
 
-  const inserted = await saveScoredMaterials(deps.sb, scored);
+  // 海外ツイート（lang≠ja）を Haiku で翻訳 → meta.translation に積む（#6 基盤）。
+  const { translations, costJpy: translateCostJpy } = await translateCandidates(
+    deps.anthropic as never,
+    scored,
+    { model: COLLECTOR_CONFIG.translationModel },
+  );
+
+  const inserted = await saveScoredMaterials(deps.sb, scored, translations);
 
   const scoreCostJpy = scored.reduce((s, c) => s + c.costJpy, 0);
   deps.onTrace?.({
     model: COLLECTOR_CONFIG.scoringModel,
     tokensIn,
     tokensOut,
-    costJpy: scoreCostJpy + exploreCostJpy,
+    costJpy: scoreCostJpy + exploreCostJpy + translateCostJpy,
   });
   return inserted;
 }
