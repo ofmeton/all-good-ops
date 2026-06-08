@@ -12,9 +12,9 @@ import {
 } from "@/lib/curation-logic";
 import {
   FMAT_OPTIONS,
-  TEMPLATE_OPTIONS,
   DEFAULT_FMAT,
   DEFAULT_TEMPLATE_ID,
+  type TemplateOption,
 } from "@/lib/curation-formats";
 import { MaterialCard } from "./MaterialCard";
 
@@ -79,10 +79,12 @@ export function CurationClient({
   materials,
   counts,
   limit,
+  templateOptions,
 }: {
   materials: Record<SelectionStatus, CurationMaterial[]>;
   counts: Record<SelectionStatus, number>;
   limit: number;
+  templateOptions: TemplateOption[];
 }) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
@@ -558,7 +560,7 @@ export function CurationClient({
                   className="w-full h-9 pl-2.5 pr-8 text-sm border border-slate-200 rounded-lg bg-white text-slate-700 hover:border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 appearance-none cursor-pointer"
                   style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394a3b8' d='M6 8L1 3h10z'/%3E%3C/svg%3E\")", backgroundRepeat: "no-repeat", backgroundPosition: "right 10px center" }}
                 >
-                  {TEMPLATE_OPTIONS.map((o) => (
+                  {templateOptions.map((o) => (
                     <option key={o.id} value={o.id}>
                       {o.label}
                     </option>

@@ -1,5 +1,6 @@
 import { serverSupabase } from "./supabase";
 import type { CurationMaterial, SelectionStatus, CurationEventRow } from "./curation-logic";
+import { toTemplateOptions, TEMPLATE_OPTIONS_FALLBACK, type TemplateOption } from "./curation-formats";
 
 /** view から status 別に取得（overall desc、上限 limit）。 */
 export async function listCurationMaterials(
@@ -62,6 +63,27 @@ export async function recordCurationEvents(
   const sb = serverSupabase();
   const { error } = await sb.from("curation_events").insert(rows);
   if (error) throw new Error(`curation_events insert failed: ${error.message}`);
+}
+
+/**
+ * Worker の /admin/templates を叩いてテンプレ選択肢を取得（registry が SSOT）。
+ * enqueueCompose と同じ規約（WORKER_BASE_URL + OAUTH_ADMIN_SECRET / Bearer）。
+ * env 未設定・取得失敗・不正レスポンスはすべて fail-open で fallback を返す
+ * （テンプレ欄が空にならない＝送信導線を止めない）。
+ */
+export async function fetchTemplateOptions(): Promise<TemplateOption[]> {
+  const base = process.env.WORKER_BASE_URL;
+  const key = process.env.OAUTH_ADMIN_SECRET;
+  if (!base || !key) return TEMPLATE_OPTIONS_FALLBACK;
+  try {
+    const url = `${base.replace(/\/$/, "")}/admin/templates`;
+    const res = await fetch(url, { method: "GET", headers: { Authorization: `Bearer ${key}` } });
+    if (!res.ok) return TEMPLATE_OPTIONS_FALLBACK;
+    const body = (await res.json()) as { templates?: unknown };
+    return toTemplateOptions(body?.templates);
+  } catch {
+    return TEMPLATE_OPTIONS_FALLBACK;
+  }
 }
 
 /** Worker の /admin/enqueue を叩いて compose を起動。runId を返す（失敗時は null）。 */
