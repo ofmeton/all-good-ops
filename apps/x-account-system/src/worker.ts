@@ -19,6 +19,7 @@ import { insertRun, updateRun } from "../lib/trace/trace-store.js";
 import { verifyLineSignature, pkceChallenge, randomVerifier } from "../lib/crypto/webcrypto.js";
 import { exchangeCode } from "../lib/oauth/token-exchange.js";
 import { createClient } from "@supabase/supabase-js";
+import { listTemplateSummaries } from "../lib/curation/compose-templates.js";
 
 export interface Env {
   // vars (wrangler.toml [vars])
@@ -193,6 +194,18 @@ export default {
       await env.JOBS.send(msg);
       log(env, "info", `admin: enqueued job=${job} (manual)`);
       return Response.json({ ok: true, enqueued: msg });
+    }
+
+    // 管理用: 投稿テンプレ registry の要約一覧を返す（dashboard のドリフト解消用）。
+    // GET /admin/templates  (Bearer <secret> or ?key=<secret>・/admin/enqueue と同じ fail-closed 認可)
+    if (url.pathname === "/admin/templates") {
+      const authHeader = request.headers.get("authorization");
+      const bearer = authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : null;
+      const key = bearer ?? url.searchParams.get("key");
+      if (!env.OAUTH_ADMIN_SECRET || key !== env.OAUTH_ADMIN_SECRET) {
+        return new Response("unauthorized", { status: 401 });
+      }
+      return Response.json({ templates: listTemplateSummaries() });
     }
 
     // X OAuth PKCE Step 1: generate verifier/state → store in KV → redirect to X
