@@ -136,3 +136,22 @@ export function renderTemplatePrompt(tpl: ComposeTemplate): string {
   }
   return `${lines.join("\n")}\n\n${tpl.systemPromptPatch}`;
 }
+
+/** テンプレ要約（id/name/description/preferredFmats のみ・本文 patch は含めない）。 */
+export type TemplateSummary = Pick<
+  ComposeTemplate,
+  "id" | "name" | "description" | "preferredFmats"
+>;
+
+/**
+ * dashboard 等の選択肢用にテンプレ要約一覧を返す（registry が SSOT）。
+ * systemPromptPatch 等の本文は露出しない（選択 UI に不要・漏洩防止）。
+ */
+export function listTemplateSummaries(): TemplateSummary[] {
+  return Object.values(COMPOSE_TEMPLATES).map((t) => ({
+    id: t.id,
+    name: t.name,
+    description: t.description,
+    preferredFmats: t.preferredFmats,
+  }));
+}

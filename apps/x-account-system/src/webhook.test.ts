@@ -298,3 +298,64 @@ describe("/admin/enqueue manual trigger", () => {
     expect(msg.slot).toBeUndefined();
   });
 });
+
+// ============================================================
+// /admin/templates registry endpoint gate (T1)
+// ============================================================
+
+describe("/admin/templates registry endpoint", () => {
+  const ADMIN_SECRET = "super-secret-admin-key";
+
+  function adminEnv(overrides: Partial<Env> = {}): Env {
+    return {
+      ...makeEnv(),
+      OAUTH_ADMIN_SECRET: ADMIN_SECRET,
+      ...overrides,
+    } as Env;
+  }
+
+  function templatesReq(opts: { key?: string; bearer?: string } = {}): Request {
+    const u = new URL("https://worker.example.com/admin/templates");
+    if (opts.key !== undefined) u.searchParams.set("key", opts.key);
+    const headers: Record<string, string> = {};
+    if (opts.bearer !== undefined) headers["authorization"] = `Bearer ${opts.bearer}`;
+    return new Request(u.toString(), { method: "GET", headers });
+  }
+
+  test("missing key → 401", async () => {
+    const res = await worker.fetch(templatesReq(), adminEnv(), makeCtx());
+    expect(res.status).toBe(401);
+  });
+
+  test("wrong key → 401", async () => {
+    const res = await worker.fetch(templatesReq({ key: "nope" }), adminEnv(), makeCtx());
+    expect(res.status).toBe(401);
+  });
+
+  test("unset OAUTH_ADMIN_SECRET → fail CLOSED (401 even with a key)", async () => {
+    const env = adminEnv({ OAUTH_ADMIN_SECRET: "" });
+    const res = await worker.fetch(templatesReq({ key: ADMIN_SECRET }), env, makeCtx());
+    expect(res.status).toBe(401);
+  });
+
+  test("valid key (query) → 200 + templates shape", async () => {
+    const res = await worker.fetch(templatesReq({ key: ADMIN_SECRET }), adminEnv(), makeCtx());
+    expect(res.status).toBe(200);
+    const json = (await res.json()) as {
+      templates: Array<{ id: string; name: string; description: string; preferredFmats?: string[] }>;
+    };
+    expect(Array.isArray(json.templates)).toBe(true);
+    expect(json.templates.length).toBeGreaterThanOrEqual(2);
+    const gold = json.templates.find((t) => t.id === "template_chaen_gold");
+    expect(gold).toBeDefined();
+    expect(typeof gold!.name).toBe("string");
+    expect(typeof gold!.description).toBe("string");
+    // summary だけ（systemPromptPatch 等の本文は漏らさない）
+    expect((gold as Record<string, unknown>).systemPromptPatch).toBeUndefined();
+  });
+
+  test("valid key (Bearer header) → 200", async () => {
+    const res = await worker.fetch(templatesReq({ bearer: ADMIN_SECRET }), adminEnv(), makeCtx());
+    expect(res.status).toBe(200);
+  });
+});
