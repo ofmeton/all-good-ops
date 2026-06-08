@@ -56,6 +56,20 @@ function loadEnv(): void {
   const attachments: PhotoAttachment[] = Array.isArray(raw) ? (raw as PhotoAttachment[]) : [];
 
   const result = await fetchDraftMedia(draftId, attachments);
+
+  // skipped>0（写真DL一部失敗）は観測から消さない: stderr に目立つ警告を出し、
+  // スキルが完了報告で人へ surface できるようにする（attachmentsResolved 記録も促す）。
+  if (result.skipped > 0) {
+    const reasons = result.resolved
+      .filter((r) => r.resolvedKind === "skipped")
+      .map((r) => `${r.sourceUrl ?? "?"}: ${r.fallbackReason ?? "?"}`);
+    console.error(
+      `⚠️ [fetch-draft-media] draft=${draftId} 写真 ${result.skipped} 枚 DL 失敗→skipped` +
+        `（uploaded=${result.uploaded}）。本文のみで投稿可。要 surface:\n  - ` +
+        reasons.join("\n  - "),
+    );
+  }
+
   console.log(
     JSON.stringify({
       ok: true,

@@ -24,6 +24,8 @@ export async function POST(req: Request) {
   const status = ACTION_TO_STATUS[action];
 
   // attachments は単一 draft 承認時のみ（RPC は claimed 全件に同値を書くため曖昧回避）
+  // 既知 follow-up: 「写真を全部外して 0 枚にする」意図は現状送らない（空配列→null 化で
+  //   RPC が coalesce により既存値を維持する＝クリア経路が無い）。承認時の新規 intent 付与のみ対応。
   let attachments: Attachment[] | null = null;
   if (body.attachments != null) {
     if (action !== "approve" || ids.length !== 1) {
@@ -49,7 +51,7 @@ export async function POST(req: Request) {
         attachments: attachments?.length ?? 0,
       }),
     );
-    return NextResponse.json({ ok: true, updated });
+    return NextResponse.json({ ok: true, updated, attachments: attachments?.length ?? 0 });
   } catch (e) {
     console.error(
       JSON.stringify({

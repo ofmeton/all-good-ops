@@ -67,12 +67,14 @@ npx tsx scripts/plan-scheduled-publish.ts --days 2   # 翌々日まで
      `post_drafts.attachments`（承認時に書かれた写真 upload intent）を pbs.twimg.com から
      原寸 DL し `os.tmpdir()/xad-media/<draftId>-<idx>.<ext>` に保存する。
    - 添付: **「画像や動画を追加」/「ファイル選択」** に `upload_file` で `localPaths` を**順次**添付。
-   - **DL 失敗（`skipped`）は本文のみで投稿を継続**（サイレント失敗禁止＝skipped 件数を必ず控え、
-     後の record で記録する）。`uploaded`=0 でも本文（＋動画 deep-link）はそのまま投稿できる。
+   - **DL 失敗（`skipped`）は本文のみで投稿を継続**（サイレント失敗禁止）。CLI は `skipped>0` のとき
+     **stderr に警告を出す**。`skipped>0` のときは**必ず人へ surface**し（何枚・理由）、`attachmentsResolved`
+     に記録する。`uploaded`=0 でも本文（＋動画 deep-link）はそのまま投稿できる。
    - **著作権/規約ガード**: 他者メディア再アップは引用RT基本＋出典明記＋拡散歓迎系限定（compliance 確認）。
 6. **button「予約設定」**（有効化されている）を押す → 予約確定。
-7. **投稿確定後、一時ファイルを cleanup**（cookie/容量の衛生）: `localPaths` を削除
-   （例: `rm -f /var/folders/.../xad-media/<draftId>-*` など、出力された localPaths のみ）。
+7. **投稿確定後、一時ファイルを cleanup**: 出力された `localPaths` を削除（例: `rm -f <localPaths>`）。
+   - cleanup は best-effort。**rm を忘れた/失敗しても、次回 `fetch-draft-media` 開始時に
+     `xad-media/` の 24h 超ファイルを自動 sweep する**ので他者写真は無期限残留しない（安全網）。
 8. 確認＆控え: `下書き` → タブ「予約済み」で予約が並ぶ。`scheduled_post_id` 相当を控える
    （削除は「編集」→ checkbox 選択 → 「削除」→「削除」確定）。写真添付があった draft は
    `uploaded`/`skipped` 件数も控え、Step 4 の record で `attachmentsResolved` に渡す。
@@ -82,7 +84,7 @@ npx tsx scripts/plan-scheduled-publish.ts --days 2   # 翌々日まで
 
 ### 4. DB 記録＋観測トレース（record-scheduled-publish.ts に集約）
 予約確定できたものだけを、Step 1 の `RECORD_ARG` に各 `scheduledPostId` を足して**1 コマンド**で記録する。
-この CLI が `post_drafts.scheduled_for/scheduled_post_id` の**冪等 UPDATE**（`and scheduled_for is null` ガード）と、`xad.run`/`xad.run_trace` への観測記録（Worker 外工程なので queue が書けない分）を**まとめて**行う:
+この CLI が `post_drafts.scheduled_for/scheduled_post_id` の**冪等 UPDATE**（`where id=$ and scheduled_for is null` ガード）と、`xad.run`/`xad.run_trace` への観測記録（Worker 外工程なので queue が書けない分）を**まとめて**行う:
 
 ```bash
 cd apps/x-account-system
@@ -90,8 +92,12 @@ npx tsx scripts/record-scheduled-publish.ts \
   '[{"draftId":"<id>","scheduledFor":"2026-06-08T07:00:00+09:00","scheduledPostId":"<x識別子>","attachmentsResolved":{"uploaded":2,"skipped":0}}]'
 ```
 
-写真添付があった draft は `attachmentsResolved`（Step 3-5 の `uploaded`/`skipped`）を足す。
-trace の output に残り、dashboard で「写真何枚 upload / 何枚 skipped」が追える（任意。無くても可）。
+- 出力 `{ runId, count, applied, noop }`: `applied`=今回確定した予約数 / `noop`=既予約で更新されなかった数。
+  **`noop>0` は二重実行/再記録の兆候**なので確認する（CLI が stderr に警告も出す）。冪等 UPDATE があるので
+  同じ引数で再実行しても二重予約にはならない。
+- **写真添付があった draft は `attachmentsResolved`（Step 3-5 の `uploaded`/`skipped`）を必ず付ける**
+  （特に `skipped>0` のとき。観測に残し dashboard で「何枚 upload / 何枚 skipped」を追えるように）。
+  写真添付が無い draft は省略可。
 
 `core_ideas.status` は `approved` のまま（公開時に別途 `published` へ）。これで dashboard の
 `scheduled-publish` ノード「実行」タブに「どの draft を / いつの予約に / どの識別子で 登録したか」が出て、

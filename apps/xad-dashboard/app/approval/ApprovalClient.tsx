@@ -43,8 +43,15 @@ export function ApprovalClient({ initialDrafts }: { initialDrafts: ApprovalDraft
           removeDraft(id);
           return;
         }
+        // 保存された添付枚数を surface（メディア欠落を承認段階で検知しやすく）
+        const savedAtt = typeof body.attachments === "number" ? body.attachments : 0;
         setMsg({
-          text: action === "approve" ? "承認しました（予約待ちストックへ）" : "却下しました",
+          text:
+            action === "approve"
+              ? savedAtt > 0
+                ? `承認しました（予約待ちストックへ・写真${savedAtt}枚添付予定）`
+                : "承認しました（予約待ちストックへ）"
+              : "却下しました",
           type: "success",
         });
         removeDraft(id);
