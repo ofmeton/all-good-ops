@@ -206,6 +206,16 @@ export async function runMaSession(deps: RunMaSessionDeps): Promise<MaSessionRes
       deps.client ??
       (new ((await import("@anthropic-ai/sdk")).default)({ apiKey }) as unknown as MaClientLike);
 
+    // SDK 版数ガード: Managed Agents API (beta.environments) 欠落を cryptic な
+    // "reading 'create'" でなく明示エラーにする。古い @anthropic-ai/sdk が
+    // node_modules に残ると本番 compose が全滅する（deploy 前 npm ci 必須）。
+    if (typeof client.beta?.environments?.create !== "function") {
+      throw new Error(
+        "@anthropic-ai/sdk lacks Managed Agents API (beta.environments). " +
+          "SDK too old — run `npm ci` (need >=0.101) and redeploy.",
+      );
+    }
+
     // 1. Environment
     const env = await client.beta.environments.create({
       name: deps.environment?.name ?? `xad-ma-${Math.floor(t0 / 1000)}`,

@@ -161,6 +161,17 @@ describe("runMaSession", () => {
       expect(calls.envDelete).toBe(1);
     });
 
+    test("SDK が古く Managed Agents API 欠落時は明示エラー (cryptic な reading 'create' を防ぐ)", async () => {
+      // 旧 @anthropic-ai/sdk 模倣: beta はあるが environments が無い（0.36 等）。
+      const client = { beta: {} } as unknown as MaClientLike;
+      const r = await runMaSession({
+        agent: { name: "a", model: "claude-haiku-4-5" }, userMessage: "hi", apiKey: "sk-test", client,
+      });
+      expect(r.ok).toBe(false);
+      expect(r.terminal).toBe("error");
+      expect(r.error).toMatch(/Managed Agents|npm ci/i);
+    });
+
     test("停滞ストリームでも timeoutMs で打ち切る (TIMEOUT)", async () => {
       // 永遠に next() が解決しない iterator
       const stallStream: AsyncIterable<Record<string, unknown>> = {
