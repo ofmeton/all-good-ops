@@ -1,10 +1,24 @@
 /**
  * lib/curation/compose-prompts.ts — 執筆Ag(MA writer) の判断系レバー。
  * ターゲット定義 / 執筆戦略 / 品質・掟 はここを編集する。
+ * 投稿の型（テンプレ）は lib/curation/compose-templates.ts に一本化（ここでは patch を結合するのみ）。
  * 出典: outputs/research/2026-06-05-chaen-x-account-analysis.md §9.1 /
  *       lib/writer/system-prompts.ts / .claude/skills/content-quality-rubric.md
  */
 import { TARGET_DEFINITION } from "../ingest/collector-prompts.js";
+import { resolveTemplate } from "./compose-templates.js";
+
+/** 許可フォーマット集合（SUBMIT_DRAFT_TOOL enum・run-compose validation・RPC と一致させる）。 */
+export const COMPOSE_FMATS = ["short", "medium", "long", "article", "thread"] as const;
+
+/** fmat の日本語ラベル（writer への希望フォーマット指示で使用）。 */
+export const FMAT_LABELS: Record<string, string> = {
+  short: "短め",
+  medium: "普通",
+  long: "長め",
+  article: "記事（X 長文単発）",
+  thread: "スレッド",
+};
 
 /** submit_draft tool（writer の出力契約）。最後に必ず呼ばせる。 */
 export const SUBMIT_DRAFT_TOOL = {
@@ -16,7 +30,7 @@ export const SUBMIT_DRAFT_TOOL = {
     type: "object",
     properties: {
       body: { type: "string", description: "X 投稿本文（プレーンテキスト・最終形）" },
-      fmat: { type: "string", enum: ["short", "medium", "long", "thread"], description: "投稿フォーマット" },
+      fmat: { type: "string", enum: ["short", "medium", "long", "article", "thread"], description: "投稿フォーマット（article=X 長文単発・thread のように分割しない）" },
       topic: { type: "string", description: "この投稿の主題（1行）" },
       category: {
         type: "string",
@@ -35,21 +49,18 @@ export const SUBMIT_DRAFT_TOOL = {
   },
 };
 
-/** 執筆 system prompt（チャエン黄金型 + 掟）。 */
-export function buildWriterSystemPrompt(): string {
+/**
+ * 執筆 system prompt（base + テンプレ patch + 掟）。
+ * templateId 未指定/無効時は既定テンプレ（チャエン黄金型）に解決＝現行挙動維持。
+ */
+export function buildWriterSystemPrompt(templateId?: string): string {
+  const tpl = resolveTemplate(templateId);
   return `あなたは X 発信用の「執筆エージェント」です。1 つの素材（元ツイート/ニュース）から、X 投稿ドラフトを 1 本書きます。
 
 ${TARGET_DEFINITION}
 ポジション: 「AIニュースを非エンジニアの言葉に翻訳して即届ける速報屋」。
 
-## 投稿の型（チャエン黄金型）
-- 1行目: 【速報】【朗報】等 + 主語が何をしたか（最強フックを1行目に置く）。
-- 空行 → 一言の意味づけ・感情（例「これは強すぎる」）。
-- 空行 → 「・」で要点 3〜5 点（箇条書き。markdown のリスト記号 - * は使わない）。
-- 「だから実務/業務がどう変わるか」を一言必ず添える（仕組み化・自動化への接続）。
-- CTA（👇 等）は毎回付けない（5〜6 投稿に 1 回程度）。
-- 文量は 140〜280 字を主軸（fmat=short/medium）。長文が要る時のみ long/thread。
-- **プレーンテキストで書く**（**太字** や # 見出し等の markdown 記法は使わない。強調は言葉と改行で）。
+${tpl.systemPromptPatch}
 
 ## リサーチ（数字捏造の防止＝最重要）
 - 具体的な数字・金額・期間・固有の事実を本文に書くなら、**素材本文に在るもの**を使うか、**web_search で裏を取ってから**書く。
@@ -66,6 +77,6 @@ ${TARGET_DEFINITION}
 ## 進め方
 1. 渡された素材本文と URL を読む。
 2. 必要なら web_search / web_fetch で裏取り・補足。
-3. チャエン黄金型で本文を 1 本書く。
+3. 投稿の型に沿って本文を 1 本書く。
 4. 最後に **必ず submit_draft を呼んで**提出する（body/fmat/topic/category 必須、citations 推奨）。`;
 }

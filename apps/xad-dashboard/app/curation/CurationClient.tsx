@@ -10,6 +10,12 @@ import {
   type CurationAction,
   type FilterSpec,
 } from "@/lib/curation-logic";
+import {
+  FMAT_OPTIONS,
+  TEMPLATE_OPTIONS,
+  DEFAULT_FMAT,
+  DEFAULT_TEMPLATE_ID,
+} from "@/lib/curation-formats";
 import { MaterialCard } from "./MaterialCard";
 
 const TABS: { key: SelectionStatus; label: string; color: string }[] = [
@@ -89,6 +95,10 @@ export function CurationClient({
     text: "",
     type: "info",
   });
+  // 執筆送信ダイアログ: format/template をバッチ一括で 1 回選ぶ
+  const [composeOpen, setComposeOpen] = useState(false);
+  const [desiredFmat, setDesiredFmat] = useState<string>(DEFAULT_FMAT);
+  const [templateId, setTemplateId] = useState<string>(DEFAULT_TEMPLATE_ID);
 
   const base = materials[tab] ?? [];
   const shown = sortMaterials(filterMaterials(base, { ...filter, text }), sort);
@@ -119,7 +129,10 @@ export function CurationClient({
     setChecked(new Set());
   };
 
-  async function act(action: CurationAction) {
+  async function act(
+    action: CurationAction,
+    opts?: { desiredFmat?: string; templateId?: string },
+  ) {
     const ids = Array.from(checked);
     if (ids.length === 0) return;
     let note: string | null = null;
@@ -130,7 +143,13 @@ export function CurationClient({
     const res = await fetch("/api/curation/select", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ ids, action, note }),
+      body: JSON.stringify({
+        ids,
+        action,
+        note,
+        ...(opts?.desiredFmat ? { desiredFmat: opts.desiredFmat } : {}),
+        ...(opts?.templateId ? { templateId: opts.templateId } : {}),
+      }),
     });
     const body = await res.json().catch(() => ({}));
     if (!res.ok) {
@@ -143,6 +162,11 @@ export function CurationClient({
     });
     setChecked(new Set());
     startTransition(() => router.refresh());
+  }
+
+  async function confirmCompose() {
+    setComposeOpen(false);
+    await act("send_to_compose", { desiredFmat, templateId });
   }
 
   const activeTab = TABS.find((t) => t.key === tab)!;
@@ -356,7 +380,11 @@ export function CurationClient({
               {ACTION_CONFIG.map(({ action, label, variant }) => (
                 <ActionButton
                   key={action}
-                  onClick={() => act(action)}
+                  onClick={() =>
+                    action === "send_to_compose"
+                      ? setComposeOpen(true)
+                      : act(action)
+                  }
                   disabled={pending || checked.size === 0}
                   variant={variant}
                 >
@@ -458,6 +486,105 @@ export function CurationClient({
           )}
         </div>
       </div>
+
+      {/* ── 執筆送信ダイアログ（format / template をバッチ一括選択） ── */}
+      {composeOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="compose-dialog-title"
+          onClick={() => setComposeOpen(false)}
+        >
+          <div
+            className="w-full max-w-sm rounded-xl bg-white shadow-xl border border-slate-200 overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="px-5 pt-4 pb-3 border-b border-slate-100">
+              <h2
+                id="compose-dialog-title"
+                className="text-sm font-semibold text-slate-900"
+              >
+                執筆へ送る
+              </h2>
+              <p className="text-xs text-slate-500 mt-0.5">
+                選択した{" "}
+                <span className="font-medium text-slate-700 tabular-nums">
+                  {checked.size}
+                </span>{" "}
+                件すべてに、下記のフォーマットとテンプレートを適用します。
+              </p>
+            </div>
+
+            <div className="px-5 py-4 space-y-3.5">
+              {/* Format */}
+              <div className="space-y-1">
+                <label
+                  htmlFor="compose-fmat"
+                  className="block text-xs font-medium text-slate-600"
+                >
+                  フォーマット
+                </label>
+                <select
+                  id="compose-fmat"
+                  value={desiredFmat}
+                  onChange={(e) => setDesiredFmat(e.target.value)}
+                  className="w-full h-9 pl-2.5 pr-8 text-sm border border-slate-200 rounded-lg bg-white text-slate-700 hover:border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 appearance-none cursor-pointer"
+                  style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394a3b8' d='M6 8L1 3h10z'/%3E%3C/svg%3E\")", backgroundRepeat: "no-repeat", backgroundPosition: "right 10px center" }}
+                >
+                  {FMAT_OPTIONS.map((o) => (
+                    <option key={o.value} value={o.value}>
+                      {o.label}
+                    </option>
+                  ))}
+                </select>
+                <p className="text-[11px] leading-snug text-slate-400">
+                  記事は X 長文単発（スレッドのように分割しません）。
+                </p>
+              </div>
+
+              {/* Template */}
+              <div className="space-y-1">
+                <label
+                  htmlFor="compose-template"
+                  className="block text-xs font-medium text-slate-600"
+                >
+                  テンプレート
+                </label>
+                <select
+                  id="compose-template"
+                  value={templateId}
+                  onChange={(e) => setTemplateId(e.target.value)}
+                  className="w-full h-9 pl-2.5 pr-8 text-sm border border-slate-200 rounded-lg bg-white text-slate-700 hover:border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 appearance-none cursor-pointer"
+                  style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394a3b8' d='M6 8L1 3h10z'/%3E%3C/svg%3E\")", backgroundRepeat: "no-repeat", backgroundPosition: "right 10px center" }}
+                >
+                  {TEMPLATE_OPTIONS.map((o) => (
+                    <option key={o.id} value={o.id}>
+                      {o.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end gap-2 px-5 py-3 bg-slate-50 border-t border-slate-100">
+              <button
+                onClick={() => setComposeOpen(false)}
+                className="px-3 py-1.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-200/60 transition-colors"
+              >
+                キャンセル
+              </button>
+              <button
+                onClick={confirmCompose}
+                disabled={pending || checked.size === 0}
+                className="px-4 py-1.5 rounded-lg text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800 shadow-sm disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              >
+                送信
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

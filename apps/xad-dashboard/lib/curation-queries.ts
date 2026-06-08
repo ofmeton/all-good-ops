@@ -36,10 +36,21 @@ export async function fetchMaterialsForEvents(ids: string[]): Promise<CurationMa
   return (data ?? []) as CurationMaterial[];
 }
 
-/** RPC で status を原子更新。更新件数を返す。 */
-export async function setSelectionStatus(ids: string[], status: SelectionStatus): Promise<number> {
+/** RPC で status を原子更新。更新件数を返す。
+ *  desiredFmat / templateId は send_to_compose 時のみ渡す（未指定は null = 既存 meta 保持）。 */
+export async function setSelectionStatus(
+  ids: string[],
+  status: SelectionStatus,
+  desiredFmat?: string | null,
+  templateId?: string | null,
+): Promise<number> {
   const sb = serverSupabase();
-  const { data, error } = await sb.rpc("set_selection_status", { p_ids: ids, p_status: status });
+  const { data, error } = await sb.rpc("set_selection_status", {
+    p_ids: ids,
+    p_status: status,
+    p_desired_fmat: desiredFmat ?? null,
+    p_template_id: templateId ?? null,
+  });
   if (error) throw new Error(`set_selection_status failed: ${error.message}`);
   return (data as number) ?? 0;
 }
