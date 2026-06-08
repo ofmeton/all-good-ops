@@ -1,0 +1,47 @@
+{
+  "status": "success",
+  "msg": "success",
+  "data": {
+    "id": "2042103180478001153",
+    "name": "Claude Code Studio",
+    "userName": "ClaudeCode_love",
+    "location": "自社サイトはこちら👉",
+    "url": "https://t.co/qiB5ZBtLZo",
+    "description": "Claude Codeガチ勢３人で運営｜実務レベルのCLI活用・自動化を毎日発信｜開発プログラム参加｜賞金30万円獲得｜現在は上場企業とAIエージェントを共同開発中｜AI時代はコンテキスト/ナレッジ管理が９割｜組織全体への「 ClaudeCode × Obsidian 」の導入は下のHPからご相談ください👇",
+    "entities": {
+      "description": {},
+      "url": {
+        "urls": [
+          {
+            "display_url": "plai-ai.com",
+            "expanded_url": "http://plai-ai.com",
+            "indices": [
+              0,
+              23
+            ],
+            "url": "https://t.co/qiB5ZBtLZo"
+          }
+        ]
+      }
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 34195,
+    "following": 16,
+    "favouritesCount": 1074,
+    "statusesCount": 491,
+    "mediaCount": 272,
+    "createdAt": "2026-04-09T04:52:16.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/2042103180478001153/1775787273",
+    "profilePicture": "https://pbs.twimg.com/profile_images/2042404213943386115/05hqEdJl_normal.jpg",
+    "canDm": true,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": [
+      "2058496124047249708"
+    ]
+  }
+}
