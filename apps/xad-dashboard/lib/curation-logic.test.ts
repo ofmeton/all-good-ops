@@ -10,7 +10,8 @@ function mat(p: Partial<CurationMaterial>): CurationMaterial {
     collected_at: "2026-06-06T00:00:00Z", selection_status: "collected",
     overall_score: 50, freshness: 40, velocity: 30, target_fit: 60,
     score_reason: "r", discovery_via: "keyword", discovery_query: "AI",
-    lang: "en", tweet_url: "u", conversation_id: null, media: [], engagement: null, ...p,
+    lang: "en", tweet_url: "u", conversation_id: null, media: [], engagement: null,
+    translation: null, ...p,
   };
 }
 

@@ -22,6 +22,7 @@ export interface CurationMaterial {
   conversation_id: string | null;
   media: MediaItem[] | null;
   engagement: Record<string, number> | null;
+  translation: string | null;
 }
 
 export const ACTION_TO_STATUS: Record<CurationAction, SelectionStatus> = {
