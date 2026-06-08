@@ -139,15 +139,20 @@ export async function fetchSourceMaterials(
   log: { warn: (m: string) => void } = console,
 ): Promise<{ materials: SourceMaterial[]; readFailed: boolean }> {
   if (!coreIdeaId) return { materials: [], readFailed: false };
+  // maybeSingle: 行なし（参照切れ・削除済み core_idea）は data:null/error:null で返る。
+  // .single() だと 0 行が PGRST116 エラー→恒久 readFailed→毎ラン check_read_failed＋MA 再走で
+  // 無限ストールする。行なしは「元ネタ枯渇」の degrade として redo の human escalation に流す。
   const { data: ci, error: ciErr } = await sb
     .from("core_ideas")
     .select("source_material_ids")
     .eq("id", coreIdeaId)
-    .single();
+    .maybeSingle();
   if (ciErr) {
     log.warn(`[check] core_idea read failed (ci=${coreIdeaId}): ${ciErr.message}`);
     return { materials: [], readFailed: true };
   }
+  // ci == null: 行が存在しない（恒久状態）→ readFailed せず枯渇 degrade。
+  if (ci == null) return { materials: [], readFailed: false };
   const ids = ((ci as { source_material_ids?: string[] } | null)?.source_material_ids ?? []) as string[];
   if (ids.length === 0) return { materials: [], readFailed: false };
   const { data: mats, error: matErr } = await sb
@@ -232,6 +237,10 @@ export async function runCheck(deps: RunCheckDeps): Promise<CheckRunResult> {
     // 読取失敗は warn＋degrade（元ネタ無しで点検は続行・redo は readFailed で次ラン据置）。
     const { materials: sourceMaterials, readFailed } = await fetchSourceMaterials(sb, d.core_idea_id, log);
     const sourceBlock = buildSourceBlock(sourceMaterials);
+    // 観測: core_idea はあるのに元ネタが 1 件も注入できない異常（参照切れ/source_material_ids 空/
+    // materials 欠落＝上流データ欠落の疑い）を可視化。null core_idea の正常 degrade と区別する。
+    if (d.core_idea_id && !readFailed && sourceMaterials.length === 0)
+      log.info?.(`[check] ${d.id} core_idea=${d.core_idea_id} だが元ネタ素材 0 件 — 上流データ欠落の疑い（degrade して点検続行）。`);
 
     // 注入順: # ドラフト本文 → # 元ネタツイート → # 直近の投稿。
     const userMessage =

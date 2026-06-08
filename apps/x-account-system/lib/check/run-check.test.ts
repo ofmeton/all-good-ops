@@ -27,7 +27,7 @@ function makeSb(state: St): any {
     const rec = (m: string) => (...a: any[]) => { ops.push({ m, a }); return builder; };
     const eqVal = (col: string) => ops.find((o) => o.m === "eq" && o.a[0] === col)?.a[1];
     const has = (m: string) => ops.some((o) => o.m === m);
-    const resolve = (single: boolean): { data: any; error: any } => {
+    const resolve = (mode: "single" | "maybe" | "list"): { data: any; error: any } => {
       if (table === "post_drafts") {
         if (has("update")) {
           if (state.failUpdate) return { data: null, error: { message: "upd boom" } };
@@ -53,7 +53,10 @@ function makeSb(state: St): any {
         const id = eqVal("id");
         const ci = (state.coreIdeas ?? []).find((c) => c.id === id);
         const data = ci ? { source_material_ids: ci.source_material_ids } : null;
-        return { data: single ? data : data ? [data] : [], error: null };
+        // 実 Supabase 忠実化: .single() は 0 行で PGRST116 エラー、.maybeSingle() は data:null/error:null。
+        if (mode === "single" && data === null) return { data: null, error: { code: "PGRST116", message: "JSON object requested, multiple (or no) rows returned" } };
+        if (mode === "list") return { data: data ? [data] : [], error: null };
+        return { data, error: null };
       }
       if (table === "materials_store") {
         if (has("update")) {
@@ -74,8 +77,9 @@ function makeSb(state: St): any {
     };
     const builder: any = {
       select: rec("select"), eq: rec("eq"), in: rec("in"), limit: rec("limit"), update: rec("update"),
-      single: () => Promise.resolve(resolve(true)),
-      then: (onF: any, onR: any) => Promise.resolve(resolve(false)).then(onF, onR),
+      single: () => Promise.resolve(resolve("single")),
+      maybeSingle: () => Promise.resolve(resolve("maybe")),
+      then: (onF: any, onR: any) => Promise.resolve(resolve("list")).then(onF, onR),
     };
     return builder;
   }
@@ -384,6 +388,28 @@ describe("runCheck", () => {
     expect(seenMsg.indexOf("# ドラフト本文")).toBeLessThan(seenMsg.indexOf("# 元ネタツイート"));
     expect(seenMsg.indexOf("# 元ネタツイート")).toBeLessThan(seenMsg.indexOf("# 直近の投稿"));
     expect(r.perDraft[0]).toMatchObject({ source_grounded: true, outcome: "ok" });
+  });
+
+  test("core_idea 行が存在しない（参照切れ）→ readFailed せず枯渇 degrade・差し戻し候補は人間委譲（無限ストール断つ）", async () => {
+    // d1 の core_idea_id は coreIdeas に存在しない（削除済み/参照切れ）。
+    // .single() なら PGRST116 で毎ラン check_read_failed → MA 再走を焼き続ける無限ストールになる。
+    // .maybeSingle() なら data:null/error:null → readFailed:false・materials:[] で枯渇 degrade に流す。
+    const state: St = { drafts: [draft("d1", { core_idea_id: "ci_missing" })] }; // coreIdeas 未登録
+    let seenMsg = "";
+    const capture = (async (deps: any) => {
+      seenMsg = deps.userMessage;
+      // 差し戻し条件（suspicious）に該当させる。
+      deps.customToolHandler?.("submit_check", { verdict: "flag", risk_level: "high", duplicate: "ok", factcheck: "suspicious", source_grounded: false, flags: ["嘘疑い"] });
+      return { ok: true, terminal: "idle", stopReason: "end_turn", transitions: [], agentText: "x", toolCalls: [], unhandledTools: [], wallClockMs: 1, ids: {}, sessionUsage: { input_tokens: 1, output_tokens: 1 } };
+    }) as any;
+    const rec = recorder();
+    const r = await runCheck(base(state, { runSession: capture, pushApproval: rec.fn }));
+    expect(seenMsg).not.toContain("# 元ネタツイート"); // 元ネタ枯渇 → 注入なし
+    // check_read_failed にならず、素材枯渇 → flagged_max_retry で人間へ（pending ストールしない）
+    expect(r).toMatchObject({ approved: 1, sentBack: 0, errorCount: 0 });
+    expect(state.drafts[0].editor_status).toBe("approved");
+    expect(r.perDraft[0].outcome).toBe("flagged_max_retry");
+    expect(rec.calls).toHaveLength(1);
   });
 
   test("core_idea_id null → 元ネタ節なしで degrade・点検続行・source_grounded 捕捉", async () => {
