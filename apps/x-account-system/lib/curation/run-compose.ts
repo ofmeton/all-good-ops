@@ -15,7 +15,8 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import type { TraceMeta } from "../trace/types.js";
 import { runMaSession } from "../ma/run-session.js";
 import { COMPOSE_CONFIG, type ComposeConfig } from "./compose-config.js";
-import { buildWriterSystemPrompt, SUBMIT_DRAFT_TOOL } from "./compose-prompts.js";
+import { buildWriterSystemPrompt, SUBMIT_DRAFT_TOOL, COMPOSE_FMATS, FMAT_LABELS } from "./compose-prompts.js";
+import { isKnownTemplate } from "./compose-templates.js";
 import { classifyRules } from "../hook-classifier/classify-rules.js";
 import { costUsdFor, costJpyFor } from "../cost/cost-of.js";
 
@@ -121,17 +122,34 @@ export async function runCompose(deps: RunComposeDeps): Promise<ComposeRunResult
     const text = (m.redacted_text || m.raw_text || "").slice(0, 4000);
     const tweetUrl = (baseMeta.tweet_url as string) ?? "";
     const scores = baseMeta.scores ? JSON.stringify(baseMeta.scores) : "";
+    // 人間キュレーションUIで選択された希望フォーマット/テンプレ（未選択は null＝後方互換）。
+    const desiredFmat = typeof baseMeta.desired_fmat === "string" ? baseMeta.desired_fmat : null;
+    const templateId = typeof baseMeta.template_id === "string" ? baseMeta.template_id : null;
+    // テンプレ drift 検知: 指定 id が registry に無ければ既定にフォールバックすることを可視化
+    // （フロント TEMPLATE_OPTIONS とバックエンド registry のズレを黙って飲み込まない）。
+    if (templateId && !isKnownTemplate(templateId)) {
+      log.warn(`[compose] unknown template_id="${templateId}" for ${m.id} → default テンプレにフォールバック`);
+    }
     // 差し戻し再生成: チェックAg が付けた前回の指摘があれば writer に渡し、同じ問題を繰り返させない。
     const lastFlags = Array.isArray(baseMeta.last_check_flags) ? (baseMeta.last_check_flags as string[]) : [];
     const redoBlock =
       lastFlags.length > 0
         ? `# 前回の指摘（必ず避けて書き直す）\n` + lastFlags.map((f) => `- ${f}`).join("\n") + `\n\n`
         : "";
+    // 希望フォーマット指示: 指定があれば writer に明示（記事=X 長文単発・分割しない）。
+    // label 欠落（将来の enum drift）でも raw 値で指示を出す（黙って無指示にしない）。
+    const fmatLabel = desiredFmat ? (FMAT_LABELS[desiredFmat] ?? desiredFmat) : null;
+    const fmatBlock =
+      fmatLabel
+        ? `# 希望フォーマット\n指定フォーマット=${fmatLabel}。` +
+          `記事は X 長文単発（thread のように分割しない）。素材が薄ければ無理に伸ばさない。\n\n`
+        : "";
     const userMessage =
       `次の素材から X 投稿を1本書いてください。\n\n` +
       `# 素材本文\n${text}\n\n` +
       (tweetUrl ? `# 出典URL\n${tweetUrl}\n\n` : "") +
       (scores ? `# 参考スコア\n${scores}\n\n` : "") +
+      fmatBlock +
       redoBlock +
       `必要なら web_search で裏取りし、最後に submit_draft を呼んでください。`;
 
@@ -151,7 +169,7 @@ export async function runCompose(deps: RunComposeDeps): Promise<ComposeRunResult
         agent: {
           name: "x-writer",
           model: cfg.writerModel,
-          system: buildWriterSystemPrompt(),
+          system: buildWriterSystemPrompt(templateId ?? cfg.defaultTemplateId),
           tools: [WEB_TOOLSET as never, SUBMIT_DRAFT_TOOL as never],
         },
         userMessage,
@@ -200,7 +218,19 @@ export async function runCompose(deps: RunComposeDeps): Promise<ComposeRunResult
       const category = ["paraphrase", "first_hand", "industry_sop"].includes(captured.category)
         ? captured.category
         : "paraphrase";
-      const fmat = ["short", "medium", "long", "thread"].includes(captured.fmat) ? captured.fmat : "short";
+      // fmat 決定: ユーザーの明示選択(desired)を最優先で永続化。無ければ writer 出力、最後に short。
+      const validCaptured = (COMPOSE_FMATS as readonly string[]).includes(captured.fmat) ? captured.fmat : null;
+      if (!validCaptured) {
+        log.warn(`[compose] writer が未知 fmat="${captured.fmat}" を返した (${m.id}) → desired/short にフォールバック`);
+      }
+      const validDesired =
+        desiredFmat && (COMPOSE_FMATS as readonly string[]).includes(desiredFmat) ? desiredFmat : null;
+      if (validDesired && validCaptured && validDesired !== validCaptured) {
+        log.warn(
+          `[compose] writer fmat="${validCaptured}" がユーザー指定="${validDesired}" と不一致 (${m.id}) → 指定を永続化`,
+        );
+      }
+      const fmat = validDesired ?? validCaptured ?? "short";
 
       const { data: ci, error: ciErr } = await sb
         .from("core_ideas")

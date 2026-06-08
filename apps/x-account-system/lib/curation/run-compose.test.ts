@@ -165,7 +165,7 @@ describe("runCompose", () => {
 
   test("maxComposePerRun で件数を bound", async () => {
     const state: St = { materials: [mat("m1"), mat("m2"), mat("m3"), mat("m4")], coreIdeas: [], postDrafts: [] };
-    const r = await runCompose({ sb: makeSb(state), apiKey: "k", config: { writerModel: "claude-haiku-4-5", maxComposePerRun: 2, timeoutMs: 1000 }, runSession: okSession(), logger: silent });
+    const r = await runCompose({ sb: makeSb(state), apiKey: "k", config: { writerModel: "claude-haiku-4-5", maxComposePerRun: 2, timeoutMs: 1000, defaultTemplateId: "template_chaen_gold" }, runSession: okSession(), logger: silent });
     expect(r.processed).toBe(2);
     expect(r.draftCount).toBe(2);
   });
@@ -200,5 +200,51 @@ describe("runCompose", () => {
     }) as any;
     await runCompose({ sb: makeSb(state), apiKey: "k", runSession: capture, logger: silent });
     expect(seenMsg).not.toContain("前回の指摘");
+  });
+
+  // ── 希望フォーマット / テンプレ選択 ──
+  /** deps.agent.system と deps.userMessage を捕捉する正常 runSession。 */
+  function captureSession(out: { system?: string; userMessage?: string }, draft: Record<string, unknown> = {}) {
+    return (async (deps: any) => {
+      out.system = deps.agent?.system;
+      out.userMessage = deps.userMessage;
+      deps.customToolHandler?.("submit_draft", { body: "本文", fmat: "short", topic: "t", category: "paraphrase", ...draft });
+      return { ok: true, terminal: "idle", stopReason: "end_turn", transitions: [], agentText: "x", toolCalls: [], unhandledTools: [], wallClockMs: 1, ids: {}, sessionUsage: { input_tokens: 10, output_tokens: 5 } };
+    }) as any;
+  }
+
+  test("(a) template_id 指定で system prompt にテンプレ patch が入る", async () => {
+    const state: St = { materials: [mat("m1", { template_id: "template_chaen_gold" })], coreIdeas: [], postDrafts: [] };
+    const out: { system?: string } = {};
+    await runCompose({ sb: makeSb(state), apiKey: "k", runSession: captureSession(out), logger: silent });
+    expect(out.system).toContain("## 投稿の型（チャエン黄金型）");
+  });
+
+  test("(b) desired_fmat 指定で userMessage に希望フォーマット指示が入る（記事=長文単発）", async () => {
+    const state: St = { materials: [mat("m1", { desired_fmat: "article" })], coreIdeas: [], postDrafts: [] };
+    const out: { userMessage?: string } = {};
+    await runCompose({ sb: makeSb(state), apiKey: "k", runSession: captureSession(out), logger: silent });
+    expect(out.userMessage).toContain("# 希望フォーマット");
+    expect(out.userMessage).toContain("指定フォーマット=記事（X 長文単発）");
+    expect(out.userMessage).toContain("thread のように分割しない");
+  });
+
+  test("(c) fmat=article は validation を通り core_idea/post_draft に保持される", async () => {
+    const state: St = { materials: [mat("m1", { desired_fmat: "article" })], coreIdeas: [], postDrafts: [] };
+    const out: Record<string, unknown> = {};
+    const r = await runCompose({ sb: makeSb(state), apiKey: "k", runSession: captureSession(out, { fmat: "article" }), logger: silent });
+    expect(r.draftCount).toBe(1);
+    expect(state.coreIdeas[0].fmat).toBe("article");
+    expect(state.postDrafts[0].fmat).toBe("article");
+  });
+
+  test("(d) desired_fmat/template_id 未指定でも default テンプレで生成（後方互換）", async () => {
+    const state: St = { materials: [mat("m1")], coreIdeas: [], postDrafts: [] };
+    const out: { system?: string; userMessage?: string } = {};
+    const r = await runCompose({ sb: makeSb(state), apiKey: "k", runSession: captureSession(out), logger: silent });
+    expect(r.draftCount).toBe(1);
+    // 既定テンプレ（チャエン黄金型）の patch が入り、希望フォーマット指示は入らない
+    expect(out.system).toContain("## 投稿の型（チャエン黄金型）");
+    expect(out.userMessage).not.toContain("# 希望フォーマット");
   });
 });
