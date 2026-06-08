@@ -124,5 +124,19 @@ export async function translateCandidates(
       150; // USD→JPY 固定（scoring と同式）
   }
 
+  // 欠落の可視化: tool 未使用・id 欠落・型ガード除外で訳が付かなかった件数を 1 行 warn。
+  // 挙動は変えない（翻訳なしの素材は meta.translation 無しで保存される）。
+  if (translations.size < targets.length) {
+    console.warn(
+      JSON.stringify({
+        level: "warn",
+        msg: "[translate] some candidates left untranslated",
+        targets: targets.length,
+        translated: translations.size,
+        missing: targets.length - translations.size,
+      }),
+    );
+  }
+
   return { translations, costJpy };
 }

@@ -74,8 +74,10 @@ left join lateral (
     )
     order by sm.ord
   ) as sources
+  -- left join: 参照先 material が削除されても要素を inner join で silent 脱落させない。
+  -- 削除済みは {id:null,...} として残り、承認画面で「元ネタが消えた」ケースを区別できる。
   from unnest(ci.source_material_ids) with ordinality as sm(mid, ord)
-  join xad.materials_store m on m.id = sm.mid
+  left join xad.materials_store m on m.id = sm.mid
 ) src on true
 where d.platform = 'x';
 
@@ -86,6 +88,10 @@ where d.platform = 'x';
 --    rejected → human_approval_status='rejected' / core_ideas.status='draft'（再 queue）
 --    既に published / scheduled / pending 以外の draft は claim 対象外。claim 件数を返す。
 --    （data-modifying CTE は参照有無に関わらず必ず実行される＝idea_upd も走る）
+--
+--    多層防御: editor_status='approved'（MA チェッカー通過済）のみ claim する。
+--    UI を経由しない承認パス（直接 RPC 呼び出し等）でも、未点検 draft を承認して
+--    fact-check を恒久バイパスする退行を防ぐ。listPendingDrafts の同フィルタと二重化。
 -- ===========================================================================
 create or replace function xad.set_approval_status(p_ids uuid[], p_status text)
 returns integer language plpgsql as $$
@@ -105,6 +111,7 @@ begin
              case when p_status = 'approved' then now() else d.human_approved_at end
      where d.id = any(p_ids)
        and d.human_approval_status = 'pending'
+       and d.editor_status = 'approved'   -- MA 点検済みのみ承認可（fact-check バイパス防止）
        and d.published_at is null
        and d.scheduled_for is null
     returning d.core_idea_id
