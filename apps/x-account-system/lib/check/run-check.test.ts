@@ -3,6 +3,7 @@
  * stateful fake Supabase + 注入 runSession / pushApproval / fetchRecent で wiring を検証（実 API 不要）。
  * 正常(approved+flag) / 重複flag / ファクトflag / 不明=flag通す / 空 / MA失敗(pending据置) /
  * stubガード / no_submit / 冪等 / update失敗 / pushApproval 呼出 / 直近投稿の userMessage 同梱。
+ * 元ネタ注入: # 元ネタツイート の raw_text＋translation 併記、source_grounded 捕捉、core_idea null は degrade。
  */
 import { runCheck, type RunCheckDeps } from "./run-check";
 
@@ -12,7 +13,7 @@ type Draft = {
   risk_level?: string; risk_reasons?: unknown; editor_output?: unknown;
 };
 type CoreIdea = { id: string; source_material_ids: string[] };
-type Mat = { id: string; meta: Record<string, unknown> };
+type Mat = { id: string; meta: Record<string, unknown>; raw_text?: string };
 type St = { drafts: Draft[]; coreIdeas?: CoreIdea[]; materials?: Mat[]; failUpdate?: boolean; failMatUpdate?: boolean; failCiRead?: boolean };
 
 /**
@@ -63,10 +64,10 @@ function makeSb(state: St): any {
           if (mt) mt.meta = payload.meta;
           return { data: null, error: null };
         }
-        // read: .in("id", ids) → {id, meta}
+        // read: .in("id", ids) → {id, raw_text, meta}
         const inOp = ops.find((o) => o.m === "in" && o.a[0] === "id");
         const ids = (inOp?.a[1] ?? []) as string[];
-        const rows = (state.materials ?? []).filter((x) => ids.includes(x.id)).map((x) => ({ id: x.id, meta: x.meta }));
+        const rows = (state.materials ?? []).filter((x) => ids.includes(x.id)).map((x) => ({ id: x.id, raw_text: x.raw_text ?? "", meta: x.meta }));
         return { data: rows, error: null };
       }
       return { data: null, error: null };
@@ -354,6 +355,49 @@ describe("runCheck", () => {
     const state: St = { drafts: [draft("d1"), draft("d2"), draft("d3")] };
     const r = await runCheck(base(state, { config: { checkerModel: "claude-haiku-4-5", maxCheckPerRun: 2, recentPostsLookbackDays: 14, timeoutMs: 1000, maxRedoAttempts: 2 } }));
     expect(r.checked).toBe(2);
+  });
+
+  test("元ネタツイートを userMessage に注入（raw_text＋translation 併記・本文と直近の間）・source_grounded 捕捉", async () => {
+    const state: St = {
+      drafts: [draft("d1", { core_idea_id: "ci1" })],
+      coreIdeas: [{ id: "ci1", source_material_ids: ["m1", "m2"] }],
+      materials: [
+        { id: "m1", raw_text: "Original English tweet", meta: { translation: "元の英語ツイート" } },
+        { id: "m2", raw_text: "日本語の元ネタ", meta: {} }, // translation 欠損は原文のみ（安全側）
+      ],
+    };
+    let seenMsg = "";
+    const capture = (async (deps: any) => {
+      seenMsg = deps.userMessage;
+      deps.customToolHandler?.("submit_check", { verdict: "ok", risk_level: "low", duplicate: "ok", factcheck: "ok", source_grounded: true, flags: [] });
+      return { ok: true, terminal: "idle", stopReason: "end_turn", transitions: [], agentText: "x", toolCalls: [], unhandledTools: [], wallClockMs: 1, ids: {}, sessionUsage: { input_tokens: 1, output_tokens: 1 } };
+    }) as any;
+    const recent: NonNullable<RunCheckDeps["fetchRecent"]> = (async () => [{ id: "p1", body: "過去の投稿A" }]) as any;
+    const r = await runCheck(base(state, { runSession: capture, fetchRecent: recent }));
+    expect(seenMsg).toContain("# 元ネタツイート");
+    expect(seenMsg).toContain("Original English tweet");
+    expect(seenMsg).toContain("[日本語訳] 元の英語ツイート");
+    expect(seenMsg).toContain("日本語の元ネタ");
+    // translation が無い素材には [日本語訳] を付けない（原文のみ＝安全側）→ 出現 1 回
+    expect(seenMsg.match(/\[日本語訳\]/g)?.length).toBe(1);
+    // 注入位置: # ドラフト本文 → # 元ネタツイート → # 直近の投稿 の順
+    expect(seenMsg.indexOf("# ドラフト本文")).toBeLessThan(seenMsg.indexOf("# 元ネタツイート"));
+    expect(seenMsg.indexOf("# 元ネタツイート")).toBeLessThan(seenMsg.indexOf("# 直近の投稿"));
+    expect(r.perDraft[0]).toMatchObject({ source_grounded: true, outcome: "ok" });
+  });
+
+  test("core_idea_id null → 元ネタ節なしで degrade・点検続行・source_grounded 捕捉", async () => {
+    const state: St = { drafts: [draft("d1", { core_idea_id: null })] };
+    let seenMsg = "";
+    const capture = (async (deps: any) => {
+      seenMsg = deps.userMessage;
+      deps.customToolHandler?.("submit_check", { verdict: "ok", risk_level: "low", duplicate: "ok", factcheck: "ok", source_grounded: false, flags: [] });
+      return { ok: true, terminal: "idle", stopReason: "end_turn", transitions: [], agentText: "x", toolCalls: [], unhandledTools: [], wallClockMs: 1, ids: {}, sessionUsage: { input_tokens: 1, output_tokens: 1 } };
+    }) as any;
+    const r = await runCheck(base(state, { runSession: capture }));
+    expect(seenMsg).not.toContain("# 元ネタツイート");
+    expect(r.checked).toBe(1);
+    expect(r.perDraft[0]).toMatchObject({ source_grounded: false, outcome: "ok" });
   });
 
   test("直近投稿を userMessage に同梱（重複チェック用）", async () => {
