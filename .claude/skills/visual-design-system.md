@@ -81,4 +81,4 @@
 
 ## 参照する他スキル
 
-- `frontend-design:frontend-design`（プラグイン）— Web UI 制作時の共通参照
+- `ui-ux-pro-max:ui-ux-pro-max`（プラグイン）— Web UI 制作時の共通参照

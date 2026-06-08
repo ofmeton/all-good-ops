@@ -93,4 +93,4 @@ print(f"updated {count} files")
 
 - [[feedback_browser_zoom_check]]: zoom 誤認による補正の典型例
 - [[feedback_tailwind_vrl_padding]]: vrl 要素は padding scale 対象外
-- `frontend-design:frontend-design` skill: text scale を変えた後の視覚再評価
+- `ui-ux-pro-max:ui-ux-pro-max` skill: text scale を変えた後の視覚再評価

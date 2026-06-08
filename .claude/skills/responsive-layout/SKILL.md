@@ -1,6 +1,6 @@
 ---
 name: responsive-layout
-description: LP/HP 制作におけるレスポンシブ崩れ対策の規約 + 検証スクリプト（responsive-snap / responsive-audit）案内。実装着手時 / 全 viewport 確認時 / レイアウト崩れ報告時に必ず参照。frontend-design スキルとペアで使う
+description: LP/HP 制作におけるレスポンシブ崩れ対策の規約 + 検証スクリプト（responsive-snap / responsive-audit）案内。実装着手時 / 全 viewport 確認時 / レイアウト崩れ報告時に必ず参照。ui-ux-pro-max スキルとペアで使う
 ---
 
 # Responsive Layout — 規約 + 検証
@@ -143,7 +143,7 @@ home | OF+257 | OF+187 | OF+235 | ok | ok | ok
 
 ## 関連 skill / memory
 
-- `frontend-design:frontend-design`（必ずペア起動）
+- `ui-ux-pro-max:ui-ux-pro-max`（必ずペア起動）
 - `memory/feedback_lp_mobile_first.md` モバイル前提
 - `memory/feedback_responsive_collage_design.md` 4 breakpoint scale
 - `memory/feedback_jp_hero_copy_linebreak.md` 改行 3 層
