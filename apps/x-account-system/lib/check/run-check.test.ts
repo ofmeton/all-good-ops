@@ -3,6 +3,7 @@
  * stateful fake Supabase + 注入 runSession / pushApproval / fetchRecent で wiring を検証（実 API 不要）。
  * 正常(approved+flag) / 重複flag / ファクトflag / 不明=flag通す / 空 / MA失敗(pending据置) /
  * stubガード / no_submit / 冪等 / update失敗 / pushApproval 呼出 / 直近投稿の userMessage 同梱。
+ * 元ネタ注入: # 元ネタツイート の raw_text＋translation 併記、source_grounded 捕捉、core_idea null は degrade。
  */
 import { runCheck, type RunCheckDeps } from "./run-check";
 
@@ -12,7 +13,7 @@ type Draft = {
   risk_level?: string; risk_reasons?: unknown; editor_output?: unknown;
 };
 type CoreIdea = { id: string; source_material_ids: string[] };
-type Mat = { id: string; meta: Record<string, unknown> };
+type Mat = { id: string; meta: Record<string, unknown>; raw_text?: string };
 type St = { drafts: Draft[]; coreIdeas?: CoreIdea[]; materials?: Mat[]; failUpdate?: boolean; failMatUpdate?: boolean; failCiRead?: boolean };
 
 /**
@@ -26,7 +27,7 @@ function makeSb(state: St): any {
     const rec = (m: string) => (...a: any[]) => { ops.push({ m, a }); return builder; };
     const eqVal = (col: string) => ops.find((o) => o.m === "eq" && o.a[0] === col)?.a[1];
     const has = (m: string) => ops.some((o) => o.m === m);
-    const resolve = (single: boolean): { data: any; error: any } => {
+    const resolve = (mode: "single" | "maybe" | "list"): { data: any; error: any } => {
       if (table === "post_drafts") {
         if (has("update")) {
           if (state.failUpdate) return { data: null, error: { message: "upd boom" } };
@@ -52,7 +53,10 @@ function makeSb(state: St): any {
         const id = eqVal("id");
         const ci = (state.coreIdeas ?? []).find((c) => c.id === id);
         const data = ci ? { source_material_ids: ci.source_material_ids } : null;
-        return { data: single ? data : data ? [data] : [], error: null };
+        // 実 Supabase 忠実化: .single() は 0 行で PGRST116 エラー、.maybeSingle() は data:null/error:null。
+        if (mode === "single" && data === null) return { data: null, error: { code: "PGRST116", message: "JSON object requested, multiple (or no) rows returned" } };
+        if (mode === "list") return { data: data ? [data] : [], error: null };
+        return { data, error: null };
       }
       if (table === "materials_store") {
         if (has("update")) {
@@ -63,18 +67,19 @@ function makeSb(state: St): any {
           if (mt) mt.meta = payload.meta;
           return { data: null, error: null };
         }
-        // read: .in("id", ids) → {id, meta}
+        // read: .in("id", ids) → {id, raw_text, meta}
         const inOp = ops.find((o) => o.m === "in" && o.a[0] === "id");
         const ids = (inOp?.a[1] ?? []) as string[];
-        const rows = (state.materials ?? []).filter((x) => ids.includes(x.id)).map((x) => ({ id: x.id, meta: x.meta }));
+        const rows = (state.materials ?? []).filter((x) => ids.includes(x.id)).map((x) => ({ id: x.id, raw_text: x.raw_text ?? "", meta: x.meta }));
         return { data: rows, error: null };
       }
       return { data: null, error: null };
     };
     const builder: any = {
       select: rec("select"), eq: rec("eq"), in: rec("in"), limit: rec("limit"), update: rec("update"),
-      single: () => Promise.resolve(resolve(true)),
-      then: (onF: any, onR: any) => Promise.resolve(resolve(false)).then(onF, onR),
+      single: () => Promise.resolve(resolve("single")),
+      maybeSingle: () => Promise.resolve(resolve("maybe")),
+      then: (onF: any, onR: any) => Promise.resolve(resolve("list")).then(onF, onR),
     };
     return builder;
   }
@@ -354,6 +359,71 @@ describe("runCheck", () => {
     const state: St = { drafts: [draft("d1"), draft("d2"), draft("d3")] };
     const r = await runCheck(base(state, { config: { checkerModel: "claude-haiku-4-5", maxCheckPerRun: 2, recentPostsLookbackDays: 14, timeoutMs: 1000, maxRedoAttempts: 2 } }));
     expect(r.checked).toBe(2);
+  });
+
+  test("元ネタツイートを userMessage に注入（raw_text＋translation 併記・本文と直近の間）・source_grounded 捕捉", async () => {
+    const state: St = {
+      drafts: [draft("d1", { core_idea_id: "ci1" })],
+      coreIdeas: [{ id: "ci1", source_material_ids: ["m1", "m2"] }],
+      materials: [
+        { id: "m1", raw_text: "Original English tweet", meta: { translation: "元の英語ツイート" } },
+        { id: "m2", raw_text: "日本語の元ネタ", meta: {} }, // translation 欠損は原文のみ（安全側）
+      ],
+    };
+    let seenMsg = "";
+    const capture = (async (deps: any) => {
+      seenMsg = deps.userMessage;
+      deps.customToolHandler?.("submit_check", { verdict: "ok", risk_level: "low", duplicate: "ok", factcheck: "ok", source_grounded: true, flags: [] });
+      return { ok: true, terminal: "idle", stopReason: "end_turn", transitions: [], agentText: "x", toolCalls: [], unhandledTools: [], wallClockMs: 1, ids: {}, sessionUsage: { input_tokens: 1, output_tokens: 1 } };
+    }) as any;
+    const recent: NonNullable<RunCheckDeps["fetchRecent"]> = (async () => [{ id: "p1", body: "過去の投稿A" }]) as any;
+    const r = await runCheck(base(state, { runSession: capture, fetchRecent: recent }));
+    expect(seenMsg).toContain("# 元ネタツイート");
+    expect(seenMsg).toContain("Original English tweet");
+    expect(seenMsg).toContain("[日本語訳] 元の英語ツイート");
+    expect(seenMsg).toContain("日本語の元ネタ");
+    // translation が無い素材には [日本語訳] を付けない（原文のみ＝安全側）→ 出現 1 回
+    expect(seenMsg.match(/\[日本語訳\]/g)?.length).toBe(1);
+    // 注入位置: # ドラフト本文 → # 元ネタツイート → # 直近の投稿 の順
+    expect(seenMsg.indexOf("# ドラフト本文")).toBeLessThan(seenMsg.indexOf("# 元ネタツイート"));
+    expect(seenMsg.indexOf("# 元ネタツイート")).toBeLessThan(seenMsg.indexOf("# 直近の投稿"));
+    expect(r.perDraft[0]).toMatchObject({ source_grounded: true, outcome: "ok" });
+  });
+
+  test("core_idea 行が存在しない（参照切れ）→ readFailed せず枯渇 degrade・差し戻し候補は人間委譲（無限ストール断つ）", async () => {
+    // d1 の core_idea_id は coreIdeas に存在しない（削除済み/参照切れ）。
+    // .single() なら PGRST116 で毎ラン check_read_failed → MA 再走を焼き続ける無限ストールになる。
+    // .maybeSingle() なら data:null/error:null → readFailed:false・materials:[] で枯渇 degrade に流す。
+    const state: St = { drafts: [draft("d1", { core_idea_id: "ci_missing" })] }; // coreIdeas 未登録
+    let seenMsg = "";
+    const capture = (async (deps: any) => {
+      seenMsg = deps.userMessage;
+      // 差し戻し条件（suspicious）に該当させる。
+      deps.customToolHandler?.("submit_check", { verdict: "flag", risk_level: "high", duplicate: "ok", factcheck: "suspicious", source_grounded: false, flags: ["嘘疑い"] });
+      return { ok: true, terminal: "idle", stopReason: "end_turn", transitions: [], agentText: "x", toolCalls: [], unhandledTools: [], wallClockMs: 1, ids: {}, sessionUsage: { input_tokens: 1, output_tokens: 1 } };
+    }) as any;
+    const rec = recorder();
+    const r = await runCheck(base(state, { runSession: capture, pushApproval: rec.fn }));
+    expect(seenMsg).not.toContain("# 元ネタツイート"); // 元ネタ枯渇 → 注入なし
+    // check_read_failed にならず、素材枯渇 → flagged_max_retry で人間へ（pending ストールしない）
+    expect(r).toMatchObject({ approved: 1, sentBack: 0, errorCount: 0 });
+    expect(state.drafts[0].editor_status).toBe("approved");
+    expect(r.perDraft[0].outcome).toBe("flagged_max_retry");
+    expect(rec.calls).toHaveLength(1);
+  });
+
+  test("core_idea_id null → 元ネタ節なしで degrade・点検続行・source_grounded 捕捉", async () => {
+    const state: St = { drafts: [draft("d1", { core_idea_id: null })] };
+    let seenMsg = "";
+    const capture = (async (deps: any) => {
+      seenMsg = deps.userMessage;
+      deps.customToolHandler?.("submit_check", { verdict: "ok", risk_level: "low", duplicate: "ok", factcheck: "ok", source_grounded: false, flags: [] });
+      return { ok: true, terminal: "idle", stopReason: "end_turn", transitions: [], agentText: "x", toolCalls: [], unhandledTools: [], wallClockMs: 1, ids: {}, sessionUsage: { input_tokens: 1, output_tokens: 1 } };
+    }) as any;
+    const r = await runCheck(base(state, { runSession: capture }));
+    expect(seenMsg).not.toContain("# 元ネタツイート");
+    expect(r.checked).toBe(1);
+    expect(r.perDraft[0]).toMatchObject({ source_grounded: false, outcome: "ok" });
   });
 
   test("直近投稿を userMessage に同梱（重複チェック用）", async () => {

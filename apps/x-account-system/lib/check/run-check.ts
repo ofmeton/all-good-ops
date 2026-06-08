@@ -61,6 +61,8 @@ export interface CheckPerDraft {
   risk_level?: "low" | "high";
   duplicate?: "ok" | "similar";
   factcheck?: "ok" | "suspicious" | "unverifiable";
+  /** 主張・数字が元ネタツイート由来か（checker の含有判定。観測用）。 */
+  source_grounded?: boolean;
   flagCount?: number;
   /** 差し戻し/上限到達時の再生成回数（素材 meta.compose_attempts の最大ベース）。 */
   attempts?: number;
@@ -105,6 +107,8 @@ interface SubmitCheck {
   risk_level: "low" | "high";
   duplicate: "ok" | "similar";
   factcheck: "ok" | "suspicious" | "unverifiable";
+  /** 主張・数字が元ネタツイート由来か（含有判定）。MA 欠落時は undefined。 */
+  source_grounded?: boolean;
   flags?: string[];
 }
 
@@ -114,6 +118,62 @@ interface DraftRow {
   fmat: string;
   core_idea_id: string | null;
   run_id: string | null;
+}
+
+/** 元ネタ素材（点検の一次ソース＋差し戻し時の再 queue 対象）。 */
+interface SourceMaterial {
+  id: string;
+  raw_text: string;
+  meta: Record<string, unknown> | null;
+}
+
+/**
+ * draft の core_idea から元ネタ素材（raw_text + meta）を取得する。
+ * - core_idea_id null / source_material_ids 空 → materials:[]・readFailed:false（degrade。元ネタ無しで点検続行）。
+ * - core_ideas / materials_store の読取エラー → readFailed:true（呼び元で warn 済・redo は据置で次ラン再点検）。
+ * 点検注入（raw_text）と差し戻し再 queue（meta.compose_attempts）の両方で 1 回の取得を共用する。
+ */
+export async function fetchSourceMaterials(
+  sb: SupabaseClient,
+  coreIdeaId: string | null,
+  log: { warn: (m: string) => void } = console,
+): Promise<{ materials: SourceMaterial[]; readFailed: boolean }> {
+  if (!coreIdeaId) return { materials: [], readFailed: false };
+  // maybeSingle: 行なし（参照切れ・削除済み core_idea）は data:null/error:null で返る。
+  // .single() だと 0 行が PGRST116 エラー→恒久 readFailed→毎ラン check_read_failed＋MA 再走で
+  // 無限ストールする。行なしは「元ネタ枯渇」の degrade として redo の human escalation に流す。
+  const { data: ci, error: ciErr } = await sb
+    .from("core_ideas")
+    .select("source_material_ids")
+    .eq("id", coreIdeaId)
+    .maybeSingle();
+  if (ciErr) {
+    log.warn(`[check] core_idea read failed (ci=${coreIdeaId}): ${ciErr.message}`);
+    return { materials: [], readFailed: true };
+  }
+  // ci == null: 行が存在しない（恒久状態）→ readFailed せず枯渇 degrade。
+  if (ci == null) return { materials: [], readFailed: false };
+  const ids = ((ci as { source_material_ids?: string[] } | null)?.source_material_ids ?? []) as string[];
+  if (ids.length === 0) return { materials: [], readFailed: false };
+  const { data: mats, error: matErr } = await sb
+    .from("materials_store")
+    .select("id, raw_text, meta")
+    .in("id", ids);
+  if (matErr) {
+    log.warn(`[check] materials read failed (ci=${coreIdeaId}): ${matErr.message}`);
+    return { materials: [], readFailed: true };
+  }
+  return { materials: (mats ?? []) as SourceMaterial[], readFailed: false };
+}
+
+/** 元ネタ素材 → checker ユーザーメッセージ用ブロック（raw_text＋translation 併記）。空なら空文字。 */
+function buildSourceBlock(materials: SourceMaterial[]): string {
+  if (materials.length === 0) return "";
+  const lines = materials.map((m, i) => {
+    const t = m.meta && typeof m.meta.translation === "string" ? `\n[日本語訳] ${m.meta.translation}` : "";
+    return `${i + 1}. ${m.raw_text}${t}`;
+  });
+  return `\n\n# 元ネタツイート（ファクト判定の一次ソース）\n` + lines.join("\n\n");
 }
 
 /** 内蔵 agent toolset（web_search/web_fetch のみ有効。bash/file/code 無効）。 */
@@ -173,10 +233,21 @@ export async function runCheck(deps: RunCheckDeps): Promise<CheckRunResult> {
 
   // 3. 各ドラフトを MA checker で点検
   for (const d of rows) {
+    // 元ネタ素材を per-draft 1 回取得（点検注入＋差し戻し再 queue で共用）。
+    // 読取失敗は warn＋degrade（元ネタ無しで点検は続行・redo は readFailed で次ラン据置）。
+    const { materials: sourceMaterials, readFailed } = await fetchSourceMaterials(sb, d.core_idea_id, log);
+    const sourceBlock = buildSourceBlock(sourceMaterials);
+    // 観測: core_idea はあるのに元ネタが 1 件も注入できない異常（参照切れ/source_material_ids 空/
+    // materials 欠落＝上流データ欠落の疑い）を可視化。null core_idea の正常 degrade と区別する。
+    if (d.core_idea_id && !readFailed && sourceMaterials.length === 0)
+      log.info?.(`[check] ${d.id} core_idea=${d.core_idea_id} だが元ネタ素材 0 件 — 上流データ欠落の疑い（degrade して点検続行）。`);
+
+    // 注入順: # ドラフト本文 → # 元ネタツイート → # 直近の投稿。
     const userMessage =
       `次の X 投稿ドラフトを点検してください。\n\n# ドラフト本文\n${d.body}` +
+      sourceBlock +
       recentBlock +
-      `\n\n必要なら web_search でファクト確認し、最後に submit_check を呼んでください。`;
+      `\n\nまず元ネタツイートに主張・数字が含まれるか判定し、含まれない新情報のみ web_search で裏取りして、最後に submit_check を呼んでください。`;
 
     let captured: SubmitCheck | undefined;
     const customToolHandler = (name: string, input: unknown): string => {
@@ -240,6 +311,8 @@ export async function runCheck(deps: RunCheckDeps): Promise<CheckRunResult> {
     const cap = captured;
     const flags = Array.isArray(cap.flags) ? cap.flags : [];
     const risk: "low" | "high" = cap.risk_level === "high" ? "high" : "low";
+    // 元ネタ含有判定（観測用）。MA 欠落時は undefined のまま perDraft に残す。
+    const sourceGrounded = typeof cap.source_grounded === "boolean" ? cap.source_grounded : undefined;
     if (costUsd === 0) log.warn(`[check] cost 0 for checked ${d.id} — sessionUsage missing? (web_search 費は別途未計上)`);
 
     const editorOutputLike: EditorOutput = {
@@ -289,7 +362,7 @@ export async function runCheck(deps: RunCheckDeps): Promise<CheckRunResult> {
         errorCount++;
         perDraft.push({
           draftId: d.id, outcome: "push_failed", verdict: cap.verdict, risk_level: risk,
-          duplicate: cap.duplicate, factcheck: cap.factcheck, flagCount: flags.length,
+          duplicate: cap.duplicate, factcheck: cap.factcheck, source_grounded: sourceGrounded, flagCount: flags.length,
           ...(attempts !== undefined ? { attempts } : {}),
           error: `pushApproval failed: ${String(e)}`,
         });
@@ -301,10 +374,10 @@ export async function runCheck(deps: RunCheckDeps): Promise<CheckRunResult> {
       if (cap.verdict === "flag") flagged++;
       perDraft.push({
         draftId: d.id, outcome, verdict: cap.verdict, risk_level: risk,
-        duplicate: cap.duplicate, factcheck: cap.factcheck, flagCount: flags.length,
+        duplicate: cap.duplicate, factcheck: cap.factcheck, source_grounded: sourceGrounded, flagCount: flags.length,
         ...(attempts !== undefined ? { attempts } : {}),
       });
-      log.info?.(`[check] ${d.id} outcome=${outcome} verdict=${cap.verdict} dup=${cap.duplicate} fact=${cap.factcheck} flags=${flags.length} risk=${risk}`);
+      log.info?.(`[check] ${d.id} outcome=${outcome} verdict=${cap.verdict} dup=${cap.duplicate} fact=${cap.factcheck} sg=${sourceGrounded} flags=${flags.length} risk=${risk}`);
     };
 
     // 差し戻し条件: 嘘(suspicious) or 重複(similar)。unverifiable/ok は従来どおり人間へ。
@@ -314,31 +387,9 @@ export async function runCheck(deps: RunCheckDeps): Promise<CheckRunResult> {
       continue;
     }
 
-    // 差し戻し候補 → core_idea.source_material_ids の素材を引き、再生成回数を確認。
+    // 差し戻し候補 → ループ先頭で取得済の素材/readFailed を再利用（重複読取しない）。
     // 読取エラー（一過性 DB エラー）と「素材が本当に無い（枯渇）」は区別する。
-    let matRows: Array<{ id: string; meta: Record<string, unknown> | null }> = [];
-    let readFailed = false;
-    if (d.core_idea_id) {
-      const { data: ci, error: ciErr } = await sb
-        .from("core_ideas")
-        .select("source_material_ids")
-        .eq("id", d.core_idea_id)
-        .single();
-      if (ciErr) {
-        readFailed = true;
-        log.warn(`[check] core_idea read failed for ${d.id} (ci=${d.core_idea_id}): ${ciErr.message}`);
-      } else {
-        const ids = ((ci as { source_material_ids?: string[] } | null)?.source_material_ids ?? []) as string[];
-        if (ids.length > 0) {
-          const { data: mats, error: matErr } = await sb
-            .from("materials_store")
-            .select("id, meta")
-            .in("id", ids);
-          if (matErr) { readFailed = true; log.warn(`[check] materials read failed for ${d.id}: ${matErr.message}`); }
-          else matRows = (mats ?? []) as Array<{ id: string; meta: Record<string, unknown> | null }>;
-        }
-      }
-    }
+    const matRows = sourceMaterials;
 
     // 読取エラーは「再生成不能」と確定せず pending 据置で次ラン再点検（suspicious を誤 approve しない）。
     if (readFailed) {
@@ -414,10 +465,10 @@ export async function runCheck(deps: RunCheckDeps): Promise<CheckRunResult> {
     if (cap.verdict === "flag") flagged++;
     perDraft.push({
       draftId: d.id, outcome: "sent_back", verdict: cap.verdict, risk_level: risk,
-      duplicate: cap.duplicate, factcheck: cap.factcheck, flagCount: flags.length,
+      duplicate: cap.duplicate, factcheck: cap.factcheck, source_grounded: sourceGrounded, flagCount: flags.length,
       attempts: maxAttempts + 1, ...(matErrMsg ? { error: `partial material requeue failed: ${matErrMsg}` } : {}),
     });
-    log.warn(`[check] ${d.id} SENT BACK for redo (dup=${cap.duplicate} fact=${cap.factcheck} attempts=${maxAttempts + 1}/${cfg.maxRedoAttempts}) — ${flags.join("; ")}`);
+    log.warn(`[check] ${d.id} SENT BACK for redo (dup=${cap.duplicate} fact=${cap.factcheck} sg=${sourceGrounded} attempts=${maxAttempts + 1}/${cfg.maxRedoAttempts}) — ${flags.join("; ")}`);
   }
 
   return { checked, approved, sentBack, flagged, errorCount, perDraft, ...(recentFetchFailed ? { recentFetchFailed: true } : {}) };
