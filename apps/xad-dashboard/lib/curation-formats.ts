@@ -91,6 +91,7 @@ const FMAT_VALUES: readonly string[] = FMAT_OPTIONS.map((o) => o.value);
 export function toRecommendations(rows: unknown): Recommendation[] {
   if (!Array.isArray(rows)) return [];
   const out: Recommendation[] = [];
+  let fmatFallbacks = 0; // 未知 fmat→既定 への黙った補正を可視化（worker↔UI の fmat drift サイン）。
   for (const row of rows) {
     if (!row || typeof row !== "object") continue;
     const r = row as Record<string, unknown>;
@@ -98,12 +99,21 @@ export function toRecommendations(rows: unknown): Recommendation[] {
     const templateId = r.templateId;
     if (typeof materialId !== "string" || materialId.length === 0) continue;
     if (typeof templateId !== "string" || templateId.length === 0) continue;
-    const fmat = typeof r.fmat === "string" && FMAT_VALUES.includes(r.fmat) ? r.fmat : DEFAULT_FMAT;
+    const fmatKnown = typeof r.fmat === "string" && FMAT_VALUES.includes(r.fmat);
+    const fmat = fmatKnown ? (r.fmat as string) : DEFAULT_FMAT;
+    if (!fmatKnown) fmatFallbacks++;
     const reason = typeof r.reason === "string" ? r.reason : "";
     let confidence = typeof r.confidence === "number" && Number.isFinite(r.confidence) ? r.confidence : 0.5;
     if (confidence < 0) confidence = 0;
     if (confidence > 1) confidence = 1;
     out.push({ materialId, templateId, fmat, reason, confidence });
+  }
+  // worker は templateId を registry 検証済（既定にフォールバック）で返すため、UI 層で残る
+  // 黙った補正は fmat の drift のみ。発生件数を 1 行 warn（silent 劣化を防ぐ）。
+  if (fmatFallbacks > 0) {
+    console.warn(
+      `[toRecommendations] ${fmatFallbacks} 件の推薦で未知 fmat を既定(${DEFAULT_FMAT})に補正（worker↔UI の fmat drift の疑い）`,
+    );
   }
   return out;
 }

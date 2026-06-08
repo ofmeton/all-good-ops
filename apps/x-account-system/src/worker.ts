@@ -255,31 +255,45 @@ export default {
       if (materials.length === 0) {
         return Response.json({ recommendations: [] });
       }
+      // 設定欠落（ANTHROPIC_API_KEY 未設定）は一過性の API 失敗と区別して明示ログ。
+      // これが無いと new Anthropic({apiKey:undefined})→401→広い catch で「毎回 fail-open」となり
+      // 設定ミスが恒久 silent 劣化する。
+      if (!env.ANTHROPIC_API_KEY) {
+        log(env, "error", "/admin/recommend: ANTHROPIC_API_KEY 未設定（設定欠落・推薦は恒久無効）");
+        return Response.json({ recommendations: [], warning: "config: ANTHROPIC_API_KEY unset" });
+      }
       try {
         const Anthropic = (await import("@anthropic-ai/sdk")).default;
         const { createClient } = await import("@supabase/supabase-js");
         const { recommendMaterials, RECOMMEND_MODEL } = await import("../lib/curation/recommend.js");
         const { recordCostLedger } = await import("../lib/cost/cost-ledger.js");
+        // 重要: 課金前に fallible な準備（client 生成）を済ませる。Anthropic 課金が発生した後に
+        // createClient が env 欠落で throw すると、トークン消費したのに cost_ledger 未計上＝
+        // brownout 会計が過小になる。sb/anthropic を recommendMaterials より先に確定させ、
+        // 課金確定後は fail-open な recordCostLedger だけが走るようにする（charge→必ず ledger）。
+        const sb = createClient(env.SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY, {
+          db: { schema: process.env.SUPABASE_SCHEMA || "xad" },
+        });
         const anthropic = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });
         const { recommendations, costJpy } = await recommendMaterials(
           anthropic as never,
           materials,
           { templates: listTemplateSummaries() },
         );
-        // cost_ledger 計上（fail-open）。ctx で waitUntil し応答をブロックしない。
-        const sb = createClient(env.SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY, {
-          db: { schema: process.env.SUPABASE_SCHEMA || "xad" },
-        });
-        const p = recordCostLedger(sb as never, {
-          category: "recommend",
-          costJpy,
-          meta: { model: RECOMMEND_MODEL, materials: materials.length },
-        });
-        ctx.waitUntil(p);
+        // cost_ledger 計上（recordCostLedger は内部 fail-open で throw しない）。
+        // ctx.waitUntil で応答をブロックしない。
+        ctx.waitUntil(
+          recordCostLedger(sb as never, {
+            category: "recommend",
+            costJpy,
+            meta: { model: RECOMMEND_MODEL, materials: materials.length },
+          }),
+        );
         log(env, "info", `admin: recommend ${materials.length} materials → ${recommendations.length} recs`);
         return Response.json({ recommendations });
       } catch (e) {
         // fail-open: 推薦は付加価値。失敗しても UI を壊さず空推薦を返す（サイレント禁止＝warn）。
+        // この経路に来る = client 生成失敗 or LLM 呼び出し自体の失敗（=課金前 or 課金なし）。
         log(env, "error", `/admin/recommend failed (fail-open): ${String(e)}`);
         return Response.json({ recommendations: [], warning: "recommend failed" });
       }

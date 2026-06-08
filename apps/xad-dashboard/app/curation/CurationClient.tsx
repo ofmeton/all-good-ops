@@ -139,11 +139,15 @@ export function CurationClient({
     }
     setRecommending(true);
     setRecError(null);
+    // worker hang で「推薦中…」のまま固まらないよう timeout（25s）で打ち切る。
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 25_000);
     try {
       const res = await fetch("/api/curation/recommend", {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ materials: payload }),
+        signal: ctrl.signal,
       });
       const body = (await res.json().catch(() => ({}))) as { recommendations?: Recommendation[] };
       const recs = Array.isArray(body.recommendations) ? body.recommendations : [];
@@ -156,8 +160,13 @@ export function CurationClient({
         setDesiredFmat(f);
       }
     } catch (e) {
-      setRecError(`推薦の取得に失敗しました: ${(e as Error).message}`);
+      const msg =
+        (e as Error)?.name === "AbortError"
+          ? "推薦がタイムアウトしました（既定のまま送信できます）"
+          : `推薦の取得に失敗しました: ${(e as Error).message}`;
+      setRecError(msg);
     } finally {
+      clearTimeout(timer);
       setRecommending(false);
     }
   }

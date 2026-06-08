@@ -128,11 +128,16 @@ export async function fetchRecommendations(
     return [];
   }
   const url = `${base.replace(/\/$/, "")}/admin/recommend`;
+  // worker hang で Next route が opaque に詰まらないよう timeout（25s）で打ち切り、
+  // AbortError は下の catch で [] に合流（既存 fail-open 経路に乗せる）。
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 25_000);
   try {
     const res = await fetch(url, {
       method: "POST",
       headers: { Authorization: `Bearer ${key}`, "content-type": "application/json" },
       body: JSON.stringify({ materials }),
+      signal: ctrl.signal,
     });
     if (!res.ok) {
       console.error(
@@ -143,8 +148,11 @@ export async function fetchRecommendations(
     const body = (await res.json()) as { recommendations?: unknown };
     return toRecommendations(body?.recommendations);
   } catch (e) {
-    console.error(`[fetchRecommendations] fetch/parse 失敗 → 推薦なし（network or 壊れ JSON）: ${String(e)}`);
+    const reason = (e as Error)?.name === "AbortError" ? "timeout(25s)" : "network or 壊れ JSON";
+    console.error(`[fetchRecommendations] fetch/parse 失敗 → 推薦なし（${reason}）: ${String(e)}`);
     return [];
+  } finally {
+    clearTimeout(timer);
   }
 }
 

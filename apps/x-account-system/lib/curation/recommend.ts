@@ -168,6 +168,9 @@ export function validateRecommendations(
   const list: RawRec[] = Array.isArray(raw) ? (raw as RawRec[]) : [];
   const out: Recommendation[] = [];
   const seen = new Set<string>();
+  // フォールバック発生件数（silent にせず集約 warn する＝drift / プロンプト劣化のサイン）。
+  let tplFallbacks = 0;
+  let fmatFallbacks = 0;
   for (const r of list) {
     const materialId = typeof r?.materialId === "string" ? r.materialId : null;
     if (!materialId || !validMaterialIds.has(materialId) || seen.has(materialId)) {
@@ -175,19 +178,30 @@ export function validateRecommendations(
       continue;
     }
     seen.add(materialId);
-    const tplId =
-      typeof r?.templateId === "string" && validTemplateIds.has(r.templateId)
-        ? r.templateId
-        : fallbackTemplateId;
-    const fmat =
-      typeof r?.fmat === "string" && (COMPOSE_FMATS as readonly string[]).includes(r.fmat)
-        ? r.fmat
-        : "medium";
+    const tplKnown = typeof r?.templateId === "string" && validTemplateIds.has(r.templateId);
+    const tplId = tplKnown ? (r.templateId as string) : fallbackTemplateId;
+    if (!tplKnown) tplFallbacks++;
+    const fmatKnown =
+      typeof r?.fmat === "string" && (COMPOSE_FMATS as readonly string[]).includes(r.fmat);
+    const fmat = fmatKnown ? (r.fmat as string) : "medium";
+    if (!fmatKnown) fmatFallbacks++;
     const reason = typeof r?.reason === "string" ? r.reason : "";
     let confidence = typeof r?.confidence === "number" && Number.isFinite(r.confidence) ? r.confidence : 0.5;
     if (confidence < 0) confidence = 0;
     if (confidence > 1) confidence = 1;
     out.push({ materialId, templateId: tplId, fmat, reason, confidence });
+  }
+  // 幻覚 templateId は「既定テンプレ + 別テンプレ向け reason」の矛盾を生むため特に可視化する。
+  if (tplFallbacks > 0 || fmatFallbacks > 0) {
+    console.warn(
+      JSON.stringify({
+        level: "warn",
+        msg: "[recommend] LLM output fell back to defaults (drift / hallucination sign)",
+        templateFallbacks: tplFallbacks, // 未知/幻覚 templateId → 既定テンプレ
+        fmatFallbacks, // 未知 fmat → medium
+        total: out.length,
+      }),
+    );
   }
   return out;
 }
@@ -208,10 +222,14 @@ export async function recommendMaterials(
   const templates = opts.templates ?? [];
   const userPrompt = buildRecommendPrompt(valid, templates);
 
+  // 素材数に比例して max_tokens を確保（固定 2048 だと多素材で後半推薦が truncate し欠落する）。
+  // 1 推薦 ≒ 100〜150 tokens。base + 200/素材、上限 8192（worker 20 素材上限でも収まる）。
+  const maxTokens = Math.min(8192, 1024 + valid.length * 200);
+
   const out = await callClaudeTraced(client, {
     params: {
       model,
-      max_tokens: 2048,
+      max_tokens: maxTokens,
       system: RECOMMEND_SYSTEM,
       tools: [RECOMMEND_TOOL as never],
       tool_choice: { type: "tool", name: "recommend_posts" },
