@@ -5,6 +5,7 @@
 import {
   resolveTemplate,
   renderTemplatePrompt,
+  listTemplateSummaries,
   COMPOSE_TEMPLATES,
   DEFAULT_TEMPLATE_ID,
 } from "./compose-templates";
@@ -66,5 +67,62 @@ describe("resolveTemplate", () => {
   test("prototype 汚染を踏まない（'constructor' 等は default）", () => {
     expect(resolveTemplate("constructor").id).toBe(DEFAULT_TEMPLATE_ID);
     expect(resolveTemplate("toString").id).toBe(DEFAULT_TEMPLATE_ID);
+  });
+});
+
+describe("listTemplateSummaries — summary contract（T-C レコメンドの依存契約）", () => {
+  // T-C の LLM レコメンドが参照する公開契約。キー集合を固定し drift を防ぐ。
+  const CONTRACT_KEYS = [
+    "description",
+    "hookType",
+    "id",
+    "name",
+    "preferredFmats",
+    "tone",
+  ];
+  const summaries = listTemplateSummaries();
+
+  test("registry の全テンプレ数と一致する", () => {
+    expect(summaries.length).toBe(Object.keys(COMPOSE_TEMPLATES).length);
+  });
+
+  test.each(summaries.map((s) => [s.id, s] as const))(
+    "%s が契約キー集合ちょうどを持つ（patch/structure/referenceNote を露出しない）",
+    (_id, summary) => {
+      // 正確なキー集合一致: 不足も過剰（systemPromptPatch/structure/referenceNote 等の漏洩）も検知。
+      expect(Object.keys(summary).sort()).toEqual(CONTRACT_KEYS);
+    },
+  );
+
+  test.each(summaries.map((s) => [s.id, s] as const))(
+    "%s が非空 tone と有効 hookType を持つ",
+    (_id, summary) => {
+      expect(typeof summary.tone).toBe("string");
+      expect(summary.tone.length).toBeGreaterThan(0);
+      expect(HOOK_TYPES).toContain(summary.hookType);
+    },
+  );
+
+  test.each(summaries.map((s) => [s.id, s] as const))(
+    "%s が id/name/description/preferredFmats を揃える",
+    (_id, summary) => {
+      expect(typeof summary.id).toBe("string");
+      expect(summary.id.length).toBeGreaterThan(0);
+      expect(typeof summary.name).toBe("string");
+      expect(summary.name.length).toBeGreaterThan(0);
+      expect(typeof summary.description).toBe("string");
+      expect(summary.description.length).toBeGreaterThan(0);
+      expect(Array.isArray(summary.preferredFmats)).toBe(true);
+    },
+  );
+
+  test("summary は systemPromptPatch / structure / referenceNote を含まない", () => {
+    for (const summary of summaries) {
+      const keys = Object.keys(summary);
+      expect(keys).not.toContain("systemPromptPatch");
+      expect(keys).not.toContain("structure");
+      expect(keys).not.toContain("referenceNote");
+      expect(keys).not.toContain("hookStrength");
+    }
   });
 });
