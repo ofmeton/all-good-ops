@@ -1,0 +1,62 @@
+{
+  "MakeAI_CEO": {
+    "roots": 61,
+    "single_pct": 54,
+    "thread_pct": 34,
+    "article_pct": 11,
+    "sShort": 27,
+    "sMed": 5,
+    "sLong": 1,
+    "thrlen": 6.7
+  },
+  "ClaudeCode_love": {
+    "roots": 158,
+    "single_pct": 77,
+    "thread_pct": 22,
+    "article_pct": 2,
+    "sShort": 7,
+    "sMed": 15,
+    "sLong": 99,
+    "thrlen": 2.2
+  },
+  "ClaudeCode_UT": {
+    "roots": 197,
+    "single_pct": 96,
+    "thread_pct": 2,
+    "article_pct": 3,
+    "sShort": 0,
+    "sMed": 39,
+    "sLong": 150,
+    "thrlen": 2
+  },
+  "nobel_824": {
+    "roots": 132,
+    "single_pct": 77,
+    "thread_pct": 11,
+    "article_pct": 11,
+    "sShort": 71,
+    "sMed": 13,
+    "sLong": 18,
+    "thrlen": 4.5
+  },
+  "Gencoin8": {
+    "roots": 40,
+    "single_pct": 70,
+    "thread_pct": 25,
+    "article_pct": 5,
+    "sShort": 7,
+    "sMed": 3,
+    "sLong": 18,
+    "thrlen": 3.5
+  },
+  "obsidianstudio9": {
+    "roots": 191,
+    "single_pct": 94,
+    "thread_pct": 4,
+    "article_pct": 2,
+    "sShort": 7,
+    "sMed": 48,
+    "sLong": 124,
+    "thrlen": 2
+  }
+}
