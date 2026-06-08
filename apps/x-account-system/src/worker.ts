@@ -210,6 +210,81 @@ export default {
       return Response.json({ templates: listTemplateSummaries() });
     }
 
+    // 管理用: キュレ素材に最適なテンプレ/fmat を LLM（Haiku）が推薦する（on-demand）。
+    // POST /admin/recommend  (Bearer <secret>・/admin/templates と同じ fail-closed 認可)
+    // body: { materials: [{ id, text, lang?, hasMedia?, engagement? }] }
+    // 返り: { recommendations: [{ materialId, templateId, fmat, reason, confidence }] }
+    // 失敗時は fail-open（recommendations: [] + warning）。Anthropic は従量課金のため
+    // ユーザー操作起点に限定し、件数上限で volume を抑える。
+    if (url.pathname === "/admin/recommend") {
+      if (request.method !== "POST") {
+        return new Response("method not allowed", { status: 405 });
+      }
+      const authHeader = request.headers.get("authorization");
+      const bearer = authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : null;
+      const key = bearer ?? url.searchParams.get("key");
+      if (!env.OAUTH_ADMIN_SECRET || key !== env.OAUTH_ADMIN_SECRET) {
+        return new Response("unauthorized", { status: 401 });
+      }
+      let payload: { materials?: unknown };
+      try {
+        payload = (await request.json()) as { materials?: unknown };
+      } catch {
+        return new Response("bad json", { status: 400 });
+      }
+      const rawMaterials = Array.isArray(payload?.materials) ? payload.materials : [];
+      if (rawMaterials.length === 0) {
+        return Response.json({ recommendations: [] });
+      }
+      // 境界検証 + コスト上限: 1 リクエスト最大 20 素材（従量課金の暴走防止）。
+      const RECOMMEND_MAX = 20;
+      const materials = rawMaterials
+        .filter((m): m is Record<string, unknown> => !!m && typeof m === "object")
+        .map((m) => ({
+          id: typeof m.id === "string" ? m.id : "",
+          text: typeof m.text === "string" ? m.text : "",
+          lang: typeof m.lang === "string" ? m.lang : null,
+          hasMedia: !!m.hasMedia,
+          engagement:
+            m.engagement && typeof m.engagement === "object"
+              ? (m.engagement as Record<string, number>)
+              : null,
+        }))
+        .filter((m) => m.id.length > 0 && m.text.trim().length > 0)
+        .slice(0, RECOMMEND_MAX);
+      if (materials.length === 0) {
+        return Response.json({ recommendations: [] });
+      }
+      try {
+        const Anthropic = (await import("@anthropic-ai/sdk")).default;
+        const { createClient } = await import("@supabase/supabase-js");
+        const { recommendMaterials, RECOMMEND_MODEL } = await import("../lib/curation/recommend.js");
+        const { recordCostLedger } = await import("../lib/cost/cost-ledger.js");
+        const anthropic = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });
+        const { recommendations, costJpy } = await recommendMaterials(
+          anthropic as never,
+          materials,
+          { templates: listTemplateSummaries() },
+        );
+        // cost_ledger 計上（fail-open）。ctx で waitUntil し応答をブロックしない。
+        const sb = createClient(env.SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY, {
+          db: { schema: process.env.SUPABASE_SCHEMA || "xad" },
+        });
+        const p = recordCostLedger(sb as never, {
+          category: "recommend",
+          costJpy,
+          meta: { model: RECOMMEND_MODEL, materials: materials.length },
+        });
+        ctx.waitUntil(p);
+        log(env, "info", `admin: recommend ${materials.length} materials → ${recommendations.length} recs`);
+        return Response.json({ recommendations });
+      } catch (e) {
+        // fail-open: 推薦は付加価値。失敗しても UI を壊さず空推薦を返す（サイレント禁止＝warn）。
+        log(env, "error", `/admin/recommend failed (fail-open): ${String(e)}`);
+        return Response.json({ recommendations: [], warning: "recommend failed" });
+      }
+    }
+
     // X OAuth PKCE Step 1: generate verifier/state → store in KV → redirect to X
     if (url.pathname === "/oauth/x/start") {
       // Admin gate (fail CLOSED): unauthenticated callers could poison the token

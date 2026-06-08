@@ -1,6 +1,13 @@
 import { serverSupabase } from "./supabase";
 import type { CurationMaterial, SelectionStatus, CurationEventRow } from "./curation-logic";
-import { toTemplateOptions, TEMPLATE_OPTIONS_FALLBACK, type TemplateOption } from "./curation-formats";
+import {
+  toTemplateOptions,
+  TEMPLATE_OPTIONS_FALLBACK,
+  toRecommendations,
+  type TemplateOption,
+  type RecommendMaterialInput,
+  type Recommendation,
+} from "./curation-formats";
 
 /** view から status 別に取得（overall desc、上限 limit）。 */
 export async function listCurationMaterials(
@@ -99,6 +106,45 @@ export async function fetchTemplateOptions(): Promise<TemplateOption[]> {
       `[fetchTemplateOptions] fetch/parse 失敗 → fallback（network or 壊れ JSON）: ${String(e)}`,
     );
     return TEMPLATE_OPTIONS_FALLBACK;
+  }
+}
+
+/**
+ * Worker の /admin/recommend を叩き、素材ごとのテンプレ/fmat 推薦を取得（registry が SSOT）。
+ * fetchTemplateOptions と同じ規約（WORKER_BASE_URL + OAUTH_ADMIN_SECRET / Bearer）。
+ * env 未設定・取得失敗・不正レスポンスはすべて fail-open で [] を返す
+ * （推薦は付加価値＝失敗しても送信導線/ダイアログを壊さない）。各失敗は console.error で観測可能に。
+ */
+export async function fetchRecommendations(
+  materials: RecommendMaterialInput[],
+): Promise<Recommendation[]> {
+  if (materials.length === 0) return [];
+  const base = process.env.WORKER_BASE_URL;
+  const key = process.env.OAUTH_ADMIN_SECRET;
+  if (!base || !key) {
+    console.error(
+      "[fetchRecommendations] WORKER_BASE_URL / OAUTH_ADMIN_SECRET 未設定 → 推薦なし（[] で fail-open）",
+    );
+    return [];
+  }
+  const url = `${base.replace(/\/$/, "")}/admin/recommend`;
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${key}`, "content-type": "application/json" },
+      body: JSON.stringify({ materials }),
+    });
+    if (!res.ok) {
+      console.error(
+        `[fetchRecommendations] POST /admin/recommend HTTP ${res.status} → 推薦なし（worker 不達 / 401 / 5xx の可能性）`,
+      );
+      return [];
+    }
+    const body = (await res.json()) as { recommendations?: unknown };
+    return toRecommendations(body?.recommendations);
+  } catch (e) {
+    console.error(`[fetchRecommendations] fetch/parse 失敗 → 推薦なし（network or 壊れ JSON）: ${String(e)}`);
+    return [];
   }
 }
 

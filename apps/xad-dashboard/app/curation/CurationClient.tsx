@@ -14,7 +14,9 @@ import {
   FMAT_OPTIONS,
   DEFAULT_FMAT,
   DEFAULT_TEMPLATE_ID,
+  modeOf,
   type TemplateOption,
+  type Recommendation,
 } from "@/lib/curation-formats";
 import { MaterialCard } from "./MaterialCard";
 
@@ -101,6 +103,71 @@ export function CurationClient({
   const [composeOpen, setComposeOpen] = useState(false);
   const [desiredFmat, setDesiredFmat] = useState<string>(DEFAULT_FMAT);
   const [templateId, setTemplateId] = useState<string>(DEFAULT_TEMPLATE_ID);
+  // AI 推薦（on-demand・ユーザー操作起点）。最終決定は人＝既定 pre-fill のみ。
+  const [recommending, setRecommending] = useState(false);
+  const [recError, setRecError] = useState<string | null>(null);
+  const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
+
+  const templateLabel = useCallback(
+    (id: string) => templateOptions.find((o) => o.id === id)?.label ?? id,
+    [templateOptions],
+  );
+  const fmatLabel = useCallback(
+    (v: string) => FMAT_OPTIONS.find((o) => o.value === v)?.label ?? v,
+    [],
+  );
+
+  // 選択素材に AI 推薦を要求し、最頻 templateId/fmat を既定に pre-fill（編集可）。
+  async function requestRecommendations() {
+    const ids = Array.from(checked);
+    if (ids.length === 0) return;
+    const byId = new Map((materials[tab] ?? []).map((m) => [m.id, m]));
+    const payload = ids
+      .map((id) => byId.get(id))
+      .filter((m): m is CurationMaterial => !!m)
+      .map((m) => ({
+        id: m.id,
+        text: m.translation || m.raw_text || "",
+        lang: m.lang,
+        hasMedia: !!(m.media && m.media.length > 0),
+        engagement: m.engagement,
+      }))
+      .filter((m) => m.text.trim().length > 0);
+    if (payload.length === 0) {
+      setRecError("本文のある素材が選択されていません");
+      return;
+    }
+    setRecommending(true);
+    setRecError(null);
+    try {
+      const res = await fetch("/api/curation/recommend", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ materials: payload }),
+      });
+      const body = (await res.json().catch(() => ({}))) as { recommendations?: Recommendation[] };
+      const recs = Array.isArray(body.recommendations) ? body.recommendations : [];
+      setRecommendations(recs);
+      if (recs.length === 0) {
+        setRecError("推薦を取得できませんでした（既定のまま送信できます）");
+      } else {
+        const { templateId: t, fmat: f } = modeOf(recs);
+        setTemplateId(t);
+        setDesiredFmat(f);
+      }
+    } catch (e) {
+      setRecError(`推薦の取得に失敗しました: ${(e as Error).message}`);
+    } finally {
+      setRecommending(false);
+    }
+  }
+
+  function openCompose() {
+    // ダイアログを開くたびに前回の推薦結果をリセット（誤った既定の残留を防ぐ）。
+    setRecommendations([]);
+    setRecError(null);
+    setComposeOpen(true);
+  }
 
   const base = materials[tab] ?? [];
   const shown = sortMaterials(filterMaterials(base, { ...filter, text }), sort);
@@ -384,7 +451,7 @@ export function CurationClient({
                   key={action}
                   onClick={() =>
                     action === "send_to_compose"
-                      ? setComposeOpen(true)
+                      ? openCompose()
                       : act(action)
                   }
                   disabled={pending || checked.size === 0}
@@ -519,6 +586,55 @@ export function CurationClient({
             </div>
 
             <div className="px-5 py-4 space-y-3.5">
+              {/* AI レコメンド（on-demand・最終決定は人） */}
+              <div className="rounded-lg border border-violet-200 bg-violet-50/60 p-3 space-y-2">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-xs font-medium text-violet-900">
+                    AI に型を提案させる
+                  </span>
+                  <button
+                    type="button"
+                    onClick={requestRecommendations}
+                    disabled={recommending || checked.size === 0}
+                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium bg-violet-600 text-white hover:bg-violet-700 active:bg-violet-800 shadow-sm disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                  >
+                    {recommending ? "推薦中…" : "🤖 AIにおすすめさせる"}
+                  </button>
+                </div>
+                <p className="text-[11px] leading-snug text-violet-700/80">
+                  選択素材の内容から最適なテンプレ/長さを提案します。下の選択は提案後も自由に変更できます（最終決定はあなた）。
+                </p>
+                {recError && (
+                  <p className="text-[11px] text-amber-700 bg-amber-50 border border-amber-200 rounded px-2 py-1">
+                    {recError}
+                  </p>
+                )}
+                {recommendations.length > 0 && (
+                  <ul className="space-y-1.5 max-h-40 overflow-y-auto">
+                    {recommendations.map((r) => (
+                      <li
+                        key={r.materialId}
+                        className="text-[11px] leading-snug bg-white border border-violet-100 rounded px-2 py-1.5"
+                      >
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <span className="font-medium text-violet-900">
+                            {templateLabel(r.templateId)}
+                          </span>
+                          <span className="text-slate-400">/</span>
+                          <span className="text-slate-600">{fmatLabel(r.fmat)}</span>
+                          <span className="ml-auto font-mono tabular-nums text-slate-400">
+                            確信度 {(r.confidence * 100).toFixed(0)}%
+                          </span>
+                        </div>
+                        {r.reason && (
+                          <p className="text-slate-500 mt-0.5">{r.reason}</p>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+
               {/* Format */}
               <div className="space-y-1">
                 <label
