@@ -210,6 +210,95 @@ export default {
       return Response.json({ templates: listTemplateSummaries() });
     }
 
+    // 管理用: キュレ素材に最適なテンプレ/fmat を LLM（Haiku）が推薦する（on-demand）。
+    // POST /admin/recommend  (Bearer <secret>・/admin/templates と同じ fail-closed 認可)
+    // body: { materials: [{ id, text, lang?, hasMedia?, engagement? }] }
+    // 返り: { recommendations: [{ materialId, templateId, fmat, reason, confidence }] }
+    // 失敗時は fail-open（recommendations: [] + warning）。Anthropic は従量課金のため
+    // ユーザー操作起点に限定し、件数上限で volume を抑える。
+    if (url.pathname === "/admin/recommend") {
+      if (request.method !== "POST") {
+        return new Response("method not allowed", { status: 405 });
+      }
+      const authHeader = request.headers.get("authorization");
+      const bearer = authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : null;
+      const key = bearer ?? url.searchParams.get("key");
+      if (!env.OAUTH_ADMIN_SECRET || key !== env.OAUTH_ADMIN_SECRET) {
+        return new Response("unauthorized", { status: 401 });
+      }
+      let payload: { materials?: unknown };
+      try {
+        payload = (await request.json()) as { materials?: unknown };
+      } catch {
+        return new Response("bad json", { status: 400 });
+      }
+      const rawMaterials = Array.isArray(payload?.materials) ? payload.materials : [];
+      if (rawMaterials.length === 0) {
+        return Response.json({ recommendations: [] });
+      }
+      // 境界検証 + コスト上限: 1 リクエスト最大 20 素材（従量課金の暴走防止）。
+      const RECOMMEND_MAX = 20;
+      const materials = rawMaterials
+        .filter((m): m is Record<string, unknown> => !!m && typeof m === "object")
+        .map((m) => ({
+          id: typeof m.id === "string" ? m.id : "",
+          text: typeof m.text === "string" ? m.text : "",
+          lang: typeof m.lang === "string" ? m.lang : null,
+          hasMedia: !!m.hasMedia,
+          engagement:
+            m.engagement && typeof m.engagement === "object"
+              ? (m.engagement as Record<string, number>)
+              : null,
+        }))
+        .filter((m) => m.id.length > 0 && m.text.trim().length > 0)
+        .slice(0, RECOMMEND_MAX);
+      if (materials.length === 0) {
+        return Response.json({ recommendations: [] });
+      }
+      // 設定欠落（ANTHROPIC_API_KEY 未設定）は一過性の API 失敗と区別して明示ログ。
+      // これが無いと new Anthropic({apiKey:undefined})→401→広い catch で「毎回 fail-open」となり
+      // 設定ミスが恒久 silent 劣化する。
+      if (!env.ANTHROPIC_API_KEY) {
+        log(env, "error", "/admin/recommend: ANTHROPIC_API_KEY 未設定（設定欠落・推薦は恒久無効）");
+        return Response.json({ recommendations: [], warning: "config: ANTHROPIC_API_KEY unset" });
+      }
+      try {
+        const Anthropic = (await import("@anthropic-ai/sdk")).default;
+        const { createClient } = await import("@supabase/supabase-js");
+        const { recommendMaterials, RECOMMEND_MODEL } = await import("../lib/curation/recommend.js");
+        const { recordCostLedger } = await import("../lib/cost/cost-ledger.js");
+        // 重要: 課金前に fallible な準備（client 生成）を済ませる。Anthropic 課金が発生した後に
+        // createClient が env 欠落で throw すると、トークン消費したのに cost_ledger 未計上＝
+        // brownout 会計が過小になる。sb/anthropic を recommendMaterials より先に確定させ、
+        // 課金確定後は fail-open な recordCostLedger だけが走るようにする（charge→必ず ledger）。
+        const sb = createClient(env.SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY, {
+          db: { schema: process.env.SUPABASE_SCHEMA || "xad" },
+        });
+        const anthropic = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });
+        const { recommendations, costJpy } = await recommendMaterials(
+          anthropic as never,
+          materials,
+          { templates: listTemplateSummaries() },
+        );
+        // cost_ledger 計上（recordCostLedger は内部 fail-open で throw しない）。
+        // ctx.waitUntil で応答をブロックしない。
+        ctx.waitUntil(
+          recordCostLedger(sb as never, {
+            category: "recommend",
+            costJpy,
+            meta: { model: RECOMMEND_MODEL, materials: materials.length },
+          }),
+        );
+        log(env, "info", `admin: recommend ${materials.length} materials → ${recommendations.length} recs`);
+        return Response.json({ recommendations });
+      } catch (e) {
+        // fail-open: 推薦は付加価値。失敗しても UI を壊さず空推薦を返す（サイレント禁止＝warn）。
+        // この経路に来る = client 生成失敗 or LLM 呼び出し自体の失敗（=課金前 or 課金なし）。
+        log(env, "error", `/admin/recommend failed (fail-open): ${String(e)}`);
+        return Response.json({ recommendations: [], warning: "recommend failed" });
+      }
+    }
+
     // X OAuth PKCE Step 1: generate verifier/state → store in KV → redirect to X
     if (url.pathname === "/oauth/x/start") {
       // Admin gate (fail CLOSED): unauthenticated callers could poison the token

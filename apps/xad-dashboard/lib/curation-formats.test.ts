@@ -3,7 +3,11 @@ import {
   toTemplateOptions,
   TEMPLATE_OPTIONS_FALLBACK,
   DEFAULT_TEMPLATE_ID,
+  DEFAULT_FMAT,
+  toRecommendations,
+  modeOf,
   type TemplateOption,
+  type Recommendation,
 } from "./curation-formats";
 
 afterEach(() => {
@@ -67,5 +71,66 @@ describe("TEMPLATE_OPTIONS_FALLBACK / DEFAULT_TEMPLATE_ID", () => {
   test("fallback は既定テンプレ 1 件のみ", () => {
     expect(TEMPLATE_OPTIONS_FALLBACK).toHaveLength(1);
     expect(TEMPLATE_OPTIONS_FALLBACK[0].id).toBe(DEFAULT_TEMPLATE_ID);
+  });
+});
+
+describe("toRecommendations", () => {
+  test("正常な推薦行はそのまま通す", () => {
+    const rows = [
+      { materialId: "m1", templateId: "template_value_deepdive", fmat: "long", reason: "深掘り", confidence: 0.9 },
+    ];
+    expect(toRecommendations(rows)).toEqual<Recommendation[]>([
+      { materialId: "m1", templateId: "template_value_deepdive", fmat: "long", reason: "深掘り", confidence: 0.9 },
+    ]);
+  });
+
+  test("未知 fmat は既定 fmat に補正", () => {
+    const out = toRecommendations([
+      { materialId: "m1", templateId: "t", fmat: "giant", reason: "r", confidence: 0.5 },
+    ]);
+    expect(out[0].fmat).toBe(DEFAULT_FMAT);
+  });
+
+  test("materialId/templateId が欠落の行は破棄", () => {
+    const out = toRecommendations([
+      { templateId: "t", fmat: "short", reason: "r", confidence: 0.5 },
+      { materialId: "m1", fmat: "short", reason: "r", confidence: 0.5 },
+      { materialId: "m2", templateId: "t", fmat: "short", reason: "r", confidence: 0.5 },
+    ]);
+    expect(out).toHaveLength(1);
+    expect(out[0].materialId).toBe("m2");
+  });
+
+  test("confidence は [0,1] にクランプ・非数値は 0.5、reason 欠落は空文字", () => {
+    const out = toRecommendations([
+      { materialId: "m1", templateId: "t", fmat: "short", confidence: 1.5 },
+      { materialId: "m2", templateId: "t", fmat: "short", confidence: -2 },
+      { materialId: "m3", templateId: "t", fmat: "short", confidence: "x" },
+    ]);
+    expect(out[0].confidence).toBe(1);
+    expect(out[0].reason).toBe("");
+    expect(out[1].confidence).toBe(0);
+    expect(out[2].confidence).toBe(0.5);
+  });
+
+  test("非配列入力は空配列", () => {
+    expect(toRecommendations(null)).toEqual([]);
+    expect(toRecommendations(undefined)).toEqual([]);
+    expect(toRecommendations({})).toEqual([]);
+  });
+});
+
+describe("modeOf", () => {
+  test("空配列は既定値", () => {
+    expect(modeOf([])).toEqual({ templateId: DEFAULT_TEMPLATE_ID, fmat: DEFAULT_FMAT });
+  });
+
+  test("最頻の templateId / fmat を返す", () => {
+    const recs: Recommendation[] = [
+      { materialId: "a", templateId: "t1", fmat: "short", reason: "", confidence: 1 },
+      { materialId: "b", templateId: "t1", fmat: "long", reason: "", confidence: 1 },
+      { materialId: "c", templateId: "t2", fmat: "long", reason: "", confidence: 1 },
+    ];
+    expect(modeOf(recs)).toEqual({ templateId: "t1", fmat: "long" });
   });
 });
