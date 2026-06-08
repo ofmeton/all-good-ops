@@ -30,7 +30,7 @@ export interface CollectorConfig {
 }
 
 /**
- * 全 28 ソースを buzz-ingest.ts の SEED_SOURCES から移植。
+ * 全 28 ソース（旧 buzz-ingest の SEED_SOURCES 由来。buzz-ingest は legacy retire で削除済）。
  * jp_publisher 24 件 / ai_official 3 件 / en_curator 1 件。
  */
 export const COLLECTOR_CONFIG: CollectorConfig = {

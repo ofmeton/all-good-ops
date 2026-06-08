@@ -100,26 +100,26 @@ describe("brownout 4-stage thresholds", () => {
   test("ok status → allowedJobs includes all cron jobs", async () => {
     const d = await evaluateBrownout(5000);
     expect(d.allowedJobs).toContain("daily-digest");
-    expect(d.allowedJobs).toContain("post-morning");
-    expect(d.allowedJobs).toContain("ideation");
+    expect(d.allowedJobs).toContain("collect");
+    expect(d.allowedJobs).toContain("compose");
+    expect(d.allowedJobs).toContain("check");
     expect(d.allowedJobs).toContain("line-event");
   });
 
   test("reduce status → allowedJobs includes all jobs", async () => {
     const d = await evaluateBrownout(10000);
     expect(d.allowedJobs).toContain("daily-digest");
-    expect(d.allowedJobs).toContain("post-morning");
+    expect(d.allowedJobs).toContain("collect");
     expect(d.allowedJobs).toContain("line-event");
   });
 
-  test("stop_posting → allowedJobs excludes post-* and ideation but includes daily-digest and line-event", async () => {
+  test("stop_posting → allowedJobs excludes 生成系(collect/compose/check) but includes daily-digest and line-event", async () => {
     const d = await evaluateBrownout(11500);
     expect(d.allowedJobs).toContain("daily-digest");
     expect(d.allowedJobs).toContain("line-event");
-    expect(d.allowedJobs).not.toContain("post-morning");
-    expect(d.allowedJobs).not.toContain("post-noon");
-    expect(d.allowedJobs).not.toContain("post-evening");
-    expect(d.allowedJobs).not.toContain("ideation");
+    expect(d.allowedJobs).not.toContain("collect");
+    expect(d.allowedJobs).not.toContain("compose");
+    expect(d.allowedJobs).not.toContain("check");
     expect(d.allowedJobs).not.toContain("optimizer-update");
   });
 
@@ -127,10 +127,9 @@ describe("brownout 4-stage thresholds", () => {
     const d = await evaluateBrownout(12500);
     expect(d.allowedJobs).toContain("daily-digest");
     expect(d.allowedJobs).toContain("line-event");
-    expect(d.allowedJobs).not.toContain("post-morning");
-    expect(d.allowedJobs).not.toContain("buzz-ingest");
+    expect(d.allowedJobs).not.toContain("collect");
+    expect(d.allowedJobs).not.toContain("rollback-monitor");
     expect(d.allowedJobs).not.toContain("optimizer-update");
-    expect(d.allowedJobs).not.toContain("ideation");
   });
 
   test("escalate → allowedJobs is only daily-digest and line-event", async () => {

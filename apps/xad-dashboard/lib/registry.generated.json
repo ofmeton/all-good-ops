@@ -29,63 +29,7 @@
       ],
       "upstream": [],
       "downstream": [
-        "ideation",
         "compose"
-      ]
-    },
-    {
-      "id": "buzz-ingest",
-      "label": "Buzz Ingest",
-      "group": "ingest",
-      "purpose": "twitterapi.io の seed アカウントから日次 buzz を取得し materials_store へ。",
-      "objectiveFunction": "一次ソースの網羅性と鮮度を最大化（取りこぼし最小化）",
-      "inputs": [
-        "twitterapi.io seed accounts"
-      ],
-      "outputs": [
-        "xad.materials_store (x_inspirations)"
-      ],
-      "keyVariables": [
-        {
-          "name": "seed accounts",
-          "desc": "取得対象アカウント群"
-        }
-      ],
-      "logicKind": "io",
-      "sourcePaths": [
-        "apps/x-account-system/lib/ingest/"
-      ],
-      "upstream": [],
-      "downstream": [
-        "ideation"
-      ]
-    },
-    {
-      "id": "inspirations-ingest",
-      "label": "Inspirations Ingest",
-      "group": "ingest",
-      "purpose": "週次で X/note seeds を取得し materials_store へ。",
-      "objectiveFunction": "週次インスピレーションの多様性とカバレッジを最大化",
-      "inputs": [
-        "X seeds",
-        "note seeds"
-      ],
-      "outputs": [
-        "xad.materials_store"
-      ],
-      "keyVariables": [
-        {
-          "name": "overseas≥6 / domestic≥18 / note≥3",
-          "desc": "取得本数下限"
-        }
-      ],
-      "logicKind": "io",
-      "sourcePaths": [
-        "apps/x-account-system/lib/ingest/"
-      ],
-      "upstream": [],
-      "downstream": [
-        "ideation"
       ]
     },
     {
@@ -159,38 +103,8 @@
       "upstream": [
         "compose"
       ],
-      "downstream": []
-    },
-    {
-      "id": "ideation",
-      "label": "Ideation",
-      "group": "ideation",
-      "purpose": "materials_store から core_ideas を LLM 生成。",
-      "objectiveFunction": "ターゲット適合 × ネタの多様性を最大化（カテゴリ/フックのバランス）",
-      "inputs": [
-        "xad.materials_store"
-      ],
-      "outputs": [
-        "xad.core_ideas"
-      ],
-      "keyVariables": [
-        {
-          "name": "batch limit",
-          "desc": "1 回の claim 対象数"
-        }
-      ],
-      "logicKind": "llm",
-      "promptRef": "apps/x-account-system/lib/ideation/ideate.ts",
-      "sourcePaths": [
-        "apps/x-account-system/lib/ideation/ideate.ts"
-      ],
-      "upstream": [
-        "collect",
-        "buzz-ingest",
-        "inspirations-ingest"
-      ],
       "downstream": [
-        "writer"
+        "line-approval"
       ]
     },
     {
@@ -219,40 +133,9 @@
       "promptRef": "apps/x-account-system/lib/writer/writer-x.ts",
       "sourcePaths": [
         "apps/x-account-system/lib/writer/",
-        "apps/x-account-system/src/jobs/post-job.ts"
+        "apps/x-account-system/src/jobs/line-event.ts"
       ],
-      "upstream": [
-        "ideation"
-      ],
-      "downstream": [
-        "hook-classifier"
-      ]
-    },
-    {
-      "id": "hook-classifier",
-      "label": "Hook Classifier",
-      "group": "review",
-      "purpose": "hook を規則ベース(regex/scoring)で分類。LLM ではない。",
-      "objectiveFunction": "hook 分類の正確性を最大化（誤分類を最小化）",
-      "inputs": [
-        "draft body"
-      ],
-      "outputs": [
-        "primary_hook (4分類)"
-      ],
-      "keyVariables": [
-        {
-          "name": "classifyRules",
-          "desc": "device/score 規則"
-        }
-      ],
-      "logicKind": "deterministic",
-      "sourcePaths": [
-        "apps/x-account-system/lib/hook-classifier/classify.ts"
-      ],
-      "upstream": [
-        "writer"
-      ],
+      "upstream": [],
       "downstream": [
         "editor"
       ]
@@ -287,7 +170,7 @@
         "apps/x-account-system/lib/editor/pipeline.ts"
       ],
       "upstream": [
-        "hook-classifier"
+        "writer"
       ],
       "downstream": [
         "line-approval"
@@ -318,6 +201,7 @@
         "apps/x-account-system/src/jobs/post-job.ts"
       ],
       "upstream": [
+        "check",
         "editor"
       ],
       "downstream": [

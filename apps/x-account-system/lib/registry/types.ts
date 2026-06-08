@@ -1,5 +1,5 @@
 export type StageGroup =
-  | "ingest" | "ideation" | "generate" | "review" | "approve" | "publish" | "learn";
+  | "ingest" | "generate" | "review" | "approve" | "publish" | "learn";
 export type LogicKind = "llm" | "deterministic" | "io";
 
 export interface StageMeta {
