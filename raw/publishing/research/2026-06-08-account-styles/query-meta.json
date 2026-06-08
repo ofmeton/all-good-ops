@@ -1,0 +1,736 @@
+{
+  "session_date": "2026-06-08",
+  "wrapper_version": "0.2.0",
+  "total_calls": 61,
+  "total_tweets_returned": 1069,
+  "estimated_cost_usd": 0.1603,
+  "estimated_cost_jpy": 25,
+  "calls": [
+    {
+      "ts": "2026-06-08T08:48:45.411828+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "MakeAI_CEO"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-06-08T08:48:48.160159+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:MakeAI_CEO since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "",
+      "cursor_out": "DAADDAABCgABHKRq_Wha0DIKAAIco_zdFptA5gAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUcpHekYgAnEAoABhykd6Rh_9jwAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:48:51.527032+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:MakeAI_CEO since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHKRq_Wha0DIKAAIco_zdFptA5gAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUcpHekYgAnEAoABhykd6Rh_9jwAAA",
+      "cursor_out": "DAADDAABCgABHKRq_Wha0DIKAAIcot2aJ1uQVwAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUcpHekYgAnEAoABhykd6Rh_7HgAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:48:54.938108+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:MakeAI_CEO since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHKRq_Wha0DIKAAIcot2aJ1uQVwAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUcpHekYgAnEAoABhykd6Rh_7HgAAA",
+      "cursor_out": "DAADDAABCgABHKRq_Wha0DIKAAIcoW_pZtqB3QAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUcpHekYgAnEAoABhykd6Rh_4rQAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:48:58.439744+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:MakeAI_CEO since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHKRq_Wha0DIKAAIcoW_pZtqB3QAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUcpHekYgAnEAoABhykd6Rh_4rQAAA",
+      "cursor_out": "DAADDAABCgABHKRq_Wha0DIKAAIcoBtNI5txGwAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUcpHekYgAnEAoABhykd6Rh_2PAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:49:02.010722+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:MakeAI_CEO since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHKRq_Wha0DIKAAIcoBtNI5txGwAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUcpHekYgAnEAoABhykd6Rh_2PAAAA",
+      "cursor_out": "DAADDAABCgABHKRq_Wha0DIKAAIcneFIBJuhnwAIAAIAAAACCAADAAAAAAgABAAAAAQKAAUcpHekYgAnEAoABhykd6Rh_zywAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:49:05.685859+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:MakeAI_CEO since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHKRq_Wha0DIKAAIcneFIBJuhnwAIAAIAAAACCAADAAAAAAgABAAAAAQKAAUcpHekYgAnEAoABhykd6Rh_zywAAA",
+      "cursor_out": "DAADDAABCgABHKRq_Wha0DIKAAIcnL322ZrAugAIAAIAAAACCAADAAAAAAgABAAAAAUKAAUcpHekYgAnEAoABhykd6Rh_xWgAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:49:09.189739+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:MakeAI_CEO since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHKRq_Wha0DIKAAIcnL322ZrAugAIAAIAAAACCAADAAAAAAgABAAAAAUKAAUcpHekYgAnEAoABhykd6Rh_xWgAAA",
+      "cursor_out": "DAADDAABCgABHKRq_Wha0DIKAAIcmj1h4tsBbAAIAAIAAAACCAADAAAAAAgABAAAAAYKAAUcpHekYgAnEAoABhykd6Rh_u6QAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:49:12.672441+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:MakeAI_CEO since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHKRq_Wha0DIKAAIcmj1h4tsBbAAIAAIAAAACCAADAAAAAAgABAAAAAYKAAUcpHekYgAnEAoABhykd6Rh_u6QAAA",
+      "cursor_out": "DAADDAABCgABHKRq_Wha0DIKAAIcmNp6ddpQdgAIAAIAAAACCAADAAAAAAgABAAAAAcKAAUcpHekYgAnEAoABhykd6Rh_seAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:49:16.694170+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:MakeAI_CEO since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHKRq_Wha0DIKAAIcmNp6ddpQdgAIAAIAAAACCAADAAAAAAgABAAAAAcKAAUcpHekYgAnEAoABhykd6Rh_seAAAA",
+      "cursor_out": "DAADDAABCgABHKRq_Wha0DIKAAIcl0xE7Jrg6AAIAAIAAAACCAADAAAAAAgABAAAAAgKAAUcpHekYgAnEAoABhykd6Rh_qBwAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:49:20.116655+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:MakeAI_CEO since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHKRq_Wha0DIKAAIcl0xE7Jrg6AAIAAIAAAACCAADAAAAAAgABAAAAAgKAAUcpHekYgAnEAoABhykd6Rh_qBwAAA",
+      "cursor_out": "DAADDAABCgABHKRq_Wha0DIKAAIclduVqRpx_wAIAAIAAAACCAADAAAAAAgABAAAAAkKAAUcpHekYgAnEAoABhykd6Rh_nlgAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:49:23.541906+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "ClaudeCode_love"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-06-08T08:49:26.275625+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:ClaudeCode_love since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "",
+      "cursor_out": "DAADDAABCgABHKRUlwKbYcYKAAIclOKEXxshhQAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUcpHfJuUAnEAoABhykd8m5P9jwAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:49:29.879441+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:ClaudeCode_love since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHKRUlwKbYcYKAAIclOKEXxshhQAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUcpHfJuUAnEAoABhykd8m5P9jwAAA",
+      "cursor_out": "DAADDAABCgABHKRUlwKbYcYKAAIcjtGOQBtw6QAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUcpHfJuUAnEAoABhykd8m5P7HgAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:49:33.476537+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:ClaudeCode_love since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHKRUlwKbYcYKAAIcjtGOQBtw6QAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUcpHfJuUAnEAoABhykd8m5P7HgAAA",
+      "cursor_out": "DAADDAABCgABHKRUlwKbYcYKAAIcifovV5uRKwAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUcpHfJuUAnEAoABhykd8m5P4rQAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:49:37.506559+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:ClaudeCode_love since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHKRUlwKbYcYKAAIcifovV5uRKwAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUcpHfJuUAnEAoABhykd8m5P4rQAAA",
+      "cursor_out": "DAADDAABCgABHKRUlwKbYcYKAAIchdVOAZqQMQAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUcpHfJuUAnEAoABhykd8m5P2PAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:49:40.911558+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:ClaudeCode_love since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHKRUlwKbYcYKAAIchdVOAZqQMQAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUcpHfJuUAnEAoABhykd8m5P2PAAAA",
+      "cursor_out": "DAADDAABCgABHKRUlwKbYcYKAAIcg8gDm5rQVQAIAAIAAAACCAADAAAAAAgABAAAAAQKAAUcpHfJuUAnEAoABhykd8m5PzywAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:49:44.913145+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:ClaudeCode_love since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHKRUlwKbYcYKAAIcg8gDm5rQVQAIAAIAAAACCAADAAAAAAgABAAAAAQKAAUcpHfJuUAnEAoABhykd8m5PzywAAA",
+      "cursor_out": "DAADDAABCgABHKRUlwKbYcYKAAIcfuIyx9px1gAIAAIAAAACCAADAAAAAAgABAAAAAUKAAUcpHfJuUAnEAoABhykd8m5PxWgAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:49:48.719068+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:ClaudeCode_love since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHKRUlwKbYcYKAAIcfuIyx9px1gAIAAIAAAACCAADAAAAAAgABAAAAAUKAAUcpHfJuUAnEAoABhykd8m5PxWgAAA",
+      "cursor_out": "DAADDAABCgABHKRUlwKbYcYKAAIcfAAJFBsBYgAIAAIAAAACCAADAAAAAAgABAAAAAYKAAUcpHfJuUAnEAoABhykd8m5Pu6QAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:49:52.341307+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:ClaudeCode_love since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHKRUlwKbYcYKAAIcfAAJFBsBYgAIAAIAAAACCAADAAAAAAgABAAAAAYKAAUcpHfJuUAnEAoABhykd8m5Pu6QAAA",
+      "cursor_out": "DAADDAABCgABHKRUlwKbYcYKAAIcd4UBHRth6AAIAAIAAAACCAADAAAAAAgABAAAAAcKAAUcpHfJuUAnEAoABhykd8m5PseAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:49:59.009240+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:ClaudeCode_love since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHKRUlwKbYcYKAAIcd4UBHRth6AAIAAIAAAACCAADAAAAAAgABAAAAAcKAAUcpHfJuUAnEAoABhykd8m5PseAAAA",
+      "cursor_out": "DAADDAABCgABHKRUlwKbYcYKAAIcdSZbPRpB7AAIAAIAAAACCAADAAAAAAgABAAAAAgKAAUcpHfJuUAnEAoABhykd8m5PqBwAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:50:07.958961+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:ClaudeCode_love since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHKRUlwKbYcYKAAIcdSZbPRpB7AAIAAIAAAACCAADAAAAAAgABAAAAAgKAAUcpHfJuUAnEAoABhykd8m5PqBwAAA",
+      "cursor_out": "DAADDAABCgABHKRUlwKbYcYKAAIcc5vR0JuR6AAIAAIAAAACCAADAAAAAAgABAAAAAkKAAUcpHfJuUAnEAoABhykd8m5PnlgAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:50:11.409620+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "ClaudeCode_UT"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-06-08T08:50:14.365814+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:ClaudeCode_UT since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "",
+      "cursor_out": "DAADDAABCgABHKRlmwsbsSMKAAIcn29WNNowUgAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUcpHf438AnEAoABhykd_jfv9jwAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:50:18.812076+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:ClaudeCode_UT since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHKRlmwsbsSMKAAIcn29WNNowUgAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUcpHf438AnEAoABhykd_jfv9jwAAA",
+      "cursor_out": "DAADDAABCgABHKRlmwsbsSMKAAIcnJCaaxth2AAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUcpHf438AnEAoABhykd_jfv7HgAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:50:23.030491+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:ClaudeCode_UT since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHKRlmwsbsSMKAAIcnJCaaxth2AAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUcpHf438AnEAoABhykd_jfv7HgAAA",
+      "cursor_out": "DAADDAABCgABHKRlmwsbsSMKAAIcmbjBxdsBWAAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUcpHf438AnEAoABhykd_jfv4rQAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:50:29.920912+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:ClaudeCode_UT since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHKRlmwsbsSMKAAIcmbjBxdsBWAAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUcpHf438AnEAoABhykd_jfv4rQAAA",
+      "cursor_out": "DAADDAABCgABHKRlmwsbsSMKAAIclk1IPNqAHQAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUcpHf438AnEAoABhykd_jfv2PAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:50:33.800716+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:ClaudeCode_UT since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHKRlmwsbsSMKAAIclk1IPNqAHQAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUcpHf438AnEAoABhykd_jfv2PAAAA",
+      "cursor_out": "DAADDAABCgABHKRlmwsbsSMKAAIckov9gRpxXQAIAAIAAAACCAADAAAAAAgABAAAAAQKAAUcpHf438AnEAoABhykd_jfvzywAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:50:38.037636+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:ClaudeCode_UT since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHKRlmwsbsSMKAAIckov9gRpxXQAIAAIAAAACCAADAAAAAAgABAAAAAQKAAUcpHf438AnEAoABhykd_jfvzywAAA",
+      "cursor_out": "DAADDAABCgABHKRlmwsbsSMKAAIckAMeTtqAyAAIAAIAAAACCAADAAAAAAgABAAAAAUKAAUcpHf438AnEAoABhykd_jfvxWgAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:50:41.931117+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:ClaudeCode_UT since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHKRlmwsbsSMKAAIckAMeTtqAyAAIAAIAAAACCAADAAAAAAgABAAAAAUKAAUcpHf438AnEAoABhykd_jfvxWgAAA",
+      "cursor_out": "DAADDAABCgABHKRlmwsbsSMKAAIcjL1oMtoQgQAIAAIAAAACCAADAAAAAAgABAAAAAYKAAUcpHf438AnEAoABhykd_jfvu6QAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:50:45.918994+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:ClaudeCode_UT since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHKRlmwsbsSMKAAIcjL1oMtoQgQAIAAIAAAACCAADAAAAAAgABAAAAAYKAAUcpHf438AnEAoABhykd_jfvu6QAAA",
+      "cursor_out": "DAADDAABCgABHKRlmwsbsSMKAAIciBKDsRoQOAAIAAIAAAACCAADAAAAAAgABAAAAAcKAAUcpHf438AnEAoABhykd_jfvseAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:50:49.637768+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:ClaudeCode_UT since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHKRlmwsbsSMKAAIciBKDsRoQOAAIAAIAAAACCAADAAAAAAgABAAAAAcKAAUcpHf438AnEAoABhykd_jfvseAAAA",
+      "cursor_out": "DAADDAABCgABHKRlmwsbsSMKAAIchWNk_1ugLwAIAAIAAAACCAADAAAAAAgABAAAAAgKAAUcpHf438AnEAoABhykd_jfvqBwAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:50:53.948357+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:ClaudeCode_UT since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHKRlmwsbsSMKAAIchWNk_1ugLwAIAAIAAAACCAADAAAAAAgABAAAAAgKAAUcpHf438AnEAoABhykd_jfvqBwAAA",
+      "cursor_out": "DAADDAABCgABHKRlmwsbsSMKAAIcgbBtPZrQ1QAIAAIAAAACCAADAAAAAAgABAAAAAkKAAUcpHf438AnEAoABhykd_jfvnlgAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:50:57.965448+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "nobel_824"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-06-08T08:51:00.716257+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:nobel_824 since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "",
+      "cursor_out": "DAADDAABCgABHKR0kBPacI8KAAIcovAEidqB1QAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUcpHgl1IAnEAoABhykeCXUf9jwAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:51:04.184705+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:nobel_824 since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHKR0kBPacI8KAAIcovAEidqB1QAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUcpHgl1IAnEAoABhykeCXUf9jwAAA",
+      "cursor_out": "DAADDAABCgABHKR0kBPacI8KAAIcnbbYDtvAqQAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUcpHgl1IAnEAoABhykeCXUf7HgAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:51:07.843637+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:nobel_824 since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHKR0kBPacI8KAAIcnbbYDtvAqQAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUcpHgl1IAnEAoABhykeCXUf7HgAAA",
+      "cursor_out": "DAADDAABCgABHKR0kBPacI8KAAIcl-Hl5JsgzgAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUcpHgl1IAnEAoABhykeCXUf4rQAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:51:11.111202+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:nobel_824 since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHKR0kBPacI8KAAIcl-Hl5JsgzgAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUcpHgl1IAnEAoABhykeCXUf4rQAAA",
+      "cursor_out": "DAADDAABCgABHKR0kBPacI8KAAIckh1YrtoQ7AAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUcpHgl1IAnEAoABhykeCXUf2PAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:51:14.918265+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:nobel_824 since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHKR0kBPacI8KAAIckh1YrtoQ7AAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUcpHgl1IAnEAoABhykeCXUf2PAAAA",
+      "cursor_out": "DAADDAABCgABHKR0kBPacI8KAAIcjncnAJoBOwAIAAIAAAACCAADAAAAAAgABAAAAAQKAAUcpHgl1IAnEAoABhykeCXUfzywAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:51:18.345792+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:nobel_824 since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHKR0kBPacI8KAAIcjncnAJoBOwAIAAIAAAACCAADAAAAAAgABAAAAAQKAAUcpHgl1IAnEAoABhykeCXUfzywAAA",
+      "cursor_out": "DAADDAABCgABHKR0kBPacI8KAAIci_myN5bQDAAIAAIAAAACCAADAAAAAAgABAAAAAUKAAUcpHgl1IAnEAoABhykeCXUfxWgAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:51:21.754970+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:nobel_824 since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHKR0kBPacI8KAAIci_myN5bQDAAIAAIAAAACCAADAAAAAAgABAAAAAUKAAUcpHgl1IAnEAoABhykeCXUfxWgAAA",
+      "cursor_out": "DAADDAABCgABHKR0kBPacI8KAAIch71YA9sQIAAIAAIAAAACCAADAAAAAAgABAAAAAYKAAUcpHgl1IAnEAoABhykeCXUfu6QAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:51:25.023220+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:nobel_824 since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHKR0kBPacI8KAAIch71YA9sQIAAIAAIAAAACCAADAAAAAAgABAAAAAYKAAUcpHgl1IAnEAoABhykeCXUfu6QAAA",
+      "cursor_out": "DAADDAABCgABHKR0kBPacI8KAAIcgsQII9tRkwAIAAIAAAACCAADAAAAAAgABAAAAAcKAAUcpHgl1IAnEAoABhykeCXUfseAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:51:28.355161+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:nobel_824 since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHKR0kBPacI8KAAIcgsQII9tRkwAIAAIAAAACCAADAAAAAAgABAAAAAcKAAUcpHgl1IAnEAoABhykeCXUfseAAAA",
+      "cursor_out": "DAADDAABCgABHKR0kBPacI8KAAIcezdWFlsA2wAIAAIAAAACCAADAAAAAAgABAAAAAgKAAUcpHgl1IAnEAoABhykeCXUfqBwAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:51:31.577138+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:nobel_824 since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHKR0kBPacI8KAAIcezdWFlsA2wAIAAIAAAACCAADAAAAAAgABAAAAAgKAAUcpHgl1IAnEAoABhykeCXUfqBwAAA",
+      "cursor_out": "DAADDAABCgABHKR0kBPacI8KAAIccd6HOdsg5gAIAAIAAAACCAADAAAAAAgABAAAAAkKAAUcpHgl1IAnEAoABhykeCXUfnlgAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:51:34.658553+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "Gencoin8"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-06-08T08:51:37.389855+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:Gencoin8 since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "",
+      "cursor_out": "DAADDAABCgABHKRKG0_bsUUKAAIcnI8O2ZrAOAAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUcpHhKDIAnEAoABhykeEoMf9jwAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:51:41.401965+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:Gencoin8 since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHKRKG0_bsUUKAAIcnI8O2ZrAOAAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUcpHhKDIAnEAoABhykeEoMf9jwAAA",
+      "cursor_out": "DAADDAABCgABHKRKG0_bsUUKAAIck7YhkdqwWAAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUcpHhKDIAnEAoABhykeEoMf7HgAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:51:44.680103+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:Gencoin8 since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHKRKG0_bsUUKAAIck7YhkdqwWAAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUcpHhKDIAnEAoABhykeEoMf7HgAAA",
+      "cursor_out": "DAADDAABCgABHKRKG0_bsUUKAAIcgZew95ZwngAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUcpHhKDIAnEAoABhykeEoMf4rQAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:51:47.878185+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:Gencoin8 since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHKRKG0_bsUUKAAIcgZew95ZwngAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUcpHhKDIAnEAoABhykeEoMf4rQAAA",
+      "cursor_out": "DAADDAABCgABHKRKG0_bsUUKAAIcfAU9jZpw0wAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUcpHhKDIAnEAoABhykeEoMf2PAAAA",
+      "has_next_page": true,
+      "tweets_returned": 9
+    },
+    {
+      "ts": "2026-06-08T08:51:51.886447+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:Gencoin8 since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHKRKG0_bsUUKAAIcfAU9jZpw0wAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUcpHhKDIAnEAoABhykeEoMf2PAAAA",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-06-08T08:51:54.915052+00:00",
+      "path": "/twitter/user/info",
+      "params": {
+        "userName": "obsidianstudio9"
+      },
+      "cursor_in": "",
+      "cursor_out": "",
+      "has_next_page": false,
+      "tweets_returned": 0
+    },
+    {
+      "ts": "2026-06-08T08:51:57.652232+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:obsidianstudio9 since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "",
+      "cursor_out": "DAADDAABCgABHKPqAl_bkWoKAAIcn0z6bJrAQgAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUcpHhd4EAnEAoABhykeF3gP9jwAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:52:01.659774+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:obsidianstudio9 since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHKPqAl_bkWoKAAIcn0z6bJrAQgAIAAIAAAACCAADAAAAAAgABAAAAAAKAAUcpHhd4EAnEAoABhykeF3gP9jwAAA",
+      "cursor_out": "DAADDAABCgABHKPqAl_bkWoKAAIclym5wtowjgAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUcpHhd4EAnEAoABhykeF3gP7HgAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:52:05.424569+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:obsidianstudio9 since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHKPqAl_bkWoKAAIclym5wtowjgAIAAIAAAACCAADAAAAAAgABAAAAAEKAAUcpHhd4EAnEAoABhykeF3gP7HgAAA",
+      "cursor_out": "DAADDAABCgABHKPqAl_bkWoKAAIckl9jVJsRjQAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUcpHhd4EAnEAoABhykeF3gP4rQAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:52:12.334519+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:obsidianstudio9 since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHKPqAl_bkWoKAAIckl9jVJsRjQAIAAIAAAACCAADAAAAAAgABAAAAAIKAAUcpHhd4EAnEAoABhykeF3gP4rQAAA",
+      "cursor_out": "DAADDAABCgABHKPqAl_bkWoKAAIcjrmJDprxyAAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUcpHhd4EAnEAoABhykeF3gP2PAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:52:16.154599+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:obsidianstudio9 since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHKPqAl_bkWoKAAIcjrmJDprxyAAIAAIAAAACCAADAAAAAAgABAAAAAMKAAUcpHhd4EAnEAoABhykeF3gP2PAAAA",
+      "cursor_out": "DAADDAABCgABHKPqAl_bkWoKAAIci6rAhhrgpgAIAAIAAAACCAADAAAAAAgABAAAAAQKAAUcpHhd4EAnEAoABhykeF3gPzywAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:52:19.862107+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:obsidianstudio9 since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHKPqAl_bkWoKAAIci6rAhhrgpgAIAAIAAAACCAADAAAAAAgABAAAAAQKAAUcpHhd4EAnEAoABhykeF3gPzywAAA",
+      "cursor_out": "DAADDAABCgABHKPqAl_bkWoKAAIchsI3kVqApgAIAAIAAAACCAADAAAAAAgABAAAAAUKAAUcpHhd4EAnEAoABhykeF3gPxWgAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:52:23.415261+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:obsidianstudio9 since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHKPqAl_bkWoKAAIchsI3kVqApgAIAAIAAAACCAADAAAAAAgABAAAAAUKAAUcpHhd4EAnEAoABhykeF3gPxWgAAA",
+      "cursor_out": "DAADDAABCgABHKPqAl_bkWoKAAIcgcv0mxsQ3wAIAAIAAAACCAADAAAAAAgABAAAAAYKAAUcpHhd4EAnEAoABhykeF3gPu6QAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:52:27.204761+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:obsidianstudio9 since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHKPqAl_bkWoKAAIcgcv0mxsQ3wAIAAIAAAACCAADAAAAAAgABAAAAAYKAAUcpHhd4EAnEAoABhykeF3gPu6QAAA",
+      "cursor_out": "DAADDAABCgABHKPqAl_bkWoKAAIcfHWKAtow3AAIAAIAAAACCAADAAAAAAgABAAAAAcKAAUcpHhd4EAnEAoABhykeF3gPseAAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:52:30.588470+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:obsidianstudio9 since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHKPqAl_bkWoKAAIcfHWKAtow3AAIAAIAAAACCAADAAAAAAgABAAAAAcKAAUcpHhd4EAnEAoABhykeF3gPseAAAA",
+      "cursor_out": "DAADDAABCgABHKPqAl_bkWoKAAIceJwigNogvgAIAAIAAAACCAADAAAAAAgABAAAAAgKAAUcpHhd4EAnEAoABhykeF3gPqBwAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    },
+    {
+      "ts": "2026-06-08T08:52:33.930652+00:00",
+      "path": "/twitter/tweet/advanced_search",
+      "params": {
+        "query": "from:obsidianstudio9 since:2026-04-29",
+        "queryType": "Latest"
+      },
+      "cursor_in": "DAADDAABCgABHKPqAl_bkWoKAAIceJwigNogvgAIAAIAAAACCAADAAAAAAgABAAAAAgKAAUcpHhd4EAnEAoABhykeF3gPqBwAAA",
+      "cursor_out": "DAADDAABCgABHKPqAl_bkWoKAAIcdNCXOFrBdQAIAAIAAAACCAADAAAAAAgABAAAAAkKAAUcpHhd4EAnEAoABhykeF3gPnlgAAA",
+      "has_next_page": true,
+      "tweets_returned": 20
+    }
+  ]
+}
