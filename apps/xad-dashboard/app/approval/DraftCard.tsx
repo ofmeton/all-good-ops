@@ -1,6 +1,72 @@
 "use client";
 import { useState } from "react";
-import { validateBody, type ApprovalDraft } from "@/lib/drafts-logic";
+import { validateBody, type ApprovalDraft, type ApprovalSource } from "@/lib/drafts-logic";
+
+function SourceSection({ sources }: { sources: ApprovalSource[] }) {
+  if (!sources || sources.length === 0) return null;
+  return (
+    <details className="px-4 sm:px-5 pt-3 group" open>
+      <summary className="cursor-pointer select-none text-xs font-medium text-slate-500 hover:text-slate-700">
+        元ネタツイート（{sources.length}件）
+      </summary>
+      <div className="mt-2 space-y-2">
+        {sources.map((s) => {
+          const e = s.engagement;
+          return (
+            <div
+              key={s.id}
+              className="rounded-lg border border-slate-100 bg-slate-50/60 p-3 text-sm"
+            >
+              <div className="flex items-center gap-2 text-xs text-slate-500 mb-1 flex-wrap">
+                {s.source_ref && <span className="font-bold text-slate-600">@{s.source_ref}</span>}
+                {s.lang && (
+                  <span className="uppercase tracking-wide text-slate-400">{s.lang}</span>
+                )}
+                {e && (
+                  <span className="tabular-nums">
+                    ♥{e.like ?? 0} ↺{e.retweet ?? 0} 👁{e.view ?? 0}
+                  </span>
+                )}
+                {s.tweet_url && (
+                  <a
+                    href={s.tweet_url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-blue-600 underline hover:text-blue-800"
+                  >
+                    原ツイート
+                  </a>
+                )}
+              </div>
+              {s.raw_text && (
+                <p className="whitespace-pre-wrap leading-relaxed text-slate-700">{s.raw_text}</p>
+              )}
+              {s.translation && (
+                <p className="whitespace-pre-wrap leading-relaxed text-slate-600 mt-1.5 pl-2 border-l-2 border-slate-200">
+                  <span className="text-[11px] text-slate-400 mr-1">日本語訳</span>
+                  {s.translation}
+                </p>
+              )}
+              {s.media && s.media.length > 0 && (
+                <div className="flex gap-2 mt-2 flex-wrap">
+                  {s.media.map((md, i) => (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      key={i}
+                      src={md.url}
+                      alt=""
+                      className="h-20 w-20 object-cover rounded border border-slate-200"
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </details>
+  );
+}
 
 const FMAT_JP: Record<string, string> = {
   short: "短文",
@@ -65,6 +131,9 @@ export function DraftCard({
           核アイデア: <span className="text-slate-700">{draft.idea_title}</span>
         </p>
       )}
+
+      {/* 元ネタツイート（原文＋日本語訳＋engagement＋メディア） */}
+      <SourceSection sources={draft.sources} />
 
       {/* body editor */}
       <div className="px-4 sm:px-5 pt-3">
