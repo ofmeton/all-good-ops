@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { validateBody, type ApprovalDraft, type ApprovalSource } from "@/lib/drafts-logic";
+import { MediaThumbs } from "@/components/MediaModal";
 
 function SourceSection({ sources }: { sources: ApprovalSource[] }) {
   if (!sources || sources.length === 0) return null;
@@ -47,19 +48,7 @@ function SourceSection({ sources }: { sources: ApprovalSource[] }) {
                   {s.translation}
                 </p>
               )}
-              {s.media && s.media.length > 0 && (
-                <div className="flex gap-2 mt-2 flex-wrap">
-                  {s.media.map((md, i) => (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      key={i}
-                      src={md.url}
-                      alt=""
-                      className="h-20 w-20 object-cover rounded border border-slate-200"
-                    />
-                  ))}
-                </div>
-              )}
+              <MediaThumbs media={s.media} />
             </div>
           );
         })}
