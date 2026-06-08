@@ -52,6 +52,8 @@ export interface Env {
   LINE_CHANNEL_ACCESS_TOKEN: string;
   LINE_CHANNEL_SECRET: string;
   LINE_USER_ID_OFMETON: string;
+  // 承認UI（xad-dashboard /approval）の URL。LINE 承認待ち通知に載せる。
+  APPROVAL_UI_URL: string;
 }
 
 /**

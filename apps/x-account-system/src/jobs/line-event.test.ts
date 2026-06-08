@@ -665,7 +665,7 @@ describe("handleLineEvent — 修正 (revise feedback)", () => {
     });
   });
 
-  test("修正: → latest pending draft revised, editor re-run, approved → Flex re-sent + feedback stored", async () => {
+  test("修正: → latest pending draft revised, editor re-run, approved → 承認待ち通知 re-sent + feedback stored", async () => {
     mockDraftMaybeSingle.mockResolvedValue({ data: REVISE_DRAFT_ROW, error: null });
     mockRunEditor.mockResolvedValue(fakeEditorOutput);
 
@@ -697,11 +697,10 @@ describe("handleLineEvent — 修正 (revise feedback)", () => {
     expect(mockAddStyleFeedback.mock.calls[0][2]).toBe("もっと短く");
     expect(mockAddStyleFeedback.mock.calls[0][3]).toBe(DRAFT_ID);
 
-    // approved → approval push (text + Flex) re-sent
-    expect(mockPushLineMessages).toHaveBeenCalledTimes(1);
-    const messages = mockPushLineMessages.mock.calls[0][1] as Array<Record<string, unknown>>;
-    const flexJson = JSON.stringify(messages[1].contents);
-    expect(flexJson).toContain(`approve:${DRAFT_ID}`);
+    // approved → 承認UIへの通知のみ（Flex / 本文全文 push は廃止）
+    expect(mockPushLineMessages).not.toHaveBeenCalled();
+    expect(mockPushLine).toHaveBeenCalledTimes(1);
+    expect(mockPushLine.mock.calls[0][1]).toMatch(/承認待ち|承認UI/);
   });
 
   test("修正: → no pending draft found → '見つかりません'", async () => {
@@ -809,9 +808,10 @@ describe("handleLineEvent — quote-reply resolves target draft", () => {
     // revise ran on the quoted draft body
     expect(mockReviseDraftForX).toHaveBeenCalledTimes(1);
     expect(mockReviseDraftForX.mock.calls[0][0]).toBe(QUOTED_DRAFT_ROW.body);
-    // re-sent approval references the quoted draft id
-    const messages = mockPushLineMessages.mock.calls[0][1] as Array<Record<string, unknown>>;
-    expect(JSON.stringify(messages[1].contents)).toContain(`approve:${QUOTED_DRAFT_ID}`);
+    // 承認UIへの通知のみ（Flex 廃止）。引用先の draft が revise されたことは上で担保。
+    expect(mockPushLineMessages).not.toHaveBeenCalled();
+    expect(mockPushLine).toHaveBeenCalledTimes(1);
+    expect(mockPushLine.mock.calls[0][1]).toMatch(/承認待ち|承認UI/);
   });
 });
 
