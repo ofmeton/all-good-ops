@@ -40,10 +40,17 @@ function parseReservations(arg: string | undefined): ScheduledReservation[] {
     if (typeof o.draftId !== "string" || typeof o.scheduledFor !== "string") {
       throw new Error("各要素は draftId / scheduledFor (string) が必須");
     }
+    // attachmentsResolved（media-fetch の uploaded/skipped）。数値なら採用、欠落は未指定。
+    let attachmentsResolved: { uploaded: number; skipped: number } | undefined;
+    const ar = o.attachmentsResolved as Record<string, unknown> | undefined;
+    if (ar && typeof ar.uploaded === "number" && typeof ar.skipped === "number") {
+      attachmentsResolved = { uploaded: ar.uploaded, skipped: ar.skipped };
+    }
     return {
       draftId: o.draftId,
       scheduledFor: o.scheduledFor,
       scheduledPostId: typeof o.scheduledPostId === "string" ? o.scheduledPostId : undefined,
+      attachmentsResolved,
     };
   });
 }

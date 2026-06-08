@@ -48,11 +48,33 @@ describe("drafts-queries", () => {
     expect(h.isCalls).toContainEqual(["scheduled_for", null]);
   });
 
-  test("setApprovalStatus は RPC に ids/status を渡す", async () => {
+  test("setApprovalStatus は RPC に ids/status を渡す（添付なしは p_attachments=null）", async () => {
     await setApprovalStatus(["a", "b"], "approved");
     expect(h.rpcCalls).toContainEqual([
       "set_approval_status",
-      { p_ids: ["a", "b"], p_status: "approved" },
+      { p_ids: ["a", "b"], p_status: "approved", p_attachments: null },
+    ]);
+  });
+
+  test("承認時に写真 attachments を渡すと p_attachments に載る", async () => {
+    const att = [
+      { kind: "upload" as const, mediaType: "photo" as const, sourceUrl: "u", sourceMaterialId: "m" },
+    ];
+    await setApprovalStatus(["a"], "approved", att);
+    expect(h.rpcCalls).toContainEqual([
+      "set_approval_status",
+      { p_ids: ["a"], p_status: "approved", p_attachments: att },
+    ]);
+  });
+
+  test("却下時は attachments を渡しても p_attachments=null（写真 intent は承認時のみ）", async () => {
+    const att = [
+      { kind: "upload" as const, mediaType: "photo" as const, sourceUrl: "u", sourceMaterialId: "m" },
+    ];
+    await setApprovalStatus(["a"], "rejected", att);
+    expect(h.rpcCalls).toContainEqual([
+      "set_approval_status",
+      { p_ids: ["a"], p_status: "rejected", p_attachments: null },
     ]);
   });
 });

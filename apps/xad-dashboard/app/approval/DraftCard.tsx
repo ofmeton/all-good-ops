@@ -1,7 +1,13 @@
 "use client";
 import { useState } from "react";
-import { validateBody, type ApprovalDraft, type ApprovalSource } from "@/lib/drafts-logic";
+import {
+  validateBody,
+  type ApprovalDraft,
+  type ApprovalSource,
+  type Attachment,
+} from "@/lib/drafts-logic";
 import { MediaThumbs } from "@/components/MediaModal";
+import { AttachmentPicker } from "./AttachmentPicker";
 
 function SourceSection({ sources }: { sources: ApprovalSource[] }) {
   if (!sources || sources.length === 0) return null;
@@ -75,14 +81,32 @@ export function DraftCard({
 }: {
   draft: ApprovalDraft;
   busy: boolean;
-  onApprove: () => void;
+  onApprove: (attachments: Attachment[]) => void;
   onReject: () => void;
   onSave: (body: string) => Promise<boolean>;
 }) {
   const [body, setBody] = useState(draft.body);
+  // 写真添付の upload intent（承認押下時に atomic 送信）。既存値があれば引き継ぐ。
+  const [attachments, setAttachments] = useState<Attachment[]>(draft.attachments ?? []);
   const dirty = body !== draft.body;
   const v = validateBody(body);
   const high = draft.risk_level === "high";
+
+  // 写真トグル: 同 sourceUrl があれば外す、無ければ加える。
+  const togglePhoto = (att: Attachment) =>
+    setAttachments((prev) =>
+      prev.some((a) => a.sourceUrl === att.sourceUrl)
+        ? prev.filter((a) => a.sourceUrl !== att.sourceUrl)
+        : [...prev, att],
+    );
+
+  // 動画 deep-link を本文末尾へ追記（重複追記は防ぐ）。以後 plain text として編集可。
+  const appendToBody = (text: string) =>
+    setBody((prev) => {
+      if (prev.includes(text)) return prev;
+      const sep = prev.endsWith("\n") || prev.length === 0 ? "" : "\n";
+      return `${prev}${sep}${text}`;
+    });
 
   return (
     <div
@@ -124,6 +148,15 @@ export function DraftCard({
       {/* 元ネタツイート（原文＋日本語訳＋engagement＋メディア） */}
       <SourceSection sources={draft.sources} />
 
+      {/* メディア添付（写真=DL添付 / 動画=本文 deep-link 追記） */}
+      <AttachmentPicker
+        sources={draft.sources}
+        selected={attachments}
+        onTogglePhoto={togglePhoto}
+        onAppendToBody={appendToBody}
+        disabled={busy}
+      />
+
       {/* body editor */}
       <div className="px-4 sm:px-5 pt-3">
         <label className="block text-xs font-medium text-slate-500 mb-1">
@@ -141,12 +174,12 @@ export function DraftCard({
       {/* actions */}
       <div className="flex flex-wrap items-center gap-2 px-4 sm:px-5 py-3 mt-1 bg-slate-50 border-t border-slate-100">
         <button
-          onClick={onApprove}
+          onClick={() => onApprove(attachments)}
           disabled={busy || dirty || !v.ok}
           title={dirty ? "先に本文を保存してください" : undefined}
           className="px-4 py-1.5 rounded-lg text-sm font-medium bg-emerald-600 text-white hover:bg-emerald-700 active:bg-emerald-800 shadow-sm disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         >
-          承認
+          承認{attachments.length > 0 ? `（📎${attachments.length}）` : ""}
         </button>
         <button
           onClick={onReject}

@@ -59,11 +59,23 @@ npx tsx scripts/plan-scheduled-publish.ts --days 2   # 翌々日まで
 3. **先に** **button「ポストを予約」** を押す → 予約設定ダイアログで 月/日/時/分 の combobox を
    `fill` で設定（TZ は「日本標準時」）→ **button「確認する」** でコンポーザーに戻る。
 4. 戻った**空の** textbox「ポスト本文」に **`type_text`** で本文を入力（プレーンテキスト、Markdown不可）。
-5. メディアがあれば **「画像や動画を追加」/「ファイル選択」** に `upload_file` で `local_path` を添付。
-   **著作権/規約ガード**: 他者メディア再アップは引用RT基本＋出典明記＋拡散歓迎系限定（compliance 確認）。
+   - **動画/GIF は本文に deep-link `{tweet_url}/video/1` が直書きされている**（承認UIで追記済）。
+     そのまま投稿すれば X が本文中で動画を展開する。動画は upload 不要。
+5. **写真添付（upload）がある draft のみ**: 投稿直前に写真を DL してネイティブ添付する。
+   - DL: `cd apps/x-account-system && npx tsx scripts/fetch-draft-media.ts <draftId>`
+     → stdout の JSON `{ localPaths[], uploaded, skipped, resolved[] }` を受ける。
+     `post_drafts.attachments`（承認時に書かれた写真 upload intent）を pbs.twimg.com から
+     原寸 DL し `os.tmpdir()/xad-media/<draftId>-<idx>.<ext>` に保存する。
+   - 添付: **「画像や動画を追加」/「ファイル選択」** に `upload_file` で `localPaths` を**順次**添付。
+   - **DL 失敗（`skipped`）は本文のみで投稿を継続**（サイレント失敗禁止＝skipped 件数を必ず控え、
+     後の record で記録する）。`uploaded`=0 でも本文（＋動画 deep-link）はそのまま投稿できる。
+   - **著作権/規約ガード**: 他者メディア再アップは引用RT基本＋出典明記＋拡散歓迎系限定（compliance 確認）。
 6. **button「予約設定」**（有効化されている）を押す → 予約確定。
-7. 確認＆控え: `下書き` → タブ「予約済み」で予約が並ぶ。`scheduled_post_id` 相当を控える
-   （削除は「編集」→ checkbox 選択 → 「削除」→「削除」確定）。
+7. **投稿確定後、一時ファイルを cleanup**（cookie/容量の衛生）: `localPaths` を削除
+   （例: `rm -f /var/folders/.../xad-media/<draftId>-*` など、出力された localPaths のみ）。
+8. 確認＆控え: `下書き` → タブ「予約済み」で予約が並ぶ。`scheduled_post_id` 相当を控える
+   （削除は「編集」→ checkbox 選択 → 「削除」→「削除」確定）。写真添付があった draft は
+   `uploaded`/`skipped` 件数も控え、Step 4 の record で `attachmentsResolved` に渡す。
 
 > 実機検証済 (2026-06-06): 上記順序で 2026-06-07 07:00 JST の予約を作成→「予約済み」で確認→削除まで通った。
 > X の web UI は変わりうるので `take_snapshot` で都度ラベルを確認し決め打ちしない。
@@ -75,8 +87,11 @@ npx tsx scripts/plan-scheduled-publish.ts --days 2   # 翌々日まで
 ```bash
 cd apps/x-account-system
 npx tsx scripts/record-scheduled-publish.ts \
-  '[{"draftId":"<id>","scheduledFor":"2026-06-08T07:00:00+09:00","scheduledPostId":"<x識別子>"}]'
+  '[{"draftId":"<id>","scheduledFor":"2026-06-08T07:00:00+09:00","scheduledPostId":"<x識別子>","attachmentsResolved":{"uploaded":2,"skipped":0}}]'
 ```
+
+写真添付があった draft は `attachmentsResolved`（Step 3-5 の `uploaded`/`skipped`）を足す。
+trace の output に残り、dashboard で「写真何枚 upload / 何枚 skipped」が追える（任意。無くても可）。
 
 `core_ideas.status` は `approved` のまま（公開時に別途 `published` へ）。これで dashboard の
 `scheduled-publish` ノード「実行」タブに「どの draft を / いつの予約に / どの識別子で 登録したか」が出て、
