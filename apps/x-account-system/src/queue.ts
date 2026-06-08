@@ -2,10 +2,6 @@
  * src/queue.ts — Cloudflare Queue consumer dispatch (scaffold)
  *
  * handleJob() は queue() handler から呼ばれる。
- * Phase 1 は全 job stub (console.log のみ)。
- * 実装は後続タスクで順次配線:
- *   - W3-2: 投稿 job (post-morning / post-noon / post-evening) の実装
- *   - W4:   その他 job (buzz-ingest / optimizer-update など) の実装
  *
  * W5-7: brownout 4-stage guard
  *   handleJob() 冒頭で当月コストを取得し evaluateBrownout() を呼ぶ。
@@ -15,11 +11,7 @@
  */
 
 import type { Env, JobMessage } from "./worker.js";
-import { runPostJob } from "./jobs/post-job.js";
 import { handleLineEvent } from "./jobs/line-event.js";
-import { runBuzzIngest } from "../lib/ingest/buzz-ingest.js";
-import { runInspirationsIngest } from "../lib/ingest/inspirations-ingest.js";
-import { runIdeation } from "../lib/ideation/ideate.js";
 import { runRollbackMonitor } from "./jobs/rollback-job.js";
 import { runRotationNotice } from "./jobs/rotation-job.js";
 import { evaluateBrownout } from "../lib/safety/brownout-handler.js";
@@ -84,93 +76,6 @@ export async function handleJob(
   }
 
   switch (msg.job) {
-    // ----------------------------------------------------------------
-    // ideation: materials_store → core_ideas LLM 自動生成 (W5-2)
-    // ----------------------------------------------------------------
-    case "ideation": {
-      const rid = runId ?? "";
-      if (rid) {
-        await withTrace(ctx, { runId: rid, stageId: "ideation" }, async () => {
-          let traceMeta: import("../lib/trace/types.js").TraceMeta | undefined;
-          const count = await runIdeation(env, 5, (m) => {
-            traceMeta = m;
-          });
-          console.log(
-            JSON.stringify({
-              level: "info",
-              msg: "[ideation] materials→core_ideas 生成 完了",
-              date: msg.date,
-              inserted: count,
-            }),
-          );
-          return { result: count, output: { inserted: count }, meta: traceMeta };
-        });
-      } else {
-        const count = await runIdeation(env);
-        console.log(
-          JSON.stringify({
-            level: "info",
-            msg: "[ideation] materials→core_ideas 生成 完了",
-            date: msg.date,
-            inserted: count,
-          }),
-        );
-      }
-      break;
-    }
-
-    // ----------------------------------------------------------------
-    // 投稿系 (X API 100/月上限 → Phase 1 は人間承認必須)
-    // ----------------------------------------------------------------
-    case "post-morning":
-    case "post-morning2":
-    case "post-noon":
-    case "post-afternoon":
-    case "post-afternoon2":
-    case "post-evening": {
-      // W3-2: idea→draft→editor→LINE承認依頼
-      // 手動起動(manual)は標準スロットを占有しないよう manual-xxx slot で投稿する。
-      // → 「各スロット投稿済み」管理は自動(cron)起動のみに反映される。
-      const slot = msg.manual
-        ? `manual-${msg.slot}-${crypto.randomUUID().slice(0, 8)}`
-        : msg.slot;
-      await runPostJob(slot, env, ctx, runId);
-      break;
-    }
-
-    // ----------------------------------------------------------------
-    // buzz-ingest: 海外 X buzz 日次取得 → materials_store
-    // ----------------------------------------------------------------
-    case "buzz-ingest": {
-      // W5-1: twitterapi.io seed accounts → xad.materials_store (x_inspirations)
-      const rid = runId ?? "";
-      if (rid) {
-        await withTrace(ctx, { runId: rid, stageId: "buzz-ingest" }, async () => {
-          const count = await runBuzzIngest(env);
-          console.log(
-            JSON.stringify({
-              level: "info",
-              msg: "[buzz-ingest] twitterapi.io 日次取得 完了",
-              date: msg.date,
-              inserted: count,
-            }),
-          );
-          return { result: count, output: { inserted: count } };
-        });
-      } else {
-        const count = await runBuzzIngest(env);
-        console.log(
-          JSON.stringify({
-            level: "info",
-            msg: "[buzz-ingest] twitterapi.io 日次取得 完了",
-            date: msg.date,
-            inserted: count,
-          }),
-        );
-      }
-      break;
-    }
-
     // ----------------------------------------------------------------
     // collect: Collector Agent — 探索的ネタ収集 + 3軸スコア → materials_store
     // ----------------------------------------------------------------
@@ -340,39 +245,6 @@ export async function handleJob(
         } catch (e) {
           console.log(JSON.stringify({ level: "error", msg: "[check] compose enqueue failed (素材は再queue済、compose未起動)", date: msg.date, sentBack, error: String(e) }));
         }
-      }
-      break;
-    }
-
-    // ----------------------------------------------------------------
-    // inspirations-ingest: 週次 inspirations 取得 (W5-3)
-    // ----------------------------------------------------------------
-    case "inspirations-ingest": {
-      // X seeds (overseas ≥6 / domestic ≥18) + note seeds (≥3) → materials_store
-      const rid = runId ?? "";
-      if (rid) {
-        await withTrace(ctx, { runId: rid, stageId: "inspirations-ingest" }, async () => {
-          const count = await runInspirationsIngest(env);
-          console.log(
-            JSON.stringify({
-              level: "info",
-              msg: "[inspirations-ingest] 週次 ingest 完了",
-              date: msg.date,
-              inserted: count,
-            }),
-          );
-          return { result: count, output: { inserted: count } };
-        });
-      } else {
-        const count = await runInspirationsIngest(env);
-        console.log(
-          JSON.stringify({
-            level: "info",
-            msg: "[inspirations-ingest] 週次 ingest 完了",
-            date: msg.date,
-            inserted: count,
-          }),
-        );
       }
       break;
     }

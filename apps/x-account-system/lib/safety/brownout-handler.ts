@@ -6,7 +6,7 @@
  * 4 段階コスト管理:
  *   ok          < ¥10,000  : 全 job 通常稼働
  *   reduce      ¥10,000~   : 全 job 許可 (Writer retry 拒否 + Optimizer ダウングレードは呼び出し側で制御)
- *   stop_posting ¥11,500~  : 投稿/ideation/optimizer 系停止。daily-digest + line-event + 計測継続
+ *   stop_posting ¥11,500~  : collect/compose/check/optimizer 等の生成系停止。ops/通知(rollback-monitor/rotation-notice/daily-digest/line-event)のみ継続
  *   cron_halt   ¥12,500~   : daily-digest + line-event のみ
  *   escalate    ¥13,800~   : daily-digest (緊急アラート) + line-event のみ
  *
@@ -34,20 +34,11 @@ export type BrownoutStatus = "ok" | "reduce" | "stop_posting" | "cron_halt" | "e
 // ---------------------------------------------------------------------------
 // allowedJobs per status
 // ---------------------------------------------------------------------------
-/** ALL job names known to the queue consumer */
+/** ALL job names known to the queue consumer (legacy pipeline retire 後の生存ジョブ) */
 const ALL_JOBS: string[] = [
-  "post-morning",
-  "post-morning2",
-  "post-noon",
-  "post-afternoon",
-  "post-afternoon2",
-  "post-evening",
-  "ideation",
-  "buzz-ingest",
   "collect",
   "compose",
   "check",
-  "inspirations-ingest",
   "daily-digest",
   "optimizer-update",
   "rollback-monitor",
@@ -56,14 +47,12 @@ const ALL_JOBS: string[] = [
 ];
 
 /**
- * stop_posting: 投稿生成/公開/アイデア生成/最適化 を停止。
- * 計測系 (buzz-ingest, inspirations-ingest, rollback-monitor, rotation-notice) は継続。
- * daily-digest は継続 (オペレーターへの状況通知)。
+ * stop_posting: 生成/公開/最適化系を停止。
+ * 継続するのは ops/通知のみ (rollback-monitor, rotation-notice, daily-digest, line-event)。
+ * collect は LLM コストがかかるため stop_posting 以上では止める (compose/check も生成系として停止)。
  * line-event は常に許可 (オペレーター操作用)。
  */
 const STOP_POSTING_ALLOWED: string[] = [
-  "buzz-ingest",
-  "inspirations-ingest",
   "rollback-monitor",
   "rotation-notice",
   "daily-digest",

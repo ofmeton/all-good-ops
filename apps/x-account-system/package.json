@@ -20,7 +20,6 @@
     "editor:cli": "tsx lib/editor/cli.ts",
     "publisher:test": "IN_MEMORY_FALLBACK=true jest lib/publisher",
     "writer:test": "IN_MEMORY_FALLBACK=true jest lib/writer",
-    "pipeline:dryrun": "IN_MEMORY_FALLBACK=true tsx lib/pipeline/e2e-dryrun.ts",
     "interviewer:test": "IN_MEMORY_FALLBACK=true jest lib/interviewer",
     "dashboard:test": "IN_MEMORY_FALLBACK=true jest lib/dashboard",
     "safety:test": "IN_MEMORY_FALLBACK=true jest lib/safety",

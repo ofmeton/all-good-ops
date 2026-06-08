@@ -268,14 +268,14 @@ describe("/admin/enqueue manual trigger", () => {
 
   test("missing key → 401, no enqueue", async () => {
     const env = adminEnv();
-    const res = await worker.fetch(req({ job: "buzz-ingest" }), env, makeCtx());
+    const res = await worker.fetch(req({ job: "collect" }), env, makeCtx());
     expect(res.status).toBe(401);
     expect(env.JOBS.send).not.toHaveBeenCalled();
   });
 
   test("wrong key → 401", async () => {
     const env = adminEnv();
-    const res = await worker.fetch(req({ job: "buzz-ingest", key: "nope" }), env, makeCtx());
+    const res = await worker.fetch(req({ job: "collect", key: "nope" }), env, makeCtx());
     expect(res.status).toBe(401);
     expect(env.JOBS.send).not.toHaveBeenCalled();
   });
@@ -287,23 +287,14 @@ describe("/admin/enqueue manual trigger", () => {
     expect(env.JOBS.send).not.toHaveBeenCalled();
   });
 
-  test("valid non-post job → enqueues {job,date}", async () => {
+  test("valid job → enqueues {job,date}", async () => {
     const env = adminEnv();
-    const res = await worker.fetch(req({ job: "buzz-ingest", key: ADMIN_SECRET }), env, makeCtx());
+    const res = await worker.fetch(req({ job: "collect", key: ADMIN_SECRET }), env, makeCtx());
     expect(res.status).toBe(200);
     expect(env.JOBS.send).toHaveBeenCalledTimes(1);
     const msg = env.JOBS.send.mock.calls[0][0];
-    expect(msg.job).toBe("buzz-ingest");
+    expect(msg.job).toBe("collect");
     expect(typeof msg.date).toBe("string");
     expect(msg.slot).toBeUndefined();
-  });
-
-  test("valid post job → enqueues with slot", async () => {
-    const env = adminEnv();
-    const res = await worker.fetch(req({ job: "post-morning", key: ADMIN_SECRET }), env, makeCtx());
-    expect(res.status).toBe(200);
-    const msg = env.JOBS.send.mock.calls[0][0];
-    expect(msg.job).toBe("post-morning");
-    expect(msg.slot).toBe("morning");
   });
 });
