@@ -40,7 +40,12 @@ describe("recordScheduledPublish", () => {
     const { traces, deps } = setup();
     await recordScheduledPublish(
       [
-        { draftId: "d1", scheduledFor: "2026-06-07T07:00:00+09:00", scheduledPostId: "x1" },
+        {
+          draftId: "d1",
+          scheduledFor: "2026-06-07T07:00:00+09:00",
+          scheduledPostId: "x1",
+          attachmentsResolved: { uploaded: 2, skipped: 1 },
+        },
         { draftId: "d2", scheduledFor: "2026-06-07T12:00:00+09:00" },
       ],
       deps,
@@ -52,14 +57,16 @@ describe("recordScheduledPublish", () => {
       expect(t.status).toBe("ok");
       expect(t.outcome).toBe("scheduled");
     }
-    // input/output に中身 (どの draft を / いつの予約に / どの識別子で) が残る
+    // input/output に中身 (どの draft を / いつの予約に / どの識別子で / 添付解決) が残る
     expect(traces[0].input).toEqual({ draftId: "d1" });
     expect(traces[0].output).toEqual({
       scheduledFor: "2026-06-07T07:00:00+09:00",
       scheduledPostId: "x1",
+      attachmentsResolved: { uploaded: 2, skipped: 1 },
     });
-    // scheduledPostId 未指定は null
+    // scheduledPostId / attachmentsResolved 未指定は null
     expect((traces[1].output as { scheduledPostId: unknown }).scheduledPostId).toBeNull();
+    expect((traces[1].output as { attachmentsResolved: unknown }).attachmentsResolved).toBeNull();
   });
 
   test("予約 0 件なら run のみで trace は書かない", async () => {

@@ -1,7 +1,7 @@
 "use client";
 import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import type { ApprovalDraft } from "@/lib/drafts-logic";
+import type { ApprovalDraft, Attachment } from "@/lib/drafts-logic";
 import { DraftCard } from "./DraftCard";
 
 type Msg = { text: string; type: "info" | "error" | "success" } | null;
@@ -17,14 +17,21 @@ export function ApprovalClient({ initialDrafts }: { initialDrafts: ApprovalDraft
   }, []);
 
   const decide = useCallback(
-    async (id: string, action: "approve" | "reject") => {
+    async (id: string, action: "approve" | "reject", attachments?: Attachment[]) => {
       setBusyId(id);
       setMsg(null);
       try {
         const res = await fetch("/api/drafts/approve", {
           method: "POST",
           headers: { "content-type": "application/json" },
-          body: JSON.stringify({ ids: [id], action }),
+          body: JSON.stringify({
+            ids: [id],
+            action,
+            // 承認かつ写真添付があるときだけ送る（後方互換）
+            ...(action === "approve" && attachments && attachments.length > 0
+              ? { attachments }
+              : {}),
+          }),
         });
         const body = await res.json().catch(() => ({}));
         if (!res.ok || !body.ok) {
@@ -36,8 +43,15 @@ export function ApprovalClient({ initialDrafts }: { initialDrafts: ApprovalDraft
           removeDraft(id);
           return;
         }
+        // 保存された添付枚数を surface（メディア欠落を承認段階で検知しやすく）
+        const savedAtt = typeof body.attachments === "number" ? body.attachments : 0;
         setMsg({
-          text: action === "approve" ? "承認しました（予約待ちストックへ）" : "却下しました",
+          text:
+            action === "approve"
+              ? savedAtt > 0
+                ? `承認しました（予約待ちストックへ・写真${savedAtt}枚添付予定）`
+                : "承認しました（予約待ちストックへ）"
+              : "却下しました",
           type: "success",
         });
         removeDraft(id);
@@ -131,7 +145,7 @@ export function ApprovalClient({ initialDrafts }: { initialDrafts: ApprovalDraft
               key={d.id}
               draft={d}
               busy={busyId === d.id}
-              onApprove={() => decide(d.id, "approve")}
+              onApprove={(attachments) => decide(d.id, "approve", attachments)}
               onReject={() => decide(d.id, "reject")}
               onSave={(body) => saveBody(d.id, body)}
             />

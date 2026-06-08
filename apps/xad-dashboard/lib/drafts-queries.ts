@@ -1,5 +1,5 @@
 import { serverSupabase } from "./supabase";
-import type { ApprovalDraft } from "./drafts-logic";
+import type { ApprovalDraft, Attachment } from "./drafts-logic";
 
 /** approval_drafts から「点検済み(editor_status='approved')かつ pending・未公開・未予約」の
  *  draft を新着順で取得。点検前 draft を人間ゲートに載せない（fact-check バイパス退行防止）。 */
@@ -21,15 +21,20 @@ export async function listPendingDrafts(limit = 100): Promise<ApprovalDraft[]> {
   return (data ?? []) as ApprovalDraft[];
 }
 
-/** RPC で承認状態を原子更新（pending のみ claim）。claim 件数を返す。 */
+/** RPC で承認状態を原子更新（pending のみ claim）。claim 件数を返す。
+ *  attachments 指定時のみ写真 upload intent を書く（null は既存値を維持＝後方互換）。 */
 export async function setApprovalStatus(
   ids: string[],
   status: "approved" | "rejected",
+  attachments?: Attachment[] | null,
 ): Promise<number> {
   const sb = serverSupabase();
   const { data, error } = await sb.rpc("set_approval_status", {
     p_ids: ids,
     p_status: status,
+    // 承認かつ写真添付がある時だけ渡す。空配列/未指定は null（既存値維持）。
+    p_attachments:
+      status === "approved" && attachments && attachments.length > 0 ? attachments : null,
   });
   if (error) throw new Error(`set_approval_status failed: ${error.message}`);
   return (data as number) ?? 0;

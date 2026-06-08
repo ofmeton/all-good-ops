@@ -62,6 +62,19 @@ interface DraftRow {
   human_approved_at: string | null;
   risk_level: string | null;
   risk_reasons: string[] | null;
+  attachments: { mediaType?: string }[] | null;
+}
+
+/** 添付サマリ: 写真 upload intent 数 + 本文に動画 deep-link があるか。人間ゲートの可視化用。 */
+function attachmentSummary(r: DraftRow): string {
+  const photos = Array.isArray(r.attachments)
+    ? r.attachments.filter((a) => a?.mediaType === "photo").length
+    : 0;
+  const hasVideoLink = /\/video\/1\b/.test(r.body ?? "");
+  const parts: string[] = [];
+  if (photos > 0) parts.push(`📎写真${photos}`);
+  if (hasVideoLink) parts.push("🎬動画(本文deep-link)");
+  return parts.length > 0 ? ` ${parts.join(" ")}` : "";
 }
 
 const WEEKDAY_JP = ["日", "月", "火", "水", "木", "金", "土"];
@@ -98,7 +111,7 @@ function preview(body: string, n = 60): string {
   // 1. 承認済みストック (approved かつ未予約) を承認順に取得
   const { data: stockRows, error: stockErr } = await sb
     .from("post_drafts")
-    .select("id, body, fmat, human_approved_at, risk_level, risk_reasons")
+    .select("id, body, fmat, human_approved_at, risk_level, risk_reasons, attachments")
     .eq("human_approval_status", "approved")
     .is("scheduled_for", null)
     .order("human_approved_at", { ascending: true })
@@ -143,8 +156,9 @@ function preview(body: string, n = 60): string {
       const flags =
         r?.risk_reasons && r.risk_reasons.length > 0 ? ` [${r.risk_reasons.join(",")}]` : "";
       const risk = r?.risk_level ? ` risk=${r.risk_level}` : "";
+      const media = r ? attachmentSummary(r) : "";
       lines.push(
-        `  ${fmtJst(p.scheduledForISO)}  ${r ? preview(r.body) : "(本文不明)"}${risk}${flags}`,
+        `  ${fmtJst(p.scheduledForISO)}  ${r ? preview(r.body) : "(本文不明)"}${risk}${flags}${media}`,
       );
     }
     const leftover = rows.length - planned.length;
