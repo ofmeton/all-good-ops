@@ -50,5 +50,13 @@ export function toTemplateOptions(rows: unknown): TemplateOption[] {
       }
     }
   }
-  return out.length > 0 ? out : TEMPLATE_OPTIONS_FALLBACK;
+  if (out.length > 0) return out;
+  // 非空配列なのに 1 件も拾えない = worker↔dashboard の field 名 drift の疑い
+  // （「worker 不達でそもそも空」とは区別してログを残す）。
+  if (rows.length > 0) {
+    console.warn(
+      `[toTemplateOptions] worker から ${rows.length} 件受領したが id/name を満たす row が 0 件（契約 drift の疑い）→ fallback`,
+    );
+  }
+  return TEMPLATE_OPTIONS_FALLBACK;
 }

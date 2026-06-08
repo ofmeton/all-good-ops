@@ -1,10 +1,14 @@
-import { describe, test, expect } from "vitest";
+import { describe, test, expect, vi, afterEach } from "vitest";
 import {
   toTemplateOptions,
   TEMPLATE_OPTIONS_FALLBACK,
   DEFAULT_TEMPLATE_ID,
   type TemplateOption,
 } from "./curation-formats";
+
+afterEach(() => {
+  vi.restoreAllMocks();
+});
 
 describe("toTemplateOptions", () => {
   test("worker の templates 配列を {id,label} に変換（label=name）", () => {
@@ -43,6 +47,19 @@ describe("toTemplateOptions", () => {
   test("非配列入力は fallback", () => {
     expect(toTemplateOptions(null as unknown as unknown[])).toEqual(TEMPLATE_OPTIONS_FALLBACK);
     expect(toTemplateOptions(undefined as unknown as unknown[])).toEqual(TEMPLATE_OPTIONS_FALLBACK);
+  });
+
+  test("非空配列なのに全 reject（契約 drift）は warn を出す", () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    toTemplateOptions([{ foo: "bar" }, { id: "" }]);
+    expect(warn).toHaveBeenCalledTimes(1);
+    expect(String(warn.mock.calls[0][0])).toContain("[toTemplateOptions]");
+  });
+
+  test("空配列（worker 到達・テンプレ 0 件）は warn を出さない", () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    toTemplateOptions([]);
+    expect(warn).not.toHaveBeenCalled();
   });
 });
 

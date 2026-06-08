@@ -74,14 +74,30 @@ export async function recordCurationEvents(
 export async function fetchTemplateOptions(): Promise<TemplateOption[]> {
   const base = process.env.WORKER_BASE_URL;
   const key = process.env.OAUTH_ADMIN_SECRET;
-  if (!base || !key) return TEMPLATE_OPTIONS_FALLBACK;
+  // fail-open（送信フローは止めない）。ただし enqueueCompose が fail-loud(throw) なのに対し
+  // ここは握って fallback するため、各失敗分岐を console.error で観測可能にする
+  // （無ログだと worker 障害・secret rotation で型2/型3 が UI から黙って消え drift が不可視で再発する）。
+  if (!base || !key) {
+    console.error(
+      "[fetchTemplateOptions] WORKER_BASE_URL / OAUTH_ADMIN_SECRET 未設定 → fallback（テンプレ一覧は既定 1 件のみ表示）",
+    );
+    return TEMPLATE_OPTIONS_FALLBACK;
+  }
+  const url = `${base.replace(/\/$/, "")}/admin/templates`;
   try {
-    const url = `${base.replace(/\/$/, "")}/admin/templates`;
     const res = await fetch(url, { method: "GET", headers: { Authorization: `Bearer ${key}` } });
-    if (!res.ok) return TEMPLATE_OPTIONS_FALLBACK;
+    if (!res.ok) {
+      console.error(
+        `[fetchTemplateOptions] GET /admin/templates HTTP ${res.status} → fallback（worker 不達 / 401 / 5xx の可能性）`,
+      );
+      return TEMPLATE_OPTIONS_FALLBACK;
+    }
     const body = (await res.json()) as { templates?: unknown };
     return toTemplateOptions(body?.templates);
-  } catch {
+  } catch (e) {
+    console.error(
+      `[fetchTemplateOptions] fetch/parse 失敗 → fallback（network or 壊れ JSON）: ${String(e)}`,
+    );
     return TEMPLATE_OPTIONS_FALLBACK;
   }
 }

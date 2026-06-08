@@ -1,10 +1,13 @@
 /**
  * lib/curation/compose-templates.ts — 投稿テンプレ registry。
- * テンプレ = 執筆 system prompt への patch（投稿の型を規定する追記文面）。
- * 複数テンプレを切替できるようレジストリ化（2 つ目以降は後日 COMPOSE_TEMPLATES に追加）。
+ * この COMPOSE_TEMPLATES が「投稿テンプレの唯一の SSOT」。
+ * テンプレ = 構造化フィールド（tone/structure/hookType/hookStrength）から合成する
+ * 「投稿の型（骨子）」＋ 固有の掟（systemPromptPatch）。執筆 system prompt に差し込む。
  *
- * 注意: id はフロント apps/xad-dashboard/lib/curation-formats.ts の TEMPLATE_OPTIONS と
- *       一致させること（ドリフト注意）。
+ * dashboard はテンプレ一覧をハードコードせず、worker `GET /admin/templates`
+ * （listTemplateSummaries）経由で取得する（ドリフト解消済）。
+ * 注意: id を変える/消す時は post_drafts 等に保存済みの template_id との
+ *       後方互換に配慮する（既存ドラフトの id 解決は resolveTemplate が default に吸収）。
  */
 /** フック類型（投稿冒頭で読者の注意を掴む型）。 */
 export type HookType = "速報" | "逆張り" | "数字" | "共感" | "問い" | "権威";

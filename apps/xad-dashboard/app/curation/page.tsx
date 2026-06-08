@@ -1,6 +1,5 @@
 import { listCurationMaterials, tabCounts, fetchTemplateOptions } from "@/lib/curation-queries";
 import { CurationClient } from "./CurationClient";
-import { TEMPLATE_OPTIONS_FALLBACK } from "@/lib/curation-formats";
 import type { CurationMaterial, SelectionStatus } from "@/lib/curation-logic";
 
 export const dynamic = "force-dynamic";
@@ -13,7 +12,8 @@ export default async function CurationPage() {
     listCurationMaterials("queued", LIMIT).catch(() => []),
     listCurationMaterials("rejected", LIMIT).catch(() => []),
     tabCounts().catch(() => ({ collected: 0, selected: 0, queued: 0, rejected: 0 })),
-    fetchTemplateOptions().catch(() => TEMPLATE_OPTIONS_FALLBACK),
+    // fetchTemplateOptions は内部で全失敗を握って fallback を返す（throw しない）ため .catch 不要。
+    fetchTemplateOptions(),
   ]);
   const materials: Record<SelectionStatus, CurationMaterial[]> = { collected, selected, queued, rejected };
   return (
