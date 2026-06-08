@@ -6,7 +6,7 @@
  *       lib/writer/system-prompts.ts / .claude/skills/content-quality-rubric.md
  */
 import { TARGET_DEFINITION } from "../ingest/collector-prompts.js";
-import { resolveTemplate } from "./compose-templates.js";
+import { resolveTemplate, renderTemplatePrompt } from "./compose-templates.js";
 
 /** 許可フォーマット集合（SUBMIT_DRAFT_TOOL enum・run-compose validation・RPC と一致させる）。 */
 export const COMPOSE_FMATS = ["short", "medium", "long", "article", "thread"] as const;
@@ -60,7 +60,7 @@ export function buildWriterSystemPrompt(templateId?: string): string {
 ${TARGET_DEFINITION}
 ポジション: 「AIニュースを非エンジニアの言葉に翻訳して即届ける速報屋」。
 
-${tpl.systemPromptPatch}
+${renderTemplatePrompt(tpl)}
 
 ## リサーチ（数字捏造の防止＝最重要）
 - 具体的な数字・金額・期間・固有の事実を本文に書くなら、**素材本文に在るもの**を使うか、**web_search で裏を取ってから**書く。

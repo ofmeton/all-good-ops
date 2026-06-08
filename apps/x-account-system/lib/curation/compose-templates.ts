@@ -6,15 +6,38 @@
  * 注意: id はフロント apps/xad-dashboard/lib/curation-formats.ts の TEMPLATE_OPTIONS と
  *       一致させること（ドリフト注意）。
  */
+/** フック類型（投稿冒頭で読者の注意を掴む型）。 */
+export type HookType = "速報" | "逆張り" | "数字" | "共感" | "問い" | "権威";
+
+/** フック強度（踏み込みの強さ）。 */
+export type HookStrength = "strong" | "medium" | "soft";
+
 export interface ComposeTemplate {
   id: string;
   name: string;
   description: string;
-  /** 執筆 system prompt の「投稿の型」セクションに差し込む文面。 */
+  /** 文体（語り口・トーン）。例「速報屋らしく短文・断定・テンポ重視」。 */
+  tone: string;
+  /** 構成（本文の流れ）。例 `["速報フック","意味づけ","箇条書き","実務接続"]`。 */
+  structure: string[];
+  /** フック類型（冒頭の掴み方）。 */
+  hookType: HookType;
+  /** フック強度（踏み込みの強さ）。 */
+  hookStrength: HookStrength;
+  /** 由来メモ（参考アカウント等から型化した場合の出典・任意）。 */
+  referenceNote?: string;
+  /** 構造化フィールドだけでは表せない固有の掟・補足を差し込む文面。 */
   systemPromptPatch: string;
   /** このテンプレが想定する fmat（任意・将来の自動 fmat ヒント用）。 */
   preferredFmats?: string[];
 }
+
+/** フック強度 → 執筆指示ラベル。 */
+export const HOOK_STRENGTH_LABEL: Record<HookStrength, string> = {
+  strong: "強（1行目で断定・踏み込んで掴む）",
+  medium: "中（過度に煽らずバランス良く掴む）",
+  soft: "弱（穏当・丁寧に入る）",
+};
 
 /** 既定テンプレ ID（未指定・無効 id 時のフォールバック先）。 */
 export const DEFAULT_TEMPLATE_ID = "template_chaen_gold";
@@ -25,6 +48,11 @@ export const COMPOSE_TEMPLATES: Record<string, ComposeTemplate> = {
     name: "チャエン型1（黄金）",
     description:
       "速報フック→意味づけ→箇条書き要点→実務接続。AIニュースを非エンジニアに翻訳する速報の黄金型。",
+    tone: "速報屋らしく短文・断定・テンポ重視。熱量はあるが煽りすぎない。",
+    structure: ["速報フック", "意味づけ・感情", "箇条書き要点", "実務接続"],
+    hookType: "速報",
+    hookStrength: "strong",
+    referenceNote: "チャエン氏 X アカウント分析（outputs/research/2026-06-05-chaen-x-account-analysis.md §9.1）",
     preferredFmats: ["short", "medium"],
     systemPromptPatch: `## 投稿の型（チャエン黄金型）
 - 1行目: 【速報】【朗報】等 + 主語が何をしたか（最強フックを1行目に置く）。
@@ -48,4 +76,23 @@ export function resolveTemplate(id?: string | null): ComposeTemplate {
     return COMPOSE_TEMPLATES[id as string];
   }
   return COMPOSE_TEMPLATES[DEFAULT_TEMPLATE_ID];
+}
+
+/**
+ * 構造化フィールドから「投稿の型（骨子）」ブロックを合成し、
+ * 固有の掟（systemPromptPatch）を併用した執筆指示文を返す。
+ * buildWriterSystemPrompt が base prompt に差し込む。
+ */
+export function renderTemplatePrompt(tpl: ComposeTemplate): string {
+  const lines = [
+    "## この投稿の型（骨子）",
+    `- 文体: ${tpl.tone}`,
+    `- 構成: ${tpl.structure.join(" → ")}`,
+    `- フック類型: ${tpl.hookType}`,
+    `- フック強度: ${HOOK_STRENGTH_LABEL[tpl.hookStrength]}`,
+  ];
+  if (tpl.referenceNote) {
+    lines.push(`- 由来: ${tpl.referenceNote}`);
+  }
+  return `${lines.join("\n")}\n\n${tpl.systemPromptPatch}`;
 }
