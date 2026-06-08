@@ -75,7 +75,7 @@ status: active
 ### フロントエンド（Next.js）
 - mobile-first・`clamp()`・auto-fit grid・孤児改行禁止（日本語改行 3 層） → `skill:responsive-layout`
 - 静的→SPA 化時は reveal を `usePathname` 依存で再初期化（再描画で演出が消える） → `mem:feedback_spa_reveal_reinit`
-- Web/UI 実装は `frontend-design` を常時併用 → `mem:feedback_frontend_design_always_on`
+- Web/UI 実装は `ui-ux-pro-max` を常時併用（旧 frontend-design から 2026-06-08 置換）→ `mem:feedback_ui_design_skill_always_on`。UI 監査は `web-design-guidelines`、React 最適化は `vercel-react-best-practices`、構成設計は `vercel-composition-patterns`
 - 定番ハマり（公開ページ anon client / revalidate 等）を設計時に織り込む → `skill:nextjs-supabase-site-gotchas`
 
 ### API / 認証 / Server

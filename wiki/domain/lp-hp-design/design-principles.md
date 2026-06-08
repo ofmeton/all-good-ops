@@ -11,7 +11,7 @@ status: active
 # LP/HP 設計原則カタログ
 
 > BSA L1/L2/L3 案件の LP/HP 実装で繰り返し適用する設計原則。
-> 実装着手前に `frontend-design` スキルと合わせて参照する。
+> 実装着手前に `ui-ux-pro-max` スキルと合わせて参照する。
 
 ---
 
@@ -165,6 +165,6 @@ document.querySelectorAll(".fade-in").forEach(e => e.classList.add("visible"))
 
 ## 関連スキル・ページ
 
-- `frontend-design` プラグインスキル（実装着手前に必ず起動）
+- `ui-ux-pro-max` プラグインスキル（実装着手前に必ず起動）
 - [[motion-techniques]] — LP/HP 演出技法カタログ（spade-co.jp 解析由来）
 - `.claude/skills/chromakey-grid-split/SKILL.md` — LP素材切り出し

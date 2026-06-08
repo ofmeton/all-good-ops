@@ -156,7 +156,7 @@ git revert <A1 commit sha>
 
 ## 関連スキル / memory
 
-- `frontend-design` プラグインスキル: 修正前後目視確認のフロー
+- `ui-ux-pro-max` プラグインスキル: 修正前後目視確認のフロー
 - `feedback_visual_diff_check_after_edit.md`: スクショ比較
 - `feedback_jsx_prototype_cache_busting.md`: `?v=` クエリ更新の原則
 - `vercel-team-deploy-checklist.md`: push 前の author email 確認
