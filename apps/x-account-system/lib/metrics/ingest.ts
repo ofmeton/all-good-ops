@@ -25,12 +25,13 @@ export function defaultDeps(): MetricsIngestDeps {
     },
     loadPublishedDrafts: async () => {
       if (!sb) return [];
-      const { data } = await sb
+      const { data, error } = await sb
         .from("post_drafts")
         .select("id, body, published_at")
         .eq("platform", "x")
         .not("published_at", "is", null)
         .gte("published_at", new Date(Date.now() - 30 * 24 * 3600 * 1000).toISOString());
+      if (error) throw new Error(`loadPublishedDrafts: ${error.message}`);
       return (data ?? []).map((d: any) => ({ id: d.id, body: d.body, publishedAt: d.published_at }));
     },
     upsertPostedRecord: async (draftId, tweetId, postedAt) => {
@@ -44,7 +45,7 @@ export function defaultDeps(): MetricsIngestDeps {
         .select("id")
         .single();
       if (error) throw new Error(`upsertPostedRecord: ${error.message}`);
-      return (data as any).id as string;
+      return (data as { id: string }).id;
     },
     upsertMetrics: async (postedRecordId, m, pcr) => {
       if (!sb) return;
@@ -68,7 +69,7 @@ export function defaultDeps(): MetricsIngestDeps {
     },
     recordCost: async (reqCount) => {
       if (!sb) return;
-      await recordCostLedger(sb as never, {
+      await recordCostLedger(sb, {
         category: "x_api_metrics",
         costJpy: X_API_COST_JPY_PER_REQ * reqCount,
         unitCount: reqCount,
