@@ -52,7 +52,7 @@ export function HomeClient({ latest }: { latest: Record<string, Trace> }) {
   const empty = Object.keys(latest).length === 0;
 
   return (
-    <main className="relative flex min-h-0 flex-1 overflow-hidden">
+    <main className="relative flex min-h-0 flex-1 overflow-hidden h-[calc(100vh-3.5rem)]">
       {/* 工程図キャンバス */}
       <div className="relative min-w-0 flex-1">
         <Legend />
