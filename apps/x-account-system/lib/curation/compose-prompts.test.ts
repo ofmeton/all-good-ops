@@ -1,65 +1,75 @@
 /**
- * lib/curation/compose-prompts.test.ts — 執筆 system prompt の合成。
- * 構造化フィールド（tone/structure/hookType/hookStrength）と systemPromptPatch の
- * 併用が prompt に出ること、未知 id でも既定テンプレで合成されることを検証する。
+ * lib/curation/compose-prompts.test.ts
+ * P2 リファクタ後:
+ *  - buildWriterSystemPrompt は **テンプレ非依存の base**（target/リサーチ/掟/進め方）。
+ *    テンプレ patch は system に焼かない（永続 agent の system は固定・テンプレは user 側）。
+ *  - buildComposeUserBlocks がテンプレ patch + 希望 fmat + 再生成フラグを userMessage 用に組む。
  */
-import { buildWriterSystemPrompt } from "./compose-prompts";
-import {
-  COMPOSE_TEMPLATES,
-  DEFAULT_TEMPLATE_ID,
-  HOOK_STRENGTH_LABEL,
-  renderTemplatePrompt,
-} from "./compose-templates";
+import { buildWriterSystemPrompt, buildComposeUserBlocks } from "./compose-prompts";
+import { COMPOSE_TEMPLATES, DEFAULT_TEMPLATE_ID, HOOK_STRENGTH_LABEL } from "./compose-templates";
 
-describe("buildWriterSystemPrompt — 構造化テンプレ合成", () => {
-  const gold = COMPOSE_TEMPLATES[DEFAULT_TEMPLATE_ID];
-
-  test("既定テンプレの tone / structure / hookType / フック強度 が prompt に出る", () => {
-    const prompt = buildWriterSystemPrompt(DEFAULT_TEMPLATE_ID);
-    expect(prompt).toContain(gold.tone);
-    for (const step of gold.structure) {
-      expect(prompt).toContain(step);
-    }
-    expect(prompt).toContain(gold.hookType);
-    expect(prompt).toContain(HOOK_STRENGTH_LABEL[gold.hookStrength]);
+describe("buildWriterSystemPrompt — テンプレ非依存 base", () => {
+  test("target / リサーチ / 掟 / 進め方 / submit_draft を含む", () => {
+    const p = buildWriterSystemPrompt();
+    expect(p).toContain("執筆エージェント");
+    expect(p).toContain("## リサーチ");
+    expect(p).toContain("## 掟");
+    expect(p).toContain("## 進め方");
+    expect(p).toContain("submit_draft");
   });
 
-  test("systemPromptPatch を併用する（骨子ブロックと patch の両方が出る）", () => {
-    const prompt = buildWriterSystemPrompt(DEFAULT_TEMPLATE_ID);
-    expect(prompt).toContain("## この投稿の型（骨子）");
-    expect(prompt).toContain(gold.systemPromptPatch);
-  });
-
-  test("未知 id でも既定テンプレの骨子で合成される", () => {
-    const prompt = buildWriterSystemPrompt("no_such_template");
-    expect(prompt).toContain(gold.tone);
-    expect(prompt).toContain(gold.hookType);
+  test("テンプレ固有 patch（型本文）は base に焼かない", () => {
+    const p = buildWriterSystemPrompt();
+    // 黄金型の patch 見出しは system に出ない（user 側へ移送）
+    expect(p).not.toContain("## 投稿の型（チャエン黄金型）");
+    // 引数を取らない（テンプレ非依存）
+    expect(buildWriterSystemPrompt.length).toBe(0);
   });
 });
 
-describe("renderTemplatePrompt", () => {
-  test("骨子ブロック + systemPromptPatch を含む", () => {
-    const tpl = COMPOSE_TEMPLATES[DEFAULT_TEMPLATE_ID];
-    const out = renderTemplatePrompt(tpl);
-    expect(out).toContain("## この投稿の型（骨子）");
-    expect(out).toContain(tpl.tone);
-    expect(out).toContain(tpl.structure.join(" → "));
-    expect(out).toContain(HOOK_STRENGTH_LABEL[tpl.hookStrength]);
-    expect(out).toContain(tpl.systemPromptPatch);
+describe("buildComposeUserBlocks — テンプレ/fmat/再生成を userMessage 用に組む", () => {
+  const gold = COMPOSE_TEMPLATES[DEFAULT_TEMPLATE_ID];
+
+  test("テンプレ patch（骨子 + 固有 patch）が入る（既定テンプレに解決）", () => {
+    const blocks = buildComposeUserBlocks(DEFAULT_TEMPLATE_ID);
+    expect(blocks).toContain("## この投稿の型（骨子）");
+    expect(blocks).toContain(gold.tone);
+    expect(blocks).toContain(HOOK_STRENGTH_LABEL[gold.hookStrength]);
+    expect(blocks).toContain(gold.systemPromptPatch);
   });
 
-  test("referenceNote があれば由来として出る", () => {
-    const out = renderTemplatePrompt({
-      id: "x",
-      name: "x",
-      description: "x",
-      tone: "硬めの speed 重視",
-      structure: ["フック", "意味づけ"],
-      hookType: "速報",
-      hookStrength: "strong",
-      referenceNote: "参考アカ @example の型",
-      systemPromptPatch: "patch本文",
-    });
-    expect(out).toContain("参考アカ @example の型");
+  test("未知 templateId は既定テンプレ patch にフォールバック", () => {
+    const blocks = buildComposeUserBlocks("no_such");
+    expect(blocks).toContain(gold.tone);
+  });
+
+  test("fmat 指定で希望フォーマット指示が入る（記事=X 長文単発・分割しない）", () => {
+    const blocks = buildComposeUserBlocks(DEFAULT_TEMPLATE_ID, "article");
+    expect(blocks).toContain("# 希望フォーマット");
+    expect(blocks).toContain("指定フォーマット=記事（X 長文単発）");
+    expect(blocks).toContain("thread のように分割しない");
+  });
+
+  test("fmat 未指定では希望フォーマット指示を入れない", () => {
+    const blocks = buildComposeUserBlocks(DEFAULT_TEMPLATE_ID);
+    expect(blocks).not.toContain("# 希望フォーマット");
+  });
+
+  test("label 欠落 fmat でも raw 値で指示を出す（黙って無指示にしない）", () => {
+    const blocks = buildComposeUserBlocks(DEFAULT_TEMPLATE_ID, "weird_fmat");
+    expect(blocks).toContain("# 希望フォーマット");
+    expect(blocks).toContain("指定フォーマット=weird_fmat");
+  });
+
+  test("redoFlags があれば『前回の指摘』ブロックが入る", () => {
+    const blocks = buildComposeUserBlocks(DEFAULT_TEMPLATE_ID, null, ["数字が事実と異なる", "重複気味"]);
+    expect(blocks).toContain("# 前回の指摘（必ず避けて書き直す）");
+    expect(blocks).toContain("- 数字が事実と異なる");
+    expect(blocks).toContain("- 重複気味");
+  });
+
+  test("redoFlags 空/未指定では『前回の指摘』を入れない", () => {
+    expect(buildComposeUserBlocks(DEFAULT_TEMPLATE_ID)).not.toContain("前回の指摘");
+    expect(buildComposeUserBlocks(DEFAULT_TEMPLATE_ID, null, [])).not.toContain("前回の指摘");
   });
 });

@@ -1,0 +1,19 @@
+# x-writer.agent.yaml — 永続 Managed Agent の seed マニフェスト（執筆Ag）
+#
+# bootstrap-ma-agents（scripts/bootstrap-ma-agents.ts）がこれを読んで Anthropic 側に
+# 永続 agent を create/update し、xad.ma_agents に登録する。run-compose は registry の
+# agent_key="x-writer" を引いて永続 session を起動する。
+#
+# プロンプト原文は **ここに重複させない**。system_builder（識別子）が指すビルダ関数を
+# bootstrap が import して materialize する（SSOT = lib/curation/compose-prompts.ts）。
+# tools も種別キーのみ。実体は COMPOSE_TOOL_REGISTRY（compose-prompts.ts）が SSOT。
+#
+# この形式は後続の checker / collector / editor の *.agent.yaml でも使い回す。
+
+key: x-writer                       # ma_agents.agent_key（registry 引き当てキー）
+name: x-writer                      # Anthropic 側 agent 表示名
+model: claude-opus-4-8              # 執筆モデル（compose-config.writerModel と整合）
+system_builder: buildWriterSystemPrompt   # lib/ma/bootstrap-core.ts SYSTEM_BUILDERS の識別子
+tools:                              # COMPOSE_TOOL_REGISTRY の種別キー
+  - web_toolset                     # web_search / web_fetch（内蔵 toolset）
+  - submit_draft                    # 出力契約 custom tool（最後に必ず呼ばせる）

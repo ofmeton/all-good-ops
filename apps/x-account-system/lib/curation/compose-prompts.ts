@@ -50,17 +50,39 @@ export const SUBMIT_DRAFT_TOOL = {
 };
 
 /**
- * 執筆 system prompt（base + テンプレ patch + 掟）。
- * templateId 未指定/無効時は既定テンプレ（チャエン黄金型）に解決＝現行挙動維持。
+ * 内蔵 agent toolset（web_search/web_fetch のみ有効。bash/file/code 無効）。
+ * 永続 agent（bootstrap-ma-agents）が agent に焼く tool。run-compose は session で
+ * tool を渡さない（agent 側固定）ため、SSOT はここに置く（compose 系の tool 正本）。
  */
-export function buildWriterSystemPrompt(templateId?: string): string {
-  const tpl = resolveTemplate(templateId);
+export const WEB_TOOLSET = {
+  type: "agent_toolset_20260401",
+  default_config: { enabled: false },
+  configs: [
+    { name: "web_search", enabled: true },
+    { name: "web_fetch", enabled: true },
+  ],
+};
+
+/**
+ * compose 系 tool の種別キー → 定義。agent.agent.yaml の `tools`（種別キー）と
+ * bootstrap が突合して agent に焼く。run-compose は handler のみ host 側で注入する。
+ */
+export const COMPOSE_TOOL_REGISTRY: Record<string, unknown> = {
+  submit_draft: SUBMIT_DRAFT_TOOL,
+  web_toolset: WEB_TOOLSET,
+};
+
+/**
+ * 執筆 system prompt（**テンプレ非依存の base**）。
+ * target / リサーチ / 掟 / 進め方 のみ。投稿の型（テンプレ patch）は system に焼かず
+ * buildComposeUserBlocks で userMessage 側に渡す（永続 agent の system を固定にするため）。
+ * bootstrap-ma-agents の system_builder=`buildWriterSystemPrompt` から呼ばれて agent に焼かれる。
+ */
+export function buildWriterSystemPrompt(): string {
   return `あなたは X 発信用の「執筆エージェント」です。1 つの素材（元ツイート/ニュース）から、X 投稿ドラフトを 1 本書きます。
 
 ${TARGET_DEFINITION}
 ポジション: 「AIニュースを非エンジニアの言葉に翻訳して即届ける速報屋」。
-
-${renderTemplatePrompt(tpl)}
 
 ## リサーチ（数字捏造の防止＝最重要）
 - 具体的な数字・金額・期間・固有の事実を本文に書くなら、**素材本文に在るもの**を使うか、**web_search で裏を取ってから**書く。
@@ -77,6 +99,36 @@ ${renderTemplatePrompt(tpl)}
 ## 進め方
 1. 渡された素材本文と URL を読む。
 2. 必要なら web_search / web_fetch で裏取り・補足。
-3. 投稿の型に沿って本文を 1 本書く。
+3. **userMessage で指定された投稿の型**に沿って本文を 1 本書く。
 4. 最後に **必ず submit_draft を呼んで**提出する（body/fmat/topic/category 必須、citations 推奨）。`;
+}
+
+/**
+ * テンプレ patch + 希望フォーマット + 再生成フラグを userMessage 用ブロックに組む。
+ * テンプレ本文の出所は compose-templates.ts（renderTemplatePrompt）。
+ *   - templateId 未指定/無効は既定テンプレに解決（現行挙動維持・drift は呼び出し側で warn）。
+ *   - fmat 指定時のみ希望フォーマット指示を付す（label 欠落でも raw 値で出す＝黙って無指示にしない）。
+ *   - redoFlags 非空時のみ「前回の指摘」を付す（差し戻し再生成）。
+ */
+export function buildComposeUserBlocks(
+  templateId?: string | null,
+  fmat?: string | null,
+  redoFlags?: string[],
+): string {
+  const tpl = resolveTemplate(templateId);
+  const templateBlock = `# 投稿の型（この型に沿って書く）\n${renderTemplatePrompt(tpl)}\n\n`;
+
+  const fmatLabel = fmat ? (FMAT_LABELS[fmat] ?? fmat) : null;
+  const fmatBlock = fmatLabel
+    ? `# 希望フォーマット\n指定フォーマット=${fmatLabel}。` +
+      `記事は X 長文単発（thread のように分割しない）。素材が薄ければ無理に伸ばさない。\n\n`
+    : "";
+
+  const flags = redoFlags ?? [];
+  const redoBlock =
+    flags.length > 0
+      ? `# 前回の指摘（必ず避けて書き直す）\n` + flags.map((f) => `- ${f}`).join("\n") + `\n\n`
+      : "";
+
+  return templateBlock + fmatBlock + redoBlock;
 }

@@ -24,6 +24,7 @@
     "dashboard:test": "IN_MEMORY_FALLBACK=true jest lib/dashboard",
     "safety:test": "IN_MEMORY_FALLBACK=true jest lib/safety",
     "ma:test": "IN_MEMORY_FALLBACK=true jest lib/ma",
+    "ma:bootstrap": "tsx scripts/bootstrap-ma-agents.ts",
     "digest:cli": "IN_MEMORY_FALLBACK=true tsx lib/dashboard/digest-cli.ts",
     "optimizer:test": "IN_MEMORY_FALLBACK=true jest lib/optimizer",
     "visualizer:test": "IN_MEMORY_FALLBACK=true jest lib/visualizer",
