@@ -40,6 +40,7 @@ const ALL_JOBS: string[] = [
   "compose",
   "check",
   "daily-digest",
+  "metrics-ingest",
   "optimizer-update",
   "rollback-monitor",
   "rotation-notice",
@@ -50,12 +51,14 @@ const ALL_JOBS: string[] = [
  * stop_posting: 生成/公開/最適化系を停止。
  * 継続するのは ops/通知のみ (rollback-monitor, rotation-notice, daily-digest, line-event)。
  * collect は LLM コストがかかるため stop_posting 以上では止める (compose/check も生成系として停止)。
+ * metrics-ingest は read-only データ収集なので投稿停止中でも継続。
  * line-event は常に許可 (オペレーター操作用)。
  */
 const STOP_POSTING_ALLOWED: string[] = [
   "rollback-monitor",
   "rotation-notice",
   "daily-digest",
+  "metrics-ingest",
   "line-event",
 ];
 
