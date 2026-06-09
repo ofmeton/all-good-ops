@@ -177,14 +177,17 @@ export function DraftCard({
       <div className="px-4 sm:px-5 py-3 mt-1 bg-slate-50 border-t border-slate-100 space-y-2">
         {/* 理由・メモ（任意）— LLM 改善用フィードバック */}
         <div>
-          <label className="block text-xs text-slate-400 mb-0.5">理由・メモ（任意）</label>
+          <label htmlFor={`reason-${draft.id}`} className="block text-xs text-slate-400 mb-0.5">
+            理由・メモ（任意）
+          </label>
           <textarea
+            id={`reason-${draft.id}`}
             value={reason}
             onChange={(e) => setReason(e.target.value)}
             rows={2}
             disabled={busy}
             placeholder="承認・却下の理由（LLM 品質改善用）"
-            className="w-full resize-none rounded border border-slate-200 p-2 text-xs text-slate-700 placeholder:text-slate-300 focus:outline-none focus:ring-1 focus:ring-blue-400/30 focus:border-blue-300 disabled:opacity-50"
+            className="w-full resize-y rounded border border-slate-200 p-2 text-xs text-slate-700 placeholder:text-slate-300 focus:outline-none focus:ring-1 focus:ring-blue-400/30 focus:border-blue-300 disabled:opacity-50"
           />
         </div>
         <div className="flex flex-wrap items-center gap-2">
