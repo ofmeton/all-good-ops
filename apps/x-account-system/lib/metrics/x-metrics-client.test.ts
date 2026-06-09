@@ -1,4 +1,4 @@
-import { parseTweetMetrics, fetchRecentTweetsWithMetrics } from "./x-metrics-client.ts";
+import { parseTweetMetrics, fetchRecentTweetsWithMetrics, getMyUserId } from "./x-metrics-client.ts";
 
 describe("parseTweetMetrics", () => {
   test("maps non_public + public metrics with null safety", () => {
@@ -46,5 +46,29 @@ describe("fetchRecentTweetsWithMetrics", () => {
     expect(out[0].tweetId).toBe("111");
     expect(calls[0]).toContain("/2/users/userX/tweets");
     expect(calls[0]).toContain("non_public_metrics");
+  });
+
+  test("rejects on non-ok response (429)", async () => {
+    const fakeFetch = async () => ({ ok: false, status: 429 }) as any;
+    await expect(fetchRecentTweetsWithMetrics("TOKEN", "userX", fakeFetch as any)).rejects.toThrow();
+  });
+});
+
+describe("getMyUserId", () => {
+  test("happy path — returns id, calls /2/users/me with bearer", async () => {
+    const calls: string[] = [];
+    const fakeFetch = async (url: string, init: any) => {
+      calls.push(url);
+      expect(init.headers.Authorization).toBe("Bearer TOKEN");
+      return { ok: true, json: async () => ({ data: { id: "999" } }) } as any;
+    };
+    const id = await getMyUserId("TOKEN", fakeFetch as any);
+    expect(id).toBe("999");
+    expect(calls[0]).toBe("https://api.x.com/2/users/me");
+  });
+
+  test("rejects on non-ok response (401)", async () => {
+    const fakeFetch = async () => ({ ok: false, status: 401 }) as any;
+    await expect(getMyUserId("TOKEN", fakeFetch as any)).rejects.toThrow();
   });
 });

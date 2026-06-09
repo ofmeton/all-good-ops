@@ -22,6 +22,7 @@ export function parseTweetMetrics(apiTweet: any): TweetMetrics {
     tweetId: String(apiTweet?.id ?? ""),
     text: String(apiTweet?.text ?? ""),
     createdAt: String(apiTweet?.created_at ?? ""),
+    // public_metrics.impression_count is available for recent tweets even without non_public_metrics access
     impressions: numOrNull(np.impression_count ?? pub.impression_count),
     userProfileClicks: numOrNull(np.user_profile_clicks),
     urlLinkClicks: numOrNull(np.url_link_clicks),
