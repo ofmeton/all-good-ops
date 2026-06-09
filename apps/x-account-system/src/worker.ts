@@ -20,6 +20,13 @@ import { verifyLineSignature, pkceChallenge, randomVerifier } from "../lib/crypt
 import { exchangeCode } from "../lib/oauth/token-exchange.js";
 import { createClient } from "@supabase/supabase-js";
 import { listTemplateSummaries } from "../lib/curation/compose-templates.js";
+import { planSlots, clipPlanByDailyCap, type StockDraft } from "../lib/publishing/slot-planner.js";
+import { SCHEDULE_CONFIG, type ScheduleConfig } from "../lib/publishing/schedule-config.js";
+import { markScheduledReservations } from "../lib/publishing/mark-scheduled.js";
+import {
+  recordScheduledPublish,
+  type ScheduledReservation,
+} from "../lib/trace/scheduled-publish-trace.js";
 
 export interface Env {
   // vars (wrangler.toml [vars])
@@ -296,6 +303,149 @@ export default {
         // この経路に来る = client 生成失敗 or LLM 呼び出し自体の失敗（=課金前 or 課金なし）。
         log(env, "error", `/admin/recommend failed (fail-open): ${String(e)}`);
         return Response.json({ recommendations: [], warning: "recommend failed" });
+      }
+    }
+
+    // 管理用: 承認済みストックのスロット割当プランを返す（read-only・DB 未書込）。
+    // POST /admin/plan-slots  (Bearer <secret>・/admin/templates と同じ fail-closed 認可)
+    // body: { includeToday?: boolean, days?: number }
+    //   includeToday=true → startOffsetDays=0（当日含む same-day。現在時刻より後のピーク帯のみ）
+    //   days → lookaheadDays 上書き（既定 SCHEDULE_CONFIG.lookaheadDays）
+    // 返り: { ok, plan: [{ draftId, scheduledForISO }], approvedCount, reservedCount, ... }
+    // CLI plan-scheduled-publish.ts と同じ planSlots(SSOT) を使い、二重予約/枠衝突を一意に防ぐ。
+    if (url.pathname === "/admin/plan-slots") {
+      if (request.method !== "POST") {
+        return new Response("method not allowed", { status: 405 });
+      }
+      const authHeader = request.headers.get("authorization");
+      const bearer = authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : null;
+      const key = bearer ?? url.searchParams.get("key");
+      if (!env.OAUTH_ADMIN_SECRET || key !== env.OAUTH_ADMIN_SECRET) {
+        return new Response("unauthorized", { status: 401 });
+      }
+      let payload: { includeToday?: unknown; days?: unknown };
+      try {
+        payload = (await request.json()) as { includeToday?: unknown; days?: unknown };
+      } catch {
+        return new Response("bad json", { status: 400 });
+      }
+      const includeToday = payload?.includeToday === true;
+      const daysNum = Number(payload?.days);
+      const config: ScheduleConfig =
+        Number.isFinite(daysNum) && daysNum > 0
+          ? { ...SCHEDULE_CONFIG, lookaheadDays: Math.floor(daysNum) }
+          : SCHEDULE_CONFIG;
+      try {
+        const sb = createClient(env.SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY, {
+          db: { schema: "xad" },
+        });
+        // 承認済み未予約ストック（承認順 FIFO・id で安定化）
+        const { data: stockRows, error: stockErr } = await sb
+          .from("post_drafts")
+          .select("id, human_approved_at")
+          .eq("human_approval_status", "approved")
+          .is("scheduled_for", null)
+          .order("human_approved_at", { ascending: true })
+          .order("id", { ascending: true });
+        if (stockErr) throw new Error(`approved ストック取得失敗: ${stockErr.message}`);
+        // 既予約（同一スロット衝突回避 + 当日残枠クリップ用）
+        const { data: reservedRows, error: reservedErr } = await sb
+          .from("post_drafts")
+          .select("scheduled_for")
+          .not("scheduled_for", "is", null);
+        if (reservedErr) throw new Error(`既予約取得失敗: ${reservedErr.message}`);
+
+        const stock: StockDraft[] = (stockRows ?? []).map((r) => ({
+          id: (r as { id: string }).id,
+          human_approved_at: (r as { human_approved_at: string | null }).human_approved_at,
+        }));
+        const existing = (reservedRows ?? [])
+          .map((r) => (r as { scheduled_for: string | null }).scheduled_for)
+          .filter((v): v is string => typeof v === "string");
+
+        const planned = planSlots(stock, {
+          now: new Date(),
+          config,
+          existing,
+          startOffsetDays: includeToday ? 0 : 1,
+        });
+        // endpoint 層の日次キャップ防御（非ピーク既予約が当日枠を超えないようクリップ）
+        const clipped = clipPlanByDailyCap(planned, existing, config);
+
+        return Response.json({
+          ok: true,
+          plan: clipped.map((p) => ({ draftId: p.draftId, scheduledForISO: p.scheduledForISO })),
+          approvedCount: stock.length,
+          reservedCount: existing.length,
+          includeToday,
+          lookaheadDays: config.lookaheadDays,
+        });
+      } catch (e) {
+        // plan は read-only。失敗は fail-loud（500）で UI に明示（黙って空プランにしない）。
+        log(env, "error", `/admin/plan-slots failed: ${String(e)}`);
+        return new Response(`plan-slots error: ${String(e)}`, { status: 500 });
+      }
+    }
+
+    // 管理用: 予約確定（本体 write）。冪等 UPDATE + 観測 trace を SSOT lib で実行。
+    // POST /admin/mark-scheduled  (Bearer <secret>・/admin/plan-slots と同じ fail-closed 認可)
+    // body: { reservations: [{ draftId, scheduledFor, scheduledPostId? }] }
+    // 返り: { ok, applied, noop, runId, results:[{draftId, applied}] }
+    // CLI record-scheduled-publish.ts と同一 lib（markScheduledReservations / recordScheduledPublish）。
+    if (url.pathname === "/admin/mark-scheduled") {
+      if (request.method !== "POST") {
+        return new Response("method not allowed", { status: 405 });
+      }
+      const authHeader = request.headers.get("authorization");
+      const bearer = authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : null;
+      const key = bearer ?? url.searchParams.get("key");
+      if (!env.OAUTH_ADMIN_SECRET || key !== env.OAUTH_ADMIN_SECRET) {
+        return new Response("unauthorized", { status: 401 });
+      }
+      let payload: { reservations?: unknown };
+      try {
+        payload = (await request.json()) as { reservations?: unknown };
+      } catch {
+        return new Response("bad json", { status: 400 });
+      }
+      const raw = Array.isArray(payload?.reservations) ? payload.reservations : [];
+      // 境界検証: draftId / scheduledFor(string) 必須。不正要素は弾く（二重予約の要なので厳格）。
+      const reservations: ScheduledReservation[] = [];
+      for (const r of raw) {
+        if (!r || typeof r !== "object") continue;
+        const o = r as Record<string, unknown>;
+        if (typeof o.draftId !== "string" || o.draftId.length === 0) continue;
+        if (typeof o.scheduledFor !== "string" || Number.isNaN(new Date(o.scheduledFor).getTime())) {
+          continue;
+        }
+        reservations.push({
+          draftId: o.draftId,
+          scheduledFor: o.scheduledFor,
+          scheduledPostId: typeof o.scheduledPostId === "string" ? o.scheduledPostId : undefined,
+        });
+      }
+      if (reservations.length === 0) {
+        return new Response("reservations required (draftId/scheduledFor)", { status: 400 });
+      }
+      try {
+        // 1. 本体 write: 冪等 UPDATE（scheduled_for IS NULL ガード）。既予約は no-op=applied:false。
+        const marks = await markScheduledReservations(
+          reservations.map((r) => ({
+            draftId: r.draftId,
+            scheduledFor: r.scheduledFor,
+            scheduledPostId: r.scheduledPostId,
+          })),
+        );
+        const applied = marks.filter((m) => m.applied).length;
+        const noop = marks.length - applied;
+        // 2. 観測 trace（fail-open）。runId を返す。
+        const runId = await recordScheduledPublish(reservations);
+        log(env, "info", `admin: mark-scheduled applied=${applied} noop=${noop} run=${runId}`);
+        return Response.json({ ok: true, applied, noop, runId, results: marks });
+      } catch (e) {
+        // 本体 write の失敗は fail-loud（500）。二重予約防止の要なので握りつぶさない。
+        log(env, "error", `/admin/mark-scheduled failed: ${String(e)}`);
+        return new Response(`mark-scheduled error: ${String(e)}`, { status: 500 });
       }
     }
 
