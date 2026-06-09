@@ -9,37 +9,61 @@ Cloudflare Workers の queue consumer から駆動する。本実装 = `run-sess
 environment / agent を毎回 create/delete せず、bootstrap で 1 度だけ作って `xad.ma_agents`
 に登録し、各 session はそれを参照して起動する。
 
+**control plane（Anthropic 側の environment/agent の create・update）= `ant` CLI**、
+**data plane（worker 向け lookup）= `xad.ma_agents`(DB)**、**プロンプト/tools の SSOT = TS**
+（`bootstrap-core.ts` の `AGENT_MANIFESTS` + `SYSTEM_BUILDERS` + `MA_TOOL_REGISTRY`）。
+
 ```
-agents/*.agent.yaml (seed: key/name/model/system_builder/tools)
-   │  npm run ma:bootstrap            （scripts/bootstrap-ma-agents.ts・SDK・冪等）
+TS SSOT: AGENT_MANIFESTS(key/name/model/system_builder/tools) + SYSTEM_BUILDERS
+   │  npm run ma:render     → agents/<key>.agent.yaml + <key>.system.md + environment.yaml（VCS 成果物）
+   │  npm run ma:bootstrap  → `ant beta:environments|agents create|update`（control plane・冪等）
    ▼
 Anthropic: environment×1(cloud,共有) + agent×N(create once → versioned)
-   │  upsert
+   │  ma_agents upsert（bootstrap・supabase-js）
    ▼
 xad.ma_agents (agent_key → agent_id/version/environment_id/model/system_hash)
-   │  getAgentRef(sb, key)            （lib/ma/agent-registry.ts・isolate内 cache）
+   │  getAgentRef(sb, key)  （lib/ma/agent-registry.ts・isolate内 cache。worker は ant 不要）
    ▼
-runMaSession({ agentRef, environmentId, userMessage, customToolHandler })  ← persistent
+runMaSession({ agentRef, environmentId, userMessage, customToolHandler })  ← SDK・persistent
 ```
 
 - **environment は 1 つを全 agent で共有**（org 上限を避ける）。bootstrap が既存を reuse、
-  無ければ 1 つ作る（`pickEnvironmentId`）。
+  無ければ `ant beta:environments create` で作る（`pickEnvironmentId`）。
 - **system / tools は agent 側に焼く**。session 起動時は渡さない（host handler のみ注入）。
   素材ごとに変わる「型/fmat/再生成指示」は userMessage 側（compose は `buildComposeUserBlocks`）。
 - **registry miss（未 bootstrap）は throw**。各工程は誤処理防止で draft 化/点検/収集をせず
   明示エラーにする（`agent-registry` の思想）。bootstrap 後に再走で回収。
 - **session id を相関キーとして残す**: post_drafts.writer_session_id / run_trace.output の
   maSessionId / materials_store.meta.collector_session_id（後続 1B が遡る）。
-- system 変更は `ma:bootstrap -- --update` で **agents.update**（新 version）→ ma_agents の
-  system_hash drift で検知。差分は `ma:bootstrap -- --dry-run`。
+- system/model 変更は `ma:render` で差分を生成し `ma:bootstrap -- --update` で
+  `ant beta:agents update --agent-id … --version …`（新 version）→ ma_agents の system_hash
+  drift で検知。版上げは **DB 更新だけで worker に反映**（redeploy 不要）。差分確認は `--dry-run`。
 
 > **ephemeral 経路（`agent` を渡し environment/agent を毎回 create する元仕様）は現在
 > prod から呼ばれない＝テスト専用**（後方互換・stub・SDK 版数ガードの単体テスト資産として
 > `run-session.ts` に残置。削除しない）。永続前提が崩れた緊急時のフォールバックも兼ねる。
 
-純ロジック（yaml パース / system materialize / tool 解決 / 差分計算）は `bootstrap-core.ts`
-（API/DB 非依存・単体テスト済）。`SYSTEM_BUILDERS` / `MA_TOOL_REGISTRY` に各工程の
-builder/tool を登録する（checker/collector も同パターンで追加済）。
+純ロジック（system materialize / tool 解決 / 差分計算 / ant 用 render・コマンド生成）は
+`bootstrap-core.ts`（API/DB/ant 非依存・単体テスト済）。`SYSTEM_BUILDERS` / `MA_TOOL_REGISTRY`
+に各工程の builder/tool を登録する（checker/collector も同パターンで追加済）。
+
+### bootstrap 実行手順（人間ゲート・**この repo では未実行**）
+1. **ant 導入 + ログイン**: `brew install anthropics/tap/ant` → `ant auth login`（Linux は GitHub releases）。
+2. **migration**: `migrations/0020_ma_agents.sql` を本番 DB に apply（xad.ma_agents 作成）。
+3. **render**: `npm run ma:render`（プロンプト変更時。`agents/*` の差分をコミット）。
+4. **差分確認**: env に SUPABASE 接続を入れ `npm run ma:bootstrap -- --dry-run`
+   → plan ＋ 実行予定の `ant` コマンドを表示（ant/DB を叩かない）。
+5. **実行**（承認後）: `npm run ma:bootstrap`（create）/ `-- --update`（drift 更新）
+   → `ant beta:…` 実行 + ma_agents upsert。または dry-run が出した `ant` コマンドを手動実行 → DB は別途同期。
+6. **end-to-end**: collect→compose→check を各 1 回実走し session_id 相関の充填を確認。
+7. **deploy**: smoke 後に `worker:deploy`。
+
+> ⚠️ **要・実行前検証**: `ant` の **出力抽出フラグ**（`bootstrap-ma-agents.ts` の `ANT_FORMAT_FLAGS=--format json`）
+> と placement は公式 docs 未確定。初回実行前に `ant beta:agents create --help` で出力指定を確認し、
+> 必要なら定数を直す。`--model '{id: <model>}'` / `--tool '<json>'`（反復）/ update の
+> `--agent-id`/`--version` は公式 docs で確認済。
+>
+> editor は **MA 対象外**（単発 forced tool_use のため latency 増で見送り・前回判断）。agent は作らない。
 
 > 旧 `teardown.ts`（`send→running→idle→retrieve→archive` 固定 order / `active_seconds`
 > 課金 / archive 前 retrieve しないと idle 課金リーク）は **現行 GA API に存在しない

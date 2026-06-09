@@ -1,11 +1,11 @@
 /**
  * lib/ma/bootstrap-core.test.ts
- * bootstrap の純ロジック（yaml パース / system materialize / tool 解決 / hash /
- * 差分計算）を実 API/DB を叩かず検証する。create/update は scripts 側（impure）。
+ * bootstrap/render の純ロジック（manifest 検証 / system materialize / tool 解決 / hash /
+ * 差分計算 / ant 用 render・コマンド生成）を実 API/DB/ant を叩かず検証する。
+ * 実 ant 実行は scripts 側（impure）でテストしない。
  */
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
 import {
+  AGENT_MANIFESTS,
   parseManifest,
   materializeSystem,
   resolveTools,
@@ -13,57 +13,76 @@ import {
   planAgentAction,
   planBootstrap,
   pickEnvironmentId,
+  normalizeToolForAnt,
+  renderAgentSpec,
+  renderAgentYaml,
+  renderEnvironmentYaml,
+  buildAntEnvCreateArgs,
+  buildAntAgentCreateArgs,
+  buildAntAgentUpdateArgs,
+  formatAntCommand,
+  MA_ENVIRONMENT_NAME,
+  type AgentManifest,
   type MaAgentRow,
 } from "./bootstrap-core";
 
-const WRITER_YAML = readFileSync(
-  join(__dirname, "../../agents/x-writer.agent.yaml"),
-  "utf8",
-);
+const writer = AGENT_MANIFESTS.find((m) => m.key === "x-writer") as AgentManifest;
 
-describe("parseManifest", () => {
-  test("seed の x-writer.agent.yaml を正しくパースする", () => {
-    const m = parseManifest(WRITER_YAML);
-    expect(m.key).toBe("x-writer");
-    expect(m.model).toBe("claude-opus-4-8");
-    expect(m.system_builder).toBe("buildWriterSystemPrompt");
-    expect(m.tools).toEqual(["web_toolset", "submit_draft"]);
+describe("AGENT_MANIFESTS（TS SSOT）", () => {
+  test("writer/checker/collector の 3 体・builder/tools が解決可能", () => {
+    expect(AGENT_MANIFESTS.map((m) => m.key)).toEqual(["x-writer", "x-checker", "x-collector"]);
+    for (const m of AGENT_MANIFESTS) {
+      expect(materializeSystem(m).length).toBeGreaterThan(0); // builder 登録済
+      expect(resolveTools(m).length).toBeGreaterThan(0); // tool キー解決可
+    }
   });
 
+  test("writer=opus / checker=haiku / collector=sonnet（config 整合）", () => {
+    expect(AGENT_MANIFESTS.find((m) => m.key === "x-writer")!.model).toBe("claude-opus-4-8");
+    expect(AGENT_MANIFESTS.find((m) => m.key === "x-checker")!.model).toBe("claude-haiku-4-5");
+    expect(AGENT_MANIFESTS.find((m) => m.key === "x-collector")!.model).toBe("claude-sonnet-4-5");
+  });
+});
+
+describe("parseManifest（inline yaml の検証ユーティリティ）", () => {
+  test("正常な manifest yaml をパース", () => {
+    const m = parseManifest("key: k\nname: n\nmodel: m\nsystem_builder: buildWriterSystemPrompt\ntools: [web_toolset]");
+    expect(m.key).toBe("k");
+    expect(m.tools).toEqual(["web_toolset"]);
+  });
   test("必須 string フィールド欠落は throw", () => {
     expect(() => parseManifest("name: x\nmodel: m\nsystem_builder: b\ntools: []")).toThrow(/key/);
   });
-
   test("tools が string[] でなければ throw", () => {
     expect(() => parseManifest("key: k\nname: n\nmodel: m\nsystem_builder: b\ntools: foo")).toThrow(/tools/);
   });
-
   test("空文書は throw", () => {
     expect(() => parseManifest("")).toThrow(/empty|invalid/i);
   });
 });
 
-describe("全 seed マニフェスト（writer/checker/collector）が parse・materialize・tool 解決できる", () => {
-  const dir = join(__dirname, "../../agents");
-  const cases: Array<{ file: string; key: string; builder: string }> = [
-    { file: "x-writer.agent.yaml", key: "x-writer", builder: "buildWriterSystemPrompt" },
-    { file: "x-checker.agent.yaml", key: "x-checker", builder: "buildCheckSystemPrompt" },
-    { file: "x-collector.agent.yaml", key: "x-collector", builder: "buildExploreSystemPrompt" },
-  ];
-  test.each(cases)("$file は key=$key builder=$builder で解決", ({ file, key, builder }) => {
-    const m = parseManifest(readFileSync(join(dir, file), "utf8"));
-    expect(m.key).toBe(key);
-    expect(m.system_builder).toBe(builder);
-    // system_builder が SYSTEM_BUILDERS に登録済みで materialize できる
-    expect(materializeSystem(m).length).toBeGreaterThan(0);
-    // tool 種別キーが全て解決できる（未知キーがあれば throw）
-    expect(resolveTools(m).length).toBeGreaterThan(0);
+describe("materializeSystem / resolveTools", () => {
+  test("writer の system を materialize（執筆エージェント/submit_draft）", () => {
+    const sys = materializeSystem(writer);
+    expect(sys).toContain("執筆エージェント");
+    expect(sys).toContain("submit_draft");
   });
-
-  test("collector_tools は 5 つの探索 tool に展開される（+ web_toolset = 6）", () => {
-    const m = parseManifest(readFileSync(join(dir, "x-collector.agent.yaml"), "utf8"));
-    const tools = resolveTools(m) as Array<Record<string, unknown>>;
-    // collector_tools(5) + web_toolset(1)
+  test("未知 system_builder は throw", () => {
+    expect(() => materializeSystem({ ...writer, system_builder: "no_such" })).toThrow(/system_builder/);
+  });
+  test("writer tools: web_toolset(内蔵) + submit_draft(custom)", () => {
+    const tools = resolveTools(writer) as Array<Record<string, unknown>>;
+    expect(tools).toHaveLength(2);
+    const names = tools.map((t) => t.name ?? t.type);
+    expect(names).toContain("submit_draft");
+    expect(names).toContain("agent_toolset_20260401");
+  });
+  test("未知 tool キーは throw", () => {
+    expect(() => resolveTools({ ...writer, tools: ["bogus"] })).toThrow(/tool key/);
+  });
+  test("collector_tools は 5 探索 tool に展開（+ web_toolset = 6）", () => {
+    const collector = AGENT_MANIFESTS.find((m) => m.key === "x-collector")!;
+    const tools = resolveTools(collector) as Array<Record<string, unknown>>;
     expect(tools.length).toBe(6);
     const names = tools.map((t) => t.name ?? t.type);
     expect(names).toContain("search_tweets");
@@ -72,89 +91,126 @@ describe("全 seed マニフェスト（writer/checker/collector）が parse・m
   });
 });
 
-describe("materializeSystem / resolveTools", () => {
-  const manifest = parseManifest(WRITER_YAML);
-
-  test("system_builder=buildWriterSystemPrompt から system 本文を materialize", () => {
-    const sys = materializeSystem(manifest);
-    expect(sys).toContain("執筆エージェント");
-    expect(sys).toContain("submit_draft");
+describe("normalizeToolForAnt / renderAgentSpec", () => {
+  test("custom tool（type 無し）は type:custom を補完、内蔵は type 維持", () => {
+    expect(normalizeToolForAnt({ name: "x", description: "d", input_schema: {} })).toMatchObject({ type: "custom", name: "x" });
+    expect(normalizeToolForAnt({ type: "agent_toolset_20260401" })).toEqual({ type: "agent_toolset_20260401" });
   });
 
-  test("未知 system_builder は throw", () => {
-    expect(() => materializeSystem({ ...manifest, system_builder: "no_such" })).toThrow(/system_builder/);
+  test("renderAgentSpec: model/system/tools(正規化) を持つ", () => {
+    const spec = renderAgentSpec(writer);
+    expect(spec.key).toBe("x-writer");
+    expect(spec.model).toBe("claude-opus-4-8");
+    expect(spec.system).toContain("執筆エージェント");
+    // 全 custom tool に type:custom が付く（submit_draft）
+    const submit = spec.tools.find((t) => t.name === "submit_draft");
+    expect(submit?.type).toBe("custom");
   });
 
-  test("tool 種別キーを定義に解決（submit_draft / web_toolset）", () => {
-    const tools = resolveTools(manifest) as Array<Record<string, unknown>>;
-    expect(tools).toHaveLength(2);
-    // web_toolset は内蔵 toolset、submit_draft は custom（name 持ち）
-    const names = tools.map((t) => t.name ?? t.type);
-    expect(names).toContain("submit_draft");
-    expect(names).toContain("agent_toolset_20260401");
+  test("collector spec: 5 custom + web_toolset すべて type を持つ（ant 必須）", () => {
+    const collector = AGENT_MANIFESTS.find((m) => m.key === "x-collector")!;
+    const spec = renderAgentSpec(collector);
+    expect(spec.tools).toHaveLength(6);
+    expect(spec.tools.every((t) => typeof t.type === "string")).toBe(true);
+  });
+});
+
+describe("render yaml（VCS 成果物）", () => {
+  test("renderAgentYaml: name/model.id/system 参照/tools・GENERATED ヘッダ", () => {
+    const y = renderAgentYaml(renderAgentSpec(writer));
+    expect(y).toContain("GENERATED by `npm run ma:render`");
+    expect(y).toContain("name: x-writer");
+    expect(y).toContain("id: claude-opus-4-8"); // model: { id: ... }
+    expect(y).toContain("system: ./x-writer.system.md"); // 本文は別ファイル参照
+    expect(y).toContain("submit_draft");
+  });
+  test("renderEnvironmentYaml: cloud/unrestricted の共有 env", () => {
+    const y = renderEnvironmentYaml();
+    expect(y).toContain(`name: ${MA_ENVIRONMENT_NAME}`);
+    expect(y).toContain("type: cloud");
+    expect(y).toContain("unrestricted");
+  });
+});
+
+describe("ant コマンド引数生成（execFile argv・shell 非経由）", () => {
+  const spec = renderAgentSpec(writer);
+
+  test("env create: --name/--config(flow)", () => {
+    const a = buildAntEnvCreateArgs();
+    expect(a.slice(0, 2)).toEqual(["beta:environments", "create"]);
+    expect(a).toContain("--name");
+    expect(a[a.indexOf("--config") + 1]).toContain("type: cloud");
   });
 
-  test("未知 tool キーは throw", () => {
-    expect(() => resolveTools({ ...manifest, tools: ["bogus"] })).toThrow(/tool key/);
+  test("agent create: --name/--model '{id: ...}'/--system/--tool×N", () => {
+    const a = buildAntAgentCreateArgs(spec);
+    expect(a.slice(0, 2)).toEqual(["beta:agents", "create"]);
+    expect(a[a.indexOf("--model") + 1]).toBe("{id: claude-opus-4-8}");
+    expect(a[a.indexOf("--system") + 1]).toContain("執筆エージェント");
+    // tools 2 つ → --tool が 2 回
+    expect(a.filter((x) => x === "--tool")).toHaveLength(2);
+    // 各 --tool 値は JSON（valid YAML）で type を含む
+    const firstTool = a[a.indexOf("--tool") + 1];
+    expect(() => JSON.parse(firstTool)).not.toThrow();
+    expect(JSON.parse(firstTool).type).toBeDefined();
+  });
+
+  test("agent update: --agent-id/--version + body フラグ（tools 全置換）", () => {
+    const a = buildAntAgentUpdateArgs(spec, "agent_xyz", 3);
+    expect(a.slice(0, 2)).toEqual(["beta:agents", "update"]);
+    expect(a[a.indexOf("--agent-id") + 1]).toBe("agent_xyz");
+    expect(a[a.indexOf("--version") + 1]).toBe("3");
+    expect(a.filter((x) => x === "--tool")).toHaveLength(2); // 配列全置換のため毎回渡す
+  });
+
+  test("formatAntCommand: 1 行表示・長値は省略", () => {
+    const line = formatAntCommand(buildAntAgentCreateArgs(spec));
+    expect(line.startsWith("ant beta:agents create")).toBe(true);
+    expect(line).toContain("…"); // 長い system は省略表示
   });
 });
 
 describe("computeSystemHash", () => {
   test("決定的で 16 hex 桁", () => {
-    const h1 = computeSystemHash("abc");
-    const h2 = computeSystemHash("abc");
-    expect(h1).toBe(h2);
-    expect(h1).toMatch(/^[0-9a-f]{16}$/);
+    expect(computeSystemHash("abc")).toBe(computeSystemHash("abc"));
+    expect(computeSystemHash("abc")).toMatch(/^[0-9a-f]{16}$/);
     expect(computeSystemHash("abc")).not.toBe(computeSystemHash("abd"));
   });
 });
 
-describe("planAgentAction", () => {
-  const manifest = parseManifest(WRITER_YAML);
-  const system = materializeSystem(manifest);
+describe("planAgentAction / planBootstrap / pickEnvironmentId", () => {
+  const system = materializeSystem(writer);
   const hash = computeSystemHash(system);
   const baseRow: MaAgentRow = {
     agent_key: "x-writer", agent_id: "agent_x", version: "1",
-    environment_id: "env_x", model: manifest.model, system_hash: hash,
+    environment_id: "env_x", model: writer.model, system_hash: hash,
   };
 
   test("既存無し → create", () => {
-    expect(planAgentAction(manifest, system, undefined, { update: false })).toBe("create");
+    expect(planAgentAction(writer, system, undefined, { update: false })).toBe("create");
   });
-
   test("hash/model 一致 → noop", () => {
-    expect(planAgentAction(manifest, system, baseRow, { update: true })).toBe("noop");
+    expect(planAgentAction(writer, system, baseRow, { update: true })).toBe("noop");
+  });
+  test("drift + --update → update", () => {
+    expect(planAgentAction(writer, system, { ...baseRow, system_hash: "deadbeefdeadbeef" }, { update: true })).toBe("update");
+  });
+  test("drift + --update 無し → noop（誤って新 version を切らない）", () => {
+    expect(planAgentAction(writer, system, { ...baseRow, model: "claude-sonnet-4-6" }, { update: false })).toBe("noop");
   });
 
-  test("drift あり + --update → update", () => {
-    const drift = { ...baseRow, system_hash: "deadbeefdeadbeef" };
-    expect(planAgentAction(manifest, system, drift, { update: true })).toBe("update");
-  });
-
-  test("drift あり + --update 無し → noop（誤って新 version を切らない）", () => {
-    const drift = { ...baseRow, model: "claude-sonnet-4-6" };
-    expect(planAgentAction(manifest, system, drift, { update: false })).toBe("noop");
-  });
-});
-
-describe("planBootstrap / pickEnvironmentId", () => {
-  const manifest = parseManifest(WRITER_YAML);
-
-  test("既存 0 行 → 全 create、environment は未解決", () => {
-    const plan = planBootstrap([manifest], [], { update: false });
-    expect(plan).toHaveLength(1);
-    expect(plan[0].action).toBe("create");
-    expect(plan[0].systemHash).toMatch(/^[0-9a-f]{16}$/);
+  test("planBootstrap: 既存 0 行 → 全 create、env 未解決", () => {
+    const plan = planBootstrap(AGENT_MANIFESTS, [], { update: false });
+    expect(plan).toHaveLength(3);
+    expect(plan.every((p) => p.action === "create")).toBe(true);
     expect(pickEnvironmentId([])).toBeUndefined();
   });
-
-  test("既存行の environment_id を reuse", () => {
+  test("既存行の environment_id を reuse・一致は noop", () => {
     const rows: MaAgentRow[] = [{
       agent_key: "x-writer", agent_id: "a", version: "1",
-      environment_id: "env_reuse", model: manifest.model,
-      system_hash: computeSystemHash(materializeSystem(manifest)),
+      environment_id: "env_reuse", model: writer.model, system_hash: hash,
     }];
     expect(pickEnvironmentId(rows)).toBe("env_reuse");
-    expect(planBootstrap([manifest], rows, { update: true })[0].action).toBe("noop");
+    expect(planBootstrap([writer], rows, { update: true })[0].action).toBe("noop");
   });
 });
