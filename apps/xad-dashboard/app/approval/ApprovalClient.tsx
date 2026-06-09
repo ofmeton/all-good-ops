@@ -96,7 +96,7 @@ export function ApprovalClient({ initialDrafts }: { initialDrafts: ApprovalDraft
   return (
     <div className="min-h-screen bg-slate-50">
       {/* ── Header ── */}
-      <div className="bg-white border-b border-slate-200 px-4 sm:px-6 py-4 sticky top-0 z-20">
+      <div className="bg-white border-b border-slate-200 px-4 sm:px-6 py-4 sticky top-14 z-20">
         <div className="max-w-3xl mx-auto flex items-baseline justify-between gap-4">
           <div>
             <h1 className="text-lg font-semibold text-slate-900 tracking-tight">投稿承認</h1>

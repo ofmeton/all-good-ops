@@ -3,18 +3,18 @@ import type { CurationMaterial } from "@/lib/curation-logic";
 import { MediaThumbs } from "@/components/MediaModal";
 
 function scoreColor(v: number | null): string {
-  if (v == null) return "bg-gray-100 text-gray-500";
-  if (v >= 70) return "bg-green-100 text-green-800";
+  if (v == null) return "bg-slate-100 text-slate-500";
+  if (v >= 70) return "bg-emerald-100 text-emerald-800";
   if (v >= 40) return "bg-amber-100 text-amber-800";
-  return "bg-gray-100 text-gray-600";
+  return "bg-slate-100 text-slate-600";
 }
 
 /** overall_score に応じた左ボーダーカラー（選択状態と独立） */
 function borderAccent(v: number | null): string {
-  if (v == null) return "border-l-gray-200";
-  if (v >= 70) return "border-l-green-400";
+  if (v == null) return "border-l-slate-200";
+  if (v >= 70) return "border-l-emerald-400";
   if (v >= 40) return "border-l-amber-400";
-  return "border-l-gray-300";
+  return "border-l-slate-300";
 }
 
 export function MaterialCard({
@@ -23,8 +23,8 @@ export function MaterialCard({
   const e = m.engagement;
   return (
     <div
-      className={`border border-l-4 rounded p-3 transition-colors ${borderAccent(m.overall_score)} ${
-        checked ? "border-blue-500 bg-blue-50" : "border-gray-200 bg-white hover:bg-gray-50"
+      className={`border border-l-4 rounded-lg p-3 transition-colors ${borderAccent(m.overall_score)} ${
+        checked ? "border-blue-500 bg-blue-50" : "border-slate-200 bg-white hover:bg-slate-50"
       }`}
     >
       <div className="flex items-start gap-2">
@@ -43,16 +43,16 @@ export function MaterialCard({
             >
               overall {m.overall_score ?? "—"}
             </span>
-            <span className="text-xs text-gray-500 font-mono tabular-nums">
+            <span className="text-xs text-slate-500 font-mono tabular-nums">
               f{m.freshness ?? "—"} / v{m.velocity ?? "—"} / fit{m.target_fit ?? "—"}
             </span>
             {m.lang && (
-              <span className="text-xs text-gray-400 uppercase tracking-wide">{m.lang}</span>
+              <span className="text-xs text-slate-400 uppercase tracking-wide">{m.lang}</span>
             )}
           </div>
 
           {/* 本文 */}
-          <p className="whitespace-pre-wrap text-sm mt-1 leading-relaxed text-gray-800">
+          <p className="whitespace-pre-wrap text-sm mt-1 leading-relaxed text-slate-800">
             {m.raw_text}
           </p>
 
@@ -60,8 +60,8 @@ export function MaterialCard({
           <MediaThumbs media={m.media} />
 
           {/* メタ行: discovery / collected_at / engagement / 原ツイート */}
-          <div className="flex flex-wrap items-center gap-2 text-xs text-gray-500 mt-2">
-            <span className="px-1.5 py-0.5 bg-gray-100 rounded font-medium">
+          <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500 mt-2">
+            <span className="px-1.5 py-0.5 bg-slate-100 rounded font-medium">
               {m.discovery_via}
               {m.discovery_query ? `: ${m.discovery_query}` : ""}
             </span>
@@ -87,11 +87,11 @@ export function MaterialCard({
 
           {/* 採点理由 (collapsible) */}
           {m.score_reason && (
-            <details className="text-xs text-gray-500 mt-1">
-              <summary className="cursor-pointer select-none hover:text-gray-700">
+            <details className="text-xs text-slate-500 mt-1">
+              <summary className="cursor-pointer select-none hover:text-slate-700">
                 採点理由
               </summary>
-              <p className="mt-1 pl-2 border-l border-gray-200 text-gray-600">
+              <p className="mt-1 pl-2 border-l border-slate-200 text-slate-600">
                 {m.score_reason}
               </p>
             </details>

@@ -1,8 +1,25 @@
 @import "tailwindcss";
 
+/* ──────────────────────────────────────────────────────────────
+ * xad observability デザイントークン
+ * 内部観測ツールはライト固定（白ノード上で文字が同化するダーク反転を防ぐ）。
+ * 共有契約 §2 の意味マッピングを破壊しないこと:
+ *   slate=基調 / blue=primary / emerald=success / rose=danger / amber=warn / slate-100=info
+ * 下記の --st-* はその意味写像をドキュメント兼ライト参照として固定したもの。
+ * 実装は Tailwind クラス（bg-slate-50 等）を正とし、変数は凡例・非 Tailwind 箇所で使う。
+ * ────────────────────────────────────────────────────────────── */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f8fafc; /* slate-50 ＝ 全画面共通の地色 */
+  --foreground: #0f172a; /* slate-900 */
+
+  /* セマンティック写像（lib/colors.ts のノード色と一致させる） */
+  --st-ok: #16a34a;      /* emerald/green-600  : 成功・承認・確定 */
+  --st-warn: #ca8a04;    /* amber-600          : 注意・warned */
+  --st-danger: #dc2626;  /* rose/red-600       : 却下・エラー */
+  --st-skipped: #475569; /* slate-600          : skip */
+  --st-idle: #9ca3af;    /* gray-400           : 未実行・不明 */
+  --st-primary: #2563eb; /* blue-600           : primary アクション */
 }
 
 @theme inline {
@@ -12,11 +29,44 @@
   --font-mono: var(--font-geist-mono);
 }
 
-/* 内部観測ツールはライト固定（bg-gray-50 / 白ノード上で文字が同化するダーク反転を防ぐ） */
-
 body {
   background: var(--background);
   color: var(--foreground);
   color-scheme: light;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), -apple-system, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN", "Noto Sans JP", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* キーボード操作時のみ可視なフォーカスリング（マウス時は出さない） */
+:focus-visible {
+  outline: 2px solid var(--st-primary);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* 選択ハイライトをブランド色に */
+::selection {
+  background: rgba(37, 99, 235, 0.18); /* blue-600 @ 18% */
+}
+
+/* 控えめなスクロールバー（デスクトップ観測用途で長い trace を読む） */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent; /* slate-300 */
+}
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-thumb {
+  background: #cbd5e1; /* slate-300 */
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8; /* slate-400 */
+  background-clip: content-box;
 }
