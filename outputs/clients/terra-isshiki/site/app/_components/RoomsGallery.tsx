@@ -38,22 +38,10 @@ const SECTIONS: Section[] = [
     label: "Bath & Laundry",
     caption: "お風呂と水まわり",
     description:
-      "杉板に包まれたバスルーム。ドラム式洗濯機と黒の洗面シンクが並ぶランドリー一体空間。",
+      "ひのきに包まれたバスルーム。ドラム式洗濯機と真鍮の洗面ボウルが並ぶランドリー一体空間。",
     items: [
       { src: "/images/rooms/bath.jpg", aspect: "3/2" },
       { src: "/images/rooms/laundry.jpg", aspect: "3/2" },
-    ],
-  },
-  {
-    label: "Kitchen",
-    caption: "キッチンと食卓",
-    description:
-      "フルキッチン + 抹茶マシーン。地元の食材を持ち込み、自分たちの食卓を整える滞在。",
-    items: [
-      { src: "/images/rooms/kitchen-01.jpg", aspect: "3/2" },
-      { src: "/images/rooms/kitchen-02.jpg", aspect: "3/2" },
-      { src: "/images/rooms/kitchen-03.jpg", aspect: "3/2" },
-      { src: "/images/rooms/kitchen-04.jpg", aspect: "3/2" },
     ],
   },
 ];
@@ -89,13 +77,13 @@ export function RoomsGallery() {
              section 自体には py をかけず、header に pt のみ持たせて
              gallery sections 間の余白を最小化する。 */}
           <div className="mx-auto max-w-[1480px] px-6 md:px-12 mb-10 md:mb-16 pt-12 md:pt-16">
-            <p className="font-garamond italic text-[clamp(9.1px,0.55vw,14px)] tracking-[0.42em] uppercase text-(--color-soil) mb-3">
+            <p className="font-garamond italic text-[clamp(11.1px,0.55vw,17.08px)] tracking-[0.42em] uppercase text-(--color-soil) mb-3">
               {section.caption}
             </p>
-            <h2 className="font-serif text-[17.92px] md:text-[clamp(22.4px,1.84vw,47.04px)] leading-[1.2] tracking-[0.04em] text-(--color-base-dark) whitespace-nowrap mb-6 md:mb-8">
+            <h2 className="font-serif text-[21.86px] md:text-[clamp(22.4px,1.84vw,47.04px)] leading-[1.2] tracking-[0.04em] text-(--color-base-dark) whitespace-nowrap mb-6 md:mb-8">
               {section.label}
             </h2>
-            <p className="font-mincho text-[10.5px] md:text-[clamp(11.2px,0.71vw,18.2px)] leading-[2.0] tracking-[0.08em] text-(--color-base-dark)/80 md:max-w-[760px]">
+            <p className="font-mincho text-[12.81px] md:text-[clamp(11.2px,0.71vw,18.2px)] leading-[2.0] tracking-[0.08em] text-(--color-base-dark)/80 md:max-w-[760px]">
               {section.description}
             </p>
           </div>

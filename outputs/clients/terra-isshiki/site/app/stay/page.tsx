@@ -91,20 +91,20 @@ export default function StayPage() {
         />
         <div className="absolute bottom-12 left-6 md:bottom-20 md:left-12 z-10 max-w-[88%] md:max-w-[760px]">
           <p
-            className="fade-up font-garamond italic text-[clamp(9.1px,0.6vw,15.4px)] tracking-[0.4em] text-(--color-base-light)/80 mb-5"
+            className="fade-up font-garamond italic text-[clamp(11.1px,0.6vw,18.79px)] tracking-[0.4em] text-(--color-base-light)/80 mb-5"
             style={{ animationDelay: "0.3s" }}
           >
             Stay — Things to Experience
           </p>
           <h1
-            className="fade-up font-serif font-medium text-[clamp(12.6px,3.57vw,18.2px)] leading-[1.22] md:text-[clamp(15.4px,1.47vw,36.4px)] md:leading-[1.16] tracking-[0.02em]"
+            className="fade-up font-serif font-medium text-[clamp(15.37px,3.57vw,22.2px)] leading-[1.22] md:text-[clamp(15.4px,1.47vw,36.4px)] md:leading-[1.16] tracking-[0.02em]"
             style={{ animationDelay: "0.55s" }}
           >
             <span className="block">葉山らしさを、</span>
             <span className="block">四つの体験で。</span>
           </h1>
           <p
-            className="fade-up mt-5 md:mt-8 font-mincho text-[9.8px] md:text-[clamp(11.2px,0.71vw,18.2px)] leading-[1.85] tracking-[0.16em] text-(--color-base-light)/85"
+            className="fade-up mt-5 md:mt-8 font-mincho text-[11.96px] md:text-[clamp(11.2px,0.71vw,18.2px)] leading-[1.85] tracking-[0.16em] text-(--color-base-light)/85"
             style={{ animationDelay: "0.85s" }}
           >
             棚田・海・地元の食材・抹茶。<br />
@@ -129,14 +129,14 @@ export default function StayPage() {
                 {/* Text — readable width, padded — comes FIRST */}
                 <div className="mx-auto max-w-[1480px] px-6 md:px-12 mb-8 md:mb-14">
                   <p
-                    className={`font-garamond italic text-[clamp(9.1px,0.55vw,14px)] tracking-[0.42em] uppercase mb-3 ${accentColor}`}
+                    className={`font-garamond italic text-[clamp(11.1px,0.55vw,17.08px)] tracking-[0.42em] uppercase mb-3 ${accentColor}`}
                   >
                     {exp.no}・{exp.sub}
                   </p>
-                  <h2 className="font-serif text-[14.56px] md:text-[clamp(17.92px,1.4vw,35.84px)] leading-[1.36] tracking-[0.04em] text-(--color-base-dark) mb-6 md:mb-8">
+                  <h2 className="font-serif text-[17.76px] md:text-[clamp(17.92px,1.4vw,35.84px)] leading-[1.36] tracking-[0.04em] text-(--color-base-dark) mb-6 md:mb-8">
                     {exp.label}
                   </h2>
-                  <p className="font-mincho text-[9.8px] md:text-[clamp(11.2px,0.71vw,18.2px)] leading-[2.0] tracking-[0.08em] text-(--color-base-dark)/85 md:max-w-[900px]">
+                  <p className="font-mincho text-[11.96px] md:text-[clamp(11.2px,0.71vw,18.2px)] leading-[2.0] tracking-[0.08em] text-(--color-base-dark)/85 md:max-w-[900px]">
                     {exp.body}
                   </p>
                 </div>
@@ -158,7 +158,7 @@ export default function StayPage() {
                     <div aria-hidden className="paper-noise absolute inset-0" />
                     <div
                       aria-hidden
-                      className="absolute right-[3vw] top-[-4%] md:right-[2vw] md:top-[-6%] font-garamond italic text-[clamp(140px,12.6vw,308px)] leading-none text-(--color-base-dark)/[0.07] select-none"
+                      className="absolute right-[3vw] top-[-4%] md:right-[2vw] md:top-[-6%] font-garamond italic text-[clamp(170.8px,12.6vw,375.76px)] leading-none text-(--color-base-dark)/[0.07] select-none"
                     >
                       {exp.no}
                     </div>
@@ -179,21 +179,21 @@ export default function StayPage() {
 
       {/* Next link */}
       <section className="border-t border-(--color-base-dark)/10 px-6 py-[clamp(80px,7.3vw,112px)] md:px-12 text-center">
-        <p className="font-garamond italic text-[clamp(9.1px,0.6vw,15.4px)] tracking-[0.4em] uppercase text-(--color-soil) mb-6">
+        <p className="font-garamond italic text-[clamp(11.1px,0.6vw,18.79px)] tracking-[0.4em] uppercase text-(--color-soil) mb-6">
           Next
         </p>
-        <h3 className="font-serif text-[18.2px] md:text-[clamp(23.8px,1.97vw,50.4px)] leading-[1.4] tracking-[0.04em] text-(--color-base-dark) mb-10">
+        <h3 className="font-serif text-[22.2px] md:text-[clamp(23.8px,1.97vw,50.4px)] leading-[1.4] tracking-[0.04em] text-(--color-base-dark) mb-10">
           海まで、徒歩 8 分。
         </h3>
         <Link
           href="/access"
-          className="group inline-flex items-center gap-4 font-garamond text-[9.1px] md:text-[clamp(9.8px,0.6vw,15.4px)] tracking-[0.32em] uppercase text-(--color-base-dark)"
+          className="group inline-flex items-center gap-4 font-garamond text-[11.1px] md:text-[clamp(9.8px,0.6vw,15.4px)] tracking-[0.32em] uppercase text-(--color-base-dark)"
         >
           <span className="relative">
             View Access
             <span className="absolute -bottom-1 left-0 h-px w-full bg-(--color-base-dark)/30 transition-colors duration-500 group-hover:bg-(--color-base-dark)" />
           </span>
-          <span aria-hidden className="text-[9.8px]">→</span>
+          <span aria-hidden className="text-[11.96px]">→</span>
         </Link>
       </section>
     </main>
