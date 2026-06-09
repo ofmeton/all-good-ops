@@ -15,6 +15,8 @@ Cloudflare Workers の queue consumer / cron は `wrangler tail` がイベント
 
 連結原則: wiki `self/engineering-principles.md` 原則2（テスト緑≠本番、end-to-end 実走）。memory [[feedback-prod-lib-local-diag]]。
 
+> **対象の存在確認（空振り防止）**: smoke/再生成の対象は **lib が読む実 WHERE 条件**で eligible 数を先に確認する（status カラムだけで判断しない）。例: compose は `selection_status='queued'` だけでなく `composed_at IS NULL` かつ `compose_claimed_at IS NULL` も効くため、status=queued だけ見て実行すると processed:0 で空振りする（2026-06-09）。
+
 ## トリガー（自然文例）
 - 「この draftID 生成し直して」「core_idea を再生成して LINE に流して」
 - 「cron の◯◯ジョブが失敗してる、原因見て」「投稿が出ない/失敗する原因」

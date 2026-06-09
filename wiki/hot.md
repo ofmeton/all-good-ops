@@ -1,7 +1,7 @@
 ---
 type: meta
 title: "Hot Cache"
-updated: 2026-06-07
+updated: 2026-06-09
 ---
 
 # Recent Context
@@ -9,23 +9,23 @@ updated: 2026-06-07
 > セッション間で保持される ~500 words のコンテキストキャッシュ。セッション開始時に最優先で読む。詳細: [[SCHEMA]] §ホットキャッシュ。
 
 ## Last Updated
-2026-06-07 — **session-retrospective スキルを実働化 + memory 棚卸し**（PR#117/#118）。スキル改訂: ①ループを閉じる §0.5 前回フォローアップ（improvement-log を読み返し status 更新・再計測。cron停止中の唯一の消費経路）②保存関門（memory/skill は「既存追記 or 保留」がデフォルト・一般化原則は wiki へ）③観点レンズ（未活用資産/プロンプト改善/Claude機能/トークンコスパ、ヒット時のみ）。191→125行に短縮。memory 棚卸し: 236→206件（project6件索引降格・廃止案件9件削除・クラスタ21件を wiki playbook へ集約）。
+2026-06-09 — **X発信を永続 Managed Agents 化（段階1-1A）して本番出荷**（PR#145 merge / worker deploy Version 6753004c）。collector/writer(opus-4-8)/checker を「create once→id参照、更新は version up」の永続 MA に。定義 SSOT=MA agent オブジェクト、control plane=`ant` CLI、registry=`xad.ma_agents`(migration 0020)、worker は DB lookup。editor は単発判定で MA 利点ゼロにつき除外。bootstrap 済（env_01KVMQ… ＋ x-writer/x-checker/x-collector）。compose/check を本番 smoke で実証（opus draft → haiku checker が事実誤り検出して差し戻し）。詳細: [[../memory/project_x_ma_persistent_rearch]]。
 
 ## Current Focus
-- **新 retro スキルの定着確認（次回）**: 「振り返って」で §0.5 が前回 improvement-log を読み返し再計測から始まるか / 保存関門で新規memoryが抑制されるか。
-- **agent teams 初実走（次の実開発）**: playbook に沿って設計→承認→実装→レビュー→人間ゲートを 1 サイクル。手戻り減・トークン対効果を usage-log で評価。
-- **🔴 はぐりん persona 運用**: monetize-os 廃止で収益化委譲先が消失 → 名義境界の戦略再判断が未着手。
+- **段階1-1B（次の実開発）**: 実行履歴の詳細トラッキング UI。`xad.run_trace` ＋ 今回仕込んだ相関キー（`writer_session_id`/`materials_store.meta.collector_session_id`/`maSessionId`）で、過去1実行の各工程の思考・入力素材・素材の出所・出力を `apps/xad-dashboard` の runs/[id] に展開。
+- **その後**: 1C 定義編集 UI（dashboard `agents.update`＋Console）→ 段階2 承認/投稿 UX → 段階3（テンプレ拡充/解説画像/スレッド）。計画書 `~/.claude/plans/41-magical-sketch.md`。
+- **🔴 はぐりん persona 運用**: monetize-os 廃止で収益化委譲先消失 → 名義境界の戦略再判断が未着手。
 - **🔴 ミナト広告設定（再開待ち）**: chrome-devtools MCP 接続待ち。[[project-minato-ad-settings]]
 
 ## Recently Touched
-- `.claude/skills/session-retrospective/SKILL.md`（実働化）/ [[dev/external-api-ops]] [[dev/vercel-deploy-gotchas]] [[dev/subagent-dispatch]] [[business/freee-invoice]]（クラスタ集約・新設）
-- memory MEMORY.md（索引10行除去）/ [[../outputs/retrospectives/2026-06-07-0026-retro-skill-and-memory-cleanup]]
-- [[dev/standards]] / [[dev/agent-teams-playbook]]（前回 agent teams 体制）
+- `apps/x-account-system/lib/ma/*`（run-session persistent / agent-registry / bootstrap-core）/ `agents/*.agent.yaml`+`*.system.md` / `scripts/{render,bootstrap}-ma-agents.ts` / migration 0020
+- memory `project_x_ma_persistent_rearch`（新規）/ `feedback_squash_merge_manual_worktree_remove`（訂正）/ `.claude/skills/prod-lib-diag`（追記）
+- [[../outputs/retrospectives/2026-06-09-1713-xad-ma-persistent-rearch]]
 
 ## Open Questions / Frontiers
-- retro スキル: §0.5 の再計測が機能し改善が定着するか / memory 肥大が再発しないか
-- agent teams: 実走でトークン対効果が見合うか / 品質 hook を入れるタイミング
-- はぐりん収益化: monetize-os 廃止後の委譲先（戦略再判断）
+- `getAgentRef` の isolate cache は `--update`（新 version）後 stale → update 運用開始時に cache TTL/recycle を入れるか
+- 1B 観測 UI は Console session への deep-link と自前 timeline 表示のどちらを主にするか
+- squash merge×worktree の `--delete-branch` 罠が3回目を出さないか（feedback 訂正済）
 
 ## Conventions
 - 500 words 以内 / declarative present tense / 全置換更新（古い項目は間引く）
