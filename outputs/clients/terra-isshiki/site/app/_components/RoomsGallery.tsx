@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 type Item = { src: string; aspect: string };
 type Section = {
@@ -46,6 +46,149 @@ const SECTIONS: Section[] = [
   },
 ];
 
+const AUTO_MS = 4500;
+
+/**
+ * セクション単位の自動送り横カルーセル。
+ * - scroll-snap で 1 枚ずつ表示。手動スワイプ可。
+ * - 自動送り（hover / フォーカス / prefers-reduced-motion で停止）。
+ * - 各スライドはタップで lightbox 拡大（onZoom）。
+ */
+function SectionCarousel({
+  section,
+  onZoom,
+}: {
+  section: Section;
+  onZoom: (src: string, alt: string) => void;
+}) {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [index, setIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const reduceRef = useRef(false);
+  const n = section.items.length;
+
+  useEffect(() => {
+    reduceRef.current =
+      typeof window.matchMedia === "function" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  }, []);
+
+  const goTo = useCallback(
+    (i: number, smooth = true) => {
+      const el = trackRef.current;
+      if (!el) return;
+      const target = ((i % n) + n) % n;
+      el.scrollTo({
+        left: target * el.clientWidth,
+        behavior: smooth ? "smooth" : "auto",
+      });
+    },
+    [n],
+  );
+
+  // 自動送り
+  useEffect(() => {
+    if (paused || reduceRef.current || n <= 1) return;
+    const id = setInterval(() => {
+      const el = trackRef.current;
+      if (!el) return;
+      const current = Math.round(el.scrollLeft / el.clientWidth);
+      el.scrollTo({
+        left: ((current + 1) % n) * el.clientWidth,
+        behavior: "smooth",
+      });
+    }, AUTO_MS);
+    return () => clearInterval(id);
+  }, [paused, n]);
+
+  // スクロール位置から現在 index を同期
+  const onScroll = () => {
+    const el = trackRef.current;
+    if (!el) return;
+    setIndex(Math.round(el.scrollLeft / el.clientWidth));
+  };
+
+  return (
+    <div
+      className="relative"
+      onPointerEnter={() => setPaused(true)}
+      onPointerLeave={() => setPaused(false)}
+      onFocusCapture={() => setPaused(true)}
+      onBlurCapture={() => setPaused(false)}
+    >
+      <div
+        ref={trackRef}
+        onScroll={onScroll}
+        className="flex overflow-x-auto snap-x snap-mandatory [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
+        {section.items.map((it, i) => (
+          <button
+            type="button"
+            key={it.src}
+            onClick={() => onZoom(it.src, `${section.label} ${i + 1}`)}
+            className="relative shrink-0 basis-full snap-start cursor-zoom-in bg-(--color-base-dark)/5"
+            style={{ aspectRatio: "3/2" }}
+            aria-label={`${section.label} の写真 ${i + 1} を拡大表示`}
+          >
+            <Image
+              src={it.src}
+              alt={`${section.label} ${i + 1}`}
+              fill
+              sizes="100vw"
+              quality={88}
+              className="object-cover object-center"
+            />
+          </button>
+        ))}
+      </div>
+
+      {n > 1 && (
+        <>
+          {/* prev / next（md 以上） */}
+          <button
+            type="button"
+            onClick={() => goTo(index - 1)}
+            aria-label="前の写真"
+            className="hidden md:flex absolute top-1/2 left-4 -translate-y-1/2 h-11 w-11 items-center justify-center bg-(--color-base-light)/85 text-(--color-base-dark) backdrop-blur-[2px] hover:bg-(--color-base-light) transition-colors"
+          >
+            <span aria-hidden className="text-[18px] leading-none -mt-0.5">
+              ‹
+            </span>
+          </button>
+          <button
+            type="button"
+            onClick={() => goTo(index + 1)}
+            aria-label="次の写真"
+            className="hidden md:flex absolute top-1/2 right-4 -translate-y-1/2 h-11 w-11 items-center justify-center bg-(--color-base-light)/85 text-(--color-base-dark) backdrop-blur-[2px] hover:bg-(--color-base-light) transition-colors"
+          >
+            <span aria-hidden className="text-[18px] leading-none -mt-0.5">
+              ›
+            </span>
+          </button>
+
+          {/* dots */}
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2">
+            {section.items.map((_, i) => (
+              <button
+                type="button"
+                key={i}
+                onClick={() => goTo(i)}
+                aria-label={`${i + 1} 枚目へ`}
+                aria-current={i === index ? "true" : undefined}
+                className={`h-1.5 rounded-full transition-all duration-300 ${
+                  i === index
+                    ? "w-6 bg-(--color-base-light)"
+                    : "w-1.5 bg-(--color-base-light)/55 hover:bg-(--color-base-light)/80"
+                }`}
+              />
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
 export function RoomsGallery() {
   const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(
     null,
@@ -64,6 +207,10 @@ export function RoomsGallery() {
     };
   }, [lightbox]);
 
+  const openZoom = useCallback((src: string, alt: string) => {
+    setLightbox({ src, alt });
+  }, []);
+
   return (
     <>
       {SECTIONS.map((section, sIdx) => (
@@ -73,9 +220,7 @@ export function RoomsGallery() {
             sIdx % 2 === 1 ? "bg-(--color-paper)" : "bg-(--color-base-light)"
           }`}
         >
-          {/* Section header — readable width, padded.
-             section 自体には py をかけず、header に pt のみ持たせて
-             gallery sections 間の余白を最小化する。 */}
+          {/* Section header */}
           <div className="mx-auto max-w-[1480px] px-6 md:px-12 mb-10 md:mb-16 pt-12 md:pt-16">
             <p className="font-garamond italic text-[clamp(11.1px,0.55vw,17.08px)] tracking-[0.42em] uppercase text-(--color-soil) mb-3">
               {section.caption}
@@ -88,45 +233,8 @@ export function RoomsGallery() {
             </p>
           </div>
 
-          {/* Image grid — full bleed, edge to edge */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-1.5 md:gap-2">
-            {section.items.map((it, i) => (
-              <button
-                type="button"
-                key={it.src}
-                onClick={() =>
-                  setLightbox({
-                    src: it.src,
-                    alt: `${section.label} ${i + 1}`,
-                  })
-                }
-                className="group relative overflow-hidden bg-(--color-base-dark)/5 cursor-zoom-in"
-                style={{ aspectRatio: it.aspect }}
-                aria-label={`${section.label} の写真 ${i + 1} を拡大表示`}
-              >
-                <Image
-                  src={it.src}
-                  alt={`${section.label} ${i + 1}`}
-                  fill
-                  sizes="(min-width: 768px) 50vw, 100vw"
-                  quality={88}
-                  className="object-cover object-center transition-transform duration-[1100ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-[1.05]"
-                />
-                <span className="pointer-events-none absolute bottom-4 right-4 flex h-11 w-11 items-center justify-center bg-(--color-base-dark)/55 text-(--color-base-light) opacity-0 transition-opacity duration-300 group-hover:opacity-100 backdrop-blur-[2px]">
-                  <svg
-                    viewBox="0 0 24 24"
-                    className="h-5 w-5"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.4"
-                  >
-                    <circle cx="10.5" cy="10.5" r="6.5" />
-                    <path d="M15.5 15.5 L21 21 M10.5 7.5 V13.5 M7.5 10.5 H13.5" />
-                  </svg>
-                </span>
-              </button>
-            ))}
-          </div>
+          {/* Auto-advancing carousel */}
+          <SectionCarousel section={section} onZoom={openZoom} />
         </section>
       ))}
 

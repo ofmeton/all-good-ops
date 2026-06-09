@@ -50,6 +50,50 @@ html, body {
   text-orientation: mixed;
 }
 
+/* Scroll reveal — 上品に控えめ（fade + わずかな上方向スライド）。
+   RevealRoot (client) が [data-reveal] を観測して .is-visible を付与する。
+   transition-delay は要素側 inline style で stagger 指定。
+   進行的強化: 隠すのは JS 有効時（html.js-reveal）のみ。no-JS では常に表示。 */
+.reveal {
+  transition: opacity 0.7s cubic-bezier(0.2, 0.8, 0.2, 1),
+    transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: opacity, transform;
+}
+.js-reveal .reveal {
+  opacity: 0;
+  transform: translateY(16px);
+}
+.js-reveal .reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* CTA の矢印を極ゆっくりドリフト（控えめ）。group-hover 時は通常の hover に委ねる。 */
+@keyframes ctaArrowDrift {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(4px); }
+}
+.cta-arrow {
+  display: inline-block;
+  animation: ctaArrowDrift 2.8s ease-in-out infinite;
+}
+
+/* アクセシビリティ: 動きを減らす設定では reveal/微動を無効化（即表示・静止） */
+@media (prefers-reduced-motion: reduce) {
+  .js-reveal .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .cta-arrow {
+    animation: none;
+  }
+  .fade-up {
+    animation: none;
+    opacity: 1;
+  }
+}
+
 /* Subtle paper noise (data URI SVG) */
 .paper-noise::before {
   content: "";
