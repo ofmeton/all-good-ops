@@ -4,6 +4,22 @@
 > **本書は読み取り分析の成果物でありコード変更を含まない。** Stage 2（観測配線）/ Stage 3（LLM-optimizer ループ）/ Stage 4（実行権限）はこのカタログを入力とする。
 > 関連: 設計思想 SSOT = `outputs/improvements/x-account-design-consolidated/initial-values-design.md`、死守ガード = `apps/x-account-system/lib/optimizer/guards.ts`。
 
+## 改訂ノート（2026-06-09・MA化＋段階1-1B 反映）
+
+本カタログ初版は HEAD=a989301 時点。その後 **PR#145（永続 Managed Agents 化）** と **段階1-1B（session 観測永続化）** が入り、以下が更新された（該当セクションは下記で読み替え）:
+
+- **プロンプト所在（compose/check/collect）**: 各工程の system prompt は `lib/ma/bootstrap-core.ts` の SYSTEM_BUILDERS が SSOT。`buildWriterSystemPrompt`（`lib/curation/compose-prompts.ts:81`、**旧 `lib/writer/system-prompts.ts` を置換＝参考資料化**）/ `buildCheckSystemPrompt`（`lib/check/check-prompts.ts:67`）/ `buildExploreSystemPrompt`（`lib/ingest/collector-prompts.ts:14`）。§1〜§3 の「プロンプト所在」はこれで読み替え。
+- **プロンプト変更経路**: 「ファイル編集→deploy」ではなく **`npm run ma:render`（TS→agents/*.system.md 生成・VCSコミット）→ `npm run ma:bootstrap --update`（ant version-up・`xad.ma_agents` upsert・worker redeploy不要）**。担当層 L（提案）の実適用はこの version-up を人間ゲートで通す（Stage 4 の権限設計対象）。
+- **8テンプレ**: `compose-templates.ts` は健在だが、永続 MA の system は固定のため **userMessage 注入**（`buildComposeUserBlocks`/`renderTemplatePrompt`）に変更。§2 の注記を読み替え。
+- **観測（§9-2 の解消）**: 段階1-1B で `session_event`/`run_session`（migration 0021）が追加。MA化3工程（collect/compose/check）の thinking/tool_use/tool_result が永続化され、相関キー `writer_session_id`/`checker_session_id`/`materials_store.meta.collector_session_id`。→ §9-2「意思決定消滅」は collect/compose/check で大半解消（思考は text 形式で残り、構造化抽出は Stage 3 の LLM 再解析）。**残る穴＝人間承認/却下理由（最重要・未記録）/ scheduled-publish slot理由 / editor 判定経路（MA外）**。
+- **editor / recommend**: MA外（messages.create 維持）。§4 は不変。
+
+## optimizer 再設計の担当層決定（2026-06-09 確定）
+
+- **下の階（Thompson）で握るのは本質3本のみ**: ①posting_time ②hook_distribution ③x_format_ratio（Stage 2A で reward 配線）。
+- **据え置き5本（bandit化しない・固定値＋死守ガードで維持）**: content_axis / visualizer / industry_sop / publishing_lag / citation。first_hand≥30% / industry_sop≥月5 / AI画像≤10% は guards.ts が引き続き保証。
+- **収集クエリ（watchlist/キーワード/scoringWeights）は上の階（Stage 3）**: engagement でなく**ファネル変換率**（素材→承認/公開）を reward に LLM が分析→提案→人間承認（`autoPromoteDiscoveredSources=false` 思想に沿う）。
+
 ## 凡例
 
 - **種別**: `数値knob`（連続/離散の bounded 値）/ `プロンプト`（文字列）/ `ルール`（regex・LLM judge・閾値ゲート）/ `クエリ`（外部API取得条件）/ `構造`（model選定・テンプレID・フラグ・列挙）

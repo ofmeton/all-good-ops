@@ -28,7 +28,6 @@ import {
 } from "./state-store.ts";
 import {
   updateBeta,
-  updateDirichlet,
 } from "./thompson.ts";
 import type {
   AnomalyReason,
@@ -90,21 +89,6 @@ export async function runOptimizerUpdate(
         });
       }
     }
-    // content axis Dirichlet (success のときのみ alpha+1)
-    if (sig.success) {
-      const beforeAlphas = structuredClone(state.contentAxis.params);
-      state.contentAxis = updateDirichlet(
-        state.contentAxis,
-        sig.attribution.contentAxisIndex,
-      );
-      changes.push({
-        paramId: state.contentAxis.paramId,
-        distType: "dirichlet",
-        before: beforeAlphas,
-        after: structuredClone(state.contentAxis.params),
-        reason: `success at index ${sig.attribution.contentAxisIndex}`,
-      });
-    }
     // x format
     const fmt = sig.attribution.xFormat;
     if (fmt && state.xFormatRatio[fmt]) {
@@ -119,36 +103,9 @@ export async function runOptimizerUpdate(
         reason: sig.success ? "success" : "failure",
       });
     }
-    // visualizer dirichlet (success だけ alpha+1)
-    if (sig.success) {
-      const beforeAlphas = structuredClone(state.visualizerMode.params);
-      state.visualizerMode = updateDirichlet(
-        state.visualizerMode,
-        sig.attribution.visualizerIndex,
-      );
-      changes.push({
-        paramId: state.visualizerMode.paramId,
-        distType: "dirichlet",
-        before: beforeAlphas,
-        after: structuredClone(state.visualizerMode.params),
-        reason: `success at vIndex ${sig.attribution.visualizerIndex}`,
-      });
-    }
-    // industry_sop (true/false で Beta 更新)
-    {
-      const beforeP = structuredClone(state.industrySopRate.params);
-      state.industrySopRate = updateBeta(
-        state.industrySopRate,
-        sig.attribution.isIndustrySop && sig.success,
-      );
-      changes.push({
-        paramId: state.industrySopRate.paramId,
-        distType: "beta",
-        before: beforeP,
-        after: structuredClone(state.industrySopRate.params),
-        reason: sig.attribution.isIndustrySop ? "industry_sop observed" : "non-sop",
-      });
-    }
+    // Stage 2A: content_axis / visualizer / industry_sop / publishing_lag /
+    // citation は bandit 化しない（据え置き）。死守ガード＋固定値で挙動を維持し、
+    // posterior は学習させない。bandit 化是非は Stage 3 (LLM-optimizer) が提案する。
   }
 
   // ----- 2. anomaly detection (PCR -30% / impression -50% in 7d) -----
@@ -245,6 +202,19 @@ export function applySignalsToState(
         distType: "beta",
         before: beforeP,
         after: structuredClone(s.hookDistribution[hookKey].params),
+        reason: sig.success ? "success" : "failure",
+      });
+    }
+    const fmt = sig.attribution.xFormat;
+    if (fmt && s.xFormatRatio[fmt]) {
+      const p = s.xFormatRatio[fmt];
+      const beforeP = structuredClone(p.params);
+      s.xFormatRatio[fmt] = updateBeta(p, sig.success);
+      changes.push({
+        paramId: p.paramId,
+        distType: "beta",
+        before: beforeP,
+        after: structuredClone(s.xFormatRatio[fmt].params),
         reason: sig.success ? "success" : "failure",
       });
     }
