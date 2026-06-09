@@ -324,6 +324,50 @@ describe("runMaSession", () => {
     });
   });
 
+  describe("onEvent フック", () => {
+    test("thinking/text/model_request_end を seq 昇順で emit", async () => {
+      const events: Array<Record<string, unknown>> = [
+        { type: "agent.message", content: [{ type: "thinking", thinking: "考え中" }, { type: "text", text: "結論" }] },
+        { type: "span.model_request_end", model_usage: { input_tokens: 5, output_tokens: 2 } },
+        { type: "session.status_idle", stop_reason: { type: "end_turn" } },
+      ];
+      const { client } = makeMockClient(events);
+      const seen: Array<{ seq: number; type: string }> = [];
+      await runMaSession({
+        agentRef: { id: "agent_x", version: "1" },
+        environmentId: "env_x",
+        userMessage: "hi",
+        client,
+        onEvent: (e) => seen.push({ seq: e.seq, type: e.type }),
+      });
+      expect(seen).toEqual([
+        { seq: 0, type: "thinking" },
+        { seq: 1, type: "text" },
+        { seq: 2, type: "model_request_end" },
+      ]);
+    });
+
+    test("custom_tool_use と custom_tool_result をペアで emit", async () => {
+      const events: Array<Record<string, unknown>> = [
+        { type: "agent.custom_tool_use", id: "tu_1", name: "get_x", input: { q: "ai" } },
+        { type: "session.status_idle", stop_reason: { type: "end_turn" } },
+      ];
+      const { client } = makeMockClient(events);
+      const seen: Array<{ type: string; payload: unknown }> = [];
+      await runMaSession({
+        agentRef: { id: "agent_x", version: "1" },
+        environmentId: "env_x",
+        userMessage: "hi",
+        client,
+        customToolHandler: async () => "RESULT",
+        onEvent: (e) => seen.push({ type: e.type, payload: e.payload }),
+      });
+      expect(seen.map((s) => s.type)).toEqual(["custom_tool_use", "custom_tool_result"]);
+      expect(seen[0].payload).toMatchObject({ tool_use_id: "tu_1", name: "get_x", input: { q: "ai" } });
+      expect(seen[1].payload).toMatchObject({ tool_use_id: "tu_1", result: "RESULT", is_error: false });
+    });
+  });
+
   describe("本番ガード (IN_MEMORY_FALLBACK 無効)", () => {
     const prev = process.env.IN_MEMORY_FALLBACK;
     beforeAll(() => { process.env.IN_MEMORY_FALLBACK = ""; });

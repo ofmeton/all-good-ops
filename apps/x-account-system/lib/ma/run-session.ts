@@ -81,6 +81,8 @@ export interface RunMaSessionDeps {
   now?: () => number;
   /** trace meta を上流に渡す (queue case 側で withTrace に接続)。 */
   onTrace?: (m: TraceMeta) => void;
+  /** drain 中の各イベントを上流に渡す（1B 観測の session_event 永続化に接続）。 */
+  onEvent?: (ev: import("../trace/types.js").SessionEventInput) => void;
   /** 終了時に session を archive する (既定 true)。 */
   archiveSession?: boolean;
   /** 終了時に agent を archive / environment を delete する (既定 true、使い捨て時)。 */
@@ -299,6 +301,10 @@ export async function runMaSession(deps: RunMaSessionDeps): Promise<MaSessionRes
     // 5. drain (停滞しても timeoutMs で打ち切る)
     const deadline = t0 + timeoutMs;
     const it = stream[Symbol.asyncIterator]();
+    let evSeq = 0;
+    const emit = (type: import("../trace/types.js").SessionEventType, payload: unknown) => {
+      deps.onEvent?.({ seq: evSeq++, type, payload });
+    };
     for (;;) {
       const step = await nextWithTimeout(it, deadline - now());
       if (step.timedOut || now() > deadline) {
@@ -312,12 +318,19 @@ export async function runMaSession(deps: RunMaSessionDeps): Promise<MaSessionRes
       const t = ev.type as string;
       if (t === "agent.message") {
         for (const b of (ev.content as Array<Record<string, unknown>>) ?? []) {
-          if (b.type === "text" && typeof b.text === "string") agentText += b.text;
+          if (b.type === "text" && typeof b.text === "string") {
+            agentText += b.text;
+            emit("text", { text: b.text });
+          } else if (b.type === "thinking") {
+            const tx = (typeof b.thinking === "string" ? b.thinking : typeof b.text === "string" ? b.text : "");
+            emit("thinking", { text: tx });
+          }
         }
         transitions.push("agent.message");
       } else if (t === "agent.custom_tool_use") {
         const name = ev.name as string;
         toolCalls.push({ name, input: ev.input });
+        emit("custom_tool_use", { tool_use_id: ev.id, name, input: ev.input });
         transitions.push(`custom_tool_use(${name})`);
         let result: string;
         let isError = false;
@@ -337,9 +350,11 @@ export async function runMaSession(deps: RunMaSessionDeps): Promise<MaSessionRes
             ...(isError ? { is_error: true } : {}),
           }],
         });
+        emit("custom_tool_result", { tool_use_id: ev.id, result, is_error: isError });
         transitions.push("custom_tool_result.sent");
       } else if (t === "span.model_request_end") {
         modelUsage = ev.model_usage;
+        emit("model_request_end", { model_usage: ev.model_usage });
         transitions.push("model_request_end");
       } else if (t === "session.status_running") {
         transitions.push("running");
