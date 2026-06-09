@@ -61,6 +61,7 @@ dead_letter_queue = "xad-jobs-dlq"
 # | JST       | UTC          | ジョブ                                      |
 # |-----------|--------------|---------------------------------------------|
 # | 05:30     | 20:30 (前日) | collect (収集エージェント)                    |
+# | 20:00     | 11:00        | metrics-ingest (engagement 取込み)          |
 # | 21:00     | 12:00        | daily-digest (LINE 配信)                    |
 # | 23:00     | 14:00        | optimizer-update (posterior 更新)           |
 # | 毎2h      | */2          | rollback-monitor (異常検知)                 |

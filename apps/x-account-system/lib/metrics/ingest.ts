@@ -36,15 +36,29 @@ export function defaultDeps(): MetricsIngestDeps {
     },
     upsertPostedRecord: async (draftId, tweetId, postedAt) => {
       if (!sb) return "memory";
+      // 既存行があれば再利用（trace_id/scheduled_at を保持・更新しない）。
+      const { data: existing, error: selErr } = await sb
+        .from("posted_records")
+        .select("id")
+        .eq("platform", "x")
+        .eq("platform_post_id", tweetId)
+        .maybeSingle();
+      if (selErr) throw new Error(`upsertPostedRecord select: ${selErr.message}`);
+      if (existing) return (existing as { id: string }).id;
+      // 無ければ INSERT。posted_records は NOT NULL の trace_id / scheduled_at を持つので補う。
       const { data, error } = await sb
         .from("posted_records")
-        .upsert(
-          { draft_id: draftId, platform: "x", platform_post_id: tweetId, posted_at: postedAt },
-          { onConflict: "platform,platform_post_id" },
-        )
+        .insert({
+          draft_id: draftId,
+          platform: "x",
+          platform_post_id: tweetId,
+          posted_at: postedAt,
+          scheduled_at: postedAt, // backfill: 実投稿時刻を流用
+          trace_id: crypto.randomUUID(),
+        })
         .select("id")
         .single();
-      if (error) throw new Error(`upsertPostedRecord: ${error.message}`);
+      if (error) throw new Error(`upsertPostedRecord insert: ${error.message}`);
       return (data as { id: string }).id;
     },
     upsertMetrics: async (postedRecordId, m, pcr) => {
