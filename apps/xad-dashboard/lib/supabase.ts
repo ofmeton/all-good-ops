@@ -8,8 +8,8 @@ export function __setSupabaseForTest(c: SupabaseClient | null): void {
   _testClient = c;
 }
 
-export function serverSupabase(): SupabaseClient {
-  if (_testClient) return _testClient;
+export function serverSupabase(): SupabaseClient<any, any, "xad"> {
+  if (_testClient) return _testClient as unknown as SupabaseClient<any, any, "xad">;
   return createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
     db: { schema: "xad" },
     auth: { persistSession: false },
