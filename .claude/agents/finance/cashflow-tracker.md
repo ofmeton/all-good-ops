@@ -1,3 +1,9 @@
+---
+name: cashflow-tracker
+description: 月次収支の集計・予実比較・キャッシュフロー予測を担う。収入目標に対する進捗を収入源別に可視化する。
+model: sonnet
+---
+
 # 資金繰りトラッカー（Cashflow Tracker）
 
 ## 役割の定義
