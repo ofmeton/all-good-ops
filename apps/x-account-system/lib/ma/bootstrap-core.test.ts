@@ -43,6 +43,35 @@ describe("parseManifest", () => {
   });
 });
 
+describe("全 seed マニフェスト（writer/checker/collector）が parse・materialize・tool 解決できる", () => {
+  const dir = join(__dirname, "../../agents");
+  const cases: Array<{ file: string; key: string; builder: string }> = [
+    { file: "x-writer.agent.yaml", key: "x-writer", builder: "buildWriterSystemPrompt" },
+    { file: "x-checker.agent.yaml", key: "x-checker", builder: "buildCheckSystemPrompt" },
+    { file: "x-collector.agent.yaml", key: "x-collector", builder: "buildExploreSystemPrompt" },
+  ];
+  test.each(cases)("$file は key=$key builder=$builder で解決", ({ file, key, builder }) => {
+    const m = parseManifest(readFileSync(join(dir, file), "utf8"));
+    expect(m.key).toBe(key);
+    expect(m.system_builder).toBe(builder);
+    // system_builder が SYSTEM_BUILDERS に登録済みで materialize できる
+    expect(materializeSystem(m).length).toBeGreaterThan(0);
+    // tool 種別キーが全て解決できる（未知キーがあれば throw）
+    expect(resolveTools(m).length).toBeGreaterThan(0);
+  });
+
+  test("collector_tools は 5 つの探索 tool に展開される（+ web_toolset = 6）", () => {
+    const m = parseManifest(readFileSync(join(dir, "x-collector.agent.yaml"), "utf8"));
+    const tools = resolveTools(m) as Array<Record<string, unknown>>;
+    // collector_tools(5) + web_toolset(1)
+    expect(tools.length).toBe(6);
+    const names = tools.map((t) => t.name ?? t.type);
+    expect(names).toContain("search_tweets");
+    expect(names).toContain("get_thread");
+    expect(names).toContain("agent_toolset_20260401");
+  });
+});
+
 describe("materializeSystem / resolveTools", () => {
   const manifest = parseManifest(WRITER_YAML);
 

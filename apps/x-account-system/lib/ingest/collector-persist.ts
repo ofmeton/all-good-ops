@@ -51,6 +51,8 @@ export function buildMaterialRow(
   redactedText: string,
   pii: boolean,
   translation?: string,
+  /** 永続 collector の explore MA session id（収集の判断根拠を 1B が遡れるよう meta に刻む）。 */
+  collectorSessionId?: string,
 ): MaterialRow {
   const createdAtParsed = new Date(c.tweet.createdAt);
   const collected_at = Number.isFinite(createdAtParsed.getTime())
@@ -79,6 +81,8 @@ export function buildMaterialRow(
       scores: c.scores,
       score_reason: c.scoreReason,
       discovery: c.discovery,
+      // 探索した永続 collector session（後続 1B が「なぜ集めたか」を遡る相関キー）。
+      ...(collectorSessionId ? { collector_session_id: collectorSessionId } : {}),
       collected_at,
       selection_status: "collected",
       cost_jpy: c.costJpy,
@@ -100,12 +104,14 @@ export async function saveScoredMaterials(
   sb: SupabaseClient,
   scored: ScoredCandidate[],
   translations?: Map<string, string>,
+  /** explore MA session id（各 row の meta.collector_session_id に刻む）。 */
+  collectorSessionId?: string,
 ): Promise<number> {
   const fresh = await dedupCandidates(sb, scored);
   let saved = 0;
   for (const c of fresh) {
     const { redactedText, highRiskHits } = redact(c.tweet.text);
-    const row = buildMaterialRow(c, redactedText, highRiskHits > 0, translations?.get(c.tweet.id));
+    const row = buildMaterialRow(c, redactedText, highRiskHits > 0, translations?.get(c.tweet.id), collectorSessionId);
     const { error } = await sb.from("materials_store").insert(row);
     if (error) {
       console.warn(JSON.stringify({ level: "warn", msg: "[collect] material insert failed", tweet_id: c.tweet.id, error: error.message }));

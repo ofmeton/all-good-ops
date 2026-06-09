@@ -94,11 +94,13 @@ function draft(id: string, over: Partial<Draft> = {}): Draft {
 function checkSession(v: Partial<Record<string, unknown>> = {}): NonNullable<RunCheckDeps["runSession"]> {
   return (async (deps: any) => {
     deps.customToolHandler?.("submit_check", { verdict: "ok", risk_level: "low", duplicate: "ok", factcheck: "ok", flags: [], ...v });
-    return { ok: true, terminal: "idle", stopReason: "end_turn", transitions: [], agentText: "x", toolCalls: [], unhandledTools: [], wallClockMs: 1, ids: {}, sessionUsage: { input_tokens: 500, output_tokens: 100 } };
+    return { ok: true, terminal: "idle", stopReason: "end_turn", transitions: [], agentText: "x", toolCalls: [], unhandledTools: [], wallClockMs: 1, ids: { env: "env_chk", agent: "agent_chk", session: "chk_x" }, sessionUsage: { input_tokens: 500, output_tokens: 100 } };
   }) as any;
 }
 const silent = { warn: () => {}, info: () => {} };
 const noRecent: NonNullable<RunCheckDeps["fetchRecent"]> = (async () => []) as any;
+/** 永続 checker agent 参照を返す getAgentRef fake（実 DB を叩かない）。 */
+const okRef: NonNullable<RunCheckDeps["getAgentRef"]> = async () => ({ agentId: "agent_chk", version: "2", environmentId: "env_chk" });
 
 /** pushApproval 呼出を記録する注入。 */
 function recorder() {
@@ -108,7 +110,7 @@ function recorder() {
 }
 
 const base = (state: St, extra: Partial<RunCheckDeps> = {}): RunCheckDeps => ({
-  env: {} as any, sb: makeSb(state), apiKey: "k", logger: silent, fetchRecent: noRecent, runSession: checkSession(), pushApproval: recorder().fn, ...extra,
+  env: {} as any, sb: makeSb(state), apiKey: "k", logger: silent, fetchRecent: noRecent, runSession: checkSession(), getAgentRef: okRef, pushApproval: recorder().fn, ...extra,
 });
 
 describe("runCheck", () => {
@@ -117,6 +119,42 @@ describe("runCheck", () => {
     const r = await runCheck(base(state));
     expect(r).toMatchObject({ checked: 0, flagged: 0, errorCount: 0 });
     expect(r.perDraft).toHaveLength(0);
+  });
+
+  // ── P3: 永続ランタイム経路 ──
+  test("永続: runSession に agentRef/environmentId を渡し system/tools は送らない", async () => {
+    const state: St = { drafts: [draft("d1")] };
+    let seen: any = {};
+    const capture = (async (deps: any) => {
+      seen = deps;
+      deps.customToolHandler?.("submit_check", { verdict: "ok", risk_level: "low", duplicate: "ok", factcheck: "ok", flags: [] });
+      return { ok: true, terminal: "idle", stopReason: "end_turn", transitions: [], agentText: "x", toolCalls: [], unhandledTools: [], wallClockMs: 1, ids: { session: "chk_x" }, sessionUsage: { input_tokens: 1, output_tokens: 1 } };
+    }) as any;
+    await runCheck(base(state, { runSession: capture }));
+    expect(seen.agentRef).toEqual({ id: "agent_chk", version: "2" });
+    expect(seen.environmentId).toBe("env_chk");
+    expect(seen.agent).toBeUndefined(); // 永続 agent に焼かれている
+    expect(seen.customToolHandler).toBeInstanceOf(Function);
+  });
+
+  test("永続: perDraft に maSessionId（checker session）を載せる", async () => {
+    const state: St = { drafts: [draft("d1")] };
+    const r = await runCheck(base(state));
+    expect(r.perDraft[0].maSessionId).toBe("chk_x");
+  });
+
+  test("registry miss: getAgentRef throw なら点検せず pending 据置・error（誤処理防止）", async () => {
+    const state: St = { drafts: [draft("d1")] };
+    const rec = recorder();
+    const missRef: NonNullable<RunCheckDeps["getAgentRef"]> = async () => {
+      throw new Error("[ma-registry] agent not bootstrapped: x-checker");
+    };
+    const r = await runCheck(base(state, { getAgentRef: missRef, pushApproval: rec.fn }));
+    expect(r).toMatchObject({ checked: 0, errorCount: 1 });
+    expect(r.perDraft[0].outcome).toBe("error");
+    expect(r.perDraft[0].error).toMatch(/not bootstrapped/);
+    expect(state.drafts[0].editor_status).toBe("pending"); // bootstrap 後に再点検可
+    expect(rec.calls).toHaveLength(0);
   });
 
   test("正常(approved+flag): unverifiable flag → approved・risk high・risk_reasons・editor_output・pushApproval", async () => {

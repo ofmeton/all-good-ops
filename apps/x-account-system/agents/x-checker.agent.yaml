@@ -1,0 +1,16 @@
+# x-checker.agent.yaml — 永続 Managed Agent の seed マニフェスト（チェックAg）
+#
+# bootstrap-ma-agents がこれを読んで Anthropic 側に永続 agent を create/update し、
+# xad.ma_agents に登録する。run-check は registry の agent_key="x-checker" を引いて
+# 永続 session を起動する（重複＋ファクトの嘘フィルタ）。
+#
+# プロンプト原文・tool 実体は重複させない。system_builder / tool 種別キーが指す SSOT は
+# lib/check/check-prompts.ts（buildCheckSystemPrompt / SUBMIT_CHECK_TOOL）。
+
+key: x-checker                      # ma_agents.agent_key（registry 引き当てキー）
+name: x-checker                     # Anthropic 側 agent 表示名
+model: claude-haiku-4-5             # 点検は「明らかに変か」の低い bar（check-config.checkerModel と整合）
+system_builder: buildCheckSystemPrompt    # lib/ma/bootstrap-core.ts SYSTEM_BUILDERS の識別子
+tools:                              # MA_TOOL_REGISTRY の種別キー
+  - web_toolset                     # web_search / web_fetch（元ネタ外の新情報の裏取り）
+  - submit_check                    # 出力契約 custom tool（最後に必ず呼ばせる）

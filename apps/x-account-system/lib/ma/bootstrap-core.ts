@@ -6,12 +6,16 @@
  * agents.create|update / ma_agents upsert は scripts/bootstrap-ma-agents.ts（impure）が
  * これらを使って行う。分離理由: bootstrap ロジックを実 API を叩かず単体テストするため。
  *
- * プロンプト/tool の SSOT は lib/curation/compose-prompts.ts。マニフェストは識別子
- * （system_builder / tool 種別キー）だけを持ち、本文は重複させない。
+ * プロンプト/tool の SSOT は各工程モジュール（compose-prompts / check-prompts /
+ * collector-*）。マニフェストは識別子（system_builder / tool 種別キー）だけを持ち、
+ * 本文は重複させない。bootstrap-core はこれらを集約して create/update に渡す。
  */
 import { createHash } from "node:crypto";
 import yaml from "js-yaml";
 import { buildWriterSystemPrompt, COMPOSE_TOOL_REGISTRY } from "../curation/compose-prompts.js";
+import { buildCheckSystemPrompt, CHECK_TOOL_REGISTRY } from "../check/check-prompts.js";
+import { buildExploreSystemPrompt } from "../ingest/collector-prompts.js";
+import { COLLECTOR_TOOL_REGISTRY } from "../ingest/collector-tools.js";
 
 /** *.agent.yaml の seed マニフェスト形（checker/collector/editor でも使い回す汎用形）。 */
 export interface AgentManifest {
@@ -30,6 +34,18 @@ export interface AgentManifest {
 /** system_builder 識別子 → ビルダ関数。マニフェストはこのキーだけを持つ。 */
 export const SYSTEM_BUILDERS: Record<string, () => string> = {
   buildWriterSystemPrompt,
+  buildCheckSystemPrompt,
+  buildExploreSystemPrompt,
+};
+
+/**
+ * 全工程の tool 種別キー → 定義。配列値のキーは複数 tool に展開する
+ * （例 collector_tools = 5 つの探索 tool）。web_toolset は compose の SSOT を共有。
+ */
+const MA_TOOL_REGISTRY: Record<string, unknown> = {
+  ...COMPOSE_TOOL_REGISTRY,
+  ...CHECK_TOOL_REGISTRY,
+  ...COLLECTOR_TOOL_REGISTRY,
 };
 
 /** xad.ma_agents の行（差分計算に使う最小列）。 */
@@ -86,15 +102,18 @@ export function materializeSystem(manifest: AgentManifest): string {
   return builder();
 }
 
-/** tool 種別キーを定義に解決（未知キーは throw）。agent に焼く tools を返す。 */
+/** tool 種別キーを定義に解決（未知キーは throw・配列値は展開）。agent に焼く tools を返す。 */
 export function resolveTools(manifest: AgentManifest): unknown[] {
-  return manifest.tools.map((toolKey) => {
-    const def = COMPOSE_TOOL_REGISTRY[toolKey];
-    if (!def) {
+  const out: unknown[] = [];
+  for (const toolKey of manifest.tools) {
+    const def = MA_TOOL_REGISTRY[toolKey];
+    if (def === undefined) {
       throw new Error(`[bootstrap] unknown tool key: ${toolKey}`);
     }
-    return def;
-  });
+    if (Array.isArray(def)) out.push(...def);
+    else out.push(def);
+  }
+  return out;
 }
 
 /** system 本文の安定ハッシュ（drift 検知用・16 hex 桁）。 */

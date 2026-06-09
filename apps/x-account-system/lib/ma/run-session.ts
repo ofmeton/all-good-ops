@@ -244,8 +244,11 @@ export async function runMaSession(deps: RunMaSessionDeps): Promise<MaSessionRes
     }
 
     // 1–2. Environment / Agent
-    //   persistent: 既存 env/agent を再利用（create スキップ）。
-    //   ephemeral:  毎回 create する（元仕様）。
+    //   persistent: 既存 env/agent を再利用（create スキップ）。本番 3 工程（writer/
+    //               checker/collector）は全て agentRef を渡すこの経路（P2/P3 で移行済）。
+    //   ephemeral:  毎回 create する（元仕様）。**現在 prod から呼ばれない＝テスト専用**
+    //               （後方互換・stub・SDK 版数ガード等の単体テスト資産として残置。削除しない）。
+    //               永続前提が崩れた緊急時のフォールバックとしても機能する。
     let agentSessionRef: { type: "agent"; id: string; version?: string };
     if (persistent) {
       ids.env = deps.environmentId;

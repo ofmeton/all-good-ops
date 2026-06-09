@@ -68,6 +68,15 @@ export const COLLECTOR_TOOLS = [
   },
 ] as const;
 
+/**
+ * collector の tool 種別キー → 定義（bootstrap が agent に焼く SSOT）。
+ * collector_tools は 5 つの探索 tool に展開される（bootstrap-core.resolveTools が flatten）。
+ * web_toolset（内蔵 web_search/web_fetch）は compose 側 SSOT を共有するため別キーで足す。
+ */
+export const COLLECTOR_TOOL_REGISTRY: Record<string, unknown> = {
+  collector_tools: COLLECTOR_TOOLS,
+};
+
 export interface ToolApi {
   searchTweets: typeof searchTweets;
   getTrends: typeof getTrends;

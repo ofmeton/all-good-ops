@@ -15,9 +15,10 @@ export interface CollectorConfig {
   trendWoeids: number[];
   /** L5(数値側): 3軸の重み（overall 算出の参考。LLM に rubric として渡す） */
   scoringWeights: { freshness: number; velocity: number; target_fit: number };
-  /** L8: 1 run で fetch する最大件数（budget 上限） */
+  /** L8: 1 run で fetch する最大件数（budget 上限。P3 後は MA explore の soft cap として handler が参照） */
   maxFetchPerRun: number;
-  /** L8: 探索ループの最大反復（agent の tool_use 往復上限） */
+  /** L8: 探索ループの最大反復の目安。P3 で explore は永続 MA session 化し、ループ境界は
+   *  session の timeoutMs + maxFetchPerRun soft cap + agent 判断が担う（本値は情報用に据置）。 */
   maxExploreIterations: number;
   /** L7: scoring モデル */
   scoringModel: string;
