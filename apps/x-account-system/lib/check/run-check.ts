@@ -27,6 +27,8 @@ import { getAgentRef as getAgentRefDefault, type AgentRef } from "../ma/agent-re
 import { fetchRecentPostBodies } from "../editor/db.js";
 import { CHECK_CONFIG, type CheckConfig } from "./check-config.js";
 import { costUsdFor, costJpyFor } from "../cost/cost-of.js";
+import { insertSessionEvents, recordRunSession } from "../trace/session-event-store.js";
+import type { SessionEventInput } from "../trace/types.js";
 import type { Env } from "../../src/worker.js";
 
 /** 永続 checker agent の registry key（ma_agents.agent_key / x-checker.agent.yaml と一致）。 */
@@ -268,6 +270,7 @@ export async function runCheck(deps: RunCheckDeps): Promise<CheckRunResult> {
       return `No handler for tool "${name}".`;
     };
 
+    const sessionEvents: SessionEventInput[] = [];
     let res;
     try {
       res = await runSession({
@@ -280,6 +283,7 @@ export async function runCheck(deps: RunCheckDeps): Promise<CheckRunResult> {
         customToolHandler,
         timeoutMs: cfg.timeoutMs,
         now: deps.now,
+        onEvent: (e) => sessionEvents.push(e),
         // onTrace は runSession に委譲せず自前で発火（costJpy を載せるため。下記参照）。
       });
     } catch (e) {
@@ -287,6 +291,16 @@ export async function runCheck(deps: RunCheckDeps): Promise<CheckRunResult> {
     }
     // 永続 session id を perDraft/run_trace.output 用に捕捉（後続 1B が checker↔draft を相関）。
     const maSessionId = res.ids?.session;
+    // 1B 観測: checker session を永続化＋draft に checker_session_id を相関（fail-open）。
+    if (maSessionId) {
+      await insertSessionEvents(maSessionId, "checker", sessionEvents);
+      await recordRunSession({ runId: deps.runId ?? "", stageId: "check", sessionId: maSessionId, agentKey: "checker" });
+      try {
+        await sb.from("post_drafts").update({ checker_session_id: maSessionId }).eq("id", d.id);
+      } catch {
+        /* fail-open: 相関欠落でも点検本処理は継続 */
+      }
+    }
 
     // cost/trace は token を消費した全経路で発火する（失敗 session も計上）。
     // run-compose と同じく stub/!ok ガードの前で 1 回だけ通知＝失敗で焼いた token を

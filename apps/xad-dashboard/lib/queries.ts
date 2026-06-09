@@ -50,5 +50,83 @@ export async function runTimeline(runId: string) {
     .eq("run_id", runId)
     .order("started_at", { ascending: true })
     .order("id", { ascending: true });
-  return { run: run.data, traces: traces ?? [] };
+  const { data: sessions } = await sb
+    .from("run_session")
+    .select("*")
+    .eq("run_id", runId)
+    .order("id", { ascending: true });
+  return { run: run.data, traces: traces ?? [], sessions: sessions ?? [] };
+}
+
+export async function sessionEvents(sessionId: string) {
+  const sb = serverSupabase();
+  const { data } = await sb
+    .from("session_event")
+    .select("*")
+    .eq("session_id", sessionId)
+    .order("seq", { ascending: true });
+  return data ?? [];
+}
+
+export interface ProvenanceMaterial {
+  id: string;
+  sourceRef: string | null;
+  collectorSessionId: string | null;
+}
+export interface ComposeProvenance {
+  writerSessionId: string | null;
+  materials: ProvenanceMaterial[];
+}
+
+// post_drafts 行から core_idea→materials を辿る共通コア（draft id 取得方法に依存しない）。
+async function provenanceFromDraft(
+  draft: { core_idea_id?: string; writer_session_id?: string } | null,
+): Promise<ComposeProvenance> {
+  const sb = serverSupabase();
+  const writerSessionId = draft?.writer_session_id ?? null;
+  const coreIdeaId = draft?.core_idea_id;
+  if (!coreIdeaId) return { writerSessionId, materials: [] };
+
+  const { data: ci } = await sb
+    .from("core_ideas")
+    .select("source_material_ids")
+    .eq("id", coreIdeaId)
+    .single();
+  const ids = ((ci as { source_material_ids?: string[] } | null)?.source_material_ids ?? []) as string[];
+  if (ids.length === 0) return { writerSessionId, materials: [] };
+
+  const { data: mats } = await sb
+    .from("materials_store")
+    .select("id,source_ref,meta")
+    .in("id", ids);
+  const materials: ProvenanceMaterial[] = (mats ?? []).map((m: Record<string, unknown>) => ({
+    id: m.id as string,
+    sourceRef: (m.source_ref as string | null) ?? null,
+    collectorSessionId: ((m.meta as { collector_session_id?: string } | null)?.collector_session_id) ?? null,
+  }));
+  return { writerSessionId, materials };
+}
+
+export async function composeProvenance(draftId: string): Promise<ComposeProvenance> {
+  const sb = serverSupabase();
+  const { data: draft } = await sb
+    .from("post_drafts")
+    .select("id,core_idea_id,writer_session_id")
+    .eq("id", draftId)
+    .single();
+  return provenanceFromDraft(draft as { core_idea_id?: string; writer_session_id?: string } | null);
+}
+
+// writer session から直接 provenance を引く（runs/[id] 用。post_drafts の二度引きを避ける）。
+export async function composeProvenanceByWriterSession(
+  sessionId: string,
+): Promise<ComposeProvenance | null> {
+  const sb = serverSupabase();
+  const { data: draft } = await sb
+    .from("post_drafts")
+    .select("core_idea_id,writer_session_id")
+    .eq("writer_session_id", sessionId)
+    .single();
+  if (!draft) return null;
+  return provenanceFromDraft(draft as { core_idea_id?: string; writer_session_id?: string });
 }

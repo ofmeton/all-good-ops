@@ -15,6 +15,8 @@ import { scoreCandidates, type Candidate } from "./collector-scoring.js";
 import { translateCandidates } from "./collector-translate.js";
 import { saveScoredMaterials } from "./collector-persist.js";
 import { costUsdFor, USD_JPY_RATE } from "../cost/cost-of.js";
+import { insertSessionEvents, recordRunSession } from "../trace/session-event-store.js";
+import type { SessionEventInput } from "../trace/types.js";
 
 /** 永続 collector agent の registry key（ma_agents.agent_key / x-collector.agent.yaml と一致）。 */
 const COLLECTOR_AGENT_KEY = "x-collector";
@@ -44,6 +46,7 @@ export interface RunCollectDeps {
   runSession?: typeof runMaSession;
   /** テスト注入用（既定 agent-registry.getAgentRef）。実 DB を叩かずに永続参照を解決する。 */
   getAgentRef?: (sb: SupabaseClient, key: string) => Promise<AgentRef>;
+  runId?: string;
 }
 
 /** 探索（永続 MA session）で候補を集約し、採点・保存。inserted 件数を返す。 */
@@ -91,6 +94,7 @@ export async function runCollect(deps: RunCollectDeps): Promise<number> {
     }
   };
 
+  const sessionEvents: SessionEventInput[] = [];
   let res: Awaited<ReturnType<typeof runMaSession>> | undefined;
   try {
     res = await runSession({
@@ -100,6 +104,7 @@ export async function runCollect(deps: RunCollectDeps): Promise<number> {
       environmentId: agentRef.environmentId,
       userMessage,
       customToolHandler,
+      onEvent: (e) => sessionEvents.push(e),
     });
   } catch (e) {
     console.warn(JSON.stringify({ level: "error", msg: "[collect] explore session failed", error: String(e) }));
@@ -108,6 +113,11 @@ export async function runCollect(deps: RunCollectDeps): Promise<number> {
     collectorSessionId = res.ids?.session;
     tokensIn = (res.sessionUsage as { input_tokens?: number } | undefined)?.input_tokens ?? 0;
     tokensOut = (res.sessionUsage as { output_tokens?: number } | undefined)?.output_tokens ?? 0;
+    if (collectorSessionId) {
+      // 1B 観測: collector explore session を永続化（fail-open）。
+      await insertSessionEvents(collectorSessionId, "collector", sessionEvents);
+      await recordRunSession({ runId: deps.runId ?? "", stageId: "collect", sessionId: collectorSessionId, agentKey: "collector" });
+    }
   }
 
   // explore で焼いた token は候補 0 でも計上する（空 explore 連発も runaway シグナル）。

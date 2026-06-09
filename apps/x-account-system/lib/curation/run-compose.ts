@@ -20,6 +20,8 @@ import { buildComposeUserBlocks, COMPOSE_FMATS } from "./compose-prompts.js";
 import { isKnownTemplate } from "./compose-templates.js";
 import { classifyRules } from "../hook-classifier/classify-rules.js";
 import { costUsdFor, costJpyFor } from "../cost/cost-of.js";
+import { insertSessionEvents, recordRunSession } from "../trace/session-event-store.js";
+import type { SessionEventInput } from "../trace/types.js";
 
 /** 永続 writer agent の registry key（ma_agents.agent_key / x-writer.agent.yaml と一致）。 */
 const WRITER_AGENT_KEY = "x-writer";
@@ -163,6 +165,7 @@ export async function runCompose(deps: RunComposeDeps): Promise<ComposeRunResult
       return `No handler for tool "${name}".`;
     };
 
+    const sessionEvents: SessionEventInput[] = [];
     let res;
     try {
       res = await runSession({
@@ -175,6 +178,7 @@ export async function runCompose(deps: RunComposeDeps): Promise<ComposeRunResult
         customToolHandler,
         timeoutMs: cfg.timeoutMs,
         now: deps.now,
+        onEvent: (e) => sessionEvents.push(e),
         // onTrace は runSession に委譲せず、cost-of で costJpy を載せて自前で発火する
         // （runMaSession の onTrace は tokens のみで costJpy を落とすため。queue 集約が
         //  cost_jpy/cost_ledger の単一ソースになるよう per-material で 1 回だけ通知）。
@@ -189,6 +193,11 @@ export async function runCompose(deps: RunComposeDeps): Promise<ComposeRunResult
     const costJpy = costJpyFor(cfg.writerModel, inTok, outTok);
     // trace/cost_ledger 用に costJpy を載せて通知（run_trace.cost_jpy の単一ソース）。
     deps.onTrace?.({ model: cfg.writerModel, tokensIn: inTok, tokensOut: outTok, costJpy });
+    // 1B 観測: writer session のイベントと run→session ブリッジを永続化（fail-open）。
+    if (res.ids?.session) {
+      await insertSessionEvents(res.ids.session, "writer", sessionEvents);
+      await recordRunSession({ runId: deps.runId ?? "", stageId: "compose", sessionId: res.ids.session, agentKey: "writer" });
+    }
 
     // stub が返るのは本番では設定ミス（IN_MEMORY_FALLBACK 誤設定/キー欠落）。draft 化しない。
     if (res.stub) {
