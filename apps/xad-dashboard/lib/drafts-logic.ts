@@ -42,6 +42,8 @@ export interface ApprovalDraft {
   sources: ApprovalSource[];
   /** 既に保存済みの写真添付 intent（approval_drafts.attachments）。承認時に上書きできる。 */
   attachments: Attachment[] | null;
+  /** 承認/却下時に記録された理由・メモ（任意）。Stage 2B で追加。view 行には常に存在（未入力は null）。 */
+  approval_reason: string | null;
 }
 
 /** 本文の上限（X 長文/記事も収まる安全側上限）。 */

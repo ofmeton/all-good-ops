@@ -22,11 +22,13 @@ export async function listPendingDrafts(limit = 100): Promise<ApprovalDraft[]> {
 }
 
 /** RPC で承認状態を原子更新（pending のみ claim）。claim 件数を返す。
- *  attachments 指定時のみ写真 upload intent を書く（null は既存値を維持＝後方互換）。 */
+ *  attachments 指定時のみ写真 upload intent を書く（null は既存値を維持＝後方互換）。
+ *  reason は承認/却下どちらでも記録可（null/未指定は既存値維持）。Stage 2B。 */
 export async function setApprovalStatus(
   ids: string[],
   status: "approved" | "rejected",
   attachments?: Attachment[] | null,
+  reason?: string | null,
 ): Promise<number> {
   const sb = serverSupabase();
   const { data, error } = await sb.rpc("set_approval_status", {
@@ -35,6 +37,7 @@ export async function setApprovalStatus(
     // 承認かつ写真添付がある時だけ渡す。空配列/未指定は null（既存値維持）。
     p_attachments:
       status === "approved" && attachments && attachments.length > 0 ? attachments : null,
+    p_reason: reason ?? null,
   });
   if (error) throw new Error(`set_approval_status failed: ${error.message}`);
   return (data as number) ?? 0;
