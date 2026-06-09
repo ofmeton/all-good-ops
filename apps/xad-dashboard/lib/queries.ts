@@ -58,16 +58,6 @@ export async function runTimeline(runId: string) {
   return { run: run.data, traces: traces ?? [], sessions: sessions ?? [] };
 }
 
-export async function runSessions(runId: string) {
-  const sb = serverSupabase();
-  const { data } = await sb
-    .from("run_session")
-    .select("*")
-    .eq("run_id", runId)
-    .order("id", { ascending: true });
-  return data ?? [];
-}
-
 export async function sessionEvents(sessionId: string) {
   const sb = serverSupabase();
   const { data } = await sb
@@ -88,15 +78,13 @@ export interface ComposeProvenance {
   materials: ProvenanceMaterial[];
 }
 
-export async function composeProvenance(draftId: string): Promise<ComposeProvenance> {
+// post_drafts 行から core_idea→materials を辿る共通コア（draft id 取得方法に依存しない）。
+async function provenanceFromDraft(
+  draft: { core_idea_id?: string; writer_session_id?: string } | null,
+): Promise<ComposeProvenance> {
   const sb = serverSupabase();
-  const { data: draft } = await sb
-    .from("post_drafts")
-    .select("id,core_idea_id,writer_session_id")
-    .eq("id", draftId)
-    .single();
-  const writerSessionId = (draft as { writer_session_id?: string } | null)?.writer_session_id ?? null;
-  const coreIdeaId = (draft as { core_idea_id?: string } | null)?.core_idea_id;
+  const writerSessionId = draft?.writer_session_id ?? null;
+  const coreIdeaId = draft?.core_idea_id;
   if (!coreIdeaId) return { writerSessionId, materials: [] };
 
   const { data: ci } = await sb
@@ -117,4 +105,28 @@ export async function composeProvenance(draftId: string): Promise<ComposeProvena
     collectorSessionId: ((m.meta as { collector_session_id?: string } | null)?.collector_session_id) ?? null,
   }));
   return { writerSessionId, materials };
+}
+
+export async function composeProvenance(draftId: string): Promise<ComposeProvenance> {
+  const sb = serverSupabase();
+  const { data: draft } = await sb
+    .from("post_drafts")
+    .select("id,core_idea_id,writer_session_id")
+    .eq("id", draftId)
+    .single();
+  return provenanceFromDraft(draft as { core_idea_id?: string; writer_session_id?: string } | null);
+}
+
+// writer session から直接 provenance を引く（runs/[id] 用。post_drafts の二度引きを避ける）。
+export async function composeProvenanceByWriterSession(
+  sessionId: string,
+): Promise<ComposeProvenance | null> {
+  const sb = serverSupabase();
+  const { data: draft } = await sb
+    .from("post_drafts")
+    .select("core_idea_id,writer_session_id")
+    .eq("writer_session_id", sessionId)
+    .single();
+  if (!draft) return null;
+  return provenanceFromDraft(draft as { core_idea_id?: string; writer_session_id?: string });
 }

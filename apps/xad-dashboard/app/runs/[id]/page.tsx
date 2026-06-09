@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { runTimeline, sessionEvents, composeProvenance } from "@/lib/queries";
+import { runTimeline, sessionEvents, composeProvenanceByWriterSession } from "@/lib/queries";
 import { consoleSessionUrl } from "@/lib/console-link";
 import { StatusBadge, statusTone } from "../status";
 import { SessionTrace } from "./SessionTrace";
@@ -36,18 +36,7 @@ export default async function RunDetail({ params }: { params: Promise<{ id: stri
     (sessions as any[]).map(async (s) => {
       const events = await sessionEvents(s.session_id);
       const provenance =
-        s.stage_id === "compose"
-          ? await (async () => {
-              const { serverSupabase } = await import("@/lib/supabase");
-              const sb = serverSupabase();
-              const { data: d } = await sb
-                .from("post_drafts")
-                .select("id")
-                .eq("writer_session_id", s.session_id)
-                .single();
-              return d ? await composeProvenance((d as { id: string }).id) : null;
-            })()
-          : null;
+        s.stage_id === "compose" ? await composeProvenanceByWriterSession(s.session_id) : null;
       return { session: s, events, provenance };
     }),
   );
