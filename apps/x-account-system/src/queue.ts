@@ -97,6 +97,7 @@ export async function handleJob(
             twitterApiKey: env.TWITTERAPI_IO_KEY,
             fetchImpl: fetch,
             apiKey: env.ANTHROPIC_API_KEY,
+            runId: rid,
             onTrace: (m) => {
               traceMeta = m;
             },
