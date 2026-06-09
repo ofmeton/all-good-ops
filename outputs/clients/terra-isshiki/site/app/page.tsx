@@ -2,6 +2,29 @@ import Image from "next/image";
 import Link from "next/link";
 import { SiteHeader } from "./_components/SiteHeader";
 import { HeroSlideshow } from "./_components/HeroSlideshow";
+import { RevealRoot } from "./_components/RevealRoot";
+
+// スクロール最初に要点を掴める「ファクト帯」。
+const FACTS = [
+  { label: "Type", value: "一棟貸し" },
+  { label: "Capacity", value: "最大 8 名" },
+  { label: "Size", value: "75 ㎡" },
+  { label: "Parking", value: "2 台" },
+  { label: "Check-in / out", value: "16:00 / 11:00" },
+  { label: "Beach", value: "徒歩 8 分" },
+];
+
+// 設備ハイライト（詳細は Rooms へ）。
+const AMENITIES = [
+  "フルキッチン",
+  "ひのきの風呂",
+  "ドラム式洗濯機",
+  "抹茶マシーン",
+  "高速 Wi-Fi",
+  "駐車場 2 台",
+  "TV / 動画配信",
+  "各室エアコン",
+];
 
 // FV は「建物の外観・内観が伝わる写真」のみ（世界観カットは不使用）。
 // 外観 → 内観を交互に並べ、第一印象で建物が伝わる構成。
@@ -82,29 +105,62 @@ export default function Home() {
         {/* Subtle paper noise */}
         <div aria-hidden className="paper-noise absolute inset-0 z-[2]" />
 
-        {/* Main copy — anchored to bottom-left corner */}
-        <div className="absolute bottom-12 left-6 md:bottom-20 md:left-12 z-10 max-w-[calc(100%-32px)] md:max-w-[80vw]">
+        {/* Local legibility scrim — 写真の明暗に依存せずコピーを必ず読めるように、
+            下端側を確実に暗くする（特にスマホ）。コピー(z-10)の背後 z-[3]。 */}
+        <div
+          aria-hidden
+          className="absolute inset-x-0 bottom-0 z-[3] h-[58%] md:h-[48%]"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(26,20,16,0) 0%, rgba(26,20,16,0.42) 55%, rgba(26,20,16,0.72) 100%)",
+          }}
+        />
+
+        {/* Main copy — anchored to bottom-left corner.
+            スマホは下部の予約バー(MobileStickyReserve)と重ならないよう余白を確保。 */}
+        <div className="absolute bottom-24 left-6 md:bottom-20 md:left-12 z-10 max-w-[calc(100%-32px)] md:max-w-[80vw]">
           <p
-            className="fade-up font-garamond italic text-[10px] md:text-[clamp(10.5px,0.71vw,18.2px)] tracking-[0.4em] text-(--color-base-light)/80 mb-6"
+            className="fade-up font-garamond italic text-[11px] md:text-[clamp(10.5px,0.71vw,18.2px)] tracking-[0.4em] text-(--color-base-light)/85 mb-6"
             style={{ animationDelay: "0.7s" }}
           >
             Hayama, Kanagawa
           </p>
           <h1
-            className="fade-up font-serif font-medium text-[clamp(17px,4.6vw,24px)] leading-[1.18] md:text-[clamp(19.6px,1.75vw,42px)] md:leading-[1.12] tracking-[0.02em] text-(--color-base-light)"
+            className="fade-up font-serif font-medium text-[clamp(21px,6vw,30px)] leading-[1.2] md:text-[clamp(19.6px,1.75vw,42px)] md:leading-[1.12] tracking-[0.02em] text-(--color-base-light)"
             style={{ animationDelay: "0.95s" }}
           >
             <span className="block whitespace-nowrap">ゆっくり流れる、</span>
             <span className="block whitespace-nowrap">葉山時間。</span>
           </h1>
           <p
-            className="fade-up mt-6 md:mt-8 font-mincho text-[12px] md:text-[clamp(10.5px,0.66vw,16.8px)] leading-[1.85] tracking-[0.14em] text-(--color-base-light)/85"
+            className="fade-up mt-6 md:mt-8 font-mincho text-[14px] md:text-[clamp(10.5px,0.66vw,16.8px)] leading-[1.9] tracking-[0.08em] text-(--color-base-light)/90"
             style={{ animationDelay: "1.25s" }}
           >
             一色海岸まで徒歩 8 分。<br />
             BEAT ICE が手がける、葉山一色の一棟貸し。
           </p>
         </div>
+      </section>
+
+      {/* Facts strip — スクロール最初に要点を掴む */}
+      <section className="relative bg-(--color-base-light) border-b border-(--color-base-dark)/8 px-6 md:px-12">
+        <dl className="mx-auto max-w-[1480px] grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6">
+          {FACTS.map((f, i) => (
+            <div
+              key={f.label}
+              data-reveal
+              className="reveal flex flex-col gap-2 px-2 py-7 md:py-9 border-t border-(--color-base-dark)/10"
+              style={{ transitionDelay: `${i * 70}ms` }}
+            >
+              <dt className="font-garamond italic text-[9.5px] md:text-[clamp(8.4px,0.49vw,12.6px)] tracking-[0.32em] uppercase text-(--color-base-dark)/45">
+                {f.label}
+              </dt>
+              <dd className="font-serif text-[14px] md:text-[clamp(13px,0.9vw,21px)] tracking-[0.04em] text-(--color-base-dark)">
+                {f.value}
+              </dd>
+            </div>
+          ))}
+        </dl>
       </section>
 
       {/* Concept — about から移設した本文 */}
@@ -118,7 +174,7 @@ export default function Home() {
               風景に、息を整える。
             </p>
           </div>
-          <div className="min-w-0">
+          <div data-reveal className="reveal min-w-0">
             <h2 className="font-serif text-[18px] md:text-[clamp(19.04px,1.4vw,35.84px)] leading-[1.36] tracking-[0.04em] text-(--color-base-dark) mb-10">
               <span className="block">葉山への愛から生まれた、</span>
               <span className="block">一棟貸しの宿。</span>
@@ -164,7 +220,8 @@ export default function Home() {
               <Link
                 href={band.href}
                 aria-label={`${band.jp}（${band.en}）を見る`}
-                className="group relative aspect-[4/3] md:aspect-auto md:min-h-[68svh] w-full overflow-hidden bg-(--color-base-dark)/10"
+                data-reveal
+                className="reveal group relative aspect-[4/3] md:aspect-auto md:min-h-[68svh] w-full overflow-hidden bg-(--color-base-dark)/10"
               >
                 <Image
                   src={band.img}
@@ -184,7 +241,11 @@ export default function Home() {
                 />
               </Link>
 
-              <div className="px-6 py-[clamp(56px,7vw,112px)] md:px-12 lg:px-20 flex flex-col justify-center">
+              <div
+                data-reveal
+                className="reveal px-6 py-[clamp(56px,7vw,112px)] md:px-12 lg:px-20 flex flex-col justify-center"
+                style={{ transitionDelay: "120ms" }}
+              >
                 <p className="font-garamond italic text-[11px] md:text-[clamp(9.1px,0.6vw,15.4px)] tracking-[0.4em] uppercase text-(--color-soil) mb-5">
                   {band.num} — {band.en}
                 </p>
@@ -210,6 +271,48 @@ export default function Home() {
         })}
       </section>
 
+      {/* Amenities highlight — 設備ハイライト（詳細は Rooms へ） */}
+      <section className="relative bg-(--color-paper) px-6 py-[clamp(80px,8vw,128px)] md:px-12">
+        <div className="mx-auto max-w-[1480px]">
+          <p
+            data-reveal
+            className="reveal font-garamond italic text-[clamp(11px,0.6vw,15.4px)] tracking-[0.4em] uppercase text-(--color-soil) mb-4"
+          >
+            Amenities
+          </p>
+          <h2
+            data-reveal
+            className="reveal font-serif text-[18px] md:text-[clamp(17.92px,1.4vw,35.84px)] leading-[1.4] tracking-[0.04em] text-(--color-base-dark) mb-12 md:mb-16"
+          >
+            暮らすように過ごす、設備。
+          </h2>
+          <ul className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-px bg-(--color-base-dark)/10 border border-(--color-base-dark)/10">
+            {AMENITIES.map((a, i) => (
+              <li
+                key={a}
+                data-reveal
+                className="reveal bg-(--color-paper) px-5 py-7 md:py-9 font-mincho text-[13.5px] md:text-[clamp(11.2px,0.71vw,18.2px)] tracking-[0.06em] text-(--color-base-dark)/85"
+                style={{ transitionDelay: `${i * 55}ms` }}
+              >
+                {a}
+              </li>
+            ))}
+          </ul>
+          <div data-reveal className="reveal mt-12">
+            <Link
+              href="/rooms"
+              className="group inline-flex items-center gap-4 font-garamond text-[11px] md:text-[clamp(9.8px,0.6vw,15.4px)] tracking-[0.32em] uppercase text-(--color-base-dark)"
+            >
+              <span className="relative">
+                View all facilities
+                <span className="absolute -bottom-1 left-0 h-px w-full bg-(--color-base-dark)/30 transition-colors duration-500 group-hover:bg-(--color-base-dark)" />
+              </span>
+              <span aria-hidden className="text-[12px]">→</span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="bg-(--color-base-dark) text-(--color-base-light) px-6 py-[clamp(64px,7vw,112px)] md:px-12">
         <div className="mx-auto max-w-[1640px] grid gap-10 md:grid-cols-[1fr_auto] md:items-end">
@@ -230,13 +333,15 @@ export default function Home() {
             className="group inline-flex items-center gap-3 font-garamond text-[10.5px] md:text-[clamp(9.1px,0.49vw,12.6px)] tracking-[0.32em] uppercase border border-(--color-base-light)/20 px-7 py-4 md:px-[clamp(28px,2.19vw,56px)] md:py-[clamp(16px,1.09vw,28px)] hover:bg-(--color-base-light)/8 transition-colors"
           >
             <span>Reserve on Airbnb</span>
-            <span aria-hidden>→</span>
+            <span aria-hidden className="cta-arrow group-hover:[animation-play-state:paused]">→</span>
           </a>
         </div>
         <p className="mt-12 md:mt-16 font-garamond text-[8.5px] md:text-[7.7px] lg:text-[8.4px] tracking-[0.32em] uppercase opacity-55 text-center md:text-left">
           © 2026 TERRA HAYAMA. All rights reserved.
         </p>
       </footer>
+
+      <RevealRoot />
     </main>
   );
 }

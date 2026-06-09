@@ -69,9 +69,17 @@ export default function RootLayout({
   return (
     <html
       lang="ja"
+      suppressHydrationWarning
       className={`${notoSerifJP.variable} ${zenOldMincho.variable} ${ebGaramond.variable} h-full antialiased`}
     >
       <body className="min-h-full">
+        {/* reveal はJS有効時のみ隠す。ペイント前に html へ class を付与し、
+            no-JS では本文を常に表示（コンテンツが消えないように）。 */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: "document.documentElement.classList.add('js-reveal')",
+          }}
+        />
         {children}
         <SideReserve />
         <MobileStickyReserve />
