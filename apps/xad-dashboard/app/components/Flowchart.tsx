@@ -26,9 +26,9 @@ export function Flowchart({ latest, onSelect }:
   const edges: Edge[] = STAGES.flatMap((s) =>
     s.downstream.map((d) => ({ id: `${s.id}-${d}`, source: s.id, target: d })));
   return (
-    <div style={{ height: "70vh" }}>
+    <div className="h-full w-full">
       <ReactFlow nodes={nodes} edges={edges} onNodeClick={(_, n) => onSelect(n.id)} fitView>
-        <Background /><Controls />
+        <Background color="#e2e8f0" gap={20} /><Controls />
       </ReactFlow>
     </div>
   );
