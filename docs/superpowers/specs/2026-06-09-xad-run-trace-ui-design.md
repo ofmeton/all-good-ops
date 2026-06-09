@@ -60,16 +60,19 @@
 | stage_id | text not null | `collect` / `compose` / `check` |
 | session_id | text not null | 対応 session |
 | agent_key | text | 同上 |
-| ref_kind | text | `draft` / `material_batch` / null（この session が産んだ主成果物の種別） |
-| ref_id | text | draft id 等（compose/check は draft id。collect は null か batch 識別） |
 | created_at | timestamptz default now() | |
 
 - index `(run_id)`、index `(session_id)`
 - compose/check は 1 run → N session を素直に表現（1行/session）。collect は 1 run → 1 session。
 - これで UI は `run_session WHERE run_id=?` 一発で run の全 session を取得できる。
+- **session→成果物の相関は別途**（下記既存テーブル）。run_session は純ブリッジに保つ（ref 列は持たない）。
 
-### 既存テーブル（変更なし、provenance 用に読む）
-- `post_drafts`: `run_id` / `writer_session_id` / `core_idea_id`
+### 3. `post_drafts.checker_session_id`（新列）
+- checker session → draft を `writer_session_id` と対称に張る（check の verdict 更新時に書込）。
+- これで check session→draft が queryable（従来は `run_trace.output_json.perDraft[].maSessionId` に埋没）。
+
+### 既存テーブル（provenance 用に読む）
+- `post_drafts`: `run_id` / `writer_session_id` / `checker_session_id`(新) / `core_idea_id`
 - `core_ideas`: `source_material_ids[]`
 - `materials_store`: `meta.collector_session_id`
 - 跨ぎ drill-down: compose の draft → `core_idea.source_material_ids` → `materials_store[]` → 各 `meta.collector_session_id` → その（別 run の）collector session の `session_event`。
