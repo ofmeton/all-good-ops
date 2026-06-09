@@ -271,6 +271,27 @@ export async function handleJob(
     }
 
     // ----------------------------------------------------------------
+    // metrics-ingest: X API v2 で engagement を取込み performance_metrics へ
+    // ----------------------------------------------------------------
+    case "metrics-ingest": {
+      const { runMetricsIngest } = await import("../lib/metrics/ingest.js");
+      const result = await runMetricsIngest();
+      console.log(
+        JSON.stringify({
+          level: "info",
+          msg: "[metrics-ingest] engagement 取込み 完了",
+          date: msg.date,
+          tweetsFetched: result.tweetsFetched,
+          matched: result.matched,
+          skipped: result.skipped,
+          upserted: result.upserted,
+          errors: result.errors,
+        }),
+      );
+      break;
+    }
+
+    // ----------------------------------------------------------------
     // optimizer-update: Thompson sampling posterior 更新 (W5-5)
     // ----------------------------------------------------------------
     case "optimizer-update": {

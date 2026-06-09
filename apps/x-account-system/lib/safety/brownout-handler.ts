@@ -40,6 +40,7 @@ const ALL_JOBS: string[] = [
   "compose",
   "check",
   "daily-digest",
+  "metrics-ingest",
   "optimizer-update",
   "rollback-monitor",
   "rotation-notice",
@@ -56,6 +57,7 @@ const STOP_POSTING_ALLOWED: string[] = [
   "rollback-monitor",
   "rotation-notice",
   "daily-digest",
+  "metrics-ingest",
   "line-event",
 ];
 
@@ -65,6 +67,7 @@ const STOP_POSTING_ALLOWED: string[] = [
  */
 const CRON_HALT_ALLOWED: string[] = [
   "daily-digest",
+  "metrics-ingest",
   "line-event",
 ];
 
@@ -74,6 +77,7 @@ const CRON_HALT_ALLOWED: string[] = [
  */
 const ESCALATE_ALLOWED: string[] = [
   "daily-digest",
+  "metrics-ingest",
   "line-event",
 ];
 

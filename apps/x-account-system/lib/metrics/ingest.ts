@@ -1,5 +1,82 @@
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { getXAccessToken } from "../publisher/token-store.ts";
+import { recordCostLedger } from "../cost/cost-ledger.ts";
+import { getMyUserId, fetchRecentTweetsWithMetrics } from "./x-metrics-client.ts";
 import { matchTweetToDraft, type DraftRow } from "./match.ts";
 import type { TweetMetrics } from "./x-metrics-client.ts";
+
+const X_API_COST_JPY_PER_REQ = 0.5;
+
+function ingestSupabase(): SupabaseClient | null {
+  if (process.env.IN_MEMORY_FALLBACK === "true") return null;
+  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) return null;
+  return createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY, {
+    db: { schema: (process.env.SUPABASE_SCHEMA || "public") as "public" },
+  });
+}
+
+export function defaultDeps(): MetricsIngestDeps {
+  const sb = ingestSupabase();
+  return {
+    getAccessToken: async () => (await getXAccessToken())?.accessToken ?? null,
+    fetchTweets: async (token) => {
+      const uid = await getMyUserId(token);
+      return await fetchRecentTweetsWithMetrics(token, uid);
+    },
+    loadPublishedDrafts: async () => {
+      if (!sb) return [];
+      const { data } = await sb
+        .from("post_drafts")
+        .select("id, body, published_at")
+        .eq("platform", "x")
+        .not("published_at", "is", null)
+        .gte("published_at", new Date(Date.now() - 30 * 24 * 3600 * 1000).toISOString());
+      return (data ?? []).map((d: any) => ({ id: d.id, body: d.body, publishedAt: d.published_at }));
+    },
+    upsertPostedRecord: async (draftId, tweetId, postedAt) => {
+      if (!sb) return "memory";
+      const { data, error } = await sb
+        .from("posted_records")
+        .upsert(
+          { draft_id: draftId, platform: "x", platform_post_id: tweetId, posted_at: postedAt },
+          { onConflict: "platform,platform_post_id" },
+        )
+        .select("id")
+        .single();
+      if (error) throw new Error(`upsertPostedRecord: ${error.message}`);
+      return (data as any).id as string;
+    },
+    upsertMetrics: async (postedRecordId, m, pcr) => {
+      if (!sb) return;
+      const { error } = await sb.from("performance_metrics").upsert(
+        {
+          posted_record_id: postedRecordId,
+          measured_at: new Date().toISOString(),
+          impressions: m.impressions,
+          user_profile_clicks: m.userProfileClicks,
+          url_link_clicks: m.urlLinkClicks,
+          pcr,
+          like_count: m.likeCount,
+          retweet_count: m.retweetCount,
+          reply_count: m.replyCount,
+          quote_count: m.quoteCount,
+          bookmark_count: m.bookmarkCount,
+        },
+        { onConflict: "posted_record_id" },
+      );
+      if (error) throw new Error(`upsertMetrics: ${error.message}`);
+    },
+    recordCost: async (reqCount) => {
+      if (!sb) return;
+      await recordCostLedger(sb as never, {
+        category: "x_api_metrics",
+        costJpy: X_API_COST_JPY_PER_REQ * reqCount,
+        unitCount: reqCount,
+        meta: { source: "metrics-ingest" },
+      });
+    },
+  };
+}
 
 export function computePcr(profileClicks: number | null, impressions: number | null): number | null {
   if (impressions == null || impressions <= 0 || profileClicks == null) return null;
@@ -23,7 +100,7 @@ export type MetricsIngestResult = {
   errors: number;
 };
 
-export async function runMetricsIngest(deps: MetricsIngestDeps): Promise<MetricsIngestResult> {
+export async function runMetricsIngest(deps: MetricsIngestDeps = defaultDeps()): Promise<MetricsIngestResult> {
   const token = await deps.getAccessToken();
   if (!token) return { tweetsFetched: 0, matched: 0, skipped: 0, upserted: 0, errors: 0 };
 

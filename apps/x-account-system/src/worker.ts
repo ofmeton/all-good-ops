@@ -77,6 +77,7 @@ export type JobMessage =
         | "optimizer-update"
         | "rollback-monitor"
         | "rotation-notice"
+        | "metrics-ingest"
         | "compose"
         | "check";
       date: string;
@@ -94,6 +95,7 @@ function jstDate(d: Date): string {
 // 注: "0 * /2 * * *" (スペースなし: 0 */2 * * *) は複数時刻に発火するが式文字列として一意なのでキーとして安全。
 const CRON_JOBS: Record<string, JobMessage["job"]> = {
   "30 20 * * *": "collect",          // 05:30 JST
+  "0 11 * * *": "metrics-ingest",    // 20:00 JST（digest/optimizer の前）
   "0 12 * * *": "daily-digest",      // 21:00 JST
   "0 14 * * *": "optimizer-update",  // 23:00 JST
   "0 */2 * * *": "rollback-monitor", // 毎2h
@@ -107,6 +109,7 @@ const CRON_JOBS_BY_NAME: Record<string, true> = {
   "optimizer-update": true,
   "rollback-monitor": true,
   "rotation-notice": true,
+  "metrics-ingest": true,
   compose: true,
   check: true,
 };

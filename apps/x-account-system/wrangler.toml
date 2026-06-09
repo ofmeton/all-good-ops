@@ -68,6 +68,7 @@ dead_letter_queue = "xad-jobs-dlq"
 [triggers]
 crons = [
   "30 20 * * *",   # 05:30 JST collect (収集エージェント)
+  "0 11 * * *",    # 20:00 JST metrics-ingest (digest/optimizer の前)
   "0 12 * * *",    # 21:00 JST daily-digest
   "0 14 * * *",    # 23:00 JST optimizer-update
   "0 */2 * * *",   # rollback-monitor 毎2h
