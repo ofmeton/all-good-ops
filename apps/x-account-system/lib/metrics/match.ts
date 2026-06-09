@@ -1,7 +1,9 @@
 export type DraftRow = { id: string; body: string; publishedAt: string | null };
 export type TweetLite = { id: string; text: string; createdAt: string };
 
-/** 照合用に本文を正規化: lowercase(latin) / 連続空白→単一空白 / 末尾 t.co・http(s) URL 除去 / trim */
+const DEFAULT_MATCH_WINDOW_MS = 24 * 60 * 60 * 1000;
+
+/** 照合用に本文を正規化: lowercase(latin) / 連続空白→単一空白 / http(s)・t.co URL 除去（位置問わず）/ trim */
 export function normalizeForMatch(text: string): string {
   if (!text) return "";
   return text
@@ -18,11 +20,12 @@ export function normalizeForMatch(text: string): string {
 export function matchTweetToDraft(
   tweet: TweetLite,
   drafts: DraftRow[],
-  windowMs = 24 * 3600 * 1000,
+  windowMs = DEFAULT_MATCH_WINDOW_MS,
 ): DraftRow | null {
   const nt = normalizeForMatch(tweet.text);
   if (!nt) return null;
   const tMs = Date.parse(tweet.createdAt);
+  if (!Number.isFinite(tMs)) return null;
   const hits = drafts.filter((d) => {
     if (!d.publishedAt) return false;
     const nb = normalizeForMatch(d.body);
