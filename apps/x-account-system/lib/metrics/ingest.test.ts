@@ -12,6 +12,7 @@ describe("computePcr", () => {
   test("profile/impressions", () => expect(computePcr(30, 1000)).toBeCloseTo(0.03));
   test("impressions 0 → null", () => expect(computePcr(5, 0)).toBeNull());
   test("null impressions → null", () => expect(computePcr(5, null)).toBeNull());
+  test("profileClicks 0 → 0 (not null)", () => expect(computePcr(0, 1000)).toBe(0));
 });
 
 describe("runMetricsIngest", () => {
@@ -54,5 +55,25 @@ describe("runMetricsIngest", () => {
     const { deps } = makeDeps({ getAccessToken: async () => null });
     const r = await runMetricsIngest(deps);
     expect(r).toMatchObject({ tweetsFetched: 0, matched: 0, upserted: 0 });
+  });
+
+  test("upsert failure on one tweet → loop continues, counts consistent", async () => {
+    let call = 0;
+    const { deps, upserts } = makeDeps({
+      fetchTweets: async () => [tweet({ tweetId: "t1", text: "本文A" }), tweet({ tweetId: "t2", text: "本文B" })],
+      loadPublishedDrafts: async () => [
+        { id: "d1", body: "本文A", publishedAt: "2026-06-05T11:00:00Z" },
+        { id: "d2", body: "本文B", publishedAt: "2026-06-05T11:00:00Z" },
+      ],
+      upsertPostedRecord: async (draftId, tweetId, postedAt) => {
+        call++;
+        if (call === 1) throw new Error("db error");
+        upserts.push({ kind: "posted", draftId, tweetId, postedAt });
+        return "pr2";
+      },
+    });
+    const r = await runMetricsIngest(deps);
+    expect(r).toMatchObject({ matched: 2, upserted: 1, skipped: 0, errors: 1 });
+    expect(upserts.filter((u) => u.kind === "posted")).toHaveLength(1);
   });
 });

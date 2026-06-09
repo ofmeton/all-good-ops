@@ -2,7 +2,7 @@ import { matchTweetToDraft, type DraftRow } from "./match.ts";
 import type { TweetMetrics } from "./x-metrics-client.ts";
 
 export function computePcr(profileClicks: number | null, impressions: number | null): number | null {
-  if (!impressions || impressions <= 0 || profileClicks == null) return null;
+  if (impressions == null || impressions <= 0 || profileClicks == null) return null;
   return profileClicks / impressions;
 }
 
@@ -20,11 +20,12 @@ export type MetricsIngestResult = {
   matched: number;
   skipped: number;
   upserted: number;
+  errors: number;
 };
 
 export async function runMetricsIngest(deps: MetricsIngestDeps): Promise<MetricsIngestResult> {
   const token = await deps.getAccessToken();
-  if (!token) return { tweetsFetched: 0, matched: 0, skipped: 0, upserted: 0 };
+  if (!token) return { tweetsFetched: 0, matched: 0, skipped: 0, upserted: 0, errors: 0 };
 
   const [tweets, drafts] = await Promise.all([
     deps.fetchTweets(token),
@@ -36,6 +37,7 @@ export async function runMetricsIngest(deps: MetricsIngestDeps): Promise<Metrics
   let matched = 0;
   let skipped = 0;
   let upserted = 0;
+  let errors = 0;
   for (const t of tweets) {
     const draft = matchTweetToDraft({ id: t.tweetId, text: t.text, createdAt: t.createdAt }, drafts);
     if (!draft) {
@@ -49,8 +51,9 @@ export async function runMetricsIngest(deps: MetricsIngestDeps): Promise<Metrics
       await deps.upsertMetrics(postedRecordId, t, pcr);
       upserted++;
     } catch (e) {
+      errors++;
       console.warn(JSON.stringify({ level: "warn", msg: "[metrics-ingest] upsert failed", tweetId: t.tweetId, error: String(e) }));
     }
   }
-  return { tweetsFetched: tweets.length, matched, skipped, upserted };
+  return { tweetsFetched: tweets.length, matched, skipped, upserted, errors };
 }
