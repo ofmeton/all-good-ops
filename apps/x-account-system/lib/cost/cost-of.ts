@@ -57,6 +57,15 @@ const RATE_BY_FAMILY: Map<Family, Rate> = (() => {
   return m;
 })();
 
+/**
+ * exact-match の単価 override（family 解決の **前** に引く）。
+ * family token だけでは世代差を吸収できない model をピン留めする。
+ *   claude-opus-4-8: 公式確定 5/25。family 既定 opus 15/75 は 3 倍過大なので正す。
+ */
+const RATE_OVERRIDE: Record<string, Rate> = {
+  "claude-opus-4-8": { input: 5, output: 25 },
+};
+
 /** model 文字列に含まれる family token を返す（無ければ undefined）。 */
 function familyOf(model: string): Family | undefined {
   const lower = (model ?? "").toLowerCase();
@@ -67,6 +76,9 @@ function familyOf(model: string): Family | undefined {
 const warned = new Set<string>();
 
 function resolveRate(model: string): Rate {
+  // exact-match override を family 解決より先に引く（世代差のピン留め）。
+  const override = RATE_OVERRIDE[(model ?? "").toLowerCase()];
+  if (override) return override;
   const fam = familyOf(model);
   if (fam) return RATE_BY_FAMILY.get(fam) ?? FAMILY_FALLBACK[fam];
   if (!warned.has(model)) {
