@@ -23,11 +23,14 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import type { TraceMeta } from "../trace/types.js";
 import type { EditorOutput } from "../editor/types.js";
 import { runMaSession } from "../ma/run-session.js";
+import { getAgentRef as getAgentRefDefault, type AgentRef } from "../ma/agent-registry.js";
 import { fetchRecentPostBodies } from "../editor/db.js";
 import { CHECK_CONFIG, type CheckConfig } from "./check-config.js";
-import { buildCheckSystemPrompt, SUBMIT_CHECK_TOOL } from "./check-prompts.js";
 import { costUsdFor, costJpyFor } from "../cost/cost-of.js";
 import type { Env } from "../../src/worker.js";
+
+/** 永続 checker agent の registry key（ma_agents.agent_key / x-checker.agent.yaml と一致）。 */
+const CHECKER_AGENT_KEY = "x-checker";
 
 /** pushApproval の最小シグネチャ（post-job.ts:290 と互換）。注入 or 既定 import。 */
 type PushApprovalFn = (
@@ -48,6 +51,8 @@ export interface RunCheckDeps {
   onTrace?: (m: TraceMeta) => void;
   /** テスト注入用（既定 runMaSession）。実 API を叩かずに wiring を検証する。 */
   runSession?: typeof runMaSession;
+  /** テスト注入用（既定 agent-registry.getAgentRef）。実 DB を叩かずに永続参照を解決する。 */
+  getAgentRef?: (sb: SupabaseClient, key: string) => Promise<AgentRef>;
   /** テスト注入用（既定 post-job の pushApproval を遅延 import）。 */
   pushApproval?: PushApprovalFn;
   /** テスト注入用（既定 fetchRecentPostBodies）。重複比較用の直近本文取得。 */
@@ -83,6 +88,8 @@ export interface CheckPerDraft {
     | "check_read_failed"
     | "requeue_failed"
     | MaFailTerminal;
+  /** 永続 MA session の id（run_trace.output に載せ、後続 1B が checker↔draft を相関）。 */
+  maSessionId?: string;
   stub?: boolean;
   error?: string;
 }
@@ -176,20 +183,11 @@ function buildSourceBlock(materials: SourceMaterial[]): string {
   return `\n\n# 元ネタツイート（ファクト判定の一次ソース）\n` + lines.join("\n\n");
 }
 
-/** 内蔵 agent toolset（web_search/web_fetch のみ有効。bash/file/code 無効）。 */
-const WEB_TOOLSET = {
-  type: "agent_toolset_20260401",
-  default_config: { enabled: false },
-  configs: [
-    { name: "web_search", enabled: true },
-    { name: "web_fetch", enabled: true },
-  ],
-};
-
 export async function runCheck(deps: RunCheckDeps): Promise<CheckRunResult> {
   const cfg = deps.config ?? CHECK_CONFIG;
   const sb = deps.sb;
   const runSession = deps.runSession ?? runMaSession;
+  const resolveAgentRef = deps.getAgentRef ?? getAgentRefDefault;
   const fetchRecent = deps.fetchRecent ?? fetchRecentPostBodies;
   const log = deps.logger ?? console;
   const perDraft: CheckPerDraft[] = [];
@@ -249,6 +247,18 @@ export async function runCheck(deps: RunCheckDeps): Promise<CheckRunResult> {
       recentBlock +
       `\n\nまず元ネタツイートに主張・数字が含まれるか判定し、含まれない新情報のみ web_search で裏取りして、最後に submit_check を呼んでください。`;
 
+    // 永続 checker agent 参照を解決（miss=未 bootstrap は throw）。誤処理防止: 解決不能なら
+    // 点検せず pending 据置で error 計上（bootstrap 後に再点検可）。
+    let agentRef: AgentRef;
+    try {
+      agentRef = await resolveAgentRef(sb, CHECKER_AGENT_KEY);
+    } catch (e) {
+      errorCount++;
+      perDraft.push({ draftId: d.id, outcome: "error", error: String(e) });
+      log.warn(`[check] agent ref unresolved for ${d.id}: ${String(e)}`);
+      continue;
+    }
+
     let captured: SubmitCheck | undefined;
     const customToolHandler = (name: string, input: unknown): string => {
       if (name === "submit_check") {
@@ -262,12 +272,10 @@ export async function runCheck(deps: RunCheckDeps): Promise<CheckRunResult> {
     try {
       res = await runSession({
         apiKey: deps.apiKey,
-        agent: {
-          name: "x-checker",
-          model: cfg.checkerModel,
-          system: buildCheckSystemPrompt(),
-          tools: [WEB_TOOLSET as never, SUBMIT_CHECK_TOOL as never],
-        },
+        // 永続経路: 既存 agent/environment を再利用。system/tools は agent 側に焼かれている
+        // ため session 起動時は渡さない（handler のみ host 側で注入）。
+        agentRef: { id: agentRef.agentId, version: agentRef.version },
+        environmentId: agentRef.environmentId,
         userMessage,
         customToolHandler,
         timeoutMs: cfg.timeoutMs,
@@ -277,6 +285,8 @@ export async function runCheck(deps: RunCheckDeps): Promise<CheckRunResult> {
     } catch (e) {
       res = { ok: false, terminal: "error" as const, error: String(e) } as Awaited<ReturnType<typeof runMaSession>>;
     }
+    // 永続 session id を perDraft/run_trace.output 用に捕捉（後続 1B が checker↔draft を相関）。
+    const maSessionId = res.ids?.session;
 
     // cost/trace は token を消費した全経路で発火する（失敗 session も計上）。
     // run-compose と同じく stub/!ok ガードの前で 1 回だけ通知＝失敗で焼いた token を
@@ -376,6 +386,7 @@ export async function runCheck(deps: RunCheckDeps): Promise<CheckRunResult> {
         draftId: d.id, outcome, verdict: cap.verdict, risk_level: risk,
         duplicate: cap.duplicate, factcheck: cap.factcheck, source_grounded: sourceGrounded, flagCount: flags.length,
         ...(attempts !== undefined ? { attempts } : {}),
+        ...(maSessionId ? { maSessionId } : {}),
       });
       log.info?.(`[check] ${d.id} outcome=${outcome} verdict=${cap.verdict} dup=${cap.duplicate} fact=${cap.factcheck} sg=${sourceGrounded} flags=${flags.length} risk=${risk}`);
     };
@@ -466,7 +477,8 @@ export async function runCheck(deps: RunCheckDeps): Promise<CheckRunResult> {
     perDraft.push({
       draftId: d.id, outcome: "sent_back", verdict: cap.verdict, risk_level: risk,
       duplicate: cap.duplicate, factcheck: cap.factcheck, source_grounded: sourceGrounded, flagCount: flags.length,
-      attempts: maxAttempts + 1, ...(matErrMsg ? { error: `partial material requeue failed: ${matErrMsg}` } : {}),
+      attempts: maxAttempts + 1, ...(maSessionId ? { maSessionId } : {}),
+      ...(matErrMsg ? { error: `partial material requeue failed: ${matErrMsg}` } : {}),
     });
     log.warn(`[check] ${d.id} SENT BACK for redo (dup=${cap.duplicate} fact=${cap.factcheck} sg=${sourceGrounded} attempts=${maxAttempts + 1}/${cfg.maxRedoAttempts}) — ${flags.join("; ")}`);
   }

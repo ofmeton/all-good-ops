@@ -96,6 +96,7 @@ export async function handleJob(
             sb: sb as never,
             twitterApiKey: env.TWITTERAPI_IO_KEY,
             fetchImpl: fetch,
+            apiKey: env.ANTHROPIC_API_KEY,
             onTrace: (m) => {
               traceMeta = m;
             },
@@ -120,6 +121,7 @@ export async function handleJob(
           sb: sb as never,
           twitterApiKey: env.TWITTERAPI_IO_KEY,
           fetchImpl: fetch,
+          apiKey: env.ANTHROPIC_API_KEY,
         });
         console.log(JSON.stringify({ level: "info", msg: "[collect] 完了(untraced)", date: msg.date, inserted }));
       }

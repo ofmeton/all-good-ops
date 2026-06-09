@@ -54,6 +54,15 @@ export const SUBMIT_CHECK_TOOL = {
   },
 };
 
+/**
+ * checker の tool 種別キー → 定義（bootstrap が agent に焼く SSOT）。
+ * web_toolset は compose 側 SSOT を再利用（重複定義しない）ため、ここには載せない。
+ * run-check は session 起動時に tool を渡さず host handler のみ注入する。
+ */
+export const CHECK_TOOL_REGISTRY: Record<string, unknown> = {
+  submit_check: SUBMIT_CHECK_TOOL,
+};
+
 /** 点検 system prompt（重複＋ファクトの嘘フィルタ・完全 soft）。 */
 export function buildCheckSystemPrompt(): string {
   return `あなたは X 投稿ドラフトの「チェックエージェント」です。1 本のドラフトについて、**重複**と**ファクト**だけを点検します。

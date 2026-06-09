@@ -31,7 +31,7 @@ export const COST_MODEL_ROWS: CostRow[] = [
     input_usd_per_mtok: 3,
     output_usd_per_mtok: 15,
     monthly_jpy_expected: 1840,
-    notes: "v10.2 §3.3 30 core × 8 platform、retry 30% で Editor reject",
+    notes: "v10.2 §3.3 30 core × 8 platform、retry 30% で Editor reject。注: P3 で runtime writer は claude-opus-4-8 へ移行。実コストは cost-of の opus-4-8 exact override(5/25) で計上。本行 model/単価(sonnet 3/15) は budget 投影の基準値として据置（cost-of RATE_BY_FAMILY の sonnet 源を opus に汚染しないため数値は変えない）。",
   },
   {
     category: "editor",
@@ -127,7 +127,7 @@ export const COST_MODEL_ROWS: CostRow[] = [
     input_usd_per_mtok: 0,
     output_usd_per_mtok: 0,
     monthly_jpy_expected: 84,
-    notes: "active_seconds 課金 (avg 1.3 min × $0.005/sec)",
+    notes: "GA Managed Agents は token 課金（session.usage）。旧 active_seconds 課金は GA に存在しない（teardown.ts と共に撤去済）。本行は session overhead の概算枠として据置、単価 0＝cost-of の RATE_BY_FAMILY 非対象。実トークン費は各工程 model 行（writer/checker=opus/haiku）で計上。",
   },
   {
     category: "image_low",

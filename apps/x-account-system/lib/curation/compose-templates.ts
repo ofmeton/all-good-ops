@@ -296,7 +296,8 @@ export function resolveTemplate(id?: string | null): ComposeTemplate {
 /**
  * 構造化フィールドから「投稿の型（骨子）」ブロックを合成し、
  * 固有の掟（systemPromptPatch）を併用した執筆指示文を返す。
- * buildWriterSystemPrompt が base prompt に差し込む。
+ * P2 以降: buildComposeUserBlocks（compose-prompts.ts）が userMessage に差し込む
+ * （永続 agent の system は固定のため、型は素材ごとに user 側で渡す）。
  */
 export function renderTemplatePrompt(tpl: ComposeTemplate): string {
   const lines = [

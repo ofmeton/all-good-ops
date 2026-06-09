@@ -14,11 +14,15 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { TraceMeta } from "../trace/types.js";
 import { runMaSession } from "../ma/run-session.js";
+import { getAgentRef as getAgentRefDefault, type AgentRef } from "../ma/agent-registry.js";
 import { COMPOSE_CONFIG, type ComposeConfig } from "./compose-config.js";
-import { buildWriterSystemPrompt, SUBMIT_DRAFT_TOOL, COMPOSE_FMATS, FMAT_LABELS } from "./compose-prompts.js";
+import { buildComposeUserBlocks, COMPOSE_FMATS } from "./compose-prompts.js";
 import { isKnownTemplate } from "./compose-templates.js";
 import { classifyRules } from "../hook-classifier/classify-rules.js";
 import { costUsdFor, costJpyFor } from "../cost/cost-of.js";
+
+/** 永続 writer agent の registry key（ma_agents.agent_key / x-writer.agent.yaml と一致）。 */
+const WRITER_AGENT_KEY = "x-writer";
 
 export interface RunComposeDeps {
   sb: SupabaseClient;
@@ -29,6 +33,8 @@ export interface RunComposeDeps {
   onTrace?: (m: TraceMeta) => void;
   /** テスト注入用（既定 runMaSession）。実 API を叩かずに wiring を検証する。 */
   runSession?: typeof runMaSession;
+  /** テスト注入用（既定 agent-registry.getAgentRef）。実 DB を叩かずに永続参照を解決する。 */
+  getAgentRef?: (sb: SupabaseClient, key: string) => Promise<AgentRef>;
   logger?: { warn: (m: string) => void; info?: (m: string) => void };
 }
 
@@ -41,6 +47,8 @@ export interface ComposePerMaterial {
   citationCount?: number;
   costJpy?: number;
   draftId?: string;
+  /** 永続 MA session の id（run_trace.output に載せ、後続 1B が writer↔投稿を相関する）。 */
+  maSessionId?: string;
   /** 失敗理由（trace に残す。console だけにしない）。 */
   error?: string;
   /** MA session が stub で返ったか（本番では設定ミスのサイン）。 */
@@ -71,20 +79,11 @@ interface MaterialRow {
   meta: Record<string, unknown> | null;
 }
 
-/** 内蔵 agent toolset（web_search/web_fetch のみ有効。bash/file/code 無効）。 */
-const WEB_TOOLSET = {
-  type: "agent_toolset_20260401",
-  default_config: { enabled: false },
-  configs: [
-    { name: "web_search", enabled: true },
-    { name: "web_fetch", enabled: true },
-  ],
-};
-
 export async function runCompose(deps: RunComposeDeps): Promise<ComposeRunResult> {
   const cfg = deps.config ?? COMPOSE_CONFIG;
   const sb = deps.sb;
   const runSession = deps.runSession ?? runMaSession;
+  const resolveAgentRef = deps.getAgentRef ?? getAgentRefDefault;
   const log = deps.logger ?? console;
   const nowIso = () => new Date(deps.now ? deps.now() : Date.now()).toISOString();
   const perMaterial: ComposePerMaterial[] = [];
@@ -132,26 +131,28 @@ export async function runCompose(deps: RunComposeDeps): Promise<ComposeRunResult
     }
     // 差し戻し再生成: チェックAg が付けた前回の指摘があれば writer に渡し、同じ問題を繰り返させない。
     const lastFlags = Array.isArray(baseMeta.last_check_flags) ? (baseMeta.last_check_flags as string[]) : [];
-    const redoBlock =
-      lastFlags.length > 0
-        ? `# 前回の指摘（必ず避けて書き直す）\n` + lastFlags.map((f) => `- ${f}`).join("\n") + `\n\n`
-        : "";
-    // 希望フォーマット指示: 指定があれば writer に明示（記事=X 長文単発・分割しない）。
-    // label 欠落（将来の enum drift）でも raw 値で指示を出す（黙って無指示にしない）。
-    const fmatLabel = desiredFmat ? (FMAT_LABELS[desiredFmat] ?? desiredFmat) : null;
-    const fmatBlock =
-      fmatLabel
-        ? `# 希望フォーマット\n指定フォーマット=${fmatLabel}。` +
-          `記事は X 長文単発（thread のように分割しない）。素材が薄ければ無理に伸ばさない。\n\n`
-        : "";
+    // テンプレ patch / 希望フォーマット / 前回の指摘は userMessage 側に組む
+    // （永続 agent の system は固定。型・fmat・再生成は素材ごとに変わるため user で渡す）。
     const userMessage =
       `次の素材から X 投稿を1本書いてください。\n\n` +
       `# 素材本文\n${text}\n\n` +
       (tweetUrl ? `# 出典URL\n${tweetUrl}\n\n` : "") +
       (scores ? `# 参考スコア\n${scores}\n\n` : "") +
-      fmatBlock +
-      redoBlock +
+      buildComposeUserBlocks(templateId ?? cfg.defaultTemplateId, desiredFmat, lastFlags) +
       `必要なら web_search で裏取りし、最後に submit_draft を呼んでください。`;
+
+    // 永続 agent 参照を解決（miss=未 bootstrap は throw）。誤投稿防止: 解決不能なら
+    // draft 化せず claim 解除して error 計上（bootstrap 後に再試行可）。
+    let agentRef: AgentRef;
+    try {
+      agentRef = await resolveAgentRef(sb, WRITER_AGENT_KEY);
+    } catch (e) {
+      await releaseClaim(sb, m.id, baseMeta, log);
+      errorCount++;
+      perMaterial.push({ materialId: m.id, source_ref: m.source_ref ?? undefined, outcome: "error", error: String(e) });
+      log.warn(`[compose] agent ref unresolved for ${m.id}: ${String(e)}`);
+      continue;
+    }
 
     let captured: SubmitDraft | undefined;
     const customToolHandler = (name: string, input: unknown): string => {
@@ -166,12 +167,10 @@ export async function runCompose(deps: RunComposeDeps): Promise<ComposeRunResult
     try {
       res = await runSession({
         apiKey: deps.apiKey,
-        agent: {
-          name: "x-writer",
-          model: cfg.writerModel,
-          system: buildWriterSystemPrompt(templateId ?? cfg.defaultTemplateId),
-          tools: [WEB_TOOLSET as never, SUBMIT_DRAFT_TOOL as never],
-        },
+        // 永続経路: 既存 agent/environment を再利用。system/tools は agent 側に焼かれている
+        // ため session 起動時は渡さない（handler のみ host 側で注入）。
+        agentRef: { id: agentRef.agentId, version: agentRef.version },
+        environmentId: agentRef.environmentId,
         userMessage,
         customToolHandler,
         timeoutMs: cfg.timeoutMs,
@@ -267,6 +266,8 @@ export async function runCompose(deps: RunComposeDeps): Promise<ComposeRunResult
         writer_draft_id: `ma-${draftId.slice(0, 8)}`,
         cost_usd: costUsd,
         risk_level: "low",
+        // 永続 writer session を draft に相関させる（後続 1B が読む。migration 0020 で追加列）。
+        ...(res.ids?.session ? { writer_session_id: res.ids.session } : {}),
         ...(deps.runId ? { run_id: deps.runId } : {}),
       });
       if (pdErr) throw new Error(`post_draft insert: ${pdErr.message}`);
@@ -284,6 +285,7 @@ export async function runCompose(deps: RunComposeDeps): Promise<ComposeRunResult
         materialId: m.id, source_ref: m.source_ref ?? undefined, outcome: "ok",
         primary_hook: hook4, content_type: category,
         citationCount: captured.citations?.length ?? 0, costJpy, draftId,
+        ...(res.ids?.session ? { maSessionId: res.ids.session } : {}),
         ...(markErr ? { error: `composed_at mark failed: ${markErr.message}` } : {}),
       });
       log.info?.(`[compose] draft ${draftId} from ${m.id} hook=${hook4} costJpy=${costJpy}`);

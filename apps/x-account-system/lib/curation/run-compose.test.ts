@@ -1,8 +1,10 @@
 /**
  * lib/curation/run-compose.test.ts
- * stateful fake Supabase + 注入 runSession で wiring を検証（実 API 不要）。
+ * stateful fake Supabase + 注入 runSession/getAgentRef で wiring を検証（実 API/DB 不要）。
  * 正常 / 空 / no_draft / MA失敗 / 部分失敗 / maxPerRun / claim・冪等 /
  * post_draft 失敗時の orphan core_idea 補償削除 / stub ガード / 観測 output。
+ * P2: 永続経路（agentRef/environmentId 注入・system 非送信・writer_session_id stamp・
+ *      ma_session_id 観測・opus model・registry miss ガード）。
  */
 import { runCompose, type RunComposeDeps } from "./run-compose";
 
@@ -74,11 +76,18 @@ function mat(id: string, extraMeta: Record<string, unknown> = {}): Mat {
   return { id, raw_text: `text ${id}`, redacted_text: null, source_ref: "@src", meta: { selection_status: "queued", tweet_url: "https://x.com/t", ...extraMeta } };
 }
 
-/** submit_draft を呼ぶ正常 runSession fake。 */
+/** 永続 agent 参照を返す getAgentRef fake（実 DB を叩かない）。 */
+const okRef: NonNullable<RunComposeDeps["getAgentRef"]> = async () => ({
+  agentId: "agent_x",
+  version: "5",
+  environmentId: "env_x",
+});
+
+/** submit_draft を呼ぶ正常 runSession fake（session id を返す）。 */
 function okSession(draft: Partial<Record<string, unknown>> = {}): NonNullable<RunComposeDeps["runSession"]> {
   return (async (deps: any) => {
     deps.customToolHandler?.("submit_draft", { body: "【速報】Xが新機能。\n\nこれは強い。\n\n・要点1\n・要点2", fmat: "short", topic: "新機能", category: "paraphrase", primary_hook: "number", citations: ["https://src"], ...draft });
-    return { ok: true, terminal: "idle", stopReason: "end_turn", transitions: [], agentText: "x", toolCalls: [], unhandledTools: [], wallClockMs: 1, ids: {}, sessionUsage: { input_tokens: 1000, output_tokens: 200 } };
+    return { ok: true, terminal: "idle", stopReason: "end_turn", transitions: [], agentText: "x", toolCalls: [], unhandledTools: [], wallClockMs: 1, ids: { env: "env_x", agent: "agent_x", session: "sesn_x" }, sessionUsage: { input_tokens: 1000, output_tokens: 200 } };
   }) as any;
 }
 const silent = { warn: () => {}, info: () => {} };
@@ -86,14 +95,14 @@ const silent = { warn: () => {}, info: () => {} };
 describe("runCompose", () => {
   test("空: queued が無ければ noop", async () => {
     const state: St = { materials: [mat("m1", { selection_status: "selected" })], coreIdeas: [], postDrafts: [] };
-    const r = await runCompose({ sb: makeSb(state), apiKey: "k", runSession: okSession(), logger: silent });
+    const r = await runCompose({ sb: makeSb(state), apiKey: "k", runSession: okSession(), getAgentRef: okRef, logger: silent });
     expect(r).toMatchObject({ processed: 0, draftCount: 0, errorCount: 0 });
     expect(state.postDrafts).toHaveLength(0);
   });
 
   test("正常: core_idea + post_draft 生成・composed_at 付与・観測 output", async () => {
     const state: St = { materials: [mat("m1")], coreIdeas: [], postDrafts: [] };
-    const r = await runCompose({ sb: makeSb(state), apiKey: "k", runId: "run1", runSession: okSession(), logger: silent });
+    const r = await runCompose({ sb: makeSb(state), apiKey: "k", runId: "run1", runSession: okSession(), getAgentRef: okRef, logger: silent });
     expect(r.draftCount).toBe(1);
     expect(r.errorCount).toBe(0);
     expect(state.coreIdeas).toHaveLength(1);
@@ -106,10 +115,58 @@ describe("runCompose", () => {
     expect(typeof r.perMaterial[0].costJpy).toBe("number");
   });
 
+  // ── P2: 永続ランタイム経路 ──
+  test("永続: runSession に agentRef/environmentId を渡し system/tools は送らない", async () => {
+    const state: St = { materials: [mat("m1")], coreIdeas: [], postDrafts: [] };
+    let seen: any = {};
+    const capture = (async (deps: any) => {
+      seen = deps;
+      deps.customToolHandler?.("submit_draft", { body: "本文", fmat: "short", topic: "t", category: "paraphrase" });
+      return { ok: true, terminal: "idle", stopReason: "end_turn", transitions: [], agentText: "x", toolCalls: [], unhandledTools: [], wallClockMs: 1, ids: { session: "sesn_x" }, sessionUsage: { input_tokens: 10, output_tokens: 5 } };
+    }) as any;
+    await runCompose({ sb: makeSb(state), apiKey: "k", runSession: capture, getAgentRef: okRef, logger: silent });
+    expect(seen.agentRef).toEqual({ id: "agent_x", version: "5" });
+    expect(seen.environmentId).toBe("env_x");
+    // 永続 agent に焼かれているので session 起動時は渡さない
+    expect(seen.agent).toBeUndefined();
+    expect(seen.customToolHandler).toBeInstanceOf(Function); // handler は host 側で注入する
+  });
+
+  test("永続: post_draft に writer_session_id を stamp し perMaterial に maSessionId を載せる", async () => {
+    const state: St = { materials: [mat("m1")], coreIdeas: [], postDrafts: [] };
+    const r = await runCompose({ sb: makeSb(state), apiKey: "k", runSession: okSession(), getAgentRef: okRef, logger: silent });
+    expect(state.postDrafts[0].writer_session_id).toBe("sesn_x");
+    expect(r.perMaterial[0].maSessionId).toBe("sesn_x");
+  });
+
+  test("opus model: cost と onTrace に config.writerModel(opus-4-8) が使われる", async () => {
+    const state: St = { materials: [mat("m1")], coreIdeas: [], postDrafts: [] };
+    const traces: any[] = [];
+    const r = await runCompose({ sb: makeSb(state), apiKey: "k", runSession: okSession(), getAgentRef: okRef, onTrace: (m) => traces.push(m), logger: silent });
+    expect(traces[0].model).toBe("claude-opus-4-8");
+    // opus-4-8 override 5/25: 1000 in + 200 out = 0.005 + 0.005 = 0.01 USD * 150 = 1.5 JPY
+    expect(r.perMaterial[0].costJpy).toBeCloseTo(1.5, 6);
+  });
+
+  test("registry miss: getAgentRef が throw なら draft 化せず error + claim 解除（誤投稿防止）", async () => {
+    const state: St = { materials: [mat("m1")], coreIdeas: [], postDrafts: [] };
+    const missRef: NonNullable<RunComposeDeps["getAgentRef"]> = async () => {
+      throw new Error("[ma-registry] agent not bootstrapped: x-writer");
+    };
+    const r = await runCompose({ sb: makeSb(state), apiKey: "k", runSession: okSession(), getAgentRef: missRef, logger: silent });
+    expect(r.draftCount).toBe(0);
+    expect(r.errorCount).toBe(1);
+    expect(r.perMaterial[0].outcome).toBe("error");
+    expect(r.perMaterial[0].error).toMatch(/not bootstrapped/);
+    expect(state.postDrafts).toHaveLength(0);
+    expect(state.materials[0].meta.composed_at).toBeUndefined();
+    expect(state.materials[0].meta.compose_claimed_at).toBeUndefined(); // 解除済（bootstrap 後に再試行可）
+  });
+
   test("no_draft: submit 未呼び出しは errorCount + claim 解除 + 理由を perMaterial に残す", async () => {
     const state: St = { materials: [mat("m1")], coreIdeas: [], postDrafts: [] };
-    const noSubmit = (async () => ({ ok: true, terminal: "idle", stopReason: "end_turn", transitions: [], agentText: "", toolCalls: [], unhandledTools: [], wallClockMs: 1, ids: {} })) as any;
-    const r = await runCompose({ sb: makeSb(state), apiKey: "k", runSession: noSubmit, logger: silent });
+    const noSubmit = (async () => ({ ok: true, terminal: "idle", stopReason: "end_turn", transitions: [], agentText: "", toolCalls: [], unhandledTools: [], wallClockMs: 1, ids: { session: "sesn_x" } })) as any;
+    const r = await runCompose({ sb: makeSb(state), apiKey: "k", runSession: noSubmit, getAgentRef: okRef, logger: silent });
     expect(r.draftCount).toBe(0);
     expect(r.errorCount).toBe(1);
     expect(r.perMaterial[0].outcome).toBe("no_draft");
@@ -121,7 +178,7 @@ describe("runCompose", () => {
   test("MA失敗(timeout): draft 化せず claim 解除・error を残す", async () => {
     const state: St = { materials: [mat("m1")], coreIdeas: [], postDrafts: [] };
     const fail = (async () => ({ ok: false, terminal: "timeout", error: "timeout", transitions: ["TIMEOUT"], agentText: "", toolCalls: [], unhandledTools: [], wallClockMs: 1, ids: {} })) as any;
-    const r = await runCompose({ sb: makeSb(state), apiKey: "k", runSession: fail, logger: silent });
+    const r = await runCompose({ sb: makeSb(state), apiKey: "k", runSession: fail, getAgentRef: okRef, logger: silent });
     expect(r.errorCount).toBe(1);
     expect(r.perMaterial[0].outcome).toBe("timeout");
     expect(r.perMaterial[0].error).toBe("timeout");
@@ -132,7 +189,7 @@ describe("runCompose", () => {
   test("stub ガード: MA が stub 返却なら draft 化せず outcome=stub", async () => {
     const state: St = { materials: [mat("m1")], coreIdeas: [], postDrafts: [] };
     const stub = (async () => ({ ok: true, stub: true, terminal: "idle", stopReason: "end_turn", transitions: [], agentText: "(stub) ok", toolCalls: [], unhandledTools: [], wallClockMs: 1, ids: {} })) as any;
-    const r = await runCompose({ sb: makeSb(state), apiKey: "k", runSession: stub, logger: silent });
+    const r = await runCompose({ sb: makeSb(state), apiKey: "k", runSession: stub, getAgentRef: okRef, logger: silent });
     expect(r.draftCount).toBe(0);
     expect(r.perMaterial[0]).toMatchObject({ outcome: "stub", stub: true });
     expect(state.postDrafts).toHaveLength(0);
@@ -140,7 +197,7 @@ describe("runCompose", () => {
 
   test("post_draft 失敗: 作成済み core_idea を補償削除し orphan を残さない", async () => {
     const state: St = { materials: [mat("m1")], coreIdeas: [], postDrafts: [], failPostDraft: true };
-    const r = await runCompose({ sb: makeSb(state), apiKey: "k", runSession: okSession(), logger: silent });
+    const r = await runCompose({ sb: makeSb(state), apiKey: "k", runSession: okSession(), getAgentRef: okRef, logger: silent });
     expect(r.draftCount).toBe(0);
     expect(r.errorCount).toBe(1);
     expect(r.perMaterial[0].outcome).toBe("error");
@@ -154,10 +211,10 @@ describe("runCompose", () => {
     let n = 0;
     const mixed = (async (deps: any) => {
       n++;
-      if (n === 1) { deps.customToolHandler?.("submit_draft", { body: "本文A", fmat: "short", topic: "t", category: "paraphrase" }); return { ok: true, terminal: "idle", stopReason: "end_turn", unhandledTools: [], toolCalls: [], transitions: [], agentText: "a", wallClockMs: 1, ids: {}, sessionUsage: { input_tokens: 10, output_tokens: 5 } }; }
+      if (n === 1) { deps.customToolHandler?.("submit_draft", { body: "本文A", fmat: "short", topic: "t", category: "paraphrase" }); return { ok: true, terminal: "idle", stopReason: "end_turn", unhandledTools: [], toolCalls: [], transitions: [], agentText: "a", wallClockMs: 1, ids: { session: "sesn_a" }, sessionUsage: { input_tokens: 10, output_tokens: 5 } }; }
       return { ok: false, terminal: "error", error: "boom", unhandledTools: [], toolCalls: [], transitions: [], agentText: "", wallClockMs: 1, ids: {} };
     }) as any;
-    const r = await runCompose({ sb: makeSb(state), apiKey: "k", runSession: mixed, logger: silent });
+    const r = await runCompose({ sb: makeSb(state), apiKey: "k", runSession: mixed, getAgentRef: okRef, logger: silent });
     expect(r.processed).toBe(2);
     expect(r.draftCount).toBe(1);
     expect(r.errorCount).toBe(1);
@@ -165,14 +222,14 @@ describe("runCompose", () => {
 
   test("maxComposePerRun で件数を bound", async () => {
     const state: St = { materials: [mat("m1"), mat("m2"), mat("m3"), mat("m4")], coreIdeas: [], postDrafts: [] };
-    const r = await runCompose({ sb: makeSb(state), apiKey: "k", config: { writerModel: "claude-haiku-4-5", maxComposePerRun: 2, timeoutMs: 1000, defaultTemplateId: "template_chaen_gold" }, runSession: okSession(), logger: silent });
+    const r = await runCompose({ sb: makeSb(state), apiKey: "k", config: { writerModel: "claude-haiku-4-5", maxComposePerRun: 2, timeoutMs: 1000, defaultTemplateId: "template_chaen_gold" }, runSession: okSession(), getAgentRef: okRef, logger: silent });
     expect(r.processed).toBe(2);
     expect(r.draftCount).toBe(2);
   });
 
   test("冪等: composed_at 済の素材は対象外", async () => {
     const state: St = { materials: [mat("m1", { composed_at: "2026-06-07T00:00:00Z" })], coreIdeas: [], postDrafts: [] };
-    const r = await runCompose({ sb: makeSb(state), apiKey: "k", runSession: okSession(), logger: silent });
+    const r = await runCompose({ sb: makeSb(state), apiKey: "k", runSession: okSession(), getAgentRef: okRef, logger: silent });
     expect(r.processed).toBe(0);
   });
 
@@ -182,9 +239,9 @@ describe("runCompose", () => {
     const capture = (async (deps: any) => {
       seenMsg = deps.userMessage;
       deps.customToolHandler?.("submit_draft", { body: "本文", fmat: "short", topic: "t", category: "paraphrase" });
-      return { ok: true, terminal: "idle", stopReason: "end_turn", transitions: [], agentText: "x", toolCalls: [], unhandledTools: [], wallClockMs: 1, ids: {}, sessionUsage: { input_tokens: 10, output_tokens: 5 } };
+      return { ok: true, terminal: "idle", stopReason: "end_turn", transitions: [], agentText: "x", toolCalls: [], unhandledTools: [], wallClockMs: 1, ids: { session: "sesn_x" }, sessionUsage: { input_tokens: 10, output_tokens: 5 } };
     }) as any;
-    await runCompose({ sb: makeSb(state), apiKey: "k", runSession: capture, logger: silent });
+    await runCompose({ sb: makeSb(state), apiKey: "k", runSession: capture, getAgentRef: okRef, logger: silent });
     expect(seenMsg).toContain("# 前回の指摘（必ず避けて書き直す）");
     expect(seenMsg).toContain("- 『〇〇が無料化』は事実と異なる");
     expect(seenMsg).toContain("- 直近投稿と重複気味");
@@ -196,34 +253,33 @@ describe("runCompose", () => {
     const capture = (async (deps: any) => {
       seenMsg = deps.userMessage;
       deps.customToolHandler?.("submit_draft", { body: "本文", fmat: "short", topic: "t", category: "paraphrase" });
-      return { ok: true, terminal: "idle", stopReason: "end_turn", transitions: [], agentText: "x", toolCalls: [], unhandledTools: [], wallClockMs: 1, ids: {}, sessionUsage: { input_tokens: 10, output_tokens: 5 } };
+      return { ok: true, terminal: "idle", stopReason: "end_turn", transitions: [], agentText: "x", toolCalls: [], unhandledTools: [], wallClockMs: 1, ids: { session: "sesn_x" }, sessionUsage: { input_tokens: 10, output_tokens: 5 } };
     }) as any;
-    await runCompose({ sb: makeSb(state), apiKey: "k", runSession: capture, logger: silent });
+    await runCompose({ sb: makeSb(state), apiKey: "k", runSession: capture, getAgentRef: okRef, logger: silent });
     expect(seenMsg).not.toContain("前回の指摘");
   });
 
-  // ── 希望フォーマット / テンプレ選択 ──
-  /** deps.agent.system と deps.userMessage を捕捉する正常 runSession。 */
-  function captureSession(out: { system?: string; userMessage?: string }, draft: Record<string, unknown> = {}) {
+  // ── 希望フォーマット / テンプレ選択（P2: テンプレは userMessage へ移送） ──
+  /** deps.userMessage を捕捉する正常 runSession（system は agent 側固定で送らない）。 */
+  function captureSession(out: { userMessage?: string }, draft: Record<string, unknown> = {}) {
     return (async (deps: any) => {
-      out.system = deps.agent?.system;
       out.userMessage = deps.userMessage;
       deps.customToolHandler?.("submit_draft", { body: "本文", fmat: "short", topic: "t", category: "paraphrase", ...draft });
-      return { ok: true, terminal: "idle", stopReason: "end_turn", transitions: [], agentText: "x", toolCalls: [], unhandledTools: [], wallClockMs: 1, ids: {}, sessionUsage: { input_tokens: 10, output_tokens: 5 } };
+      return { ok: true, terminal: "idle", stopReason: "end_turn", transitions: [], agentText: "x", toolCalls: [], unhandledTools: [], wallClockMs: 1, ids: { session: "sesn_x" }, sessionUsage: { input_tokens: 10, output_tokens: 5 } };
     }) as any;
   }
 
-  test("(a) template_id 指定で system prompt にテンプレ patch が入る", async () => {
+  test("(a) template_id 指定で userMessage にテンプレ patch が入る（system へは焼かない）", async () => {
     const state: St = { materials: [mat("m1", { template_id: "template_chaen_gold" })], coreIdeas: [], postDrafts: [] };
-    const out: { system?: string } = {};
-    await runCompose({ sb: makeSb(state), apiKey: "k", runSession: captureSession(out), logger: silent });
-    expect(out.system).toContain("## 投稿の型（チャエン黄金型）");
+    const out: { userMessage?: string } = {};
+    await runCompose({ sb: makeSb(state), apiKey: "k", runSession: captureSession(out), getAgentRef: okRef, logger: silent });
+    expect(out.userMessage).toContain("## 投稿の型（チャエン黄金型）");
   });
 
   test("(b) desired_fmat 指定で userMessage に希望フォーマット指示が入る（記事=長文単発）", async () => {
     const state: St = { materials: [mat("m1", { desired_fmat: "article" })], coreIdeas: [], postDrafts: [] };
     const out: { userMessage?: string } = {};
-    await runCompose({ sb: makeSb(state), apiKey: "k", runSession: captureSession(out), logger: silent });
+    await runCompose({ sb: makeSb(state), apiKey: "k", runSession: captureSession(out), getAgentRef: okRef, logger: silent });
     expect(out.userMessage).toContain("# 希望フォーマット");
     expect(out.userMessage).toContain("指定フォーマット=記事（X 長文単発）");
     expect(out.userMessage).toContain("thread のように分割しない");
@@ -232,7 +288,7 @@ describe("runCompose", () => {
   test("(c) fmat=article は validation を通り core_idea/post_draft に保持される", async () => {
     const state: St = { materials: [mat("m1", { desired_fmat: "article" })], coreIdeas: [], postDrafts: [] };
     const out: Record<string, unknown> = {};
-    const r = await runCompose({ sb: makeSb(state), apiKey: "k", runSession: captureSession(out, { fmat: "article" }), logger: silent });
+    const r = await runCompose({ sb: makeSb(state), apiKey: "k", runSession: captureSession(out, { fmat: "article" }), getAgentRef: okRef, logger: silent });
     expect(r.draftCount).toBe(1);
     expect(state.coreIdeas[0].fmat).toBe("article");
     expect(state.postDrafts[0].fmat).toBe("article");
@@ -240,11 +296,11 @@ describe("runCompose", () => {
 
   test("(d) desired_fmat/template_id 未指定でも default テンプレで生成（後方互換）", async () => {
     const state: St = { materials: [mat("m1")], coreIdeas: [], postDrafts: [] };
-    const out: { system?: string; userMessage?: string } = {};
-    const r = await runCompose({ sb: makeSb(state), apiKey: "k", runSession: captureSession(out), logger: silent });
+    const out: { userMessage?: string } = {};
+    const r = await runCompose({ sb: makeSb(state), apiKey: "k", runSession: captureSession(out), getAgentRef: okRef, logger: silent });
     expect(r.draftCount).toBe(1);
-    // 既定テンプレ（チャエン黄金型）の patch が入り、希望フォーマット指示は入らない
-    expect(out.system).toContain("## 投稿の型（チャエン黄金型）");
+    // 既定テンプレ（チャエン黄金型）の patch が userMessage に入り、希望フォーマット指示は入らない
+    expect(out.userMessage).toContain("## 投稿の型（チャエン黄金型）");
     expect(out.userMessage).not.toContain("# 希望フォーマット");
   });
 });

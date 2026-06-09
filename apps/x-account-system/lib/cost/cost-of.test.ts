@@ -13,9 +13,17 @@ describe("cost-of", () => {
     expect(costUsdFor("claude-sonnet-4-6", 1_000_000, 1_000_000)).toBeCloseTo(18, 6);
   });
 
-  test("family 突合: opus は COST_MODEL_ROWS の 15/75（SSOT 由来）", () => {
+  test("exact override: claude-opus-4-8 は 5/25（family 解決より前に exact-match）", () => {
+    // opus-4-8 公式確定単価 5/25。family 既定 opus 15/75 は 3 倍過大なので
+    // exact-match override で正す。1M in + 1M out = 5 + 25 = 30 USD
+    expect(costUsdFor("claude-opus-4-8", 1_000_000, 1_000_000)).toBeCloseTo(30, 6);
+    // costJpyFor 連動: 30 USD * 150 = 4500 JPY
+    expect(costJpyFor("claude-opus-4-8", 1_000_000, 1_000_000)).toBe(4500);
+  });
+
+  test("family fallback: exact override 無しの opus 系は family 15/75 に解決（既存挙動維持）", () => {
     // 1M in + 1M out = 15 + 75 = 90 USD
-    expect(costUsdFor("claude-opus-4-8", 1_000_000, 1_000_000)).toBeCloseTo(90, 6);
+    expect(costUsdFor("claude-opus-4-7", 1_000_000, 1_000_000)).toBeCloseTo(90, 6);
   });
 
   test("family 突合: haiku は COST_MODEL_ROWS に行が無いので fallback 1/5（既存 usdFor 互換）", () => {

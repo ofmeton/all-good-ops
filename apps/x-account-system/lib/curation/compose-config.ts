@@ -14,7 +14,8 @@ export interface ComposeConfig {
 }
 
 export const COMPOSE_CONFIG: ComposeConfig = {
-  writerModel: "claude-sonnet-4-6",
+  // P2: 永続 writer agent は opus-4-8 で執筆（cost は cost-of の opus-4-8 override 5/25 で計上）。
+  writerModel: "claude-opus-4-8",
   maxComposePerRun: 3,
   timeoutMs: 120_000,
   defaultTemplateId: "template_chaen_gold",

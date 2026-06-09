@@ -57,7 +57,21 @@ export type CustomToolHandler = (
 ) => Promise<string> | string;
 
 export interface RunMaSessionDeps {
-  agent: MaAgentSpec;
+  /**
+   * ephemeral 経路では必須（environment/agent を毎回 create する元仕様）。
+   * persistent 経路（agentRef 指定時）では create をスキップするため省略可。
+   * persistent でも model は trace/cost のために渡してよい（任意）。
+   */
+  agent?: MaAgentSpec;
+  /**
+   * 永続 Managed Agent の参照。指定時は persistent 経路に入り、
+   * environments.create / agents.create をスキップして既存 agent を再利用する
+   * （agent-registry.getAgentRef の戻りを流用）。version 省略時は session.create
+   * の agent から version を外す。
+   */
+  agentRef?: { id: string; version?: string };
+  /** persistent 経路で再利用する environment id（agentRef とセットで指定）。 */
+  environmentId?: string;
   userMessage: string;
   apiKey?: string;
   customToolHandler?: CustomToolHandler;
@@ -165,7 +179,8 @@ export async function runMaSession(deps: RunMaSessionDeps): Promise<MaSessionRes
   // ---- stub fallback: IN_MEMORY_FALLBACK のみで発動 (本番でキー欠落は stub しない) ----
   if (!deps.client && process.env.IN_MEMORY_FALLBACK === "true") {
     transitions.push("stub:env", "stub:agent", "stub:session", "stub:running");
-    const customTool = deps.agent.tools?.find(
+    // persistent 経路では agent 省略可。tools 不在でも安全に動く（?. でガード）。
+    const customTool = deps.agent?.tools?.find(
       (t): t is MaToolDef => "name" in t && typeof (t as { name?: unknown }).name === "string",
     );
     if (deps.customToolHandler && customTool) {
@@ -177,7 +192,7 @@ export async function runMaSession(deps: RunMaSessionDeps): Promise<MaSessionRes
       agentText = "(stub) ok";
     }
     transitions.push("stub:idle(end_turn)");
-    deps.onTrace?.({ model: deps.agent.model, tokensIn: 0, tokensOut: 0 });
+    deps.onTrace?.({ model: deps.agent?.model, tokensIn: 0, tokensOut: 0 });
     return {
       ok: true, stub: true, stopReason: "end_turn", terminal: "idle",
       unhandledTools, transitions, agentText, toolCalls,
@@ -196,10 +211,22 @@ export async function runMaSession(deps: RunMaSessionDeps): Promise<MaSessionRes
     };
   }
 
+  // persistent 経路: agentRef があれば既存 env/agent を再利用し create/cleanup しない。
+  const persistent = !!deps.agentRef;
   const timeoutMs = deps.timeoutMs ?? DEFAULT_TIMEOUT_MS;
   const archiveSession = deps.archiveSession ?? true;
-  const cleanupAgentEnv = deps.cleanupAgentEnv ?? true;
+  // persistent では env/agent は使い回すので既定で archive/delete しない（session は据置）。
+  const cleanupAgentEnv = deps.cleanupAgentEnv ?? !persistent;
   let client: MaClientLike | undefined;
+
+  // ephemeral 経路は agent 必須（create に使う）。persistent は agentRef を使うので不要。
+  if (!persistent && !deps.agent) {
+    return {
+      ok: false, terminal: "error", unhandledTools, transitions, agentText, toolCalls,
+      wallClockMs: now() - t0, ids,
+      error: "runMaSession: deps.agent required for ephemeral path (no agentRef given).",
+    };
+  }
 
   try {
     client =
@@ -216,30 +243,49 @@ export async function runMaSession(deps: RunMaSessionDeps): Promise<MaSessionRes
       );
     }
 
-    // 1. Environment
-    const env = await client.beta.environments.create({
-      name: deps.environment?.name ?? `xad-ma-${Math.floor(t0 / 1000)}`,
-      config: { type: "cloud", networking: { type: deps.environment?.networking ?? "unrestricted" } },
-    });
-    ids.env = env.id;
-    transitions.push("env.created");
+    // 1–2. Environment / Agent
+    //   persistent: 既存 env/agent を再利用（create スキップ）。本番 3 工程（writer/
+    //               checker/collector）は全て agentRef を渡すこの経路（P2/P3 で移行済）。
+    //   ephemeral:  毎回 create する（元仕様）。**現在 prod から呼ばれない＝テスト専用**
+    //               （後方互換・stub・SDK 版数ガード等の単体テスト資産として残置。削除しない）。
+    //               永続前提が崩れた緊急時のフォールバックとしても機能する。
+    let agentSessionRef: { type: "agent"; id: string; version?: string };
+    if (persistent) {
+      ids.env = deps.environmentId;
+      ids.agent = deps.agentRef!.id;
+      agentSessionRef = {
+        type: "agent",
+        id: deps.agentRef!.id,
+        ...(deps.agentRef!.version ? { version: deps.agentRef!.version } : {}),
+      };
+      transitions.push("env.reused", "agent.reused");
+    } else {
+      const agentSpec = deps.agent!; // ephemeral は上で必須チェック済
+      const env = await client.beta.environments.create({
+        name: deps.environment?.name ?? `xad-ma-${Math.floor(t0 / 1000)}`,
+        config: { type: "cloud", networking: { type: deps.environment?.networking ?? "unrestricted" } },
+      });
+      ids.env = env.id;
+      transitions.push("env.created");
 
-    // 2. Agent (custom tool は type:"custom" を補完。内蔵 toolset は type そのまま)
-    const agent = await client.beta.agents.create({
-      name: deps.agent.name,
-      model: deps.agent.model,
-      ...(deps.agent.system ? { system: deps.agent.system } : {}),
-      ...(deps.agent.tools?.length
-        ? { tools: deps.agent.tools.map((t) => ("type" in t && t.type ? t : { type: "custom", ...t })) }
-        : {}),
-    });
-    ids.agent = agent.id;
-    transitions.push("agent.created");
+      // custom tool は type:"custom" を補完。内蔵 toolset は type そのまま。
+      const agent = await client.beta.agents.create({
+        name: agentSpec.name,
+        model: agentSpec.model,
+        ...(agentSpec.system ? { system: agentSpec.system } : {}),
+        ...(agentSpec.tools?.length
+          ? { tools: agentSpec.tools.map((t) => ("type" in t && t.type ? t : { type: "custom", ...t })) }
+          : {}),
+      });
+      ids.agent = agent.id;
+      transitions.push("agent.created");
+      agentSessionRef = { type: "agent", id: agent.id, version: agent.version };
+    }
 
-    // 3. Session
+    // 3. Session（両経路で共有。agent 参照のみ経路で差し替え）
     const session = await client.beta.sessions.create({
-      agent: { type: "agent", id: agent.id, version: agent.version },
-      environment_id: env.id,
+      agent: agentSessionRef,
+      environment_id: ids.env,
     });
     ids.session = session.id;
     transitions.push(`session.created(${session.status})`);
@@ -319,7 +365,7 @@ export async function runMaSession(deps: RunMaSessionDeps): Promise<MaSessionRes
     }
 
     const usage = (sessionUsage ?? modelUsage ?? {}) as { input_tokens?: number; output_tokens?: number };
-    deps.onTrace?.({ model: deps.agent.model, tokensIn: usage.input_tokens, tokensOut: usage.output_tokens });
+    deps.onTrace?.({ model: deps.agent?.model, tokensIn: usage.input_tokens, tokensOut: usage.output_tokens });
 
     const ok =
       terminal === "idle" &&
