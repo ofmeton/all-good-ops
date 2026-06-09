@@ -19,6 +19,21 @@ status: active
 - 設計→実装→レビューが絡む**まとまった開発**（新機能・サブシステム・複数観点レビューが要る改修）
 - 単発の小修正・調査はチームを組まず通常の単独セッション or サブエージェントで足りる（トークン無駄を避ける）
 
+## feature-factory モード（逐次パイプライン）
+
+**まとまった機能のフル工程実装**は、並列 team でなく逐次の「ソフトウェア工場」で回す（`skill:feature-factory`）。並列 team は「観点別レビューを同時に走らせる」時に使い、factory は「定義→設計→実装→検証→照合を1本の連鎖で通す」時に使う。
+
+連鎖と人間チェックポイント（**CPは3点だけ**）:
+
+1. **story-writer** が受け入れ基準つきユーザーストーリーを作る → ⏸ **CP① ストーリー承認**
+2. **architect** が技術ブリーフを作る → ⏸ **CP② ブリーフ承認**（既存 plan approval）
+3. **system-engineer** が BE→FE を逐次実装
+4. **test-verifier** が受け入れテストを書いて実走（基準別合否）
+5. **spec-validator** が実装を story/brief と照合しギャップを深刻度分類で報告
+6. 失敗/Critical は正しい担当へ差し戻し → 再検証クリーンまで回す → ⏸ **CP③ PR承認**
+
+各工程は専用クリーンコンテキストで、前工程のサマリのみ受け取る（ドリフト防止）。Step0 調査は architect 起動手順か `feature-dev:code-explorer` を流用（専任新設なし）。
+
 ## チーム編成（最大 4・スポット運用）
 
 | 役割 | 担当 | tools | 備考 |
@@ -35,6 +50,7 @@ status: active
 - **必須 2 観点**: `code-reviewer`（総合品質・バグ）+ `silent-failure-hunter`（エラーハンドリング・サイレント失敗。ウチの教訓が最も多い領域）
 - **案件で追加**: `type-design-analyzer`（型設計が要の時）/ `pr-test-analyzer`（テスト網羅が要の時）
 - **別モデル観点（任意）**: Codex レビュー（`mcp__codex__codex`）。重要・複雑な変更でセカンドオピニオンが欲しい時に回す。Claude 系レビュアー同士は盲点が共通しがちなので、別モデルが異なる指摘傾向で見落としを拾える。Codex MCP は導入済
+- **feature-factory での検証**: `dev-automation/spec-validator`（承認済み story/brief との照合・ギャップ報告）を主とし、複雑case のみ上記 pr-review-toolkit を追加。spec-validator は「仕様照合」、pr-review-toolkit は「一般品質・バグ」で役割が分かれる
 
 ## ワークフロー
 
