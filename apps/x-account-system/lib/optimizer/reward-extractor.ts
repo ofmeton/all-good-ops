@@ -82,27 +82,25 @@ export function toHookKey(
 }
 
 /**
- * `post_drafts.slot` → `OptimizerState.postingTime` key (timeBand)
+ * post の公開タイムスタンプ (`posted_records.posted_at`) → `postingTime` key (timeBand)。
  *
- * slot values added in migration 0007 (text, freeform). Map known values.
- * Unknown → 'morning' as a safe default (most common band).
+ * 旧実装は `post_drafts.slot` を読んでいたが、slot は二重投稿防止の
+ * ユニーク制約 `(scheduled_date, slot)` 用で時間帯情報を持たない
+ * (= run-compose が `agent-xxxx` を書くため常に morning に fallback していた)。
+ * 時間帯は公開時刻 (UTC) を JST(+9) に直して band 化する。
+ *
+ * JST band (initial-values §3.1 の 5 band):
+ *   morning 05–10 / noon 11–13 / afternoon 14–17 / evening 18–22 / midnight 23–04
  */
-function toTimeBand(
-  slot: string | null,
+export function toTimeBand(
+  publishedAt: Date,
 ): keyof OptimizerState["postingTime"] {
-  if (!slot) return "morning";
-  const s = slot.toLowerCase();
-  if (s.includes("morning") || s.includes("朝")) return "morning";
-  if (s.includes("noon") || s.includes("昼") || s.includes("midday")) return "noon";
-  if (s.includes("afternoon") || s.includes("午後")) return "afternoon";
-  if (s.includes("evening") || s.includes("夜") || s.includes("夕")) return "evening";
-  if (s.includes("midnight") || s.includes("深夜")) return "midnight";
-  // exact match for simple slot strings like 'morning', 'noon', etc.
-  const validBands = ["morning", "noon", "afternoon", "evening", "midnight"] as const;
-  for (const b of validBands) {
-    if (s === b) return b;
-  }
-  return "morning";
+  const jstHour = (publishedAt.getUTCHours() + 9) % 24;
+  if (jstHour >= 5 && jstHour <= 10) return "morning";
+  if (jstHour >= 11 && jstHour <= 13) return "noon";
+  if (jstHour >= 14 && jstHour <= 17) return "afternoon";
+  if (jstHour >= 18 && jstHour <= 22) return "evening";
+  return "midnight"; // 23,0,1,2,3,4
 }
 
 /**
@@ -229,12 +227,15 @@ export async function extractSuccessSignals(
         pcr: r.pcr,
         urlLinkClicks: r.urlLinkClicks,
         attribution: {
-          timeBand: toTimeBand(r.draft?.slot ?? null),
+          // Stage 2A で握る本質3レバー — 実値配線
+          timeBand: toTimeBand(new Date(r.postedAt)),
           hook: toHookKey(primaryHook, devices),
-          contentAxisIndex: 3 as 0 | 1 | 2 | 3, // first_hand default (§3.4); real mapping needs contentType
           xFormat: toXFormat(r.draft?.fmat ?? null),
-          visualizerIndex: 0 as 0 | 1 | 2, // image default; real mapping needs attachments
-          isIndustrySop: false, // post_drafts has no industry_sop flag yet
+          // 以下は据え置き（bandit 化しない）。update-loop は本フェーズで消費しない。
+          // 死守ガード＋固定値で挙動を維持するため、固定 placeholder のまま残す。
+          contentAxisIndex: 3 as 0 | 1 | 2 | 3,
+          visualizerIndex: 0 as 0 | 1 | 2,
+          isIndustrySop: false,
           isFailureStoryVerified: primaryHook === "failure_story",
         },
         success,

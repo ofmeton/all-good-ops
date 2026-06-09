@@ -343,6 +343,62 @@ describe("05_guard_clip", () => {
 });
 
 // ---------------------------------------------------------------------------
+// Stage 2A — 本質3レバーのみ学習 / 残り5本は凍結
+// ---------------------------------------------------------------------------
+
+describe("stage2a_frozen_levers", () => {
+  test("runOptimizerUpdate learns time/hook/format, freezes content_axis/visualizer/industry_sop", async () => {
+    const now = new Date("2026-06-15");
+    const before = buildInitialState(now);
+    stateStoreMock.__forceState(buildInitialState(now));
+    // benign window (no anomaly rollback)
+    rewardMock.__setMockWindowPerf({
+      currentAvgPcr: 0.05,
+      prevAvgPcr: 0.05,
+      currentAvgImpression: 1000,
+      prevAvgImpression: 1000,
+    });
+    // 5 success signals: morning / number_lead / short / first_hand(3) / visualizer video(1) / industry_sop
+    rewardMock.__setMockSignals(
+      Array.from({ length: 5 }, () =>
+        buildSignal({
+          attribution: {
+            timeBand: "morning",
+            hook: "number_lead",
+            contentAxisIndex: 3,
+            xFormat: "short",
+            visualizerIndex: 1,
+            isIndustrySop: true,
+            isFailureStoryVerified: false,
+          },
+          success: true,
+        }),
+      ),
+    );
+
+    const { after } = await runOptimizerUpdate(now);
+
+    // 握る3本: posterior が動く
+    expect(after.postingTime.morning.params.alpha).toBeGreaterThan(
+      before.postingTime.morning.params.alpha as number,
+    );
+    expect(after.hookDistribution.number_lead.params.alpha).toBeGreaterThan(
+      before.hookDistribution.number_lead.params.alpha as number,
+    );
+    expect(after.xFormatRatio.short.params.alpha).toBeGreaterThan(
+      before.xFormatRatio.short.params.alpha as number,
+    );
+
+    // 据え置き5本: 初期値のまま凍結（学習しない）
+    expect(after.contentAxis.params.alphas).toEqual(before.contentAxis.params.alphas);
+    expect(after.visualizerMode.params.alphas).toEqual(
+      before.visualizerMode.params.alphas,
+    );
+    expect(after.industrySopRate.params).toEqual(before.industrySopRate.params);
+  });
+});
+
+// ---------------------------------------------------------------------------
 // Sampler 単体テスト (seedable PRNG で deterministic)
 // ---------------------------------------------------------------------------
 
