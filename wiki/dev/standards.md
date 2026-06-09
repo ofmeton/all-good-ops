@@ -37,6 +37,7 @@ status: active
 
 ## A2. 設計フェーズ（着手時）
 
+- まとまった機能は**受け入れ基準つきユーザーストーリーを先に定義し人間承認**してから設計に入る（CP①）→ `skill:feature-factory` / `agent:story-writer`
 - データ契約を**生成→整形→出力で単一契約に固定**してから実装に入る → 原則4
 - 永続層のスキーマ変更は**実スキーマを先に Inspect**（既存構造・分布確認）してから設計 → `mem:feedback_db_migration_pre_inspect`
 - ユーザーシナリオ（正常/例外/権限差/空状態/エラー/同時操作）を網羅し必要機能を洗い出す → architect 設計プロセス §2
@@ -47,6 +48,7 @@ status: active
 - **「テスト緑」≠「本番動作」**。新機能は本番 env で 1 回 end-to-end 実走 → 原則2 / `mem:feedback_tests_green_but_production_stub`
 - queue/cron 等の不安定経路は lib をローカル tsx で prod 実行して診断 → `skill:prod-lib-diag` / 原則2
 - 既知バグは deferred せず improvement-log 記録 + その場/次 PR で修正 → 原則3 / `mem:feedback_known_bug_no_defer`
+- 機能は単体テストに加え**受け入れテスト（ユーザー目線・外側から）**で全受け入れ基準の充足を証明する。手段は採用スタック依存（Web=Playwright / lib・CLI=Vitest/tsx 等、B節準拠）→ `agent:test-verifier`
 
 ## A4. エラーハンドリング・観測
 
