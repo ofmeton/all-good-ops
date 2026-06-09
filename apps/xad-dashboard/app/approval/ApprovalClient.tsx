@@ -17,7 +17,7 @@ export function ApprovalClient({ initialDrafts }: { initialDrafts: ApprovalDraft
   }, []);
 
   const decide = useCallback(
-    async (id: string, action: "approve" | "reject", attachments?: Attachment[]) => {
+    async (id: string, action: "approve" | "reject", attachments?: Attachment[], reason?: string) => {
       setBusyId(id);
       setMsg(null);
       try {
@@ -31,6 +31,8 @@ export function ApprovalClient({ initialDrafts }: { initialDrafts: ApprovalDraft
             ...(action === "approve" && attachments && attachments.length > 0
               ? { attachments }
               : {}),
+            // 理由が入力されていればそのまま送る（Stage 2B）
+            ...(reason ? { reason } : {}),
           }),
         });
         const body = await res.json().catch(() => ({}));
@@ -145,8 +147,8 @@ export function ApprovalClient({ initialDrafts }: { initialDrafts: ApprovalDraft
               key={d.id}
               draft={d}
               busy={busyId === d.id}
-              onApprove={(attachments) => decide(d.id, "approve", attachments)}
-              onReject={() => decide(d.id, "reject")}
+              onApprove={(attachments, reason) => decide(d.id, "approve", attachments, reason)}
+              onReject={(reason) => decide(d.id, "reject", undefined, reason)}
               onSave={(body) => saveBody(d.id, body)}
             />
           ))

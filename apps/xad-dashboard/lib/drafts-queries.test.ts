@@ -48,11 +48,11 @@ describe("drafts-queries", () => {
     expect(h.isCalls).toContainEqual(["scheduled_for", null]);
   });
 
-  test("setApprovalStatus は RPC に ids/status を渡す（添付なしは p_attachments=null）", async () => {
+  test("setApprovalStatus は RPC に ids/status を渡す（添付なし・理由なしは null）", async () => {
     await setApprovalStatus(["a", "b"], "approved");
     expect(h.rpcCalls).toContainEqual([
       "set_approval_status",
-      { p_ids: ["a", "b"], p_status: "approved", p_attachments: null },
+      { p_ids: ["a", "b"], p_status: "approved", p_attachments: null, p_reason: null },
     ]);
   });
 
@@ -63,7 +63,7 @@ describe("drafts-queries", () => {
     await setApprovalStatus(["a"], "approved", att);
     expect(h.rpcCalls).toContainEqual([
       "set_approval_status",
-      { p_ids: ["a"], p_status: "approved", p_attachments: att },
+      { p_ids: ["a"], p_status: "approved", p_attachments: att, p_reason: null },
     ]);
   });
 
@@ -74,7 +74,31 @@ describe("drafts-queries", () => {
     await setApprovalStatus(["a"], "rejected", att);
     expect(h.rpcCalls).toContainEqual([
       "set_approval_status",
-      { p_ids: ["a"], p_status: "rejected", p_attachments: null },
+      { p_ids: ["a"], p_status: "rejected", p_attachments: null, p_reason: null },
+    ]);
+  });
+
+  test("reason を渡すと p_reason に載る（承認）", async () => {
+    await setApprovalStatus(["a"], "approved", null, "文章が自然でよい");
+    expect(h.rpcCalls).toContainEqual([
+      "set_approval_status",
+      { p_ids: ["a"], p_status: "approved", p_attachments: null, p_reason: "文章が自然でよい" },
+    ]);
+  });
+
+  test("reason を渡すと p_reason に載る（却下）", async () => {
+    await setApprovalStatus(["a"], "rejected", null, "リスクが高い");
+    expect(h.rpcCalls).toContainEqual([
+      "set_approval_status",
+      { p_ids: ["a"], p_status: "rejected", p_attachments: null, p_reason: "リスクが高い" },
+    ]);
+  });
+
+  test("reason=null は p_reason=null", async () => {
+    await setApprovalStatus(["a"], "rejected", null, null);
+    expect(h.rpcCalls).toContainEqual([
+      "set_approval_status",
+      { p_ids: ["a"], p_status: "rejected", p_attachments: null, p_reason: null },
     ]);
   });
 });

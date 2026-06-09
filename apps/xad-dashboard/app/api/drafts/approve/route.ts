@@ -9,8 +9,9 @@ import { setApprovalStatus } from "@/lib/drafts-queries";
 
 // 承認/却下: pending のみ RPC で CAS 遷移。id のみログ（本文/PII は出さない）。
 // 承認時に写真の upload intent(attachments) を受け取り RPC へ渡す（境界で検証）。
+// reason: 承認/却下理由の任意自由テキスト（Stage 2B）。上限 2000 字。
 export async function POST(req: Request) {
-  let body: { ids?: string[]; action?: DraftApprovalAction; attachments?: unknown };
+  let body: { ids?: string[]; action?: DraftApprovalAction; attachments?: unknown; reason?: unknown };
   try {
     body = await req.json();
   } catch {
@@ -39,8 +40,24 @@ export async function POST(req: Request) {
     attachments = v.value;
   }
 
+  // reason: 任意の承認/却下理由（Stage 2B）。文字列のみ・上限 2000 字。
+  let reason: string | null = null;
+  if (body.reason != null) {
+    if (typeof body.reason !== "string") {
+      return NextResponse.json({ error: "reason は文字列で指定してください" }, { status: 400 });
+    }
+    const trimmed = body.reason.trim();
+    if (trimmed.length > 2000) {
+      return NextResponse.json(
+        { error: `reason が長すぎます（${trimmed.length}/2000字）` },
+        { status: 400 },
+      );
+    }
+    reason = trimmed.length > 0 ? trimmed : null;
+  }
+
   try {
-    const updated = await setApprovalStatus(ids, status, attachments);
+    const updated = await setApprovalStatus(ids, status, attachments, reason);
     console.info(
       JSON.stringify({
         level: "info",
@@ -49,6 +66,7 @@ export async function POST(req: Request) {
         ids: ids.length,
         updated,
         attachments: attachments?.length ?? 0,
+        has_reason: reason != null,
       }),
     );
     return NextResponse.json({ ok: true, updated, attachments: attachments?.length ?? 0 });

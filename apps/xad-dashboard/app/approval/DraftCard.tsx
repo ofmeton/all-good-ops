@@ -81,13 +81,15 @@ export function DraftCard({
 }: {
   draft: ApprovalDraft;
   busy: boolean;
-  onApprove: (attachments: Attachment[]) => void;
-  onReject: () => void;
+  onApprove: (attachments: Attachment[], reason?: string) => void;
+  onReject: (reason?: string) => void;
   onSave: (body: string) => Promise<boolean>;
 }) {
   const [body, setBody] = useState(draft.body);
   // 写真添付の upload intent（承認押下時に atomic 送信）。既存値があれば引き継ぐ。
   const [attachments, setAttachments] = useState<Attachment[]>(draft.attachments ?? []);
+  // 承認/却下理由（任意）。Stage 2B。
+  const [reason, setReason] = useState("");
   const dirty = body !== draft.body;
   const v = validateBody(body);
   const high = draft.risk_level === "high";
@@ -172,39 +174,53 @@ export function DraftCard({
       </div>
 
       {/* actions */}
-      <div className="flex flex-wrap items-center gap-2 px-4 sm:px-5 py-3 mt-1 bg-slate-50 border-t border-slate-100">
-        <button
-          onClick={() => onApprove(attachments)}
-          disabled={busy || dirty || !v.ok}
-          title={dirty ? "先に本文を保存してください" : undefined}
-          className="px-4 py-1.5 rounded-lg text-sm font-medium bg-emerald-600 text-white hover:bg-emerald-700 active:bg-emerald-800 shadow-sm disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-        >
-          承認{attachments.length > 0 ? `（📎${attachments.length}）` : ""}
-        </button>
-        <button
-          onClick={onReject}
-          disabled={busy}
-          className="px-3 py-1.5 rounded-lg text-sm font-medium bg-white text-rose-600 border border-rose-200 hover:bg-rose-50 hover:border-rose-300 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-        >
-          却下
-        </button>
-        <div className="ml-auto flex items-center gap-2">
-          {dirty && (
-            <button
-              onClick={() => setBody(draft.body)}
-              disabled={busy}
-              className="text-xs text-slate-500 hover:text-slate-700 disabled:opacity-40"
-            >
-              変更を破棄
-            </button>
-          )}
+      <div className="px-4 sm:px-5 py-3 mt-1 bg-slate-50 border-t border-slate-100 space-y-2">
+        {/* 理由・メモ（任意）— LLM 改善用フィードバック */}
+        <div>
+          <label className="block text-xs text-slate-400 mb-0.5">理由・メモ（任意）</label>
+          <textarea
+            value={reason}
+            onChange={(e) => setReason(e.target.value)}
+            rows={2}
+            disabled={busy}
+            placeholder="承認・却下の理由（LLM 品質改善用）"
+            className="w-full resize-none rounded border border-slate-200 p-2 text-xs text-slate-700 placeholder:text-slate-300 focus:outline-none focus:ring-1 focus:ring-blue-400/30 focus:border-blue-300 disabled:opacity-50"
+          />
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
           <button
-            onClick={() => onSave(v.ok ? v.value : body)}
-            disabled={busy || !dirty || !v.ok}
-            className="px-3 py-1.5 rounded-lg text-sm font-medium bg-white text-slate-700 border border-slate-300 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            onClick={() => onApprove(attachments, reason.trim() || undefined)}
+            disabled={busy || dirty || !v.ok}
+            title={dirty ? "先に本文を保存してください" : undefined}
+            className="px-4 py-1.5 rounded-lg text-sm font-medium bg-emerald-600 text-white hover:bg-emerald-700 active:bg-emerald-800 shadow-sm disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           >
-            本文を保存
+            承認{attachments.length > 0 ? `（📎${attachments.length}）` : ""}
           </button>
+          <button
+            onClick={() => onReject(reason.trim() || undefined)}
+            disabled={busy}
+            className="px-3 py-1.5 rounded-lg text-sm font-medium bg-white text-rose-600 border border-rose-200 hover:bg-rose-50 hover:border-rose-300 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          >
+            却下
+          </button>
+          <div className="ml-auto flex items-center gap-2">
+            {dirty && (
+              <button
+                onClick={() => setBody(draft.body)}
+                disabled={busy}
+                className="text-xs text-slate-500 hover:text-slate-700 disabled:opacity-40"
+              >
+                変更を破棄
+              </button>
+            )}
+            <button
+              onClick={() => onSave(v.ok ? v.value : body)}
+              disabled={busy || !dirty || !v.ok}
+              className="px-3 py-1.5 rounded-lg text-sm font-medium bg-white text-slate-700 border border-slate-300 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            >
+              本文を保存
+            </button>
+          </div>
         </div>
       </div>
     </div>
