@@ -275,7 +275,8 @@ export async function handleJob(
     // ----------------------------------------------------------------
     case "optimizer-analyst": {
       const { runOptimizerAnalyst } = await import("../lib/optimizer-analyst/run-analyst.js");
-      const result = await runOptimizerAnalyst();
+      // runId を渡し session_event を run→session でブリッジ（メタ観測）。
+      const result = await runOptimizerAnalyst(undefined, runId);
       console.log(JSON.stringify({ level: "info", msg: "[optimizer-analyst] 提案生成 完了", date: msg.date, ok: result.ok, proposals: result.proposals }));
       break;
     }

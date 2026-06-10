@@ -6,6 +6,8 @@ import { defaultToolDeps, makeToolHandler, type ToolDeps } from "./tools.ts";
 import { costJpyFor } from "../cost/cost-of.js";
 import { recordCostLedger } from "../cost/cost-ledger.js";
 import { pushLine } from "../line/line-client.js";
+import { insertSessionEvents, recordRunSession } from "../trace/session-event-store.js";
+import type { SessionEventInput } from "../trace/types.js";
 
 export interface AnalystDeps {
   buildSnapshotText: () => Promise<string>;
@@ -15,6 +17,8 @@ export interface AnalystDeps {
     agentRef: { id: string; version?: string };
     environmentId?: string;
     customToolHandler: (n: string, i: unknown) => Promise<string>;
+    /** run→session ブリッジ用 run id（無ければ session_event は session 単位でのみ残る）。 */
+    runId?: string;
   }) => Promise<{ ok: boolean }>;
   toolDeps?: ToolDeps;
   countProposalsSince: (sinceMs: number) => Promise<number>;
@@ -68,13 +72,29 @@ export function defaultAnalystDeps(): AnalystDeps {
     },
 
     async runSession(args) {
+      // メタ観測: agent 自身の思考も session_event に永続化（run-compose と同じ配線）。
+      const sessionEvents: SessionEventInput[] = [];
       const res = await runMaSession({
         apiKey: process.env.ANTHROPIC_API_KEY,
         agentRef: { id: args.agentRef.id, version: args.agentRef.version },
         environmentId: args.environmentId,
         userMessage: args.userMessage,
         customToolHandler: args.customToolHandler,
+        // 月次の重い opus job（read5ツール＋submit_proposal5回で ~164s）。既定 120s では
+        // timeout し ok:false・提案0件になるため 5 分に拡張（240s 実行で ok/5提案を実証済）。
+        timeoutMs: 300_000,
+        onEvent: (e) => sessionEvents.push(e),
       });
+      // 1B 観測: agent session のイベントと run→session ブリッジを永続化（fail-open）。
+      if (res.ids?.session) {
+        await insertSessionEvents(res.ids.session, ANALYST_AGENT_KEY, sessionEvents);
+        await recordRunSession({
+          runId: args.runId ?? "",
+          stageId: "optimizer-analyst",
+          sessionId: res.ids.session,
+          agentKey: ANALYST_AGENT_KEY,
+        });
+      }
       // Capture usage for cost recording
       const usage = res.sessionUsage as { input_tokens?: number; output_tokens?: number } | undefined;
       if (usage) {
@@ -128,7 +148,10 @@ export function defaultAnalystDeps(): AnalystDeps {
   };
 }
 
-export async function runOptimizerAnalyst(deps: AnalystDeps = defaultAnalystDeps()): Promise<AnalystResult> {
+export async function runOptimizerAnalyst(
+  deps: AnalystDeps = defaultAnalystDeps(),
+  runId?: string,
+): Promise<AnalystResult> {
   const now = deps.now ?? Date.now;
   const startedMs = now();
   const ref = await deps.getAgentRef();
@@ -147,6 +170,7 @@ export async function runOptimizerAnalyst(deps: AnalystDeps = defaultAnalystDeps
     agentRef: { id: ref.id, version: ref.version },
     environmentId: ref.environmentId,
     customToolHandler: handler,
+    runId,
   });
   await deps.recordCost();
 
