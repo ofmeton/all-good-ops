@@ -16,6 +16,8 @@ import { buildWriterSystemPrompt, COMPOSE_TOOL_REGISTRY } from "../curation/comp
 import { buildCheckSystemPrompt, CHECK_TOOL_REGISTRY } from "../check/check-prompts.js";
 import { buildExploreSystemPrompt } from "../ingest/collector-prompts.js";
 import { COLLECTOR_TOOL_REGISTRY } from "../ingest/collector-tools.js";
+import { buildOptimizerAnalystSystemPrompt } from "../optimizer-analyst/prompts.js";
+import { OPTIMIZER_ANALYST_TOOL_REGISTRY } from "../optimizer-analyst/tools.js";
 
 /** *.agent.yaml の seed マニフェスト形（checker/collector/editor でも使い回す汎用形）。 */
 export interface AgentManifest {
@@ -36,6 +38,7 @@ export const SYSTEM_BUILDERS: Record<string, () => string> = {
   buildWriterSystemPrompt,
   buildCheckSystemPrompt,
   buildExploreSystemPrompt,
+  buildOptimizerAnalystSystemPrompt,
 };
 
 /**
@@ -46,6 +49,7 @@ const MA_TOOL_REGISTRY: Record<string, unknown> = {
   ...COMPOSE_TOOL_REGISTRY,
   ...CHECK_TOOL_REGISTRY,
   ...COLLECTOR_TOOL_REGISTRY,
+  ...OPTIMIZER_ANALYST_TOOL_REGISTRY,
 };
 
 /** xad.ma_agents の行（差分計算に使う最小列）。 */
@@ -180,6 +184,7 @@ export const AGENT_MANIFESTS: AgentManifest[] = [
   { key: "x-writer", name: "x-writer", model: "claude-opus-4-8", system_builder: "buildWriterSystemPrompt", tools: ["web_toolset", "submit_draft"] },
   { key: "x-checker", name: "x-checker", model: "claude-haiku-4-5", system_builder: "buildCheckSystemPrompt", tools: ["web_toolset", "submit_check"] },
   { key: "x-collector", name: "x-collector", model: "claude-sonnet-4-5", system_builder: "buildExploreSystemPrompt", tools: ["collector_tools", "web_toolset"] },
+  { key: "x-optimizer-analyst", name: "x-optimizer-analyst", model: "claude-opus-4-8", system_builder: "buildOptimizerAnalystSystemPrompt", tools: ["optimizer_analyst_tools", "web_toolset", "submit_proposal"] },
 ];
 
 /** 共有 cloud environment（org 上限回避のため全 agent で 1 つ使い回す）。 */

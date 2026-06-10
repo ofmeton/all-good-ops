@@ -29,8 +29,8 @@ import {
 const writer = AGENT_MANIFESTS.find((m) => m.key === "x-writer") as AgentManifest;
 
 describe("AGENT_MANIFESTS（TS SSOT）", () => {
-  test("writer/checker/collector の 3 体・builder/tools が解決可能", () => {
-    expect(AGENT_MANIFESTS.map((m) => m.key)).toEqual(["x-writer", "x-checker", "x-collector"]);
+  test("writer/checker/collector/optimizer-analyst の 4 体・builder/tools が解決可能", () => {
+    expect(AGENT_MANIFESTS.map((m) => m.key)).toEqual(["x-writer", "x-checker", "x-collector", "x-optimizer-analyst"]);
     for (const m of AGENT_MANIFESTS) {
       expect(materializeSystem(m).length).toBeGreaterThan(0); // builder 登録済
       expect(resolveTools(m).length).toBeGreaterThan(0); // tool キー解決可
@@ -201,7 +201,7 @@ describe("planAgentAction / planBootstrap / pickEnvironmentId", () => {
 
   test("planBootstrap: 既存 0 行 → 全 create、env 未解決", () => {
     const plan = planBootstrap(AGENT_MANIFESTS, [], { update: false });
-    expect(plan).toHaveLength(3);
+    expect(plan).toHaveLength(4);
     expect(plan.every((p) => p.action === "create")).toBe(true);
     expect(pickEnvironmentId([])).toBeUndefined();
   });

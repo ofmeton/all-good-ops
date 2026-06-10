@@ -271,6 +271,17 @@ export async function handleJob(
     }
 
     // ----------------------------------------------------------------
+    // optimizer-analyst: 毎月1日 提案生成 MA job (月次)
+    // ----------------------------------------------------------------
+    case "optimizer-analyst": {
+      const { runOptimizerAnalyst } = await import("../lib/optimizer-analyst/run-analyst.js");
+      // runId を渡し session_event を run→session でブリッジ（メタ観測）。
+      const result = await runOptimizerAnalyst(undefined, runId);
+      console.log(JSON.stringify({ level: "info", msg: "[optimizer-analyst] 提案生成 完了", date: msg.date, ok: result.ok, proposals: result.proposals }));
+      break;
+    }
+
+    // ----------------------------------------------------------------
     // metrics-ingest: X API v2 で engagement を取込み performance_metrics へ
     // ----------------------------------------------------------------
     case "metrics-ingest": {

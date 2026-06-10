@@ -75,6 +75,7 @@ export type JobMessage =
         | "collect"
         | "daily-digest"
         | "optimizer-update"
+        | "optimizer-analyst"
         | "rollback-monitor"
         | "rotation-notice"
         | "metrics-ingest"
@@ -100,6 +101,7 @@ const CRON_JOBS: Record<string, JobMessage["job"]> = {
   "0 14 * * *": "optimizer-update",  // 23:00 JST
   "0 */2 * * *": "rollback-monitor", // 毎2h
   "0 15 1 * *": "rotation-notice",   // 月初 rotation 通知
+  "0 16 1 * *": "optimizer-analyst", // 月初 01:00 JST optimizer-analyst
 };
 
 /** /admin/enqueue で手動起動を許可する job 名（line-event は webhook 専用なので除外） */
@@ -107,6 +109,7 @@ const CRON_JOBS_BY_NAME: Record<string, true> = {
   collect: true,
   "daily-digest": true,
   "optimizer-update": true,
+  "optimizer-analyst": true,
   "rollback-monitor": true,
   "rotation-notice": true,
   "metrics-ingest": true,
