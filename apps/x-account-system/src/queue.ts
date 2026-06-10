@@ -282,6 +282,20 @@ export async function handleJob(
     }
 
     // ----------------------------------------------------------------
+    // optimizer-apply (accept 後随時・enqueue のみ・cron 無)
+    // ----------------------------------------------------------------
+    case "optimizer-apply": {
+      const { runApplyEngine, defaultApplyDeps } = await import("../lib/optimizer-apply/apply-engine.js");
+      const result = await runApplyEngine(defaultApplyDeps());
+      console.log(JSON.stringify({
+        level: "info", msg: "[optimizer-apply] 提案適用 完了", date: msg.date,
+        applied: result.applied, noop: result.noop, skipped: result.skipped,
+        blocked: result.blocked, errors: result.errors,
+      }));
+      break;
+    }
+
+    // ----------------------------------------------------------------
     // metrics-ingest: X API v2 で engagement を取込み performance_metrics へ
     // ----------------------------------------------------------------
     case "metrics-ingest": {
