@@ -132,7 +132,10 @@ export async function runOptimizerAnalyst(deps: AnalystDeps = defaultAnalystDeps
   const now = deps.now ?? Date.now;
   const startedMs = now();
   const ref = await deps.getAgentRef();
-  if (!ref) return { ok: false, proposals: 0 };
+  if (!ref) {
+    try { await deps.notify("optimizer-analyst: agent未bootstrap のためスキップしました"); } catch { /* notify fail-open */ }
+    return { ok: false, proposals: 0 };
+  }
 
   const snapshotText = await deps.buildSnapshotText();
   const userMessage = `${snapshotText}\n\n---\n上記の観測を分析し、改善提案を submit_proposal で記録してください（最大5件）。`;
