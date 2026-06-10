@@ -42,6 +42,7 @@ const ALL_JOBS: string[] = [
   "daily-digest",
   "metrics-ingest",
   "optimizer-update",
+  "optimizer-analyst",
   "rollback-monitor",
   "rotation-notice",
   "line-event",

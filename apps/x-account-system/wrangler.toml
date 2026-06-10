@@ -66,6 +66,7 @@ dead_letter_queue = "xad-jobs-dlq"
 # | 23:00     | 14:00        | optimizer-update (posterior 更新)           |
 # | 毎2h      | */2          | rollback-monitor (異常検知)                 |
 # | 毎月1日 00:00| 15:00 (1日) | rotation-notice (token rotation 通知)       |
+# | 毎月1日 01:00| 16:00 (1日) | optimizer-analyst (月次改善提案生成)         |
 [triggers]
 crons = [
   "30 20 * * *",   # 05:30 JST collect (収集エージェント)
@@ -74,6 +75,7 @@ crons = [
   "0 14 * * *",    # 23:00 JST optimizer-update
   "0 */2 * * *",   # rollback-monitor 毎2h
   "0 15 1 * *",    # 毎月1日 rotation-notice
+  "0 16 1 * *",    # 毎月1日 01:00 JST optimizer-analyst
 ]
 
 # --------------------------------------------------------------------
