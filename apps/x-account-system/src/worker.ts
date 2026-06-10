@@ -76,6 +76,7 @@ export type JobMessage =
         | "daily-digest"
         | "optimizer-update"
         | "optimizer-analyst"
+        | "optimizer-apply"
         | "rollback-monitor"
         | "rotation-notice"
         | "metrics-ingest"
@@ -110,6 +111,7 @@ const CRON_JOBS_BY_NAME: Record<string, true> = {
   "daily-digest": true,
   "optimizer-update": true,
   "optimizer-analyst": true,
+  "optimizer-apply": true,
   "rollback-monitor": true,
   "rotation-notice": true,
   "metrics-ingest": true,

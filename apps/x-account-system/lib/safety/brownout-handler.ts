@@ -43,6 +43,7 @@ const ALL_JOBS: string[] = [
   "metrics-ingest",
   "optimizer-update",
   "optimizer-analyst",
+  "optimizer-apply",
   "rollback-monitor",
   "rotation-notice",
   "line-event",
@@ -60,6 +61,7 @@ const STOP_POSTING_ALLOWED: string[] = [
   "rotation-notice",
   "daily-digest",
   "metrics-ingest",
+  "optimizer-apply",
   "line-event",
 ];
 

@@ -82,6 +82,16 @@ afterAll(() => {
   delete process.env.IN_MEMORY_FALLBACK;
 });
 
+describe("optimizer-apply brownout", () => {
+  it("ALL_JOBS と STOP_POSTING_ALLOWED に含まれ cron_halt/escalate には含まれない", async () => {
+    const { ALLOWED_JOBS_BY_STATUS } = await import("../lib/safety/brownout-handler.ts");
+    expect(ALLOWED_JOBS_BY_STATUS.ok).toContain("optimizer-apply");
+    expect(ALLOWED_JOBS_BY_STATUS.stop_posting).toContain("optimizer-apply");
+    expect(ALLOWED_JOBS_BY_STATUS.cron_halt).not.toContain("optimizer-apply");
+    expect(ALLOWED_JOBS_BY_STATUS.escalate).not.toContain("optimizer-apply");
+  });
+});
+
 describe("handleJob: brownout cost-fetch fails OPEN", () => {
   it("does NOT throw when getMonthlyCostJpy() rejects (would otherwise retry forever)", async () => {
     const msg: JobMessage = { job: "daily-digest", date: "2026-06-03" };
