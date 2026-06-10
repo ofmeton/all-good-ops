@@ -1,0 +1,726 @@
+{
+  "fetched_at": "2026-06-10T23:18:07.404675+00:00",
+  "since_period": "daily",
+  "total_repos": 101,
+  "by_language": {
+    "all": [
+      {
+        "full_name": "addyosmani/agent-skills",
+        "url": "https://github.com/addyosmani/agent-skills",
+        "description": "Production-grade engineering skills for AI coding agents.",
+        "fetched_language_filter": "all",
+        "since": "daily"
+      },
+      {
+        "full_name": "phuryn/pm-skills",
+        "url": "https://github.com/phuryn/pm-skills",
+        "description": "PM Skills Marketplace: 100+ agentic skills, commands, and plugins — from discovery to strategy, execution, launch, and growth.",
+        "fetched_language_filter": "all",
+        "since": "daily"
+      },
+      {
+        "full_name": "refactoringhq/tolaria",
+        "url": "https://github.com/refactoringhq/tolaria",
+        "description": "Desktop app to manage markdown knowledge bases",
+        "fetched_language_filter": "all",
+        "since": "daily"
+      },
+      {
+        "full_name": "mvanhorn/last30days-skill",
+        "url": "https://github.com/mvanhorn/last30days-skill",
+        "description": "AI agent skill that researches any topic across Reddit, X, YouTube, HN, Polymarket, and the web - then synthesizes a grounded summary",
+        "fetched_language_filter": "all",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/soxoj",
+        "url": "https://github.com/sponsors/soxoj",
+        "description": "🕵️‍♂️ Collect a dossier on a person by username from 3000+ sites",
+        "fetched_language_filter": "all",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/x1xhlol",
+        "url": "https://github.com/sponsors/x1xhlol",
+        "description": "FULL Augment Code, Claude Code, Cluely, CodeBuddy, Comet, Cursor, Devin AI, Junie, Kiro, Leap.new, Lovable, Manus, NotionAI, Orchids.app, Perplexity, Poke, Qoder, Replit, Same.dev, Trae, Traycer AI, VSCode Agent, Warp.dev, Windsurf, Xcode, Z.ai Code, Dia & v0. (And other Open Sourced) System Prompts, Internal Tools & AI Models",
+        "fetched_language_filter": "all",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/obra",
+        "url": "https://github.com/sponsors/obra",
+        "description": "An agentic skills framework & software development methodology that works.",
+        "fetched_language_filter": "all",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/masterking32",
+        "url": "https://github.com/sponsors/masterking32",
+        "description": "Advanced DNS tunneling VPN for censorship bypass, optimized beyond DNSTT and SlipStream with low-overhead ARQ, resolver load balancing, high packet-loss stability and speed.",
+        "fetched_language_filter": "all",
+        "since": "daily"
+      },
+      {
+        "full_name": "harry0703/MoneyPrinterTurbo",
+        "url": "https://github.com/harry0703/MoneyPrinterTurbo",
+        "description": "利用AI大模型，一键生成高清短视频 Generate short videos with one click using AI LLM.",
+        "fetched_language_filter": "all",
+        "since": "daily"
+      },
+      {
+        "full_name": "maziyarpanahi/openmed",
+        "url": "https://github.com/maziyarpanahi/openmed",
+        "description": "open-source healthcare ai",
+        "fetched_language_filter": "all",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/luongnv89",
+        "url": "https://github.com/sponsors/luongnv89",
+        "description": "A visual, example-driven guide to Claude Code — from basic concepts to advanced agents, with copy-paste templates that bring immediate value.",
+        "fetched_language_filter": "all",
+        "since": "daily"
+      },
+      {
+        "full_name": "activeloopai/hivemind",
+        "url": "https://github.com/activeloopai/hivemind",
+        "description": "One brain for all your agents",
+        "fetched_language_filter": "all",
+        "since": "daily"
+      },
+      {
+        "full_name": "ruvnet/RuView",
+        "url": "https://github.com/ruvnet/RuView",
+        "description": "π RuView turns commodity WiFi signals into real-time spatial intelligence, vital sign monitoring, and presence detection — all without a single pixel of video.",
+        "fetched_language_filter": "all",
+        "since": "daily"
+      },
+      {
+        "full_name": "roboflow/supervision",
+        "url": "https://github.com/roboflow/supervision",
+        "description": "We write your reusable computer vision tools. 💜",
+        "fetched_language_filter": "all",
+        "since": "daily"
+      },
+      {
+        "full_name": "google/skills",
+        "url": "https://github.com/google/skills",
+        "description": "Agent Skills for Google products and technologies",
+        "fetched_language_filter": "all",
+        "since": "daily"
+      },
+      {
+        "full_name": "FareedKhan-dev/train-llm-from-scratch",
+        "url": "https://github.com/FareedKhan-dev/train-llm-from-scratch",
+        "description": "A straightforward method for training your LLM, from downloading data to generating text.",
+        "fetched_language_filter": "all",
+        "since": "daily"
+      },
+      {
+        "full_name": "apple/container",
+        "url": "https://github.com/apple/container",
+        "description": "A tool for creating and running Linux containers using lightweight virtual machines on a Mac. It is written in Swift, and optimized for Apple silicon.",
+        "fetched_language_filter": "all",
+        "since": "daily"
+      }
+    ],
+    "python": [
+      {
+        "full_name": "mvanhorn/last30days-skill",
+        "url": "https://github.com/mvanhorn/last30days-skill",
+        "description": "AI agent skill that researches any topic across Reddit, X, YouTube, HN, Polymarket, and the web - then synthesizes a grounded summary",
+        "fetched_language_filter": "python",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/soxoj",
+        "url": "https://github.com/sponsors/soxoj",
+        "description": "🕵️‍♂️ Collect a dossier on a person by username from 3000+ sites",
+        "fetched_language_filter": "python",
+        "since": "daily"
+      },
+      {
+        "full_name": "harry0703/MoneyPrinterTurbo",
+        "url": "https://github.com/harry0703/MoneyPrinterTurbo",
+        "description": "利用AI大模型，一键生成高清短视频 Generate short videos with one click using AI LLM.",
+        "fetched_language_filter": "python",
+        "since": "daily"
+      },
+      {
+        "full_name": "maziyarpanahi/openmed",
+        "url": "https://github.com/maziyarpanahi/openmed",
+        "description": "open-source healthcare ai",
+        "fetched_language_filter": "python",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/luongnv89",
+        "url": "https://github.com/sponsors/luongnv89",
+        "description": "A visual, example-driven guide to Claude Code — from basic concepts to advanced agents, with copy-paste templates that bring immediate value.",
+        "fetched_language_filter": "python",
+        "since": "daily"
+      },
+      {
+        "full_name": "roboflow/supervision",
+        "url": "https://github.com/roboflow/supervision",
+        "description": "We write your reusable computer vision tools. 💜",
+        "fetched_language_filter": "python",
+        "since": "daily"
+      },
+      {
+        "full_name": "google/skills",
+        "url": "https://github.com/google/skills",
+        "description": "Agent Skills for Google products and technologies",
+        "fetched_language_filter": "python",
+        "since": "daily"
+      },
+      {
+        "full_name": "FareedKhan-dev/train-llm-from-scratch",
+        "url": "https://github.com/FareedKhan-dev/train-llm-from-scratch",
+        "description": "A straightforward method for training your LLM, from downloading data to generating text.",
+        "fetched_language_filter": "python",
+        "since": "daily"
+      },
+      {
+        "full_name": "Andyyyy64/whichllm",
+        "url": "https://github.com/Andyyyy64/whichllm",
+        "description": "Find the local LLM that actually runs and performs best on your hardware. Ranked by real, recency-aware benchmarks, not parameter count. One command, run it instantly.",
+        "fetched_language_filter": "python",
+        "since": "daily"
+      },
+      {
+        "full_name": "Sumanth077/Hands-On-AI-Engineering",
+        "url": "https://github.com/Sumanth077/Hands-On-AI-Engineering",
+        "description": "A curated collection of practical AI projects implementing OCR systems, RAG, AI agents, and other AI use cases.",
+        "fetched_language_filter": "python",
+        "since": "daily"
+      },
+      {
+        "full_name": "davila7/claude-code-templates",
+        "url": "https://github.com/davila7/claude-code-templates",
+        "description": "CLI tool for configuring and monitoring Claude Code",
+        "fetched_language_filter": "python",
+        "since": "daily"
+      },
+      {
+        "full_name": "RyanCodrai/turbovec",
+        "url": "https://github.com/RyanCodrai/turbovec",
+        "description": "A vector index built on TurboQuant, written in Rust with Python bindings",
+        "fetched_language_filter": "python",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/BerriAI",
+        "url": "https://github.com/sponsors/BerriAI",
+        "description": "Python SDK, Proxy Server (AI Gateway) to call 100+ LLM APIs in OpenAI (or native) format, with cost tracking, guardrails, loadbalancing and logging. [Bedrock, Azure, OpenAI, VertexAI, Cohere, Anthropic, Sagemaker, HuggingFace, VLLM, NVIDIA NIM]",
+        "fetched_language_filter": "python",
+        "since": "daily"
+      },
+      {
+        "full_name": "ml-explore/mlx-examples",
+        "url": "https://github.com/ml-explore/mlx-examples",
+        "description": "Examples in the MLX framework",
+        "fetched_language_filter": "python",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/vllm-project",
+        "url": "https://github.com/sponsors/vllm-project",
+        "description": "A framework for efficient model inference with omni-modality models",
+        "fetched_language_filter": "python",
+        "since": "daily"
+      },
+      {
+        "full_name": "comet-ml/opik",
+        "url": "https://github.com/comet-ml/opik",
+        "description": "Debug, evaluate, and monitor your LLM applications, RAG systems, and agentic workflows with comprehensive tracing, automated evaluations, and production-ready dashboards.",
+        "fetched_language_filter": "python",
+        "since": "daily"
+      },
+      {
+        "full_name": "alistaitsacle/free-llm-api-keys",
+        "url": "https://github.com/alistaitsacle/free-llm-api-keys",
+        "description": "Free LLM API keys for GPT-5.5, Claude, DeepSeek, Gemini, Grok — copy, paste, use. Updated 3-5x daily. No credit card needed.",
+        "fetched_language_filter": "python",
+        "since": "daily"
+      }
+    ],
+    "typescript": [
+      {
+        "full_name": "refactoringhq/tolaria",
+        "url": "https://github.com/refactoringhq/tolaria",
+        "description": "Desktop app to manage markdown knowledge bases",
+        "fetched_language_filter": "typescript",
+        "since": "daily"
+      },
+      {
+        "full_name": "activeloopai/hivemind",
+        "url": "https://github.com/activeloopai/hivemind",
+        "description": "One brain for all your agents",
+        "fetched_language_filter": "typescript",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/ibelick",
+        "url": "https://github.com/sponsors/ibelick",
+        "description": "Skills for Design Engineers",
+        "fetched_language_filter": "typescript",
+        "since": "daily"
+      },
+      {
+        "full_name": "shadcn-ui/ui",
+        "url": "https://github.com/shadcn-ui/ui",
+        "description": "A set of beautifully-designed, accessible components and a code distribution platform. Works with your favorite frameworks. Open Source. Open Code.",
+        "fetched_language_filter": "typescript",
+        "since": "daily"
+      },
+      {
+        "full_name": "pascalorg/editor",
+        "url": "https://github.com/pascalorg/editor",
+        "description": "Create and share 3D architectural projects.",
+        "fetched_language_filter": "typescript",
+        "since": "daily"
+      },
+      {
+        "full_name": "RSSNext/Folo",
+        "url": "https://github.com/RSSNext/Folo",
+        "description": "🧡 Folo is the AI RSS Reader",
+        "fetched_language_filter": "typescript",
+        "since": "daily"
+      },
+      {
+        "full_name": "Fission-AI/OpenSpec",
+        "url": "https://github.com/Fission-AI/OpenSpec",
+        "description": "Spec-driven development (SDD) for AI coding assistants.",
+        "fetched_language_filter": "typescript",
+        "since": "daily"
+      },
+      {
+        "full_name": "coleam00/Archon",
+        "url": "https://github.com/coleam00/Archon",
+        "description": "The first open-source harness builder for AI coding. Make AI coding deterministic and repeatable.",
+        "fetched_language_filter": "typescript",
+        "since": "daily"
+      },
+      {
+        "full_name": "thesysdev/openui",
+        "url": "https://github.com/thesysdev/openui",
+        "description": "The Open Standard for Generative UI",
+        "fetched_language_filter": "typescript",
+        "since": "daily"
+      },
+      {
+        "full_name": "ZuodaoTech/everyone-can-use-english",
+        "url": "https://github.com/ZuodaoTech/everyone-can-use-english",
+        "description": "人人都能用英语",
+        "fetched_language_filter": "typescript",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/code-yeongyu",
+        "url": "https://github.com/sponsors/code-yeongyu",
+        "description": "omo/lazycodex: The coding agent for tokenmaxxers;the one and only agent harness for complex codebases. For your Codex, for your OpenCode",
+        "fetched_language_filter": "typescript",
+        "since": "daily"
+      },
+      {
+        "full_name": "yikart/AiToEarn",
+        "url": "https://github.com/yikart/AiToEarn",
+        "description": "Let's use AI to Earn!",
+        "fetched_language_filter": "typescript",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/Eugeny",
+        "url": "https://github.com/sponsors/Eugeny",
+        "description": "A terminal for a more modern age",
+        "fetched_language_filter": "typescript",
+        "since": "daily"
+      },
+      {
+        "full_name": "google-labs-code/design.md",
+        "url": "https://github.com/google-labs-code/design.md",
+        "description": "A format specification for describing a visual identity to coding agents. DESIGN.md gives agents a persistent, structured understanding of a design system.",
+        "fetched_language_filter": "typescript",
+        "since": "daily"
+      },
+      {
+        "full_name": "chaitin/MonkeyCode",
+        "url": "https://github.com/chaitin/MonkeyCode",
+        "description": "企业级 AI 开发平台，内置了开发环境管理、AI 模型管理、AI 任务管理、项目需求管理等能力，是真正面向专业开发团队的 AI 助手",
+        "fetched_language_filter": "typescript",
+        "since": "daily"
+      }
+    ],
+    "javascript": [
+      {
+        "full_name": "openai/plugins",
+        "url": "https://github.com/openai/plugins",
+        "description": "OpenAI Plugins",
+        "fetched_language_filter": "javascript",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/santifer",
+        "url": "https://github.com/sponsors/santifer",
+        "description": "AI-powered job search system built on Claude Code. 14 skill modes, Go dashboard, PDF generation, batch processing.",
+        "fetched_language_filter": "javascript",
+        "since": "daily"
+      },
+      {
+        "full_name": "WebKit/WebKit",
+        "url": "https://github.com/WebKit/WebKit",
+        "description": "Home of the WebKit project, the browser engine used by Safari, Mail, App Store and many other applications on macOS, iOS and Linux.",
+        "fetched_language_filter": "javascript",
+        "since": "daily"
+      },
+      {
+        "full_name": "usebruno/bruno",
+        "url": "https://github.com/usebruno/bruno",
+        "description": "Opensource IDE For Exploring and Testing API's (lightweight alternative to Postman/Insomnia)",
+        "fetched_language_filter": "javascript",
+        "since": "daily"
+      },
+      {
+        "full_name": "npm/cli",
+        "url": "https://github.com/npm/cli",
+        "description": "the package manager for JavaScript",
+        "fetched_language_filter": "javascript",
+        "since": "daily"
+      },
+      {
+        "full_name": "WhiskeySockets/Baileys",
+        "url": "https://github.com/WhiskeySockets/Baileys",
+        "description": "Socket-based TS/JavaScript API for WhatsApp Web",
+        "fetched_language_filter": "javascript",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/JuliusBrussee",
+        "url": "https://github.com/sponsors/JuliusBrussee",
+        "description": "🪨 why use many token when few token do trick — Claude Code skill that cuts 65% of tokens by talking like caveman",
+        "fetched_language_filter": "javascript",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/Mintplex-Labs",
+        "url": "https://github.com/sponsors/Mintplex-Labs",
+        "description": "Stop renting your intelligence. Own it with AnythingLLM. Everything you need for a powerful local-first agent experience",
+        "fetched_language_filter": "javascript",
+        "since": "daily"
+      },
+      {
+        "full_name": "blackmatrix7/ios_rule_script",
+        "url": "https://github.com/blackmatrix7/ios_rule_script",
+        "description": "分流规则、重写写规则及脚本。",
+        "fetched_language_filter": "javascript",
+        "since": "daily"
+      }
+    ],
+    "go": [
+      {
+        "full_name": "sponsors/masterking32",
+        "url": "https://github.com/sponsors/masterking32",
+        "description": "Advanced DNS tunneling VPN for censorship bypass, optimized beyond DNSTT and SlipStream with low-overhead ARQ, resolver load balancing, high packet-loss stability and speed.",
+        "fetched_language_filter": "go",
+        "since": "daily"
+      },
+      {
+        "full_name": "kunchenguid/no-mistakes",
+        "url": "https://github.com/kunchenguid/no-mistakes",
+        "description": "git push no-mistakes",
+        "fetched_language_filter": "go",
+        "since": "daily"
+      },
+      {
+        "full_name": "Wei-Shaw/sub2api",
+        "url": "https://github.com/Wei-Shaw/sub2api",
+        "description": "Sub2API is an open-source relay platform that unifies Claude, OpenAI, Gemini, and Antigravity subscriptions into a single endpoint. It supports account sharing and cost-sharing, with seamless native tool compatibility.",
+        "fetched_language_filter": "go",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/aldinokemal",
+        "url": "https://github.com/sponsors/aldinokemal",
+        "description": "GOWA - WhatsApp REST API with support for UI, Multi Account, Webhooks, and MCP, and Chatwoot. Built with Golang for efficient memory use.",
+        "fetched_language_filter": "go",
+        "since": "daily"
+      },
+      {
+        "full_name": "juicedata/juicefs",
+        "url": "https://github.com/juicedata/juicefs",
+        "description": "JuiceFS is a distributed POSIX file system built on top of Redis and S3.",
+        "fetched_language_filter": "go",
+        "since": "daily"
+      },
+      {
+        "full_name": "docker/docker-agent",
+        "url": "https://github.com/docker/docker-agent",
+        "description": "AI Agent Builder and Runtime by Docker Engineering",
+        "fetched_language_filter": "go",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/vllm-project",
+        "url": "https://github.com/sponsors/vllm-project",
+        "description": "Cost-efficient and pluggable Infrastructure components for GenAI inference",
+        "fetched_language_filter": "go",
+        "since": "daily"
+      },
+      {
+        "full_name": "trufflesecurity/trufflehog",
+        "url": "https://github.com/trufflesecurity/trufflehog",
+        "description": "Find, verify, and analyze leaked credentials",
+        "fetched_language_filter": "go",
+        "since": "daily"
+      },
+      {
+        "full_name": "Tencent/WeKnora",
+        "url": "https://github.com/Tencent/WeKnora",
+        "description": "Open-source LLM knowledge platform: turn raw documents into a queryable RAG, an autonomous reasoning agent, and a self-maintaining Wiki.",
+        "fetched_language_filter": "go",
+        "since": "daily"
+      },
+      {
+        "full_name": "terrastruct/d2",
+        "url": "https://github.com/terrastruct/d2",
+        "description": "D2 is a modern diagram scripting language that turns text to diagrams.",
+        "fetched_language_filter": "go",
+        "since": "daily"
+      },
+      {
+        "full_name": "envoyproxy/gateway",
+        "url": "https://github.com/envoyproxy/gateway",
+        "description": "Manages Envoy Proxy as a Standalone or Kubernetes-based Application Gateway",
+        "fetched_language_filter": "go",
+        "since": "daily"
+      },
+      {
+        "full_name": "trpc-group/trpc-agent-go",
+        "url": "https://github.com/trpc-group/trpc-agent-go",
+        "description": "A Go framework for building production agent systems with graph workflows, tools, memory, A2A, AG-UI, MCP, evaluation, and observability.",
+        "fetched_language_filter": "go",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/dstotijn",
+        "url": "https://github.com/sponsors/dstotijn",
+        "description": "An HTTP toolkit for security research.",
+        "fetched_language_filter": "go",
+        "since": "daily"
+      },
+      {
+        "full_name": "prometheus/node_exporter",
+        "url": "https://github.com/prometheus/node_exporter",
+        "description": "Exporter for machine metrics",
+        "fetched_language_filter": "go",
+        "since": "daily"
+      },
+      {
+        "full_name": "kubernetes/ingress-nginx",
+        "url": "https://github.com/kubernetes/ingress-nginx",
+        "description": "Ingress NGINX Controller for Kubernetes",
+        "fetched_language_filter": "go",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/gruntwork-io",
+        "url": "https://github.com/sponsors/gruntwork-io",
+        "description": "Terragrunt is a flexible orchestration tool that allows Infrastructure as Code written in OpenTofu/Terraform to scale.",
+        "fetched_language_filter": "go",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/usememos",
+        "url": "https://github.com/sponsors/usememos",
+        "description": "Open-source, self-hosted note-taking tool built for quick capture. Markdown-native, lightweight, and fully yours.",
+        "fetched_language_filter": "go",
+        "since": "daily"
+      },
+      {
+        "full_name": "kai-scheduler/KAI-Scheduler",
+        "url": "https://github.com/kai-scheduler/KAI-Scheduler",
+        "description": "KAI Scheduler is an open source Kubernetes Native scheduler for AI workloads at large scale",
+        "fetched_language_filter": "go",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/mikefarah",
+        "url": "https://github.com/sponsors/mikefarah",
+        "description": "yq is a portable command-line YAML, JSON, XML, CSV, TOML, HCL and properties processor",
+        "fetched_language_filter": "go",
+        "since": "daily"
+      },
+      {
+        "full_name": "oauth2-proxy/oauth2-proxy",
+        "url": "https://github.com/oauth2-proxy/oauth2-proxy",
+        "description": "A reverse proxy that provides authentication with Google, Azure, OpenID Connect and many more identity providers.",
+        "fetched_language_filter": "go",
+        "since": "daily"
+      },
+      {
+        "full_name": "bluenviron/mediamtx",
+        "url": "https://github.com/bluenviron/mediamtx",
+        "description": "Ready-to-use Media-over-QUIC / SRT / WebRTC / RTSP / RTMP / LL-HLS / MPEG-TS / RTP live media server and media proxy that allows to read, publish, proxy, record and playback real-time video and audio streams.",
+        "fetched_language_filter": "go",
+        "since": "daily"
+      },
+      {
+        "full_name": "m5stack/StackChan",
+        "url": "https://github.com/m5stack/StackChan",
+        "description": "StackChan open source!",
+        "fetched_language_filter": "go",
+        "since": "daily"
+      }
+    ],
+    "rust": [
+      {
+        "full_name": "ruvnet/RuView",
+        "url": "https://github.com/ruvnet/RuView",
+        "description": "π RuView turns commodity WiFi signals into real-time spatial intelligence, vital sign monitoring, and presence detection — all without a single pixel of video.",
+        "fetched_language_filter": "rust",
+        "since": "daily"
+      },
+      {
+        "full_name": "astral-sh/ruff",
+        "url": "https://github.com/astral-sh/ruff",
+        "description": "An extremely fast Python linter and code formatter, written in Rust.",
+        "fetched_language_filter": "rust",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/dmtrKovalenko",
+        "url": "https://github.com/sponsors/dmtrKovalenko",
+        "description": "The fastest and the most accurate file search toolkit for AI agents, Neovim, Rust, C, and NodeJS",
+        "fetched_language_filter": "rust",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/pydantic",
+        "url": "https://github.com/sponsors/pydantic",
+        "description": "A minimal, secure Python interpreter written in Rust for use by AI",
+        "fetched_language_filter": "rust",
+        "since": "daily"
+      },
+      {
+        "full_name": "cloud-hypervisor/cloud-hypervisor",
+        "url": "https://github.com/cloud-hypervisor/cloud-hypervisor",
+        "description": "A Virtual Machine Monitor for modern Cloud workloads. Features include CPU, memory and device hotplug, support for running Windows and Linux guests, device offload with vhost-user and a minimal compact footprint. Written in Rust with a strong focus on security.",
+        "fetched_language_filter": "rust",
+        "since": "daily"
+      },
+      {
+        "full_name": "chroma-core/chroma",
+        "url": "https://github.com/chroma-core/chroma",
+        "description": "Search infrastructure for AI",
+        "fetched_language_filter": "rust",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/atuinsh",
+        "url": "https://github.com/sponsors/atuinsh",
+        "description": "✨ Making your shell magical",
+        "fetched_language_filter": "rust",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/starship",
+        "url": "https://github.com/sponsors/starship",
+        "description": "☄🌌️ The minimal, blazing-fast, and infinitely customizable prompt for any shell!",
+        "fetched_language_filter": "rust",
+        "since": "daily"
+      },
+      {
+        "full_name": "RustAudio/cpal",
+        "url": "https://github.com/RustAudio/cpal",
+        "description": "Low-level cross-platform audio I/O library in Rust",
+        "fetched_language_filter": "rust",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/stalwartlabs",
+        "url": "https://github.com/sponsors/stalwartlabs",
+        "description": "All-in-one Mail & Collaboration server. Secure, scalable and fluent in every protocol (IMAP, JMAP, SMTP, CalDAV, CardDAV, WebDAV).",
+        "fetched_language_filter": "rust",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/Michael-A-Kuykendall",
+        "url": "https://github.com/sponsors/Michael-A-Kuykendall",
+        "description": "⚡ Pure-Rust WebGPU inference engine — OpenAI-API compatible, GGUF native, runs on any GPU. No Python. No llama.cpp. Single binary.",
+        "fetched_language_filter": "rust",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/GyulyVGC",
+        "url": "https://github.com/sponsors/GyulyVGC",
+        "description": "Comfortably monitor your Internet traffic 🕵️‍♂️",
+        "fetched_language_filter": "rust",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/qdrant",
+        "url": "https://github.com/sponsors/qdrant",
+        "description": "Qdrant - High-performance, massive-scale Vector Database and Vector Search Engine for the next generation of AI. Also available in the cloud https://cloud.qdrant.io/",
+        "fetched_language_filter": "rust",
+        "since": "daily"
+      },
+      {
+        "full_name": "superradcompany/microsandbox",
+        "url": "https://github.com/superradcompany/microsandbox",
+        "description": "🧱 easy, fast, local microVMs for untrusted workloads",
+        "fetched_language_filter": "rust",
+        "since": "daily"
+      },
+      {
+        "full_name": "foundry-rs/foundry",
+        "url": "https://github.com/foundry-rs/foundry",
+        "description": "Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.",
+        "fetched_language_filter": "rust",
+        "since": "daily"
+      },
+      {
+        "full_name": "paritytech/polkadot-sdk",
+        "url": "https://github.com/paritytech/polkadot-sdk",
+        "description": "The Parity Polkadot Blockchain SDK",
+        "fetched_language_filter": "rust",
+        "since": "daily"
+      },
+      {
+        "full_name": "lakehq/sail",
+        "url": "https://github.com/lakehq/sail",
+        "description": "Drop-in Apache Spark replacement written in Rust, unifying batch processing, stream processing, and compute-intensive AI workloads.",
+        "fetched_language_filter": "rust",
+        "since": "daily"
+      },
+      {
+        "full_name": "cube-js/cube",
+        "url": "https://github.com/cube-js/cube",
+        "description": "📊 Cube Core is open-source semantic layer for AI, BI and embedded analytics",
+        "fetched_language_filter": "rust",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/ajeetdsouza",
+        "url": "https://github.com/sponsors/ajeetdsouza",
+        "description": "A smarter cd command. Supports all major shells.",
+        "fetched_language_filter": "rust",
+        "since": "daily"
+      },
+      {
+        "full_name": "gitbutlerapp/gitbutler",
+        "url": "https://github.com/gitbutlerapp/gitbutler",
+        "description": "The GitButler version control client, backed by Git, powered by Tauri/Rust/Svelte",
+        "fetched_language_filter": "rust",
+        "since": "daily"
+      },
+      {
+        "full_name": "sponsors/junhoyeo",
+        "url": "https://github.com/sponsors/junhoyeo",
+        "description": "🛰️ A CLI tool for tracking token usage from OpenCode, Claude Code, 🦞OpenClaw (Clawdbot/Moltbot), Pi, Codex, Gemini, Cursor, AmpCode, Factory Droid, Kimi, and more! • 🏅Global Leaderboard + 2D/3D Contributions Graph",
+        "fetched_language_filter": "rust",
+        "since": "daily"
+      }
+    ]
+  }
+}
