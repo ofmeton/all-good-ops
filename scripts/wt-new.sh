@@ -74,6 +74,17 @@ if [[ -f "$wt_path/package.json" ]]; then
   ( cd "$wt_path" && npm install --silent 2>&1 | tail -5 ) || echo "⚠️  npm install 失敗（手動で実行してください）" >&2
 fi
 
+# アプリ別 node_modules を main repo から symlink（monorepo workspace でなく各 app 独立のため、
+# root npm install では apps/*/node_modules が入らない。テスト/ビルド/deploy 用に main の実体を流用）。
+for app in apps/x-account-system apps/xad-dashboard; do
+  src="$repo_root/$app/node_modules"
+  dst="$wt_path/$app"
+  if [[ -d "$src" && -d "$dst" && ! -e "$dst/node_modules" ]]; then
+    ln -sfn "$src" "$dst/node_modules"
+    echo "→ linked $app/node_modules ← main repo"
+  fi
+done
+
 cat <<EOF
 
 ✅ worktree ready

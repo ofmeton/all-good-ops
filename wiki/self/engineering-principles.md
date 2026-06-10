@@ -30,6 +30,8 @@ fallback 経路（`IN_MEMORY_FALLBACK=true` 等）だけが緑でも、本番経
 
 - **事例**: 148→400 tests 緑のまま deploy したが、本番実走で token 失効・スレッド事故・judge crash・ideation orphan・DLP 誤検出 が連続発覚。テストは全て fallback / mock を通っていた。
 - **一般化**: 配線・新機能は **本番 env で lib を 1 回 end-to-end 実行**して確認する（ローカル tsx で `.env.local` を読み込み lib 関数を prod 実行する diag ハーネスが有効）。
+- **事例 (2026-06-10, optimizer)**: Stage 2A で reward 配線を正しく直してテスト緑にしたが、本番実走で `extractSuccessSignals` が **0 件**。真因は `performance_metrics` が空＝engagement 実績の取込パイプライン自体が無く、配線を直しても**学習燃料がゼロ**だった。
+- **派生原則: 学習/最適化/集計系を直す前に「本番に実データ(燃料)があるか」を先に確認する**。reward/posterior/KPI/レコメンド等「データを食って動く」系は、ロジック修正より先に `select count(*)` で供給源が埋まっているか本番確認。空なら上流の取込を先に作る。
 
 ## 原則3: 既知バグを deferred しない
 
