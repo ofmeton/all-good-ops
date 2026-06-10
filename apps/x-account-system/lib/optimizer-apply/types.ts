@@ -37,5 +37,6 @@ export type ApplyDeps = {
   loadOptimizerState: (now?: Date) => Promise<OptimizerState>;
   saveOptimizerState: (s: OptimizerState) => Promise<void>;
   snapshotState: (ts?: Date) => Promise<{ snapshotId: string }>;
+  rollbackToSnapshot: (snapshotId: string) => Promise<unknown>;
   notify: (summary: string) => Promise<void>;
 };

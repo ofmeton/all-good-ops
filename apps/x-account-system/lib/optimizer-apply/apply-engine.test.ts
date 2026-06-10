@@ -19,6 +19,7 @@ function makeDeps(proposals: ProposalRow[]) {
     loadOptimizerState: async () => ({} as never),
     saveOptimizerState: async () => {},
     snapshotState: async () => ({ snapshotId: "snap_eng" }),
+    rollbackToSnapshot: async () => {},
     notify: async (s) => { notify.push(s); },
   };
   return { deps, implemented, skipped, notify };
@@ -66,6 +67,24 @@ describe("runApplyEngine", () => {
     const r = await runApplyEngine(deps);
     expect(r.noop).toBe(1);
     expect(implemented.n1.apply_status).toBe("noop");
+  });
+
+  it("tier-T apply 後 markImplemented 失敗時は自動 rollback して error 計上", async () => {
+    const state: any = {
+      postingTime: { evening: { paramId: "posting_time_evening", distType: "beta", params: { alpha: 2, beta: 8 } } },
+      hookDistribution: {}, xFormatRatio: {},
+    };
+    const rolledBack: string[] = [];
+    const { deps } = makeDeps([
+      row({ id: "t1", meta: { apply: { paramId: "posting_time_evening", value: 0.3 } } }),
+    ]);
+    deps.loadOptimizerState = async () => state;
+    deps.markImplemented = async () => { throw new Error("mark down"); };
+    deps.rollbackToSnapshot = async (id: string) => { rolledBack.push(id); };
+    const r = await runApplyEngine(deps);
+    expect(r.errors).toBe(1);
+    expect(r.applied).toBe(0);
+    expect(rolledBack).toEqual(["snap_eng"]);
   });
 
   it("apply 失敗は errors++ で他は継続（fail-open）", async () => {

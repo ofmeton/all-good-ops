@@ -48,6 +48,11 @@ export async function applyTierT(
   if (!post) throw new Error(`unknown tier-T paramId: ${descriptor.paramId}`);
   if (post.distType !== "beta") throw new Error(`tier-T applies only to beta posteriors: ${descriptor.paramId}`);
 
+  const rule = GUARD_RULES.find((r) => r.paramId === descriptor.paramId);
+  if (!rule || rule.lowerBound == null || rule.upperBound == null) {
+    throw new Error(`no bounded guard rule for tier-T paramId: ${descriptor.paramId}`);
+  }
+
   const { snapshotId } = await deps.snapshotState(); // 変更前の状態を退避
   const clipped = clipToGuard(descriptor.paramId, descriptor.value);
   const { before, after } = setBetaMean(post, clipped);

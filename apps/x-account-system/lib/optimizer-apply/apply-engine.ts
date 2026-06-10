@@ -1,7 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { classifyTier, getApplyDescriptor, validateProposalSafe } from "./validation.ts";
 import { applyTierT } from "./tier-t.ts";
-import { loadOptimizerState, saveOptimizerState, snapshotState } from "../optimizer/state-store.ts";
+import { loadOptimizerState, saveOptimizerState, snapshotState, rollbackToSnapshot } from "../optimizer/state-store.ts";
 import { pushLine } from "../line/line-client.ts";
 import type { ApplyDeps, ApplyEngineResult } from "./types.ts";
 
@@ -26,13 +26,19 @@ export async function runApplyEngine(deps: ApplyDeps): Promise<ApplyEngineResult
       if (tier === "T") {
         const d = getApplyDescriptor(p)!;
         const r = await applyTierT(d, deps);
-        await deps.markImplemented(p.id, {
-          apply_status: "applied",
-          apply_param: r.paramId,
-          apply_before: r.before,
-          apply_after: r.after,
-          rollback_handle: { snapshot_id: r.snapshotId },
-        });
+        try {
+          await deps.markImplemented(p.id, {
+            apply_status: "applied",
+            apply_param: r.paramId,
+            apply_before: r.before,
+            apply_after: r.after,
+            rollback_handle: { snapshot_id: r.snapshotId },
+          });
+        } catch (markErr) {
+          // state は既に変更・保存済みだが記録に失敗 → 可逆性を守るため自動 rollback して error 扱いへ
+          await deps.rollbackToSnapshot(r.snapshotId).catch(() => {});
+          throw markErr;
+        }
         res.applied++;
         continue;
       }
@@ -99,6 +105,7 @@ export function defaultApplyDeps(): ApplyDeps {
     loadOptimizerState,
     saveOptimizerState,
     snapshotState,
+    rollbackToSnapshot,
     async notify(summary) {
       const token = process.env.LINE_CHANNEL_ACCESS_TOKEN;
       const userId = process.env.LINE_USER_ID_OFMETON;

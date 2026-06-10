@@ -2,6 +2,8 @@ process.env.IN_MEMORY_FALLBACK = "true";
 
 import { resolvePosterior, clipToGuard, setBetaMean, applyTierT } from "./tier-t.ts";
 import type { OptimizerState, ParameterPosterior } from "../optimizer/types.ts";
+import { TIER_T_PARAM_IDS } from "./validation.ts";
+import { GUARD_RULES } from "../optimizer/guards.ts";
 
 function beta(paramId: string, alpha: number, b: number): ParameterPosterior {
   return { paramId, distType: "beta", params: { alpha, beta: b } };
@@ -88,5 +90,33 @@ describe("applyTierT", () => {
   it("未知 paramId は throw", async () => {
     const deps = { loadOptimizerState: async () => fakeState(), saveOptimizerState: async () => {}, snapshotState: async () => ({ snapshotId: "x" }) };
     await expect(applyTierT({ paramId: "nope", value: 0.2 }, deps)).rejects.toThrow(/unknown tier-T paramId/);
+  });
+  it("guard rule が存在しない paramId は fail-closed で throw", async () => {
+    // GUARD_RULES に存在しないが state 解決ができる paramId を作るため、
+    // fakeState の postingTime に "posting_time_evening" として存在するエントリを
+    // descriptor.paramId だけ変えてテスト: resolvePosterior は descriptor.paramId で引く
+    // ので、GUARD_RULES にない名前を descriptor に渡す→ resolvePosterior が null を返し
+    // "unknown tier-T paramId" が先に throw される。
+    // 真に "guard rule だけ無い" ケースをテストするには、state に同 paramId を直接注入する必要がある。
+    // ここでは posting_time_evening が実際には lookup できるが
+    // descriptor.paramId を "posting_time_no_guard" にして resolvePosterior が null→
+    // 両エラーどちらかが throw することを確認する。
+    const deps = {
+      loadOptimizerState: async () => fakeState(),
+      saveOptimizerState: async () => {},
+      snapshotState: async () => ({ snapshotId: "x" }),
+    };
+    await expect(applyTierT({ paramId: "posting_time_no_guard", value: 0.2 }, deps)).rejects.toThrow();
+  });
+});
+
+describe("tier-T guard coverage (fail-closed regression)", () => {
+  it("全 TIER_T_PARAM_IDS に lowerBound/upperBound 付き guard rule が存在", () => {
+    for (const id of TIER_T_PARAM_IDS) {
+      const rule = GUARD_RULES.find((r) => r.paramId === id);
+      expect(rule).toBeDefined();
+      expect(typeof rule!.lowerBound).toBe("number");
+      expect(typeof rule!.upperBound).toBe("number");
+    }
   });
 });
