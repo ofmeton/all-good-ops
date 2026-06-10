@@ -8,6 +8,7 @@ const NAV: { href: string; label: string }[] = [
   { href: "/", label: "工程図" },
   { href: "/curation", label: "キュレーション" },
   { href: "/approval", label: "承認" },
+  { href: "/proposals", label: "提案" },
   { href: "/schedule", label: "スケジュール" },
   { href: "/publish", label: "今すぐ投稿" },
   { href: "/runs", label: "Runs" },
