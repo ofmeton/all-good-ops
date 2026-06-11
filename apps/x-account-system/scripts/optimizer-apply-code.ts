@@ -21,13 +21,23 @@ const WORKER_URL = process.env.XAD_WORKER_URL ?? "https://ofmeton-x-account.off-
 const LOCK = path.join(tmpdir(), "optimizer-apply-code.lock");
 const CLAUDE_MODEL = "claude-opus-4-8";
 
+const ENV_LOCAL_KEYS: string[] = [];
 for (const l of readFileSync(path.join(MAIN_REPO, APP_DIR, ".env.local"), "utf8").split("\n")) {
   const m = l.match(/^([A-Z0-9_]+)=(.*)$/);
-  if (m && process.env[m[1]] === undefined) process.env[m[1]] = m[2].replace(/^["']|["']$/g, "");
+  if (m) {
+    ENV_LOCAL_KEYS.push(m[1]);
+    if (process.env[m[1]] === undefined) process.env[m[1]] = m[2].replace(/^["']|["']$/g, "");
+  }
 }
 delete process.env.IN_MEMORY_FALLBACK;
 
-function sh(cmd: string, args: string[], o: { cwd?: string; env?: Record<string, string>; timeoutMs?: number } = {}) {
+// jest / claude -p のサブプロセスには .env.local の本番 secret を渡さない。
+// 理由: (1) ANTHROPIC_API_KEY が claude -p に渡ると subscription でなく API 課金になる
+//       (2) 本番 secret が env にあると「キー不在」を検証する env-guard テストが落ち gate 偽陰性になる
+// （wrangler/ma:bootstrap は creds 必要なので deploy() では unset しない）
+const SECRET_UNSET: Record<string, undefined> = Object.fromEntries(ENV_LOCAL_KEYS.map((k) => [k, undefined]));
+
+function sh(cmd: string, args: string[], o: { cwd?: string; env?: Record<string, string | undefined>; timeoutMs?: number } = {}) {
   const r = spawnSync(cmd, args, {
     cwd: o.cwd, encoding: "utf8", timeout: o.timeoutMs ?? 600_000,
     env: { ...process.env, ...o.env }, maxBuffer: 64 * 1024 * 1024,
@@ -51,7 +61,7 @@ function runClaude(cwd: string, prompt: string, allowedTools: string) {
   // 非許可コマンドは headless で拒否）。bypassPermissions は allowedTools 制限すら無効化し prompt-injection
   // された提案で任意コード実行になり得るため使わない。repo 内の逸脱変更は allowlist ゲートが merge 前に弾く。
   const r = sh("claude", ["-p", prompt, "--model", CLAUDE_MODEL, "--permission-mode", "acceptEdits", "--allowedTools", allowedTools],
-    { cwd, timeoutMs: 1_200_000, env: { ALLOW_BRANCH_CONFLICT: "1" } });
+    { cwd, timeoutMs: 1_200_000, env: { ALLOW_BRANCH_CONFLICT: "1", ...SECRET_UNSET } });
   return { ok: r.ok, log: r.out };
 }
 
@@ -108,7 +118,7 @@ function defaultCodeApplyDeps(): CodeApplyDeps {
     },
     async runChecks(ws) {
       const app = path.join(ws.dir, APP_DIR);
-      const jest = sh("npx", ["jest", "--silent"], { cwd: app, env: { IN_MEMORY_FALLBACK: "true" }, timeoutMs: 900_000 });
+      const jest = sh("npx", ["jest", "--silent"], { cwd: app, env: { ...SECRET_UNSET, IN_MEMORY_FALLBACK: "true" }, timeoutMs: 900_000 });
       if (!jest.ok) return { ok: false, output: `jest:\n${jest.out.slice(-1500)}` };
       const tsc = sh("npx", ["tsc", "-p", "src/tsconfig.json", "--noEmit"], { cwd: app });
       if (!tsc.ok) return { ok: false, output: `tsc:\n${tsc.out.slice(-1500)}` };
