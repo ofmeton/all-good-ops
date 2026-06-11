@@ -72,6 +72,16 @@ describe("runCodeApply", () => {
     expect(calls.cleanup[0][0]).toBe(true);
   });
 
+  it("空 diff（implementer 無変更）→ PR を作らず no_change で error 計上", async () => {
+    const { deps, calls } = makeDeps([row()], []);
+    const r = await runCodeApply(deps);
+    expect(r.errors).toBe(1);
+    expect(calls.pr).toBeUndefined();          // PR を作らない
+    expect(calls.merge).toBeUndefined();
+    expect(calls.markStatus[0][1]).toBe("no_change");
+    expect(calls.cleanup[0][0]).toBe(false);   // branch も残さない
+  });
+
   it("review REJECT → fixer → APPROVE → applied", async () => {
     const { deps, calls } = makeDeps([row()]);
     let first = true;
