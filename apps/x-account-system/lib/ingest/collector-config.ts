@@ -78,6 +78,6 @@ export const COLLECTOR_CONFIG: CollectorConfig = {
   scoringModel: "claude-sonnet-4-5",
   translationModel: "claude-haiku-4-5-20251001",
   scoringBatchSize: 20,
-  dedupWindowDays: 15,
+  dedupWindowDays: 14,
   autoPromoteDiscoveredSources: false,
 };
