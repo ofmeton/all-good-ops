@@ -9,25 +9,27 @@ updated: 2026-06-11
 > セッション間で保持される ~500 words のコンテキストキャッシュ。セッション開始時に最優先で読む。詳細: [[SCHEMA]] §ホットキャッシュ。
 
 ## Last Updated
-2026-06-11 — **X optimizer 自己改善ループ 全段完成・本番稼働**。Stage4(4A レビューUI + 4B-1 apply-engine tier-T・PR#153)＋Stage4-B2(apply-code runner＝nested `claude -p` で config/prompt を自動コード適用・PR#154)。両方とも**本番フル実証 ALL PASS**（4B-1=tier-T apply→rollback／4B-2=throwaway dedupWindowDays14→15 apply PR#160→rollback PR#161 で正味ゼロ）。初回実走が安全弁となり4実バグ摘出・修正(PR#155空diff/#156 acceptEdits=bypass securityレビュー対応/#159 secret unset)。詳細 [[../memory/project_x_optimizer_redesign]]。
+2026-06-11 — **xad キュレ/承認/投稿 7機能追加・本番反映完了**（PR#162）。設計=architect(Fable)→4並列system-engineer→pr-review-toolkit→migration0025-27 apply/worker deploy/dashboard deploy/DB層smoke。①執筆送信時に推薦自動選択 ②手動投稿済み化 ③承認済み破棄(論理) ④指示文つき修正依頼→即再執筆 ⑤修正依頼でformat/template再選+推薦 ⑥今すぐ投稿で全文表示 ⑦スレッド投稿(即時のみ・予約非対応)。`post_drafts.thread_bodies`+RPC3本(set_selection_status_items/discard_approved_drafts/request_draft_revision)。前段=optimizer自己改善ループ全段完成(Stage4・PR#153/154)。詳細 [[../memory/project_x_optimizer_redesign]]。
 
 ## Current Focus
-- **optimizer 運用フェーズへ**: 人間は dashboard `/proposals` で accept → tier-T は worker(optimizer-apply job)、config/prompt は `npm run apply-code`(skill `x-optimizer-apply-code`)が agent にコードを書かせ gate→merge→deploy。可逆(`--rollback`)。
-- **apply-code runner hardening（次回 apply-code 運用時）**: `mergePr --delete-branch`(merged remote branch残る) / 実行時 PATH 明示 / Docker sandbox(acceptEdits の worktree外 Write 残存リスク)。
+- **xad 新機能の実UI確認**: dashboard はログイン後に7機能を一巡確認（SSO配下でCLIからは実画面検証不可・DB層は健全確証済）。
+- **optimizer 運用フェーズ**: dashboard `/proposals` で accept → tier-T は worker、config/prompt は `npm run apply-code`(skill `x-optimizer-apply-code`)。可逆(`--rollback`)。
+- **apply-code runner hardening（次回運用時）**: `mergePr --delete-branch` / 実行時 PATH 明示 / Docker sandbox。
 - **X発信 段階1-1C（残）**: 定義編集UI→段階2承認/投稿UX→段階3。
 - **🔴 はぐりん persona 運用**: monetize-os 廃止で委譲先消失 → 名義境界の戦略再判断 未着手。
 - **🔴 ミナト広告設定（再開待ち）**: chrome-devtools MCP 接続待ち。[[project-minato-ad-settings]]
 
 ## Recently Touched
-- `apps/x-account-system/lib/optimizer-apply/*`(4B-1) / `lib/optimizer-apply-code/*`+`scripts/optimizer-apply-code.ts`(4B-2) / `src/{worker,queue}.ts` / `lib/safety/brownout-handler.ts`
-- `apps/xad-dashboard/app/proposals`・`app/api/proposals/decide`・`lib/proposals-queries.ts`（4A）
-- migration `0024_proposal_decision`（RPC set_proposal_decision・本番適用済）
-- `.claude/skills/x-optimizer-apply-code/SKILL.md`
-- [[../outputs/retrospectives/2026-06-11-1300-optimizer-apply-stage4]]
+- `apps/xad-dashboard/app/{curation,approval,publish}`・`app/api/{curation/select,drafts/revise,drafts/discard,drafts/update}`・`lib/{curation,drafts,publish}-queries.ts`・`app/components/{FmatTemplatePicker,useRecommendations}`・`lib/thread-logic.ts`
+- `apps/x-account-system/lib/curation/{run-compose,compose-prompts,thread}.ts`・`scripts/{publish-now,plan-scheduled-publish}.ts`・`src/worker.ts`
+- migration `0025_selection_per_material`/`0026_draft_lifecycle`/`0027_thread_support`（本番適用済）
+- `.claude/skills/x-{immediate,scheduled}-publish/SKILL.md`（スレッド手順追記）
+- [[../outputs/retrospectives/2026-06-11-1556-xad-curation-approval]]
 
 ## Open Questions / Frontiers
 - nested `claude -p` 起動は permission-mode acceptEdits + secret unset + PATH明示（memory [[headless-claude-subprocess]] / wiki 原則7）
 - 外部CLI(claude/gh/wrangler)を含む経路は dry-run と別に単発 smoke を先に
+- deploy系の連続 Bash は毎回 `cd <abs> && ...`（cwd reset hook・既存 [[bash-cwd-persistence]] 未適用で npm ci 空振り再発）
 - `taskcreate-threshold` は retire（6連続open・ワークフロー不適合）。harness reminder 任せ
 - 重い MA/opus は `timeoutMs` 明示／学習系は本番に燃料(実データ)があるか先に確認
 

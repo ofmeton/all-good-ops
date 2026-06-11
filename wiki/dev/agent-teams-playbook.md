@@ -1,7 +1,7 @@
 ---
 type: concept
 created: 2026-06-06
-updated: 2026-06-06
+updated: 2026-06-11
 related: [[dev/standards]], [[self/engineering-principles]]
 tags: [agent-teams, orchestration, workflow, dev, ssot]
 status: active
@@ -64,7 +64,12 @@ status: active
 
 ## ガードレール
 
-- **worktree 衝突**: 1 案件 1 worktree 内で implementer は最大 2 名・**ファイル領域を分担**。`package.json` 等共有ファイルは 1 人に集約 → `mem:feedback_subagent_package_json_concurrency`
+- **worktree 衝突**: 1 案件 1 worktree 内で implementer は**ファイル領域を分担**。`package.json` 等共有ファイルは 1 人に集約 → `mem:feedback_subagent_package_json_concurrency`。素朴な並列は 2 名まで。**厳密なファイル排他 + 下記 tactic を満たせば 4 名まで可**（2026-06-11 xad 7機能で 4 並列実証）
+- **並列実装の運用tactic**（4 並列を安全に回す条件・2026-06-11 実証）:
+  - **共有基盤は先行直列フェーズに切る**: migration・共通 component・共有ヘルパー・型拡張は Phase 0 として 1 名が先行実装しコミット。並列フェーズはこれを read/import だけで依存させる（並列同士が共有ファイルを編集しない分解を architect に作らせる）
+  - **並列 implementer は commit させず lead が集約**: 同一 worktree で複数 agent が同時 commit すると `.git/index.lock` が競合する。各 agent は担当ファイル編集 + 報告のみ → lead が統合検証後に workstream 別 commit
+  - **検証はスコープ + フルbuildは統合で1回**: 各 agent の検証は自分の担当テスト + `tsc --noEmit` に限定（複数 agent の `next build` 同時実行は `.next` 競合・遅延）。フル build は統合フェーズで lead が 1 回。worktree の Next.js は Turbopack が symlink node_modules で panic → `next build --webpack`（`mem:feedback_worktree_next16_turbopack_symlink`）
+  - **統合フェーズで lead がフル検証**: 各 agent はスコープ検証なので、統合後に全テスト + 型 + build + 差分レビュー（pr-review-toolkit）を lead が回し、継ぎ目（RPC↔呼び出し契約・共有ヘルパーの drift・import alias）を重点確認
 - **git 規律**: lead は `wt-new.sh` で切った task ブランチ内で起動。main 直 commit・別ブランチ checkout は既存 hook が block（脱出口 `ALLOW_*`）
 - **トークン上限**: teammate 最大 4・スポット運用（常時稼働しない）
 - **権限の伝播**: teammate は lead の権限を継承する。lead を `--dangerously-skip-permissions` で動かさない（事故が並列に広がる）
