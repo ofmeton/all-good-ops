@@ -11,9 +11,17 @@ export interface CurationMaterial {
   collected_at: string | null;
   selection_status: SelectionStatus;
   overall_score: number | null;
+  /** 表示時 time-decay 適用後の「いまの総合」（view 算出・要件3）。 */
+  effective_overall: number | null;
   freshness: number | null;
+  /** 半減期48h で減衰した「いまの鮮度」（view 算出）。 */
+  freshness_eff: number | null;
   velocity: number | null;
+  /** 時間あたりエンゲージ（バズ速度・view 算出）。PR-5 inbox セーフガード用。 */
+  velocity_per_hour: number | null;
   target_fit: number | null;
+  /** candidate=投稿候補 / reference=参考(JP二次流通)。view が確定（要件4）。 */
+  lane: string | null;
   score_reason: string | null;
   discovery_via: string | null;
   discovery_query: string | null;
@@ -62,7 +70,14 @@ export function buildEventRows(
   }));
 }
 
-export type SortKey = "overall_score" | "freshness" | "velocity" | "target_fit" | "collected_at" | "engagement";
+export type SortKey =
+  | "effective_overall"
+  | "overall_score"
+  | "freshness"
+  | "velocity"
+  | "target_fit"
+  | "collected_at"
+  | "engagement";
 
 function engagementTotal(m: CurationMaterial): number {
   const e = m.engagement;

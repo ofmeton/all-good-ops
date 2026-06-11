@@ -30,7 +30,8 @@ const TABS: { key: SelectionStatus; label: string; color: string }[] = [
 ];
 
 const SORTS: { key: SortKey; label: string }[] = [
-  { key: "overall_score", label: "総合スコア" },
+  { key: "effective_overall", label: "総合（鮮度補正）" },
+  { key: "overall_score", label: "総合（採点時）" },
   { key: "freshness", label: "鮮度" },
   { key: "velocity", label: "伸び率" },
   { key: "target_fit", label: "適合度" },
@@ -105,7 +106,7 @@ export function CurationClient({
   const [tab, setTab] = useState<SelectionStatus>("collected");
   // 多軸ソート: 並び1（必須）/ 並び2・並び3（任意・"" で無効）。優先順に評価される（例: 新着順 × 総合）。
   const [sortKeys, setSortKeys] = useState<[SortKey, SortKey | "", SortKey | ""]>([
-    "overall_score",
+    "effective_overall",
     "",
     "",
   ]);
@@ -229,12 +230,12 @@ export function CurationClient({
   const setSortSlot = useCallback((idx: 0 | 1 | 2, value: SortKey | "") => {
     setSortKeys((prev) => {
       const arr: (SortKey | "")[] = [prev[0], prev[1], prev[2]];
-      arr[idx] = idx === 0 ? (value || "overall_score") : value;
+      arr[idx] = idx === 0 ? (value || "effective_overall") : value;
       for (let j = idx + 1; j < 3; j++) {
         if (value && arr[j] === value) arr[j] = "";
       }
       if (arr[1] === "") arr[2] = "";
-      return [(arr[0] || "overall_score") as SortKey, arr[1], arr[2]];
+      return [(arr[0] || "effective_overall") as SortKey, arr[1], arr[2]];
     });
   }, []);
 
