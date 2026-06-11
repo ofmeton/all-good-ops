@@ -112,6 +112,8 @@ export function CurationClient({
   ]);
   const [filter, setFilter] = useState<FilterSpec>({});
   const [text, setText] = useState("");
+  // lane レーン（要件4）: 既定は投稿候補のみ表示。参考(JP=二次流通)は別レーンに物理分離。
+  const [lane, setLane] = useState<"candidate" | "reference" | "">("candidate");
   const [checked, setChecked] = useState<Set<string>>(new Set());
   const [msg, setMsg] = useState<{ text: string; type: "info" | "error" | "success" }>({
     text: "",
@@ -241,7 +243,15 @@ export function CurationClient({
 
   const base = materials[tab] ?? [];
   const activeSortKeys = sortKeys.filter(Boolean) as SortKey[];
-  const shown = sortMaterials(filterMaterials(base, { ...filter, text }), activeSortKeys);
+  const shown = sortMaterials(
+    filterMaterials(base, { ...filter, text, lane: lane || undefined }),
+    activeSortKeys,
+  );
+  // レーン別件数（セグメント表示用）。lane 未設定の旧データは candidate 扱い。
+  const laneCounts = {
+    candidate: base.filter((m) => (m.lane ?? "candidate") === "candidate").length,
+    reference: base.filter((m) => m.lane === "reference").length,
+  };
   const vias = Array.from(
     new Set(base.map((m) => m.discovery_via).filter(Boolean))
   ) as string[];
@@ -414,6 +424,42 @@ export function CurationClient({
                       </option>
                     ))}
                   </select>
+                );
+              })}
+            </div>
+
+            <div className="w-px h-4 bg-slate-200 mx-0.5" />
+
+            {/* Lane（要件4）: 投稿候補 / 参考(JP) / 全。既定は投稿候補（二次流通を主ビューから分離） */}
+            <div className="inline-flex rounded border border-slate-200 overflow-hidden" role="group" aria-label="レーン">
+              {([
+                { key: "candidate", label: "投稿候補", count: laneCounts.candidate },
+                { key: "reference", label: "参考(JP)", count: laneCounts.reference },
+                { key: "", label: "全" },
+              ] as const).map((opt) => {
+                const active = lane === opt.key;
+                return (
+                  <button
+                    key={opt.key || "all"}
+                    onClick={() => {
+                      setLane(opt.key);
+                      setChecked(new Set());
+                    }}
+                    aria-pressed={active}
+                    className={[
+                      "px-2.5 h-7 text-xs font-medium transition-colors border-r border-slate-200 last:border-r-0",
+                      active
+                        ? opt.key === "reference"
+                          ? "bg-violet-100 text-violet-800"
+                          : "bg-blue-100 text-blue-800"
+                        : "bg-white text-slate-500 hover:bg-slate-50",
+                    ].join(" ")}
+                  >
+                    {opt.label}
+                    {"count" in opt && (
+                      <span className="ml-1 tabular-nums opacity-70">{opt.count}</span>
+                    )}
+                  </button>
                 );
               })}
             </div>

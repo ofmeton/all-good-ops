@@ -136,6 +136,7 @@ export interface FilterSpec {
   via?: string;        // discovery_via 完全一致
   hasMedia?: boolean;  // media が1件以上
   lang?: string;       // lang 完全一致
+  lane?: string;       // lane 完全一致（candidate=投稿候補 / reference=参考(JP)）
   source?: string;     // source_ref 部分一致（小文字）
   text?: string;       // raw_text 部分一致（小文字）
 }
@@ -145,6 +146,7 @@ export function filterMaterials(materials: CurationMaterial[], f: FilterSpec): C
     if (f.via && m.discovery_via !== f.via) return false;
     if (f.hasMedia && !(m.media && m.media.length > 0)) return false;
     if (f.lang && m.lang !== f.lang) return false;
+    if (f.lane && (m.lane ?? "candidate") !== f.lane) return false;
     if (f.source && !(m.source_ref ?? "").toLowerCase().includes(f.source.toLowerCase())) return false;
     if (f.text && !(m.raw_text ?? "").toLowerCase().includes(f.text.toLowerCase())) return false;
     return true;
