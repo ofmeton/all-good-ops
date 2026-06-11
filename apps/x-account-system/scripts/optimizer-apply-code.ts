@@ -47,8 +47,10 @@ const IMPLEMENT_TOOLS = "Read,Edit,Write,Grep,Glob,Bash(npm test:*),Bash(npx jes
 const REVIEW_TOOLS = "Read,Grep,Glob,Bash(git diff:*)";
 function runClaude(cwd: string, prompt: string, allowedTools: string) {
   // headless 実行では permission-mode を明示しないとプランモードで起動し、承認待ち→即キャンセル→
-  // 編集ゼロになる。worktree 隔離 + allowedTools 限定なので bypassPermissions で自動実行させる。
-  const r = sh("claude", ["-p", prompt, "--model", CLAUDE_MODEL, "--permission-mode", "bypassPermissions", "--allowedTools", allowedTools],
+  // 編集ゼロになる。acceptEdits は編集を自動承認しつつ Bash は allowedTools のみ許可（rm/curl 等の
+  // 非許可コマンドは headless で拒否）。bypassPermissions は allowedTools 制限すら無効化し prompt-injection
+  // された提案で任意コード実行になり得るため使わない。repo 内の逸脱変更は allowlist ゲートが merge 前に弾く。
+  const r = sh("claude", ["-p", prompt, "--model", CLAUDE_MODEL, "--permission-mode", "acceptEdits", "--allowedTools", allowedTools],
     { cwd, timeoutMs: 1_200_000, env: { ALLOW_BRANCH_CONFLICT: "1" } });
   return { ok: r.ok, log: r.out };
 }
