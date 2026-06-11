@@ -12,6 +12,7 @@ import { getAgentRef as getAgentRefDefault, type AgentRef } from "../ma/agent-re
 import { COLLECTOR_CONFIG } from "./collector-config.js";
 import { dispatchTool, type ToolApi } from "./collector-tools.js";
 import { scoreCandidates, type Candidate } from "./collector-scoring.js";
+import { resolveThreadRoots } from "./collector-thread.js";
 import { translateCandidates } from "./collector-translate.js";
 import { saveScoredMaterials } from "./collector-persist.js";
 import { costUsdFor, USD_JPY_RATE } from "../cost/cost-of.js";
@@ -128,7 +129,15 @@ export async function runCollect(deps: RunCollectDeps): Promise<number> {
     return 0;
   }
 
-  const scored = await scoreCandidates(deps.anthropic as never, candidates, {
+  // スレッド非ルート（2番目以降）の候補は TOP へ差し替える（断片でなくスレッド起点を採点・保存）。
+  // コード側で決定的に行う（MA の get_thread 判断に依存しない）。fail-open。
+  const normalized = await resolveThreadRoots(candidates, {
+    key: deps.twitterApiKey,
+    fetchImpl: deps.fetchImpl,
+    getThread: deps.api?.getThread,
+  });
+
+  const scored = await scoreCandidates(deps.anthropic as never, normalized, {
     now,
     batchSize: COLLECTOR_CONFIG.scoringBatchSize,
     model: COLLECTOR_CONFIG.scoringModel,

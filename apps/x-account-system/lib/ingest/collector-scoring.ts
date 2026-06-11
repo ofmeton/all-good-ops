@@ -14,6 +14,8 @@ export interface DiscoveryTag {
 export interface Candidate {
   tweet: Tweet;
   discovery: DiscoveryTag;
+  /** スレッド非ルート（2番目以降）を拾った際に TOP へ差し替えた元の reply tweet id（provenance）。 */
+  threadRootOf?: string;
 }
 
 export interface AxisScores {
