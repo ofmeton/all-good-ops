@@ -3,6 +3,9 @@ import {
   ACTION_TO_STATUS,
   validateBody,
   canApprove,
+  canDiscard,
+  validateInstruction,
+  INSTRUCTION_MAX_LEN,
   BODY_MAX_LEN,
   buildMediaDeepLink,
   defaultPhotoAttachments,
@@ -195,6 +198,64 @@ describe("drafts-logic", () => {
     test("rejects over ATTACHMENTS_MAX", () => {
       const many = Array.from({ length: ATTACHMENTS_MAX + 1 }, () => ({ ...good }));
       expect(validateAttachments(many).ok).toBe(false);
+    });
+  });
+
+  describe("canDiscard", () => {
+    test("approved + unpublished + unscheduled → true", () => {
+      expect(
+        canDiscard({ human_approval_status: "approved", published_at: null, scheduled_for: null }),
+      ).toBe(true);
+    });
+
+    test("pending → false (must be approved first)", () => {
+      expect(
+        canDiscard({ human_approval_status: "pending", published_at: null, scheduled_for: null }),
+      ).toBe(false);
+    });
+
+    test("published → false", () => {
+      expect(
+        canDiscard({
+          human_approval_status: "approved",
+          published_at: "2026-06-08T00:00:00Z",
+          scheduled_for: null,
+        }),
+      ).toBe(false);
+    });
+
+    test("scheduled → false", () => {
+      expect(
+        canDiscard({
+          human_approval_status: "approved",
+          published_at: null,
+          scheduled_for: "2026-06-09T00:00:00Z",
+        }),
+      ).toBe(false);
+    });
+  });
+
+  describe("validateInstruction", () => {
+    test("trims and accepts normal instruction", () => {
+      expect(validateInstruction("  もっと数字を足して  ")).toEqual({
+        ok: true,
+        value: "もっと数字を足して",
+      });
+    });
+
+    test("rejects empty / whitespace-only", () => {
+      expect(validateInstruction("").ok).toBe(false);
+      expect(validateInstruction("   \n  ").ok).toBe(false);
+    });
+
+    test("rejects non-string", () => {
+      expect(validateInstruction(undefined).ok).toBe(false);
+      expect(validateInstruction(123).ok).toBe(false);
+    });
+
+    test("accepts exactly INSTRUCTION_MAX_LEN, rejects over", () => {
+      expect(validateInstruction("あ".repeat(INSTRUCTION_MAX_LEN)).ok).toBe(true);
+      expect(validateInstruction("あ".repeat(INSTRUCTION_MAX_LEN + 1)).ok).toBe(false);
     });
   });
 });
