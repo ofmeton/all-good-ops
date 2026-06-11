@@ -64,6 +64,16 @@ fallback 経路（`IN_MEMORY_FALLBACK=true` 等）だけが緑でも、本番経
 - **事例 (2026-06-05)**: ローカル 48 skill の大半が frontmatter 無し flat `.md` で自動検出されず、CLAUDE.md の手動誘導（起動マップ+ls+Read）に依存していた → 横断ツール系 22 個を SKILL.md 化し自動起動可能に。
 - 運用点検は `claude-md-health-check` スキル item 8（公式チェックリスト）に集約。出典: [Best practices for Claude Code](https://code.claude.com/docs/en/best-practices) / [Skill authoring best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices) / [Effective context engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)。
 
+## 原則7（自律実行）: agent がコードを書いて自己改善する系は「最小権限 × 初回安全弁 × 起動経路の事前 smoke」
+
+optimizer apply-code runner（accepted 提案を nested `claude -p` に実装させ→gate→merge→deploy）で確立（2026-06-11）。LLM が自分でコードを書いて本番に流す系ほど、境界をコードで強制し初回は安全に壊す。
+
+- **最小権限**: secret は必要な subprocess にだけ渡す。`.env.local` を global process.env に積んで全 spawn が継承する設計は事故る（`ANTHROPIC_API_KEY` 継承で nested claude が API 課金化／本番 secret 在中で env-guard テスト偽陰性→gate 崩壊）。子の env で secret を unset し creds 必須の操作（deploy）だけ渡す。
+- **権限境界はコードで強制し agent に与えない**: implementer agent に push/gh/deploy ツールを渡さない＝merge 権限は決定的 runner だけ。allowlist 外の変更は 1 ファイルでも無条件 reject（部分 merge なし）。`bypassPermissions` でなく `acceptEdits`＋allowedTools の多層防御（bypass は prompt-injection で任意コード実行＝セキュリティ HIGH 指摘）。
+- **初回本番実走は安全弁**: throwaway 入力＋rollback で正味ゼロ化し初回で実バグを段階摘出（apply-code は plan-mode/空diff/secret漏れ/bypass の4実バグを初回実走で安全に摘出）。可逆性（git revert + 再deploy）を最初から配線。
+- **起動経路の事前 smoke**: dry-run が外部CLI（claude -p / gh / wrangler）を呼ばない設計だと、その経路は実走まで未検証で初発覚し再走コストが嵩む。外部CLI を含む経路は dry-run と別に単発 smoke を先に。← 原則2 の subprocess 版。
+- 詳細手順: memory [[headless-claude-subprocess]]。
+
 ---
 
 ## メモ
