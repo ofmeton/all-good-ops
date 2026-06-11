@@ -1,6 +1,7 @@
 /**
  * lib/ingest/collector-config.ts — Collector の数値・設定系レバー SSOT。
- * 改善レバー L1/L2/L4/L7/L8/L9/L10 はここを編集する（散在禁止）。
+ * 改善レバー L1/L2/L4/L7/L8/L10 はここを編集する（散在禁止）。
+ * （L9 dedupWindowDays は dead config だったため 2026-06-11 削除。dedup は tweet_id unique 依存。）
  */
 
 export interface CollectorWatchSource {
@@ -26,18 +27,18 @@ export interface CollectorConfig {
   translationModel: string;
   /** L8: scoring の1バッチ件数 */
   scoringBatchSize: number;
-  /** L9: dedup ウィンドウ（日。これより古い同一 tweet_id は無視＝実質 tweet_id unique 依存） */
-  dedupWindowDays: number;
   /** L2: 新ソース候補を即 watchlist 昇格しない（常に candidate_sources へ） */
   autoPromoteDiscoveredSources: false;
 }
 
 /**
- * 全 28 ソース（旧 buzz-ingest の SEED_SOURCES 由来。buzz-ingest は legacy retire で削除済）。
- * 2026-06-11: category を本番 materials_store の実言語分布で裏取りし再分類（jp_publisher に紛れていた
- *   英語/非日本語アカ 8 件を en_curator へ）。lane（要件4）は category でなく per-material の lang で
- *   決まるため機能影響はないが、SSOT 正確性のため修正。
- * jp_publisher 16 / ai_official 3 / en_curator 9。
+ * 全 34 ソース。2026-06-11 収集最適化（PR-6）:
+ *  - 転換ゼロの英語/非日本語アカ 4 件を除去（gerardsans/csaba_kissi/jason_coder0/Fluyeporlaweb。
+ *    本番実測で collected 多数・queued 0・低 avg。探索は handle 限定でないので同じツイートは
+ *    keyword/trend 経由で拾い得る＝取りこぼしリスクは低い）。
+ *  - ai_official に Google系/主要ラボ/開発ツール/Anthropic製品 計 10 アカを追加（公式速報の一次ソース・
+ *    inbox セーフガード対象）。dashboard の AI_OFFICIAL_HANDLES と同期させること。
+ * jp_publisher 16 / ai_official 13 / en_curator 5。
  */
 export const COLLECTOR_CONFIG: CollectorConfig = {
   watchlist: [
@@ -59,19 +60,27 @@ export const COLLECTOR_CONFIG: CollectorConfig = {
     { handle: "claudecode_lab", category: "jp_publisher" },
     { handle: "Codestudiopjbk", category: "jp_publisher" },
     { handle: "ethancoder0", category: "jp_publisher" },
-    // --- ai_official: AI 企業公式（速報の一次ソース・inbox セーフガード対象）---
+    // --- ai_official: AI 企業/製品公式（速報の一次ソース・inbox セーフガード対象）---
     { handle: "AnthropicAI", category: "ai_official" },
     { handle: "OpenAI", category: "ai_official" },
     { handle: "GoogleDeepMind", category: "ai_official" },
+    // 2026-06-11 追加（Google系 / 主要ラボ / 開発ツール / Anthropic製品）
+    { handle: "GoogleAI", category: "ai_official" },
+    { handle: "GeminiApp", category: "ai_official" },
+    { handle: "xai", category: "ai_official" },
+    { handle: "AIatMeta", category: "ai_official" },
+    { handle: "MistralAI", category: "ai_official" },
+    { handle: "perplexity_ai", category: "ai_official" },
+    { handle: "cursor_ai", category: "ai_official" },
+    { handle: "vercel", category: "ai_official" },
+    { handle: "v0", category: "ai_official" },
+    { handle: "claudeai", category: "ai_official" },
     // --- en_curator: 英語/非日本語 AI 解説者（海外バズ早期検知。実分布で ja=0 を確認）---
-    { handle: "gerardsans", category: "en_curator" },
-    { handle: "csaba_kissi", category: "en_curator" },
+    // 転換ゼロの gerardsans/csaba_kissi/jason_coder0/Fluyeporlaweb は 2026-06-11 に除去。
     { handle: "Atenov_D", category: "en_curator" },
     { handle: "cyrilXBT", category: "en_curator" },
     { handle: "heynavtoor", category: "en_curator" },
     { handle: "exploraX_", category: "en_curator" },
-    { handle: "Fluyeporlaweb", category: "en_curator" },
-    { handle: "jason_coder0", category: "en_curator" },
     { handle: "ai_explorer25", category: "en_curator" },
   ],
   trendWoeids: [23424977],
@@ -81,6 +90,5 @@ export const COLLECTOR_CONFIG: CollectorConfig = {
   scoringModel: "claude-sonnet-4-5",
   translationModel: "claude-haiku-4-5-20251001",
   scoringBatchSize: 20,
-  dedupWindowDays: 14,
   autoPromoteDiscoveredSources: false,
 };

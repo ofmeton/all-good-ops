@@ -153,8 +153,13 @@ export function filterMaterials(materials: CurationMaterial[], f: FilterSpec): C
   });
 }
 
-/** inbox トリアージのセーフガード閾値・公式アカ。 */
-export const AI_OFFICIAL_HANDLES = new Set(["AnthropicAI", "OpenAI", "GoogleDeepMind"]);
+/** inbox トリアージのセーフガード閾値・公式アカ。
+ *  ※ collector-config.ts の category='ai_official' と同期させること（別パッケージのため手動同期）。 */
+export const AI_OFFICIAL_HANDLES = new Set([
+  "AnthropicAI", "OpenAI", "GoogleDeepMind",
+  "GoogleAI", "GeminiApp", "xai", "AIatMeta", "MistralAI", "perplexity_ai",
+  "cursor_ai", "vercel", "v0", "claudeai",
+]);
 export const INBOX_VELOCITY_THRESHOLD = 500; // velocity_per_hour（時間あたりエンゲージ）
 
 /**
