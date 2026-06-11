@@ -9,7 +9,7 @@ import {
   type Recommendation,
 } from "./curation-formats";
 
-/** view から status 別に取得（overall desc、上限 limit）。 */
+/** view から status 別に取得（effective_overall=time-decay後 desc、上限 limit）。 */
 export async function listCurationMaterials(
   status: SelectionStatus, limit = 300,
 ): Promise<CurationMaterial[]> {
@@ -18,7 +18,7 @@ export async function listCurationMaterials(
     .from("curation_materials")
     .select("*")
     .eq("selection_status", status)
-    .order("overall_score", { ascending: false, nullsFirst: false })
+    .order("effective_overall", { ascending: false, nullsFirst: false })
     .limit(limit);
   return (data ?? []) as CurationMaterial[];
 }

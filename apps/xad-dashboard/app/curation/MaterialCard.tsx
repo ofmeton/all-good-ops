@@ -23,7 +23,7 @@ export function MaterialCard({
   const e = m.engagement;
   return (
     <div
-      className={`border border-l-4 rounded-lg p-3 transition-colors ${borderAccent(m.overall_score)} ${
+      className={`border border-l-4 rounded-lg p-3 transition-colors ${borderAccent(m.effective_overall ?? m.overall_score)} ${
         checked ? "border-blue-500 bg-blue-50" : "border-slate-200 bg-white hover:bg-slate-50"
       }`}
     >
@@ -35,16 +35,30 @@ export function MaterialCard({
           className="mt-1 accent-blue-500"
         />
         <div className="flex-1 min-w-0">
-          {/* ヘッダー行: author / overall badge / 3-axis / lang */}
+          {/* ヘッダー行: author / lane / effective(=いまの総合) badge / 採点時 raw / 3-axis / lang */}
           <div className="flex items-center gap-2 text-sm flex-wrap">
             <span className="font-bold">@{m.source_ref}</span>
+            {m.lane === "reference" && (
+              <span className="px-1.5 py-0.5 rounded text-xs font-semibold bg-violet-100 text-violet-700">
+                参考(JP)
+              </span>
+            )}
+            {/* 主表示は time-decay 後の effective_overall（いまの価値）。 */}
             <span
-              className={`px-2 py-0.5 rounded text-xs font-bold ${scoreColor(m.overall_score)}`}
+              className={`px-2 py-0.5 rounded text-xs font-bold ${scoreColor(m.effective_overall ?? m.overall_score)}`}
             >
-              overall {m.overall_score ?? "—"}
+              総合 {m.effective_overall ?? m.overall_score ?? "—"}
             </span>
+            {/* 採点時の生スコアと差があれば併記（スコア違和感の検知用）。 */}
+            {m.effective_overall != null &&
+              m.overall_score != null &&
+              m.effective_overall !== m.overall_score && (
+                <span className="text-xs text-slate-400 tabular-nums" title="採点時の総合スコア">
+                  採点 {m.overall_score}
+                </span>
+              )}
             <span className="text-xs text-slate-500 font-mono tabular-nums">
-              f{m.freshness ?? "—"} / v{m.velocity ?? "—"} / fit{m.target_fit ?? "—"}
+              f{m.freshness_eff ?? m.freshness ?? "—"} / v{m.velocity ?? "—"} / fit{m.target_fit ?? "—"}
             </span>
             {m.lang && (
               <span className="text-xs text-slate-400 uppercase tracking-wide">{m.lang}</span>
