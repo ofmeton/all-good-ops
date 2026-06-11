@@ -1,5 +1,5 @@
 "use client";
-import { useState, useTransition, useCallback } from "react";
+import { useState, useTransition, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import {
   sortMaterials,
@@ -14,10 +14,12 @@ import {
   FMAT_OPTIONS,
   DEFAULT_FMAT,
   DEFAULT_TEMPLATE_ID,
-  modeOf,
+  buildAssignments,
   type TemplateOption,
-  type Recommendation,
+  type MaterialAssignment,
 } from "@/lib/curation-formats";
+import { FmatTemplatePicker } from "@/app/components/FmatTemplatePicker";
+import { useRecommendations } from "@/app/components/useRecommendations";
 import { MaterialCard } from "./MaterialCard";
 
 const TABS: { key: SelectionStatus; label: string; color: string }[] = [
@@ -99,14 +101,14 @@ export function CurationClient({
     text: "",
     type: "info",
   });
-  // 執筆送信ダイアログ: format/template をバッチ一括で 1 回選ぶ
+  // 執筆送信ダイアログ: 素材ごとに行（FmatTemplatePicker）で format/template を選ぶ（要件1）。
   const [composeOpen, setComposeOpen] = useState(false);
-  const [desiredFmat, setDesiredFmat] = useState<string>(DEFAULT_FMAT);
-  const [templateId, setTemplateId] = useState<string>(DEFAULT_TEMPLATE_ID);
-  // AI 推薦（on-demand・ユーザー操作起点）。最終決定は人＝既定 pre-fill のみ。
-  const [recommending, setRecommending] = useState(false);
-  const [recError, setRecError] = useState<string | null>(null);
-  const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
+  // 行の編集値（素材 id → {fmat, templateId}）。各行の初期値は推薦（無ければ既定）。
+  const [assignments, setAssignments] = useState<MaterialAssignment[]>([]);
+  // AI 推薦の共通フック（CurationClient/承認ダイアログで共用・fail-open・timeout 25s）。
+  const rec = useRecommendations();
+  // 自動発火の二重起動ガード: 直近に推薦を投げた id セット（ソート済 join）を覚えておく。
+  const lastRecKeyRef = useRef<string>("");
 
   const templateLabel = useCallback(
     (id: string) => templateOptions.find((o) => o.id === id)?.label ?? id,
@@ -117,65 +119,95 @@ export function CurationClient({
     [],
   );
 
-  // 選択素材に AI 推薦を要求し、最頻 templateId/fmat を既定に pre-fill（編集可）。
-  async function requestRecommendations() {
+  // 選択素材の推薦入力（本文・言語・メディア・反応）を作る。本文の無い素材は除外。
+  const buildRecPayload = useCallback(
+    (ids: string[]) => {
+      const byId = new Map((materials[tab] ?? []).map((m) => [m.id, m]));
+      return ids
+        .map((id) => byId.get(id))
+        .filter((m): m is CurationMaterial => !!m)
+        .map((m) => ({
+          id: m.id,
+          text: m.translation || m.raw_text || "",
+          lang: m.lang,
+          hasMedia: !!(m.media && m.media.length > 0),
+          engagement: m.engagement,
+        }))
+        .filter((m) => m.text.trim().length > 0);
+    },
+    [materials, tab],
+  );
+
+  // ユーザーが手動編集した行 id（推薦で上書きしない＝人の操作を尊重）。
+  const [editedIds, setEditedIds] = useState<Set<string>>(new Set());
+
+  // 推薦を実行し、結果で未編集行の初期値を pre-fill（要件1）。最終決定は人（行は編集可）。
+  // 推薦失敗（fail-open）でも assignments は既定で確定済なので送信導線は止まらない。
+  const runRecommend = useCallback(
+    async (ids: string[]) => {
+      const payload = buildRecPayload(ids);
+      const result = await rec.run(payload); // 内部で recommendations state も更新（行表示用）
+      // run() は失敗時 null・成功時に最頻 1 組を返す。要件1 は素材ごとに当てたいので、
+      // hook 内部が更新した recommendations を直接は読めない（setState は非同期）。
+      // 代わりに run() の戻りで成否だけ判定し、行反映は下の effect-less 同期ブロックで recommendations から行う。
+      void result;
+    },
+    [buildRecPayload, rec],
+  );
+
+  function openCompose() {
     const ids = Array.from(checked);
     if (ids.length === 0) return;
-    const byId = new Map((materials[tab] ?? []).map((m) => [m.id, m]));
-    const payload = ids
-      .map((id) => byId.get(id))
-      .filter((m): m is CurationMaterial => !!m)
-      .map((m) => ({
-        id: m.id,
-        text: m.translation || m.raw_text || "",
-        lang: m.lang,
-        hasMedia: !!(m.media && m.media.length > 0),
-        engagement: m.engagement,
-      }))
-      .filter((m) => m.text.trim().length > 0);
-    if (payload.length === 0) {
-      setRecError("本文のある素材が選択されていません");
-      return;
-    }
-    setRecommending(true);
-    setRecError(null);
-    // worker hang で「推薦中…」のまま固まらないよう timeout（25s）で打ち切る。
-    const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), 25_000);
-    try {
-      const res = await fetch("/api/curation/recommend", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ materials: payload }),
-        signal: ctrl.signal,
-      });
-      const body = (await res.json().catch(() => ({}))) as { recommendations?: Recommendation[] };
-      const recs = Array.isArray(body.recommendations) ? body.recommendations : [];
-      setRecommendations(recs);
-      if (recs.length === 0) {
-        setRecError("推薦を取得できませんでした（既定のまま送信できます）");
-      } else {
-        const { templateId: t, fmat: f } = modeOf(recs);
-        setTemplateId(t);
-        setDesiredFmat(f);
-      }
-    } catch (e) {
-      const msg =
-        (e as Error)?.name === "AbortError"
-          ? "推薦がタイムアウトしました（既定のまま送信できます）"
-          : `推薦の取得に失敗しました: ${(e as Error).message}`;
-      setRecError(msg);
-    } finally {
-      clearTimeout(timer);
-      setRecommending(false);
+    // 各行を既定で初期化（この時点で送信可能＝推薦は付加価値）。編集履歴もリセット。
+    setAssignments(buildAssignments(ids, []));
+    setEditedIds(new Set());
+    appliedRecKeyRef.current = "";
+    rec.reset();
+    setComposeOpen(true);
+    // ダイアログを開いた直後に推薦を 1 回 batch 自動発火（同一 id セットでは再発火しない）。
+    const key = [...ids].sort().join(",");
+    if (key !== lastRecKeyRef.current) {
+      lastRecKeyRef.current = key;
+      void runRecommend(ids);
     }
   }
 
-  function openCompose() {
-    // ダイアログを開くたびに前回の推薦結果をリセット（誤った既定の残留を防ぐ）。
-    setRecommendations([]);
-    setRecError(null);
-    setComposeOpen(true);
+  // 推薦結果が届いたら未編集行の初期値へ反映（手動編集済の行は上書きしない）。
+  // render 中の setState は React が安全に折り畳む（key が変わった 1 回のみ実行）。
+  const recsKey = rec.recommendations.map((r) => r.materialId).join(",");
+  const appliedRecKeyRef = useRef<string>("");
+  if (composeOpen && rec.recommendations.length > 0 && recsKey !== appliedRecKeyRef.current) {
+    appliedRecKeyRef.current = recsKey;
+    setAssignments((prev) => {
+      const built = buildAssignments(prev.map((a) => a.id), rec.recommendations);
+      return prev.map((a, i) => (editedIds.has(a.id) ? a : built[i]));
+    });
+  }
+
+  // 手動再実行（同一 id セットのガードを無視して投げ直す）。
+  function rerunRecommend() {
+    const ids = assignments.map((a) => a.id);
+    if (ids.length === 0) return;
+    appliedRecKeyRef.current = ""; // 次の結果を再適用できるようにする
+    void runRecommend(ids);
+  }
+
+  // 1 行の値を更新（= 手動編集としてマークし、以後の推薦反映から除外）。
+  const updateAssignment = useCallback(
+    (id: string, patch: Partial<Pick<MaterialAssignment, "fmat" | "templateId">>) => {
+      setAssignments((prev) => prev.map((a) => (a.id === id ? { ...a, ...patch } : a)));
+      setEditedIds((prev) => new Set(prev).add(id));
+    },
+    [],
+  );
+
+  // 一括変更（上部の行）: 全行に同じ fmat/template を当てる。
+  const [bulkFmat, setBulkFmat] = useState<string>(DEFAULT_FMAT);
+  const [bulkTemplateId, setBulkTemplateId] = useState<string>(DEFAULT_TEMPLATE_ID);
+  function applyBulk() {
+    setAssignments((prev) => prev.map((a) => ({ ...a, fmat: bulkFmat, templateId: bulkTemplateId })));
+    // 一括適用も手動操作＝以後の推薦反映から全行を除外する。
+    setEditedIds(new Set(assignments.map((a) => a.id)));
   }
 
   const base = materials[tab] ?? [];
@@ -209,7 +241,7 @@ export function CurationClient({
 
   async function act(
     action: CurationAction,
-    opts?: { desiredFmat?: string; templateId?: string },
+    opts?: { assignments?: MaterialAssignment[] },
   ) {
     const ids = Array.from(checked);
     if (ids.length === 0) return;
@@ -225,8 +257,16 @@ export function CurationClient({
         ids,
         action,
         note,
-        ...(opts?.desiredFmat ? { desiredFmat: opts.desiredFmat } : {}),
-        ...(opts?.templateId ? { templateId: opts.templateId } : {}),
+        // 要件1: 素材ごと希望を assignments で送る（route は per-item RPC を使う）。
+        ...(opts?.assignments
+          ? {
+              assignments: opts.assignments.map((a) => ({
+                id: a.id,
+                desiredFmat: a.fmat,
+                templateId: a.templateId,
+              })),
+            }
+          : {}),
       }),
     });
     const body = await res.json().catch(() => ({}));
@@ -244,7 +284,7 @@ export function CurationClient({
 
   async function confirmCompose() {
     setComposeOpen(false);
-    await act("send_to_compose", { desiredFmat, templateId });
+    await act("send_to_compose", { assignments });
   }
 
   const activeTab = TABS.find((t) => t.key === tab)!;
@@ -565,7 +605,7 @@ export function CurationClient({
         </div>
       </div>
 
-      {/* ── 執筆送信ダイアログ（format / template をバッチ一括選択） ── */}
+      {/* ── 執筆送信ダイアログ（素材ごとに format / template を選択・要件1） ── */}
       {composeOpen && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm"
@@ -575,10 +615,10 @@ export function CurationClient({
           onClick={() => setComposeOpen(false)}
         >
           <div
-            className="w-full max-w-sm rounded-xl bg-white shadow-xl border border-slate-200 overflow-hidden"
+            className="w-full max-w-2xl max-h-[88vh] flex flex-col rounded-xl bg-white shadow-xl border border-slate-200 overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="px-5 pt-4 pb-3 border-b border-slate-100">
+            <div className="px-5 pt-4 pb-3 border-b border-slate-100 shrink-0">
               <h2
                 id="compose-dialog-title"
                 className="text-sm font-semibold text-slate-900"
@@ -590,111 +630,111 @@ export function CurationClient({
                 <span className="font-medium text-slate-700 tabular-nums">
                   {checked.size}
                 </span>{" "}
-                件すべてに、下記のフォーマットとテンプレートを適用します。
+                件それぞれに、フォーマットとテンプレートを設定します（初期値は AI 推薦、無ければ既定）。最終決定はあなたです。
               </p>
             </div>
 
-            <div className="px-5 py-4 space-y-3.5">
-              {/* AI レコメンド（on-demand・最終決定は人） */}
-              <div className="rounded-lg border border-violet-200 bg-violet-50/60 p-3 space-y-2">
+            <div className="px-5 py-4 space-y-3 overflow-y-auto">
+              {/* AI 推薦ステータス（自動発火・最終決定は人） */}
+              <div className="rounded-lg border border-violet-200 bg-violet-50/60 p-3 space-y-1.5">
                 <div className="flex items-center justify-between gap-2">
                   <span className="text-xs font-medium text-violet-900">
-                    AI に型を提案させる
+                    {rec.loading
+                      ? "AI が各素材に最適な型を推薦中…"
+                      : rec.recommendations.length > 0
+                      ? `AI が ${rec.recommendations.length} 件の素材に型を推薦しました（初期値に反映済・編集可）`
+                      : "AI 推薦（各素材の初期値に反映されます）"}
                   </span>
                   <button
                     type="button"
-                    onClick={requestRecommendations}
-                    disabled={recommending || checked.size === 0}
-                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium bg-violet-600 text-white hover:bg-violet-700 active:bg-violet-800 shadow-sm disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                    onClick={rerunRecommend}
+                    disabled={rec.loading || assignments.length === 0}
+                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium bg-violet-600 text-white hover:bg-violet-700 active:bg-violet-800 shadow-sm disabled:opacity-40 disabled:cursor-not-allowed transition-colors shrink-0"
                   >
-                    {recommending ? "推薦中…" : "🤖 AIにおすすめさせる"}
+                    {rec.loading ? "推薦中…" : "🤖 再推薦"}
                   </button>
                 </div>
-                <p className="text-[11px] leading-snug text-violet-700/80">
-                  選択素材の内容から最適なテンプレ/長さを提案します。下の選択は提案後も自由に変更できます（最終決定はあなた）。
-                </p>
-                {recError && (
+                {rec.error && (
                   <p className="text-[11px] text-amber-700 bg-amber-50 border border-amber-200 rounded px-2 py-1">
-                    {recError}
+                    {rec.error}
                   </p>
                 )}
-                {recommendations.length > 0 && (
-                  <ul className="space-y-1.5 max-h-40 overflow-y-auto">
-                    {recommendations.map((r) => (
-                      <li
-                        key={r.materialId}
-                        className="text-[11px] leading-snug bg-white border border-violet-100 rounded px-2 py-1.5"
-                      >
-                        <div className="flex items-center gap-1.5 flex-wrap">
-                          <span className="font-medium text-violet-900">
-                            {templateLabel(r.templateId)}
-                          </span>
-                          <span className="text-slate-400">/</span>
-                          <span className="text-slate-600">{fmatLabel(r.fmat)}</span>
-                          <span className="ml-auto font-mono tabular-nums text-slate-400">
-                            確信度 {(r.confidence * 100).toFixed(0)}%
-                          </span>
-                        </div>
-                        {r.reason && (
-                          <p className="text-slate-500 mt-0.5">{r.reason}</p>
-                        )}
-                      </li>
-                    ))}
-                  </ul>
-                )}
               </div>
 
-              {/* Format */}
-              <div className="space-y-1">
-                <label
-                  htmlFor="compose-fmat"
-                  className="block text-xs font-medium text-slate-600"
-                >
-                  フォーマット
-                </label>
-                <select
-                  id="compose-fmat"
-                  value={desiredFmat}
-                  onChange={(e) => setDesiredFmat(e.target.value)}
-                  className="w-full h-9 pl-2.5 pr-8 text-sm border border-slate-200 rounded-lg bg-white text-slate-700 hover:border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 appearance-none cursor-pointer"
-                  style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394a3b8' d='M6 8L1 3h10z'/%3E%3C/svg%3E\")", backgroundRepeat: "no-repeat", backgroundPosition: "right 10px center" }}
-                >
-                  {FMAT_OPTIONS.map((o) => (
-                    <option key={o.value} value={o.value}>
-                      {o.label}
-                    </option>
-                  ))}
-                </select>
-                <p className="text-[11px] leading-snug text-slate-400">
-                  記事は X 長文単発（スレッドのように分割しません）。
-                </p>
+              {/* 一括変更行（全行に同じ fmat/template を当てる） */}
+              <div className="rounded-lg border border-slate-200 bg-slate-50/80 p-3">
+                <div className="flex items-center justify-between gap-2 mb-2">
+                  <span className="text-xs font-medium text-slate-600">
+                    一括変更（全 {assignments.length} 件に適用）
+                  </span>
+                  <button
+                    type="button"
+                    onClick={applyBulk}
+                    disabled={assignments.length === 0}
+                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium bg-white text-slate-700 border border-slate-300 hover:bg-slate-100 active:bg-slate-200 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shrink-0"
+                  >
+                    全件に適用
+                  </button>
+                </div>
+                <div className="grid grid-cols-2 gap-2.5">
+                  <FmatTemplatePicker
+                    idPrefix="compose-bulk"
+                    fmat={bulkFmat}
+                    templateId={bulkTemplateId}
+                    onFmatChange={setBulkFmat}
+                    onTemplateChange={setBulkTemplateId}
+                    templateOptions={templateOptions}
+                    fmatHint={null}
+                  />
+                </div>
               </div>
 
-              {/* Template */}
-              <div className="space-y-1">
-                <label
-                  htmlFor="compose-template"
-                  className="block text-xs font-medium text-slate-600"
-                >
-                  テンプレート
-                </label>
-                <select
-                  id="compose-template"
-                  value={templateId}
-                  onChange={(e) => setTemplateId(e.target.value)}
-                  className="w-full h-9 pl-2.5 pr-8 text-sm border border-slate-200 rounded-lg bg-white text-slate-700 hover:border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 appearance-none cursor-pointer"
-                  style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394a3b8' d='M6 8L1 3h10z'/%3E%3C/svg%3E\")", backgroundRepeat: "no-repeat", backgroundPosition: "right 10px center" }}
-                >
-                  {templateOptions.map((o) => (
-                    <option key={o.id} value={o.id}>
-                      {o.label}
-                    </option>
-                  ))}
-                </select>
+              {/* 素材ごとの行 */}
+              <div className="space-y-2.5">
+                {assignments.map((a, i) => {
+                  const m = (materials[tab] ?? []).find((x) => x.id === a.id);
+                  const preview = (m?.translation || m?.raw_text || "(本文なし)").trim();
+                  const r = rec.recommendations.find((x) => x.materialId === a.id);
+                  return (
+                    <div
+                      key={a.id}
+                      className="rounded-lg border border-slate-200 p-3 space-y-2"
+                    >
+                      <div className="flex items-start gap-2">
+                        <span className="text-[11px] font-mono tabular-nums text-slate-400 mt-0.5 shrink-0">
+                          {i + 1}
+                        </span>
+                        <p className="text-xs text-slate-600 leading-snug line-clamp-2 flex-1">
+                          {preview}
+                        </p>
+                      </div>
+                      {r && (
+                        <p className="text-[11px] text-violet-700/90 bg-violet-50/70 border border-violet-100 rounded px-2 py-1 leading-snug">
+                          AI推薦: {templateLabel(r.templateId)} / {fmatLabel(r.fmat)}
+                          <span className="text-slate-400">
+                            {" "}（確信度 {(r.confidence * 100).toFixed(0)}%）
+                          </span>
+                          {r.reason && <span className="block text-slate-500">{r.reason}</span>}
+                        </p>
+                      )}
+                      <div className="grid grid-cols-2 gap-2.5">
+                        <FmatTemplatePicker
+                          idPrefix={`compose-row-${i}`}
+                          fmat={a.fmat}
+                          templateId={a.templateId}
+                          onFmatChange={(v) => updateAssignment(a.id, { fmat: v })}
+                          onTemplateChange={(v) => updateAssignment(a.id, { templateId: v })}
+                          templateOptions={templateOptions}
+                          fmatHint={null}
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
 
-            <div className="flex items-center justify-end gap-2 px-5 py-3 bg-slate-50 border-t border-slate-100">
+            <div className="flex items-center justify-end gap-2 px-5 py-3 bg-slate-50 border-t border-slate-100 shrink-0">
               <button
                 onClick={() => setComposeOpen(false)}
                 className="px-3 py-1.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-200/60 transition-colors"

@@ -43,16 +43,51 @@ export async function setApprovalStatus(
   return (data as number) ?? 0;
 }
 
-/** post_drafts.body を service role で直接更新（pending かつ未公開のみ）。更新件数を返す。 */
-export async function updateDraftBody(id: string, body: string): Promise<number> {
+/** post_drafts.body を service role で直接更新（pending かつ未公開のみ）。更新件数を返す。
+ *  threadBodies を渡したとき（要件7）は thread_bodies も同時更新する。
+ *  契約（migration 0027）: thread_bodies が投稿時の正・body は join 派生。両方を書く。
+ *  threadBodies=undefined のときは body のみ更新（thread_bodies は触らない＝後方互換）。
+ *  threadBodies=null を渡すと単一ツイートへ戻す（thread_bodies を NULL 化）。 */
+export async function updateDraftBody(
+  id: string,
+  body: string,
+  threadBodies?: string[] | null,
+): Promise<number> {
   const sb = serverSupabase();
+  // thread_bodies は「明示指定（配列 or null）」のときだけ patch に含める。
+  // 既存の単一本文編集（threadBodies 未指定）では列を触らず後方互換を保つ。
+  const patch: { body: string; thread_bodies?: string[] | null } =
+    threadBodies === undefined ? { body } : { body, thread_bodies: threadBodies };
   const { data, error } = await sb
     .from("post_drafts")
-    .update({ body })
+    .update(patch)
     .eq("id", id)
     .eq("human_approval_status", "pending")
     .is("published_at", null)
     .select("id");
   if (error) throw new Error(`updateDraftBody failed: ${error.message}`);
   return Array.isArray(data) ? data.length : 0;
+}
+
+/** RPC request_draft_revision（migration 0026）で修正依頼を CAS 起票する（要件4+5）。
+ *  pending かつ未公開・未予約のみ 'revision_requested' へ遷移し、素材 meta に指示文・
+ *  前回ドラフト・desired_fmat/template_id を載せて再 compose のキューへ戻す。
+ *  desiredFmat/templateId は非 NULL 時のみ素材 meta を上書き（未指定＝現状維持）。
+ *  claim 件数（0 or 1）を返す（二重押下は CAS で no-op＝0）。 */
+export async function requestRevision(
+  id: string,
+  instruction: string,
+  desiredFmat?: string | null,
+  templateId?: string | null,
+): Promise<number> {
+  const sb = serverSupabase();
+  const { data, error } = await sb.rpc("request_draft_revision", {
+    p_draft_id: id,
+    p_instruction: instruction,
+    // 未指定（現状維持）は null。RPC 側で非 NULL 時のみ素材 meta を上書きする。
+    p_desired_fmat: desiredFmat ?? null,
+    p_template_id: templateId ?? null,
+  });
+  if (error) throw new Error(`request_draft_revision failed: ${error.message}`);
+  return (data as number) ?? 0;
 }

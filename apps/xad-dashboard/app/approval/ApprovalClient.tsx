@@ -2,15 +2,26 @@
 import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import type { ApprovalDraft, Attachment } from "@/lib/drafts-logic";
+import type { TemplateOption } from "@/lib/curation-formats";
+import { splitThread, joinThread } from "@/lib/thread-logic";
 import { DraftCard } from "./DraftCard";
+import { RevisionDialog } from "./RevisionDialog";
 
 type Msg = { text: string; type: "info" | "error" | "success" } | null;
 
-export function ApprovalClient({ initialDrafts }: { initialDrafts: ApprovalDraft[] }) {
+export function ApprovalClient({
+  initialDrafts,
+  templateOptions,
+}: {
+  initialDrafts: ApprovalDraft[];
+  templateOptions: TemplateOption[];
+}) {
   const router = useRouter();
   const [drafts, setDrafts] = useState<ApprovalDraft[]>(initialDrafts);
   const [busyId, setBusyId] = useState<string | null>(null);
   const [msg, setMsg] = useState<Msg>(null);
+  // 修正依頼ダイアログ対象（要件4+5）。null=閉じている。
+  const [reviseTarget, setReviseTarget] = useState<ApprovalDraft | null>(null);
 
   const removeDraft = useCallback((id: string) => {
     setDrafts((prev) => prev.filter((d) => d.id !== id));
@@ -68,21 +79,34 @@ export function ApprovalClient({ initialDrafts }: { initialDrafts: ApprovalDraft
   );
 
   const saveBody = useCallback(
-    async (id: string, body: string): Promise<boolean> => {
+    async (id: string, body: string, isThread: boolean): Promise<boolean> => {
       setBusyId(id);
       setMsg(null);
       try {
         const res = await fetch("/api/drafts/update", {
           method: "POST",
           headers: { "content-type": "application/json" },
-          body: JSON.stringify({ id, body }),
+          body: JSON.stringify({ id, body, ...(isThread ? { isThread: true } : {}) }),
         });
         const json = await res.json().catch(() => ({}));
         if (!res.ok || !json.ok) {
           setMsg({ text: `保存失敗: ${json.error ?? json.warning ?? res.status}`, type: "error" });
           return false;
         }
-        setDrafts((prev) => prev.map((d) => (d.id === id ? { ...d, body } : d)));
+        // thread draft はサーバが正規化した body を反映し、thread_bodies も再分割で更新。
+        const savedBody = typeof json.body === "string" ? json.body : body;
+        const nextThreadBodies = isThread ? splitThread(savedBody) : null;
+        setDrafts((prev) =>
+          prev.map((d) =>
+            d.id === id
+              ? {
+                  ...d,
+                  body: isThread ? joinThread(nextThreadBodies as string[]) : savedBody,
+                  thread_bodies: nextThreadBodies,
+                }
+              : d,
+          ),
+        );
         setMsg({ text: "本文を保存しました", type: "success" });
         return true;
       } catch (e) {
@@ -93,6 +117,48 @@ export function ApprovalClient({ initialDrafts }: { initialDrafts: ApprovalDraft
       }
     },
     [],
+  );
+
+  const requestRevision = useCallback(
+    async (
+      id: string,
+      args: { instruction: string; desiredFmat?: string; templateId?: string },
+    ) => {
+      setBusyId(id);
+      setMsg(null);
+      try {
+        const res = await fetch("/api/drafts/revise", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ id, ...args }),
+        });
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok || !json.ok) {
+          setMsg({ text: `修正依頼に失敗: ${json.error ?? res.status}`, type: "error" });
+          return;
+        }
+        setReviseTarget(null);
+        if (json.updated === 0) {
+          setMsg({ text: "対象は既に処理済みでした", type: "info" });
+          removeDraft(id);
+          return;
+        }
+        // enqueue 失敗時は warning を surface（遷移は成立済・後で自動再生成）。
+        setMsg({
+          text: json.warning
+            ? `修正依頼を受理しました（${json.warning}）`
+            : "修正依頼を送信しました（再生成を起動・点検後に承認待ちへ戻ります）",
+          type: json.warning ? "info" : "success",
+        });
+        removeDraft(id);
+        router.refresh();
+      } catch (e) {
+        setMsg({ text: `通信エラー: ${(e as Error).message}`, type: "error" });
+      } finally {
+        setBusyId(null);
+      }
+    },
+    [removeDraft, router],
   );
 
   return (
@@ -149,11 +215,22 @@ export function ApprovalClient({ initialDrafts }: { initialDrafts: ApprovalDraft
               busy={busyId === d.id}
               onApprove={(attachments, reason) => decide(d.id, "approve", attachments, reason)}
               onReject={(reason) => decide(d.id, "reject", undefined, reason)}
-              onSave={(body) => saveBody(d.id, body)}
+              onSave={(body, isThread) => saveBody(d.id, body, isThread)}
+              onRequestRevision={() => setReviseTarget(d)}
             />
           ))
         )}
       </div>
+
+      {reviseTarget && (
+        <RevisionDialog
+          draft={reviseTarget}
+          templateOptions={templateOptions}
+          busy={busyId === reviseTarget.id}
+          onSubmit={(args) => requestRevision(reviseTarget.id, args)}
+          onClose={() => setReviseTarget(null)}
+        />
+      )}
     </div>
   );
 }

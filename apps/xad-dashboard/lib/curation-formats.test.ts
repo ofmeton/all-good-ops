@@ -6,8 +6,10 @@ import {
   DEFAULT_FMAT,
   toRecommendations,
   modeOf,
+  buildAssignments,
   type TemplateOption,
   type Recommendation,
+  type MaterialAssignment,
 } from "./curation-formats";
 
 afterEach(() => {
@@ -132,5 +134,52 @@ describe("modeOf", () => {
       { materialId: "c", templateId: "t2", fmat: "long", reason: "", confidence: 1 },
     ];
     expect(modeOf(recs)).toEqual({ templateId: "t1", fmat: "long" });
+  });
+});
+
+describe("buildAssignments", () => {
+  test("推薦のある素材はその推薦、無い素材は既定で初期化（要件1）", () => {
+    const recs: Recommendation[] = [
+      { materialId: "m1", templateId: "t_deep", fmat: "long", reason: "r", confidence: 0.9 },
+    ];
+    expect(buildAssignments(["m1", "m2"], recs)).toEqual<MaterialAssignment[]>([
+      { id: "m1", fmat: "long", templateId: "t_deep" },
+      { id: "m2", fmat: DEFAULT_FMAT, templateId: DEFAULT_TEMPLATE_ID },
+    ]);
+  });
+
+  test("推薦が空なら全行が既定（fail-open）", () => {
+    expect(buildAssignments(["a", "b"], [])).toEqual<MaterialAssignment[]>([
+      { id: "a", fmat: DEFAULT_FMAT, templateId: DEFAULT_TEMPLATE_ID },
+      { id: "b", fmat: DEFAULT_FMAT, templateId: DEFAULT_TEMPLATE_ID },
+    ]);
+  });
+
+  test("ids の順序を保持する", () => {
+    const out = buildAssignments(["z", "a", "m"], []);
+    expect(out.map((a) => a.id)).toEqual(["z", "a", "m"]);
+  });
+
+  test("同一 materialId の重複推薦は先頭を採る", () => {
+    const recs: Recommendation[] = [
+      { materialId: "m1", templateId: "t_first", fmat: "short", reason: "", confidence: 1 },
+      { materialId: "m1", templateId: "t_second", fmat: "long", reason: "", confidence: 1 },
+    ];
+    expect(buildAssignments(["m1"], recs)).toEqual<MaterialAssignment[]>([
+      { id: "m1", fmat: "short", templateId: "t_first" },
+    ]);
+  });
+
+  test("ids に無い推薦は無視（選択外素材の推薦は捨てる）", () => {
+    const recs: Recommendation[] = [
+      { materialId: "other", templateId: "t_x", fmat: "long", reason: "", confidence: 1 },
+    ];
+    expect(buildAssignments(["m1"], recs)).toEqual<MaterialAssignment[]>([
+      { id: "m1", fmat: DEFAULT_FMAT, templateId: DEFAULT_TEMPLATE_ID },
+    ]);
+  });
+
+  test("空 ids は空配列", () => {
+    expect(buildAssignments([], [])).toEqual([]);
   });
 });

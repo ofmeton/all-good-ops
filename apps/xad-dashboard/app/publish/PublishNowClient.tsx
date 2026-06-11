@@ -5,10 +5,24 @@ import type { PublishStock, HandoffPayload } from "@/lib/publish-queries";
 
 type Msg = { text: string; type: "info" | "error" | "success" } | null;
 
-/** 本文先頭プレビュー（1 行化・60 字）。 */
-function preview(body: string, n = 60): string {
-  const oneLine = body.replace(/\s+/g, " ").trim();
-  return [...oneLine].length > n ? `${[...oneLine].slice(0, n).join("")}…` : oneLine;
+/** thread draft の各ツイートを trim→空除去して正規化（投稿時の正＝thread_bodies）。 */
+function threadPartsFromTweets(tweets: string[] | null): string[] {
+  return Array.isArray(tweets)
+    ? tweets
+        .filter((t): t is string => typeof t === "string")
+        .map((t) => t.trim())
+        .filter((t) => t.length > 0)
+    : [];
+}
+
+/** thread draft の各ツイートを trim→空除去して正規化（投稿時の正＝thread_bodies）。 */
+function threadParts(d: PublishStock): string[] {
+  return Array.isArray(d.thread_bodies)
+    ? d.thread_bodies
+        .filter((t): t is string => typeof t === "string")
+        .map((t) => t.trim())
+        .filter((t) => t.length > 0)
+    : [];
 }
 
 /** 写真 upload intent 数＋本文の動画 deep-link 有無をバッジ文字列に。 */
@@ -33,6 +47,19 @@ export function PublishNowClient({ initialStock }: { initialStock: PublishStock[
   const [activeId, setActiveId] = useState<string | null>(null);
   const [handoff, setHandoff] = useState<HandoffPayload | null>(null);
   const [copied, setCopied] = useState<string | null>(null);
+  // 要件6: 本文の全文展開トグル（行ごと line-clamp ↔ whitespace-pre-wrap 全文）。
+  const [expanded, setExpanded] = useState<Set<string>>(new Set());
+  // 要件3: 破棄ダイアログ（対象 id + 理由任意）。
+  const [discardId, setDiscardId] = useState<string | null>(null);
+
+  const toggleExpand = useCallback((id: string) => {
+    setExpanded((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }, []);
 
   const copy = useCallback(async (label: string, text: string) => {
     try {
@@ -106,6 +133,54 @@ export function PublishNowClient({ initialStock }: { initialStock: PublishStock[
     [router],
   );
 
+  // 要件2: handoff を経由せず「投稿済みにする」。X で投稿済みかを人間に再確認させてから確定。
+  const handleMarkPublished = useCallback(
+    (id: string) => {
+      if (!window.confirm("Xで投稿済みか確認しましたか?\n\n「OK」で published_at を確定します（取り消し不可）。")) {
+        return;
+      }
+      void confirmPublished(id);
+    },
+    [confirmPublished],
+  );
+
+  // 要件3: 破棄（論理破棄・復元可）。理由任意 → /api/drafts/discard。
+  const handleDiscard = useCallback(
+    async (id: string, reason: string) => {
+      setBusy(true);
+      setMsg(null);
+      try {
+        const res = await fetch("/api/drafts/discard", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ ids: [id], reason: reason.trim() || undefined }),
+        });
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok || !json.ok) {
+          setMsg({ text: `破棄失敗: ${json.error ?? res.status}`, type: "error" });
+          return;
+        }
+        if (json.discarded === 0) {
+          setMsg({ text: "対象は破棄できませんでした（公開済み/予約済み/別状態の可能性）", type: "info" });
+        } else {
+          setMsg({ text: "破棄しました（元素材は再利用可・復元可）", type: "success" });
+          setStock((prev) => prev.filter((d) => d.id !== id));
+          if (activeId === id) {
+            setActiveId(null);
+            setHandoff(null);
+          }
+        }
+        setDiscardId(null);
+        router.refresh();
+      } catch (e) {
+        setMsg({ text: `通信エラー: ${(e as Error).message}`, type: "error" });
+      } finally {
+        setBusy(false);
+      }
+    },
+    [activeId, router],
+  );
+
   return (
     <div className="min-h-screen bg-slate-50">
       {/* ── Header ── */}
@@ -115,6 +190,7 @@ export function PublishNowClient({ initialStock }: { initialStock: PublishStock[
             <h1 className="text-lg font-semibold text-slate-900 tracking-tight">今すぐ投稿</h1>
             <p className="text-xs text-slate-500 mt-0.5">
               承認済みストックを 1 件選び、chrome 半自動（通常コンポーザ）で投稿 → 投稿後に「投稿済み」を確定します。
+              手動で「投稿済みにする」「破棄」も各行から可能です。
             </p>
           </div>
           <span className="text-xs text-slate-400 font-mono tabular-nums whitespace-nowrap">
@@ -162,6 +238,9 @@ export function PublishNowClient({ initialStock }: { initialStock: PublishStock[
           stock.map((d) => {
             const summary = mediaSummary(d);
             const isActive = activeId === d.id;
+            const parts = threadParts(d);
+            const isThread = parts.length > 1;
+            const isExpanded = expanded.has(d.id);
             return (
               <div
                 key={d.id}
@@ -171,11 +250,59 @@ export function PublishNowClient({ initialStock }: { initialStock: PublishStock[
                 ].join(" ")}
               >
                 <div className="flex items-start justify-between gap-3">
-                  <div className="min-w-0">
-                    <p className="text-sm text-slate-700 leading-relaxed break-words">
-                      {preview(d.body)}
-                    </p>
+                  <div className="min-w-0 flex-1">
+                    {/* 要件6: 3 行 line-clamp ↔ 全文(whitespace-pre-wrap)トグル。
+                        thread draft は番号付きで全文表示する。 */}
+                    {isThread ? (
+                      <button
+                        type="button"
+                        onClick={() => toggleExpand(d.id)}
+                        className="w-full text-left"
+                        aria-expanded={isExpanded}
+                      >
+                        <div
+                          className={[
+                            "text-sm text-slate-700 leading-relaxed break-words whitespace-pre-wrap space-y-1.5",
+                            isExpanded ? "" : "line-clamp-3",
+                          ].join(" ")}
+                        >
+                          {parts.map((t, i) => (
+                            <p key={i}>
+                              <span className="text-slate-400 tabular-nums mr-1">{i + 1}/{parts.length}</span>
+                              {t}
+                            </p>
+                          ))}
+                        </div>
+                        <span className="mt-1 inline-block text-[11px] text-blue-600">
+                          {isExpanded ? "▲ 閉じる" : "▼ 全文を表示"}
+                        </span>
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => toggleExpand(d.id)}
+                        className="w-full text-left"
+                        aria-expanded={isExpanded}
+                      >
+                        <p
+                          className={[
+                            "text-sm text-slate-700 leading-relaxed break-words",
+                            isExpanded ? "whitespace-pre-wrap" : "line-clamp-3",
+                          ].join(" ")}
+                        >
+                          {d.body}
+                        </p>
+                        <span className="mt-1 inline-block text-[11px] text-blue-600">
+                          {isExpanded ? "▲ 閉じる" : "▼ 全文を表示"}
+                        </span>
+                      </button>
+                    )}
                     <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
+                      {isThread && (
+                        <span className="text-[11px] px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-700 border border-indigo-200">
+                          🧵 スレッド{parts.length}本
+                        </span>
+                      )}
                       {d.fmat && (
                         <span className="text-[11px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-600">
                           {d.fmat}
@@ -193,14 +320,41 @@ export function PublishNowClient({ initialStock }: { initialStock: PublishStock[
                       )}
                     </div>
                   </div>
-                  <button
-                    onClick={() => openHandoff(d.id)}
-                    disabled={busy}
-                    className="shrink-0 px-3 py-1.5 rounded-lg text-sm font-medium bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-40"
-                  >
-                    今すぐ投稿
-                  </button>
+                  <div className="shrink-0 flex flex-col items-stretch gap-1.5">
+                    <button
+                      onClick={() => openHandoff(d.id)}
+                      disabled={busy}
+                      className="px-3 py-1.5 rounded-lg text-sm font-medium bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-40"
+                    >
+                      今すぐ投稿
+                    </button>
+                    {/* 要件2: handoff を経由しない「投稿済みにする」（window.confirm 起点）。 */}
+                    <button
+                      onClick={() => handleMarkPublished(d.id)}
+                      disabled={busy}
+                      className="px-3 py-1.5 rounded-lg text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 disabled:opacity-40"
+                    >
+                      投稿済みにする
+                    </button>
+                    {/* 要件3: 破棄（rose 系・確認ダイアログ＋理由任意）。 */}
+                    <button
+                      onClick={() => setDiscardId(d.id)}
+                      disabled={busy}
+                      className="px-3 py-1.5 rounded-lg text-xs font-medium bg-rose-50 text-rose-700 border border-rose-200 hover:bg-rose-100 disabled:opacity-40"
+                    >
+                      破棄
+                    </button>
+                  </div>
                 </div>
+
+                {/* ── 破棄ダイアログ（対象行のみ）── */}
+                {discardId === d.id && (
+                  <DiscardDialog
+                    busy={busy}
+                    onConfirm={(reason) => handleDiscard(d.id, reason)}
+                    onCancel={() => setDiscardId(null)}
+                  />
+                )}
 
                 {/* ── ハンドオフ手順（選択中のみ）── */}
                 {isActive && handoff && (
@@ -243,25 +397,57 @@ function HandoffPanel({
 }) {
   const dlCmd = `cd apps/x-account-system && npx tsx scripts/fetch-draft-media.ts ${handoff.draftId}`;
   const planCmd = `cd apps/x-account-system && npx tsx scripts/publish-now.ts --id ${handoff.draftId}`;
+  // 要件7: thread_bodies が 2 本以上ならスレッド投稿として個別コピー＋スレッド手順に分岐。
+  const tweets = threadPartsFromTweets(handoff.tweets);
+  const isThread = tweets.length > 1;
   return (
     <div className="mt-4 pt-4 border-t border-slate-200 space-y-3">
       {/* 本文 */}
-      <div>
-        <div className="flex items-center justify-between gap-2 mb-1">
+      {isThread ? (
+        <div className="space-y-2">
           <span className="text-xs font-medium text-slate-600">
-            投稿本文（{handoff.charCount} 字）
+            スレッド本文（{tweets.length} 本）— ツイートごとに個別コピーして 1 本ずつ投稿
           </span>
-          <button
-            onClick={() => onCopy("body", handoff.body)}
-            className="text-xs px-2 py-0.5 rounded bg-slate-100 text-slate-600 hover:bg-slate-200"
-          >
-            {copied === "body" ? COPY_OK : "本文をコピー"}
-          </button>
+          {tweets.map((t, i) => {
+            const label = `tweet-${i}`;
+            return (
+              <div key={i}>
+                <div className="flex items-center justify-between gap-2 mb-1">
+                  <span className="text-[11px] font-medium text-indigo-700 tabular-nums">
+                    {i + 1}/{tweets.length} 本目（{[...t].length} 字）
+                  </span>
+                  <button
+                    onClick={() => onCopy(label, t)}
+                    className="text-xs px-2 py-0.5 rounded bg-slate-100 text-slate-600 hover:bg-slate-200"
+                  >
+                    {copied === label ? COPY_OK : "このツイートをコピー"}
+                  </button>
+                </div>
+                <pre className="text-xs text-slate-700 bg-slate-50 border border-slate-200 rounded-lg p-2.5 whitespace-pre-wrap break-words font-sans">
+                  {t}
+                </pre>
+              </div>
+            );
+          })}
         </div>
-        <pre className="text-xs text-slate-700 bg-slate-50 border border-slate-200 rounded-lg p-2.5 whitespace-pre-wrap break-words font-sans">
-          {handoff.body}
-        </pre>
-      </div>
+      ) : (
+        <div>
+          <div className="flex items-center justify-between gap-2 mb-1">
+            <span className="text-xs font-medium text-slate-600">
+              投稿本文（{handoff.charCount} 字）
+            </span>
+            <button
+              onClick={() => onCopy("body", handoff.body)}
+              className="text-xs px-2 py-0.5 rounded bg-slate-100 text-slate-600 hover:bg-slate-200"
+            >
+              {copied === "body" ? COPY_OK : "本文をコピー"}
+            </button>
+          </div>
+          <pre className="text-xs text-slate-700 bg-slate-50 border border-slate-200 rounded-lg p-2.5 whitespace-pre-wrap break-words font-sans">
+            {handoff.body}
+          </pre>
+        </div>
+      )}
 
       {/* メディア */}
       {(handoff.photos.length > 0 || handoff.hasVideoDeepLink) && (
@@ -300,12 +486,22 @@ function HandoffPanel({
             {copied === "plan" ? COPY_OK : "plan コマンド"}
           </button>
         </div>
-        <ol className="list-decimal list-inside space-y-0.5 text-slate-500">
-          <li>x.com/compose/post を開く（通常コンポーザ・予約UIは使わない）</li>
-          <li>本文を type_text で入力（写真がある場合は先に DL→添付）</li>
-          <li>「ポストする」で即時投稿（source=本人クライアント維持）</li>
-          <li>投稿完了したら下の「投稿済みにする」で published_at 確定</li>
-        </ol>
+        {isThread ? (
+          <ol className="list-decimal list-inside space-y-0.5 text-slate-500">
+            <li>x.com/compose/post を開く（通常コンポーザ・予約UIは使わない）</li>
+            <li>1 本目を type_text で入力（写真がある場合は先に DL→添付）</li>
+            <li>「ポストを追加」（+）で空エディタを増やし、2 本目以降を 1 本ずつ貼る（計 {tweets.length} 本）</li>
+            <li>「すべてポストする」でスレッド一括投稿（source=本人クライアント維持）</li>
+            <li>投稿完了したら下の「投稿済みにする」で published_at 確定</li>
+          </ol>
+        ) : (
+          <ol className="list-decimal list-inside space-y-0.5 text-slate-500">
+            <li>x.com/compose/post を開く（通常コンポーザ・予約UIは使わない）</li>
+            <li>本文を type_text で入力（写真がある場合は先に DL→添付）</li>
+            <li>「ポストする」で即時投稿（source=本人クライアント維持）</li>
+            <li>投稿完了したら下の「投稿済みにする」で published_at 確定</li>
+          </ol>
+        )}
       </div>
 
       {/* 確定 */}
@@ -323,6 +519,54 @@ function HandoffPanel({
           className="px-3 py-1.5 rounded-lg text-sm font-medium bg-slate-100 text-slate-600 hover:bg-slate-200 disabled:opacity-40"
         >
           閉じる
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/** 破棄ダイアログ（要件3）: 理由任意（2000 字）＋確認。論理破棄・復元可の注意を明示。 */
+function DiscardDialog({
+  busy,
+  onConfirm,
+  onCancel,
+}: {
+  busy: boolean;
+  onConfirm: (reason: string) => void;
+  onCancel: () => void;
+}) {
+  const [reason, setReason] = useState("");
+  const tooLong = reason.trim().length > 2000;
+  return (
+    <div className="mt-4 pt-4 border-t border-rose-200 space-y-2.5">
+      <p className="text-xs font-medium text-rose-700">このストックを破棄しますか?</p>
+      <p className="text-[11px] text-slate-500">
+        論理破棄（復元可）です。元素材は再利用可（再キュレ/再執筆の対象に戻ります）。
+      </p>
+      <textarea
+        value={reason}
+        onChange={(e) => setReason(e.target.value)}
+        placeholder="破棄理由（任意）"
+        rows={2}
+        className="w-full text-xs rounded-lg border border-slate-200 p-2 focus:outline-none focus:ring-1 focus:ring-rose-300 resize-y"
+      />
+      {tooLong && (
+        <p className="text-[11px] text-rose-600">理由が長すぎます（{reason.trim().length}/2000字）</p>
+      )}
+      <div className="flex items-center gap-2">
+        <button
+          onClick={() => onConfirm(reason)}
+          disabled={busy || tooLong}
+          className="px-3 py-1.5 rounded-lg text-sm font-medium bg-rose-600 hover:bg-rose-700 text-white disabled:opacity-40"
+        >
+          破棄する
+        </button>
+        <button
+          onClick={onCancel}
+          disabled={busy}
+          className="px-3 py-1.5 rounded-lg text-sm font-medium bg-slate-100 text-slate-600 hover:bg-slate-200 disabled:opacity-40"
+        >
+          キャンセル
         </button>
       </div>
     </div>

@@ -348,11 +348,14 @@ export default {
           db: { schema: "xad" },
         });
         // 承認済み未予約ストック（承認順 FIFO・id で安定化）
+        // 決定1: スレッド draft (thread_bodies IS NOT NULL) は X 予約UIがスレッド未サポート
+        //   のため予約スロット計画から除外（即時投稿 x-immediate-publish のみ対応）。
         const { data: stockRows, error: stockErr } = await sb
           .from("post_drafts")
           .select("id, human_approved_at")
           .eq("human_approval_status", "approved")
           .is("scheduled_for", null)
+          .is("thread_bodies", null)
           .order("human_approved_at", { ascending: true })
           .order("id", { ascending: true });
         if (stockErr) throw new Error(`approved ストック取得失敗: ${stockErr.message}`);

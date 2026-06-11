@@ -2,7 +2,13 @@
 // 状態遷移・本文バリデーション・承認可否のみ。配管は drafts-queries が持つ。
 
 export type DraftApprovalAction = "approve" | "reject";
-export type ApprovalStatus = "pending" | "approved" | "rejected" | "auto_approved";
+export type ApprovalStatus =
+  | "pending"
+  | "approved"
+  | "rejected"
+  | "auto_approved"
+  | "discarded"
+  | "revision_requested";
 
 /** UI アクション → human_approval_status。RPC guard と一致させる。 */
 export const ACTION_TO_STATUS: Record<DraftApprovalAction, "approved" | "rejected"> = {
@@ -44,6 +50,9 @@ export interface ApprovalDraft {
   attachments: Attachment[] | null;
   /** 承認/却下時に記録された理由・メモ（任意）。Stage 2B で追加。view 行には常に存在（未入力は null）。 */
   approval_reason: string | null;
+  /** スレッド本文配列（要件7）。null=単一ツイート（後方互換）。
+   *  thread_bodies が投稿時の正。body は THREAD_DELIM join 派生（migration 0027 契約）。 */
+  thread_bodies: string[] | null;
 }
 
 /** 本文の上限（X 長文/記事も収まる安全側上限）。 */
@@ -73,6 +82,32 @@ export function canApprove(
     d.published_at == null &&
     d.scheduled_for == null
   );
+}
+
+/** 破棄できるのは approved かつ未公開・未予約のときだけ（RPC discard_approved_drafts の CAS と同条件・要件3）。 */
+export function canDiscard(
+  d: Pick<ApprovalDraft, "human_approval_status" | "published_at" | "scheduled_for">,
+): boolean {
+  return (
+    d.human_approval_status === "approved" &&
+    d.published_at == null &&
+    d.scheduled_for == null
+  );
+}
+
+/** 修正依頼の指示文の上限（暴走 payload ガード）。 */
+export const INSTRUCTION_MAX_LEN = 2000;
+
+/** 修正依頼の指示文を trim し、空/上限超を弾く（要件4・1〜2000字）。
+ *  サーバ・クライアント共通ガード。RPC request_draft_revision の instruction と一致。 */
+export function validateInstruction(raw: unknown): ValidateResult {
+  if (typeof raw !== "string") return { ok: false, error: "指示文が文字列ではありません" };
+  const value = raw.trim();
+  if (value.length === 0) return { ok: false, error: "指示文が空です" };
+  if (value.length > INSTRUCTION_MAX_LEN) {
+    return { ok: false, error: `指示文が長すぎます（${value.length}/${INSTRUCTION_MAX_LEN}字）` };
+  }
+  return { ok: true, value };
 }
 
 // ===========================================================================

@@ -118,6 +118,38 @@ export function toRecommendations(rows: unknown): Recommendation[] {
   return out;
 }
 
+/** 執筆送信ダイアログの素材ごと割り当て（要件1: 行 × FmatTemplatePicker の初期値・編集値）。 */
+export interface MaterialAssignment {
+  id: string;
+  fmat: string;
+  templateId: string;
+}
+
+/**
+ * 素材ごと割り当ての初期値を作る（要件1）。
+ *   各素材の初期値 = その素材の推薦（materialId 一致）。無ければ既定値（DEFAULT_FMAT / DEFAULT_TEMPLATE_ID）。
+ * 推薦は境界検証済（toRecommendations 経由）の Recommendation[] を渡すこと（fail-open: 空なら全行が既定）。
+ * 1 素材に複数推薦があった場合は先頭（推薦順）を採る。
+ */
+export function buildAssignments(
+  ids: string[],
+  recommendations: Recommendation[],
+): MaterialAssignment[] {
+  const byMaterial = new Map<string, Recommendation>();
+  for (const r of recommendations) {
+    // 先頭優先（同一 materialId の重複は最初の 1 件のみ採用）。
+    if (!byMaterial.has(r.materialId)) byMaterial.set(r.materialId, r);
+  }
+  return ids.map((id) => {
+    const rec = byMaterial.get(id);
+    return {
+      id,
+      fmat: rec?.fmat ?? DEFAULT_FMAT,
+      templateId: rec?.templateId ?? DEFAULT_TEMPLATE_ID,
+    };
+  });
+}
+
 /** 推薦群から最頻 templateId / fmat（ダイアログの既定 pre-fill 用）。空なら既定値。 */
 export function modeOf(recs: Recommendation[]): { templateId: string; fmat: string } {
   if (recs.length === 0) return { templateId: DEFAULT_TEMPLATE_ID, fmat: DEFAULT_FMAT };

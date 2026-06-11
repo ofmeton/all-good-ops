@@ -63,6 +63,39 @@ export async function setSelectionStatus(
   return (data as number) ?? 0;
 }
 
+/** 素材ごと割り当て（要件1）。各素材に別々の希望 fmat/template を当てる。 */
+export interface SelectionItem {
+  id: string;
+  desiredFmat?: string | null;
+  templateId?: string | null;
+}
+
+/**
+ * RPC set_selection_status_items（0025）で素材ごと希望 fmat/template を一括反映。更新件数を返す。
+ *   p_items=[{id, desired_fmat?, template_id?}]。desired_fmat/template_id は非 NULL のときだけ
+ *   素材 meta に jsonb_set される（NULL は既存 meta 保持）。
+ * 0017 の 4 引数 set_selection_status（全件同一）と異なり、素材単位で別々の希望を渡せる。
+ * 空文字は「未指定」とみなし null に正規化する（UI の DEFAULT 送出と取り違えない）。
+ */
+export async function setSelectionStatusItems(
+  items: SelectionItem[],
+  status: SelectionStatus,
+): Promise<number> {
+  const sb = serverSupabase();
+  const p_items = items.map((it) => ({
+    id: it.id,
+    // 空文字/undefined は null（= 既存 meta 保持）。RPC 側は null をスキップする契約。
+    desired_fmat: it.desiredFmat ? it.desiredFmat : null,
+    template_id: it.templateId ? it.templateId : null,
+  }));
+  const { data, error } = await sb.rpc("set_selection_status_items", {
+    p_items,
+    p_status: status,
+  });
+  if (error) throw new Error(`set_selection_status_items failed: ${error.message}`);
+  return (data as number) ?? 0;
+}
+
 /** curation_events を一括追記。 */
 export async function recordCurationEvents(
   rows: Array<CurationEventRow & { compose_run_id?: string | null }>,
