@@ -9,7 +9,8 @@ updated: 2026-06-11
 > セッション間で保持される ~500 words のコンテキストキャッシュ。セッション開始時に最優先で読む。詳細: [[SCHEMA]] §ホットキャッシュ。
 
 ## Last Updated
-2026-06-11 — **xad キュレ/承認/投稿 7機能追加・本番反映完了**（PR#162）。設計=architect(Fable)→4並列system-engineer→pr-review-toolkit→migration0025-27 apply/worker deploy/dashboard deploy/DB層smoke。①執筆送信時に推薦自動選択 ②手動投稿済み化 ③承認済み破棄(論理) ④指示文つき修正依頼→即再執筆 ⑤修正依頼でformat/template再選+推薦 ⑥今すぐ投稿で全文表示 ⑦スレッド投稿(即時のみ・予約非対応)。`post_drafts.thread_bodies`+RPC3本(set_selection_status_items/discard_approved_drafts/request_draft_revision)。前段=optimizer自己改善ループ全段完成(Stage4・PR#153/154)。詳細 [[../memory/project_x_optimizer_redesign]]。
+2026-06-11 — **BEAT ICE 労働保険 年度更新の e-Gov 電子申請を伴走**（実務支援）。申告書到着→業種=飲食小売0.3%確定（印字）→暫定精算 納付¥2,809→Mac向けe-Govハンズオン改訂→入力支援（住所エラーは連絡先欄のダッシュ）。冴希さんGビズIDプライムで申請。アクセスコード等は [[../memory/project_rice_cream_shop]] / raw `2026-06-11-beatice-labor-insurance-egov-filed`。
+直前 — **xad キュレ/承認/投稿 7機能追加・本番反映完了**（PR#162）。設計=architect(Fable)→4並列system-engineer→pr-review-toolkit→migration0025-27 apply/worker deploy/dashboard deploy/DB層smoke。①執筆送信時に推薦自動選択 ②手動投稿済み化 ③承認済み破棄(論理) ④指示文つき修正依頼→即再執筆 ⑤修正依頼でformat/template再選+推薦 ⑥今すぐ投稿で全文表示 ⑦スレッド投稿(即時のみ・予約非対応)。`post_drafts.thread_bodies`+RPC3本(set_selection_status_items/discard_approved_drafts/request_draft_revision)。前段=optimizer自己改善ループ全段完成(Stage4・PR#153/154)。詳細 [[../memory/project_x_optimizer_redesign]]。
 
 ## Current Focus
 - **xad 新機能の実UI確認**: dashboard はログイン後に7機能を一巡確認（SSO配下でCLIからは実画面検証不可・DB層は健全確証済）。
@@ -25,6 +26,7 @@ updated: 2026-06-11
 - migration `0025_selection_per_material`/`0026_draft_lifecycle`/`0027_thread_support`（本番適用済）
 - `.claude/skills/x-{immediate,scheduled}-publish/SKILL.md`（スレッド手順追記）
 - [[../outputs/retrospectives/2026-06-11-1556-xad-curation-approval]]
+- 労働保険: `outputs/clients/rice-cream/2026-06-09-労働保険-年度更新-記入ガイド.md`・Notion(説明ガイド+e-Govハンズオン)・[[../outputs/retrospectives/2026-06-11-1200-rice-cream-labor-insurance-egov]]
 
 ## Open Questions / Frontiers
 - nested `claude -p` 起動は permission-mode acceptEdits + secret unset + PATH明示（memory [[headless-claude-subprocess]] / wiki 原則7）
