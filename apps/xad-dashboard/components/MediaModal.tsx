@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { mediaDownloadHref } from "@/lib/media-download";
 
 export interface MediaItem {
   type: string;
@@ -52,14 +53,25 @@ export function MediaModal({ item, onClose }: { item: MediaItem; onClose: () => 
       aria-modal="true"
       aria-label="メディアの拡大表示"
     >
-      <button
-        ref={closeRef}
-        onClick={onClose}
-        aria-label="閉じる"
-        className="absolute top-3 right-4 rounded-md px-1 text-3xl leading-none text-white/80 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-white"
-      >
-        ×
-      </button>
+      <div className="absolute top-3 right-4 flex items-center gap-3">
+        <a
+          href={mediaDownloadHref(item.url)}
+          download
+          onClick={(e) => e.stopPropagation()}
+          aria-label="ダウンロード"
+          className="rounded-md px-2 py-1 text-sm text-white/80 hover:text-white border border-white/30 hover:border-white/70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white"
+        >
+          ⬇ ダウンロード
+        </a>
+        <button
+          ref={closeRef}
+          onClick={onClose}
+          aria-label="閉じる"
+          className="rounded-md px-1 text-3xl leading-none text-white/80 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-white"
+        >
+          ×
+        </button>
+      </div>
       <div className="max-w-5xl max-h-[90vh]" onClick={(e) => e.stopPropagation()}>
         {isVideoType(item.type) ? (
           <video
@@ -95,25 +107,37 @@ export function MediaThumbs({
     <>
       <div className="flex gap-2 mt-2 flex-wrap">
         {media.map((md, i) => (
-          <button
-            key={i}
-            type="button"
-            onClick={() => setActive(md)}
-            aria-label="メディアを拡大"
-            className={`relative ${thumbClass} rounded border border-slate-200 overflow-hidden group`}
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={md.url}
-              alt=""
-              className="h-full w-full object-cover group-hover:opacity-90 transition-opacity"
-            />
-            {isVideoType(md.type) && (
-              <span className="absolute inset-0 flex items-center justify-center text-white text-lg bg-black/25">
-                ▶
-              </span>
-            )}
-          </button>
+          // button(拡大) と a(DL) を兄弟にする（<a> を <button> 内に入れると不正HTML）。
+          <div key={i} className={`relative ${thumbClass} group`}>
+            <button
+              type="button"
+              onClick={() => setActive(md)}
+              aria-label="メディアを拡大"
+              className="block h-full w-full rounded border border-slate-200 overflow-hidden"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={md.url}
+                alt=""
+                className="h-full w-full object-cover group-hover:opacity-90 transition-opacity"
+              />
+              {isVideoType(md.type) && (
+                <span className="absolute inset-0 flex items-center justify-center text-white text-lg bg-black/25">
+                  ▶
+                </span>
+              )}
+            </button>
+            <a
+              href={mediaDownloadHref(md.url)}
+              download
+              onClick={(e) => e.stopPropagation()}
+              aria-label="ダウンロード"
+              title="ダウンロード"
+              className="absolute bottom-1 right-1 rounded bg-black/55 px-1 text-xs leading-tight text-white opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity"
+            >
+              ⬇
+            </a>
+          </div>
         ))}
       </div>
       {active && <MediaModal item={active} onClose={() => setActive(null)} />}
