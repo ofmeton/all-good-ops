@@ -17,10 +17,20 @@ function borderAccent(v: number | null): string {
   return "border-l-slate-300";
 }
 
+/** 収集からの経過日数（温めプールの寝かせ期間バッジ用）。 */
+function ageDays(iso: string | null): number | null {
+  if (!iso) return null;
+  const ms = Date.now() - new Date(iso).getTime();
+  if (!Number.isFinite(ms) || ms < 0) return null;
+  return Math.floor(ms / 86_400_000);
+}
+
 export function MaterialCard({
-  m, checked, onToggle,
-}: { m: CurationMaterial; checked: boolean; onToggle: (id: string) => void }) {
+  m, checked, onToggle, showWarmAge = false,
+}: { m: CurationMaterial; checked: boolean; onToggle: (id: string) => void; showWarmAge?: boolean }) {
   const e = m.engagement;
+  // 温め（選抜）プールの経過日数バッジ。7日超で amber、14日超で「見直し」強調。
+  const days = showWarmAge ? ageDays(m.created_at) : null;
   return (
     <div
       className={`border border-l-4 rounded-lg p-3 transition-colors ${borderAccent(m.effective_overall ?? m.overall_score)} ${
@@ -41,6 +51,16 @@ export function MaterialCard({
             {m.lane === "reference" && (
               <span className="px-1.5 py-0.5 rounded text-xs font-semibold bg-violet-100 text-violet-700">
                 参考(JP)
+              </span>
+            )}
+            {days != null && days >= 7 && (
+              <span
+                className={`px-1.5 py-0.5 rounded text-xs font-semibold ${
+                  days >= 14 ? "bg-rose-100 text-rose-700" : "bg-amber-100 text-amber-700"
+                }`}
+                title="温めてからの経過日数"
+              >
+                {days >= 14 ? `見直し ${days}日` : `${days}日`}
               </span>
             )}
             {/* 主表示は time-decay 後の effective_overall（いまの価値）。 */}

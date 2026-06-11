@@ -25,7 +25,7 @@ import { MaterialCard } from "./MaterialCard";
 
 const TABS: { key: SelectionStatus; label: string; color: string }[] = [
   { key: "collected", label: "未処理", color: "border-slate-400" },
-  { key: "selected", label: "選抜済", color: "border-emerald-500" },
+  { key: "selected", label: "温め", color: "border-emerald-500" },
   { key: "queued", label: "送信済", color: "border-blue-500" },
   { key: "rejected", label: "除外", color: "border-rose-400" },
   { key: "archived", label: "アーカイブ", color: "border-slate-300" },
@@ -57,7 +57,7 @@ const ACTION_CONFIG: {
   variant: "primary" | "default" | "danger" | "ghost";
 }[] = [
   { action: "send_to_compose", label: "執筆へ送る", variant: "primary" },
-  { action: "select", label: "選抜", variant: "default" },
+  { action: "select", label: "温め（あとで）", variant: "default" },
   { action: "reject", label: "除外", variant: "danger" },
   { action: "reset", label: "未処理へ戻す", variant: "ghost" },
 ];
@@ -350,7 +350,7 @@ export function CurationClient({
                 素材キュレーション
               </h1>
               <p className="text-xs text-slate-500 mt-0.5">
-                X収集素材のスコアリング・選抜・発信工程への送信
+                X収集素材のトリアージ・温め・発信工程への送信
               </p>
             </div>
             <div className="text-right text-xs text-slate-400 font-mono tabular-nums">
@@ -702,15 +702,29 @@ export function CurationClient({
                   : "フィルタ条件に該当する素材がありません。"}
               </p>
               {triageActive && base.length > 0 ? (
-                <button
-                  onClick={() => {
-                    setTriage(false);
-                    setChecked(new Set());
-                  }}
-                  className="mt-2 text-xs text-blue-600 hover:underline"
-                >
-                  全件を表示（50-69 帯も確認）
-                </button>
+                <div className="mt-2 flex flex-col items-center gap-1.5">
+                  <button
+                    onClick={() => {
+                      setTriage(false);
+                      setChecked(new Set());
+                    }}
+                    className="text-xs text-blue-600 hover:underline"
+                  >
+                    全件を表示（50-69 帯も確認）
+                  </button>
+                  {/* 温めプール（要件5）への導線。捌き切ったら寝かせネタを見直す。 */}
+                  {counts.selected > 0 && (
+                    <button
+                      onClick={() => {
+                        setTab("selected");
+                        setChecked(new Set());
+                      }}
+                      className="text-xs text-emerald-700 hover:underline"
+                    >
+                      🔥 温めプールに {counts.selected} 件あります。見直しますか
+                    </button>
+                  )}
+                </div>
               ) : base.length > 0 ? (
                 <button
                   onClick={() => {
@@ -730,6 +744,7 @@ export function CurationClient({
                 m={m}
                 checked={checked.has(m.id)}
                 onToggle={toggle}
+                showWarmAge={tab === "selected"}
               />
             ))
           )}
