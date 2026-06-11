@@ -1,6 +1,6 @@
 import { describe, test, expect } from "vitest";
 import {
-  ACTION_TO_STATUS, buildEventRows, sortMaterials, filterMaterials,
+  ACTION_TO_STATUS, buildEventRows, sortMaterials, filterMaterials, passesInboxTriage,
   type CurationMaterial,
 } from "./curation-logic";
 
@@ -69,11 +69,55 @@ describe("curation-logic", () => {
 
   test("filterMaterials: via / media / lang / source / text", () => {
     const en = mat({ id: "en", lang: "en", discovery_via: "keyword", raw_text: "claude rocks", media: [] });
-    const ja = mat({ id: "ja", lang: "ja", discovery_via: "trend", raw_text: "猫", media: [{ type: "photo", url: "u" }] });
+    const ja = mat({ id: "ja", lang: "ja", lane: "reference", discovery_via: "trend", raw_text: "猫", media: [{ type: "photo", url: "u" }] });
     expect(filterMaterials([en, ja], { via: "trend" }).map((m) => m.id)).toEqual(["ja"]);
     expect(filterMaterials([en, ja], { hasMedia: true }).map((m) => m.id)).toEqual(["ja"]);
     expect(filterMaterials([en, ja], { lang: "en" }).map((m) => m.id)).toEqual(["en"]);
     expect(filterMaterials([en, ja], { text: "claude" }).map((m) => m.id)).toEqual(["en"]);
     expect(filterMaterials([en, ja], { source: "alice" }).map((m) => m.id)).toEqual(["en", "ja"]);
+    expect(filterMaterials([en, ja], { lane: "reference" }).map((m) => m.id)).toEqual(["ja"]);
+  });
+
+  test("passesInboxTriage: candidate は高スコア/trend/高velocity/公式で通す", () => {
+    // candidate × effective>=70 → 通す
+    expect(passesInboxTriage(mat({ lane: "candidate", effective_overall: 72 }))).toBe(true);
+    // candidate × effective<70 かつ非trend・低velocity・非公式 → 落とす
+    expect(
+      passesInboxTriage(mat({ lane: "candidate", effective_overall: 55, overall_score: 55, discovery_via: "fixed", velocity_per_hour: 10, source_ref: "randomguy" })),
+    ).toBe(false);
+    // セーフガード: trend は低スコアでも通す
+    expect(
+      passesInboxTriage(mat({ lane: "candidate", effective_overall: 20, discovery_via: "trend", velocity_per_hour: 0 })),
+    ).toBe(true);
+    // セーフガード: 高velocity は通す
+    expect(
+      passesInboxTriage(mat({ lane: "candidate", effective_overall: 20, discovery_via: "fixed", velocity_per_hour: 800 })),
+    ).toBe(true);
+    // セーフガード: 公式アカは低スコアでも通す
+    expect(
+      passesInboxTriage(mat({ lane: "candidate", effective_overall: 10, discovery_via: "fixed", velocity_per_hour: 0, source_ref: "OpenAI" })),
+    ).toBe(true);
+  });
+
+  test("passesInboxTriage: reference(JP)は高スコアでも落とすが、JPバズ(trend/高velocity)だけ救う", () => {
+    // reference × 高スコアでも非trend・低velocity → inbox に出さない（参考レーンへ）
+    expect(
+      passesInboxTriage(mat({ lane: "reference", effective_overall: 95, discovery_via: "fixed", velocity_per_hour: 10 })),
+    ).toBe(false);
+    // reference × 高velocity → JPバズ参考として救う
+    expect(
+      passesInboxTriage(mat({ lane: "reference", effective_overall: 30, velocity_per_hour: 600 })),
+    ).toBe(true);
+    // reference × trend → 救う
+    expect(
+      passesInboxTriage(mat({ lane: "reference", effective_overall: 30, discovery_via: "trend", velocity_per_hour: 0 })),
+    ).toBe(true);
+  });
+
+  test("passesInboxTriage: lane 未設定(旧データ)は candidate 扱い", () => {
+    expect(passesInboxTriage(mat({ lane: null, effective_overall: 80 }))).toBe(true);
+    expect(
+      passesInboxTriage(mat({ lane: null, effective_overall: 40, discovery_via: "fixed", velocity_per_hour: 0, source_ref: "x" })),
+    ).toBe(false);
   });
 });
