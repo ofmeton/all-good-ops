@@ -86,6 +86,8 @@ export function buildMaterialRow(
       is_reply: c.tweet.isReply ?? null,
       conversation_id: c.tweet.conversationId ?? null,
       media: c.tweet.media ?? [],
+      // スレッド非ルートを TOP へ差し替えた場合の provenance（差し替え元の reply id）。
+      ...(c.threadRootOf ? { thread_root_of: c.threadRootOf } : {}),
       lane,
       lane_reason,
       scores: c.scores,
