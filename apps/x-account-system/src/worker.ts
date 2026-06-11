@@ -347,14 +347,18 @@ export default {
         const sb = createClient(env.SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY, {
           db: { schema: "xad" },
         });
-        // 承認済み未予約ストック（承認順 FIFO・id で安定化）
+        // 承認済み未予約・未公開ストック（承認順 FIFO・id で安定化）
         // 決定1: スレッド draft (thread_bodies IS NOT NULL) は X 予約UIがスレッド未サポート
         //   のため予約スロット計画から除外（即時投稿 x-immediate-publish のみ対応）。
+        // published_at IS NULL: 今すぐ投稿で公開済みの draft をプラン対象に含めると、FIFO で
+        //   先に空きスロット（lookaheadDays=1・ピーク数枠のみ）を食い潰し、実在庫に割当が回らない。
+        //   dashboard 表示 stock(schedule-queries) と同一3条件に揃える。
         const { data: stockRows, error: stockErr } = await sb
           .from("post_drafts")
           .select("id, human_approved_at")
           .eq("human_approval_status", "approved")
           .is("scheduled_for", null)
+          .is("published_at", null)
           .is("thread_bodies", null)
           .order("human_approved_at", { ascending: true })
           .order("id", { ascending: true });
