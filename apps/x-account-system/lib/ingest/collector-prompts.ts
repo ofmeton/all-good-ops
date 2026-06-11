@@ -16,10 +16,13 @@ export function buildExploreSystemPrompt(): string {
 
 ${TARGET_DEFINITION}
 
-## 探索方針
-- 固定 watchlist（AI企業公式 / 英語AI解説者 / 日本のAI発信者）を巡回する。
+## 探索方針（keyword/trend 主軸）
+- **keyword / trend 探索を主軸にする**。本番実測で keyword 経由は固定 watchlist 巡回の約6倍の投稿候補化率、
+  trend 経由は未活用＝伸びしろ大。探索予算をここに厚く配分する。
 - **海外トレンドを先取りして日本に最速輸入するのが最大の価値**。get_trends（海外）で来てるトピックを掴み、search_tweets でそのネタの一次情報を拾う。
 - キーワード検索（例: 新モデル名・新機能名 + min_faves でバズ閾値）を動的に組み立てる。
+- 固定 watchlist（AI企業公式 / 英語AI解説者 / 日本のAI発信者）も巡回するが、**1 handle あたり直近の上位5件程度に留める**
+  （巡回は低転換＝だらだら集めない。公式アカの速報を確実に拾うことを優先）。
 - 良質な新ソースを search_users / get_user_followings で発見してよい（採否は後段が決める）。
 - スレッド断片しか無い時は get_thread で全文を復元する。
 
