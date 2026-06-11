@@ -1,4 +1,4 @@
-export type SelectionStatus = "collected" | "selected" | "queued" | "rejected";
+export type SelectionStatus = "collected" | "selected" | "queued" | "rejected" | "archived";
 export type CurationAction = "select" | "reject" | "reset" | "send_to_compose";
 
 export interface MediaItem { type: string; url: string }
@@ -151,4 +151,26 @@ export function filterMaterials(materials: CurationMaterial[], f: FilterSpec): C
     if (f.text && !(m.raw_text ?? "").toLowerCase().includes(f.text.toLowerCase())) return false;
     return true;
   });
+}
+
+/** inbox トリアージのセーフガード閾値・公式アカ。 */
+export const AI_OFFICIAL_HANDLES = new Set(["AnthropicAI", "OpenAI", "GoogleDeepMind"]);
+export const INBOX_VELOCITY_THRESHOLD = 500; // velocity_per_hour（時間あたりエンゲージ）
+
+/**
+ * 未処理 inbox のトリアージ条件（要件2: 人間が見るのは高シグナルだけ）。
+ * 実測で「queued 化された素材は 100% effective>=70」＝閾値70は実績ベース。
+ * candidate は effective>=70 / trend / 高velocity / 公式アカ で必ず通す（取りこぼし防止のセーフガード）。
+ * reference(JP二次流通)は通常 inbox に出さないが、trend or 高velocity の「JPバズ」だけ救う。
+ */
+export function passesInboxTriage(m: CurationMaterial): boolean {
+  const hot =
+    m.discovery_via === "trend" || (m.velocity_per_hour ?? 0) >= INBOX_VELOCITY_THRESHOLD;
+  if (m.lane === "reference") return hot; // JPバズ参考のみ inbox に昇格
+  // candidate（lane 未設定の旧データも candidate 扱い）
+  return (
+    (m.effective_overall ?? m.overall_score ?? 0) >= 70 ||
+    hot ||
+    AI_OFFICIAL_HANDLES.has(m.source_ref ?? "")
+  );
 }

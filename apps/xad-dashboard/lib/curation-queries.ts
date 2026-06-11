@@ -9,25 +9,26 @@ import {
   type Recommendation,
 } from "./curation-formats";
 
-/** view から status 別に取得（effective_overall=time-decay後 desc、上限 limit）。 */
+/** view から status 別に取得。collected/他は effective_overall(time-decay後) desc、
+ *  archived は新着退避順(created_at desc)。上限 limit。 */
 export async function listCurationMaterials(
   status: SelectionStatus, limit = 300,
 ): Promise<CurationMaterial[]> {
   const sb = serverSupabase();
-  const { data } = await sb
-    .from("curation_materials")
-    .select("*")
-    .eq("selection_status", status)
-    .order("effective_overall", { ascending: false, nullsFirst: false })
-    .limit(limit);
+  let q = sb.from("curation_materials").select("*").eq("selection_status", status);
+  // archived は「最近退避された順」で救出しやすく。それ以外は鮮度補正後スコア順。
+  q = status === "archived"
+    ? q.order("created_at", { ascending: false })
+    : q.order("effective_overall", { ascending: false, nullsFirst: false });
+  const { data } = await q.limit(limit);
   return (data ?? []) as CurationMaterial[];
 }
 
 /** 各タブの件数。 */
 export async function tabCounts(): Promise<Record<SelectionStatus, number>> {
   const sb = serverSupabase();
-  const statuses: SelectionStatus[] = ["collected", "selected", "queued", "rejected"];
-  const out = { collected: 0, selected: 0, queued: 0, rejected: 0 } as Record<SelectionStatus, number>;
+  const statuses: SelectionStatus[] = ["collected", "selected", "queued", "rejected", "archived"];
+  const out = { collected: 0, selected: 0, queued: 0, rejected: 0, archived: 0 } as Record<SelectionStatus, number>;
   await Promise.all(statuses.map(async (s) => {
     const { count } = await sb
       .from("curation_materials").select("id", { count: "exact", head: true })

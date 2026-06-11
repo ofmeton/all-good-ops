@@ -6,16 +6,17 @@ export const dynamic = "force-dynamic";
 const LIMIT = 300;
 
 export default async function CurationPage() {
-  const [collected, selected, queued, rejected, counts, templateOptions] = await Promise.all([
+  const [collected, selected, queued, rejected, archived, counts, templateOptions] = await Promise.all([
     listCurationMaterials("collected", LIMIT).catch(() => []),
     listCurationMaterials("selected", LIMIT).catch(() => []),
     listCurationMaterials("queued", LIMIT).catch(() => []),
     listCurationMaterials("rejected", LIMIT).catch(() => []),
-    tabCounts().catch(() => ({ collected: 0, selected: 0, queued: 0, rejected: 0 })),
+    listCurationMaterials("archived", LIMIT).catch(() => []),
+    tabCounts().catch(() => ({ collected: 0, selected: 0, queued: 0, rejected: 0, archived: 0 })),
     // fetchTemplateOptions は内部で全失敗を握って fallback を返す（throw しない）ため .catch 不要。
     fetchTemplateOptions(),
   ]);
-  const materials: Record<SelectionStatus, CurationMaterial[]> = { collected, selected, queued, rejected };
+  const materials: Record<SelectionStatus, CurationMaterial[]> = { collected, selected, queued, rejected, archived };
   return (
     <CurationClient
       materials={materials}

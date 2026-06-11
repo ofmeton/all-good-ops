@@ -126,6 +126,19 @@ export async function handleJob(
         });
         console.log(JSON.stringify({ level: "info", msg: "[collect] 完了(untraced)", date: msg.date, inserted }));
       }
+      // auto-archive（要件2・PR-5）: collected のまま7日経過した素材を archived へ自動退避。
+      // 新 cron は立てず collect 末尾に相乗り。削除でなく退避＝reset で復帰可・system イベント追記。
+      // fail-open（収集本体は成功扱い・sweep 失敗は warn のみ）。
+      try {
+        const { data: archived, error } = await sb.rpc("archive_stale_materials", { p_days: 7 });
+        if (error) {
+          console.warn(JSON.stringify({ level: "warn", msg: "[collect] auto-archive sweep failed", error: error.message }));
+        } else {
+          console.log(JSON.stringify({ level: "info", msg: "[collect] auto-archive", archived: archived ?? 0 }));
+        }
+      } catch (e) {
+        console.warn(JSON.stringify({ level: "warn", msg: "[collect] auto-archive sweep threw", error: String(e) }));
+      }
       break;
     }
 

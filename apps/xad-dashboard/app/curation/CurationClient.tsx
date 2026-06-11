@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import {
   sortMaterials,
   filterMaterials,
+  passesInboxTriage,
   type CurationMaterial,
   type SelectionStatus,
   type SortKey,
@@ -27,6 +28,7 @@ const TABS: { key: SelectionStatus; label: string; color: string }[] = [
   { key: "selected", label: "選抜済", color: "border-emerald-500" },
   { key: "queued", label: "送信済", color: "border-blue-500" },
   { key: "rejected", label: "除外", color: "border-rose-400" },
+  { key: "archived", label: "アーカイブ", color: "border-slate-300" },
 ];
 
 const SORTS: { key: SortKey; label: string }[] = [
@@ -114,6 +116,8 @@ export function CurationClient({
   const [text, setText] = useState("");
   // lane レーン（要件4）: 既定は投稿候補のみ表示。参考(JP=二次流通)は別レーンに物理分離。
   const [lane, setLane] = useState<"candidate" | "reference" | "">("candidate");
+  // トリアージ（要件2）: 未処理タブで高シグナルのみ表示（既定ON）。OFF で 50-69 帯も含む全件。
+  const [triage, setTriage] = useState(true);
   const [checked, setChecked] = useState<Set<string>>(new Set());
   const [msg, setMsg] = useState<{ text: string; type: "info" | "error" | "success" }>({
     text: "",
@@ -243,10 +247,14 @@ export function CurationClient({
 
   const base = materials[tab] ?? [];
   const activeSortKeys = sortKeys.filter(Boolean) as SortKey[];
-  const shown = sortMaterials(
-    filterMaterials(base, { ...filter, text, lane: lane || undefined }),
-    activeSortKeys,
-  );
+  // 未処理タブ × トリアージON のときは「高シグナルだけ」を出す（lane セグメントは無効化し
+  // 候補の高シグナル＋JPバズ参考の混成を見せる）。それ以外は lane セグメントで絞る。
+  const triageActive = tab === "collected" && triage;
+  const baseFiltered = filterMaterials(base, { ...filter, text });
+  const laneScoped = triageActive
+    ? baseFiltered.filter(passesInboxTriage)
+    : baseFiltered.filter((m) => !lane || (m.lane ?? "candidate") === lane);
+  const shown = sortMaterials(laneScoped, activeSortKeys);
   // レーン別件数（セグメント表示用）。lane 未設定の旧データは candidate 扱い。
   const laneCounts = {
     candidate: base.filter((m) => (m.lane ?? "candidate") === "candidate").length,
@@ -430,7 +438,26 @@ export function CurationClient({
 
             <div className="w-px h-4 bg-slate-200 mx-0.5" />
 
-            {/* Lane（要件4）: 投稿候補 / 参考(JP) / 全。既定は投稿候補（二次流通を主ビューから分離） */}
+            {/* トリアージ（要件2）: 未処理タブのみ。ON=高シグナルだけ / OFF=全件(50-69帯も) */}
+            {tab === "collected" && (
+              <label className="flex items-center gap-1.5 cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  checked={triage}
+                  onChange={(e) => {
+                    setTriage(e.target.checked);
+                    setChecked(new Set());
+                  }}
+                  className="w-3.5 h-3.5 rounded border-slate-300 accent-blue-600"
+                />
+                <span className={`text-xs font-medium ${triage ? "text-blue-700" : "text-slate-500"}`}>
+                  🎯 高シグナルのみ
+                </span>
+              </label>
+            )}
+
+            {/* Lane（要件4）: 投稿候補 / 参考(JP) / 全。トリアージON時は高シグ混成のため非表示。 */}
+            {!triageActive && (
             <div className="inline-flex rounded border border-slate-200 overflow-hidden" role="group" aria-label="レーン">
               {([
                 { key: "candidate", label: "投稿候補", count: laneCounts.candidate },
@@ -463,6 +490,7 @@ export function CurationClient({
                 );
               })}
             </div>
+            )}
 
             <div className="w-px h-4 bg-slate-200 mx-0.5" />
 
@@ -663,13 +691,27 @@ export function CurationClient({
         <div className="space-y-2">
           {shown.length === 0 ? (
             <div className="py-16 text-center">
-              <div className="text-slate-300 text-4xl mb-3 select-none">○</div>
+              <div className="text-slate-300 text-4xl mb-3 select-none">
+                {triageActive && base.length > 0 ? "🎉" : "○"}
+              </div>
               <p className="text-slate-500 text-sm">
-                {base.length === 0
+                {triageActive && base.length > 0
+                  ? "高シグナルの未処理はありません（inbox ゼロ達成）。"
+                  : base.length === 0
                   ? "このタブに素材がありません。"
                   : "フィルタ条件に該当する素材がありません。"}
               </p>
-              {base.length > 0 && (
+              {triageActive && base.length > 0 ? (
+                <button
+                  onClick={() => {
+                    setTriage(false);
+                    setChecked(new Set());
+                  }}
+                  className="mt-2 text-xs text-blue-600 hover:underline"
+                >
+                  全件を表示（50-69 帯も確認）
+                </button>
+              ) : base.length > 0 ? (
                 <button
                   onClick={() => {
                     setFilter({});
@@ -679,7 +721,7 @@ export function CurationClient({
                 >
                   フィルタをリセット
                 </button>
-              )}
+              ) : null}
             </div>
           ) : (
             shown.map((m) => (
