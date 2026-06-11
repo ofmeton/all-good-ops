@@ -59,6 +59,9 @@ npx tsx scripts/plan-scheduled-publish.ts --days 2   # 翌々日まで
 2. `take_snapshot` で UI 取得。ログイン済みか（自分のプロフィール画像が出るか）を確認。
 3. **先に** **button「ポストを予約」** を押す → 予約設定ダイアログで 月/日/時/分 の combobox を
    `fill` で設定（TZ は「日本標準時」）→ **button「確認する」** でコンポーザーに戻る。
+   - **🪙 トークン注意**: 予約設定ダイアログの a11y snapshot は時/分/日の全 option を列挙し**巨大**（1回150行超）。
+     各 `fill` で `includeSnapshot:true` を多用すると激しく嵩む。**最後の `fill`（分）でだけ snapshot を取り、
+     確認テキスト「○年○月○日(曜)の午前/午後○:○○に送信されます」で時刻を検証**すれば十分。途中の fill は snapshot 不要。
 4. 戻った**空の** textbox「ポスト本文」に **`type_text`** で本文を入力（プレーンテキスト、Markdown不可）。
    - **動画/GIF は本文に deep-link `{tweet_url}/video/1` が直書きされている**（承認UIで追記済）。
      そのまま投稿すれば X が本文中で動画を展開する。動画は upload 不要。
@@ -86,6 +89,14 @@ npx tsx scripts/plan-scheduled-publish.ts --days 2   # 翌々日まで
 ### 4. DB 記録＋観測トレース（record-scheduled-publish.ts に集約）
 予約確定できたものだけを、Step 1 の `RECORD_ARG` に各 `scheduledPostId` を足して**1 コマンド**で記録する。
 この CLI が `post_drafts.scheduled_for/scheduled_post_id` の**冪等 UPDATE**（`where id=$ and scheduled_for is null` ガード）と、`xad.run`/`xad.run_trace` への観測記録（Worker 外工程なので queue が書けない分）を**まとめて**行う:
+
+> ⚠️ **ダッシュボードで先に「予約確定」した draft は record CLI が noop になる**（2026-06-11）。
+> dashboard schedule タブの確定は `/admin/mark-scheduled` で **`scheduled_for` を先にセット**する。
+> 一方この record CLI の CAS は `scheduled_for is null` ガードなので、**既に scheduled_for があると claim できず
+> `applied=0`・`scheduled_post_id` も記録されない**。dashboard 確定済みの draft を X へ登録した場合は、
+> record CLI ではなく **`scheduled_post_id` を直接 UPDATE**（`update xad.post_drafts set scheduled_post_id=$ where id=$`）するか、
+> scheduled_post_id 控えを諦め scheduled_for（既設）で運用する（削除は X「予約済み」UI から）。
+> ＝ Step1 の plan→record 経路は「dashboard で予約していない（scheduled_for NULL）」素材が前提。
 
 ```bash
 cd apps/x-account-system
