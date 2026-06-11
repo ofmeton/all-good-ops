@@ -47,7 +47,18 @@ describe("buildComposeUserBlocks — テンプレ/fmat/再生成を userMessage 
     const blocks = buildComposeUserBlocks(DEFAULT_TEMPLATE_ID, "article");
     expect(blocks).toContain("# 希望フォーマット");
     expect(blocks).toContain("指定フォーマット=記事（X 長文単発）");
-    expect(blocks).toContain("thread のように分割しない");
+    expect(blocks).toContain("スレッドのように分割しない");
+  });
+
+  test("fmat=thread でスレッド分割指示（tweets に1本ずつ・1本目=フック・最大8本）が入る", () => {
+    const blocks = buildComposeUserBlocks(DEFAULT_TEMPLATE_ID, "thread");
+    expect(blocks).toContain("# 希望フォーマット");
+    expect(blocks).toContain("指定フォーマット=スレッド");
+    expect(blocks).toContain("tweets に1ツイートずつ");
+    expect(blocks).toContain("1本目=フック");
+    expect(blocks).toContain("最大8本");
+    // article 限定の「分割しない」文言は thread には出さない
+    expect(blocks).not.toContain("分割しない");
   });
 
   test("fmat 未指定では希望フォーマット指示を入れない", () => {

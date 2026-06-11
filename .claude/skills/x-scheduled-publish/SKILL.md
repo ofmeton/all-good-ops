@@ -36,6 +36,7 @@ npx tsx scripts/plan-scheduled-publish.ts --days 2   # 翌々日まで
 ```
 
 - `human_approval_status='approved' AND scheduled_for IS NULL` を承認順(FIFO)で取得し、`lib/publishing/slot-planner.ts` が **翌日以降のピーク帯（平日5枠 [7,8,12,15,17] / 週末3枠 [8,12,17]、`lib/publishing/schedule-config.ts`）** へ割当。過去スロット skip・既予約と衝突回避・枠超過分は次回据置。
+- **スレッド draft（`thread_bodies IS NOT NULL`・🧵）は予約対象外**: X 公式の予約投稿UIはスレッド（連続ツイート）を未サポートのため、`plan-scheduled-publish.ts` / worker plan-slots は `thread_bodies IS NULL` のみを引く（スレッドは候補に出ない）。**スレッドを公開したいときは `x-immediate-publish`（今すぐ投稿）スキルへ**回す（「ポストを追加」で連続ツイートを組んで一括即時投稿）。
 - 出力: **人向け要約**（各 draft の JST 時刻＋本文プレビュー＋risk）/ `JSON_PLAN` / `RECORD_ARG`（後で record に渡す形）。
 - スロット時間・枠数を変えたいときは `schedule-config.ts` を編集（散在禁止のレバー）。
 

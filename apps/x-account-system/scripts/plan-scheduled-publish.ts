@@ -109,11 +109,14 @@ function preview(body: string, n = 60): string {
   const config: ScheduleConfig = { ...SCHEDULE_CONFIG, ...(days ? { lookaheadDays: days } : {}) };
 
   // 1. 承認済みストック (approved かつ未予約) を承認順に取得
+  //    決定1: スレッド draft (thread_bodies IS NOT NULL) は X 予約UIがスレッド未サポートのため
+  //    予約対象外。即時投稿(x-immediate-publish)のみ。ここで除外する（thread_bodies IS NULL のみ）。
   const { data: stockRows, error: stockErr } = await sb
     .from("post_drafts")
     .select("id, body, fmat, human_approved_at, risk_level, risk_reasons, attachments")
     .eq("human_approval_status", "approved")
     .is("scheduled_for", null)
+    .is("thread_bodies", null)
     .order("human_approved_at", { ascending: true })
     .order("id", { ascending: true }); // 同値/null 時の非決定性回避（FIFO 安定化）
   if (stockErr) throw new Error(`[plan] approved ストック取得失敗: ${stockErr.message}`);

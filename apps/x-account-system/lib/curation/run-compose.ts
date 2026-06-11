@@ -18,6 +18,7 @@ import { getAgentRef as getAgentRefDefault, type AgentRef } from "../ma/agent-re
 import { COMPOSE_CONFIG, type ComposeConfig } from "./compose-config.js";
 import { buildComposeUserBlocks, COMPOSE_FMATS } from "./compose-prompts.js";
 import { isKnownTemplate } from "./compose-templates.js";
+import { joinThread, validateThreadParts, THREAD_MAX_PARTS } from "./thread.js";
 import { classifyRules } from "../hook-classifier/classify-rules.js";
 import { costUsdFor, costJpyFor } from "../cost/cost-of.js";
 import { insertSessionEvents, recordRunSession } from "../trace/session-event-store.js";
@@ -55,6 +56,8 @@ export interface ComposePerMaterial {
   error?: string;
   /** MA session が stub で返ったか（本番では設定ミスのサイン）。 */
   stub?: boolean;
+  /** fmat=thread だが tweets が不正/欠落で単一投稿(fmat='long')へ降格したか（安全側デフォルト）。 */
+  threadFallback?: boolean;
 }
 
 export interface ComposeRunResult {
@@ -71,6 +74,8 @@ interface SubmitDraft {
   category: string;
   primary_hook?: string;
   citations?: string[];
+  /** fmat=thread のとき writer が1ツイートずつ入れる配列（投稿時の正・body は join 派生）。 */
+  tweets?: string[];
 }
 
 interface MaterialRow {
@@ -133,6 +138,21 @@ export async function runCompose(deps: RunComposeDeps): Promise<ComposeRunResult
     }
     // 差し戻し再生成: チェックAg が付けた前回の指摘があれば writer に渡し、同じ問題を繰り返させない。
     const lastFlags = Array.isArray(baseMeta.last_check_flags) ? (baseMeta.last_check_flags as string[]) : [];
+    // 要件4（人間の修正依頼）: 承認UIで「指示文つき修正依頼」が出されると RPC が素材 meta に
+    //   human_revision_note（指示文）/ previous_draft_body（前回ドラフト本文）を書く。あれば
+    //   userMessage に「前回ドラフト＋指示・最優先で反映」ブロックを足す。**解釈は writer の判断**
+    //   （code は前回本文と指示を渡す配管に徹する）。再生成後は通常 check→人間承認（人間ゲート不変）。
+    const revisionNote = typeof baseMeta.human_revision_note === "string" ? baseMeta.human_revision_note.trim() : "";
+    const previousDraftBody = typeof baseMeta.previous_draft_body === "string" ? baseMeta.previous_draft_body : "";
+    const revisionBlock =
+      revisionNote.length > 0
+        ? `# 人間からの修正依頼（最優先で反映する）\n` +
+          (previousDraftBody.length > 0
+            ? `## 前回のドラフト\n${previousDraftBody}\n\n`
+            : "") +
+          `## 修正の指示\n${revisionNote}\n\n` +
+          `上記の指示を最優先で反映して書き直してください。指示の解釈・どこをどう直すかはあなたの判断です。\n\n`
+        : "";
     // テンプレ patch / 希望フォーマット / 前回の指摘は userMessage 側に組む
     // （永続 agent の system は固定。型・fmat・再生成は素材ごとに変わるため user で渡す）。
     const userMessage =
@@ -140,6 +160,7 @@ export async function runCompose(deps: RunComposeDeps): Promise<ComposeRunResult
       `# 素材本文\n${text}\n\n` +
       (tweetUrl ? `# 出典URL\n${tweetUrl}\n\n` : "") +
       (scores ? `# 参考スコア\n${scores}\n\n` : "") +
+      revisionBlock +
       buildComposeUserBlocks(templateId ?? cfg.defaultTemplateId, desiredFmat, lastFlags) +
       `必要なら web_search で裏取りし、最後に submit_draft を呼んでください。`;
 
@@ -238,7 +259,37 @@ export async function runCompose(deps: RunComposeDeps): Promise<ComposeRunResult
           `[compose] writer fmat="${validCaptured}" がユーザー指定="${validDesired}" と不一致 (${m.id}) → 指定を永続化`,
         );
       }
-      const fmat = validDesired ?? validCaptured ?? "short";
+      let fmat = validDesired ?? validCaptured ?? "short";
+
+      // スレッド解決（要件7・決定1: thread_bodies が投稿時の正・body は join 派生）。
+      //   fmat=thread かつ writer の tweets が有効（非空配列/各要素非空 string/本数上限 8）
+      //   → thread_bodies=tweets / body=joinThread(tweets) で insert。
+      //   不正/欠落 → **安全側デフォルト: 単一投稿として fmat='long' へ降格 + warn**
+      //   （threadFallback=true を perMaterial に記録）。境界検証は thread.validateThreadParts に集約。
+      let draftBody = captured.body;
+      let threadBodies: string[] | null = null;
+      let threadFallback = false;
+      if (fmat === "thread") {
+        const rawTweets = Array.isArray(captured.tweets) ? captured.tweets : null;
+        // 各要素が非空 string か（trim 後）を境界検証（recommend.validateRecommendations 様式）。
+        const cleaned =
+          rawTweets && rawTweets.every((t) => typeof t === "string" && t.trim().length > 0)
+            ? rawTweets.map((t) => t.trim())
+            : null;
+        const v = cleaned ? validateThreadParts(cleaned) : { ok: false, errors: ["tweets 欠落/不正"] };
+        if (cleaned && v.ok) {
+          threadBodies = cleaned;
+          draftBody = joinThread(cleaned);
+        } else {
+          // 降格: スレッド不成立。単一投稿として long に落とし、body は writer の body を維持。
+          fmat = "long";
+          threadFallback = true;
+          log.warn(
+            `[compose] fmat=thread だが tweets 不正/欠落 (${m.id}) → 単一投稿 fmat='long' に降格 ` +
+              `[${v.errors.join(" / ")}・本数上限${THREAD_MAX_PARTS}]`,
+          );
+        }
+      }
 
       const { data: ci, error: ciErr } = await sb
         .from("core_ideas")
@@ -258,7 +309,7 @@ export async function runCompose(deps: RunComposeDeps): Promise<ComposeRunResult
       createdCoreIdeaId = (ci as { id: string }).id;
 
       const draftId = crypto.randomUUID();
-      const hook4 = classifyRules(captured.body).primary_hook;
+      const hook4 = classifyRules(draftBody).primary_hook;
       const { error: pdErr } = await sb.from("post_drafts").insert({
         id: draftId,
         trace_id: draftId,
@@ -266,7 +317,9 @@ export async function runCompose(deps: RunComposeDeps): Promise<ComposeRunResult
         platform: "x",
         variant_index: 0,
         fmat,
-        body: captured.body,
+        body: draftBody,
+        // thread のとき thread_bodies=投稿時の正。単一投稿(null)は後方互換（migration 0027 で追加列）。
+        ...(threadBodies ? { thread_bodies: threadBodies } : {}),
         primary_hook: hook4,
         editor_status: "pending",
         human_approval_status: "pending",
@@ -295,6 +348,7 @@ export async function runCompose(deps: RunComposeDeps): Promise<ComposeRunResult
         primary_hook: hook4, content_type: category,
         citationCount: captured.citations?.length ?? 0, costJpy, draftId,
         ...(res.ids?.session ? { maSessionId: res.ids.session } : {}),
+        ...(threadFallback ? { threadFallback: true } : {}),
         ...(markErr ? { error: `composed_at mark failed: ${markErr.message}` } : {}),
       });
       log.info?.(`[compose] draft ${draftId} from ${m.id} hook=${hook4} costJpy=${costJpy}`);

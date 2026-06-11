@@ -29,8 +29,14 @@ export const SUBMIT_DRAFT_TOOL = {
   input_schema: {
     type: "object",
     properties: {
-      body: { type: "string", description: "X 投稿本文（プレーンテキスト・最終形）" },
-      fmat: { type: "string", enum: ["short", "medium", "long", "article", "thread"], description: "投稿フォーマット（article=X 長文単発・thread のように分割しない）" },
+      body: { type: "string", description: "X 投稿本文（プレーンテキスト・最終形）。fmat=thread のときは tweets を全て連結した参考本文でよい（投稿時の正は tweets）" },
+      fmat: { type: "string", enum: ["short", "medium", "long", "article", "thread"], description: "投稿フォーマット（article=X 長文単発・スレッドに分割しない / thread=連続ツイートに分割し tweets に1本ずつ入れる）" },
+      tweets: {
+        type: "array",
+        items: { type: "string" },
+        description:
+          "fmat=thread のときのみ：スレッドを構成する各ツイートを1本ずつ配列に入れる。1本目=フック（最も強い1文で掴む）。各ツイートは全角140字目安・最大8本。fmat≠thread のときは省略する。",
+      },
       topic: { type: "string", description: "この投稿の主題（1行）" },
       category: {
         type: "string",
@@ -119,9 +125,16 @@ export function buildComposeUserBlocks(
   const templateBlock = `# 投稿の型（この型に沿って書く）\n${renderTemplatePrompt(tpl)}\n\n`;
 
   const fmatLabel = fmat ? (FMAT_LABELS[fmat] ?? fmat) : null;
+  // fmat=thread のときは「1ツイートずつ tweets に入れる」契約を明示する（スレッド分割は writer の判断）。
+  // 記事(article) は逆に「分割しない単発」であることを限定して指示する（thread との取り違え防止）。
+  const isThread = fmat === "thread";
   const fmatBlock = fmatLabel
-    ? `# 希望フォーマット\n指定フォーマット=${fmatLabel}。` +
-      `記事は X 長文単発（thread のように分割しない）。素材が薄ければ無理に伸ばさない。\n\n`
+    ? isThread
+      ? `# 希望フォーマット\n指定フォーマット=${fmatLabel}（連続ツイート）。` +
+        `スレッドに分割し、**submit_draft の tweets に1ツイートずつ**入れる（1本目=フック・最も強い1文で掴む・各ツイート全角140字目安・最大8本）。` +
+        `素材が薄ければ無理に本数を増やさない。\n\n`
+      : `# 希望フォーマット\n指定フォーマット=${fmatLabel}。` +
+        `記事（article）は X 長文単発（スレッドのように分割しない）。素材が薄ければ無理に伸ばさない。\n\n`
     : "";
 
   const flags = redoFlags ?? [];

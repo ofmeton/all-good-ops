@@ -49,10 +49,20 @@ interface DraftRow {
   id: string;
   body: string;
   fmat: string | null;
+  /** スレッド draft の各ツイート（投稿時の正・null=単一投稿。migration 0027 で追加列）。 */
+  thread_bodies: string[] | null;
   human_approved_at: string | null;
   risk_level: string | null;
   risk_reasons: string[] | null;
   attachments: { mediaType?: string; sourceUrl?: string }[] | null;
+}
+
+/** スレッド draft の各ツイート（健全なら）を返す。単一投稿は null。 */
+function threadParts(r: DraftRow): string[] | null {
+  const tb = r.thread_bodies;
+  if (!Array.isArray(tb) || tb.length === 0) return null;
+  if (!tb.every((t) => typeof t === "string" && t.trim().length > 0)) return null;
+  return tb.map((t) => t.trim());
 }
 
 function photoCount(r: DraftRow): number {
@@ -108,7 +118,7 @@ function preview(body: string, n = 60): string {
   // 承認済み・未予約・未公開ストックを承認順(FIFO)で取得
   let q = sb
     .from("post_drafts")
-    .select("id, body, fmat, human_approved_at, risk_level, risk_reasons, attachments")
+    .select("id, body, fmat, thread_bodies, human_approved_at, risk_level, risk_reasons, attachments")
     .eq("human_approval_status", "approved")
     .is("scheduled_for", null)
     .is("published_at", null);
@@ -128,8 +138,10 @@ function preview(body: string, n = 60): string {
     } else {
       lines.push("FIFO（承認順）。--id <id> で投稿ハンドオフを表示:");
       for (const r of rows) {
-        lines.push(`  ${r.id}  承認:${fmtJst(r.human_approved_at)}  risk=${r.risk_level ?? "?"}${mediaSummary(r)}`);
-        lines.push(`    ${preview(r.body)}`);
+        const parts = threadParts(r);
+        const threadBadge = parts ? ` 🧵スレッド${parts.length}本` : "";
+        lines.push(`  ${r.id}  承認:${fmtJst(r.human_approved_at)}  risk=${r.risk_level ?? "?"}${threadBadge}${mediaSummary(r)}`);
+        lines.push(`    ${preview(parts ? parts[0] : r.body)}`);
       }
     }
     console.log(lines.join("\n"));
@@ -145,17 +157,31 @@ function preview(body: string, n = 60): string {
     ? r.attachments.filter((a) => a?.mediaType === "photo")
     : [];
 
+  const parts = threadParts(r);
   const out: string[] = [];
   out.push(`# 今すぐ手動投稿ハンドオフ  draftId=${r.id}`);
-  out.push(`  fmat=${r.fmat ?? "?"}  risk=${r.risk_level ?? "?"}${r.risk_reasons?.length ? ` [${r.risk_reasons.join(",")}]` : ""}`);
+  out.push(
+    `  fmat=${r.fmat ?? "?"}${parts ? `  🧵スレッド${parts.length}本` : ""}  risk=${r.risk_level ?? "?"}${r.risk_reasons?.length ? ` [${r.risk_reasons.join(",")}]` : ""}`,
+  );
   out.push("");
-  out.push("## 投稿本文（そのまま type_text で入力。動画/GIF の deep-link は本文内に含まれる）");
-  out.push(r.body ?? "");
-  out.push("");
+  if (parts) {
+    // スレッド: ツイートごとに番号付き全文を提示（各ツイートを1本ずつ type_text する）。
+    out.push("## 投稿本文（スレッド・各ツイートを1本ずつ type_text で入力）");
+    parts.forEach((p, i) => {
+      out.push(`--- ${i + 1}/${parts.length} 本目 ---`);
+      out.push(p);
+      out.push("");
+    });
+  } else {
+    out.push("## 投稿本文（そのまま type_text で入力。動画/GIF の deep-link は本文内に含まれる）");
+    out.push(r.body ?? "");
+    out.push("");
+  }
   out.push("## メディア");
   if (photos.length > 0) {
     out.push(`  写真 ${photos.length} 枚（DL→ネイティブ添付）:`);
     out.push(`    cd apps/x-account-system && npx tsx scripts/fetch-draft-media.ts ${r.id}`);
+    if (parts) out.push("  ※スレッドのメディアは1本目に添付（複数ツイートに分ける場合は人間判断）。");
   }
   if (hasVideoDeepLink(r)) {
     out.push("  動画/GIF: 本文の deep-link(/video/1) で展開。upload 不要・本文をそのまま投稿。");
@@ -164,12 +190,24 @@ function preview(body: string, n = 60): string {
     out.push("  （メディアなし・本文のみ）");
   }
   out.push("");
-  out.push("## chrome 半自動 手順（即時投稿・予約UIは使わない・source=本人クライアント維持）");
-  out.push("  1. new_page で https://x.com/compose/post を開く（通常コンポーザ）");
-  out.push("  2. 写真がある場合は先に fetch-draft-media → upload_file でネイティブ添付");
-  out.push("  3. 空 textbox「ポスト本文」に type_text で本文を入力（fill は不可・onChange 不発火）");
-  out.push("  4. button「ポストする」で即時投稿（予約UIには入らない）");
-  out.push("  5. 投稿後、一時ファイルを cleanup（fetch-draft-media の localPaths を rm）");
+  if (parts) {
+    out.push("## chrome 半自動 手順（スレッド即時投稿・予約UIは使わない・source=本人クライアント維持）");
+    out.push("  1. new_page で https://x.com/compose/post を開く（通常コンポーザ）");
+    out.push("  2. 写真がある場合は先に fetch-draft-media → 1本目に upload_file でネイティブ添付");
+    out.push("  3. 空 textbox「ポスト本文」に type_text で 1本目を入力（fill は不可・onChange 不発火）");
+    out.push("  4. 「ポストを追加」(+) ボタンで次のツイート枠を増やす");
+    out.push("  5. 追加された空エディタに type_text で次のツイートを入力（空エディタ必須・fill 不可）");
+    out.push(`  6. 残りのツイートも 4-5 を繰り返す（計 ${parts.length} 本）`);
+    out.push("  7. button「すべてポストする」で即時投稿（予約UIには入らない）");
+    out.push("  8. 投稿後、一時ファイルを cleanup（fetch-draft-media の localPaths を rm）");
+  } else {
+    out.push("## chrome 半自動 手順（即時投稿・予約UIは使わない・source=本人クライアント維持）");
+    out.push("  1. new_page で https://x.com/compose/post を開く（通常コンポーザ）");
+    out.push("  2. 写真がある場合は先に fetch-draft-media → upload_file でネイティブ添付");
+    out.push("  3. 空 textbox「ポスト本文」に type_text で本文を入力（fill は不可・onChange 不発火）");
+    out.push("  4. button「ポストする」で即時投稿（予約UIには入らない）");
+    out.push("  5. 投稿後、一時ファイルを cleanup（fetch-draft-media の localPaths を rm）");
+  }
   out.push("");
   out.push("## 投稿完了後（published_at 確定）");
   out.push("  dashboard /publish の対象カードで「投稿済みにする」を押す（markPublished・冪等）。");

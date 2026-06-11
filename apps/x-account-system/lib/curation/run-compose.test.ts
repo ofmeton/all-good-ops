@@ -282,7 +282,7 @@ describe("runCompose", () => {
     await runCompose({ sb: makeSb(state), apiKey: "k", runSession: captureSession(out), getAgentRef: okRef, logger: silent });
     expect(out.userMessage).toContain("# 希望フォーマット");
     expect(out.userMessage).toContain("指定フォーマット=記事（X 長文単発）");
-    expect(out.userMessage).toContain("thread のように分割しない");
+    expect(out.userMessage).toContain("スレッドのように分割しない");
   });
 
   test("(c) fmat=article は validation を通り core_idea/post_draft に保持される", async () => {
@@ -302,5 +302,91 @@ describe("runCompose", () => {
     // 既定テンプレ（チャエン黄金型）の patch が userMessage に入り、希望フォーマット指示は入らない
     expect(out.userMessage).toContain("## 投稿の型（チャエン黄金型）");
     expect(out.userMessage).not.toContain("# 希望フォーマット");
+  });
+
+  // ── 要件7: スレッド（thread_bodies が投稿時の正・body は join 派生） ──
+  test("thread 正常: tweets 有効なら thread_bodies 保存 + body=joinThread + fmat=thread 維持", async () => {
+    const state: St = { materials: [mat("m1", { desired_fmat: "thread" })], coreIdeas: [], postDrafts: [] };
+    const draft = { fmat: "thread", body: "ignored", tweets: ["フック本目", "2本目の詳細", "3本目の締め"] };
+    const r = await runCompose({ sb: makeSb(state), apiKey: "k", runSession: captureSession({}, draft), getAgentRef: okRef, logger: silent });
+    expect(r.draftCount).toBe(1);
+    expect(r.perMaterial[0].threadFallback).toBeUndefined();
+    const pd = state.postDrafts[0];
+    expect(pd.fmat).toBe("thread");
+    expect(pd.thread_bodies).toEqual(["フック本目", "2本目の詳細", "3本目の締め"]);
+    expect(pd.body).toBe("フック本目\n\n---\n\n2本目の詳細\n\n---\n\n3本目の締め");
+    expect(state.coreIdeas[0].fmat).toBe("thread");
+  });
+
+  test("thread フォールバック: tweets 欠落なら fmat='long' へ降格 + threadFallback=true + thread_bodies なし", async () => {
+    const state: St = { materials: [mat("m1", { desired_fmat: "thread" })], coreIdeas: [], postDrafts: [] };
+    // writer が fmat=thread を返したが tweets を入れ忘れた → 安全側デフォルトで単一投稿に降格
+    const draft = { fmat: "thread", body: "単一本文に落ちる", tweets: undefined };
+    const r = await runCompose({ sb: makeSb(state), apiKey: "k", runSession: captureSession({}, draft), getAgentRef: okRef, logger: silent });
+    expect(r.draftCount).toBe(1);
+    expect(r.perMaterial[0].threadFallback).toBe(true);
+    const pd = state.postDrafts[0];
+    expect(pd.fmat).toBe("long");
+    expect(pd.body).toBe("単一本文に落ちる");
+    expect(pd.thread_bodies).toBeUndefined();
+    expect(state.coreIdeas[0].fmat).toBe("long");
+  });
+
+  test("thread フォールバック: tweets が上限8本超なら降格", async () => {
+    const state: St = { materials: [mat("m1", { desired_fmat: "thread" })], coreIdeas: [], postDrafts: [] };
+    const nine = Array.from({ length: 9 }, (_, i) => `t${i + 1}`);
+    const draft = { fmat: "thread", body: "fallback", tweets: nine };
+    const r = await runCompose({ sb: makeSb(state), apiKey: "k", runSession: captureSession({}, draft), getAgentRef: okRef, logger: silent });
+    expect(r.perMaterial[0].threadFallback).toBe(true);
+    expect(state.postDrafts[0].fmat).toBe("long");
+    expect(state.postDrafts[0].thread_bodies).toBeUndefined();
+  });
+
+  test("thread フォールバック: 空 part を含むと降格", async () => {
+    const state: St = { materials: [mat("m1", { desired_fmat: "thread" })], coreIdeas: [], postDrafts: [] };
+    const draft = { fmat: "thread", body: "fallback", tweets: ["ok本目", "   ", "3本目"] };
+    const r = await runCompose({ sb: makeSb(state), apiKey: "k", runSession: captureSession({}, draft), getAgentRef: okRef, logger: silent });
+    expect(r.perMaterial[0].threadFallback).toBe(true);
+    expect(state.postDrafts[0].fmat).toBe("long");
+  });
+
+  test("非 thread では tweets を無視（thread_bodies なし・threadFallback なし）", async () => {
+    const state: St = { materials: [mat("m1", { desired_fmat: "short" })], coreIdeas: [], postDrafts: [] };
+    const draft = { fmat: "short", body: "短い本文", tweets: ["a", "b"] };
+    const r = await runCompose({ sb: makeSb(state), apiKey: "k", runSession: captureSession({}, draft), getAgentRef: okRef, logger: silent });
+    expect(r.perMaterial[0].threadFallback).toBeUndefined();
+    expect(state.postDrafts[0].thread_bodies).toBeUndefined();
+    expect(state.postDrafts[0].fmat).toBe("short");
+  });
+
+  // ── 要件4: 人間の修正依頼（meta.human_revision_note / previous_draft_body を userMessage へ） ──
+  test("修正依頼: human_revision_note があれば『最優先で反映』ブロック + 前回ドラフトを userMessage に同梱", async () => {
+    const state: St = {
+      materials: [mat("m1", { human_revision_note: "もっと数字を入れて締めを強く", previous_draft_body: "前回の弱い本文" })],
+      coreIdeas: [], postDrafts: [],
+    };
+    const out: { userMessage?: string } = {};
+    await runCompose({ sb: makeSb(state), apiKey: "k", runSession: captureSession(out), getAgentRef: okRef, logger: silent });
+    expect(out.userMessage).toContain("# 人間からの修正依頼（最優先で反映する）");
+    expect(out.userMessage).toContain("## 前回のドラフト");
+    expect(out.userMessage).toContain("前回の弱い本文");
+    expect(out.userMessage).toContain("## 修正の指示");
+    expect(out.userMessage).toContain("もっと数字を入れて締めを強く");
+  });
+
+  test("修正依頼なし（通常生成）では修正依頼ブロックを入れない", async () => {
+    const state: St = { materials: [mat("m1")], coreIdeas: [], postDrafts: [] };
+    const out: { userMessage?: string } = {};
+    await runCompose({ sb: makeSb(state), apiKey: "k", runSession: captureSession(out), getAgentRef: okRef, logger: silent });
+    expect(out.userMessage).not.toContain("人間からの修正依頼");
+  });
+
+  test("修正依頼: previous_draft_body が無くても指示だけで反映ブロックを出す", async () => {
+    const state: St = { materials: [mat("m1", { human_revision_note: "丁寧語に直して" })], coreIdeas: [], postDrafts: [] };
+    const out: { userMessage?: string } = {};
+    await runCompose({ sb: makeSb(state), apiKey: "k", runSession: captureSession(out), getAgentRef: okRef, logger: silent });
+    expect(out.userMessage).toContain("# 人間からの修正依頼（最優先で反映する）");
+    expect(out.userMessage).toContain("丁寧語に直して");
+    expect(out.userMessage).not.toContain("## 前回のドラフト");
   });
 });
