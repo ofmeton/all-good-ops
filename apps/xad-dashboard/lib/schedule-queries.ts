@@ -2,9 +2,11 @@ import { serverSupabase } from "./supabase";
 import { toPlanRows, type PlanRow, type Reservation, type ScheduleStock } from "./schedule-logic";
 
 /**
- * 承認済み未予約ストック（human_approval_status='approved' AND scheduled_for IS NULL）を
- * 承認順(FIFO)で取得。CLI plan-scheduled-publish.ts と同じ source(post_drafts)・同じ並びで、
- * 表示に必要な列のみ選ぶ。serverSupabase(service role) 専用。
+ * 承認済み未予約・未公開ストックを承認順(FIFO)で取得。
+ * 条件 = human_approval_status='approved' AND scheduled_for IS NULL AND published_at IS NULL。
+ * publish-queries.listApprovedStock（今すぐ投稿）と**同一の3条件**で、両タブが同じストックを出す。
+ * （published_at IS NULL を欠くと、今すぐ投稿で公開済みの draft がスケジュールに残り二重投稿の温床になる）。
+ * CLI plan-scheduled-publish.ts と同じ source(post_drafts)・同じ並び。serverSupabase(service role) 専用。
  */
 export async function listApprovedStock(limit = 100): Promise<ScheduleStock[]> {
   const sb = serverSupabase();
@@ -13,6 +15,7 @@ export async function listApprovedStock(limit = 100): Promise<ScheduleStock[]> {
     .select("id, body, fmat, human_approved_at, risk_level, risk_reasons, attachments")
     .eq("human_approval_status", "approved")
     .is("scheduled_for", null)
+    .is("published_at", null) // ← 今すぐ投稿タブと整合（公開済みはストックに残さない・二重投稿防止）
     .order("human_approved_at", { ascending: true })
     .order("id", { ascending: true }) // 同値/null 時の非決定性回避（FIFO 安定化）
     .limit(limit);
