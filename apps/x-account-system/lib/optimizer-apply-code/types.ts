@@ -24,6 +24,8 @@ export type Workspace = { dir: string; branch: string };
 export type CodeApplyDeps = {
   /** worker 側 tier-T/noop 処理を発火（fail-open） */
   enqueueWorkerApply: () => Promise<void>;
+  /** MAIN_REPO が main・クリーンであることを保証（merge 前提条件）。失敗時 throw。 */
+  preflight: () => Promise<void>;
   /** accepted ∧ 未実装 ∧ apply_status∈(null,'skipped_manual') ∧ tier∈{config,prompt} を cap 件まで */
   loadTargets: (cap: number) => Promise<ProposalRow[]>;
   createWorkspace: (id: string) => Promise<Workspace>;
@@ -49,7 +51,7 @@ export type RollbackHandle = { git_sha?: string; pr_url?: string; deployed?: str
 export type CodeRollbackDeps = Pick<
   CodeApplyDeps,
   | "createWorkspace" | "collectDiff" | "runChecks" | "pushAndCreatePr"
-  | "mergePr" | "deploy" | "cleanupWorkspace" | "renderArtifacts" | "notify"
+  | "mergePr" | "deploy" | "cleanupWorkspace" | "renderArtifacts" | "notify" | "preflight"
 > & {
   getRollbackHandle: (id: string) => Promise<RollbackHandle | null>;
   revertCommit: (ws: Workspace, sha: string) => Promise<void>;

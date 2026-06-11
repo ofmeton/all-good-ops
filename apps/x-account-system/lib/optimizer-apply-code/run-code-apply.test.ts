@@ -35,6 +35,7 @@ function makeDeps(targets: ProposalRow[], diffFiles: string[] = [CFG]) {
     markApplied: async (id, meta) => rec("markApplied", id, meta),
     markStatus: async (id, st, note) => rec("markStatus", id, st, note),
     notify: async (m) => rec("notify", m),
+    preflight: async () => {},
   };
   return { deps, calls };
 }
@@ -136,6 +137,24 @@ describe("runCodeApply", () => {
     expect(r.processed).toBe(1);
     expect((calls.createWs as unknown[][])[0][0]).toBe("p2");
   });
+
+  it("preflight 失敗で非dryRun は中止（merge しない・errors=1）", async () => {
+    const { deps, calls } = makeDeps([row()]);
+    deps.preflight = async () => { throw new Error("MAIN_REPO dirty"); };
+    const r = await runCodeApply(deps);
+    expect(r.errors).toBe(1);
+    expect(r.processed).toBe(0);
+    expect(calls.createWs).toBeUndefined();
+    expect(calls.merge).toBeUndefined();
+    expect((calls.notify as unknown[][]).some((a) => String(a[0]).includes("🛑"))).toBe(true);
+  });
+
+  it("dryRun は preflight をスキップ（dirty でも実行）", async () => {
+    const { deps } = makeDeps([row()]);
+    deps.preflight = async () => { throw new Error("MAIN_REPO dirty"); };
+    const r = await runCodeApply(deps, { dryRun: true });
+    expect(r.applied).toBe(1);
+  });
 });
 
 describe("runCodeRollback", () => {
@@ -155,6 +174,7 @@ describe("runCodeRollback", () => {
       getRollbackHandle: async () => handle,
       revertCommit: async (_w, sha) => rec("revert", sha),
       markRolledBack: async (id) => rec("rolledBack", id),
+      preflight: async () => {},
     };
     return { deps, calls };
   }
@@ -173,6 +193,15 @@ describe("runCodeRollback", () => {
     const r = await runCodeRollback("p1", deps);
     expect(r.ok).toBe(false);
     expect(r.reason).toMatch(/git_sha/);
+    expect(calls.revert).toBeUndefined();
+  });
+
+  it("preflight 失敗で rollback しない", async () => {
+    const { deps, calls } = makeRbDeps({ git_sha: "deadbeef" });
+    deps.preflight = async () => { throw new Error("MAIN_REPO dirty"); };
+    const r = await runCodeRollback("p1", deps);
+    expect(r.ok).toBe(false);
+    expect(r.reason).toMatch(/dirty/);
     expect(calls.revert).toBeUndefined();
   });
 });

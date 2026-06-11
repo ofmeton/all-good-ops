@@ -59,6 +59,13 @@ function defaultCodeApplyDeps(): CodeApplyDeps {
       });
       if (!res.ok) throw new Error(`enqueue ${res.status}`);
     },
+    async preflight() {
+      const branch = mustSh("git", ["-C", MAIN_REPO, "rev-parse", "--abbrev-ref", "HEAD"]).trim();
+      const dirty = sh("git", ["-C", MAIN_REPO, "status", "--porcelain"]).out.trim();
+      if (branch !== "main" || dirty !== "") {
+        throw new Error(`MAIN_REPO は main・クリーン必須 (branch=${branch}, dirty=${dirty ? "yes" : "no"})`);
+      }
+    },
     async loadTargets(cap) {
       const { data, error } = await sb.from("optimizer_proposal").select(COLS)
         .eq("accepted", true).or("implemented.is.null,implemented.eq.false")
@@ -185,6 +192,7 @@ function defaultCodeApplyDeps(): CodeApplyDeps {
         createWorkspace: deps.createWorkspace, collectDiff: deps.collectDiff, runChecks: deps.runChecks,
         pushAndCreatePr: deps.pushAndCreatePr, mergePr: deps.mergePr, deploy: deps.deploy,
         cleanupWorkspace: deps.cleanupWorkspace, renderArtifacts: deps.renderArtifacts, notify: deps.notify,
+        preflight: deps.preflight,
         async getRollbackHandle(id) {
           const { data } = await sb.from("optimizer_proposal").select("meta").eq("id", id).single();
           return ((data?.meta as { rollback_handle?: never } | null)?.rollback_handle ?? null);

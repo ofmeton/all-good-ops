@@ -102,6 +102,14 @@ async function applyOne(p: ProposalRow, deps: CodeApplyDeps, opts: CodeApplyOpti
 /** accepted な config/prompt 提案を直列処理。fail-open（1件の失敗で他を止めない）。 */
 export async function runCodeApply(deps: CodeApplyDeps, opts: CodeApplyOptions = {}): Promise<CodeApplyResult> {
   const cap = opts.cap ?? 3;
+  if (!opts.dryRun) {
+    try {
+      await deps.preflight();
+    } catch (e) {
+      await deps.notify(`🛑 apply-code 中止: ${String(e)}`);
+      return { processed: 0, applied: 0, prPending: 0, blocked: 0, errors: 1, details: [{ id: "preflight", outcome: "error", note: String(e) }] };
+    }
+  }
   await deps.enqueueWorkerApply().catch(() => {});
   let targets = await deps.loadTargets(cap);
   if (opts.onlyId) targets = targets.filter((p) => p.id === opts.onlyId);
@@ -133,6 +141,11 @@ export async function runCodeApply(deps: CodeApplyDeps, opts: CodeApplyOptions =
 export async function runCodeRollback(
   proposalId: string, deps: CodeRollbackDeps,
 ): Promise<{ ok: boolean; reason?: string }> {
+  try {
+    await deps.preflight();
+  } catch (e) {
+    return { ok: false, reason: String(e) };
+  }
   const handle = await deps.getRollbackHandle(proposalId);
   if (!handle?.git_sha) return { ok: false, reason: "no rollback_handle.git_sha" };
   const ws = await deps.createWorkspace(`rb-${proposalId.slice(0, 8)}`);
