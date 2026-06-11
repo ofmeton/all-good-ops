@@ -6,6 +6,12 @@ import {
   type ApprovalSource,
   type Attachment,
 } from "@/lib/drafts-logic";
+import {
+  joinThread,
+  splitThread,
+  validateThreadParts,
+  THREAD_DELIM,
+} from "@/lib/thread-logic";
 import { MediaThumbs } from "@/components/MediaModal";
 import { AttachmentPicker } from "./AttachmentPicker";
 
@@ -78,20 +84,33 @@ export function DraftCard({
   onApprove,
   onReject,
   onSave,
+  onRequestRevision,
 }: {
   draft: ApprovalDraft;
   busy: boolean;
   onApprove: (attachments: Attachment[], reason?: string) => void;
   onReject: (reason?: string) => void;
-  onSave: (body: string) => Promise<boolean>;
+  /** 本文を保存。thread draft のときは isThread=true で thread_bodies も更新させる。 */
+  onSave: (body: string, isThread: boolean) => Promise<boolean>;
+  /** 修正依頼ダイアログを開く（要件4+5）。state は ApprovalClient が持つ。 */
+  onRequestRevision: () => void;
 }) {
-  const [body, setBody] = useState(draft.body);
+  // thread draft（要件7）: textarea には THREAD_DELIM 区切りの全文を表示・編集する。
+  // thread_bodies が投稿時の正のため、初期値はそれを join した正準形にそろえる。
+  const isThread = Array.isArray(draft.thread_bodies) && draft.thread_bodies.length > 0;
+  const initialBody = isThread ? joinThread(draft.thread_bodies as string[]) : draft.body;
+  const [body, setBody] = useState(initialBody);
   // 写真添付の upload intent（承認押下時に atomic 送信）。既存値があれば引き継ぐ。
   const [attachments, setAttachments] = useState<Attachment[]>(draft.attachments ?? []);
   // 承認/却下理由（任意）。Stage 2B。
   const [reason, setReason] = useState("");
-  const dirty = body !== draft.body;
+  const dirty = body !== initialBody;
   const v = validateBody(body);
+  // thread draft は分割後の本数・空 part も検証（保存・承認のブロック条件）。
+  const threadParts = isThread ? splitThread(body) : [];
+  const threadCheck = isThread
+    ? validateThreadParts(threadParts)
+    : { ok: true, errors: [] as string[] };
   const high = draft.risk_level === "high";
 
   // 写真トグル: 同 sourceUrl があれば外す、無ければ加える。
@@ -130,6 +149,11 @@ export function DraftCard({
             {FMAT_JP[draft.fmat] ?? draft.fmat}
           </span>
         )}
+        {isThread && (
+          <span className="text-xs font-medium text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded-full">
+            🧵 スレッド{threadParts.length}本
+          </span>
+        )}
         <span className="text-xs text-slate-400 tabular-nums">{body.length}字</span>
         {draft.risk_reasons && draft.risk_reasons.length > 0 && (
           <span className="text-xs text-rose-600">
@@ -162,7 +186,9 @@ export function DraftCard({
       {/* body editor */}
       <div className="px-4 sm:px-5 pt-3">
         <label className="block text-xs font-medium text-slate-500 mb-1">
-          本文（直接編集できます）
+          {isThread
+            ? `本文（直接編集できます・「${THREAD_DELIM.trim()}」でツイートを区切ります）`
+            : "本文（直接編集できます）"}
         </label>
         <textarea
           value={body}
@@ -171,6 +197,9 @@ export function DraftCard({
           className="w-full resize-y rounded-lg border border-slate-200 p-3 text-sm leading-relaxed text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 font-sans"
         />
         {!v.ok && <p className="text-xs text-rose-600 mt-1">{v.error}</p>}
+        {v.ok && !threadCheck.ok && (
+          <p className="text-xs text-rose-600 mt-1">{threadCheck.errors.join(" / ")}</p>
+        )}
       </div>
 
       {/* actions */}
@@ -193,11 +222,18 @@ export function DraftCard({
         <div className="flex flex-wrap items-center gap-2">
           <button
             onClick={() => onApprove(attachments, reason.trim() || undefined)}
-            disabled={busy || dirty || !v.ok}
+            disabled={busy || dirty || !v.ok || !threadCheck.ok}
             title={dirty ? "先に本文を保存してください" : undefined}
             className="px-4 py-1.5 rounded-lg text-sm font-medium bg-emerald-600 text-white hover:bg-emerald-700 active:bg-emerald-800 shadow-sm disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           >
             承認{attachments.length > 0 ? `（📎${attachments.length}）` : ""}
+          </button>
+          <button
+            onClick={onRequestRevision}
+            disabled={busy}
+            className="px-3 py-1.5 rounded-lg text-sm font-medium bg-white text-amber-700 border border-amber-200 hover:bg-amber-50 hover:border-amber-300 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          >
+            修正依頼
           </button>
           <button
             onClick={() => onReject(reason.trim() || undefined)}
@@ -209,7 +245,7 @@ export function DraftCard({
           <div className="ml-auto flex items-center gap-2">
             {dirty && (
               <button
-                onClick={() => setBody(draft.body)}
+                onClick={() => setBody(initialBody)}
                 disabled={busy}
                 className="text-xs text-slate-500 hover:text-slate-700 disabled:opacity-40"
               >
@@ -217,8 +253,8 @@ export function DraftCard({
               </button>
             )}
             <button
-              onClick={() => onSave(v.ok ? v.value : body)}
-              disabled={busy || !dirty || !v.ok}
+              onClick={() => onSave(v.ok ? v.value : body, isThread)}
+              disabled={busy || !dirty || !v.ok || !threadCheck.ok}
               className="px-3 py-1.5 rounded-lg text-sm font-medium bg-white text-slate-700 border border-slate-300 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
               本文を保存
