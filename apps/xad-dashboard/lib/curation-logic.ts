@@ -70,16 +70,51 @@ function engagementTotal(m: CurationMaterial): number {
   return (e.like ?? 0) + (e.retweet ?? 0) + (e.view ?? 0) + (e.bookmark ?? 0);
 }
 
-/** 既定 overall desc。collected_at は新しい順、engagement は合算 desc。null は末尾。 */
-export function sortMaterials(materials: CurationMaterial[], key: SortKey): CurationMaterial[] {
-  const copy = [...materials];
+/** ISO 文字列を日単位（YYYY-MM-DD）に丸める。多軸ソートで同日を次キーに渡すため。 */
+function dayKey(iso: string | null): string {
+  return (iso ?? "").slice(0, 10);
+}
+
+/** 1 キー分の比較（戻り値 > 0 で b が上位＝降順）。null は末尾。 */
+function compareByKey(
+  a: CurationMaterial,
+  b: CurationMaterial,
+  key: SortKey,
+  roundDay: boolean,
+): number {
   if (key === "collected_at") {
-    return copy.sort((a, b) => (b.collected_at ?? "").localeCompare(a.collected_at ?? ""));
+    // 新しい順。後続キーがある時だけ日単位に丸め、同日内を次キーで並べ替えられるようにする
+    // （完全タイムスタンプ比較だと第2キーがほぼ発動しない）。
+    const av = roundDay ? dayKey(a.collected_at) : (a.collected_at ?? "");
+    const bv = roundDay ? dayKey(b.collected_at) : (b.collected_at ?? "");
+    return bv.localeCompare(av);
   }
-  if (key === "engagement") {
-    return copy.sort((a, b) => engagementTotal(b) - engagementTotal(a));
-  }
-  return copy.sort((a, b) => (b[key] ?? -1) - (a[key] ?? -1));
+  if (key === "engagement") return engagementTotal(b) - engagementTotal(a);
+  return (b[key] ?? -1) - (a[key] ?? -1);
+}
+
+/**
+ * 多軸ソート。keys を優先順に評価し、先頭キーが同値なら次キーで決める（例: 新着順 × 総合スコア）。
+ * 単一キー（後方互換）も受ける。keys が空なら overall_score 単独。Array.sort は安定なので
+ * 全キー同値の並びは入力順を保つ。
+ */
+export function sortMaterials(
+  materials: CurationMaterial[],
+  keys: SortKey | SortKey[],
+): CurationMaterial[] {
+  const list = (Array.isArray(keys) ? keys : [keys]).filter(Boolean) as SortKey[];
+  const effective: SortKey[] = list.length > 0 ? list : ["overall_score"];
+  const copy = [...materials];
+  copy.sort((a, b) => {
+    for (let i = 0; i < effective.length; i++) {
+      const key = effective[i];
+      const roundDay = key === "collected_at" && i < effective.length - 1;
+      const cmp = compareByKey(a, b, key, roundDay);
+      if (cmp !== 0) return cmp;
+    }
+    return 0;
+  });
+  return copy;
 }
 
 export interface FilterSpec {

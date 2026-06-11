@@ -38,6 +38,16 @@ const SORTS: { key: SortKey; label: string }[] = [
   { key: "engagement", label: "反応数" },
 ];
 
+// フィルタ行の select 共通スタイル（chevron 背景込み）。
+const SELECT_CLASS =
+  "h-7 pl-2 pr-6 text-sm border border-slate-200 rounded bg-white text-slate-700 hover:border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 appearance-none cursor-pointer";
+const SELECT_STYLE: React.CSSProperties = {
+  backgroundImage:
+    "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394a3b8' d='M6 8L1 3h10z'/%3E%3C/svg%3E\")",
+  backgroundRepeat: "no-repeat",
+  backgroundPosition: "right 6px center",
+};
+
 const ACTION_CONFIG: {
   action: CurationAction;
   label: string;
@@ -93,7 +103,12 @@ export function CurationClient({
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [tab, setTab] = useState<SelectionStatus>("collected");
-  const [sort, setSort] = useState<SortKey>("overall_score");
+  // 多軸ソート: 並び1（必須）/ 並び2・並び3（任意・"" で無効）。優先順に評価される（例: 新着順 × 総合）。
+  const [sortKeys, setSortKeys] = useState<[SortKey, SortKey | "", SortKey | ""]>([
+    "overall_score",
+    "",
+    "",
+  ]);
   const [filter, setFilter] = useState<FilterSpec>({});
   const [text, setText] = useState("");
   const [checked, setChecked] = useState<Set<string>>(new Set());
@@ -210,8 +225,22 @@ export function CurationClient({
     setEditedIds(new Set(assignments.map((a) => a.id)));
   }
 
+  // ソートスロット更新。重複キーは後方スロットを空にし、並び2 が空なら並び3 も詰める（穴を作らない）。
+  const setSortSlot = useCallback((idx: 0 | 1 | 2, value: SortKey | "") => {
+    setSortKeys((prev) => {
+      const arr: (SortKey | "")[] = [prev[0], prev[1], prev[2]];
+      arr[idx] = idx === 0 ? (value || "overall_score") : value;
+      for (let j = idx + 1; j < 3; j++) {
+        if (value && arr[j] === value) arr[j] = "";
+      }
+      if (arr[1] === "") arr[2] = "";
+      return [(arr[0] || "overall_score") as SortKey, arr[1], arr[2]];
+    });
+  }, []);
+
   const base = materials[tab] ?? [];
-  const shown = sortMaterials(filterMaterials(base, { ...filter, text }), sort);
+  const activeSortKeys = sortKeys.filter(Boolean) as SortKey[];
+  const shown = sortMaterials(filterMaterials(base, { ...filter, text }), activeSortKeys);
   const vias = Array.from(
     new Set(base.map((m) => m.discovery_via).filter(Boolean))
   ) as string[];
@@ -356,23 +385,36 @@ export function CurationClient({
         <div className="max-w-4xl mx-auto px-6">
           {/* Filter row */}
           <div className="flex flex-wrap items-center gap-2 py-2.5 text-sm border-b border-slate-100">
-            {/* Sort */}
+            {/* Sort（多軸: 並び1 必須 / 並び2・3 任意。優先順に評価＝例 新着順 × 総合） */}
             <div className="flex items-center gap-1.5">
               <span className="text-xs font-medium text-slate-400 uppercase tracking-wider whitespace-nowrap">
                 並び
               </span>
-              <select
-                value={sort}
-                onChange={(e) => setSort(e.target.value as SortKey)}
-                className="h-7 pl-2 pr-6 text-sm border border-slate-200 rounded bg-white text-slate-700 hover:border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 appearance-none cursor-pointer"
-                style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394a3b8' d='M6 8L1 3h10z'/%3E%3C/svg%3E\")", backgroundRepeat: "no-repeat", backgroundPosition: "right 6px center" }}
-              >
-                {SORTS.map((s) => (
-                  <option key={s.key} value={s.key}>
-                    {s.label}
-                  </option>
-                ))}
-              </select>
+              {([0, 1, 2] as const).map((idx) => {
+                // 前段が未選択なら次段は出さない（並び1→2→3 の順に開く）。
+                if (idx > 0 && sortKeys[idx - 1] === "") return null;
+                const value = sortKeys[idx];
+                // 他スロットで使用中のキーは選択肢から除外（重複指定を防ぐ）。
+                const used = sortKeys.filter((k, j) => j !== idx && k) as SortKey[];
+                const opts = SORTS.filter((s) => !used.includes(s.key));
+                return (
+                  <select
+                    key={idx}
+                    aria-label={`並び替え${idx + 1}`}
+                    value={value}
+                    onChange={(e) => setSortSlot(idx, e.target.value as SortKey | "")}
+                    className={SELECT_CLASS}
+                    style={SELECT_STYLE}
+                  >
+                    {idx > 0 && <option value="">—（なし）</option>}
+                    {opts.map((s) => (
+                      <option key={s.key} value={s.key}>
+                        {idx > 0 ? `↳ ${s.label}` : s.label}
+                      </option>
+                    ))}
+                  </select>
+                );
+              })}
             </div>
 
             <div className="w-px h-4 bg-slate-200 mx-0.5" />

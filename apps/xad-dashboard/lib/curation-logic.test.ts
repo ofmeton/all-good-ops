@@ -35,11 +35,35 @@ describe("curation-logic", () => {
     expect(rows[0].discovery).toEqual({ via: "trend", query: "AI" });
   });
 
-  test("sortMaterials: overall desc 既定 / 軸切替", () => {
+  test("sortMaterials: overall desc 既定 / 軸切替（単一キー後方互換）", () => {
     const a = mat({ id: "a", overall_score: 10, velocity: 99 });
     const b = mat({ id: "b", overall_score: 80, velocity: 1 });
     expect(sortMaterials([a, b], "overall_score").map((m) => m.id)).toEqual(["b", "a"]);
     expect(sortMaterials([a, b], "velocity").map((m) => m.id)).toEqual(["a", "b"]);
+    // 空配列は overall_score 単独にフォールバック
+    expect(sortMaterials([a, b], []).map((m) => m.id)).toEqual(["b", "a"]);
+  });
+
+  test("sortMaterials: 多軸（新着順 × 総合）同日内は総合で並ぶ", () => {
+    // 同日（時刻違い）。x は時刻が最も遅いが overall は低い。
+    const x = mat({ id: "x", collected_at: "2026-06-10T23:00:00Z", overall_score: 30 });
+    const y = mat({ id: "y", collected_at: "2026-06-10T09:00:00Z", overall_score: 90 });
+    const z = mat({ id: "z", collected_at: "2026-06-08T12:00:00Z", overall_score: 99 });
+    // 単一キー collected_at は時刻で x(23時) > y(9時) > z
+    expect(sortMaterials([x, y, z], "collected_at").map((m) => m.id)).toEqual(["x", "y", "z"]);
+    // 新着順 × 総合: 6/10 を日単位で同値→overall で y(90)>x(30)、最後に 6/8 の z
+    expect(sortMaterials([x, y, z], ["collected_at", "overall_score"]).map((m) => m.id)).toEqual([
+      "y", "x", "z",
+    ]);
+  });
+
+  test("sortMaterials: 多軸 第1キー同値で第2キーが効く", () => {
+    const p = mat({ id: "p", overall_score: 50, velocity: 10 });
+    const q = mat({ id: "q", overall_score: 50, velocity: 80 });
+    const r = mat({ id: "r", overall_score: 70, velocity: 1 });
+    expect(sortMaterials([p, q, r], ["overall_score", "velocity"]).map((m) => m.id)).toEqual([
+      "r", "q", "p",
+    ]);
   });
 
   test("filterMaterials: via / media / lang / source / text", () => {
