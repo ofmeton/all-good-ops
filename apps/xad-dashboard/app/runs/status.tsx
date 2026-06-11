@@ -17,21 +17,21 @@ export function statusTone(
 }
 
 const TONE_CLASS: Record<string, string> = {
-  ok: "bg-emerald-50 text-emerald-700 border-emerald-200",
-  error: "bg-rose-50 text-rose-700 border-rose-200",
-  running: "bg-blue-50 text-blue-700 border-blue-200",
-  skipped: "bg-slate-100 text-slate-600 border-slate-200",
-  warn: "bg-amber-50 text-amber-700 border-amber-200",
-  idle: "bg-slate-50 text-slate-500 border-slate-200",
+  ok: "bg-emerald-400/10 text-emerald-300 border-emerald-400/30",
+  error: "bg-rose-400/10 text-rose-300 border-rose-400/30",
+  running: "bg-blue-400/10 text-blue-300 border-blue-400/30",
+  skipped: "bg-slate-500/15 text-slate-400 border-slate-500/30",
+  warn: "bg-amber-400/10 text-amber-300 border-amber-400/30",
+  idle: "bg-slate-500/10 text-slate-400 border-slate-500/25",
 };
 
 const TONE_DOT: Record<string, string> = {
-  ok: "bg-emerald-500",
-  error: "bg-rose-500",
-  running: "bg-blue-500",
-  skipped: "bg-slate-400",
-  warn: "bg-amber-500",
-  idle: "bg-slate-300",
+  ok: "bg-emerald-400",
+  error: "bg-rose-400",
+  running: "bg-blue-400 shadow-glow-primary animate-pulse-glow",
+  skipped: "bg-slate-500",
+  warn: "bg-amber-400",
+  idle: "bg-slate-600",
 };
 
 export function StatusBadge({
