@@ -59,6 +59,14 @@ export function buildMaterialRow(
     ? createdAtParsed.toISOString()
     : null;
 
+  // lane（要件4）: 日本語ツイートは二次流通であることが多く「アウトプット改善の参考シグナル」止まり
+  // ＝投稿候補から物理分離する。判定はコード側の決定ルール（LLM 任せにしない）。
+  // 投稿候補=candidate / 参考=reference。view 側も同じ規則で coalesce 確定するが、
+  // 収集時に materialize して source_stats / 直接 meta クエリでも正確にする。
+  const isJa = (c.tweet.lang ?? null) === "ja";
+  const lane = isJa ? "reference" : "candidate";
+  const lane_reason = isJa ? "lang=ja（二次流通の参考シグナル）" : "lang≠ja（投稿候補）";
+
   return {
     source_type: "x_inspirations",
     source_ref: c.tweet.author.userName,
@@ -78,6 +86,8 @@ export function buildMaterialRow(
       is_reply: c.tweet.isReply ?? null,
       conversation_id: c.tweet.conversationId ?? null,
       media: c.tweet.media ?? [],
+      lane,
+      lane_reason,
       scores: c.scores,
       score_reason: c.scoreReason,
       discovery: c.discovery,

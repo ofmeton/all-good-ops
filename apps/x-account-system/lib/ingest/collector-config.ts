@@ -34,42 +34,45 @@ export interface CollectorConfig {
 
 /**
  * 全 28 ソース（旧 buzz-ingest の SEED_SOURCES 由来。buzz-ingest は legacy retire で削除済）。
- * jp_publisher 24 件 / ai_official 3 件 / en_curator 1 件。
+ * 2026-06-11: category を本番 materials_store の実言語分布で裏取りし再分類（jp_publisher に紛れていた
+ *   英語/非日本語アカ 8 件を en_curator へ）。lane（要件4）は category でなく per-material の lang で
+ *   決まるため機能影響はないが、SSOT 正確性のため修正。
+ * jp_publisher 16 / ai_official 3 / en_curator 9。
  */
 export const COLLECTOR_CONFIG: CollectorConfig = {
   watchlist: [
-    // --- jp_publisher: 既存信頼 4 アカ ---
+    // --- jp_publisher: 日本語 AI 発信者（実分布で ja 優勢を確認）---
     { handle: "Shimayus", category: "jp_publisher" },
     { handle: "SuguruKun_ai", category: "jp_publisher" },
     { handle: "masahirochaen", category: "jp_publisher" },
     { handle: "ClaudeCode_love", category: "jp_publisher" },
-    // --- jp_publisher: ユーザー追加 20 アカ ---
     { handle: "ClaudeCode_UT", category: "jp_publisher" },
     { handle: "obsidianstudio9", category: "jp_publisher" },
     { handle: "MakeAI_CEO", category: "jp_publisher" },
     { handle: "mmmiyama_D", category: "jp_publisher" },
     { handle: "tetumemo", category: "jp_publisher" },
-    { handle: "claudecode_lab", category: "jp_publisher" },
     { handle: "ObsidianOtaku", category: "jp_publisher" },
     { handle: "so_ainsight", category: "jp_publisher" },
-    { handle: "Codestudiopjbk", category: "jp_publisher" },
-    { handle: "exploraX_", category: "jp_publisher" },
-    { handle: "jason_coder0", category: "jp_publisher" },
-    { handle: "heynavtoor", category: "jp_publisher" },
-    { handle: "ethancoder0", category: "jp_publisher" },
-    { handle: "cyrilXBT", category: "jp_publisher" },
     { handle: "daifukujinji", category: "jp_publisher" },
-    { handle: "Fluyeporlaweb", category: "jp_publisher" },
     { handle: "commte", category: "jp_publisher" },
-    { handle: "csaba_kissi", category: "jp_publisher" },
-    { handle: "ai_explorer25", category: "jp_publisher" },
-    { handle: "Atenov_D", category: "jp_publisher" },
-    // --- ai_official: AI 企業公式（速報の一次ソース）---
+    // lang 不明（テキスト lang null・media/コード中心）。証拠不十分のため据置。
+    { handle: "claudecode_lab", category: "jp_publisher" },
+    { handle: "Codestudiopjbk", category: "jp_publisher" },
+    { handle: "ethancoder0", category: "jp_publisher" },
+    // --- ai_official: AI 企業公式（速報の一次ソース・inbox セーフガード対象）---
     { handle: "AnthropicAI", category: "ai_official" },
     { handle: "OpenAI", category: "ai_official" },
     { handle: "GoogleDeepMind", category: "ai_official" },
-    // --- en_curator: 英語 AI 解説者（海外バズ早期検知）---
+    // --- en_curator: 英語/非日本語 AI 解説者（海外バズ早期検知。実分布で ja=0 を確認）---
     { handle: "gerardsans", category: "en_curator" },
+    { handle: "csaba_kissi", category: "en_curator" },
+    { handle: "Atenov_D", category: "en_curator" },
+    { handle: "cyrilXBT", category: "en_curator" },
+    { handle: "heynavtoor", category: "en_curator" },
+    { handle: "exploraX_", category: "en_curator" },
+    { handle: "Fluyeporlaweb", category: "en_curator" },
+    { handle: "jason_coder0", category: "en_curator" },
+    { handle: "ai_explorer25", category: "en_curator" },
   ],
   trendWoeids: [23424977],
   scoringWeights: { freshness: 0.3, velocity: 0.3, target_fit: 0.4 },
