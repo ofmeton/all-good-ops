@@ -46,7 +46,9 @@ const COLS = "id, proposal_type, scope, hypothesis, evidence, rank, accepted, im
 const IMPLEMENT_TOOLS = "Read,Edit,Write,Grep,Glob,Bash(npm test:*),Bash(npx jest:*),Bash(npx tsc:*),Bash(git add:*),Bash(git commit:*),Bash(git diff:*),Bash(git status:*)";
 const REVIEW_TOOLS = "Read,Grep,Glob,Bash(git diff:*)";
 function runClaude(cwd: string, prompt: string, allowedTools: string) {
-  const r = sh("claude", ["-p", prompt, "--model", CLAUDE_MODEL, "--allowedTools", allowedTools],
+  // headless 実行では permission-mode を明示しないとプランモードで起動し、承認待ち→即キャンセル→
+  // 編集ゼロになる。worktree 隔離 + allowedTools 限定なので bypassPermissions で自動実行させる。
+  const r = sh("claude", ["-p", prompt, "--model", CLAUDE_MODEL, "--permission-mode", "bypassPermissions", "--allowedTools", allowedTools],
     { cwd, timeoutMs: 1_200_000, env: { ALLOW_BRANCH_CONFLICT: "1" } });
   return { ok: r.ok, log: r.out };
 }

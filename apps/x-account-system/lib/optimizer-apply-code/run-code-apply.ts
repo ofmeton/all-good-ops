@@ -57,6 +57,12 @@ async function applyOne(p: ProposalRow, deps: CodeApplyDeps, opts: CodeApplyOpti
     }
 
     if (!gate.ok || review?.verdict !== "APPROVE") {
+      // 空 diff = implementer が変更を生成しなかった（SKIP 等）。PR を作らず no_change で記録。
+      if (gate.diff.files.length === 0) {
+        await deps.markStatus(p.id, "no_change", "implementer が変更を生成しなかった");
+        await deps.cleanupWorkspace(ws, false);
+        return { id: p.id, outcome: "error", note: "no change produced" };
+      }
       const note = (gate.ok ? (review?.reasons ?? []) : gate.failures).join("; ").slice(0, 500);
       const { prUrl } = await deps.pushAndCreatePr(ws, { title: prTitle(p), body: prBody(p) }, true);
       await deps.markStatus(p.id, "pr_pending", `自動ゲート不合格（人間レビュー要）: ${note}`);
