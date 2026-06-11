@@ -10,6 +10,7 @@
   "type": "module",
   "scripts": {
     "budget": "tsx lib/cost/budget-cli.ts",
+    "apply-code": "tsx scripts/optimizer-apply-code.ts",
     "oauth:test": "tsx lib/oauth/pkce-test.ts",
     "fallback:dry-run": "tsx lib/fallback/trigger-cli.ts --dry-run",
     "relabel": "python3 scripts/relabel-tweets.py",
