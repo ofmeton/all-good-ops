@@ -113,7 +113,7 @@ export function MediaThumbs({
               type="button"
               onClick={() => setActive(md)}
               aria-label="メディアを拡大"
-              className="block h-full w-full rounded border border-slate-200 overflow-hidden"
+              className="block h-full w-full rounded border border-white/10 overflow-hidden"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img

@@ -22,16 +22,16 @@ function isActive(pathname: string, href: string): boolean {
 export function NavBar() {
   const pathname = usePathname() ?? "/";
   return (
-    <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/85 backdrop-blur supports-[backdrop-filter]:bg-white/75">
+    <header className="sticky top-0 z-30 border-b border-white/10 bg-base/70 backdrop-blur-xl">
       <div className="flex h-14 items-center gap-3 px-4 sm:px-6">
         {/* brand */}
         <Link
           href="/"
-          className="flex items-center gap-2 shrink-0 text-slate-900 no-underline"
+          className="flex items-center gap-2 shrink-0 text-white no-underline"
         >
           <span
             aria-hidden
-            className="inline-block h-2.5 w-2.5 rounded-full bg-blue-600 ring-2 ring-blue-100"
+            className="inline-block h-2.5 w-2.5 rounded-full bg-blue-400 shadow-glow-primary animate-pulse-glow"
           />
           <span className="font-semibold tracking-tight text-sm sm:text-base whitespace-nowrap">
             xad <span className="text-slate-400 font-normal">observability</span>
@@ -54,15 +54,15 @@ export function NavBar() {
                     className={[
                       "relative inline-flex items-center rounded-md px-2.5 py-1.5 text-sm font-medium transition-colors whitespace-nowrap no-underline",
                       active
-                        ? "text-slate-900 bg-slate-100"
-                        : "text-slate-500 hover:text-slate-900 hover:bg-slate-50",
+                        ? "text-white bg-white/10"
+                        : "text-slate-400 hover:text-white hover:bg-white/5",
                     ].join(" ")}
                   >
                     {item.label}
                     {active && (
                       <span
                         aria-hidden
-                        className="absolute inset-x-2.5 -bottom-px h-0.5 rounded-full bg-blue-600"
+                        className="absolute inset-x-2.5 -bottom-px h-0.5 rounded-full bg-blue-400 shadow-glow-primary"
                       />
                     )}
                   </Link>

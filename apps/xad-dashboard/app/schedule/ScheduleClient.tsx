@@ -139,15 +139,15 @@ export function ScheduleClient({
   }, [assignments, stockIds, router]);
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-white/[0.03]">
       {/* ── Header ── */}
-      <div className="bg-white border-b border-slate-200 px-4 sm:px-6 py-4 sticky top-0 z-20">
+      <div className="bg-surface border-b border-white/10 px-4 sm:px-6 py-4 sticky top-0 z-20">
         <div className="max-w-3xl mx-auto flex items-baseline justify-between gap-4">
           <div>
-            <h1 className="text-lg font-semibold text-slate-900 tracking-tight">
+            <h1 className="text-lg font-semibold text-white tracking-tight">
               スケジュール / スロット割当
             </h1>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <p className="text-xs text-slate-400 mt-0.5">
               承認済みストックをピーク帯へ割当 → 「予約を確定」で予約登録します。
             </p>
           </div>
@@ -158,27 +158,27 @@ export function ScheduleClient({
 
         {/* controls */}
         <div className="max-w-3xl mx-auto mt-3 flex flex-wrap items-center gap-2">
-          <label className="inline-flex items-center gap-1.5 text-xs text-slate-600 select-none">
+          <label className="inline-flex items-center gap-1.5 text-xs text-slate-300 select-none">
             <input
               type="checkbox"
               checked={includeToday}
               disabled={busy}
               onChange={toggleToday}
-              className="h-3.5 w-3.5 rounded border-slate-300"
+              className="h-3.5 w-3.5 rounded border-white/15"
             />
             当日も割当（same-day・現在より後のピーク帯のみ）
           </label>
           <button
             onClick={() => replan(includeToday)}
             disabled={busy}
-            className="px-3 py-1.5 rounded-lg text-sm font-medium bg-white text-slate-700 border border-slate-300 hover:bg-slate-100 disabled:opacity-40 transition-colors"
+            className="px-3 py-1.5 rounded-lg text-sm font-medium bg-surface text-slate-300 border border-white/15 hover:bg-white/10 disabled:opacity-40 transition-colors"
           >
             スロットを再提案
           </button>
           <button
             onClick={confirm}
             disabled={busy || assignedCount === 0}
-            className="ml-auto px-4 py-1.5 rounded-lg text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800 shadow-sm disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            className="ml-auto px-4 py-1.5 rounded-lg text-sm font-medium bg-blue-500 text-white hover:bg-blue-400 active:bg-blue-600 shadow-sm disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           >
             予約を確定{assignedCount > 0 ? `（${assignedCount}）` : ""}
           </button>
@@ -190,10 +190,10 @@ export function ScheduleClient({
               className={[
                 "inline-block text-xs px-2.5 py-1 rounded-full font-medium",
                 msg.type === "error"
-                  ? "bg-rose-50 text-rose-700 border border-rose-200"
+                  ? "bg-rose-400/10 text-rose-300 border border-rose-400/30"
                   : msg.type === "success"
-                    ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
-                    : "bg-slate-100 text-slate-600",
+                    ? "bg-emerald-400/10 text-emerald-300 border border-emerald-400/30"
+                    : "bg-white/5 text-slate-300",
               ].join(" ")}
             >
               {msg.text}
@@ -207,10 +207,10 @@ export function ScheduleClient({
         {stock.length === 0 ? (
           <div className="py-20 text-center">
             <div className="text-slate-300 text-4xl mb-3 select-none">○</div>
-            <p className="text-slate-500 text-sm">承認済み（未予約）のストックはありません。</p>
+            <p className="text-slate-400 text-sm">承認済み（未予約）のストックはありません。</p>
             <button
               onClick={() => router.refresh()}
-              className="mt-3 text-xs text-blue-600 hover:underline"
+              className="mt-3 text-xs text-blue-300 hover:underline"
             >
               再読み込み
             </button>

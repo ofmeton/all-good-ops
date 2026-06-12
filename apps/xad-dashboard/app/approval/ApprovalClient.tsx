@@ -162,13 +162,13 @@ export function ApprovalClient({
   );
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-white/[0.03]">
       {/* ── Header ── */}
-      <div className="bg-white border-b border-slate-200 px-4 sm:px-6 py-4 sticky top-14 z-20">
+      <div className="bg-surface border-b border-white/10 px-4 sm:px-6 py-4 sticky top-14 z-20">
         <div className="max-w-3xl mx-auto flex items-baseline justify-between gap-4">
           <div>
-            <h1 className="text-lg font-semibold text-slate-900 tracking-tight">投稿承認</h1>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <h1 className="text-lg font-semibold text-white tracking-tight">投稿承認</h1>
+            <p className="text-xs text-slate-400 mt-0.5">
               本文を直接編集して承認。承認すると予約待ちストックに入ります。
             </p>
           </div>
@@ -182,10 +182,10 @@ export function ApprovalClient({
               className={[
                 "inline-block text-xs px-2.5 py-1 rounded-full font-medium",
                 msg.type === "error"
-                  ? "bg-rose-50 text-rose-700 border border-rose-200"
+                  ? "bg-rose-400/10 text-rose-300 border border-rose-400/30"
                   : msg.type === "success"
-                    ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
-                    : "bg-slate-100 text-slate-600",
+                    ? "bg-emerald-400/10 text-emerald-300 border border-emerald-400/30"
+                    : "bg-white/5 text-slate-300",
               ].join(" ")}
             >
               {msg.text}
@@ -199,10 +199,10 @@ export function ApprovalClient({
         {drafts.length === 0 ? (
           <div className="py-20 text-center">
             <div className="text-slate-300 text-4xl mb-3 select-none">○</div>
-            <p className="text-slate-500 text-sm">承認待ちの投稿はありません。</p>
+            <p className="text-slate-400 text-sm">承認待ちの投稿はありません。</p>
             <button
               onClick={() => router.refresh()}
-              className="mt-3 text-xs text-blue-600 hover:underline"
+              className="mt-3 text-xs text-blue-300 hover:underline"
             >
               再読み込み
             </button>

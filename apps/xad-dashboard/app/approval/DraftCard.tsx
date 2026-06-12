@@ -19,7 +19,7 @@ function SourceSection({ sources }: { sources: ApprovalSource[] }) {
   if (!sources || sources.length === 0) return null;
   return (
     <details className="px-4 sm:px-5 pt-3 group" open>
-      <summary className="cursor-pointer select-none text-xs font-medium text-slate-500 hover:text-slate-700">
+      <summary className="cursor-pointer select-none text-xs font-medium text-slate-400 hover:text-slate-200">
         元ネタツイート（{sources.length}件）
       </summary>
       <div className="mt-2 space-y-2">
@@ -28,10 +28,10 @@ function SourceSection({ sources }: { sources: ApprovalSource[] }) {
           return (
             <div
               key={s.id}
-              className="rounded-lg border border-slate-100 bg-slate-50/60 p-3 text-sm"
+              className="rounded-lg border border-white/5 bg-white/[0.03] p-3 text-sm"
             >
-              <div className="flex items-center gap-2 text-xs text-slate-500 mb-1 flex-wrap">
-                {s.source_ref && <span className="font-bold text-slate-600">@{s.source_ref}</span>}
+              <div className="flex items-center gap-2 text-xs text-slate-400 mb-1 flex-wrap">
+                {s.source_ref && <span className="font-bold text-slate-300">@{s.source_ref}</span>}
                 {s.lang && (
                   <span className="uppercase tracking-wide text-slate-400">{s.lang}</span>
                 )}
@@ -45,17 +45,17 @@ function SourceSection({ sources }: { sources: ApprovalSource[] }) {
                     href={s.tweet_url}
                     target="_blank"
                     rel="noreferrer"
-                    className="text-blue-600 underline hover:text-blue-800"
+                    className="text-blue-300 underline hover:text-blue-200"
                   >
                     原ツイート
                   </a>
                 )}
               </div>
               {s.raw_text && (
-                <p className="whitespace-pre-wrap leading-relaxed text-slate-700">{s.raw_text}</p>
+                <p className="whitespace-pre-wrap leading-relaxed text-slate-300">{s.raw_text}</p>
               )}
               {s.translation && (
-                <p className="whitespace-pre-wrap leading-relaxed text-slate-600 mt-1.5 pl-2 border-l-2 border-slate-200">
+                <p className="whitespace-pre-wrap leading-relaxed text-slate-300 mt-1.5 pl-2 border-l-2 border-white/10">
                   <span className="text-[11px] text-slate-400 mr-1">日本語訳</span>
                   {s.translation}
                 </p>
@@ -131,32 +131,32 @@ export function DraftCard({
 
   return (
     <div
-      className={`rounded-xl border bg-white shadow-sm overflow-hidden ${
-        high ? "border-l-4 border-l-rose-400 border-slate-200" : "border-slate-200"
+      className={`rounded-xl border bg-surface shadow-sm overflow-hidden ${
+        high ? "border-l-4 border-l-rose-400 border-white/10" : "border-white/10"
       }`}
     >
       {/* header */}
       <div className="flex flex-wrap items-center gap-2 px-4 sm:px-5 pt-4">
         <span
           className={`px-2 py-0.5 rounded-full text-xs font-bold ${
-            high ? "bg-rose-100 text-rose-700" : "bg-emerald-100 text-emerald-700"
+            high ? "bg-rose-400/15 text-rose-300" : "bg-emerald-400/15 text-emerald-300"
           }`}
         >
           {high ? "⚠ HIGH RISK" : "✓ low risk"}
         </span>
         {draft.fmat && (
-          <span className="text-xs text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">
+          <span className="text-xs text-slate-400 bg-white/5 px-2 py-0.5 rounded-full">
             {FMAT_JP[draft.fmat] ?? draft.fmat}
           </span>
         )}
         {isThread && (
-          <span className="text-xs font-medium text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded-full">
+          <span className="text-xs font-medium text-indigo-300 bg-indigo-400/15 px-2 py-0.5 rounded-full">
             🧵 スレッド{threadParts.length}本
           </span>
         )}
         <span className="text-xs text-slate-400 tabular-nums">{body.length}字</span>
         {draft.risk_reasons && draft.risk_reasons.length > 0 && (
-          <span className="text-xs text-rose-600">
+          <span className="text-xs text-rose-300">
             {draft.risk_reasons.join(" / ")}
           </span>
         )}
@@ -166,8 +166,8 @@ export function DraftCard({
       </div>
 
       {draft.idea_title && (
-        <p className="px-4 sm:px-5 mt-2 text-xs text-slate-500">
-          核アイデア: <span className="text-slate-700">{draft.idea_title}</span>
+        <p className="px-4 sm:px-5 mt-2 text-xs text-slate-400">
+          核アイデア: <span className="text-slate-300">{draft.idea_title}</span>
         </p>
       )}
 
@@ -185,7 +185,7 @@ export function DraftCard({
 
       {/* body editor */}
       <div className="px-4 sm:px-5 pt-3">
-        <label className="block text-xs font-medium text-slate-500 mb-1">
+        <label className="block text-xs font-medium text-slate-400 mb-1">
           {isThread
             ? `本文（直接編集できます・「${THREAD_DELIM.trim()}」でツイートを区切ります）`
             : "本文（直接編集できます）"}
@@ -194,16 +194,16 @@ export function DraftCard({
           value={body}
           onChange={(e) => setBody(e.target.value)}
           rows={Math.min(Math.max(body.split("\n").length + 1, 5), 18)}
-          className="w-full resize-y rounded-lg border border-slate-200 p-3 text-sm leading-relaxed text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 font-sans"
+          className="w-full resize-y rounded-lg border border-white/10 p-3 text-sm leading-relaxed text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 font-sans"
         />
-        {!v.ok && <p className="text-xs text-rose-600 mt-1">{v.error}</p>}
+        {!v.ok && <p className="text-xs text-rose-300 mt-1">{v.error}</p>}
         {v.ok && !threadCheck.ok && (
-          <p className="text-xs text-rose-600 mt-1">{threadCheck.errors.join(" / ")}</p>
+          <p className="text-xs text-rose-300 mt-1">{threadCheck.errors.join(" / ")}</p>
         )}
       </div>
 
       {/* actions */}
-      <div className="px-4 sm:px-5 py-3 mt-1 bg-slate-50 border-t border-slate-100 space-y-2">
+      <div className="px-4 sm:px-5 py-3 mt-1 bg-white/[0.03] border-t border-white/5 space-y-2">
         {/* 理由・メモ（任意）— LLM 改善用フィードバック */}
         <div>
           <label htmlFor={`reason-${draft.id}`} className="block text-xs text-slate-400 mb-0.5">
@@ -216,7 +216,7 @@ export function DraftCard({
             rows={2}
             disabled={busy}
             placeholder="承認・却下の理由（LLM 品質改善用）"
-            className="w-full resize-y rounded border border-slate-200 p-2 text-xs text-slate-700 placeholder:text-slate-300 focus:outline-none focus:ring-1 focus:ring-blue-400/30 focus:border-blue-300 disabled:opacity-50"
+            className="w-full resize-y rounded border border-white/10 p-2 text-xs text-slate-300 placeholder:text-slate-500 focus:outline-none focus:ring-1 focus:ring-blue-400/30 focus:border-blue-400/40 disabled:opacity-50"
           />
         </div>
         <div className="flex flex-wrap items-center gap-2">
@@ -224,21 +224,21 @@ export function DraftCard({
             onClick={() => onApprove(attachments, reason.trim() || undefined)}
             disabled={busy || dirty || !v.ok || !threadCheck.ok}
             title={dirty ? "先に本文を保存してください" : undefined}
-            className="px-4 py-1.5 rounded-lg text-sm font-medium bg-emerald-600 text-white hover:bg-emerald-700 active:bg-emerald-800 shadow-sm disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            className="px-4 py-1.5 rounded-lg text-sm font-medium bg-emerald-500 text-white hover:bg-emerald-400 active:bg-emerald-600 shadow-sm disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           >
             承認{attachments.length > 0 ? `（📎${attachments.length}）` : ""}
           </button>
           <button
             onClick={onRequestRevision}
             disabled={busy}
-            className="px-3 py-1.5 rounded-lg text-sm font-medium bg-white text-amber-700 border border-amber-200 hover:bg-amber-50 hover:border-amber-300 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            className="px-3 py-1.5 rounded-lg text-sm font-medium bg-surface text-amber-300 border border-amber-400/30 hover:bg-amber-400/10 hover:border-amber-400/40 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           >
             修正依頼
           </button>
           <button
             onClick={() => onReject(reason.trim() || undefined)}
             disabled={busy}
-            className="px-3 py-1.5 rounded-lg text-sm font-medium bg-white text-rose-600 border border-rose-200 hover:bg-rose-50 hover:border-rose-300 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            className="px-3 py-1.5 rounded-lg text-sm font-medium bg-surface text-rose-300 border border-rose-400/30 hover:bg-rose-400/10 hover:border-rose-400/40 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           >
             却下
           </button>
@@ -247,7 +247,7 @@ export function DraftCard({
               <button
                 onClick={() => setBody(initialBody)}
                 disabled={busy}
-                className="text-xs text-slate-500 hover:text-slate-700 disabled:opacity-40"
+                className="text-xs text-slate-400 hover:text-slate-200 disabled:opacity-40"
               >
                 変更を破棄
               </button>
@@ -255,7 +255,7 @@ export function DraftCard({
             <button
               onClick={() => onSave(v.ok ? v.value : body, isThread)}
               disabled={busy || !dirty || !v.ok || !threadCheck.ok}
-              className="px-3 py-1.5 rounded-lg text-sm font-medium bg-white text-slate-700 border border-slate-300 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="px-3 py-1.5 rounded-lg text-sm font-medium bg-surface text-slate-300 border border-white/15 hover:bg-white/10 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
               本文を保存
             </button>

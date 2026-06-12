@@ -182,13 +182,13 @@ export function PublishNowClient({ initialStock }: { initialStock: PublishStock[
   );
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-white/[0.03]">
       {/* ── Header ── */}
-      <div className="bg-white border-b border-slate-200 px-4 sm:px-6 py-4 sticky top-0 z-20">
+      <div className="bg-surface border-b border-white/10 px-4 sm:px-6 py-4 sticky top-0 z-20">
         <div className="max-w-3xl mx-auto flex items-baseline justify-between gap-4">
           <div>
-            <h1 className="text-lg font-semibold text-slate-900 tracking-tight">今すぐ投稿</h1>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <h1 className="text-lg font-semibold text-white tracking-tight">今すぐ投稿</h1>
+            <p className="text-xs text-slate-400 mt-0.5">
               承認済みストックを 1 件選び、chrome 半自動（通常コンポーザ）で投稿 → 投稿後に「投稿済み」を確定します。
               手動で「投稿済みにする」「破棄」も各行から可能です。
             </p>
@@ -203,10 +203,10 @@ export function PublishNowClient({ initialStock }: { initialStock: PublishStock[
               className={[
                 "inline-block text-xs px-2.5 py-1 rounded-full font-medium",
                 msg.type === "error"
-                  ? "bg-rose-50 text-rose-700 border border-rose-200"
+                  ? "bg-rose-400/10 text-rose-300 border border-rose-400/30"
                   : msg.type === "success"
-                    ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
-                    : "bg-slate-100 text-slate-600",
+                    ? "bg-emerald-400/10 text-emerald-300 border border-emerald-400/30"
+                    : "bg-white/5 text-slate-300",
               ].join(" ")}
             >
               {msg.text}
@@ -215,7 +215,7 @@ export function PublishNowClient({ initialStock }: { initialStock: PublishStock[
         )}
         {/* ポリシー明示バナー */}
         <div className="max-w-3xl mx-auto mt-2">
-          <span className="inline-block text-[11px] px-2.5 py-1 rounded-lg bg-amber-50 text-amber-700 border border-amber-200">
+          <span className="inline-block text-[11px] px-2.5 py-1 rounded-lg bg-amber-400/10 text-amber-300 border border-amber-400/30">
             X API 直投はしません。実投稿は chrome 半自動（source=本人クライアント維持）。本画面は対象整形と投稿後記録のみ。
           </span>
         </div>
@@ -226,10 +226,10 @@ export function PublishNowClient({ initialStock }: { initialStock: PublishStock[
         {stock.length === 0 ? (
           <div className="py-20 text-center">
             <div className="text-slate-300 text-4xl mb-3 select-none">○</div>
-            <p className="text-slate-500 text-sm">今すぐ投稿できる承認済みストックはありません。</p>
+            <p className="text-slate-400 text-sm">今すぐ投稿できる承認済みストックはありません。</p>
             <button
               onClick={() => router.refresh()}
-              className="mt-3 text-xs text-blue-600 hover:underline"
+              className="mt-3 text-xs text-blue-300 hover:underline"
             >
               再読み込み
             </button>
@@ -245,8 +245,8 @@ export function PublishNowClient({ initialStock }: { initialStock: PublishStock[
               <div
                 key={d.id}
                 className={[
-                  "bg-white border rounded-lg p-4",
-                  isActive ? "border-blue-300 ring-1 ring-blue-100" : "border-slate-200",
+                  "bg-surface border rounded-lg p-4",
+                  isActive ? "border-blue-400/40 ring-1 ring-blue-400/20" : "border-white/10",
                 ].join(" ")}
               >
                 <div className="flex items-start justify-between gap-3">
@@ -262,7 +262,7 @@ export function PublishNowClient({ initialStock }: { initialStock: PublishStock[
                       >
                         <div
                           className={[
-                            "text-sm text-slate-700 leading-relaxed break-words whitespace-pre-wrap space-y-1.5",
+                            "text-sm text-slate-300 leading-relaxed break-words whitespace-pre-wrap space-y-1.5",
                             isExpanded ? "" : "line-clamp-3",
                           ].join(" ")}
                         >
@@ -273,7 +273,7 @@ export function PublishNowClient({ initialStock }: { initialStock: PublishStock[
                             </p>
                           ))}
                         </div>
-                        <span className="mt-1 inline-block text-[11px] text-blue-600">
+                        <span className="mt-1 inline-block text-[11px] text-blue-300">
                           {isExpanded ? "▲ 閉じる" : "▼ 全文を表示"}
                         </span>
                       </button>
@@ -286,35 +286,35 @@ export function PublishNowClient({ initialStock }: { initialStock: PublishStock[
                       >
                         <p
                           className={[
-                            "text-sm text-slate-700 leading-relaxed break-words",
+                            "text-sm text-slate-300 leading-relaxed break-words",
                             isExpanded ? "whitespace-pre-wrap" : "line-clamp-3",
                           ].join(" ")}
                         >
                           {d.body}
                         </p>
-                        <span className="mt-1 inline-block text-[11px] text-blue-600">
+                        <span className="mt-1 inline-block text-[11px] text-blue-300">
                           {isExpanded ? "▲ 閉じる" : "▼ 全文を表示"}
                         </span>
                       </button>
                     )}
                     <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
                       {isThread && (
-                        <span className="text-[11px] px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-700 border border-indigo-200">
+                        <span className="text-[11px] px-1.5 py-0.5 rounded bg-indigo-400/10 text-indigo-300 border border-indigo-400/30">
                           🧵 スレッド{parts.length}本
                         </span>
                       )}
                       {d.fmat && (
-                        <span className="text-[11px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-600">
+                        <span className="text-[11px] px-1.5 py-0.5 rounded bg-white/5 text-slate-300">
                           {d.fmat}
                         </span>
                       )}
                       {d.risk_level === "high" && (
-                        <span className="text-[11px] px-1.5 py-0.5 rounded bg-rose-50 text-rose-700 border border-rose-200">
+                        <span className="text-[11px] px-1.5 py-0.5 rounded bg-rose-400/10 text-rose-300 border border-rose-400/30">
                           risk=high
                         </span>
                       )}
                       {summary && (
-                        <span className="text-[11px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-600">
+                        <span className="text-[11px] px-1.5 py-0.5 rounded bg-white/5 text-slate-300">
                           {summary}
                         </span>
                       )}
@@ -324,7 +324,7 @@ export function PublishNowClient({ initialStock }: { initialStock: PublishStock[
                     <button
                       onClick={() => openHandoff(d.id)}
                       disabled={busy}
-                      className="px-3 py-1.5 rounded-lg text-sm font-medium bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-40"
+                      className="px-3 py-1.5 rounded-lg text-sm font-medium bg-blue-500 hover:bg-blue-400 text-white disabled:opacity-40"
                     >
                       今すぐ投稿
                     </button>
@@ -332,7 +332,7 @@ export function PublishNowClient({ initialStock }: { initialStock: PublishStock[
                     <button
                       onClick={() => handleMarkPublished(d.id)}
                       disabled={busy}
-                      className="px-3 py-1.5 rounded-lg text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 disabled:opacity-40"
+                      className="px-3 py-1.5 rounded-lg text-xs font-medium bg-emerald-400/10 text-emerald-300 border border-emerald-400/30 hover:bg-emerald-400/15 disabled:opacity-40"
                     >
                       投稿済みにする
                     </button>
@@ -340,7 +340,7 @@ export function PublishNowClient({ initialStock }: { initialStock: PublishStock[
                     <button
                       onClick={() => setDiscardId(d.id)}
                       disabled={busy}
-                      className="px-3 py-1.5 rounded-lg text-xs font-medium bg-rose-50 text-rose-700 border border-rose-200 hover:bg-rose-100 disabled:opacity-40"
+                      className="px-3 py-1.5 rounded-lg text-xs font-medium bg-rose-400/10 text-rose-300 border border-rose-400/30 hover:bg-rose-400/15 disabled:opacity-40"
                     >
                       破棄
                     </button>
@@ -401,11 +401,11 @@ function HandoffPanel({
   const tweets = threadPartsFromTweets(handoff.tweets);
   const isThread = tweets.length > 1;
   return (
-    <div className="mt-4 pt-4 border-t border-slate-200 space-y-3">
+    <div className="mt-4 pt-4 border-t border-white/10 space-y-3">
       {/* 本文 */}
       {isThread ? (
         <div className="space-y-2">
-          <span className="text-xs font-medium text-slate-600">
+          <span className="text-xs font-medium text-slate-300">
             スレッド本文（{tweets.length} 本）— ツイートごとに個別コピーして 1 本ずつ投稿
           </span>
           {tweets.map((t, i) => {
@@ -413,17 +413,17 @@ function HandoffPanel({
             return (
               <div key={i}>
                 <div className="flex items-center justify-between gap-2 mb-1">
-                  <span className="text-[11px] font-medium text-indigo-700 tabular-nums">
+                  <span className="text-[11px] font-medium text-indigo-300 tabular-nums">
                     {i + 1}/{tweets.length} 本目（{[...t].length} 字）
                   </span>
                   <button
                     onClick={() => onCopy(label, t)}
-                    className="text-xs px-2 py-0.5 rounded bg-slate-100 text-slate-600 hover:bg-slate-200"
+                    className="text-xs px-2 py-0.5 rounded bg-white/5 text-slate-300 hover:bg-white/15"
                   >
                     {copied === label ? COPY_OK : "このツイートをコピー"}
                   </button>
                 </div>
-                <pre className="text-xs text-slate-700 bg-slate-50 border border-slate-200 rounded-lg p-2.5 whitespace-pre-wrap break-words font-sans">
+                <pre className="text-xs text-slate-300 bg-white/[0.03] border border-white/10 rounded-lg p-2.5 whitespace-pre-wrap break-words font-sans">
                   {t}
                 </pre>
               </div>
@@ -433,17 +433,17 @@ function HandoffPanel({
       ) : (
         <div>
           <div className="flex items-center justify-between gap-2 mb-1">
-            <span className="text-xs font-medium text-slate-600">
+            <span className="text-xs font-medium text-slate-300">
               投稿本文（{handoff.charCount} 字）
             </span>
             <button
               onClick={() => onCopy("body", handoff.body)}
-              className="text-xs px-2 py-0.5 rounded bg-slate-100 text-slate-600 hover:bg-slate-200"
+              className="text-xs px-2 py-0.5 rounded bg-white/5 text-slate-300 hover:bg-white/15"
             >
               {copied === "body" ? COPY_OK : "本文をコピー"}
             </button>
           </div>
-          <pre className="text-xs text-slate-700 bg-slate-50 border border-slate-200 rounded-lg p-2.5 whitespace-pre-wrap break-words font-sans">
+          <pre className="text-xs text-slate-300 bg-white/[0.03] border border-white/10 rounded-lg p-2.5 whitespace-pre-wrap break-words font-sans">
             {handoff.body}
           </pre>
         </div>
@@ -452,23 +452,23 @@ function HandoffPanel({
       {/* メディア */}
       {(handoff.photos.length > 0 || handoff.hasVideoDeepLink) && (
         <div className="space-y-1.5">
-          <span className="text-xs font-medium text-slate-600">メディア</span>
+          <span className="text-xs font-medium text-slate-300">メディア</span>
           {handoff.photos.length > 0 && (
-            <div className="text-xs text-slate-600 bg-slate-100 rounded-lg p-2.5 space-y-1">
+            <div className="text-xs text-slate-300 bg-white/5 rounded-lg p-2.5 space-y-1">
               <div className="flex items-center justify-between gap-2">
                 <span>写真 {handoff.photos.length} 枚（DL→ネイティブ添付）</span>
                 <button
                   onClick={() => onCopy("dl", dlCmd)}
-                  className="text-xs px-2 py-0.5 rounded bg-white text-slate-600 border border-slate-200 hover:bg-slate-50"
+                  className="text-xs px-2 py-0.5 rounded bg-surface text-slate-300 border border-white/10 hover:bg-white/5"
                 >
                   {copied === "dl" ? COPY_OK : "DL コマンド"}
                 </button>
               </div>
-              <code className="block text-[11px] text-slate-500 break-all">{dlCmd}</code>
+              <code className="block text-[11px] text-slate-400 break-all">{dlCmd}</code>
             </div>
           )}
           {handoff.hasVideoDeepLink && (
-            <div className="text-xs text-slate-600 bg-slate-100 rounded-lg p-2.5">
+            <div className="text-xs text-slate-300 bg-white/5 rounded-lg p-2.5">
               動画/GIF は本文の deep-link（{handoff.videoDeepLinkHint ?? "/video/1"}）で展開されます。upload 不要・本文をそのまま投稿。
             </div>
           )}
@@ -476,18 +476,18 @@ function HandoffPanel({
       )}
 
       {/* chrome 手順 */}
-      <div className="text-xs text-slate-600 bg-slate-100 rounded-lg p-2.5 space-y-1">
+      <div className="text-xs text-slate-300 bg-white/5 rounded-lg p-2.5 space-y-1">
         <div className="flex items-center justify-between gap-2">
           <span className="font-medium">chrome 半自動 手順（通常コンポーザ・予約UI不使用）</span>
           <button
             onClick={() => onCopy("plan", planCmd)}
-            className="text-xs px-2 py-0.5 rounded bg-white text-slate-600 border border-slate-200 hover:bg-slate-50"
+            className="text-xs px-2 py-0.5 rounded bg-surface text-slate-300 border border-white/10 hover:bg-white/5"
           >
             {copied === "plan" ? COPY_OK : "plan コマンド"}
           </button>
         </div>
         {isThread ? (
-          <ol className="list-decimal list-inside space-y-0.5 text-slate-500">
+          <ol className="list-decimal list-inside space-y-0.5 text-slate-400">
             <li>x.com/compose/post を開く（通常コンポーザ・予約UIは使わない）</li>
             <li>1 本目を type_text で入力（写真がある場合は先に DL→添付）</li>
             <li>「ポストを追加」（+）で空エディタを増やし、2 本目以降を 1 本ずつ貼る（計 {tweets.length} 本）</li>
@@ -495,7 +495,7 @@ function HandoffPanel({
             <li>投稿完了したら下の「投稿済みにする」で published_at 確定</li>
           </ol>
         ) : (
-          <ol className="list-decimal list-inside space-y-0.5 text-slate-500">
+          <ol className="list-decimal list-inside space-y-0.5 text-slate-400">
             <li>x.com/compose/post を開く（通常コンポーザ・予約UIは使わない）</li>
             <li>本文を type_text で入力（写真がある場合は先に DL→添付）</li>
             <li>「ポストする」で即時投稿（source=本人クライアント維持）</li>
@@ -509,14 +509,14 @@ function HandoffPanel({
         <button
           onClick={onConfirm}
           disabled={busy}
-          className="px-3 py-1.5 rounded-lg text-sm font-medium bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 disabled:opacity-40"
+          className="px-3 py-1.5 rounded-lg text-sm font-medium bg-emerald-400/10 text-emerald-300 border border-emerald-400/30 hover:bg-emerald-400/15 disabled:opacity-40"
         >
           投稿済みにする
         </button>
         <button
           onClick={onClose}
           disabled={busy}
-          className="px-3 py-1.5 rounded-lg text-sm font-medium bg-slate-100 text-slate-600 hover:bg-slate-200 disabled:opacity-40"
+          className="px-3 py-1.5 rounded-lg text-sm font-medium bg-white/5 text-slate-300 hover:bg-white/15 disabled:opacity-40"
         >
           閉じる
         </button>
@@ -538,9 +538,9 @@ function DiscardDialog({
   const [reason, setReason] = useState("");
   const tooLong = reason.trim().length > 2000;
   return (
-    <div className="mt-4 pt-4 border-t border-rose-200 space-y-2.5">
-      <p className="text-xs font-medium text-rose-700">このストックを破棄しますか?</p>
-      <p className="text-[11px] text-slate-500">
+    <div className="mt-4 pt-4 border-t border-rose-400/30 space-y-2.5">
+      <p className="text-xs font-medium text-rose-300">このストックを破棄しますか?</p>
+      <p className="text-[11px] text-slate-400">
         論理破棄（復元可）です。元素材は再利用可（再キュレ/再執筆の対象に戻ります）。
       </p>
       <textarea
@@ -548,23 +548,23 @@ function DiscardDialog({
         onChange={(e) => setReason(e.target.value)}
         placeholder="破棄理由（任意）"
         rows={2}
-        className="w-full text-xs rounded-lg border border-slate-200 p-2 focus:outline-none focus:ring-1 focus:ring-rose-300 resize-y"
+        className="w-full text-xs rounded-lg border border-white/10 p-2 focus:outline-none focus:ring-1 focus:ring-rose-400/40 resize-y"
       />
       {tooLong && (
-        <p className="text-[11px] text-rose-600">理由が長すぎます（{reason.trim().length}/2000字）</p>
+        <p className="text-[11px] text-rose-300">理由が長すぎます（{reason.trim().length}/2000字）</p>
       )}
       <div className="flex items-center gap-2">
         <button
           onClick={() => onConfirm(reason)}
           disabled={busy || tooLong}
-          className="px-3 py-1.5 rounded-lg text-sm font-medium bg-rose-600 hover:bg-rose-700 text-white disabled:opacity-40"
+          className="px-3 py-1.5 rounded-lg text-sm font-medium bg-rose-500 hover:bg-rose-400 text-white disabled:opacity-40"
         >
           破棄する
         </button>
         <button
           onClick={onCancel}
           disabled={busy}
-          className="px-3 py-1.5 rounded-lg text-sm font-medium bg-slate-100 text-slate-600 hover:bg-slate-200 disabled:opacity-40"
+          className="px-3 py-1.5 rounded-lg text-sm font-medium bg-white/5 text-slate-300 hover:bg-white/15 disabled:opacity-40"
         >
           キャンセル
         </button>

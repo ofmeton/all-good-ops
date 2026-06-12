@@ -34,11 +34,11 @@ export function SessionTrace({
   consoleUrl: string | null;
 }) {
   return (
-    <div className="mt-2 rounded-lg border border-slate-200 bg-slate-50/60 p-2">
-      <div className="mb-1 flex items-center gap-2 text-xs text-slate-500">
+    <div className="mt-2 rounded-lg border border-white/10 bg-white/[0.03] p-2">
+      <div className="mb-1 flex items-center gap-2 text-xs text-slate-400">
         <span className="font-mono">session {sessionId.slice(0, 12)}…</span>
         {consoleUrl && (
-          <a href={consoleUrl} target="_blank" rel="noreferrer" className="text-indigo-600 hover:underline">
+          <a href={consoleUrl} target="_blank" rel="noreferrer" className="text-indigo-300 hover:underline">
             Console ↗
           </a>
         )}
@@ -48,9 +48,9 @@ export function SessionTrace({
       ) : (
         <ol className="space-y-1">
           {events.map((e) => (
-            <li key={e.id} className="rounded bg-white p-1.5 text-xs">
-              <span className="mr-2 font-medium text-slate-600">{TYPE_LABEL[e.type] ?? e.type}</span>
-              <pre className="mt-0.5 whitespace-pre-wrap break-words font-mono text-[11px] text-slate-700">
+            <li key={e.id} className="rounded bg-white/[0.04] p-1.5 text-xs">
+              <span className="mr-2 font-medium text-slate-300">{TYPE_LABEL[e.type] ?? e.type}</span>
+              <pre className="mt-0.5 whitespace-pre-wrap break-words font-mono text-[11px] text-slate-300">
                 {payloadText(e.type, e.payload)}
               </pre>
             </li>

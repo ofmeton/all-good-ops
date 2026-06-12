@@ -60,7 +60,7 @@ export function SlotPicker({
       value={value ?? ""}
       disabled={disabled}
       onChange={(e) => onChange(e.target.value === "" ? undefined : e.target.value)}
-      className="h-8 rounded-lg border border-slate-300 bg-white px-2 text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 disabled:opacity-40"
+      className="h-8 rounded-lg border border-white/15 bg-surface px-2 text-xs text-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 disabled:opacity-40"
     >
       <option value="">未割当（今回は予約しない）</option>
       {value && !valueInGroups && <option value={value}>{fmtJst(value)}（現在の割当）</option>}
