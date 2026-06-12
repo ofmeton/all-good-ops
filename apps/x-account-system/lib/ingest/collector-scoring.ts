@@ -45,13 +45,15 @@ export interface CollectCostBreakdown {
 
 /**
  * runCollect の戻り値。inserted は現行の戻り値（呼び出し側の意味を保持）。
- * 加えて funnel 件数（fetched/scored）とコスト内訳を観測用に返す。挙動には影響しない。
+ * 加えて funnel 件数（fetched→deduped→scored→inserted）とコスト内訳を観測用に返す。挙動不変。
  */
 export interface CollectStats {
   /** materials_store に新規 insert した件数（= 旧 number 戻り値）。 */
   inserted: number;
   /** dedup 前に explore で集めた候補数（candidates.length）。 */
   fetched: number;
+  /** early-dedup（バッチ内重複＋既存 store 重複）後の候補数。funnel: fetched→deduped→scored→inserted。 */
+  deduped: number;
   /** fine-score に回した件数（現状 = thread-root 正規化後の normalized 件数）。 */
   scored: number;
   /** コスト内訳。 */

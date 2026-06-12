@@ -12,9 +12,9 @@ import { getAgentRef as getAgentRefDefault, type AgentRef } from "../ma/agent-re
 import { COLLECTOR_CONFIG } from "./collector-config.js";
 import { dispatchTool, type ToolApi } from "./collector-tools.js";
 import { scoreCandidates, type Candidate, type CollectStats } from "./collector-scoring.js";
-import { resolveThreadRoots } from "./collector-thread.js";
+import { resolveThreadRoots, isNonRootReply } from "./collector-thread.js";
 import { translateCandidates } from "./collector-translate.js";
-import { saveScoredMaterials } from "./collector-persist.js";
+import { saveScoredMaterials, dedupByTweetId } from "./collector-persist.js";
 import { costUsdFor, USD_JPY_RATE } from "../cost/cost-of.js";
 import { insertSessionEvents, recordRunSession } from "../trace/session-event-store.js";
 import type { SessionEventInput } from "../trace/types.js";
@@ -77,7 +77,7 @@ export async function runCollect(deps: RunCollectDeps): Promise<CollectStats> {
     agentRef = await resolveAgentRef(deps.sb, COLLECTOR_AGENT_KEY);
   } catch (e) {
     console.warn(JSON.stringify({ level: "error", msg: "[collect] agent ref unresolved (未bootstrap?)", error: String(e) }));
-    return { inserted: 0, fetched: 0, scored: 0, cost: { exploreJpy: 0, scoringJpy: 0, translateJpy: 0, totalJpy: 0 } };
+    return { inserted: 0, fetched: 0, deduped: 0, scored: 0, cost: { exploreJpy: 0, scoringJpy: 0, translateJpy: 0, totalJpy: 0 } };
   }
 
   // explore: 永続 session の drain ループが tool_use 往復を回す。candidate は handler の
@@ -135,14 +135,29 @@ export async function runCollect(deps: RunCollectDeps): Promise<CollectStats> {
     return {
       inserted: 0,
       fetched: 0,
+      deduped: 0,
       scored: 0,
       cost: { exploreJpy: exploreCostJpy, scoringJpy: 0, translateJpy: 0, totalJpy: exploreCostJpy },
     };
   }
 
+  // P1 early-dedup: 採点・翻訳の前に重複を畳む（重複ツイートの sonnet 採点＋haiku 翻訳を削減）。
+  //  - バッチ内重複（複数経路で同一 tweet を拾う）は常に安全に畳む。
+  //  - 既存 store 重複（前日までの既出）は **resolveThreadRoots で id が変わらない候補のみ** DB 除去する。
+  //    非ルート reply は後段で thread-root へ差し替わり id が変化しうるため早期 DB 除去から除外し、
+  //    persist backstop に委ねる ⇒ inserted 集合は従来と完全同一（早期に落とすのは persist でも必ず落ちる候補のみ）。
+  //  - fail-open: dedup が throw したら early-dedup をスキップし従来経路（persist backstop）に委ねる。
+  let deduped: Candidate[];
+  try {
+    deduped = await dedupByTweetId(deps.sb, candidates, (c) => !isNonRootReply(c.tweet));
+  } catch (e) {
+    console.warn(JSON.stringify({ level: "warn", msg: "[collect] early-dedup failed (fail-open, persist backstop に委譲)", error: String(e) }));
+    deduped = candidates;
+  }
+
   // スレッド非ルート（2番目以降）の候補は TOP へ差し替える（断片でなくスレッド起点を採点・保存）。
   // コード側で決定的に行う（MA の get_thread 判断に依存しない）。fail-open。
-  const normalized = await resolveThreadRoots(candidates, {
+  const normalized = await resolveThreadRoots(deduped, {
     key: deps.twitterApiKey,
     fetchImpl: deps.fetchImpl,
     getThread: deps.api?.getThread,
@@ -175,6 +190,7 @@ export async function runCollect(deps: RunCollectDeps): Promise<CollectStats> {
   return {
     inserted,
     fetched: candidates.length,
+    deduped: deduped.length,
     scored: normalized.length,
     cost: {
       exploreJpy: exploreCostJpy,

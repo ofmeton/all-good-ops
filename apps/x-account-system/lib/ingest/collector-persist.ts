@@ -6,20 +6,36 @@ import { redact } from "../dlp/redact.js";
 import type { ScoredCandidate } from "./collector-scoring.js";
 import { TRANSLATION_ENGINE } from "./collector-translate.js";
 
-/** 既存 store にある tweet_id とバッチ内重複を除去。 */
-export async function dedupCandidates(
+/** tweet.id を持つ最小形（Candidate / ScoredCandidate 共通）。dedup は id のみ参照する。 */
+type TweetIded = { tweet: { id: string } };
+
+/**
+ * バッチ内重複（同一 tweet_id）と既存 store の tweet_id を除去する純汎用 dedup。
+ * 採点前（early-dedup・Candidate[]）と採点後（persist backstop・ScoredCandidate[]）で共用する。
+ *
+ * `dbEligible`: DB 既存チェックで除去してよい候補の述語。省略時は全件対象（persist と同挙動）。
+ *   early-dedup は resolveThreadRoots で id が変わりうる候補（非ルート reply）を除外して呼ぶ。
+ *   id 不変の候補だけ DB 除去すれば persist と同じ判定になり、inserted 集合の同一性が保たれる。
+ *   バッチ内 dedup は同一 raw id が resolve 後も同一に畳まれるため、述語に関係なく常に安全。
+ *
+ * fail-open: DB 照会エラー時はバッチ内 dedup 済みを返す（persist backstop が最終担保）。
+ */
+export async function dedupByTweetId<T extends TweetIded>(
   sb: SupabaseClient,
-  scored: ScoredCandidate[],
-): Promise<ScoredCandidate[]> {
-  // バッチ内 dedup
+  items: T[],
+  dbEligible?: (item: T) => boolean,
+): Promise<T[]> {
+  // バッチ内 dedup（常に安全）
   const seen = new Set<string>();
-  const unique = scored.filter((c) => {
+  const unique = items.filter((c) => {
     if (seen.has(c.tweet.id)) return false;
     seen.add(c.tweet.id);
     return true;
   });
-  const ids = unique.map((c) => c.tweet.id);
-  if (ids.length === 0) return [];
+  // DB 既存チェック対象（述語で絞る。省略時は unique 全件）。
+  const eligible = dbEligible ? unique.filter(dbEligible) : unique;
+  const ids = eligible.map((c) => c.tweet.id);
+  if (ids.length === 0) return unique;
 
   const { data, error } = await sb
     .from("materials_store")
@@ -31,7 +47,16 @@ export async function dedupCandidates(
   const existing = new Set(
     (data ?? []).map((r: { meta?: { tweet_id?: string } }) => r.meta?.tweet_id),
   );
+  // 非 eligible（DB 未照会）の id は existing に入らないため除去されない。
   return unique.filter((c) => !existing.has(c.tweet.id));
+}
+
+/** 既存 store にある tweet_id とバッチ内重複を除去（persist backstop・ScoredCandidate 専用）。 */
+export async function dedupCandidates(
+  sb: SupabaseClient,
+  scored: ScoredCandidate[],
+): Promise<ScoredCandidate[]> {
+  return dedupByTweetId(sb, scored);
 }
 
 export interface MaterialRow {

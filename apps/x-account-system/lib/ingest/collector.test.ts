@@ -49,6 +49,31 @@ function makeSb(inserts: unknown[]) {
   };
 }
 
+/**
+ * materials_store に既存の tweet_id を持つ sb mock（前日までの既出を模す）。
+ * select(...).in(col, ids) は existing ∩ ids を返す（early-dedup / persist 双方の照会に対応）。
+ */
+function makeSbWithExisting(existing: Set<string>, inserts: unknown[]) {
+  return {
+    from: () => ({
+      select: () => ({
+        eq: () => ({
+          in: async (_col: string, ids: string[]) => ({
+            data: ids.filter((id) => existing.has(id)).map((id) => ({ meta: { tweet_id: id } })),
+            error: null,
+          }),
+        }),
+      }),
+      insert: async (row: unknown) => { inserts.push(row); return { error: null }; },
+    }),
+  };
+}
+
+/** 非ルート reply でない（id 不変）通常ツイート。lang 未指定で翻訳経路は通らない（既存 test に同じ）。 */
+function tweet(id: string) {
+  return { id, text: `t${id}`, author: { userName: "a" }, createdAt: new Date().toISOString(), likeCount: 10, viewCount: 100, isReply: false, conversationId: id };
+}
+
 describe("runCollect", () => {
   test("explore(MA session) → score → persist", async () => {
     const inserts: unknown[] = [];
@@ -100,8 +125,9 @@ describe("runCollect", () => {
 
     // inserted の意味は保持（= 旧 number 戻り値）。
     expect(stats.inserted).toBe(1);
-    // funnel 件数: 候補1件を採点。
+    // funnel 件数: 候補1件 → dedup後1 → 採点1。
     expect(stats.fetched).toBe(1);
+    expect(stats.deduped).toBe(1);
     expect(stats.scored).toBe(1);
     // breakdown 3 成分が揃って返り、totalJpy = 合計。
     expect(stats.cost).toEqual(
@@ -136,6 +162,7 @@ describe("runCollect", () => {
     });
     expect(stats.inserted).toBe(0);
     expect(stats.fetched).toBe(0);
+    expect(stats.deduped).toBe(0);
     expect(stats.scored).toBe(0);
     expect(stats.cost.scoringJpy).toBe(0);
     expect(stats.cost.translateJpy).toBe(0);
@@ -213,5 +240,78 @@ describe("runCollect", () => {
       now: Date.now(),
     });
     expect(stats.inserted).toBe(1);
+  });
+
+  // ---- P1 early-dedup（inserted 不変・重複の採点/翻訳削減） ----
+
+  test("P1 early-dedup: バッチ内重複＋既存 store 重複を採点前に落とす（inserted 不変）", async () => {
+    const inserts: unknown[] = [];
+    // 既存 store に t2 がある。探索は [t1, t1(バッチ内重複), t2(既出), t3(新規)] を1回で返す。
+    const stats = await runCollect({
+      anthropic: scoringAnthropic([
+        { id: "t1", freshness: 50, velocity: 50, target_fit: 60, overall: 55, reason: "ok" },
+        { id: "t3", freshness: 50, velocity: 50, target_fit: 60, overall: 55, reason: "ok" },
+      ]) as never,
+      sb: makeSbWithExisting(new Set(["t2"]), inserts) as never,
+      twitterApiKey: "k", fetchImpl: undefined as never, apiKey: "sk-test",
+      runSession: exploreSession([{ name: "search_tweets", input: { query: "AI", queryType: "Latest", via: "keyword" } }]),
+      getAgentRef: okRef,
+      api: {
+        searchTweets: async () => [tweet("t1"), tweet("t1"), tweet("t2"), tweet("t3")],
+        getTrends: async () => [], searchUsers: async () => [], getUserFollowings: async () => [], getThread: async () => [],
+      },
+      now: Date.now(),
+    });
+
+    // inserted 集合 = 新規の {t1, t3}（従来の persist dedup と同一結果）。t2(既出)・t1重複は落ちる。
+    const insertedIds = (inserts as Array<{ meta: { tweet_id: string } }>).map((r) => r.meta.tweet_id).sort();
+    expect(insertedIds).toEqual(["t1", "t3"]);
+    expect(stats.inserted).toBe(2);
+    // funnel: fetched=4 → early-dedup後=2（t1重複・t2既出を除去）→ scored=2（=deduped）。
+    expect(stats.fetched).toBe(4);
+    expect(stats.deduped).toBe(2);
+    expect(stats.scored).toBe(2);
+    // 採点に回ったのは deduped 件数のみ＝重複の sonnet 採点が消えている（コスト削減の実証）。
+  });
+
+  test("P1 fail-open: early-dedup の DB 照会が失敗しても persist backstop が inserted を担保", async () => {
+    const inserts: unknown[] = [];
+    // select().in() が throw する sb（early-dedup は skip され従来経路へ）。persist 側は in が
+    // {data:[],error:null} を返す mock に切替できないため、ここでは early は throw・persist は
+    // 同じ throw を踏むが fail-open（dedupByTweetId は catch せず上位 saveScoredMaterials も throw 伝播
+    // しない設計ではないため）→ early のみ throw する mock を用意する。
+    let call = 0;
+    const sb = {
+      from: () => ({
+        select: () => ({
+          eq: () => ({
+            in: async () => {
+              call += 1;
+              if (call === 1) throw new Error("transient DB error"); // early-dedup の照会のみ失敗
+              return { data: [], error: null };                       // persist backstop は成功
+            },
+          }),
+        }),
+        insert: async (row: unknown) => { inserts.push(row); return { error: null }; },
+      }),
+    };
+    const stats = await runCollect({
+      anthropic: scoringAnthropic([{ id: "t9", freshness: 50, velocity: 50, target_fit: 60, overall: 55, reason: "ok" }]) as never,
+      sb: sb as never,
+      twitterApiKey: "k", fetchImpl: undefined as never, apiKey: "sk-test",
+      runSession: exploreSession([{ name: "search_tweets", input: { query: "AI", queryType: "Latest", via: "keyword" } }]),
+      getAgentRef: okRef,
+      api: {
+        searchTweets: async () => [tweet("t9")],
+        getTrends: async () => [], searchUsers: async () => [], getUserFollowings: async () => [], getThread: async () => [],
+      },
+      now: Date.now(),
+    });
+    // early-dedup 失敗時は候補をそのまま採点へ（収集は死なない）。inserted は従来どおり。
+    expect(stats.inserted).toBe(1);
+    expect((inserts as Array<{ meta: { tweet_id: string } }>)[0].meta.tweet_id).toBe("t9");
+    // deduped は fail-open で fetched と同値（早期 dedup skip）。
+    expect(stats.fetched).toBe(1);
+    expect(stats.deduped).toBe(1);
   });
 });

@@ -109,7 +109,7 @@ export async function handleJob(
           collectStats = stats;
           return {
             result: stats.inserted,
-            output: { inserted: stats.inserted, fetched: stats.fetched, scored: stats.scored, breakdown },
+            output: { inserted: stats.inserted, fetched: stats.fetched, deduped: stats.deduped, scored: stats.scored, breakdown },
             meta: traceMeta,
           };
         });
@@ -126,6 +126,7 @@ export async function handleJob(
                 ? { exploreJpy: collectStats.cost.exploreJpy, scoringJpy: collectStats.cost.scoringJpy, translateJpy: collectStats.cost.translateJpy }
                 : undefined,
               fetched: collectStats?.fetched,
+              deduped: collectStats?.deduped,
               scored: collectStats?.scored,
               inserted: collectStats?.inserted,
             },
