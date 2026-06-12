@@ -477,7 +477,7 @@ export function CurationClient({
                       "px-2.5 h-7 text-xs font-medium transition-colors border-r border-white/10 last:border-r-0",
                       active
                         ? opt.key === "reference"
-                          ? "bg-violet-100 text-violet-800"
+                          ? "bg-violet-400/15 text-violet-200"
                           : "bg-blue-400/15 text-blue-200"
                         : "bg-surface text-slate-400 hover:bg-white/5",
                     ].join(" ")}
@@ -782,9 +782,9 @@ export function CurationClient({
 
             <div className="px-5 py-4 space-y-3 overflow-y-auto">
               {/* AI 推薦ステータス（自動発火・最終決定は人） */}
-              <div className="rounded-lg border border-violet-200 bg-violet-50/60 p-3 space-y-1.5">
+              <div className="rounded-lg border border-violet-400/30 bg-violet-400/10 p-3 space-y-1.5">
                 <div className="flex items-center justify-between gap-2">
-                  <span className="text-xs font-medium text-violet-900">
+                  <span className="text-xs font-medium text-violet-200">
                     {rec.loading
                       ? "AI が各素材に最適な型を推薦中…"
                       : rec.recommendations.length > 0
@@ -795,7 +795,7 @@ export function CurationClient({
                     type="button"
                     onClick={rerunRecommend}
                     disabled={rec.loading || assignments.length === 0}
-                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium bg-violet-600 text-white hover:bg-violet-700 active:bg-violet-800 shadow-sm disabled:opacity-40 disabled:cursor-not-allowed transition-colors shrink-0"
+                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium bg-violet-500 text-white hover:bg-violet-400 active:bg-violet-600 shadow-sm disabled:opacity-40 disabled:cursor-not-allowed transition-colors shrink-0"
                   >
                     {rec.loading ? "推薦中…" : "🤖 再推薦"}
                   </button>
@@ -855,7 +855,7 @@ export function CurationClient({
                         </p>
                       </div>
                       {r && (
-                        <p className="text-[11px] text-violet-700/90 bg-violet-50/70 border border-violet-100 rounded px-2 py-1 leading-snug">
+                        <p className="text-[11px] text-violet-300 bg-violet-400/10 border border-violet-400/20 rounded px-2 py-1 leading-snug">
                           AI推薦: {templateLabel(r.templateId)} / {fmatLabel(r.fmat)}
                           <span className="text-slate-400">
                             {" "}（確信度 {(r.confidence * 100).toFixed(0)}%）

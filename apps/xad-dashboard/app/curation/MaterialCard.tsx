@@ -49,7 +49,7 @@ export function MaterialCard({
           <div className="flex items-center gap-2 text-sm flex-wrap">
             <span className="font-bold">@{m.source_ref}</span>
             {m.lane === "reference" && (
-              <span className="px-1.5 py-0.5 rounded text-xs font-semibold bg-violet-100 text-violet-700">
+              <span className="px-1.5 py-0.5 rounded text-xs font-semibold bg-violet-400/15 text-violet-300">
                 参考(JP)
               </span>
             )}
