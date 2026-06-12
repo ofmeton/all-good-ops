@@ -1,28 +1,76 @@
-// scripts/load.mjs
+// scripts/load.mjs — normalized.json を ローカル SQLite(data/mf-finance.db) へ冪等投入。
+// 旧 Supabase 版は legacy/ に退避。ローカル無料運用のため better-sqlite3 を使う。
 import { readFileSync } from 'node:fs';
-import { createClient } from '@supabase/supabase-js';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import Database from 'better-sqlite3';
 
-const url = process.env.SUPABASE_URL;
-// 金庫(repo-root .env.local)は SUPABASE_SERVICE_ROLE_KEY 名。後方互換で SUPABASE_SERVICE_KEY も許容。
-const key = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
-if (!url || !key) { console.error('SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY 未設定'); process.exit(1); }
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const appRoot = join(__dirname, '..');
+const dbPath = join(appRoot, 'data', 'mf-finance.db');
+const schemaPath = join(appRoot, 'db', 'schema.sql');
+const dataPath = join(appRoot, 'data', 'normalized.json');
 
-const supabase = createClient(url, key, { db: { schema: 'mf_finance' } });
-const records = JSON.parse(readFileSync('data/normalized.json', 'utf8'));
+const db = new Database(dbPath);
+db.pragma('journal_mode = WAL');
+db.pragma('foreign_keys = ON');
+db.exec(readFileSync(schemaPath, 'utf8'));
 
-const CHUNK = 500;
-let done = 0;
-for (let i = 0; i < records.length; i += CHUNK) {
-  const chunk = records.slice(i, i + CHUNK).map(r => ({
-    id: r.id, included: r.included, date: r.date, description: r.description,
-    amount: r.amount, account: r.account, category_major: r.category_major,
-    category_middle: r.category_middle, memo: r.memo, is_transfer: r.is_transfer,
-    is_internal_move: r.is_internal_move, classification: r.classification,
-    source_type: r.source_type, source: r.source,
-  }));
-  const { error } = await supabase.from('transactions').upsert(chunk, { onConflict: 'id' });
-  if (error) { console.error(error); process.exit(1); }
-  done += chunk.length;
-  console.log(`upserted ${done}/${records.length}`);
-}
-console.log('done');
+const records = JSON.parse(readFileSync(dataPath, 'utf8'));
+
+// id 保持・冪等。ingested_at は既存行の値を温存（再投入で履歴を壊さない）。
+const upsert = db.prepare(`
+  INSERT INTO transactions
+    (id, included, date, description, amount, account, category_major,
+     category_middle, memo, is_transfer, is_internal_move, classification,
+     source_type, source)
+  VALUES
+    (@id, @included, @date, @description, @amount, @account, @category_major,
+     @category_middle, @memo, @is_transfer, @is_internal_move, @classification,
+     @source_type, @source)
+  ON CONFLICT(id) DO UPDATE SET
+    included         = excluded.included,
+    date             = excluded.date,
+    description      = excluded.description,
+    amount           = excluded.amount,
+    account          = excluded.account,
+    category_major   = excluded.category_major,
+    category_middle  = excluded.category_middle,
+    memo             = excluded.memo,
+    is_transfer      = excluded.is_transfer,
+    is_internal_move = excluded.is_internal_move,
+    classification   = excluded.classification,
+    source_type      = excluded.source_type,
+    source           = excluded.source
+`);
+
+const b = (v) => (v ? 1 : 0); // bool→0/1（better-sqlite3 は bool を直接バインド不可）
+const loadAll = db.transaction((rows) => {
+  for (const r of rows) {
+    upsert.run({
+      id: r.id,
+      included: b(r.included),
+      date: r.date,
+      description: r.description ?? null,
+      amount: r.amount,
+      account: r.account ?? null,
+      category_major: r.category_major ?? null,
+      category_middle: r.category_middle ?? null,
+      memo: r.memo ?? null,
+      is_transfer: b(r.is_transfer),
+      is_internal_move: b(r.is_internal_move),
+      classification: r.classification ?? null,
+      source_type: r.source_type ?? null,
+      source: r.source ?? 'mf_cf',
+    });
+  }
+});
+loadAll(records);
+
+const total = db.prepare('SELECT COUNT(*) n FROM transactions').get().n;
+const inScope = db
+  .prepare('SELECT COUNT(*) n FROM transactions WHERE included = 1 AND is_transfer = 0')
+  .get().n;
+console.log(`loaded ${records.length} records → DB total ${total} 行`);
+console.log(`収支対象（included=1 AND is_transfer=0）: ${inScope} 件 (recon 期待値 3,194)`);
+db.close();

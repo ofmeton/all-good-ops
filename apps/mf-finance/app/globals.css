@@ -1,0 +1,40 @@
+@import "tailwindcss";
+
+/* 家計ダッシュボードはライト固定（信頼感・データの可読性優先）。
+   design-system 由来: トラスト青 / 利益緑 / 警告赤 をライトに翻案。 */
+:root {
+  --background: #f6f7f9; /* slate-50 系。pure white は避ける（design 推奨） */
+  --surface: #ffffff;
+  --foreground: #0f172a; /* slate-900 */
+  --muted: #64748b; /* slate-500 */
+  --border: #e2e8f0; /* slate-200 */
+  --primary: #1e40af; /* trust blue */
+  --positive: #059669; /* profit green */
+  --warning: #b45309; /* amber-700 */
+  --negative: #dc2626; /* destructive red */
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-positive: var(--positive);
+  --color-warning: var(--warning);
+  --color-negative: var(--negative);
+  --font-sans: var(--font-lexend), system-ui, sans-serif;
+  --font-numeric: var(--font-lexend), system-ui, sans-serif;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  color-scheme: light;
+}
+
+/* 金額は等幅数字でレイアウトシフトを防ぐ */
+.tabular {
+  font-variant-numeric: tabular-nums;
+}

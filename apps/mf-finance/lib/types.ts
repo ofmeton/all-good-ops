@@ -1,0 +1,38 @@
+// 純Nodeライブラリ scripts/lib/*.mjs に型が無いため、受け側だけ最小の型を定義。
+// SSOT のロジックは .mjs 側、ここは形だけ。
+
+export interface Tx {
+  id: string;
+  included: number; // 0/1（SQLite）— disposable.mjs は truthy/falsy で判定するのでそのまま渡せる
+  date: string; // 'YYYY-MM-DD'
+  description: string | null;
+  amount: number; // 負=支出
+  account: string | null;
+  category_major: string | null;
+  category_middle: string | null;
+  classification: string | null; // income/fixed/variable/transfer/internal/unknown
+  source_type: string | null;
+  is_transfer: number;
+  is_internal_move: number;
+}
+
+export interface RecurringItem {
+  id: number;
+  kind: "income" | "expense";
+  name: string;
+  amount: number; // 正の magnitude
+  day: number | null;
+  active: number; // 0/1
+  confirmed: "auto" | "user";
+}
+
+// computeMonthlyDisposable の戻り値（disposable.mjs:29）
+export interface DisposableResult {
+  incomeRecurring: number;
+  incomeSpot: number;
+  incomeTotal: number;
+  fixed: number;
+  variableActual: number;
+  disposableBudget: number;
+  remaining: number;
+}
