@@ -11,6 +11,7 @@
   "scripts": {
     "budget": "tsx lib/cost/budget-cli.ts",
     "apply-code": "tsx scripts/optimizer-apply-code.ts",
+    "apply-nightly": "tsx scripts/optimizer-apply-nightly.ts",
     "oauth:test": "tsx lib/oauth/pkce-test.ts",
     "fallback:dry-run": "tsx lib/fallback/trigger-cli.ts --dry-run",
     "relabel": "python3 scripts/relabel-tweets.py",
