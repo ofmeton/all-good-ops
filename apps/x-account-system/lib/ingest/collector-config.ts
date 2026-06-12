@@ -29,6 +29,25 @@ export interface CollectorConfig {
   scoringBatchSize: number;
   /** L2: 新ソース候補を即 watchlist 昇格しない（常に candidate_sources へ） */
   autoPromoteDiscoveredSources: false;
+
+  // --- P2 二段採点（collector-prerank）レバー。tier-config（人間+PR で変更）---
+  /** prerank の適用モード。"shadow"=選抜は計算/記録のみで fine-score は全件（挙動不変・既定）。
+   *  "enforce"=選抜のみ fine-score（shadow データで上澄み非劣化を実証後・人間ゲートで切替）。 */
+  prerankMode: "shadow" | "enforce";
+  /** topK: prior 降順で fine-score に回す上位件数。 */
+  shortlistTopK: number;
+  /** exploration: 残余から via 層化ランダムで拾う件数（セレンディピティ＋剪定群の不偏推定）。 */
+  explorationQuota: number;
+  /** floor stale 判定の age 閾値（時間）。これを超え velocity<1 で provably-zero 候補。 */
+  prerankMaxAgeHours: number;
+  /** fresh-protect: この時間未満の新しい候補は floor しない（遅咲き保護）。 */
+  freshnessProtectHours: number;
+  /** prior の3成分の重み（w_f·freshness + w_v·velocity + w_e·engagement）。 */
+  prerankWeights: { w_f: number; w_v: number; w_e: number };
+  /** freshness = exp(-age_hours/τ) の τ（時間）。大きいほど減衰が緩やか。 */
+  prerankTau: number;
+  /** discovery.via 別の prior 加点（探索経路の事前優先度）。 */
+  viaBoost: Record<string, number>;
 }
 
 /**
@@ -91,4 +110,13 @@ export const COLLECTOR_CONFIG: CollectorConfig = {
   translationModel: "claude-haiku-4-5-20251001",
   scoringBatchSize: 20,
   autoPromoteDiscoveredSources: false,
+  // P2 二段採点（既定 shadow＝挙動不変。enforce 切替は shadow 実証後・人間ゲート）
+  prerankMode: "shadow",
+  shortlistTopK: 60,
+  explorationQuota: 10,
+  prerankMaxAgeHours: 72,
+  freshnessProtectHours: 6,
+  prerankWeights: { w_f: 0.4, w_v: 0.35, w_e: 0.15 },
+  prerankTau: 24,
+  viaBoost: { fixed: 0, keyword: 0.1, trend: 0.1, user_search: 0.05, following: 0.05 },
 };

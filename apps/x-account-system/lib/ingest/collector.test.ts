@@ -21,6 +21,29 @@ function scoringAnthropic(scores: Array<Record<string, unknown>>) {
   };
 }
 
+/**
+ * 採点回数を数える scoring fake。user prompt から id を抽出し id 毎に overall を返す。
+ * overallById で fine overall を制御（retention テスト用）。非 scoring(=翻訳) は throw（fail-open で握られる）。
+ */
+function countingScorer(overallById: Record<string, number> = {}) {
+  const state = { scoredIds: [] as string[], calls: 0 };
+  const anthropic = {
+    messages: {
+      create: async (args: { tools?: { name: string }[]; messages?: Array<{ content: string }> }) => {
+        const isScoring = (args.tools ?? []).some((t) => t.name === "score_materials");
+        if (!isScoring) throw new Error("unexpected non-scoring messages.create in collector test");
+        state.calls += 1;
+        const content = args.messages?.[0]?.content ?? "";
+        const ids = content.split("\n").slice(1).filter(Boolean).map((l) => JSON.parse(l).id as string);
+        state.scoredIds.push(...ids);
+        const scores = ids.map((id) => ({ id, freshness: 50, velocity: 50, target_fit: 50, overall: overallById[id] ?? 50, reason: "ok" }));
+        return { content: [{ type: "tool_use", input: { scores } }], usage: { input_tokens: 10, output_tokens: 5 } };
+      },
+    },
+  };
+  return { anthropic, state };
+}
+
 /** explore session fake: 指定の tool 呼び出しを customToolHandler で順に発火し候補を蓄積。 */
 function exploreSession(
   toolCalls: Array<{ name: string; input: Record<string, unknown> }>,
@@ -313,5 +336,116 @@ describe("runCollect", () => {
     // deduped は fail-open で fetched と同値（早期 dedup skip）。
     expect(stats.fetched).toBe(1);
     expect(stats.deduped).toBe(1);
+  });
+
+  // ---- P2 二段採点 prerank（shadow 既定＝挙動不変 / enforce＝選抜のみ採点） ----
+
+  /** 3件の新鮮候補 + 1件の stale（floor 対象）を返す探索。lang 未指定で翻訳経路は通らない。 */
+  function prerankCandidates() {
+    const fresh = (id: string, like: number) => ({ id, text: `t${id}`, author: { userName: "rando" }, createdAt: new Date().toISOString(), likeCount: like, viewCount: 1000, isReply: false, conversationId: id });
+    const stale = { id: "old", text: "old", author: { userName: "rando" }, createdAt: new Date(Date.now() - 200 * 3600_000).toISOString(), likeCount: 0, retweetCount: 0, bookmarkCount: 0, viewCount: 5, isReply: false, conversationId: "old" };
+    return [fresh("a", 900), fresh("b", 500), fresh("c", 100), stale];
+  }
+
+  const prerankApi = (tweets: unknown[]) => ({
+    searchTweets: async () => tweets as never,
+    getTrends: async () => [], searchUsers: async () => [], getUserFollowings: async () => [], getThread: async () => [],
+  });
+
+  test("P2 shadow（既定）: 全件 fine-score＝挙動不変・inserted/採点回数が従来と同じ・meta に selection_pool 無し", async () => {
+    const inserts: unknown[] = [];
+    const onTraceCosts: number[] = [];
+    const { anthropic, state } = countingScorer();
+    const stats = await runCollect({
+      anthropic: anthropic as never,
+      sb: makeSb(inserts) as never,
+      twitterApiKey: "k", fetchImpl: undefined as never, apiKey: "sk-test",
+      runSession: exploreSession([{ name: "search_tweets", input: { query: "AI", queryType: "Latest", via: "keyword" } }]),
+      getAgentRef: okRef,
+      onTrace: (m) => onTraceCosts.push(m.costJpy ?? 0),
+      // prerankMode 未指定 → COLLECTOR_CONFIG 既定 "shadow"。
+      api: prerankApi(prerankCandidates()),
+      now: Date.now(),
+    });
+
+    // 挙動不変: stale 含む全 4 件を採点・保存（prerank は計算のみ）。
+    expect(state.scoredIds.sort()).toEqual(["a", "b", "c", "old"]);
+    expect(stats.scored).toBe(4);
+    expect(stats.inserted).toBe(4);
+    expect(inserts).toHaveLength(4);
+    // meta に selection_pool/prior_score を刻まない（shadow=meta 不変）。
+    for (const row of inserts as Array<{ meta: Record<string, unknown> }>) {
+      expect(row.meta.selection_pool).toBeUndefined();
+      expect(row.meta.prior_score).toBeUndefined();
+    }
+    // shadow 指標が算出される。
+    expect(stats.selectionMode).toBe("shadow");
+    expect(stats.shadow).toBeDefined();
+    expect(stats.shadow!.topN_retention).toBeGreaterThanOrEqual(0);
+    expect(stats.shadow!.topN_retention).toBeLessThanOrEqual(1);
+    expect(stats.shadow!.selected_count + stats.shadow!.pruned_count).toBe(4);
+    // 剪定サマリ: stale が floor される（沈黙カット禁止＝記録される）。
+    expect(stats.pruned!.byReason.stale_low_velocity).toBe(1);
+    // onTrace は 1 本・cost 合計は scoring(4件)+explore+translate。
+    expect(onTraceCosts).toHaveLength(1);
+    expect(onTraceCosts[0]).toBeCloseTo(stats.cost.totalJpy, 10);
+  });
+
+  test("P2 shadow: retention/pruned_fine_max が上澄み非劣化を測れる（高 fine は全て selected・剪定群の fine は低い）", async () => {
+    const inserts: unknown[] = [];
+    // fine overall を a>b>c>old に設定。a,b,c は prior selected、old は floor 剪定。
+    const { anthropic } = countingScorer({ a: 90, b: 80, c: 70, old: 10 });
+    const stats = await runCollect({
+      anthropic: anthropic as never,
+      sb: makeSb(inserts) as never,
+      twitterApiKey: "k", fetchImpl: undefined as never, apiKey: "sk-test",
+      runSession: exploreSession([{ name: "search_tweets", input: { query: "AI", queryType: "Latest", via: "keyword" } }]),
+      getAgentRef: okRef,
+      prerankMode: "shadow",
+      rng: () => 0.5,
+      api: prerankApi(prerankCandidates()),
+      now: Date.now(),
+    });
+    // 候補4件なので topN=4（old も母数に入る）。old(低fine,floor)のみ未 selected → retention=3/4。
+    expect(stats.shadow!.topN_size).toBe(4);
+    expect(stats.shadow!.topN_retention).toBeCloseTo(0.75, 6);
+    // 上澄み非劣化の核: 剪定群の fine 最大が低い（=高 fine を捨てていない）。old の fine=10 のみ。
+    expect(stats.shadow!.pruned_fine_max).toBe(10);
+    // prior と fine は正の単調（a>b>c>old が両軸で一致）→ ρ>0。
+    expect(stats.shadow!.spearman_rho).not.toBeNull();
+    expect(stats.shadow!.spearman_rho!).toBeGreaterThan(0);
+  });
+
+  test("P2 enforce: selected のみ fine-score（stale は採点せず）・pruned 記録・meta に selection_pool", async () => {
+    const inserts: unknown[] = [];
+    const { anthropic, state } = countingScorer();
+    const stats = await runCollect({
+      anthropic: anthropic as never,
+      sb: makeSb(inserts) as never,
+      twitterApiKey: "k", fetchImpl: undefined as never, apiKey: "sk-test",
+      runSession: exploreSession([{ name: "search_tweets", input: { query: "AI", queryType: "Latest", via: "keyword" } }]),
+      getAgentRef: okRef,
+      prerankMode: "enforce",
+      rng: () => 0.5,
+      api: prerankApi(prerankCandidates()),
+      now: Date.now(),
+    });
+
+    // enforce: stale("old") は floor され採点・保存されない。a,b,c のみ。
+    expect(state.scoredIds.sort()).toEqual(["a", "b", "c"]);
+    expect(stats.scored).toBe(3);
+    expect(stats.inserted).toBe(3);
+    const ids = (inserts as Array<{ meta: { tweet_id: string } }>).map((r) => r.meta.tweet_id).sort();
+    expect(ids).toEqual(["a", "b", "c"]);
+    // pruned 記録（沈黙カット禁止）。
+    expect(stats.pruned!.byReason.stale_low_velocity).toBe(1);
+    // enforce は selection_pool/prior_score を meta に刻む。
+    for (const row of inserts as Array<{ meta: Record<string, unknown> }>) {
+      expect(row.meta.selection_pool).toBeDefined();
+      expect(typeof row.meta.prior_score).toBe("number");
+    }
+    // enforce は ground truth 不在のため shadow 指標は出さない。
+    expect(stats.selectionMode).toBe("enforce");
+    expect(stats.shadow).toBeUndefined();
   });
 });

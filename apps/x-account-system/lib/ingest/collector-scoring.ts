@@ -43,9 +43,45 @@ export interface CollectCostBreakdown {
   totalJpy: number;
 }
 
+/** 剪定サンプル（沈黙カット禁止＝後から監査できるよう id/handle/理由/prior を残す）。 */
+export interface PrunedSample {
+  tweetId: string;
+  handle: string;
+  reason: string;
+  prior: number;
+}
+
+/** P2 prerank で剪定された候補のサマリ（件数・理由別・サンプル）。 */
+export interface PrunedSummary {
+  count: number;
+  byReason: Record<string, number>;
+  samples: PrunedSample[];
+}
+
+/**
+ * shadow モードの観測指標（enforce 切替判断の材料）。shadow は全件 fine-score 済なので
+ * prior 由来の選抜が「真の上澄み」をどれだけ捕捉するかを ground truth 付きで測れる。
+ */
+export interface ShadowReport {
+  /** 最重要: fine overall 上位 N(=20) のうち prior selected に含まれる率（enforce 前提=100%）。 */
+  topN_retention: number;
+  /** 剪定群の fine overall 最大（高すぎると上澄みを捨てているサイン）。 */
+  pruned_fine_max: number;
+  pool_counts: { safeguard: number; topK: number; exploration: number };
+  selected_count: number;
+  pruned_count: number;
+  /** prior vs fine overall の Spearman 順位相関（n<2 は null）。 */
+  spearman_rho: number | null;
+  /** topN_retention の母数（min(20, fine-scored 件数)）。 */
+  topN_size: number;
+  /** createdAt parse 不能の件数。 */
+  anomalies: number;
+}
+
 /**
  * runCollect の戻り値。inserted は現行の戻り値（呼び出し側の意味を保持）。
- * 加えて funnel 件数（fetched→deduped→scored→inserted）とコスト内訳を観測用に返す。挙動不変。
+ * 加えて funnel 件数（fetched→deduped→scored→inserted）とコスト内訳を観測用に返す。
+ * P2: prerank の選抜モード・剪定サマリ・shadow 指標を付随（shadow 既定では挙動不変）。
  */
 export interface CollectStats {
   /** materials_store に新規 insert した件数（= 旧 number 戻り値）。 */
@@ -54,10 +90,16 @@ export interface CollectStats {
   fetched: number;
   /** early-dedup（バッチ内重複＋既存 store 重複）後の候補数。funnel: fetched→deduped→scored→inserted。 */
   deduped: number;
-  /** fine-score に回した件数（現状 = thread-root 正規化後の normalized 件数）。 */
+  /** fine-score に回した件数（shadow=全件 / enforce=selected のみ）。 */
   scored: number;
   /** コスト内訳。 */
   cost: CollectCostBreakdown;
+  /** prerank の適用モード（"shadow"=挙動不変 / "enforce"=選抜のみ採点）。 */
+  selectionMode?: "shadow" | "enforce";
+  /** 剪定サマリ（沈黙カット禁止）。 */
+  pruned?: PrunedSummary;
+  /** shadow 指標（shadow モードでのみ算出。enforce は ground truth 不在のため未算出）。 */
+  shadow?: ShadowReport;
 }
 
 export interface NumericHints {

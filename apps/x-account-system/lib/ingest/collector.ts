@@ -15,6 +15,8 @@ import { scoreCandidates, type Candidate, type CollectStats } from "./collector-
 import { resolveThreadRoots, isNonRootReply } from "./collector-thread.js";
 import { translateCandidates } from "./collector-translate.js";
 import { saveScoredMaterials, dedupByTweetId } from "./collector-persist.js";
+import { buildPrerankParams, selectForScoring, spearmanRho, type SelectionPool } from "./collector-prerank.js";
+import type { PrunedSummary, ShadowReport } from "./collector-scoring.js";
 import { costUsdFor, USD_JPY_RATE } from "../cost/cost-of.js";
 import { insertSessionEvents, recordRunSession } from "../trace/session-event-store.js";
 import type { SessionEventInput } from "../trace/types.js";
@@ -50,6 +52,10 @@ export interface RunCollectDeps {
   /** テスト注入用（既定 agent-registry.getAgentRef）。実 DB を叩かずに永続参照を解決する。 */
   getAgentRef?: (sb: SupabaseClient, key: string) => Promise<AgentRef>;
   runId?: string;
+  /** P2 prerank の exploration 層化サンプル用 rng（既定 Math.random。テストで決定化）。 */
+  rng?: () => number;
+  /** P2 prerank モード override（既定 COLLECTOR_CONFIG.prerankMode＝shadow）。テスト/段階移行用。 */
+  prerankMode?: "shadow" | "enforce";
 }
 
 /**
@@ -163,20 +169,36 @@ export async function runCollect(deps: RunCollectDeps): Promise<CollectStats> {
     getThread: deps.api?.getThread,
   });
 
-  const scored = await scoreCandidates(deps.anthropic as never, normalized, {
+  // P2 二段採点（prerank）: prior（決定的・無料）で三層選抜 = safeguard ∪ topK ∪ exploration。
+  // selection の計算自体は純関数・無課金。挙動が変わるのは enforce のみ。
+  const prerankMode = deps.prerankMode ?? COLLECTOR_CONFIG.prerankMode;
+  const prerankParams = buildPrerankParams(COLLECTOR_CONFIG);
+  const selection = selectForScoring(normalized, prerankParams, deps.rng ?? Math.random, now);
+
+  // shadow（既定・挙動不変）: fine-score は normalized 全件。enforce: selected のみ。
+  const scoreTargets: Candidate[] =
+    prerankMode === "enforce" ? selection.selected.map((s) => s.candidate) : normalized;
+
+  const scored = await scoreCandidates(deps.anthropic as never, scoreTargets, {
     now,
     batchSize: COLLECTOR_CONFIG.scoringBatchSize,
     model: COLLECTOR_CONFIG.scoringModel,
   });
 
   // 海外ツイート（lang≠ja）を Haiku で翻訳 → meta.translation に積む（#6 基盤）。
+  // enforce では scored 自体が selected のみなので、翻訳も自動で selected の非ja に限られる。
   const { translations, costJpy: translateCostJpy } = await translateCandidates(
     deps.anthropic as never,
     scored,
     { model: COLLECTOR_CONFIG.translationModel },
   );
 
-  const inserted = await saveScoredMaterials(deps.sb, scored, translations, collectorSessionId);
+  // enforce のみ selection_pool/prior_score を meta に刻む（shadow は meta 不変＝挙動不変）。
+  const selectionMeta =
+    prerankMode === "enforce"
+      ? new Map(selection.selected.map((s) => [s.candidate.tweet.id, { pool: s.pool, prior: s.prior }]))
+      : undefined;
+  const inserted = await saveScoredMaterials(deps.sb, scored, translations, collectorSessionId, selectionMeta);
 
   const scoreCostJpy = scored.reduce((s, c) => s + c.costJpy, 0);
   const totalCostJpy = scoreCostJpy + exploreCostJpy + translateCostJpy;
@@ -187,16 +209,88 @@ export async function runCollect(deps: RunCollectDeps): Promise<CollectStats> {
     tokensOut,
     costJpy: totalCostJpy,
   });
+
+  // 剪定サマリ（沈黙カット禁止・両モードで記録）。
+  const prunedSummary: PrunedSummary = {
+    count: selection.pruned.length,
+    byReason: selection.pruned.reduce<Record<string, number>>((acc, p) => {
+      acc[p.reason] = (acc[p.reason] ?? 0) + 1;
+      return acc;
+    }, {}),
+    samples: selection.pruned.slice(0, 10).map((p) => ({
+      tweetId: p.candidate.tweet.id,
+      handle: p.candidate.tweet.author?.userName ?? "",
+      reason: p.reason,
+      prior: p.prior,
+    })),
+  };
+
+  // shadow 指標（shadow モードのみ＝全件 fine-score を ground truth に retention 等を算出）。
+  let shadow: ShadowReport | undefined;
+  if (prerankMode === "shadow") {
+    shadow = buildShadowReport(scored, selection.selected, selection.pruned, selection.poolCounts, selection.anomalies);
+  }
+
   return {
     inserted,
     fetched: candidates.length,
     deduped: deduped.length,
-    scored: normalized.length,
+    scored: scoreTargets.length,
     cost: {
       exploreJpy: exploreCostJpy,
       scoringJpy: scoreCostJpy,
       translateJpy: translateCostJpy,
       totalJpy: totalCostJpy,
     },
+    selectionMode: prerankMode,
+    pruned: prunedSummary,
+    shadow,
+  };
+}
+
+/**
+ * shadow 指標を構築（全件 fine-score 済を ground truth に使う）。
+ *  - topN_retention: fine overall 上位20が prior selected に含まれる率（enforce 前提=100%）
+ *  - pruned_fine_max: 剪定群の fine overall 最大
+ *  - spearman_rho: prior vs fine overall の順位相関
+ */
+function buildShadowReport(
+  scored: Array<{ tweet: { id: string }; scores: { overall: number } }>,
+  selected: Array<{ candidate: { tweet: { id: string } }; prior: number }>,
+  pruned: Array<{ candidate: { tweet: { id: string } }; prior: number }>,
+  poolCounts: Record<SelectionPool, number>,
+  anomalies: number,
+): ShadowReport {
+  const selectedIds = new Set(selected.map((s) => s.candidate.tweet.id));
+  const prunedIds = new Set(pruned.map((p) => p.candidate.tweet.id));
+
+  // top-N retention（N=20）。
+  const byOverall = [...scored].sort((a, b) => b.scores.overall - a.scores.overall);
+  const topN = byOverall.slice(0, Math.min(20, byOverall.length));
+  const retained = topN.filter((c) => selectedIds.has(c.tweet.id)).length;
+  const topN_retention = topN.length > 0 ? retained / topN.length : 1;
+
+  // 剪定群の fine overall 最大。
+  const pruned_fine_max = scored
+    .filter((c) => prunedIds.has(c.tweet.id))
+    .reduce((m, c) => Math.max(m, c.scores.overall), 0);
+
+  // Spearman: prior vs fine overall（selected∪pruned で prior が引ける全件）。
+  const priorById = new Map<string, number>();
+  for (const s of selected) priorById.set(s.candidate.tweet.id, s.prior);
+  for (const p of pruned) priorById.set(p.candidate.tweet.id, p.prior);
+  const pairs = scored
+    .filter((c) => priorById.has(c.tweet.id))
+    .map((c) => ({ a: priorById.get(c.tweet.id)!, b: c.scores.overall }));
+
+  return {
+    topN_retention,
+    pruned_fine_max,
+    pool_counts: poolCounts,
+    selected_count: selected.length,
+    pruned_count: pruned.length,
+    spearman_rho: spearmanRho(pairs),
+    topN_size: topN.length,
+    anomalies,
   };
 }

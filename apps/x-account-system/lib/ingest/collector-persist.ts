@@ -70,6 +70,12 @@ export interface MaterialRow {
   meta: Record<string, unknown>;
 }
 
+/** prerank 選抜の出所（enforce のみ meta に刻む。shadow では付与せず＝meta 不変）。 */
+export interface SelectionMeta {
+  pool: string;
+  prior: number;
+}
+
 /** ScoredCandidate → materials_store row。translation 指定時のみ meta に翻訳を付与。 */
 export function buildMaterialRow(
   c: ScoredCandidate,
@@ -78,6 +84,8 @@ export function buildMaterialRow(
   translation?: string,
   /** 永続 collector の explore MA session id（収集の判断根拠を 1B が遡れるよう meta に刻む）。 */
   collectorSessionId?: string,
+  /** P2 enforce: prerank 選抜の pool/prior（観測・後追い用。shadow では undefined）。 */
+  selection?: SelectionMeta,
 ): MaterialRow {
   const createdAtParsed = new Date(c.tweet.createdAt);
   const collected_at = Number.isFinite(createdAtParsed.getTime())
@@ -120,6 +128,8 @@ export function buildMaterialRow(
       discovery: c.discovery,
       // 探索した永続 collector session（後続 1B が「なぜ集めたか」を遡る相関キー）。
       ...(collectorSessionId ? { collector_session_id: collectorSessionId } : {}),
+      // P2 enforce: prerank 選抜 pool/prior（shadow では付与しない＝meta 不変）。
+      ...(selection ? { selection_pool: selection.pool, prior_score: selection.prior } : {}),
       collected_at,
       selection_status: "collected",
       cost_jpy: c.costJpy,
@@ -143,12 +153,21 @@ export async function saveScoredMaterials(
   translations?: Map<string, string>,
   /** explore MA session id（各 row の meta.collector_session_id に刻む）。 */
   collectorSessionId?: string,
+  /** P2 enforce: tweet_id→選抜 pool/prior（meta に刻む。shadow では渡さない＝meta 不変）。 */
+  selectionByTweetId?: Map<string, SelectionMeta>,
 ): Promise<number> {
   const fresh = await dedupCandidates(sb, scored);
   let saved = 0;
   for (const c of fresh) {
     const { redactedText, highRiskHits } = redact(c.tweet.text);
-    const row = buildMaterialRow(c, redactedText, highRiskHits > 0, translations?.get(c.tweet.id), collectorSessionId);
+    const row = buildMaterialRow(
+      c,
+      redactedText,
+      highRiskHits > 0,
+      translations?.get(c.tweet.id),
+      collectorSessionId,
+      selectionByTweetId?.get(c.tweet.id),
+    );
     const { error } = await sb.from("materials_store").insert(row);
     if (error) {
       console.warn(JSON.stringify({ level: "warn", msg: "[collect] material insert failed", tweet_id: c.tweet.id, error: error.message }));

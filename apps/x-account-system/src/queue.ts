@@ -109,7 +109,17 @@ export async function handleJob(
           collectStats = stats;
           return {
             result: stats.inserted,
-            output: { inserted: stats.inserted, fetched: stats.fetched, deduped: stats.deduped, scored: stats.scored, breakdown },
+            output: {
+              inserted: stats.inserted,
+              fetched: stats.fetched,
+              deduped: stats.deduped,
+              scored: stats.scored,
+              breakdown,
+              // P2 観測: 選抜モード・shadow 指標（retention 等）・剪定サマリ。
+              selectionMode: stats.selectionMode,
+              shadow: stats.shadow,
+              pruned: stats.pruned,
+            },
             meta: traceMeta,
           };
         });
@@ -129,6 +139,12 @@ export async function handleJob(
               deduped: collectStats?.deduped,
               scored: collectStats?.scored,
               inserted: collectStats?.inserted,
+              // P2: 本番 run で retention/剪定を観測（enforce 切替判断の材料）。
+              selectionMode: collectStats?.selectionMode,
+              shadow: collectStats?.shadow,
+              pruned: collectStats?.pruned
+                ? { count: collectStats.pruned.count, byReason: collectStats.pruned.byReason }
+                : undefined,
             },
           });
           if (ctx) ctx.waitUntil(p);
