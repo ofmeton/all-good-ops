@@ -120,6 +120,7 @@ SessionStart hook で cwd/branch/uncommitted 確認 → ブランチ判定を 1 
 
 ### 運用ハイジーン（沈殿防止）
 秘書の運用副産物（raw/facts・outputs・wiki・振り返り・新スキル）はメイン本体に着地レールが無く沈殿しやすい。
+- **終了儀式は `session-end` スキル**（「セッション終了」「session end」「終わりにする」等で自動起動／`session-retrospective` の最終フェーズからも連続実行）。以下はその要点:
 - **終了儀式**: メイン repo は「`main` 上・未コミット 0」を目標。書いた副産物はそのセッション内でコミットまで完了
 - 作業後は `main` に戻す（古い task ブランチに居座らない）
 - SessionStart banner が repo family 未コミットを `-uall` 合算し閾値超で「🧹 整理推奨」→ 出たら整理優先

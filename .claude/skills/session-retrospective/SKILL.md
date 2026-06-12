@@ -106,6 +106,7 @@ CLAUDE.md のルーティング表大幅変更・戦略 KGI・人間確認ルー
 5. **§6 反映先候補** → 保存関門を通してから SAFE/RISKY 分類で提示・承認取得
 6. **承認後に反映** → 本体を `outputs/retrospectives/YYYY-MM-DD-HHmm[-topic].md` に保存（topic は lowercase-hyphen、冒頭に日時+対象サマリ）
 7. **`wiki/hot.md` 更新（必須）** — Last Updated / Current Focus / Recently Touched(直近7件) / Open Questions。500 words 以内。詳細は `wiki/SCHEMA.md` §ホットキャッシュ
+8. **セッション終了処理（`session-end` スキル）** — 反映が済んだら続けて `session-end` の手順を実行し、「main クリーン・副産物コミット済み・後片付け済み」で終える。**「振り返り → SAFE/RISKY 反映承諾 → セッション終了」は一連**。ユーザーが追加で「終了して」と言わなくても、振り返り反映の直後にそのまま終了処理へ進む。
 
 ## 絶対にやらないこと
 
