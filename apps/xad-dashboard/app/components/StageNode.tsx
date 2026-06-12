@@ -55,7 +55,7 @@ export const StageNode = memo(function StageNode({ data }: NodeProps<StageNodeDa
           style={{ boxShadow: "0 0 20px 0 rgb(96 165 250 / 0.4), inset 0 0 0 1px rgb(96 165 250 / 0.5)" }}
         />
       )}
-      <p className="text-[9px] font-medium uppercase tracking-wider text-slate-500">
+      <p className="text-[9px] font-medium uppercase tracking-wider text-slate-400">
         {data.group}
       </p>
       <div className="mt-0.5 flex items-center gap-1.5">

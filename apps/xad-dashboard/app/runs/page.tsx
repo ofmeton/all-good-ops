@@ -66,14 +66,14 @@ export default async function Runs() {
                     </div>
                     {/* trigger */}
                     <span className="text-xs text-slate-400">
-                      <span className="text-slate-500 sm:hidden">トリガー: </span>
+                      <span className="text-slate-400 sm:hidden">トリガー: </span>
                       {r.trigger}
                     </span>
                     {/* status */}
                     <StatusBadge status={r.status} />
                     {/* attempt */}
                     <span className="text-xs tabular-nums text-slate-400 sm:text-right">
-                      <span className="text-slate-500 sm:hidden">試行: </span>
+                      <span className="text-slate-400 sm:hidden">試行: </span>
                       {r.attempt}
                     </span>
                   </Link>
