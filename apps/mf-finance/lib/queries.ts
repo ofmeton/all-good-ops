@@ -1,6 +1,14 @@
 import "server-only";
 import { db } from "./db";
-import type { DisposableResult, RecurringItem, Tx } from "./types";
+import type {
+  DisposableResult,
+  MonthAgg,
+  MonthlySummary,
+  RecurringItem,
+  SeriesPoint,
+  Tx,
+} from "./types";
+import { addMonths, formatYm } from "./format";
 // 純Node .mjs（型なし→ allowJs で any 解決）。ロジックの SSOT はこちら（再実装しない）。
 import { computeMonthlyDisposable } from "../scripts/lib/disposable.mjs";
 
@@ -43,4 +51,88 @@ export function getLatestTxDate(): string | null {
     d: string | null;
   };
   return row.d;
+}
+
+// データが存在する最大の月キー（'YYYY-MM'）。翌月ボタンの上限・トレンド既定終端に使う。
+export function getMaxYm(): string | null {
+  const row = db
+    .prepare("SELECT MAX(substr(date, 1, 7)) ym FROM transactions")
+    .get() as { ym: string | null };
+  return row.ym;
+}
+
+// 実績収支の集計条件（可処分とは別概念）:
+//   included=1 / 内部移動・口座間振替を除外 / amount の符号で収入・支出を分離。
+const SUMMARY_WHERE =
+  "included = 1 AND is_transfer = 0 AND is_internal_move = 0";
+
+// 1 ヶ月（'YYYY-MM'）の実績集計。データ無しでも 0 を返す。
+function aggregateMonth(ym: string): MonthAgg & { count: number } {
+  const row = db
+    .prepare(
+      `SELECT
+         COALESCE(SUM(CASE WHEN amount > 0 THEN amount ELSE 0 END), 0) AS income,
+         COALESCE(SUM(CASE WHEN amount < 0 THEN -amount ELSE 0 END), 0) AS expense,
+         COUNT(*) AS count
+       FROM transactions
+       WHERE ${SUMMARY_WHERE} AND substr(date, 1, 7) = ?`,
+    )
+    .get(ym) as { income: number; expense: number; count: number };
+  return {
+    income: row.income,
+    expense: row.expense,
+    net: row.income - row.expense,
+    count: row.count,
+  };
+}
+
+// 選択月の実績収支サマリ + 前月 / 前年同月の比較。
+export function getMonthlySummary(year: number, month: number): MonthlySummary {
+  const ym = formatYm(year, month);
+  const cur = aggregateMonth(ym);
+  const prev = aggregateMonth(addMonths(ym, -1));
+  const yoy = aggregateMonth(addMonths(ym, -12));
+  return {
+    ym,
+    income: cur.income,
+    expense: cur.expense,
+    net: cur.net,
+    count: cur.count,
+    prev: { income: prev.income, expense: prev.expense, net: prev.net },
+    yoy: { income: yoy.income, expense: yoy.expense, net: yoy.net },
+  };
+}
+
+// 末尾 endYm（既定 = データ最大月、無ければ当月）から遡る N ヶ月の連続系列。
+// データ欠損月は 0 埋めして必ず months 件返す（トレンドの軸を安定させる）。
+export function getMonthlySeries(
+  months = 12,
+  endYm?: string,
+): SeriesPoint[] {
+  const now = new Date();
+  const end = endYm ?? getMaxYm() ?? formatYm(now.getFullYear(), now.getMonth() + 1);
+  const start = addMonths(end, -(months - 1));
+
+  const rows = db
+    .prepare(
+      `SELECT substr(date, 1, 7) AS ym,
+         COALESCE(SUM(CASE WHEN amount > 0 THEN amount ELSE 0 END), 0) AS income,
+         COALESCE(SUM(CASE WHEN amount < 0 THEN -amount ELSE 0 END), 0) AS expense
+       FROM transactions
+       WHERE ${SUMMARY_WHERE}
+         AND substr(date, 1, 7) >= ? AND substr(date, 1, 7) <= ?
+       GROUP BY ym`,
+    )
+    .all(start, end) as { ym: string; income: number; expense: number }[];
+
+  const map = new Map(rows.map((r) => [r.ym, r]));
+  const out: SeriesPoint[] = [];
+  for (let i = 0; i < months; i++) {
+    const ym = addMonths(start, i);
+    const r = map.get(ym);
+    const income = r?.income ?? 0;
+    const expense = r?.expense ?? 0;
+    out.push({ ym, income, expense, net: income - expense });
+  }
+  return out;
 }

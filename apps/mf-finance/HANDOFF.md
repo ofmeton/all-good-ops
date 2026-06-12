@@ -1,59 +1,67 @@
 # mf-finance 引き継ぎ（別セッション再開用）
 
-最終更新: 2026-06-06 / 作業ブランチ: `task/260606-mf-finance`（worktree `/Users/rikukudo/Projects/all-good-ops-mf-finance`）
+最終更新: 2026-06-12 / 作業ブランチ: `task/260606-mf-finance`（worktree `/Users/rikukudo/Projects/all-good-ops-mf-finance`）
 
 ## 0. これは何
-マネーフォワードME（個人版・課金継続＝収集役）のデータを Claude 側で自動集計・分析する**個人家計ダッシュボード**。MF課金はやめず「収集=MF / 分析=本システム」。ユーザー=工藤陸（フリーランス・複数収入源・借金あり・月収26万KGI）。
+マネーフォワードME（個人版・課金継続＝収集役）のデータを Claude 側で自動集計・分析する**個人家計ダッシュボード**。MF課金はやめず「収集=MF / 分析=本システム」。ユーザー=工藤陸（フリーランス・複数収入源）。
 - **設計の重心**: home を開いた瞬間に「**今月あといくら使えるか**（可処分）」が分かること。
-- 成果物=**Next.js(App Router)+Supabase**（`ofmeton-apps`=`hofvvcvhjslevymhbcqj` の `mf_finance` スキーマ分離）。
+- **アーキ（2026-06-12 方針転換）**: コスト=無料＋家計データ非公開のため **完全ローカル**。データ=**SQLite 単一ファイル `data/mf-finance.db`（better-sqlite3, git ignore）**、UI=**ローカル Next.js（localhost のみ・認証なし・単一ユーザー）**。旧 Supabase 依存は撤廃（`legacy/` へ退役）。詳細 memory `project_mf_finance_dashboard.md`。
 
 ## 1. 必読ドキュメント（この順で読む）
-1. 仕様: `docs/superpowers/specs/2026-06-06-mf-finance-dashboard-design.md`（ユーザーシナリオ網羅・データモデル・可処分ロジック）
-2. Plan 1（データ基盤=完了）: `docs/superpowers/plans/2026-06-06-mf-finance-data-layer.md`
-3. 全体設計: `apps/mf-finance/DESIGN.md`
+1. 仕様: `docs/superpowers/specs/2026-06-06-mf-finance-dashboard-design.md`（ユーザーシナリオ・データモデル・可処分ロジック）
+2. 全体設計: `apps/mf-finance/DESIGN.md`
+3. ローカル化＋Plan2 計画: `/Users/rikukudo/.claude/plans/merry-spinning-glacier.md`
 4. データ素性の注意: `raw/finance/moneyforward/README.md`
-5. 上位計画: `/Users/rikukudo/.claude/plans/chrome-devtools-virtual-hennessy.md`
+5. 再取得手順: `scripts/acquire.md`
 
-## 2. 完了済み（Plan 1 = データ基盤＋可処分ロジック）✅
-- 純Nodeライブラリ＋node:testで TDD（11/11緑）: `scripts/lib/{csv,normalize,classify,recurring,disposable}.mjs`
-- CLI: `scripts/normalize.mjs`（raw CSV→`data/normalized.json`）/ `scripts/detect-recurring.mjs` / `scripts/load.mjs`（supabase-js）/ `scripts/load-mgmt.mjs`（Management API フォールバック）
-- Supabase `mf_finance` スキーマ: 7テーブル（transactions / recurring_items / account_status / asset_history / liability_snapshots / manual_liabilities / category_rules）＋RLS有効＋service_role権限。migration: `supabase/migrations/0001_*.sql`,`0002_*.sql`
-- **データ投入済み**: `transactions` に **3,742行**（収支対象3,194 / 2020-01〜2026-06）。分類分布 variable1904/transfer548/unknown484/income338/fixed258/internal210。
-- 検証: `cd apps/mf-finance && npm test` で全緑。Supabase件数は MCP `execute_sql` で確認済。
+## 2. 完了済み ✅
+### Plan 1（データ基盤＋可処分ロジック）
+- 純Nodeライブラリ＋node:testで TDD（11/11緑）: `scripts/lib/{csv,normalize,classify,recurring,disposable}.mjs`。**Supabase非依存・無改変で流用（回帰防止線）**。可処分式 SSOT = `disposable.mjs` の `computeMonthlyDisposable`。
+- CLI: `scripts/normalize.mjs`（raw CSV→`data/normalized.json`）/ `scripts/detect-recurring.mjs`。
 
-## 3. 未着手・次の一手
-### 3-1. Plan 2 着手前の2ブロッカー（Task #9）
-1. **PostgREST 公開反映の確認**: `mf_finance` を exposed schemas に追加済（設定は永続化、`db_schema=public,graphql_public,xad,mf_finance`）だが、**稼働中PostgRESTが未反映**だった（`PGRST106 Invalid schema`）。supabase-js が `from('transactions')` で読めるか再確認すること。まだ未反映なら memory `reference_supabase_nonpublic_schema_exposed.md` 参照（反映は再起動待ち。投入は `load-mgmt.mjs` で迂回可）。
-2. **最新データ再取得（P0）**: 現在DBのデータは**再連携“前”のスナップショット**。再連携後のフル版を引き直す→reload。手順は `scripts/acquire.md`：個人Chromeで MF ログイン＋`chrome://inspect`で remote debugging 有効化→chrome-devtools MCP で `/cf/csv?from=YYYY/MM/01&month=M&year=YYYY`（全月ループ）と `/bs/history/csv` を fetch（**Shift-JIS→UTF-8**）→`raw/finance/moneyforward/*.csv` 更新→`npm run normalize`→`load`。作業後 remote debugging 無効化。
+### ローカル SQLite 化 ＋ Plan 2 Phase 1（home 可処分表示）
+- `db/schema.sql`: Postgres 7表の SQLite 移植（bool→0/1, timestamptz→TEXT, jsonb→TEXT, identity→AUTOINCREMENT）。
+- `scripts/load.mjs`: **SQLite版（冪等 upsert）**。`data/normalized.json`→DB。投入後「収支対象=included=1 AND is_transfer=0」を recon値 3,194 と突合（一致）。
+- `scripts/seed-recurring.mjs`: `recurring-candidates.json`→`recurring_items`。**支出 amountAvg は負値→`Math.abs` で正値格納**（disposable は income/expense とも正値前提・test 規約）。
+- Next.js: `lib/db.ts`（server-only better-sqlite3 singleton）/ `lib/queries.ts`（`getDisposable` が `disposable.mjs` を流用）/ `lib/types.ts` / `lib/format.ts` / `app/page.tsx`（`force-dynamic`・当月）/ `app/components/{DisposableHero,DisposableBreakdown}.tsx`。ライト固定・Lexend・トラスト青/利益緑。`next.config.ts` に `serverExternalPackages:['better-sqlite3']`。
+- 旧 Supabase 資産（`load-mgmt.mjs`, `supabase/migrations`）→ `legacy/`。
+- 検証: build緑 / test 11緑 / home HTTP200・「あと使える ¥23,009」描画 / populated月(2026-03=228,071円)で算出一致。コミット `1c33382`。
 
-### 3-2. Plan 2 = 可処分ダッシュボードUI（未作成）
-`writing-plans` で Plan 2 を起こす。内容: Next.js App Router scaffold（**scaffold直後ライト固定**）、home（あと使える＋内訳:収入見込/固定費/変動費実績）、月次収支・前月比・前年同月比・トレンド、**連携鮮度表示＋refresh促し**、**口座/カード別の当月利用**、**赤字/着金の警告**、**引落予定vs残高カレンダー**、定期項目 確定UI（recurring_items の ON/OFF＋金額調整）。skill: `ui-ux-pro-max`（旧frontend-design）/ `nextjs-supabase-site-gotchas` / `responsive-layout` / `supabase`。
-- 注意: PostgREST `max_rows=1000`。transactions 3700件超はページング/集計クエリで対応。
-- 接続: server側 service_role（RLSバイパス）。鍵は金庫（下記）。
+## 3. 進行中・次の一手
+### Plan 2 Phase 2（実装中）
+月セレクタ（`?ym=YYYY-MM`）・月次収支・前月比・前年同月比・トレンド（軽量SVG棒）。`lib/queries.ts` に `getMonthlySummary` / `getMonthlySeries` 追加、`lib/format.ts` に月キーユーティリティ追加済み。空月（直近2ヶ月）には控えめな注記。
 
-### 3-3. 後続モジュール（さらに先・各々小spec）
-カテゴリ深掘り／サブスク一覧UI／LLM自動ラベリング(未分類484件・Claude API・従量課金は先出し)／資産推移＋手入力負債(アコム/奨学金/横浜バイクローン/修学支援貸付=`manual_liabilities`手入力)トラッキング＋KGI連動(wiki/self/goals)／CF予測／異常アラート／freee統合(MCP読取のみ・cashflow-tracker連動)／予算実績／確定申告用経費集計。
+### B2 = データ鮮度（最新化・未解決 P0）
+現DBは**再連携“前”スナップショット**。**直近2ヶ月（2026-05/06）がほぼ空**（4件/2件）で 2026-03 以前が populated。根因=MF側で**連携エラーの口座があり 2026-04 以降データ激減**。
+- **手順** `scripts/acquire.md`: ①個人Chromeで MF ログイン＋**連携エラー口座を再連携** → ②`chrome://inspect/#remote-debugging` で remote debugging 有効化 → ③**Claude Code 再起動**（chrome-devtools MCP が個人Chromeにアタッチ。memory `reference_chrome_devtools_mcp`）→ ④`/cf/csv?from=YYYY/MM/01&month=M&year=YYYY` 全月ループ＋`/bs/history/csv` を fetch（**Shift-JIS→UTF-8**）→ `raw/finance/moneyforward/*.csv` 更新 → `npm run normalize` → `npm run load`。⑤作業後 remote debugging を必ず無効化（cookie 露出）。
+- automation 制御 Chrome は MF/Google ログイン検知で弾かれる→**人間が個人Chromeでログイン**が必須。MF=金融。認証情報は会話に出さない。
+
+### Phase 3 以降（仕様順）
+連携鮮度バナー＋手動refresh促し / 口座別当月利用 / 赤字・着金警告 / 引落予定vs残高カレンダー（`asset_history`）/ 定期項目 確定UI（`recurring_items` ON/OFF＋金額・server action）/ 手入力負債（`manual_liabilities`）/ カテゴリ深掘り / サブスク一覧 / LLM自動ラベリング(未分類484件) / CF予測 / freee統合(MCP読取)。
 
 ## 4. 確定済みの要件（再議論しない）
-- 可処分式: **あと使える = (定期収入見込み＋スポット着金) − 固定費 − 変動費実績**
-- 収入=定期収入見込み（`recurring_items` kind=income）＋スポット着金（未マッチ入金）。**事業/給与/その他の `source_type` タグ**で分離。
-- 固定費=自動検出→人間がON/OFF確定（`recurring_items` kind=expense, confirmed）。
-- 内部移動補正: `大項目=現金・カード` は `is_internal_move=true` で消費から除外（過大計上対策）。
-- 借金=ダッシュボードで手入力。データ更新=いずれ cron（現 cron 全停止中→当面手動 refresh、cron-ready に作る）。
+- 可処分式: **あと使える =（定期収入見込み＋スポット着金）− 固定費 − 変動費実績**
+- 収入=定期収入見込み（`recurring_items` kind=income, active）＋スポット着金（recurring income 名に一致しない当月入金）。
+- 固定費=自動検出→人間がON/OFF確定（`recurring_items` kind=expense, confirmed='user'）。`recurring_items.amount` は**正の magnitude**。
+- 内部移動補正: `is_internal_move=true`/`classification='internal'` は消費から除外。
+- 借金=ダッシュボードで手入力。データ更新=当面手動 refresh（cron全停止中・cron-ready に作る）。
 
-## 5. 環境・鍵・ハマり所
-- **金庫（共通鍵束）**: repo-root `.env.local`（`/Users/rikukudo/Projects/private-agents/all-good-ops/.env.local`）に `SUPABASE_URL`(=ofmeton-apps) と `SUPABASE_SERVICE_ROLE_KEY` あり。**新規追加不要**。`load.mjs` は両名(`SUPABASE_SERVICE_KEY`/`SUPABASE_SERVICE_ROLE_KEY`)を許容。実行例: `cd apps/mf-finance && node --env-file=/Users/rikukudo/Projects/private-agents/all-good-ops/.env.local scripts/load.mjs`。worktree統合時は金庫を main 側に維持。
-- **Management API トークン**: keychain から（memory `reference_supabase_mgmt_api_keychain`）。`load-mgmt.mjs` は `SB_MGMT_TOKEN` env で受ける。
-- **CSV は Shift-JIS**（Content-Type は utf-8 と詐称）。`raw/finance/moneyforward/*.csv` は UTF-8 変換済。CSVには**メモ欄に物理改行**が混じる→`csv.mjs` は char-by-char パーサで対応済（正レコード数=3742、README記載の3743は継続行二重計上）。
-- chrome-devtools は**個人Chromeにアタッチ**方式（automation Chromeはbot検知でログイン不可）。memory `reference_chrome_devtools_mcp`。
+## 5. 環境・ハマり所
+- **データは全てローカル・git ignore**: `data/*.db`（機微・コミット厳禁）, `data/*.json`。`.next/`, `node_modules/` も ignore。
+- **金庫（repo-root `.env.local`）の Supabase 鍵は mf-finance では不要**になった（xad 等が使用中なので削除はしない）。
+- better-sqlite3 はネイティブモジュール。`npm install`（Node v24）でABI一致バイナリ取得。`next.config.ts` の `serverExternalPackages` 必須。Edge Runtime 非対応（`runtime='edge'` を書かない）。
+- **CSV は Shift-JIS**（Content-Type は utf-8 詐称）。メモ欄に物理改行混入→`csv.mjs` の char-by-char パーサで対応済（正レコード数=3742）。
+- chrome-devtools は**個人Chromeにアタッチ**方式（automation Chromeはログイン不可）。memory `reference_chrome_devtools_mcp`。
 - 認証情報は会話に再掲しない・repoに永続化しない。
 
 ## 6. 再開手順（コピペ用）
 ```
-cd /Users/rikukudo/Projects/all-good-ops-mf-finance
+cd /Users/rikukudo/Projects/all-good-ops-mf-finance/apps/mf-finance
 git status && git log --oneline -5
-cd apps/mf-finance && npm test            # 11/11 緑を確認
-# PostgREST反映チェック→未反映なら load-mgmt、反映済なら supabase-js
-# 次: 3-1の2ブロッカー解消 → writing-plans で Plan 2 → subagent-driven で実装
+npm install                       # 初回 or 依存変更時
+npm test                          # 11/11 緑を確認
+npm run load && npm run seed:recurring   # DB を data/mf-finance.db に再構築（冪等）
+npm run dev                       # http://localhost:3000
+# 次: Phase 2 仕上げ → B2 データ再取得 → Phase 3
 ```
-進捗管理は TaskList（#5 後続モジュール群 / #9 Plan2前ブロッカー が残）。
+進捗の上位計画: `/Users/rikukudo/.claude/plans/merry-spinning-glacier.md`。

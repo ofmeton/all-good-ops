@@ -18,3 +18,39 @@ export function shortDate(iso: string): string {
   const [, m, d] = iso.split("-");
   return `${Number(m)}月${Number(d)}日`;
 }
+
+// --- 月キー（'YYYY-MM'）ユーティリティ。client/server 両用（月セレクタ + 集計クエリで共有） ---
+
+// 'YYYY-MM' 形式かを厳密判定（searchParams など信頼できない入力のガード）。
+export function isValidYm(s: unknown): s is string {
+  return typeof s === "string" && /^\d{4}-(0[1-9]|1[0-2])$/.test(s);
+}
+
+export function parseYm(ym: string): { year: number; month: number } {
+  const [y, m] = ym.split("-").map(Number);
+  return { year: y, month: m };
+}
+
+export function formatYm(year: number, month: number): string {
+  return `${year}-${String(month).padStart(2, "0")}`;
+}
+
+// 月キーに delta ヶ月を加算（負も可）。年跨ぎを正しく処理。
+export function addMonths(ym: string, delta: number): string {
+  const { year, month } = parseYm(ym);
+  const total = year * 12 + (month - 1) + delta;
+  const ny = Math.floor(total / 12);
+  const nm = (total % 12) + 1;
+  return formatYm(ny, nm);
+}
+
+// 'YYYY-MM' → '2026年3月'
+export function ymLabel(ym: string): string {
+  const { year, month } = parseYm(ym);
+  return monthLabel(year, month);
+}
+
+// 'YYYY-MM' → '3月'（軸ラベル等の短縮）
+export function ymShort(ym: string): string {
+  return `${parseYm(ym).month}月`;
+}
