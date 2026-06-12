@@ -164,7 +164,7 @@ export async function runOptimizerAnalyst(
   }
 
   const snapshotText = await deps.buildSnapshotText();
-  const userMessage = `${snapshotText}\n\n---\n上記の観測を分析し、改善提案を submit_proposal で記録してください（最大5件）。新しい観測がない領域では提案しないでください（0件でも可）。直近約4週間の既出提案（上記スナップショットの recent proposals）と重複・実質同一の提案はしないでください。`;
+  const userMessage = `${snapshotText}\n\n---\n上記の観測を分析し、改善提案を submit_proposal で記録してください（最大5件）。新しい観測がない領域では提案しないでください（0件でも可）。直近約4週間の既出提案（上記スナップショットの recent proposals）と重複・実質同一の提案はしないでください。\n\n収集 ROI の目的関数は「コスト最小化でなく ¥当たり品質最大化」です（主=approved_yield_per_jpy / 従=published_engagement_per_jpy / guard=exploration_high_score_rate）。収集レバーに改善余地があれば scope=collector_lever で提案してください。`;
 
   const handler = deps.toolDeps ? makeToolHandler(deps.toolDeps) : async () => "ok";
 
