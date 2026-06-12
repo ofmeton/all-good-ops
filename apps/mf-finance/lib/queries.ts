@@ -1,7 +1,10 @@
 import "server-only";
 import { db } from "./db";
 import type {
+  AccountUsage,
   DisposableResult,
+  Freshness,
+  LargeIncome,
   MonthAgg,
   MonthlySummary,
   RecurringItem,
@@ -135,4 +138,56 @@ export function getMonthlySeries(
     out.push({ ym, income, expense, net: income - expense });
   }
   return out;
+}
+
+// --- Phase 3: 鮮度 / 口座別利用 / 警告 ---
+
+// 連携鮮度: 最新取引日と今日との差（日）。
+export function getFreshness(): Freshness {
+  const latest = getLatestTxDate();
+  if (!latest) return { latest: null, daysSince: null };
+  // 日付のみで差分（ローカルタイム基準）。
+  const today = new Date();
+  const t0 = Date.UTC(today.getFullYear(), today.getMonth(), today.getDate());
+  const [y, m, d] = latest.split("-").map(Number);
+  const t1 = Date.UTC(y, m - 1, d);
+  const daysSince = Math.round((t0 - t1) / 86400000);
+  return { latest, daysSince };
+}
+
+// 当月の口座/カード別利用（支出・入金）。内部移動・振替は除外。支出額の大きい順。
+export function getAccountUsage(year: number, month: number): AccountUsage[] {
+  const ym = formatYm(year, month);
+  const rows = db
+    .prepare(
+      `SELECT COALESCE(account, '(不明)') AS account,
+         COALESCE(SUM(CASE WHEN amount < 0 THEN -amount ELSE 0 END), 0) AS spent,
+         COALESCE(SUM(CASE WHEN amount > 0 THEN amount ELSE 0 END), 0) AS received
+       FROM transactions
+       WHERE ${SUMMARY_WHERE} AND substr(date, 1, 7) = ?
+       GROUP BY account
+       HAVING spent > 0 OR received > 0
+       ORDER BY spent DESC, received DESC`,
+    )
+    .all(ym) as AccountUsage[];
+  return rows;
+}
+
+// 当月の大口入金（着金アラート用）。threshold 以上の単一入金を新しい順に。
+export function getLargeIncomes(
+  year: number,
+  month: number,
+  threshold = 50000,
+): LargeIncome[] {
+  const ym = formatYm(year, month);
+  const rows = db
+    .prepare(
+      `SELECT date, COALESCE(description, '(明細なし)') AS description, amount
+       FROM transactions
+       WHERE ${SUMMARY_WHERE} AND substr(date, 1, 7) = ? AND amount >= ?
+       ORDER BY amount DESC, date DESC
+       LIMIT 5`,
+    )
+    .all(ym, threshold) as LargeIncome[];
+  return rows;
 }

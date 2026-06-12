@@ -1,0 +1,22 @@
+import { NextResponse } from "next/server";
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
+
+const run = promisify(execFile);
+
+// localhost 単一ユーザー専用。raw CSV から DB を再構築する手動 refresh。
+// 入力は受け取らず固定スクリプトのみ実行（コマンドインジェクション余地なし）。
+// 本来の最新化（MFからの再取得）は別手順(scripts/acquire.md)。ここは normalize→load の再構築。
+export const runtime = "nodejs";
+
+export async function POST() {
+  const cwd = process.cwd();
+  try {
+    await run("node", ["scripts/normalize.mjs"], { cwd });
+    const { stdout } = await run("node", ["scripts/load.mjs"], { cwd });
+    return NextResponse.json({ ok: true, log: stdout.trim() });
+  } catch (e) {
+    const message = e instanceof Error ? e.message : String(e);
+    return NextResponse.json({ ok: false, error: message }, { status: 500 });
+  }
+}

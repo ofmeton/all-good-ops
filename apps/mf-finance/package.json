@@ -11,6 +11,7 @@
     "normalize": "node scripts/normalize.mjs",
     "detect": "node scripts/detect-recurring.mjs",
     "load": "node scripts/load.mjs",
+    "load:assets": "node scripts/load-assets.mjs",
     "seed:recurring": "node scripts/seed-recurring.mjs"
   },
   "dependencies": {

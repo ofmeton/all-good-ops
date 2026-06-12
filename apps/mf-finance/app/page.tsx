@@ -1,16 +1,23 @@
 import {
+  getAccountUsage,
   getDisposable,
-  getLatestTxDate,
+  getFreshness,
+  getLargeIncomes,
   getMaxYm,
   getMonthlySeries,
   getMonthlySummary,
 } from "@/lib/queries";
-import { formatYm, isValidYm, parseYm, shortDate } from "@/lib/format";
+import { formatYm, isValidYm, parseYm } from "@/lib/format";
 import { DisposableHero } from "@/app/components/DisposableHero";
 import { DisposableBreakdown } from "@/app/components/DisposableBreakdown";
 import { MonthSelector } from "@/app/components/MonthSelector";
 import { MonthlySummary } from "@/app/components/MonthlySummary";
 import { TrendChart } from "@/app/components/TrendChart";
+import { FreshnessBanner } from "@/app/components/FreshnessBanner";
+import { AccountBreakdown } from "@/app/components/AccountBreakdown";
+import { Alerts } from "@/app/components/Alerts";
+import { PayoutCalendar } from "@/app/components/PayoutCalendar";
+import { getLatestAsset, getProjectedBalance } from "@/lib/calendar-queries";
 
 // SQLite ファイル更新を再ビルドなしで反映（毎リクエスト最新化）。
 export const dynamic = "force-dynamic";
@@ -36,20 +43,25 @@ export default async function Home({
   const { disposable } = getDisposable(year, month);
   const summary = getMonthlySummary(year, month);
   const series = getMonthlySeries(12, trendEnd);
-  const latest = getLatestTxDate();
+  const accounts = getAccountUsage(year, month);
+  const largeIncomes = getLargeIncomes(year, month);
+  const freshness = getFreshness();
+  const projected = getProjectedBalance(year, month);
+  const latestAsset = getLatestAsset();
 
   const sparse = summary.count <= SPARSE_TX_THRESHOLD;
 
   return (
     <main className="mx-auto w-full max-w-3xl px-4 py-6 sm:py-10">
-      <header className="mb-4 flex items-baseline justify-between">
+      <header className="mb-4">
         <h1 className="text-lg font-semibold text-foreground sm:text-xl">
           家計ダッシュボード
         </h1>
-        {latest && (
-          <p className="text-xs text-muted">データ最新: {shortDate(latest)}</p>
-        )}
       </header>
+
+      <div className="mb-4">
+        <FreshnessBanner data={freshness} />
+      </div>
 
       <div className="mb-4">
         <MonthSelector ym={ym} maxYm={maxYm} />
@@ -64,9 +76,13 @@ export default async function Home({
         </p>
       )}
 
+      <Alerts disposable={disposable} largeIncomes={largeIncomes} />
+
       <DisposableHero data={disposable} />
       <DisposableBreakdown data={disposable} />
       <MonthlySummary data={summary} />
+      <AccountBreakdown data={accounts} />
+      <PayoutCalendar projected={projected} latestAsset={latestAsset} />
       <TrendChart series={series} selectedYm={ym} />
     </main>
   );

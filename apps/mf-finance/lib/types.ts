@@ -58,3 +58,24 @@ export interface MonthlySummary extends MonthAgg {
 export interface SeriesPoint extends MonthAgg {
   ym: string;
 }
+
+// --- Phase 3: 鮮度 / 口座別利用 / 警告 ---
+
+export interface Freshness {
+  latest: string | null; // 取引の最大日付 'YYYY-MM-DD'
+  daysSince: number | null; // 今日との差（日）
+}
+
+// 当月の口座/カード別利用。
+export interface AccountUsage {
+  account: string;
+  spent: number; // 支出（正の magnitude）
+  received: number; // 入金（正の magnitude）
+}
+
+// 当月の大口入金（着金アラート用）。
+export interface LargeIncome {
+  date: string;
+  description: string;
+  amount: number;
+}
