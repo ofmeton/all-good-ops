@@ -38,8 +38,15 @@ MF側でデータが回復していたため再取得を実施。chrome-devtools
 - **再現性**: `normalize.mjs` は引数なしで `raw/.../cashflow-*.csv` を**全併読**（旧フル+refetch、loader が ID で ON CONFLICT 後勝ち重複排除）→ `npm run normalize && npm run load` で再構築可。`/api/refresh` も同経路。
 - 次回以降の最新化手順 `scripts/acquire.md`: ①個人Chrome で MF ログイン（連携エラー口座があれば再連携）→ ②chrome-devtools が未接続なら `chrome://inspect/#remote-debugging` 有効化（接続済なら不要）→ ③`/cf/csv` 月次ループ＋`/bs/history/csv` を fetch → raw に新ファイル → `npm run normalize && npm run load && npm run load:assets && npm run detect && npm run seed:recurring`。④作業後 remote debugging を無効化（cookie 露出防止）。MF=金融・認証情報は会話に出さない。
 
-### Phase 3 以降（仕様順）
-連携鮮度バナー＋手動refresh促し / 口座別当月利用 / 赤字・着金警告 / 引落予定vs残高カレンダー（`asset_history`）/ 定期項目 確定UI（`recurring_items` ON/OFF＋金額・server action）/ 手入力負債（`manual_liabilities`）/ カテゴリ深掘り / サブスク一覧 / LLM自動ラベリング(未分類484件) / CF予測 / freee統合(MCP読取)。
+### 後続モジュール9種 ✅ 完了（2026-06-12・ee803f1・並列5エージェント+親統合）
+- ページ: `/categories`(深掘り) `/subscriptions`(年額換算+休眠) `/assets`(純資産/推移/KGI26万/CF予測6ヶ月) `/budget`(予算vs実績) `/rules`(分類ルールSSOT) `/tax`(経費集計×按分×CSV+freee枠)。nav 8リンク。
+- **ラベリング**: agent(=Claude)が350 distinctを直接分類→`category_rules` 245件(source='llm')→`apply-rules.mjs` 冪等適用。**unknown 532→65**。`npm run refresh` = normalize→load→apply:rules→load:assets（/api/refresh も apply まで連鎖）。
+- 異常検知3ルール(急増/二重請求/初出大口)を home と /budget に表示。schema +3表(budgets/business_pl/tax_mappings)。
+- **freee**: 2025帳簿ゼロ・2026年度未作成と確認済 → `/tax` は「未取込」案内が正常系。freee側で記帳が始まったら `data/freee-pl.json` → `npm run load:freee`。
+
+### 既知のデータ整備課題（コードでなく運用）
+1. **CF予測が2026-07ゼロ割れ表示** = 定期収入の登録が¥31,080/月と過小（実3ヶ月平均 ¥367,465。BEAT ICE等が「スポット」扱い）。`/settings` で定期収入を確定すれば現実化。
+2. unknown 残65件（人名宛送金・判読不能屋号など保守的にスキップ）→ `/rules` で手動追加可能。
 
 ## 4. 確定済みの要件（再議論しない）
 - 可処分式: **あと使える =（定期収入見込み＋スポット着金）− 固定費 − 変動費実績**
