@@ -1,6 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { classifyTier, getApplyDescriptor, validateProposalSafe } from "./validation.ts";
 import { applyTierT } from "./tier-t.ts";
+import { applyTierP, rollbackTierP } from "./tier-p.ts";
 import { loadOptimizerState, saveOptimizerState, snapshotState, rollbackToSnapshot } from "../optimizer/state-store.ts";
 import { pushLine } from "../line/line-client.ts";
 import type { ApplyDeps, ApplyEngineResult } from "./types.ts";
@@ -37,6 +38,31 @@ export async function runApplyEngine(deps: ApplyDeps): Promise<ApplyEngineResult
         } catch (markErr) {
           // state は既に変更・保存済みだが記録に失敗 → 可逆性を守るため自動 rollback して error 扱いへ
           await deps.rollbackToSnapshot(r.snapshotId).catch(() => {});
+          throw markErr;
+        }
+        res.applied++;
+        continue;
+      }
+      if (tier === "P") {
+        const d = getApplyDescriptor(p);
+        if (!d) {
+          // scope=collector_lever だが reviewer が apply={paramId,value} を付けていない → 手動待ち。
+          await deps.markSkipped(p.id, "skipped_manual", "tier-P: meta.apply={paramId,value} 未付与（reviewer が apply を付ける）");
+          res.skipped++;
+          continue;
+        }
+        const r = await deps.applyTierP(d.paramId, d.value);
+        try {
+          await deps.markImplemented(p.id, {
+            apply_status: "applied",
+            apply_param: r.paramId,
+            apply_before: r.before,
+            apply_after: r.after,
+            rollback_handle: { tier: "P", param_id: r.paramId, before: r.before },
+          });
+        } catch (markErr) {
+          // upsert 済だが記録失敗 → 可逆性を守るため runtime_params を before へ戻して error 扱い。
+          await deps.rollbackTierP(r.paramId, r.before).catch(() => {});
           throw markErr;
         }
         res.applied++;
@@ -106,6 +132,8 @@ export function defaultApplyDeps(): ApplyDeps {
     saveOptimizerState,
     snapshotState,
     rollbackToSnapshot,
+    applyTierP: (paramId, value) => applyTierP(sb as never, paramId, value),
+    rollbackTierP: (paramId, before) => rollbackTierP(sb as never, paramId, before),
     async notify(summary) {
       const token = process.env.LINE_CHANNEL_ACCESS_TOKEN;
       const userId = process.env.LINE_USER_ID_OFMETON;
