@@ -92,6 +92,25 @@ function makeSbWithExisting(existing: Set<string>, inserts: unknown[]) {
   };
 }
 
+/**
+ * runtime_params テーブルを返す sb mock（P2-enforce-flip）。
+ * from("runtime_params").select() は rows を thenable で返す。それ以外は dedup/insert の最小 mock。
+ */
+function makeSbWithRuntimeParams(runtimeRows: Record<string, number>, inserts: unknown[]) {
+  return {
+    from: (table: string) => {
+      if (table === "runtime_params") {
+        const data = Object.entries(runtimeRows).map(([param_id, value]) => ({ param_id, value }));
+        return { select: () => Promise.resolve({ data, error: null }) };
+      }
+      return {
+        select: () => ({ eq: () => ({ in: async () => ({ data: [], error: null }) }) }),
+        insert: async (row: unknown) => { inserts.push(row); return { error: null }; },
+      };
+    },
+  };
+}
+
 /** 非ルート reply でない（id 不変）通常ツイート。lang 未指定で翻訳経路は通らない（既存 test に同じ）。 */
 function tweet(id: string) {
   return { id, text: `t${id}`, author: { userName: "a" }, createdAt: new Date().toISOString(), likeCount: 10, viewCount: 100, isReply: false, conversationId: id };
@@ -447,5 +466,62 @@ describe("runCollect", () => {
     // enforce は ground truth 不在のため shadow 指標は出さない。
     expect(stats.selectionMode).toBe("enforce");
     expect(stats.shadow).toBeUndefined();
+  });
+
+  // ---- P2-enforce-flip: prerankMode を runtime_param collector_prerank_enforce で切替 ----
+
+  test("enforce-flip: runtime_param collector_prerank_enforce=1 → enforce（selected のみ採点）", async () => {
+    const inserts: unknown[] = [];
+    const { anthropic, state } = countingScorer();
+    const stats = await runCollect({
+      anthropic: anthropic as never,
+      sb: makeSbWithRuntimeParams({ collector_prerank_enforce: 1 }, inserts) as never,
+      twitterApiKey: "k", fetchImpl: undefined as never, apiKey: "sk-test",
+      runSession: exploreSession([{ name: "search_tweets", input: { query: "AI", queryType: "Latest", via: "keyword" } }]),
+      getAgentRef: okRef,
+      rng: () => 0.5,
+      // prerankMode 未指定 → runtime_param が決定。
+      api: prerankApi(prerankCandidates()),
+      now: Date.now(),
+    });
+    expect(stats.selectionMode).toBe("enforce");
+    expect(state.scoredIds.sort()).toEqual(["a", "b", "c"]); // stale("old") は floor され不採点
+    expect(stats.scored).toBe(3);
+    expect(stats.shadow).toBeUndefined();
+  });
+
+  test("enforce-flip: collector_prerank_enforce=0 → shadow（全件採点・挙動不変）", async () => {
+    const inserts: unknown[] = [];
+    const { anthropic, state } = countingScorer();
+    const stats = await runCollect({
+      anthropic: anthropic as never,
+      sb: makeSbWithRuntimeParams({ collector_prerank_enforce: 0 }, inserts) as never,
+      twitterApiKey: "k", fetchImpl: undefined as never, apiKey: "sk-test",
+      runSession: exploreSession([{ name: "search_tweets", input: { query: "AI", queryType: "Latest", via: "keyword" } }]),
+      getAgentRef: okRef,
+      api: prerankApi(prerankCandidates()),
+      now: Date.now(),
+    });
+    expect(stats.selectionMode).toBe("shadow");
+    expect(state.scoredIds.sort()).toEqual(["a", "b", "c", "old"]); // 全件採点
+    expect(stats.scored).toBe(4);
+    expect(stats.shadow).toBeDefined();
+  });
+
+  test("enforce-flip: runtime_param 行なし → shadow（default・挙動不変）", async () => {
+    const inserts: unknown[] = [];
+    const { anthropic, state } = countingScorer();
+    const stats = await runCollect({
+      anthropic: anthropic as never,
+      sb: makeSbWithRuntimeParams({}, inserts) as never, // collector_prerank_enforce 行なし
+      twitterApiKey: "k", fetchImpl: undefined as never, apiKey: "sk-test",
+      runSession: exploreSession([{ name: "search_tweets", input: { query: "AI", queryType: "Latest", via: "keyword" } }]),
+      getAgentRef: okRef,
+      api: prerankApi(prerankCandidates()),
+      now: Date.now(),
+    });
+    expect(stats.selectionMode).toBe("shadow");
+    expect(state.scoredIds.sort()).toEqual(["a", "b", "c", "old"]);
+    expect(stats.scored).toBe(4);
   });
 });

@@ -16,6 +16,7 @@ import { resolveThreadRoots, isNonRootReply } from "./collector-thread.js";
 import { translateCandidates } from "./collector-translate.js";
 import { saveScoredMaterials, dedupByTweetId } from "./collector-persist.js";
 import { buildPrerankParams, selectForScoring, spearmanRho, type SelectionPool } from "./collector-prerank.js";
+import { resolveRuntimeParams } from "../params/runtime-params.js";
 import type { PrunedSummary, ShadowReport } from "./collector-scoring.js";
 import { costUsdFor, USD_JPY_RATE } from "../cost/cost-of.js";
 import { insertSessionEvents, recordRunSession } from "../trace/session-event-store.js";
@@ -171,7 +172,18 @@ export async function runCollect(deps: RunCollectDeps): Promise<CollectStats> {
 
   // P2 二段採点（prerank）: prior（決定的・無料）で三層選抜 = safeguard ∪ topK ∪ exploration。
   // selection の計算自体は純関数・無課金。挙動が変わるのは enforce のみ。
-  const prerankMode = deps.prerankMode ?? COLLECTOR_CONFIG.prerankMode;
+  //
+  // P2-enforce-flip: prerankMode は runtime_param collector_prerank_enforce で決定する。
+  //   param=1 → enforce / 0 or 行なし / DB 不達 → shadow（resolveRuntimeParams が fail-open で default 0）。
+  //   ＝ enforce 化は prod の runtime_params を 1 にする DB 更新だけ（deploy 不要・即 revert）。
+  //   deps.prerankMode はテスト/手動 override（runtime_param より優先）。
+  let prerankMode: "shadow" | "enforce";
+  if (deps.prerankMode) {
+    prerankMode = deps.prerankMode;
+  } else {
+    const rp = await resolveRuntimeParams(deps.sb);
+    prerankMode = rp.collector_prerank_enforce >= 1 ? "enforce" : "shadow";
+  }
   const prerankParams = buildPrerankParams(COLLECTOR_CONFIG);
   const selection = selectForScoring(normalized, prerankParams, deps.rng ?? Math.random, now);
 
