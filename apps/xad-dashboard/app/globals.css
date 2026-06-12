@@ -168,10 +168,23 @@ body {
   .input-dark::placeholder { color: #64748b; }
   .input-dark:focus { border-color: rgb(96 165 250 / 0.5); background: rgb(255 255 255 / 0.07); outline: none; }
 
-  /* RSC から style={{ "--i": idx }} で使える stagger 入場（delay は 12 段で頭打ち） */
+  /* RSC から style={{ "--i": idx }} で使える stagger 入場（delay は 12 段で頭打ち）。
+   * delay 期間に base を見せないため backwards fill が要る＝ both。これらは fixed 子を
+   * 持たない葉要素なので containing-block 副作用は無害。 */
   .stagger-in {
     animation: rise-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
     animation-delay: calc(min(var(--i, 0), 12) * 45ms);
+  }
+
+  /* ページ遷移の入場（template.tsx 専用）。
+   * ⚠️ fill を付けない: fill(both/forwards)だと終了後も transform が identity matrix で残り、
+   *    keyword none と違って position:fixed の containing block を作ってしまう。
+   *    結果、配下の fixed モーダル/ドロワー/backdrop が viewport でなく本要素基準に化けて
+   *    画面外へ飛ぶ（compose ダイアログが見えない不具合の根因）。fill 無しなら 0.5s 後に
+   *    transform が keyword none へ戻り containing block も消える。delay 無しなので開始時の
+   *    base ちらつきも出ない。 */
+  .page-enter {
+    animation: rise-in 0.5s var(--ease-out-expo);
   }
 
   /* KPI 数字（等幅 + グラデ文字） */
