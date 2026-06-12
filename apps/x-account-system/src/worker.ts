@@ -102,7 +102,7 @@ const CRON_JOBS: Record<string, JobMessage["job"]> = {
   "0 14 * * *": "optimizer-update",  // 23:00 JST
   "0 */2 * * *": "rollback-monitor", // 毎2h
   "0 15 1 * *": "rotation-notice",   // 月初 rotation 通知
-  "0 16 * * 0": "optimizer-analyst", // 日曜16:00 UTC = 毎週月曜01:00 JST optimizer-analyst
+  "0 16 * * SUN": "optimizer-analyst", // 日曜16:00 UTC = 毎週月曜01:00 JST（CF Quartz: 日=SUN, 0 不可）
 };
 
 /** /admin/enqueue で手動起動を許可する job 名（line-event は webhook 専用なので除外） */
