@@ -90,8 +90,9 @@ export async function handleJob(
       const { runCollect } = await import("../lib/ingest/collector.js");
       if (rid) {
         let traceMeta: import("../lib/trace/types.js").TraceMeta | undefined;
+        let collectStats: import("../lib/ingest/collector.js").CollectStats | undefined;
         await withTrace(ctx, { runId: rid, stageId: "collect" }, async () => {
-          const inserted = await runCollect({
+          const stats = await runCollect({
             anthropic: anthropic as never,
             sb: sb as never,
             twitterApiKey: env.TWITTERAPI_IO_KEY,
@@ -102,29 +103,62 @@ export async function handleJob(
               traceMeta = m;
             },
           });
-          console.log(JSON.stringify({ level: "info", msg: "[collect] 完了", date: msg.date, inserted }));
-          return { result: inserted, output: { inserted }, meta: traceMeta };
+          console.log(JSON.stringify({ level: "info", msg: "[collect] 完了", date: msg.date, inserted: stats.inserted }));
+          // trace output に内訳を載せる（観測ダッシュボード用）。cost 合計（meta.costJpy）は不変。
+          const breakdown = { exploreJpy: stats.cost.exploreJpy, scoringJpy: stats.cost.scoringJpy, translateJpy: stats.cost.translateJpy };
+          collectStats = stats;
+          return {
+            result: stats.inserted,
+            output: {
+              inserted: stats.inserted,
+              fetched: stats.fetched,
+              deduped: stats.deduped,
+              scored: stats.scored,
+              breakdown,
+              // P2 観測: 選抜モード・shadow 指標（retention 等）・剪定サマリ。
+              selectionMode: stats.selectionMode,
+              shadow: stats.shadow,
+              pruned: stats.pruned,
+            },
+            meta: traceMeta,
+          };
         });
         // cost_ledger 計上（fail-open）。ctx 不在経路（手動/非 Queue）でも握り潰さず await。
+        // cost_jpy の総額は現状と同じ（traceMeta.costJpy）。breakdown はあくまで meta の内訳。
         {
           const p = recordCostLedger(sb as never, {
             category: "collector",
             costJpy: traceMeta?.costJpy ?? 0,
             unitCount: (traceMeta?.tokensIn ?? 0) + (traceMeta?.tokensOut ?? 0),
-            meta: { model: traceMeta?.model },
+            meta: {
+              model: traceMeta?.model,
+              breakdown: collectStats
+                ? { exploreJpy: collectStats.cost.exploreJpy, scoringJpy: collectStats.cost.scoringJpy, translateJpy: collectStats.cost.translateJpy }
+                : undefined,
+              fetched: collectStats?.fetched,
+              deduped: collectStats?.deduped,
+              scored: collectStats?.scored,
+              inserted: collectStats?.inserted,
+              // P2: 本番 run で retention/剪定を観測（enforce 切替判断の材料）。
+              selectionMode: collectStats?.selectionMode,
+              shadow: collectStats?.shadow,
+              pruned: collectStats?.pruned
+                ? { count: collectStats.pruned.count, byReason: collectStats.pruned.byReason }
+                : undefined,
+            },
           });
           if (ctx) ctx.waitUntil(p);
           else await p;
         }
       } else {
-        const inserted = await runCollect({
+        const stats = await runCollect({
           anthropic: anthropic as never,
           sb: sb as never,
           twitterApiKey: env.TWITTERAPI_IO_KEY,
           fetchImpl: fetch,
           apiKey: env.ANTHROPIC_API_KEY,
         });
-        console.log(JSON.stringify({ level: "info", msg: "[collect] 完了(untraced)", date: msg.date, inserted }));
+        console.log(JSON.stringify({ level: "info", msg: "[collect] 完了(untraced)", date: msg.date, inserted: stats.inserted }));
       }
       // auto-archive（要件2・PR-5）: collected のまま7日経過した素材を archived へ自動退避。
       // 新 cron は立てず collect 末尾に相乗り。削除でなく退避＝reset で復帰可・system イベント追記。
