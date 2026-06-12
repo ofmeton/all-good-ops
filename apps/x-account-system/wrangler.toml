@@ -75,7 +75,7 @@ crons = [
   "0 14 * * *",    # 23:00 JST optimizer-update
   "0 */2 * * *",   # rollback-monitor 毎2h
   "0 15 1 * *",    # 毎月1日 rotation-notice
-  "0 16 * * 0",    # 日曜16:00 UTC = 毎週月曜01:00 JST optimizer-analyst
+  "0 16 * * SUN",  # 日曜16:00 UTC = 毎週月曜01:00 JST optimizer-analyst（CF は Quartz: 日=SUN。0 は不可）
 ]
 
 # --------------------------------------------------------------------
