@@ -56,7 +56,10 @@ export function defaultAnalystDeps(): AnalystDeps {
 
   return {
     async buildSnapshotText() {
-      const snapshot = await buildSnapshot(defaultSnapshotDeps());
+      // 週次化に合わせ窓を 14 日に短縮。30 日窓を週次で回すと窓が大幅重複し提案が
+      // 毎週ほぼ同一になるため。14 日 ≈ 4.4本/日×14 ≈ 62 投稿でエンゲージ信号を確保しつつ
+      // 直近3日の未成熟分も許容する。
+      const snapshot = await buildSnapshot(defaultSnapshotDeps(14));
       return renderSnapshotText(snapshot);
     },
 
@@ -80,7 +83,7 @@ export function defaultAnalystDeps(): AnalystDeps {
         environmentId: args.environmentId,
         userMessage: args.userMessage,
         customToolHandler: args.customToolHandler,
-        // 月次の重い opus job（read5ツール＋submit_proposal5回で ~164s）。既定 120s では
+        // 週次の重い opus job（read5ツール＋submit_proposal5回で ~164s）。既定 120s では
         // timeout し ok:false・提案0件になるため 5 分に拡張（240s 実行で ok/5提案を実証済）。
         timeoutMs: 300_000,
         onEvent: (e) => sessionEvents.push(e),
@@ -161,7 +164,7 @@ export async function runOptimizerAnalyst(
   }
 
   const snapshotText = await deps.buildSnapshotText();
-  const userMessage = `${snapshotText}\n\n---\n上記の観測を分析し、改善提案を submit_proposal で記録してください（最大5件）。`;
+  const userMessage = `${snapshotText}\n\n---\n上記の観測を分析し、改善提案を submit_proposal で記録してください（最大5件）。新しい観測がない領域では提案しないでください（0件でも可）。直近約4週間の既出提案（上記スナップショットの recent proposals）と重複・実質同一の提案はしないでください。`;
 
   const handler = deps.toolDeps ? makeToolHandler(deps.toolDeps) : async () => "ok";
 

@@ -318,7 +318,7 @@ export async function handleJob(
     }
 
     // ----------------------------------------------------------------
-    // optimizer-analyst: 毎月1日 提案生成 MA job (月次)
+    // optimizer-analyst: 毎週月曜01:00 JST 提案生成 MA job (週次)
     // ----------------------------------------------------------------
     case "optimizer-analyst": {
       const { runOptimizerAnalyst } = await import("../lib/optimizer-analyst/run-analyst.js");
