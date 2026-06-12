@@ -24,7 +24,7 @@ export function MaterialProvenance({
   if (materials.length === 0) return null;
   return (
     <div className="mt-2">
-      <p className="mb-1 text-xs font-semibold text-slate-500">渡された素材（出所）</p>
+      <p className="mb-1 text-xs font-semibold text-slate-400">渡された素材（出所）</p>
       <ul className="space-y-1">
         {materials.map((m) => (
           <MaterialRow key={m.id} material={m} loadEvents={loadEvents} />
@@ -52,11 +52,11 @@ function MaterialRow({
   }
 
   return (
-    <li className="rounded border border-slate-200 bg-white p-1.5 text-xs">
+    <li className="rounded border border-white/10 bg-white/[0.04] p-1.5 text-xs">
       <div className="flex items-center gap-2">
-        <span className="truncate text-slate-700">{material.sourceRef ?? material.id}</span>
+        <span className="truncate text-slate-300">{material.sourceRef ?? material.id}</span>
         {cs ? (
-          <button onClick={toggle} className="ml-auto shrink-0 text-indigo-600 hover:underline">
+          <button onClick={toggle} className="ml-auto shrink-0 text-indigo-300 hover:underline">
             {open ? "閉じる" : "どう集めたか ↓"}
           </button>
         ) : (
@@ -74,7 +74,7 @@ function MaterialRow({
               {events
                 .filter((e) => e.type === "thinking" || e.type === "custom_tool_use")
                 .map((e) => (
-                  <li key={e.id} className="font-mono text-[11px] text-slate-600">
+                  <li key={e.id} className="font-mono text-[11px] text-slate-400">
                     {e.type === "thinking"
                       ? `🧠 ${String(e.payload?.text ?? "")}`
                       : `🔍 ${String(e.payload?.name ?? "")}(${JSON.stringify(e.payload?.input ?? {})})`}
