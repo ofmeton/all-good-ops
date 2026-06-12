@@ -17,6 +17,7 @@ import { FreshnessBanner } from "@/app/components/FreshnessBanner";
 import { AccountBreakdown } from "@/app/components/AccountBreakdown";
 import { Alerts } from "@/app/components/Alerts";
 import { PayoutCalendar } from "@/app/components/PayoutCalendar";
+import { AnomalyAlerts } from "@/app/components/AnomalyAlerts";
 import { getLatestAsset, getProjectedBalance } from "@/lib/calendar-queries";
 
 // SQLite ファイル更新を再ビルドなしで反映（毎リクエスト最新化）。
@@ -77,6 +78,7 @@ export default async function Home({
       )}
 
       <Alerts disposable={disposable} largeIncomes={largeIncomes} />
+      <AnomalyAlerts ym={ym} />
 
       <DisposableHero data={disposable} />
       <DisposableBreakdown data={disposable} />

@@ -5,6 +5,7 @@ data/*.db-shm
 node_modules/
 .env.local
 
-# Next.js
+# Next.js / TypeScript
 .next/
 next-env.d.ts
+tsconfig.tsbuildinfo

@@ -14,7 +14,9 @@ export async function POST() {
   try {
     await run("node", ["scripts/normalize.mjs"], { cwd });
     const { stdout } = await run("node", ["scripts/load.mjs"], { cwd });
-    return NextResponse.json({ ok: true, log: stdout.trim() });
+    // load は classification を classify.mjs 由来に戻すため、ルール（LLM/手動）を再適用して維持。
+    const { stdout: rulesLog } = await run("node", ["scripts/apply-rules.mjs"], { cwd });
+    return NextResponse.json({ ok: true, log: `${stdout.trim()}\n${rulesLog.trim()}` });
   } catch (e) {
     const message = e instanceof Error ? e.message : String(e);
     return NextResponse.json({ ok: false, error: message }, { status: 500 });

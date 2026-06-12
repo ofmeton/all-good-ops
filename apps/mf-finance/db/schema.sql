@@ -82,3 +82,35 @@ CREATE TABLE IF NOT EXISTS category_rules (
   source          TEXT NOT NULL DEFAULT 'manual',
   created_at      TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
 );
+
+-- ===== 後続モジュール（予算実績 / freee統合 / 確定申告） =====
+
+-- カテゴリ別の月次予算（全月共通の1値。月別予算が要るときに拡張）。
+CREATE TABLE IF NOT EXISTS budgets (
+  id             INTEGER PRIMARY KEY AUTOINCREMENT,
+  category_major TEXT NOT NULL UNIQUE,
+  amount         INTEGER NOT NULL,
+  created_at     TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
+);
+
+-- freee からの月次事業PL（薄切り ingest: data/freee-pl.json → load-freee.mjs）。
+CREATE TABLE IF NOT EXISTS business_pl (
+  month       TEXT PRIMARY KEY, -- 'YYYY-MM'
+  revenue     INTEGER,
+  expense     INTEGER,
+  profit      INTEGER,
+  source      TEXT NOT NULL DEFAULT 'freee',
+  captured_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
+);
+
+-- 確定申告: カテゴリ→事業按分・青色申告科目のマッピング。
+-- category_middle='' は大項目全体に適用（NULL だと UNIQUE が効かないため '' を既定に）。
+CREATE TABLE IF NOT EXISTS tax_mappings (
+  id              INTEGER PRIMARY KEY AUTOINCREMENT,
+  category_major  TEXT NOT NULL,
+  category_middle TEXT NOT NULL DEFAULT '',
+  business_ratio  REAL NOT NULL DEFAULT 0 CHECK (business_ratio >= 0 AND business_ratio <= 1),
+  aoiro_item      TEXT,
+  note            TEXT,
+  UNIQUE (category_major, category_middle)
+);

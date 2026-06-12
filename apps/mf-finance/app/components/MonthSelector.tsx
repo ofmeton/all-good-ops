@@ -24,8 +24,9 @@ export function MonthSelector({
       className="flex items-center justify-between gap-2"
       aria-label="表示する月の切り替え"
     >
+      {/* 相対クエリ href（現在のパスを維持）— /categories や /budget 上でもそのページ内で月切替できる */}
       <Link
-        href={`/?ym=${prevYm}`}
+        href={`?ym=${prevYm}`}
         className={`${btnBase} cursor-pointer bg-surface text-foreground shadow-sm hover:border-primary hover:text-primary`}
         aria-label={`前月（${ymLabel(prevYm)}）へ`}
         rel="prev"
@@ -53,7 +54,7 @@ export function MonthSelector({
         </span>
       ) : (
         <Link
-          href={`/?ym=${nextYm}`}
+          href={`?ym=${nextYm}`}
           className={`${btnBase} cursor-pointer bg-surface text-foreground shadow-sm hover:border-primary hover:text-primary`}
           aria-label={`翌月（${ymLabel(nextYm)}）へ`}
           rel="next"
