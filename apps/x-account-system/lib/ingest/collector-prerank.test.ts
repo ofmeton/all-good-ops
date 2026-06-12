@@ -39,6 +39,30 @@ function seededRng(seed: number): () => number {
   };
 }
 
+describe("buildPrerankParams overrides（P3 runtime lever overlay）", () => {
+  it("override 無し → config default（挙動不変）", () => {
+    const p = buildPrerankParams(COLLECTOR_CONFIG);
+    expect(p.shortlistTopK).toBe(COLLECTOR_CONFIG.shortlistTopK);
+    expect(p.explorationQuota).toBe(COLLECTOR_CONFIG.explorationQuota);
+    expect(p.maxAgeHours).toBe(COLLECTOR_CONFIG.prerankMaxAgeHours);
+  });
+  it("override 値で K/quota/age を上書きする", () => {
+    const p = buildPrerankParams(COLLECTOR_CONFIG, { shortlistTopK: 30, explorationQuota: 8, maxAgeHours: 60 });
+    expect(p.shortlistTopK).toBe(30);
+    expect(p.explorationQuota).toBe(8);
+    expect(p.maxAgeHours).toBe(60);
+    // 非 runtime レバーは config のまま。
+    expect(p.tau).toBe(COLLECTOR_CONFIG.prerankTau);
+    expect(p.freshnessProtectHours).toBe(COLLECTOR_CONFIG.freshnessProtectHours);
+  });
+  it("一部のみ override → 残りは config default", () => {
+    const p = buildPrerankParams(COLLECTOR_CONFIG, { shortlistTopK: 40 });
+    expect(p.shortlistTopK).toBe(40);
+    expect(p.explorationQuota).toBe(COLLECTOR_CONFIG.explorationQuota);
+    expect(p.maxAgeHours).toBe(COLLECTOR_CONFIG.prerankMaxAgeHours);
+  });
+});
+
 describe("computePrior", () => {
   test("新鮮・高velocity・高engagement ほど prior が高い", () => {
     const fresh = computePrior(computeHints(tw("a", { createdAt: new Date(NOW - 600_000).toISOString(), likeCount: 500, viewCount: 1000 }), NOW), "keyword", params);

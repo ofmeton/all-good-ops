@@ -173,18 +173,23 @@ export async function runCollect(deps: RunCollectDeps): Promise<CollectStats> {
   // P2 二段採点（prerank）: prior（決定的・無料）で三層選抜 = safeguard ∪ topK ∪ exploration。
   // selection の計算自体は純関数・無課金。挙動が変わるのは enforce のみ。
   //
+  // P3 閉ループ: runtime_params を 1 度だけ解決し、レバー（K/quota/age/enforce）の上書きに使う。
+  //   resolveRuntimeParams は overlay+clip 済の確定値を返す。DB 不達/壊れ値/未投入は fail-open で
+  //   COLLECTOR_CONFIG default＝挙動完全不変。これで optimizer が tier-P で書いた値を翌 collect が反映する。
+  const rp = await resolveRuntimeParams(deps.sb);
+
   // P2-enforce-flip: prerankMode は runtime_param collector_prerank_enforce で決定する。
-  //   param=1 → enforce / 0 or 行なし / DB 不達 → shadow（resolveRuntimeParams が fail-open で default 0）。
-  //   ＝ enforce 化は prod の runtime_params を 1 にする DB 更新だけ（deploy 不要・即 revert）。
-  //   deps.prerankMode はテスト/手動 override（runtime_param より優先）。
-  let prerankMode: "shadow" | "enforce";
-  if (deps.prerankMode) {
-    prerankMode = deps.prerankMode;
-  } else {
-    const rp = await resolveRuntimeParams(deps.sb);
-    prerankMode = rp.collector_prerank_enforce >= 1 ? "enforce" : "shadow";
-  }
-  const prerankParams = buildPrerankParams(COLLECTOR_CONFIG);
+  //   param=1 → enforce / 0 or 行なし / DB 不達 → shadow。deps.prerankMode はテスト/手動 override（優先）。
+  const prerankMode: "shadow" | "enforce" =
+    deps.prerankMode ?? (rp.collector_prerank_enforce >= 1 ? "enforce" : "shadow");
+
+  // K/quota/age の runtime レバーを buildPrerankParams に overlay（enforce は上で消費済＝二重にしない）。
+  //   未投入なら resolveRuntimeParams が default（=config 値）を返すため上書きしても挙動不変。
+  const prerankParams = buildPrerankParams(COLLECTOR_CONFIG, {
+    shortlistTopK: rp.collector_shortlist_top_k,
+    explorationQuota: rp.collector_exploration_quota,
+    maxAgeHours: rp.collector_prerank_max_age_hours,
+  });
   const selection = selectForScoring(normalized, prerankParams, deps.rng ?? Math.random, now);
 
   // shadow（既定・挙動不変）: fine-score は normalized 全件。enforce: selected のみ。

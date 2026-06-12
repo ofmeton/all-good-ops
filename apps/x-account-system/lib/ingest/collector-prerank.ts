@@ -50,15 +50,24 @@ export interface SelectResult {
   poolCounts: Record<SelectionPool, number>;
 }
 
-/** config → prerank パラメータ。ai_official handle 集合を 1 度だけ構築。 */
-export function buildPrerankParams(config: CollectorConfig): PrerankParams {
+/**
+ * config → prerank パラメータ。ai_official handle 集合を 1 度だけ構築。
+ *
+ * overrides（P3 閉ループ）: runtime_params 由来の値（既に overlay+clip 済）を渡すと該当レバーを上書きする。
+ *   undefined のフィールドは config default を使う（runtime_params 未投入＝挙動不変）。
+ *   weights/tau/viaBoost/freshnessProtectHours は runtime 化していない（tier-config・人間+PR）。
+ */
+export function buildPrerankParams(
+  config: CollectorConfig,
+  overrides?: { shortlistTopK?: number; explorationQuota?: number; maxAgeHours?: number },
+): PrerankParams {
   return {
     weights: config.prerankWeights,
     tau: config.prerankTau,
     viaBoost: config.viaBoost,
-    shortlistTopK: config.shortlistTopK,
-    explorationQuota: config.explorationQuota,
-    maxAgeHours: config.prerankMaxAgeHours,
+    shortlistTopK: overrides?.shortlistTopK ?? config.shortlistTopK,
+    explorationQuota: overrides?.explorationQuota ?? config.explorationQuota,
+    maxAgeHours: overrides?.maxAgeHours ?? config.prerankMaxAgeHours,
     freshnessProtectHours: config.freshnessProtectHours,
     aiOfficialHandles: new Set(
       config.watchlist
