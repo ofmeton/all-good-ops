@@ -48,6 +48,13 @@ describe("classifyTier", () => {
   it("tier-T allowlist の apply を持てば T", () => {
     expect(classifyTier(row({ meta: { apply: { paramId: "xfmt_thread", value: 0.15 } } }))).toBe("T");
   });
+  it("runtime param の apply を持てば P（tier-P）", () => {
+    expect(classifyTier(row({ scope: "collector_lever", meta: { apply: { paramId: "collector_shortlist_top_k", value: 90 } } }))).toBe("P");
+    expect(classifyTier(row({ scope: "collector_lever", meta: { apply: { paramId: "collector_prerank_enforce", value: 1 } } }))).toBe("P");
+  });
+  it("scope=collector_lever は apply 不在でも P（engine 側で手動 skip）", () => {
+    expect(classifyTier(row({ scope: "collector_lever", hypothesis: "改善したい", meta: {} }))).toBe("P");
+  });
   it("prompt/template scope は prompt", () => {
     expect(classifyTier(row({ scope: "writer_prompt", hypothesis: "プロンプト改善" }))).toBe("prompt");
   });

@@ -16,6 +16,7 @@ import { resolveThreadRoots, isNonRootReply } from "./collector-thread.js";
 import { translateCandidates } from "./collector-translate.js";
 import { saveScoredMaterials, dedupByTweetId } from "./collector-persist.js";
 import { buildPrerankParams, selectForScoring, spearmanRho, type SelectionPool } from "./collector-prerank.js";
+import { resolveRuntimeParams } from "../params/runtime-params.js";
 import type { PrunedSummary, ShadowReport } from "./collector-scoring.js";
 import { costUsdFor, USD_JPY_RATE } from "../cost/cost-of.js";
 import { insertSessionEvents, recordRunSession } from "../trace/session-event-store.js";
@@ -171,8 +172,24 @@ export async function runCollect(deps: RunCollectDeps): Promise<CollectStats> {
 
   // P2 二段採点（prerank）: prior（決定的・無料）で三層選抜 = safeguard ∪ topK ∪ exploration。
   // selection の計算自体は純関数・無課金。挙動が変わるのは enforce のみ。
-  const prerankMode = deps.prerankMode ?? COLLECTOR_CONFIG.prerankMode;
-  const prerankParams = buildPrerankParams(COLLECTOR_CONFIG);
+  //
+  // P3 閉ループ: runtime_params を 1 度だけ解決し、レバー（K/quota/age/enforce）の上書きに使う。
+  //   resolveRuntimeParams は overlay+clip 済の確定値を返す。DB 不達/壊れ値/未投入は fail-open で
+  //   COLLECTOR_CONFIG default＝挙動完全不変。これで optimizer が tier-P で書いた値を翌 collect が反映する。
+  const rp = await resolveRuntimeParams(deps.sb);
+
+  // P2-enforce-flip: prerankMode は runtime_param collector_prerank_enforce で決定する。
+  //   param=1 → enforce / 0 or 行なし / DB 不達 → shadow。deps.prerankMode はテスト/手動 override（優先）。
+  const prerankMode: "shadow" | "enforce" =
+    deps.prerankMode ?? (rp.collector_prerank_enforce >= 1 ? "enforce" : "shadow");
+
+  // K/quota/age の runtime レバーを buildPrerankParams に overlay（enforce は上で消費済＝二重にしない）。
+  //   未投入なら resolveRuntimeParams が default（=config 値）を返すため上書きしても挙動不変。
+  const prerankParams = buildPrerankParams(COLLECTOR_CONFIG, {
+    shortlistTopK: rp.collector_shortlist_top_k,
+    explorationQuota: rp.collector_exploration_quota,
+    maxAgeHours: rp.collector_prerank_max_age_hours,
+  });
   const selection = selectForScoring(normalized, prerankParams, deps.rng ?? Math.random, now);
 
   // shadow（既定・挙動不変）: fine-score は normalized 全件。enforce: selected のみ。

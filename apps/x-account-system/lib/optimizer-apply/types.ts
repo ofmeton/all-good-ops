@@ -14,10 +14,11 @@ export type ProposalRow = {
   meta: Record<string, unknown> | null;
 };
 
-/** reviewer が accept 時に付与する tier-T 構造化変更。 */
+/** reviewer が accept 時に付与する tier-T / tier-P 構造化変更（{paramId, value}）。 */
 export type ApplyDescriptor = { paramId: string; value: number };
 
-export type Tier = "T" | "config" | "prompt" | "noop" | "blocked";
+/** T=Beta posterior(optimizer_state) / P=runtime_params 数値レバー / config/prompt=手動 / noop / blocked。 */
+export type Tier = "T" | "P" | "config" | "prompt" | "noop" | "blocked";
 
 export type ApplyEngineResult = {
   applied: number; // tier-T 数値適用
@@ -38,5 +39,9 @@ export type ApplyDeps = {
   saveOptimizerState: (s: OptimizerState) => Promise<void>;
   snapshotState: (ts?: Date) => Promise<{ snapshotId: string }>;
   rollbackToSnapshot: (snapshotId: string) => Promise<unknown>;
+  /** tier-P 適用: runtime_params に clip→upsert。{paramId, before, after}（before=rollback handle）。 */
+  applyTierP: (paramId: string, value: number) => Promise<{ paramId: string; before: number | null; after: number }>;
+  /** tier-P rollback: before へ書戻し（null=削除で復帰）。 */
+  rollbackTierP: (paramId: string, before: number | null) => Promise<void>;
   notify: (summary: string) => Promise<void>;
 };

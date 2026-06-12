@@ -1,4 +1,5 @@
 import type { ProposalRow, ApplyDescriptor, Tier } from "./types.ts";
+import { RUNTIME_PARAM_IDS } from "../params/runtime-params.js";
 
 /** Thompson 閉ループの live 3 レバーのみが tier-T 数値適用対象（content_axis 等の凍結レバー・failure_story は除外）。 */
 export const TIER_T_PARAM_IDS = [
@@ -46,7 +47,11 @@ export function classifyTier(p: ProposalRow): Tier {
   if (!validateProposalSafe(p).ok) return "blocked";
   const d = getApplyDescriptor(p);
   if (d && (TIER_T_PARAM_IDS as readonly string[]).includes(d.paramId)) return "T";
+  // tier-P: runtime_params 数値レバー。paramId が runtime param か scope=collector_lever で分岐
+  // （collector_lever かつ descriptor 不在は engine 側で skip＝誤適用しない）。
+  if (d && (RUNTIME_PARAM_IDS as readonly string[]).includes(d.paramId)) return "P";
   const scope = p.scope.toLowerCase();
+  if (scope === "collector_lever") return "P";
   if (/prompt|template|テンプレ|プロンプト/.test(scope)) return "prompt";
   if (/config|threshold|閾値|query|watchlist|keyword|weight/.test(scope)) return "config";
   return "noop";
