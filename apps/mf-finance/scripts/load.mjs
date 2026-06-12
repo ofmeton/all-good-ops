@@ -72,5 +72,5 @@ const inScope = db
   .prepare('SELECT COUNT(*) n FROM transactions WHERE included = 1 AND is_transfer = 0')
   .get().n;
 console.log(`loaded ${records.length} records → DB total ${total} 行`);
-console.log(`収支対象（included=1 AND is_transfer=0）: ${inScope} 件 (recon 期待値 3,194)`);
+console.log(`収支対象（included=1 AND is_transfer=0）: ${inScope} 件`);
 db.close();

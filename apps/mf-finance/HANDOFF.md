@@ -31,10 +31,12 @@
 ### Plan 2 Phase 2（実装中）
 月セレクタ（`?ym=YYYY-MM`）・月次収支・前月比・前年同月比・トレンド（軽量SVG棒）。`lib/queries.ts` に `getMonthlySummary` / `getMonthlySeries` 追加、`lib/format.ts` に月キーユーティリティ追加済み。空月（直近2ヶ月）には控えめな注記。
 
-### B2 = データ鮮度（最新化・未解決 P0）
-現DBは**再連携“前”スナップショット**。**直近2ヶ月（2026-05/06）がほぼ空**（4件/2件）で 2026-03 以前が populated。根因=MF側で**連携エラーの口座があり 2026-04 以降データ激減**。
-- **手順** `scripts/acquire.md`: ①個人Chromeで MF ログイン＋**連携エラー口座を再連携** → ②`chrome://inspect/#remote-debugging` で remote debugging 有効化 → ③**Claude Code 再起動**（chrome-devtools MCP が個人Chromeにアタッチ。memory `reference_chrome_devtools_mcp`）→ ④`/cf/csv?from=YYYY/MM/01&month=M&year=YYYY` 全月ループ＋`/bs/history/csv` を fetch（**Shift-JIS→UTF-8**）→ `raw/finance/moneyforward/*.csv` 更新 → `npm run normalize` → `npm run load`。⑤作業後 remote debugging を必ず無効化（cookie 露出）。
-- automation 制御 Chrome は MF/Google ログイン検知で弾かれる→**人間が個人Chromeでログイン**が必須。MF=金融。認証情報は会話に出さない。
+### B2 = データ鮮度（最新化）✅ 完了（2026-06-12）
+MF側でデータが回復していたため再取得を実施。chrome-devtools MCP が個人Chromeにアタッチ済み（**再起動不要**だった）→ `evaluate_script` の `fetch(credentials:'include')` で `/cf/csv`（2024-01〜2026-06 の30ヶ月）と `/bs/history/csv` を取得（Shift-JIS→UTF-8、`filePath` でファイル保存し context 非汚染）。
+- 成果: 直近月が回復（2026-05: 4→116件 / 2026-06: 2→43件 / 04: 34→72）。DB total 3742→**4164行**・収支対象**3503件**。資産最新 2026-06-12 ¥375,756。固定費 detect 14→20件（完全データでより正確）。
+- raw 追加（immutable・新ファイル）: `cashflow-2024-01_2026-06-refetch-20260612.csv` / `asset-history-2025-03_2026-06-refetch-20260612.csv`。
+- **再現性**: `normalize.mjs` は引数なしで `raw/.../cashflow-*.csv` を**全併読**（旧フル+refetch、loader が ID で ON CONFLICT 後勝ち重複排除）→ `npm run normalize && npm run load` で再構築可。`/api/refresh` も同経路。
+- 次回以降の最新化手順 `scripts/acquire.md`: ①個人Chrome で MF ログイン（連携エラー口座があれば再連携）→ ②chrome-devtools が未接続なら `chrome://inspect/#remote-debugging` 有効化（接続済なら不要）→ ③`/cf/csv` 月次ループ＋`/bs/history/csv` を fetch → raw に新ファイル → `npm run normalize && npm run load && npm run load:assets && npm run detect && npm run seed:recurring`。④作業後 remote debugging を無効化（cookie 露出防止）。MF=金融・認証情報は会話に出さない。
 
 ### Phase 3 以降（仕様順）
 連携鮮度バナー＋手動refresh促し / 口座別当月利用 / 赤字・着金警告 / 引落予定vs残高カレンダー（`asset_history`）/ 定期項目 確定UI（`recurring_items` ON/OFF＋金額・server action）/ 手入力負債（`manual_liabilities`）/ カテゴリ深掘り / サブスク一覧 / LLM自動ラベリング(未分類484件) / CF予測 / freee統合(MCP読取)。
