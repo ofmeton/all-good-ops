@@ -11,13 +11,15 @@ import { runMaSession } from "../ma/run-session.js";
 import { getAgentRef as getAgentRefDefault, type AgentRef } from "../ma/agent-registry.js";
 import { COLLECTOR_CONFIG } from "./collector-config.js";
 import { dispatchTool, type ToolApi } from "./collector-tools.js";
-import { scoreCandidates, type Candidate } from "./collector-scoring.js";
+import { scoreCandidates, type Candidate, type CollectStats } from "./collector-scoring.js";
 import { resolveThreadRoots } from "./collector-thread.js";
 import { translateCandidates } from "./collector-translate.js";
 import { saveScoredMaterials } from "./collector-persist.js";
 import { costUsdFor, USD_JPY_RATE } from "../cost/cost-of.js";
 import { insertSessionEvents, recordRunSession } from "../trace/session-event-store.js";
 import type { SessionEventInput } from "../trace/types.js";
+
+export type { CollectStats } from "./collector-scoring.js";
 
 /** 永続 collector agent の registry key（ma_agents.agent_key / x-collector.agent.yaml と一致）。 */
 const COLLECTOR_AGENT_KEY = "x-collector";
@@ -50,8 +52,12 @@ export interface RunCollectDeps {
   runId?: string;
 }
 
-/** 探索（永続 MA session）で候補を集約し、採点・保存。inserted 件数を返す。 */
-export async function runCollect(deps: RunCollectDeps): Promise<number> {
+/**
+ * 探索（永続 MA session）で候補を集約し、採点・保存。
+ * 戻り値 CollectStats: inserted（= 旧 number 戻り値・意味不変）＋ funnel 件数＋コスト内訳。
+ * 採点・保存・dedup・件数・onTrace の cost 合計は一切変えず、内訳を返すだけ（純粋な観測追加）。
+ */
+export async function runCollect(deps: RunCollectDeps): Promise<CollectStats> {
   const now = deps.now ?? Date.now();
   const runSession = deps.runSession ?? runMaSession;
   const resolveAgentRef = deps.getAgentRef ?? getAgentRefDefault;
@@ -71,7 +77,7 @@ export async function runCollect(deps: RunCollectDeps): Promise<number> {
     agentRef = await resolveAgentRef(deps.sb, COLLECTOR_AGENT_KEY);
   } catch (e) {
     console.warn(JSON.stringify({ level: "error", msg: "[collect] agent ref unresolved (未bootstrap?)", error: String(e) }));
-    return 0;
+    return { inserted: 0, fetched: 0, scored: 0, cost: { exploreJpy: 0, scoringJpy: 0, translateJpy: 0, totalJpy: 0 } };
   }
 
   // explore: 永続 session の drain ループが tool_use 往復を回す。candidate は handler の
@@ -126,7 +132,12 @@ export async function runCollect(deps: RunCollectDeps): Promise<number> {
     costUsdFor(COLLECTOR_CONFIG.scoringModel, tokensIn, tokensOut) * USD_JPY_RATE;
   if (candidates.length === 0) {
     deps.onTrace?.({ tokensIn, tokensOut, model: COLLECTOR_CONFIG.scoringModel, costJpy: exploreCostJpy });
-    return 0;
+    return {
+      inserted: 0,
+      fetched: 0,
+      scored: 0,
+      cost: { exploreJpy: exploreCostJpy, scoringJpy: 0, translateJpy: 0, totalJpy: exploreCostJpy },
+    };
   }
 
   // スレッド非ルート（2番目以降）の候補は TOP へ差し替える（断片でなくスレッド起点を採点・保存）。
@@ -153,11 +164,23 @@ export async function runCollect(deps: RunCollectDeps): Promise<number> {
   const inserted = await saveScoredMaterials(deps.sb, scored, translations, collectorSessionId);
 
   const scoreCostJpy = scored.reduce((s, c) => s + c.costJpy, 0);
+  const totalCostJpy = scoreCostJpy + exploreCostJpy + translateCostJpy;
+  // onTrace の cost 合計は現状と同額（合算 1 本）。内訳は CollectStats で別途返す。
   deps.onTrace?.({
     model: COLLECTOR_CONFIG.scoringModel,
     tokensIn,
     tokensOut,
-    costJpy: scoreCostJpy + exploreCostJpy + translateCostJpy,
+    costJpy: totalCostJpy,
   });
-  return inserted;
+  return {
+    inserted,
+    fetched: candidates.length,
+    scored: normalized.length,
+    cost: {
+      exploreJpy: exploreCostJpy,
+      scoringJpy: scoreCostJpy,
+      translateJpy: translateCostJpy,
+      totalJpy: totalCostJpy,
+    },
+  };
 }

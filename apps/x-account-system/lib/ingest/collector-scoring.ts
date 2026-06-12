@@ -31,6 +31,33 @@ export interface ScoredCandidate extends Candidate {
   costJpy: number;
 }
 
+/**
+ * collect 1 run のコスト内訳（成分別）。explore(MA session) / scoring / translate を
+ * 個別に観測するためのデータ契約（cost_ledger に合算 1 本で入る現状の内訳を分解）。
+ * totalJpy === exploreJpy + scoringJpy + translateJpy（onTrace に渡す合計と一致）。
+ */
+export interface CollectCostBreakdown {
+  exploreJpy: number;
+  scoringJpy: number;
+  translateJpy: number;
+  totalJpy: number;
+}
+
+/**
+ * runCollect の戻り値。inserted は現行の戻り値（呼び出し側の意味を保持）。
+ * 加えて funnel 件数（fetched/scored）とコスト内訳を観測用に返す。挙動には影響しない。
+ */
+export interface CollectStats {
+  /** materials_store に新規 insert した件数（= 旧 number 戻り値）。 */
+  inserted: number;
+  /** dedup 前に explore で集めた候補数（candidates.length）。 */
+  fetched: number;
+  /** fine-score に回した件数（現状 = thread-root 正規化後の normalized 件数）。 */
+  scored: number;
+  /** コスト内訳。 */
+  cost: CollectCostBreakdown;
+}
+
 export interface NumericHints {
   age_hours: number;
   velocity_per_hour: number;

@@ -52,7 +52,7 @@ function makeSb(inserts: unknown[]) {
 describe("runCollect", () => {
   test("explore(MA session) → score → persist", async () => {
     const inserts: unknown[] = [];
-    const inserted = await runCollect({
+    const stats = await runCollect({
       anthropic: scoringAnthropic([{ id: "1", freshness: 50, velocity: 50, target_fit: 60, overall: 55, reason: "ok" }]) as never,
       sb: makeSb(inserts) as never,
       twitterApiKey: "k",
@@ -72,9 +72,77 @@ describe("runCollect", () => {
       now: Date.now(),
     });
 
-    expect(inserted).toBe(1);
+    expect(stats.inserted).toBe(1);
     expect(inserts).toHaveLength(1);
     expect((inserts[0] as { meta: { scores: { overall: number } } }).meta.scores.overall).toBe(55);
+  });
+
+  test("CollectStats: breakdown 3 成分 + funnel 件数を返す（inserted の意味は保持）", async () => {
+    const inserts: unknown[] = [];
+    const onTraceCosts: number[] = [];
+    const stats = await runCollect({
+      anthropic: scoringAnthropic([{ id: "1", freshness: 50, velocity: 50, target_fit: 60, overall: 55, reason: "ok" }]) as never,
+      sb: makeSb(inserts) as never,
+      twitterApiKey: "k",
+      fetchImpl: undefined as never,
+      apiKey: "sk-test",
+      runSession: exploreSession([{ name: "search_tweets", input: { query: "Claude", queryType: "Latest", via: "keyword" } }]),
+      getAgentRef: okRef,
+      onTrace: (m) => onTraceCosts.push(m.costJpy ?? 0),
+      api: {
+        searchTweets: async () => [
+          { id: "1", text: "Claude new feature", author: { userName: "a" }, createdAt: new Date().toISOString(), likeCount: 100, viewCount: 1000 },
+        ],
+        getTrends: async () => [], searchUsers: async () => [], getUserFollowings: async () => [], getThread: async () => [],
+      },
+      now: Date.now(),
+    });
+
+    // inserted の意味は保持（= 旧 number 戻り値）。
+    expect(stats.inserted).toBe(1);
+    // funnel 件数: 候補1件を採点。
+    expect(stats.fetched).toBe(1);
+    expect(stats.scored).toBe(1);
+    // breakdown 3 成分が揃って返り、totalJpy = 合計。
+    expect(stats.cost).toEqual(
+      expect.objectContaining({
+        exploreJpy: expect.any(Number),
+        scoringJpy: expect.any(Number),
+        translateJpy: expect.any(Number),
+        totalJpy: expect.any(Number),
+      }),
+    );
+    expect(stats.cost.totalJpy).toBeCloseTo(
+      stats.cost.exploreJpy + stats.cost.scoringJpy + stats.cost.translateJpy,
+      10,
+    );
+    // 挙動不変: onTrace に渡す cost 合計 === breakdown.totalJpy（合算 1 本のまま）。
+    expect(onTraceCosts).toHaveLength(1);
+    expect(onTraceCosts[0]).toBeCloseTo(stats.cost.totalJpy, 10);
+  });
+
+  test("候補0件: explore 分のみ cost、件数は全0（早期 return も CollectStats）", async () => {
+    const inserts: unknown[] = [];
+    const onTraceCosts: number[] = [];
+    const stats = await runCollect({
+      anthropic: scoringAnthropic([]) as never,
+      sb: makeSb(inserts) as never,
+      twitterApiKey: "k", fetchImpl: undefined as never, apiKey: "sk-test",
+      runSession: exploreSession([{ name: "search_tweets", input: { query: "x", queryType: "Latest", via: "keyword" } }]),
+      getAgentRef: okRef,
+      onTrace: (m) => onTraceCosts.push(m.costJpy ?? 0),
+      api: { searchTweets: async () => [], getTrends: async () => [], searchUsers: async () => [], getUserFollowings: async () => [], getThread: async () => [] },
+      now: Date.now(),
+    });
+    expect(stats.inserted).toBe(0);
+    expect(stats.fetched).toBe(0);
+    expect(stats.scored).toBe(0);
+    expect(stats.cost.scoringJpy).toBe(0);
+    expect(stats.cost.translateJpy).toBe(0);
+    expect(stats.cost.totalJpy).toBe(stats.cost.exploreJpy);
+    // onTrace は早期 return でも explore 分を 1 本発火（挙動不変）。
+    expect(onTraceCosts).toHaveLength(1);
+    expect(onTraceCosts[0]).toBeCloseTo(stats.cost.exploreJpy, 10);
   });
 
   test("collector_session_id を materials_store.meta に刻む（1B 用の相関キー）", async () => {
@@ -116,20 +184,20 @@ describe("runCollect", () => {
   test("registry miss: getAgentRef throw なら収集中止で 0 件（誤収集防止）", async () => {
     const inserts: unknown[] = [];
     const missRef: NonNullable<RunCollectDeps["getAgentRef"]> = async () => { throw new Error("[ma-registry] agent not bootstrapped: x-collector"); };
-    const inserted = await runCollect({
+    const stats = await runCollect({
       anthropic: scoringAnthropic([]) as never, sb: makeSb(inserts) as never,
       twitterApiKey: "k", fetchImpl: undefined as never, apiKey: "sk-test",
       runSession: exploreSession([{ name: "search_tweets", input: {} }]), getAgentRef: missRef,
       api: { searchTweets: async () => [{ id: "1", text: "x", author: { userName: "a" }, createdAt: new Date().toISOString(), likeCount: 1, viewCount: 1 }], getTrends: async () => [], searchUsers: async () => [], getUserFollowings: async () => [], getThread: async () => [] },
       now: Date.now(),
     });
-    expect(inserted).toBe(0);
+    expect(stats.inserted).toBe(0);
     expect(inserts).toHaveLength(0);
   });
 
   test("fail-open: dispatchTool が throw しても探索は死なない（他 tool の候補は残る）", async () => {
     const inserts: unknown[] = [];
-    const inserted = await runCollect({
+    const stats = await runCollect({
       anthropic: scoringAnthropic([{ id: "tweet-good", freshness: 60, velocity: 60, target_fit: 70, overall: 63, reason: "ok" }]) as never,
       sb: makeSb(inserts) as never, twitterApiKey: "k", fetchImpl: undefined as never, apiKey: "sk-test",
       runSession: exploreSession([
@@ -144,6 +212,6 @@ describe("runCollect", () => {
       },
       now: Date.now(),
     });
-    expect(inserted).toBe(1);
+    expect(stats.inserted).toBe(1);
   });
 });
