@@ -19,7 +19,7 @@ import { FMAT_OPTIONS, type TemplateOption } from "@/lib/curation-formats";
 export const UNSET_VALUE = "";
 
 const SELECT_CLASS =
-  "w-full h-9 pl-2.5 pr-8 text-sm border border-slate-200 rounded-lg bg-white text-slate-700 hover:border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 appearance-none cursor-pointer";
+  "w-full h-9 pl-2.5 pr-8 text-sm border border-white/10 rounded-lg bg-surface text-slate-300 hover:border-white/25 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 appearance-none cursor-pointer";
 
 const SELECT_STYLE: React.CSSProperties = {
   backgroundImage:
@@ -56,7 +56,7 @@ export function FmatTemplatePicker({
       <div className="space-y-1">
         <label
           htmlFor={`${idPrefix}-fmat`}
-          className="block text-xs font-medium text-slate-600"
+          className="block text-xs font-medium text-slate-300"
         >
           フォーマット
         </label>
@@ -83,7 +83,7 @@ export function FmatTemplatePicker({
       <div className="space-y-1">
         <label
           htmlFor={`${idPrefix}-template`}
-          className="block text-xs font-medium text-slate-600"
+          className="block text-xs font-medium text-slate-300"
         >
           テンプレート
         </label>

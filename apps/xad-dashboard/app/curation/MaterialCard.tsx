@@ -3,10 +3,10 @@ import type { CurationMaterial } from "@/lib/curation-logic";
 import { MediaThumbs } from "@/components/MediaModal";
 
 function scoreColor(v: number | null): string {
-  if (v == null) return "bg-slate-100 text-slate-500";
-  if (v >= 70) return "bg-emerald-100 text-emerald-800";
-  if (v >= 40) return "bg-amber-100 text-amber-800";
-  return "bg-slate-100 text-slate-600";
+  if (v == null) return "bg-white/5 text-slate-400";
+  if (v >= 70) return "bg-emerald-400/15 text-emerald-200";
+  if (v >= 40) return "bg-amber-400/15 text-amber-200";
+  return "bg-white/5 text-slate-300";
 }
 
 /** overall_score に応じた左ボーダーカラー（選択状態と独立） */
@@ -34,7 +34,7 @@ export function MaterialCard({
   return (
     <div
       className={`border border-l-4 rounded-lg p-3 transition-colors ${borderAccent(m.effective_overall ?? m.overall_score)} ${
-        checked ? "border-blue-500 bg-blue-50" : "border-slate-200 bg-white hover:bg-slate-50"
+        checked ? "border-blue-500 bg-blue-400/10" : "border-white/10 bg-surface hover:bg-white/5"
       }`}
     >
       <div className="flex items-start gap-2">
@@ -56,7 +56,7 @@ export function MaterialCard({
             {days != null && days >= 7 && (
               <span
                 className={`px-1.5 py-0.5 rounded text-xs font-semibold ${
-                  days >= 14 ? "bg-rose-100 text-rose-700" : "bg-amber-100 text-amber-700"
+                  days >= 14 ? "bg-rose-400/15 text-rose-300" : "bg-amber-400/15 text-amber-300"
                 }`}
                 title="温めてからの経過日数"
               >
@@ -77,7 +77,7 @@ export function MaterialCard({
                   採点 {m.overall_score}
                 </span>
               )}
-            <span className="text-xs text-slate-500 font-mono tabular-nums">
+            <span className="text-xs text-slate-400 font-mono tabular-nums">
               f{m.freshness_eff ?? m.freshness ?? "—"} / v{m.velocity ?? "—"} / fit{m.target_fit ?? "—"}
             </span>
             {m.lang && (
@@ -86,7 +86,7 @@ export function MaterialCard({
           </div>
 
           {/* 本文 */}
-          <p className="whitespace-pre-wrap text-sm mt-1 leading-relaxed text-slate-800">
+          <p className="whitespace-pre-wrap text-sm mt-1 leading-relaxed text-slate-200">
             {m.raw_text}
           </p>
 
@@ -94,8 +94,8 @@ export function MaterialCard({
           <MediaThumbs media={m.media} />
 
           {/* メタ行: discovery / collected_at / engagement / 原ツイート */}
-          <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500 mt-2">
-            <span className="px-1.5 py-0.5 bg-slate-100 rounded font-medium">
+          <div className="flex flex-wrap items-center gap-2 text-xs text-slate-400 mt-2">
+            <span className="px-1.5 py-0.5 bg-white/5 rounded font-medium">
               {m.discovery_via}
               {m.discovery_query ? `: ${m.discovery_query}` : ""}
             </span>
@@ -112,7 +112,7 @@ export function MaterialCard({
                 href={m.tweet_url}
                 target="_blank"
                 rel="noreferrer"
-                className="text-blue-600 underline hover:text-blue-800"
+                className="text-blue-300 underline hover:text-blue-200"
               >
                 原ツイート
               </a>
@@ -121,11 +121,11 @@ export function MaterialCard({
 
           {/* 採点理由 (collapsible) */}
           {m.score_reason && (
-            <details className="text-xs text-slate-500 mt-1">
-              <summary className="cursor-pointer select-none hover:text-slate-700">
+            <details className="text-xs text-slate-400 mt-1">
+              <summary className="cursor-pointer select-none hover:text-slate-200">
                 採点理由
               </summary>
-              <p className="mt-1 pl-2 border-l border-slate-200 text-slate-600">
+              <p className="mt-1 pl-2 border-l border-white/10 text-slate-300">
                 {m.score_reason}
               </p>
             </details>

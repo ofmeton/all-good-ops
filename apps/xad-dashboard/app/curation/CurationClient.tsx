@@ -24,11 +24,11 @@ import { useRecommendations } from "@/app/components/useRecommendations";
 import { MaterialCard } from "./MaterialCard";
 
 const TABS: { key: SelectionStatus; label: string; color: string }[] = [
-  { key: "collected", label: "未処理", color: "border-slate-400" },
+  { key: "collected", label: "未処理", color: "border-white/25" },
   { key: "selected", label: "温め", color: "border-emerald-500" },
   { key: "queued", label: "送信済", color: "border-blue-500" },
   { key: "rejected", label: "除外", color: "border-rose-400" },
-  { key: "archived", label: "アーカイブ", color: "border-slate-300" },
+  { key: "archived", label: "アーカイブ", color: "border-white/15" },
 ];
 
 const SORTS: { key: SortKey; label: string }[] = [
@@ -43,7 +43,7 @@ const SORTS: { key: SortKey; label: string }[] = [
 
 // フィルタ行の select 共通スタイル（chevron 背景込み）。
 const SELECT_CLASS =
-  "h-7 pl-2 pr-6 text-sm border border-slate-200 rounded bg-white text-slate-700 hover:border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 appearance-none cursor-pointer";
+  "h-7 pl-2 pr-6 text-sm border border-white/10 rounded bg-surface text-slate-300 hover:border-white/25 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 appearance-none cursor-pointer";
 const SELECT_STYLE: React.CSSProperties = {
   backgroundImage:
     "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394a3b8' d='M6 8L1 3h10z'/%3E%3C/svg%3E\")",
@@ -77,13 +77,13 @@ function ActionButton({
     "inline-flex items-center gap-1.5 px-3 py-1.5 rounded text-sm font-medium transition-all duration-150 disabled:opacity-35 disabled:cursor-not-allowed select-none";
   const styles = {
     primary:
-      "bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800 shadow-sm",
+      "bg-blue-500 text-white hover:bg-blue-400 active:bg-blue-600 shadow-sm",
     default:
-      "bg-white text-slate-700 border border-slate-300 hover:bg-slate-50 hover:border-slate-400 active:bg-slate-100",
+      "bg-surface text-slate-300 border border-white/15 hover:bg-white/5 hover:border-white/30 active:bg-white/5",
     danger:
-      "bg-white text-rose-600 border border-rose-200 hover:bg-rose-50 hover:border-rose-300 active:bg-rose-100",
+      "bg-surface text-rose-300 border border-rose-400/30 hover:bg-rose-400/10 hover:border-rose-400/40 active:bg-rose-400/15",
     ghost:
-      "text-slate-500 hover:text-slate-700 hover:bg-slate-100 active:bg-slate-200",
+      "text-slate-400 hover:text-slate-200 hover:bg-white/10 active:bg-white/10",
   };
   return (
     <button onClick={onClick} disabled={disabled} className={`${base} ${styles[variant]}`}>
@@ -340,16 +340,16 @@ export function CurationClient({
     shown.length > 0 && shown.every((m) => checked.has(m.id));
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-white/[0.03]">
       {/* ── Page header ── */}
-      <div className="bg-white border-b border-slate-200 px-6 py-4">
+      <div className="bg-surface border-b border-white/10 px-6 py-4">
         <div className="max-w-4xl mx-auto">
           <div className="flex items-baseline justify-between gap-4 mb-4">
             <div>
-              <h1 className="text-lg font-semibold text-slate-900 tracking-tight">
+              <h1 className="text-lg font-semibold text-white tracking-tight">
                 素材キュレーション
               </h1>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-xs text-slate-400 mt-0.5">
                 X収集素材のトリアージ・温め・発信工程への送信
               </p>
             </div>
@@ -377,8 +377,8 @@ export function CurationClient({
                   className={[
                     "relative px-4 py-2 text-sm font-medium rounded-t transition-colors duration-150",
                     active
-                      ? `bg-slate-50 text-slate-900 border-t-2 ${t.color} border-x border-slate-200 -mb-px z-10`
-                      : "text-slate-500 hover:text-slate-700 hover:bg-slate-100",
+                      ? `bg-white/[0.03] text-white border-t-2 ${t.color} border-x border-white/10 -mb-px z-10`
+                      : "text-slate-400 hover:text-slate-200 hover:bg-white/10",
                   ].join(" ")}
                 >
                   {t.label}
@@ -386,8 +386,8 @@ export function CurationClient({
                     className={[
                       "ml-2 text-xs px-1.5 py-0.5 rounded-full font-mono tabular-nums",
                       active
-                        ? "bg-slate-200 text-slate-700"
-                        : "bg-slate-100 text-slate-400",
+                        ? "bg-white/10 text-slate-300"
+                        : "bg-white/5 text-slate-400",
                     ].join(" ")}
                   >
                     {counts[t.key].toLocaleString()}
@@ -400,10 +400,10 @@ export function CurationClient({
       </div>
 
       {/* ── Controls + sticky action bar ── */}
-      <div className="sticky top-14 z-20 bg-white border-b border-slate-200 shadow-sm">
+      <div className="sticky top-14 z-20 bg-surface border-b border-white/10 shadow-sm">
         <div className="max-w-4xl mx-auto px-6">
           {/* Filter row */}
-          <div className="flex flex-wrap items-center gap-2 py-2.5 text-sm border-b border-slate-100">
+          <div className="flex flex-wrap items-center gap-2 py-2.5 text-sm border-b border-white/5">
             {/* Sort（多軸: 並び1 必須 / 並び2・3 任意。優先順に評価＝例 新着順 × 総合） */}
             <div className="flex items-center gap-1.5">
               <span className="text-xs font-medium text-slate-400 uppercase tracking-wider whitespace-nowrap">
@@ -436,7 +436,7 @@ export function CurationClient({
               })}
             </div>
 
-            <div className="w-px h-4 bg-slate-200 mx-0.5" />
+            <div className="w-px h-4 bg-white/10 mx-0.5" />
 
             {/* トリアージ（要件2）: 未処理タブのみ。ON=高シグナルだけ / OFF=全件(50-69帯も) */}
             {tab === "collected" && (
@@ -448,9 +448,9 @@ export function CurationClient({
                     setTriage(e.target.checked);
                     setChecked(new Set());
                   }}
-                  className="w-3.5 h-3.5 rounded border-slate-300 accent-blue-600"
+                  className="w-3.5 h-3.5 rounded border-white/15 accent-blue-600"
                 />
-                <span className={`text-xs font-medium ${triage ? "text-blue-700" : "text-slate-500"}`}>
+                <span className={`text-xs font-medium ${triage ? "text-blue-300" : "text-slate-400"}`}>
                   🎯 高シグナルのみ
                 </span>
               </label>
@@ -458,7 +458,7 @@ export function CurationClient({
 
             {/* Lane（要件4）: 投稿候補 / 参考(JP) / 全。トリアージON時は高シグ混成のため非表示。 */}
             {!triageActive && (
-            <div className="inline-flex rounded border border-slate-200 overflow-hidden" role="group" aria-label="レーン">
+            <div className="inline-flex rounded border border-white/10 overflow-hidden" role="group" aria-label="レーン">
               {([
                 { key: "candidate", label: "投稿候補", count: laneCounts.candidate },
                 { key: "reference", label: "参考(JP)", count: laneCounts.reference },
@@ -474,12 +474,12 @@ export function CurationClient({
                     }}
                     aria-pressed={active}
                     className={[
-                      "px-2.5 h-7 text-xs font-medium transition-colors border-r border-slate-200 last:border-r-0",
+                      "px-2.5 h-7 text-xs font-medium transition-colors border-r border-white/10 last:border-r-0",
                       active
                         ? opt.key === "reference"
                           ? "bg-violet-100 text-violet-800"
-                          : "bg-blue-100 text-blue-800"
-                        : "bg-white text-slate-500 hover:bg-slate-50",
+                          : "bg-blue-400/15 text-blue-200"
+                        : "bg-surface text-slate-400 hover:bg-white/5",
                     ].join(" ")}
                   >
                     {opt.label}
@@ -492,7 +492,7 @@ export function CurationClient({
             </div>
             )}
 
-            <div className="w-px h-4 bg-slate-200 mx-0.5" />
+            <div className="w-px h-4 bg-white/10 mx-0.5" />
 
             {/* Via */}
             <select
@@ -500,7 +500,7 @@ export function CurationClient({
               onChange={(e) =>
                 setFilter((f) => ({ ...f, via: e.target.value || undefined }))
               }
-              className="h-7 pl-2 pr-6 text-sm border border-slate-200 rounded bg-white text-slate-700 hover:border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 appearance-none cursor-pointer"
+              className="h-7 pl-2 pr-6 text-sm border border-white/10 rounded bg-surface text-slate-300 hover:border-white/25 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 appearance-none cursor-pointer"
               style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394a3b8' d='M6 8L1 3h10z'/%3E%3C/svg%3E\")", backgroundRepeat: "no-repeat", backgroundPosition: "right 6px center" }}
             >
               <option value="">経路: 全</option>
@@ -517,7 +517,7 @@ export function CurationClient({
               onChange={(e) =>
                 setFilter((f) => ({ ...f, lang: e.target.value || undefined }))
               }
-              className="h-7 pl-2 pr-6 text-sm border border-slate-200 rounded bg-white text-slate-700 hover:border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 appearance-none cursor-pointer"
+              className="h-7 pl-2 pr-6 text-sm border border-white/10 rounded bg-surface text-slate-300 hover:border-white/25 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 appearance-none cursor-pointer"
               style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394a3b8' d='M6 8L1 3h10z'/%3E%3C/svg%3E\")", backgroundRepeat: "no-repeat", backgroundPosition: "right 6px center" }}
             >
               <option value="">言語: 全</option>
@@ -529,7 +529,7 @@ export function CurationClient({
             </select>
 
             {/* Media checkbox */}
-            <label className="flex items-center gap-1.5 cursor-pointer text-slate-600 hover:text-slate-800 select-none">
+            <label className="flex items-center gap-1.5 cursor-pointer text-slate-300 hover:text-white select-none">
               <input
                 type="checkbox"
                 checked={!!filter.hasMedia}
@@ -539,12 +539,12 @@ export function CurationClient({
                     hasMedia: e.target.checked || undefined,
                   }))
                 }
-                className="w-3.5 h-3.5 rounded border-slate-300 accent-blue-600"
+                className="w-3.5 h-3.5 rounded border-white/15 accent-blue-600"
               />
               <span className="text-xs">メディア有</span>
             </label>
 
-            <div className="w-px h-4 bg-slate-200 mx-0.5" />
+            <div className="w-px h-4 bg-white/10 mx-0.5" />
 
             {/* Source text input */}
             <div className="relative">
@@ -557,7 +557,7 @@ export function CurationClient({
                     source: e.target.value || undefined,
                   }))
                 }
-                className="h-7 pl-2 pr-2 w-24 text-sm border border-slate-200 rounded bg-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400"
+                className="h-7 pl-2 pr-2 w-24 text-sm border border-white/10 rounded bg-surface placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400"
               />
             </div>
 
@@ -580,7 +580,7 @@ export function CurationClient({
                 placeholder="本文検索"
                 value={text}
                 onChange={(e) => setText(e.target.value)}
-                className="h-7 pl-6 pr-2 w-32 text-sm border border-slate-200 rounded bg-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400"
+                className="h-7 pl-6 pr-2 w-32 text-sm border border-white/10 rounded bg-surface placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400"
               />
             </div>
 
@@ -596,14 +596,14 @@ export function CurationClient({
             <button
               onClick={allShownSelected ? clearAll : selectAll}
               disabled={shown.length === 0}
-              className="text-xs text-slate-500 hover:text-slate-700 disabled:opacity-40 disabled:cursor-not-allowed underline-offset-2 hover:underline transition-colors select-none"
+              className="text-xs text-slate-400 hover:text-slate-200 disabled:opacity-40 disabled:cursor-not-allowed underline-offset-2 hover:underline transition-colors select-none"
             >
               {allShownSelected ? "選択解除" : "全選択"}
             </button>
 
             <span className="text-xs text-slate-400 font-mono tabular-nums min-w-[4rem]">
               {checked.size > 0 ? (
-                <span className="text-slate-700 font-medium">
+                <span className="text-slate-300 font-medium">
                   {checked.size} 件選択中
                 </span>
               ) : (
@@ -634,10 +634,10 @@ export function CurationClient({
                 className={[
                   "ml-auto text-xs px-2.5 py-1 rounded-full font-medium",
                   msg.type === "error"
-                    ? "bg-rose-50 text-rose-700 border border-rose-200"
+                    ? "bg-rose-400/10 text-rose-300 border border-rose-400/30"
                     : msg.type === "success"
-                    ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
-                    : "bg-slate-100 text-slate-600",
+                    ? "bg-emerald-400/10 text-emerald-300 border border-emerald-400/30"
+                    : "bg-white/5 text-slate-300",
                 ].join(" ")}
               >
                 {msg.text}
@@ -651,9 +651,9 @@ export function CurationClient({
       <div className="max-w-4xl mx-auto px-6 py-4">
         {/* Limit exceeded notice */}
         {counts[tab] > limit && (
-          <div className="flex items-start gap-2 mb-4 p-3 rounded-lg bg-amber-50 border border-amber-200">
+          <div className="flex items-start gap-2 mb-4 p-3 rounded-lg bg-amber-400/10 border border-amber-400/30">
             <svg
-              className="w-4 h-4 text-amber-600 mt-0.5 shrink-0"
+              className="w-4 h-4 text-amber-300 mt-0.5 shrink-0"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -665,7 +665,7 @@ export function CurationClient({
                 d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
               />
             </svg>
-            <p className="text-xs text-amber-800">
+            <p className="text-xs text-amber-200">
               <span className="font-semibold">{counts[tab].toLocaleString()} 件</span>
               {" "}中、overall 降順で上位{" "}
               <span className="font-semibold">{limit.toLocaleString()} 件</span>
@@ -677,7 +677,7 @@ export function CurationClient({
         {/* Active tab indicator */}
         <div className="flex items-center gap-2 mb-3">
           <div className={`w-1 h-4 rounded-full ${activeTab.color.replace("border-", "bg-")}`} />
-          <h2 className="text-sm font-medium text-slate-700">
+          <h2 className="text-sm font-medium text-slate-300">
             {activeTab.label}
           </h2>
           {shown.length !== base.length && (
@@ -694,7 +694,7 @@ export function CurationClient({
               <div className="text-slate-300 text-4xl mb-3 select-none">
                 {triageActive && base.length > 0 ? "🎉" : "○"}
               </div>
-              <p className="text-slate-500 text-sm">
+              <p className="text-slate-400 text-sm">
                 {triageActive && base.length > 0
                   ? "高シグナルの未処理はありません（inbox ゼロ達成）。"
                   : base.length === 0
@@ -708,7 +708,7 @@ export function CurationClient({
                       setTriage(false);
                       setChecked(new Set());
                     }}
-                    className="text-xs text-blue-600 hover:underline"
+                    className="text-xs text-blue-300 hover:underline"
                   >
                     全件を表示（50-69 帯も確認）
                   </button>
@@ -719,7 +719,7 @@ export function CurationClient({
                         setTab("selected");
                         setChecked(new Set());
                       }}
-                      className="text-xs text-emerald-700 hover:underline"
+                      className="text-xs text-emerald-300 hover:underline"
                     >
                       🔥 温めプールに {counts.selected} 件あります。見直しますか
                     </button>
@@ -731,7 +731,7 @@ export function CurationClient({
                     setFilter({});
                     setText("");
                   }}
-                  className="mt-2 text-xs text-blue-600 hover:underline"
+                  className="mt-2 text-xs text-blue-300 hover:underline"
                 >
                   フィルタをリセット
                 </button>
@@ -754,26 +754,26 @@ export function CurationClient({
       {/* ── 執筆送信ダイアログ（素材ごとに format / template を選択・要件1） ── */}
       {composeOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
           role="dialog"
           aria-modal="true"
           aria-labelledby="compose-dialog-title"
           onClick={() => setComposeOpen(false)}
         >
           <div
-            className="w-full max-w-2xl max-h-[88vh] flex flex-col rounded-xl bg-white shadow-xl border border-slate-200 overflow-hidden"
+            className="w-full max-w-2xl max-h-[88vh] flex flex-col rounded-xl bg-surface shadow-xl border border-white/10 overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="px-5 pt-4 pb-3 border-b border-slate-100 shrink-0">
+            <div className="px-5 pt-4 pb-3 border-b border-white/5 shrink-0">
               <h2
                 id="compose-dialog-title"
-                className="text-sm font-semibold text-slate-900"
+                className="text-sm font-semibold text-white"
               >
                 執筆へ送る
               </h2>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-xs text-slate-400 mt-0.5">
                 選択した{" "}
-                <span className="font-medium text-slate-700 tabular-nums">
+                <span className="font-medium text-slate-300 tabular-nums">
                   {checked.size}
                 </span>{" "}
                 件それぞれに、フォーマットとテンプレートを設定します（初期値は AI 推薦、無ければ既定）。最終決定はあなたです。
@@ -801,23 +801,23 @@ export function CurationClient({
                   </button>
                 </div>
                 {rec.error && (
-                  <p className="text-[11px] text-amber-700 bg-amber-50 border border-amber-200 rounded px-2 py-1">
+                  <p className="text-[11px] text-amber-300 bg-amber-400/10 border border-amber-400/30 rounded px-2 py-1">
                     {rec.error}
                   </p>
                 )}
               </div>
 
               {/* 一括変更行（全行に同じ fmat/template を当てる） */}
-              <div className="rounded-lg border border-slate-200 bg-slate-50/80 p-3">
+              <div className="rounded-lg border border-white/10 bg-white/[0.03] p-3">
                 <div className="flex items-center justify-between gap-2 mb-2">
-                  <span className="text-xs font-medium text-slate-600">
+                  <span className="text-xs font-medium text-slate-300">
                     一括変更（全 {assignments.length} 件に適用）
                   </span>
                   <button
                     type="button"
                     onClick={applyBulk}
                     disabled={assignments.length === 0}
-                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium bg-white text-slate-700 border border-slate-300 hover:bg-slate-100 active:bg-slate-200 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shrink-0"
+                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium bg-surface text-slate-300 border border-white/15 hover:bg-white/10 active:bg-white/10 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shrink-0"
                   >
                     全件に適用
                   </button>
@@ -844,13 +844,13 @@ export function CurationClient({
                   return (
                     <div
                       key={a.id}
-                      className="rounded-lg border border-slate-200 p-3 space-y-2"
+                      className="rounded-lg border border-white/10 p-3 space-y-2"
                     >
                       <div className="flex items-start gap-2">
                         <span className="text-[11px] font-mono tabular-nums text-slate-400 mt-0.5 shrink-0">
                           {i + 1}
                         </span>
-                        <p className="text-xs text-slate-600 leading-snug line-clamp-2 flex-1">
+                        <p className="text-xs text-slate-300 leading-snug line-clamp-2 flex-1">
                           {preview}
                         </p>
                       </div>
@@ -860,7 +860,7 @@ export function CurationClient({
                           <span className="text-slate-400">
                             {" "}（確信度 {(r.confidence * 100).toFixed(0)}%）
                           </span>
-                          {r.reason && <span className="block text-slate-500">{r.reason}</span>}
+                          {r.reason && <span className="block text-slate-400">{r.reason}</span>}
                         </p>
                       )}
                       <div className="grid grid-cols-2 gap-2.5">
@@ -880,17 +880,17 @@ export function CurationClient({
               </div>
             </div>
 
-            <div className="flex items-center justify-end gap-2 px-5 py-3 bg-slate-50 border-t border-slate-100 shrink-0">
+            <div className="flex items-center justify-end gap-2 px-5 py-3 bg-white/[0.03] border-t border-white/5 shrink-0">
               <button
                 onClick={() => setComposeOpen(false)}
-                className="px-3 py-1.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-200/60 transition-colors"
+                className="px-3 py-1.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-white/15 transition-colors"
               >
                 キャンセル
               </button>
               <button
                 onClick={confirmCompose}
                 disabled={pending || checked.size === 0}
-                className="px-4 py-1.5 rounded-lg text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800 shadow-sm disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                className="px-4 py-1.5 rounded-lg text-sm font-medium bg-blue-500 text-white hover:bg-blue-400 active:bg-blue-600 shadow-sm disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
               >
                 送信
               </button>
