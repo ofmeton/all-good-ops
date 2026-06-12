@@ -94,19 +94,19 @@ export function RevisionDialog({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-slate-900/40 p-0 sm:p-4"
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 p-0 sm:p-4"
       role="dialog"
       aria-modal="true"
       aria-label="修正依頼"
       onClick={onClose}
     >
       <div
-        className="w-full sm:max-w-lg max-h-[90vh] overflow-y-auto bg-white rounded-t-2xl sm:rounded-2xl shadow-xl"
+        className="w-full sm:max-w-lg max-h-[90vh] overflow-y-auto bg-surface rounded-t-2xl sm:rounded-2xl shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="px-5 pt-5 pb-3 border-b border-slate-100">
-          <h2 className="text-base font-semibold text-slate-900">修正依頼</h2>
-          <p className="text-xs text-slate-500 mt-0.5">
+        <div className="px-5 pt-5 pb-3 border-b border-white/5">
+          <h2 className="text-base font-semibold text-white">修正依頼</h2>
+          <p className="text-xs text-slate-400 mt-0.5">
             指示文を添えて書き直しを依頼します。送信後に再生成が起動し、点検を経て再び承認待ちに戻ります。
           </p>
         </div>
@@ -116,7 +116,7 @@ export function RevisionDialog({
           <div className="space-y-1">
             <label
               htmlFor={`revision-instruction-${draft.id}`}
-              className="block text-xs font-medium text-slate-600"
+              className="block text-xs font-medium text-slate-300"
             >
               指示文（必須）
             </label>
@@ -127,10 +127,10 @@ export function RevisionDialog({
               rows={4}
               disabled={busy}
               placeholder="例: もっと具体例を入れて、煽り表現を弱めてください"
-              className="w-full resize-y rounded-lg border border-slate-200 p-3 text-sm leading-relaxed text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 disabled:opacity-50"
+              className="w-full resize-y rounded-lg border border-white/10 p-3 text-sm leading-relaxed text-slate-200 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 disabled:opacity-50"
             />
             {!v.ok && instruction.length > 0 && (
-              <p className="text-xs text-rose-600">{v.error}</p>
+              <p className="text-xs text-rose-300">{v.error}</p>
             )}
           </div>
 
@@ -153,20 +153,20 @@ export function RevisionDialog({
               type="button"
               onClick={applyRecommendation}
               disabled={busy || rec.loading}
-              className="text-xs font-medium px-3 py-1.5 rounded-lg border border-blue-200 text-blue-700 bg-blue-50 hover:bg-blue-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="text-xs font-medium px-3 py-1.5 rounded-lg border border-blue-400/30 text-blue-300 bg-blue-400/10 hover:bg-blue-400/15 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
               {rec.loading ? "推薦中…" : "AI に format/template を推薦してもらう"}
             </button>
-            {rec.error && <p className="text-xs text-amber-600">{rec.error}</p>}
+            {rec.error && <p className="text-xs text-amber-300">{rec.error}</p>}
           </div>
         </div>
 
-        <div className="px-5 py-3 bg-slate-50 border-t border-slate-100 flex items-center justify-end gap-2">
+        <div className="px-5 py-3 bg-white/[0.03] border-t border-white/5 flex items-center justify-end gap-2">
           <button
             type="button"
             onClick={onClose}
             disabled={busy}
-            className="px-3 py-1.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-100 disabled:opacity-40"
+            className="px-3 py-1.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-white/10 disabled:opacity-40"
           >
             キャンセル
           </button>
@@ -174,7 +174,7 @@ export function RevisionDialog({
             type="button"
             onClick={submit}
             disabled={!canSubmit}
-            className="px-4 py-1.5 rounded-lg text-sm font-medium bg-amber-600 text-white hover:bg-amber-700 active:bg-amber-800 shadow-sm disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            className="px-4 py-1.5 rounded-lg text-sm font-medium bg-amber-500 text-white hover:bg-amber-400 active:bg-amber-600 shadow-sm disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           >
             修正依頼を送信
           </button>
