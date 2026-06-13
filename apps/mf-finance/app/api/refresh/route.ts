@@ -16,7 +16,12 @@ export async function POST() {
     const { stdout } = await run("node", ["scripts/load.mjs"], { cwd });
     // load は classification を classify.mjs 由来に戻すため、ルール（LLM/手動）を再適用して維持。
     const { stdout: rulesLog } = await run("node", ["scripts/apply-rules.mjs"], { cwd });
-    return NextResponse.json({ ok: true, log: `${stdout.trim()}\n${rulesLog.trim()}` });
+    // 取引固有の上書き（振替ペア・一点修正）をルールの後に再適用。
+    const { stdout: ovLog } = await run("node", ["scripts/apply-overrides.mjs"], { cwd });
+    return NextResponse.json({
+      ok: true,
+      log: `${stdout.trim()}\n${rulesLog.trim()}\n${ovLog.trim()}`,
+    });
   } catch (e) {
     const message = e instanceof Error ? e.message : String(e);
     return NextResponse.json({ ok: false, error: message }, { status: 500 });

@@ -16,7 +16,10 @@
     "seed:recurring": "node scripts/seed-recurring.mjs",
     "export:unknowns": "node scripts/export-unknowns.mjs",
     "apply:rules": "node scripts/apply-rules.mjs",
-    "refresh": "npm run normalize && npm run load && npm run apply:rules && npm run load:assets"
+    "apply:overrides": "node scripts/apply-overrides.mjs",
+    "optimizer:export": "node scripts/optimizer-export.mjs",
+    "optimizer:propose": "node scripts/optimizer-propose.mjs",
+    "refresh": "npm run normalize && npm run load && npm run apply:rules && npm run apply:overrides && npm run load:assets"
   },
   "dependencies": {
     "better-sqlite3": "^11.8.1",

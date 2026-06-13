@@ -114,3 +114,59 @@ CREATE TABLE IF NOT EXISTS tax_mappings (
   note            TEXT,
   UNIQUE (category_major, category_middle)
 );
+
+-- ===== Optimizer（データ・スチュワード） =====
+
+-- 提案キュー（下層シグナル / 上層LLM 双方が投入、人間が承認/却下）。
+CREATE TABLE IF NOT EXISTS optimizer_proposals (
+  id              INTEGER PRIMARY KEY AUTOINCREMENT,
+  created_at      TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
+  kind            TEXT NOT NULL CHECK (kind IN (
+                    'classify_unknown','fixed_vs_variable','relabel',
+                    'transfer_pair','rule_suggest','rule_conflict',
+                    'label_add','category_regroup')),
+  source          TEXT NOT NULL CHECK (source IN ('signal','llm')),
+  status          TEXT NOT NULL DEFAULT 'pending' CHECK (status IN (
+                    'pending','accepted','rejected','dismissed','superseded')),
+  title           TEXT NOT NULL,
+  rationale       TEXT,
+  confidence      TEXT NOT NULL DEFAULT 'med' CHECK (confidence IN ('high','med','low')),
+  target_ref      TEXT, -- JSON
+  proposed_action TEXT, -- JSON
+  dedup_key       TEXT,
+  decided_at      TEXT,
+  decided_note    TEXT
+);
+CREATE INDEX IF NOT EXISTS idx_proposals_status_kind ON optimizer_proposals (status, kind);
+CREATE INDEX IF NOT EXISTS idx_proposals_dedup ON optimizer_proposals (dedup_key);
+
+-- 取引単位の上書き（振替ペア・一点修正）。reload 後も apply-overrides で再現。
+CREATE TABLE IF NOT EXISTS txn_overrides (
+  txn_id           TEXT PRIMARY KEY, -- transactions.id（MF ID は安定）
+  is_transfer      INTEGER CHECK (is_transfer IN (0,1)),
+  is_internal_move INTEGER CHECK (is_internal_move IN (0,1)),
+  classification   TEXT,
+  category_major   TEXT,
+  category_middle  TEXT,
+  note             TEXT,
+  created_at       TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
+);
+
+-- 集計の括り直し（大項目→表示グループ）。/categories /budget /tax が ?by=group でロールアップ。
+CREATE TABLE IF NOT EXISTS category_groups (
+  category_major TEXT PRIMARY KEY,
+  group_name     TEXT NOT NULL,
+  sort_order     INTEGER NOT NULL DEFAULT 0,
+  created_at     TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
+);
+
+-- optimize パスの作業ログ。
+CREATE TABLE IF NOT EXISTS optimizer_runs (
+  id       INTEGER PRIMARY KEY AUTOINCREMENT,
+  ran_at   TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
+  ran_by   TEXT NOT NULL CHECK (ran_by IN ('signal','llm')),
+  signals  INTEGER,
+  proposed INTEGER,
+  decided  INTEGER,
+  note     TEXT
+);
