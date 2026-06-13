@@ -23,7 +23,7 @@
   // ---- 状態 -------------------------------------------------------------
   let inspecting = false, hovered = null;
   let selected = null, selectedEl = null;
-  let sourceClass = "", liveClass = "", bp = "";
+  let sourceClass = "", liveClass = "", bp = "", tab = "box";
   let reordering = false, dragEl2 = null, dropTarget = null, dropPos = "before";
   let lastX = 0, lastY = 0, asTimer = null, asDir = 0; // D&D オートスクロール
   const pending = [];
@@ -193,6 +193,24 @@
                border: 1px solid var(--bd2); padding: 10px 14px; border-radius: 9px; font-size: 12px; display: none;
                pointer-events: none; box-shadow: 0 8px 24px rgba(0,0,0,.4); }
       .toast.warn { border-color: #b45309; } .toast.err { border-color: var(--danger); }
+      .elhdr { display: flex; align-items: center; gap: 7px; padding: 11px 14px 9px; color: var(--muted); }
+      .elhdr svg { color: var(--accent); }
+      .eltag { font-family: ui-monospace, monospace; font-size: 12px; color: var(--tx); }
+      .elcomp { font-size: 11px; color: var(--muted); }
+      .tabs { display: flex; gap: 2px; padding: 0 10px; border-bottom: 1px solid var(--bd); }
+      .tab { padding: 8px 11px; border: none; background: transparent; color: var(--muted); font-size: 12px; cursor: pointer;
+             border-bottom: 2px solid transparent; margin-bottom: -1px; }
+      .tab:hover { color: var(--tx); }
+      .tab.on { color: var(--tx); border-bottom-color: var(--accent); }
+      .num { display: inline-flex; align-items: center; background: var(--surface); border: 1px solid var(--bd); border-radius: 7px; overflow: hidden; }
+      .num input { width: 52px; border: none; background: transparent; color: var(--tx); font-size: 12px; padding: 5px 6px; outline: none; -moz-appearance: textfield; }
+      .num input::-webkit-outer-spin-button, .num input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+      .num input:focus { background: var(--surface2); }
+      .num .u { font-size: 10px; color: var(--muted); padding: 0 7px 0 2px; }
+      .seg button.on { background: var(--accent); color: #fff; }
+      .kv { display: flex; gap: 8px; font-size: 11px; margin-bottom: 6px; }
+      .kv span { color: var(--muted); width: 56px; flex: none; }
+      .kv code { color: var(--tx); font-family: ui-monospace, monospace; word-break: break-all; }
       @media (prefers-reduced-motion: reduce) { .inspector, .hl, .tool, .btn { transition: none; } }
     </style>
     <div class="hl"></div>
@@ -309,6 +327,60 @@
     return "#" + m.slice(0, 3).map((n) => Number(n).toString(16).padStart(2, "0")).join("");
   }
 
+  // ---- 汎用 Tailwind ユーティリティ編集（bp 対応・決定的） ----------------
+  // 値1つ: [arbitrary] / (paren) / 単一トークン(ハイフン無し=方向別/色階調クラスを巻き込まない)
+  const VAL = `(\\[[^\\]]*\\]|\\([^)]*\\)|[\\w./%#.]+)`;
+  // prefix-value 系（w/h/rounded/opacity/z/leading/tracking 等。text-/font- のような多義prefixには使わない）
+  function setUtil(prefix, value) {
+    const p = reEsc(bp), pf = reEsc(prefix);
+    let next = liveClass.replace(new RegExp(`(^|\\s)${p}${pf}-${VAL}(?=\\s|$)`, "g"), " ").replace(/\s+/g, " ").trim();
+    if (value !== "" && value != null) next = (next + ` ${bp}${prefix}-${value}`).trim();
+    applyLive(next);
+  }
+  function readUtil(prefix) {
+    const m = liveClass.match(new RegExp(`(^|\\s)${reEsc(bp)}${reEsc(prefix)}-${VAL}(?=\\s|$)`));
+    return m ? m[2] : "";
+  }
+  // 排他キーワード集合（position/overflow/shadow 等）
+  function setEnum(options, value) {
+    const p = reEsc(bp);
+    let next = liveClass.replace(new RegExp(`(^|\\s)${p}(${options.map(reEsc).join("|")})(?=\\s|$)`, "g"), " ").replace(/\s+/g, " ").trim();
+    if (value) next = (next + ` ${bp}${value}`).trim();
+    applyLive(next);
+  }
+  function readEnum(options) {
+    const m = liveClass.match(new RegExp(`(^|\\s)${reEsc(bp)}(${options.map(reEsc).join("|")})(?=\\s|$)`));
+    return m ? m[2] : "";
+  }
+  // on/off トグル（underline/italic 等）
+  function toggleUtil(cls) {
+    const re = new RegExp(`(^|\\s)${reEsc(bp)}${reEsc(cls)}(?=\\s|$)`);
+    applyLive(re.test(liveClass) ? liveClass.replace(re, " ").replace(/\s+/g, " ").trim() : (liveClass + ` ${bp}${cls}`).trim());
+  }
+  function hasUtil(cls) { return new RegExp(`(^|\\s)${reEsc(bp)}${reEsc(cls)}(?=\\s|$)`).test(liveClass); }
+  const numOf = (v) => { const m = String(v).match(/-?\d+(\.\d+)?/); return m ? m[0] : ""; }; // "[200px]"→"200"
+  // bracket 値(0-1等)は×100して%表示、素のTailwind階調(opacity-50/leading-6)はそのまま
+  const pctBracket = (raw) => { if (!raw) return ""; if (raw.startsWith("[")) { const n = parseFloat(raw.replace(/[\[\]]/g, "")); return Number.isFinite(n) ? Math.round(n * 100) : ""; } return numOf(raw); };
+
+  // フォントサイズ（色/揃えを潰さず size のみ差し替え）
+  function setTextSize(px) {
+    const p = reEsc(bp);
+    const strip = new RegExp(`(^|\\s)${p}text-(\\[(?!#|var\\(|rgb|hsl|oklch)[^\\]]*\\]|xs|sm|base|lg|xl|[2-9]xl)(?=\\s|$)`, "g");
+    let next = liveClass.replace(strip, " ").replace(/\s+/g, " ").trim();
+    if (px !== "") next = (next + ` ${bp}text-[${px}px]`).trim();
+    applyLive(next);
+  }
+  function readTextSize() {
+    const m = liveClass.match(new RegExp(`(^|\\s)${reEsc(bp)}text-(\\[(?!#|var\\(|rgb|hsl|oklch)[^\\]]*\\]|xs|sm|base|lg|xl|[2-9]xl)(?=\\s|$)`));
+    return m ? numOf(m[2]) : "";
+  }
+  // フォント太さ（family を潰さず weight のみ）
+  const WEIGHTS = ["font-thin", "font-extralight", "font-light", "font-normal", "font-medium", "font-semibold", "font-bold", "font-extrabold", "font-black"];
+  function setWeight(v) { setEnum(WEIGHTS, v); }
+  // フォントファミリ
+  const FAMILIES = ["font-sans", "font-serif", "font-mono"];
+  function setFamily(v) { setEnum(FAMILIES, v); }
+
   async function post(endpoint, body) {
     const res = await fetch(`${ORIGIN}${endpoint}`, { method: "POST", headers: POST_HEADERS, body: body ? JSON.stringify(body) : undefined });
     return res.json();
@@ -355,68 +427,129 @@
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const SIDE = `<option value="">全</option><option value="x">左右</option><option value="y">上下</option><option value="t">上</option><option value="r">右</option><option value="b">下</option><option value="l">左</option>`;
 
+  const TEXTUAL = /^(p|h[1-6]|span|a|button|li|label|strong|em|blockquote|figcaption|small|q|cite)$/;
+  const POS = ["relative", "absolute", "fixed", "sticky"];
+  const OVERFLOW = ["overflow-visible", "overflow-hidden", "overflow-auto", "overflow-scroll"];
+  const SHADOWS = ["shadow-none", "shadow-sm", "shadow", "shadow-md", "shadow-lg", "shadow-xl", "shadow-2xl"];
+  const opt = (val, cur, label) => `<option value="${val}"${val === cur ? " selected" : ""}>${label}</option>`;
+
   function renderBody() {
     const sel = selected;
     if (!sel) {
-      $body.innerHTML = `<div class="empty">上の <b style="color:var(--accent)">⌖</b> を押して<br>要素をクリックで選択してください</div>`;
+      $body.innerHTML = `<div class="empty">ツールバーの選択アイコンを押して<br>要素をクリックで選択してください</div>`;
       return;
     }
     const cs = selectedEl && selectedEl.isConnected ? getComputedStyle(selectedEl) : null;
-    const textHex = rgbToHex(cs && cs.color), bgHex = rgbToHex(cs && cs.backgroundColor);
-    const list = pending.map((p, i) => `<li><span class="t">&lt;${esc(p.payload.tag)}&gt; ${esc(p.prompt.slice(0, 40))}</span><span class="x" data-i="${i}">✕</span></li>`).join("");
+    const textHex = rgbToHex(cs && cs.color), bgHex = rgbToHex(cs && cs.backgroundColor), bdHex = rgbToHex(cs && cs.borderColor);
+    const textual = TEXTUAL.test(sel.tag);
+    const tabs = (textual ? [["text", "テキスト"]] : []).concat([["box", "ボックス"], ["transform", "変形"], ["settings", "設定"]]);
+    if (!tabs.some(([k]) => k === tab)) tab = tabs[0][0];
+    const num = (cls, val, unit, ph = "") => `<span class="num"><input type="number" class="${cls}" value="${val}" placeholder="${ph}">${unit ? `<span class="u">${unit}</span>` : ""}</span>`;
+    const list = pending.map((p, i) => `<li><span class="t">&lt;${esc(p.payload.tag)}&gt; ${esc(p.prompt.slice(0, 36))}</span><span class="x" data-i="${i}">✕</span></li>`).join("");
 
-    $body.innerHTML = `
-      <div class="meta">&lt;${esc(sel.tag)}&gt;${sel.component ? ` · ${esc(sel.component)}` : ""} · <b>${esc(sel.route)}</b></div>
-      <section>
-        <h5>スペーシング</h5>
-        <div class="ctl"><label>余白</label><select class="m-side">${SIDE}</select>
-          <span class="step"><button data-act="m-">−</button><button data-act="m+">＋</button></span></div>
-        <div class="ctl"><label>詰め</label><select class="p-side">${SIDE}</select>
-          <span class="step"><button data-act="p-">−</button><button data-act="p+">＋</button></span></div>
+    let panel = "";
+    if (tab === "text") {
+      panel = `<section><h5>タイポグラフィ</h5>
+        <div class="ctl"><label>色</label><span class="swatch"><input type="color" class="c-text" value="${textHex}"></span></div>
+        <div class="ctl"><label>フォント</label><select class="f-family">${opt("", readEnum(FAMILIES), "—")}${opt("font-sans", readEnum(FAMILIES), "Sans")}${opt("font-serif", readEnum(FAMILIES), "Serif")}${opt("font-mono", readEnum(FAMILIES), "Mono")}</select></div>
+        <div class="ctl"><label>サイズ</label>${num("f-size", readTextSize(), "px")}
+          <label style="width:auto">太さ</label><select class="f-weight">${["", ...WEIGHTS].map((w) => opt(w, readEnum(WEIGHTS), w ? w.replace("font-", "") : "—")).join("")}</select></div>
+        <div class="ctl"><label>行高</label>${num("f-lh", pctBracket(readUtil("leading")), "%")}
+          <label style="width:auto">字間</label>${num("f-ls", numOf(readUtil("tracking")), "em")}</div>
+        <div class="ctl"><label>整列</label><span class="seg"><button data-align="left">左</button><button data-align="center">中</button><button data-align="right">右</button><button data-align="justify">両端</button></span></div>
+        <div class="ctl"><label>装飾</label><span class="seg"><button class="t-ul${hasUtil("underline") ? " on" : ""}">下線</button><button class="t-it${hasUtil("italic") ? " on" : ""}"><i>斜体</i></button></span></div>
+      </section>`;
+    } else if (tab === "box") {
+      panel = `<section><h5>レイアウト</h5>
+        <div class="ctl"><label>幅</label>${num("l-w", numOf(readUtil("w")), "px")}<label style="width:auto">高さ</label>${num("l-h", numOf(readUtil("h")), "px")}</div>
+        <div class="ctl"><label>マージン</label><select class="m-side">${SIDE}</select><span class="step"><button data-act="m-">−</button><button data-act="m+">＋</button></span></div>
+        <div class="ctl"><label>パディング</label><select class="p-side">${SIDE}</select><span class="step"><button data-act="p-">−</button><button data-act="p+">＋</button></span></div>
       </section>
-      <section>
-        <h5>テキスト</h5>
-        <div class="ctl"><label>サイズ</label><span class="step"><button data-size="-1">−</button><button data-size="1">＋</button></span></div>
-        <div class="ctl"><label>揃え</label><span class="seg"><button data-align="left">左</button><button data-align="center">中</button><button data-align="right">右</button></span></div>
+      <section><h5>外観</h5>
+        <div class="ctl"><label>背景色</label><span class="swatch"><input type="color" class="c-bg" value="${bgHex}"></span></div>
+        <div class="ctl"><label>角丸</label>${num("a-radius", numOf(readUtil("rounded")), "px")}<label style="width:auto">不透明度</label>${num("a-opacity", pctBracket(readUtil("opacity")), "%")}</div>
+        <div class="ctl"><label>枠線</label>${num("a-border", numOf(readUtil("border")), "px")}<span class="swatch"><input type="color" class="c-border" value="${bdHex}"></span></div>
+        <div class="ctl"><label>影</label><select class="a-shadow">${["", ...SHADOWS].map((s) => opt(s, readEnum(SHADOWS), s ? s.replace("shadow-", "").replace("shadow", "default") : "—")).join("")}</select></div>
       </section>
-      <section>
-        <h5>カラー</h5>
-        <div class="ctl"><label>文字</label><span class="swatch"><input type="color" class="c-text" value="${textHex}"></span>
-          <label style="width:auto">背景</label><span class="swatch"><input type="color" class="c-bg" value="${bgHex}"></span></div>
-      </section>
-      <section>
-        <h5>クラス（Tailwind）</h5>
+      <section><h5>ポジション</h5>
+        <div class="ctl"><label>位置</label><select class="p-pos">${["", ...POS].map((v) => opt(v, readEnum(POS), v || "static")).join("")}</select><label style="width:auto">重ね順</label>${num("p-z", numOf(readUtil("z")), "")}</div>
+        <div class="ctl"><label>はみ出し</label><select class="p-of">${["", ...OVERFLOW].map((v) => opt(v, readEnum(OVERFLOW), v ? v.replace("overflow-", "") : "—")).join("")}</select></div>
+      </section>`;
+    } else if (tab === "transform") {
+      panel = `<section><h5>変形</h5>
+        <div class="ctl"><label>回転</label>${num("t-rot", numOf(readUtil("rotate")), "deg")}</div>
+        <div class="ctl"><label>拡縮</label>${num("t-scale", readUtil("scale").replace(/[\[\]]/g, ""), "×", "1")}</div>
+      </section>`;
+    } else {
+      panel = `<section><h5>クラス（Tailwind）</h5>
         <textarea class="cls" spellcheck="false">${esc(liveClass)}</textarea>
         <div class="row"><button class="btn primary apply">適用</button><button class="btn ghost reset">戻す</button></div>
       </section>
-      <section>
-        <h5>構造</h5>
+      <section><h5>構造</h5>
         <div class="row"><button class="btn dup">${svg("copy", 14)} 複製</button><button class="btn danger del">${svg("trash", 14)} 削除</button></div>
       </section>
-      <section>
-        <h5>Claudeに頼む（複雑な構造・文言）</h5>
+      <section><h5>要素</h5>
+        <div class="kv"><span>tag</span><code>&lt;${esc(sel.tag)}&gt;</code></div>
+        <div class="kv"><span>page</span><code>${esc(sel.route)}</code></div>
+        <div class="kv"><span>selector</span><code>${esc(sel.selector)}</code></div>
+      </section>`;
+    }
+
+    $body.innerHTML = `
+      <div class="elhdr">${svg("cursor", 13)}<span class="eltag">&lt;${esc(sel.tag)}&gt;</span>${sel.component ? `<span class="elcomp">${esc(sel.component)}</span>` : ""}</div>
+      <div class="tabs">${tabs.map(([k, l]) => `<button class="tab${k === tab ? " on" : ""}" data-tab="${k}">${l}</button>`).join("")}</div>
+      ${panel}
+      <section class="ask-sec"><h5>Claudeに頼む（複雑な構造・文言）</h5>
         <textarea class="ask" placeholder="例: 2行に分けて、画像と左右入れ替えて"></textarea>
         <div class="row"><button class="btn add">キューに追加</button></div>
         ${pending.length ? `<ul>${list}</ul><div class="row"><button class="btn send">${svg("send", 14)} Claudeへ送る (${pending.length})</button></div>` : ""}
       </section>`;
 
-    const sideOf = (s) => $(s).value;
+    // タブ切替
+    $body.querySelectorAll(".tab[data-tab]").forEach((b) => b.onclick = () => { tab = b.dataset.tab; renderBody(); });
+    // 共通: 色/揃え/装飾
+    const oc = (s, fn) => { const el = $(s); if (el) el.oninput = fn; };
+    oc(".c-text", (e) => setColor("text", e.target.value));
+    oc(".c-bg", (e) => setColor("bg", e.target.value));
+    oc(".c-border", (e) => setColor("border", e.target.value));
+    $body.querySelectorAll(".seg button[data-align]").forEach((b) => b.onclick = () => setAlign(b.dataset.align));
+    const ul = $(".t-ul"); if (ul) ul.onclick = () => { toggleUtil("underline"); renderBody(); };
+    const it = $(".t-it"); if (it) it.onclick = () => { toggleUtil("italic"); renderBody(); };
+    // テキスト数値
+    oc(".f-size", (e) => setTextSize(e.target.value));
+    const fam = $(".f-family"); if (fam) fam.onchange = (e) => setFamily(e.target.value);
+    const fw = $(".f-weight"); if (fw) fw.onchange = (e) => setWeight(e.target.value);
+    oc(".f-lh", (e) => setUtil("leading", e.target.value ? `[${e.target.value / 100}]` : ""));
+    oc(".f-ls", (e) => setUtil("tracking", e.target.value ? `[${e.target.value}em]` : ""));
+    // ボックス
+    const mside = () => ($(".m-side") || {}).value || "";
+    const pside = () => ($(".p-side") || {}).value || "";
     $body.querySelectorAll(".step button[data-act]").forEach((b) => b.onclick = () => {
       const a = b.dataset.act, kind = a[0], dir = a[1] === "+" ? 1 : -1;
-      stepSpacing(bp + kind + sideOf(kind === "m" ? ".m-side" : ".p-side"), dir);
+      stepSpacing(bp + kind + (kind === "m" ? mside() : pside()), dir);
     });
-    $body.querySelectorAll(".step button[data-size]").forEach((b) => b.onclick = () => stepSize(Number(b.dataset.size)));
-    $body.querySelectorAll(".seg button[data-align]").forEach((b) => b.onclick = () => setAlign(b.dataset.align));
-    $(".c-text").oninput = (e) => setColor("text", e.target.value);
-    $(".c-bg").oninput = (e) => setColor("bg", e.target.value);
+    oc(".l-w", (e) => setUtil("w", e.target.value ? `[${e.target.value}px]` : ""));
+    oc(".l-h", (e) => setUtil("h", e.target.value ? `[${e.target.value}px]` : ""));
+    oc(".a-radius", (e) => setUtil("rounded", e.target.value ? `[${e.target.value}px]` : ""));
+    oc(".a-opacity", (e) => setUtil("opacity", e.target.value !== "" ? `[${Math.max(0, Math.min(100, e.target.value)) / 100}]` : ""));
+    oc(".a-border", (e) => setUtil("border", e.target.value ? `[${e.target.value}px]` : ""));
+    const sh = $(".a-shadow"); if (sh) sh.onchange = (e) => setEnum(SHADOWS, e.target.value);
+    const pos = $(".p-pos"); if (pos) pos.onchange = (e) => setEnum(POS, e.target.value);
+    oc(".p-z", (e) => setUtil("z", e.target.value !== "" ? `[${e.target.value}]` : ""));
+    const of = $(".p-of"); if (of) of.onchange = (e) => setEnum(OVERFLOW, e.target.value);
+    // 変形
+    oc(".t-rot", (e) => setUtil("rotate", e.target.value ? `[${e.target.value}deg]` : ""));
+    oc(".t-scale", (e) => setUtil("scale", e.target.value ? `[${e.target.value}]` : ""));
+    // 設定タブ: class/構造
     const cls = $(".cls");
-    cls.oninput = (e) => { liveClass = e.target.value; if (selectedEl && selectedEl.isConnected) selectedEl.setAttribute("class", liveClass); highlightSelected(); };
-    $(".apply").onclick = commitStyle;
-    $(".reset").onclick = () => applyLive(sourceClass);
-    $(".dup").onclick = () => doStruct("/duplicate");
-    $(".del").onclick = () => doStruct("/delete");
+    if (cls) cls.oninput = (e) => { liveClass = e.target.value; if (selectedEl && selectedEl.isConnected) selectedEl.setAttribute("class", liveClass); highlightSelected(); };
+    const ap = $(".apply"); if (ap) ap.onclick = commitStyle;
+    const rs = $(".reset"); if (rs) rs.onclick = () => applyLive(sourceClass);
+    const du = $(".dup"); if (du) du.onclick = () => doStruct("/duplicate");
+    const de = $(".del"); if (de) de.onclick = () => doStruct("/delete");
+    // Claude
     const ask = $(".ask"), add = $(".add");
-    add.onclick = () => { const p = (ask.value || "").trim(); if (!p) { toast("指示を入力してください", "warn"); return; } pending.push({ payload: selected, prompt: p }); renderBody(); };
+    if (add) add.onclick = () => { const p = (ask.value || "").trim(); if (!p) { toast("指示を入力してください", "warn"); return; } pending.push({ payload: selected, prompt: p }); renderBody(); };
     $body.querySelectorAll(".x").forEach((x) => x.onclick = () => { pending.splice(Number(x.dataset.i), 1); renderBody(); });
     const sendBtn = $(".send"); if (sendBtn) sendBtn.onclick = send;
   }
@@ -485,7 +618,7 @@
   $launcher.onclick = () => setCollapsed(false);
   root.querySelectorAll(".bpseg button").forEach((b) => {
     if (b.dataset.bp === bp) b.classList.add("on");
-    b.onclick = () => { bp = b.dataset.bp; root.querySelectorAll(".bpseg button").forEach((x) => x.classList.toggle("on", x.dataset.bp === bp)); };
+    b.onclick = () => { bp = b.dataset.bp; root.querySelectorAll(".bpseg button").forEach((x) => x.classList.toggle("on", x.dataset.bp === bp)); if (selected) renderBody(); };
   });
 
   // ---- ページ側イベント -------------------------------------------------
@@ -508,6 +641,7 @@
     if (!inspecting || isOurs(e.target)) return;
     e.preventDefault(); e.stopPropagation();
     selectedEl = e.target; selected = collect(e.target); sourceClass = selected.classes; liveClass = selected.classes;
+    tab = TEXTUAL.test(selected.tag) ? "text" : "box";
     setInspecting(false); openPanel(); highlightSelected();
   }, true);
 
