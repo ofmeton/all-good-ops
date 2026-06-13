@@ -54,6 +54,22 @@ tools:
           items:
             type: string
           description: 本文中の具体数字・主張の裏付けに使った URL/出典（素材本文 or web_search 由来）。無ければ空配列
+        outline:
+          type: array
+          items:
+            type: object
+            properties:
+              role:
+                type: string
+                description: 各ツイート/ブロックの役割
+              key_message:
+                type: string
+                description: 一目で伝えたい要点
+            required:
+              - role
+              - key_message
+            additionalProperties: false
+          description: 構成設計（outline）の成果物。各ツイート/ブロックの役割と、一目で伝えたい要点。将来のブロック別画像生成にも使う。
       required:
         - body
         - fmat
