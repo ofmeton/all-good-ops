@@ -6,7 +6,8 @@ import {
 
 describe("collector-prompts (判断レバー)", () => {
   test("target definition は chaen 層", () => {
-    expect(TARGET_DEFINITION).toContain("ビジネスパーソン");
+    expect(TARGET_DEFINITION).toContain("Claude Code を既にある程度使っていて");
+    expect(TARGET_DEFINITION).toContain("保存・共有したくなるネタ");
   });
   test("explore prompt は海外トレンド先取りと全保存方針を含む", () => {
     const p = buildExploreSystemPrompt();
