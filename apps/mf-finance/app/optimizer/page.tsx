@@ -3,6 +3,8 @@ import {
   getProposalCounts,
   getDecisionLog,
   getRuns,
+  getCategoryOptions,
+  getProposalSamples,
 } from "@/lib/optimizer/proposals-queries";
 import type { OptimizerProposal } from "@/lib/optimizer/types";
 import { ProposalCard } from "@/app/optimizer/ProposalCard";
@@ -30,6 +32,7 @@ export default function OptimizerPage() {
   const decisions = getDecisionLog(50);
   const runs = getRuns(1);
   const lastRun = runs[0] ?? null;
+  const categoryOptions = getCategoryOptions();
 
   const grouped = groupByKind(pending);
 
@@ -97,9 +100,18 @@ export default function OptimizerPage() {
                 </span>
               </h2>
               <ul className="space-y-2">
-                {items.map((p) => (
-                  <ProposalCard key={p.id} proposal={p} />
-                ))}
+                {items.map((p) => {
+                  const { samples, total } = getProposalSamples(p);
+                  return (
+                    <ProposalCard
+                      key={p.id}
+                      proposal={p}
+                      samples={samples}
+                      sampleTotal={total}
+                      categoryOptions={categoryOptions}
+                    />
+                  );
+                })}
               </ul>
             </section>
           ))}

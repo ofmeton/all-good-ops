@@ -105,6 +105,102 @@ export function getDecisionLog(limit = 50): OptimizerProposal[] {
   return rows.map(hydrate);
 }
 
+// 「修正して承認」の大項目・中項目プルダウン用の既存カテゴリ一覧。
+export function getCategoryOptions(): { majors: string[]; middles: string[] } {
+  const majors = (
+    db
+      .prepare(
+        `SELECT DISTINCT category_major FROM transactions
+         WHERE category_major IS NOT NULL AND category_major != '' AND category_major != '未分類'
+         ORDER BY category_major`,
+      )
+      .all() as { category_major: string }[]
+  ).map((r) => r.category_major);
+  const middles = (
+    db
+      .prepare(
+        `SELECT DISTINCT category_middle FROM transactions
+         WHERE category_middle IS NOT NULL AND category_middle != '' AND category_middle != '未分類'
+         ORDER BY category_middle`,
+      )
+      .all() as { category_middle: string }[]
+  ).map((r) => r.category_middle);
+  return { majors, middles };
+}
+
+// 提案カードに出す該当明細サンプル（金額を見せる）。
+export interface ProposalSample {
+  date: string;
+  description: string;
+  amount: number;
+}
+
+// 提案の対象取引を target_ref / proposed_action から導いてサンプル（最大8件）と総件数を返す。
+export function getProposalSamples(p: OptimizerProposal): {
+  samples: ProposalSample[];
+  total: number;
+} {
+  const t = (p.target_ref ?? {}) as Record<string, unknown>;
+  const a = p.proposed_action as { txn_ids?: unknown } | null;
+  const ids = Array.isArray(t.txn_ids)
+    ? (t.txn_ids as string[])
+    : Array.isArray(a?.txn_ids)
+      ? (a!.txn_ids as string[])
+      : null;
+
+  if (ids && ids.length > 0) {
+    const shown = ids.slice(0, 8);
+    const ph = shown.map(() => "?").join(",");
+    const samples = db
+      .prepare(
+        `SELECT date, description, amount FROM transactions WHERE id IN (${ph}) ORDER BY date DESC`,
+      )
+      .all(...shown) as ProposalSample[];
+    return { samples, total: ids.length };
+  }
+
+  if (typeof t.description === "string") {
+    const desc = t.description;
+    const total = (
+      db
+        .prepare("SELECT COUNT(*) AS n FROM transactions WHERE TRIM(description) = ?")
+        .get(desc) as { n: number }
+    ).n;
+    const samples = db
+      .prepare(
+        `SELECT date, description, amount FROM transactions
+         WHERE TRIM(description) = ? ORDER BY date DESC LIMIT 8`,
+      )
+      .all(desc) as ProposalSample[];
+    return { samples, total };
+  }
+
+  if (typeof t.rule_id === "number") {
+    const rule = db
+      .prepare("SELECT pattern, match_type FROM category_rules WHERE id = ?")
+      .get(t.rule_id) as { pattern: string; match_type: string } | undefined;
+    if (rule) {
+      const where =
+        rule.match_type === "contains"
+          ? "INSTR(TRIM(description), ?) > 0"
+          : "TRIM(description) = ?";
+      const total = (
+        db
+          .prepare(`SELECT COUNT(*) AS n FROM transactions WHERE ${where}`)
+          .get(rule.pattern) as { n: number }
+      ).n;
+      const samples = db
+        .prepare(
+          `SELECT date, description, amount FROM transactions WHERE ${where} ORDER BY date DESC LIMIT 8`,
+        )
+        .all(rule.pattern) as ProposalSample[];
+      return { samples, total };
+    }
+  }
+
+  return { samples: [], total: 0 };
+}
+
 // 作業ログ（run 履歴）を新しい順で返す。
 export function getRuns(limit = 20): OptimizerRunRow[] {
   return db

@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import type { OptimizerProposal, ProposedAction } from "@/lib/optimizer/types";
+import type { ProposalSample } from "@/lib/optimizer/proposals-queries";
 import {
   applyProposal,
   rejectProposal,
@@ -12,19 +13,21 @@ import {
 import {
   CONFIDENCE_LABEL,
   CONFIDENCE_TONE,
+  CLASSIFICATION_OPTIONS,
   actionSummary,
   targetSummary,
 } from "@/app/optimizer/labels";
+import { yenSigned, shortDate } from "@/lib/format";
 
 // 提案1件のカード。承認 / 却下(理由任意) / 修正して承認(主要フィールドのinline編集) / スキップ。
-// 楽観更新はせず action 後の revalidate に委ねる。送信中 disabled、{ok:false} はエラー表示。
+// 該当明細の金額も表示。分類・大項目・中項目はプルダウン（任意入力可）。
 
-// 「修正して承認」で編集可能なフィールド記述子（action type ごと）。
 interface EditField {
   key: string;
   label: string;
   value: string;
-  kind?: "text" | "number" | "match_type";
+  // text=自由入力 / number=数値 / match_type=一致方法select / classification=分類select / category=カテゴリselect(任意入力可)
+  kind?: "text" | "number" | "match_type" | "classification" | "category";
 }
 
 // action から編集可能フィールドを抽出。空配列 = inline 編集不可（修正ボタン非表示）。
@@ -33,33 +36,31 @@ function editableFields(action: ProposedAction | null): EditField[] {
   switch (action.type) {
     case "add_rule":
       return [
-        { key: "pattern", label: "パターン", value: action.pattern },
-        { key: "match_type", label: "一致", value: action.match_type, kind: "match_type" },
-        { key: "classification", label: "分類", value: action.classification },
-        { key: "category_major", label: "大項目", value: action.category_major ?? "" },
-        { key: "category_middle", label: "中項目", value: action.category_middle ?? "" },
+        { key: "pattern", label: "パターン（取引の摘要）", value: action.pattern },
+        { key: "match_type", label: "一致方法", value: action.match_type, kind: "match_type" },
+        { key: "classification", label: "分類", value: action.classification, kind: "classification" },
+        { key: "category_major", label: "大項目", value: action.category_major ?? "", kind: "category" },
+        { key: "category_middle", label: "中項目", value: action.category_middle ?? "", kind: "category" },
       ];
     case "edit_rule":
       return [
-        { key: "classification", label: "分類", value: String(action.patch.classification ?? "") },
-        { key: "category_major", label: "大項目", value: String(action.patch.category_major ?? "") },
-        { key: "category_middle", label: "中項目", value: String(action.patch.category_middle ?? "") },
+        { key: "classification", label: "分類", value: String(action.patch.classification ?? ""), kind: "classification" },
+        { key: "category_major", label: "大項目", value: String(action.patch.category_major ?? ""), kind: "category" },
+        { key: "category_middle", label: "中項目", value: String(action.patch.category_middle ?? ""), kind: "category" },
       ];
     case "set_override":
       return [
-        { key: "classification", label: "分類", value: action.fields.classification ?? "" },
-        { key: "category_major", label: "大項目", value: action.fields.category_major ?? "" },
-        { key: "category_middle", label: "中項目", value: action.fields.category_middle ?? "" },
+        { key: "classification", label: "分類", value: action.fields.classification ?? "", kind: "classification" },
+        { key: "category_major", label: "大項目", value: action.fields.category_major ?? "", kind: "category" },
+        { key: "category_middle", label: "中項目", value: action.fields.category_middle ?? "", kind: "category" },
       ];
     case "regroup":
-      return [
-        { key: "group_name", label: "グループ名", value: action.mappings[0]?.group_name ?? "" },
-      ];
+      return [{ key: "group_name", label: "グループ名", value: action.mappings[0]?.group_name ?? "" }];
     case "add_recurring":
       return [
         { key: "name", label: "名称", value: action.name },
         { key: "amount", label: "金額", value: String(action.amount), kind: "number" },
-        { key: "day", label: "日(任意)", value: action.day != null ? String(action.day) : "", kind: "number" },
+        { key: "day", label: "引落日(任意)", value: action.day != null ? String(action.day) : "", kind: "number" },
       ];
     default:
       return []; // delete_rule / mark_transfer は inline 編集対象なし
@@ -67,12 +68,8 @@ function editableFields(action: ProposedAction | null): EditField[] {
 }
 
 // 編集値（key→string）を元 action にマージして patchedAction を再構築。
-function rebuildAction(
-  action: ProposedAction,
-  values: Record<string, string>,
-): ProposedAction {
-  const v = (k: string, fallback: string) =>
-    values[k] !== undefined ? values[k] : fallback;
+function rebuildAction(action: ProposedAction, values: Record<string, string>): ProposedAction {
+  const v = (k: string, fallback: string) => (values[k] !== undefined ? values[k] : fallback);
   const orNull = (sv: string) => (sv.trim() === "" ? undefined : sv.trim());
   switch (action.type) {
     case "add_rule":
@@ -113,19 +110,86 @@ function rebuildAction(
         ...action,
         name: v("name", action.name),
         amount: Number(v("amount", String(action.amount))),
-        day: v("day", action.day != null ? String(action.day) : "").trim() === ""
-          ? null
-          : Number(v("day", "")),
+        day:
+          v("day", action.day != null ? String(action.day) : "").trim() === ""
+            ? null
+            : Number(v("day", "")),
       };
     default:
       return action;
   }
 }
 
+const INPUT_CLS =
+  "h-11 rounded-lg border border-border bg-surface px-2 text-sm text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary disabled:opacity-50";
+
+// 大項目・中項目のプルダウン（既存カテゴリ＋「任意入力…」で自由入力欄）。
+function CategorySelect({
+  id,
+  value,
+  options,
+  disabled,
+  onChange,
+}: {
+  id: string;
+  value: string;
+  options: string[];
+  disabled: boolean;
+  onChange: (v: string) => void;
+}) {
+  const [custom, setCustom] = useState(value !== "" && !options.includes(value));
+  const selectVal = custom ? "__custom__" : options.includes(value) ? value : "";
+  return (
+    <>
+      <select
+        id={id}
+        value={selectVal}
+        disabled={disabled}
+        onChange={(e) => {
+          if (e.target.value === "__custom__") setCustom(true);
+          else {
+            setCustom(false);
+            onChange(e.target.value);
+          }
+        }}
+        className={INPUT_CLS}
+      >
+        <option value="">（指定なし）</option>
+        {options.map((o) => (
+          <option key={o} value={o}>
+            {o}
+          </option>
+        ))}
+        <option value="__custom__">任意入力…</option>
+      </select>
+      {custom && (
+        <input
+          type="text"
+          value={value}
+          disabled={disabled}
+          placeholder="カテゴリ名を入力"
+          onChange={(e) => onChange(e.target.value)}
+          className={`mt-1 ${INPUT_CLS}`}
+        />
+      )}
+    </>
+  );
+}
+
 const BTN_BASE =
   "h-11 shrink-0 cursor-pointer rounded-lg border px-3 text-sm font-medium transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-40";
 
-export function ProposalCard({ proposal }: { proposal: OptimizerProposal }) {
+export function ProposalCard({
+  proposal,
+  samples,
+  sampleTotal,
+  categoryOptions,
+}: {
+  proposal: OptimizerProposal;
+  samples: ProposalSample[];
+  sampleTotal: number;
+  categoryOptions: { majors: string[]; middles: string[] };
+}) {
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const [showReject, setShowReject] = useState(false);
@@ -135,6 +199,9 @@ export function ProposalCard({ proposal }: { proposal: OptimizerProposal }) {
 
   const fields = editableFields(proposal.proposed_action);
   const targetText = targetSummary(proposal.kind, proposal.target_ref);
+
+  const setVal = (key: string, val: string) =>
+    setEditValues((v) => ({ ...v, [key]: val }));
 
   const handle = (fn: () => Promise<OptimizerActionResult>) => {
     setError(null);
@@ -187,7 +254,42 @@ export function ProposalCard({ proposal }: { proposal: OptimizerProposal }) {
         <p className="text-xs leading-relaxed text-muted">{proposal.rationale}</p>
       )}
 
-      {targetText && (
+      {/* 該当明細（金額） */}
+      {samples.length > 0 && (
+        <div className="rounded-lg border border-border bg-background px-2 py-1.5">
+          <p className="mb-1 text-[11px] font-medium text-muted">
+            該当明細{" "}
+            <span className="tabular">{sampleTotal}件</span>
+            {sampleTotal > samples.length && (
+              <span className="text-muted">（先頭{samples.length}件）</span>
+            )}
+          </p>
+          <ul className="flex flex-col gap-0.5">
+            {samples.map((s, i) => (
+              <li
+                key={`${s.date}-${i}`}
+                className="flex items-baseline justify-between gap-2 text-[11px]"
+              >
+                <span className="flex min-w-0 items-baseline gap-1.5">
+                  <span className="tabular shrink-0 text-muted">
+                    {shortDate(s.date)}
+                  </span>
+                  <span className="truncate text-foreground">{s.description}</span>
+                </span>
+                <span
+                  className={`tabular shrink-0 font-medium ${
+                    s.amount < 0 ? "text-foreground" : "text-positive"
+                  }`}
+                >
+                  ¥{yenSigned(s.amount)}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {targetText && !samples.length && (
         <p className="tabular rounded-lg bg-background px-2 py-1 text-[11px] text-muted">
           {targetText}
         </p>
@@ -200,45 +302,68 @@ export function ProposalCard({ proposal }: { proposal: OptimizerProposal }) {
       {showEdit && fields.length > 0 && (
         <div className="rounded-lg border border-primary/30 bg-primary/5 p-3">
           <p className="mb-2 text-[11px] font-medium text-primary">
-            修正して承認（主要フィールド）
+            修正して承認
           </p>
           <div className="flex flex-col gap-2">
-            {fields.map((f) => (
-              <div key={f.key} className="flex flex-col gap-1">
-                <label
-                  htmlFor={`edit-${proposal.id}-${f.key}`}
-                  className="text-[11px] text-muted"
-                >
-                  {f.label}
-                </label>
-                {f.kind === "match_type" ? (
-                  <select
-                    id={`edit-${proposal.id}-${f.key}`}
-                    value={editValues[f.key] ?? f.value}
-                    onChange={(e) =>
-                      setEditValues((v) => ({ ...v, [f.key]: e.target.value }))
-                    }
-                    disabled={pending}
-                    className="h-11 rounded-lg border border-border bg-surface px-2 text-sm text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary disabled:opacity-50"
-                  >
-                    <option value="contains">contains（部分一致）</option>
-                    <option value="exact">exact（完全一致）</option>
-                  </select>
-                ) : (
-                  <input
-                    id={`edit-${proposal.id}-${f.key}`}
-                    type={f.kind === "number" ? "number" : "text"}
-                    inputMode={f.kind === "number" ? "numeric" : undefined}
-                    value={editValues[f.key] ?? f.value}
-                    onChange={(e) =>
-                      setEditValues((v) => ({ ...v, [f.key]: e.target.value }))
-                    }
-                    disabled={pending}
-                    className="h-11 rounded-lg border border-border bg-surface px-2 text-sm text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary disabled:opacity-50"
-                  />
-                )}
-              </div>
-            ))}
+            {fields.map((f) => {
+              const id = `edit-${proposal.id}-${f.key}`;
+              const cur = editValues[f.key] ?? f.value;
+              return (
+                <div key={f.key} className="flex flex-col gap-1">
+                  <label htmlFor={id} className="text-[11px] text-muted">
+                    {f.label}
+                  </label>
+                  {f.kind === "match_type" ? (
+                    <select
+                      id={id}
+                      value={cur}
+                      disabled={pending}
+                      onChange={(e) => setVal(f.key, e.target.value)}
+                      className={INPUT_CLS}
+                    >
+                      <option value="exact">完全一致（この摘要だけ）</option>
+                      <option value="contains">部分一致（含む取引すべて）</option>
+                    </select>
+                  ) : f.kind === "classification" ? (
+                    <select
+                      id={id}
+                      value={cur}
+                      disabled={pending}
+                      onChange={(e) => setVal(f.key, e.target.value)}
+                      className={INPUT_CLS}
+                    >
+                      {CLASSIFICATION_OPTIONS.map((o) => (
+                        <option key={o.value} value={o.value}>
+                          {o.label}
+                        </option>
+                      ))}
+                    </select>
+                  ) : f.kind === "category" ? (
+                    <CategorySelect
+                      id={id}
+                      value={cur}
+                      options={
+                        f.key === "category_major"
+                          ? categoryOptions.majors
+                          : categoryOptions.middles
+                      }
+                      disabled={pending}
+                      onChange={(val) => setVal(f.key, val)}
+                    />
+                  ) : (
+                    <input
+                      id={id}
+                      type={f.kind === "number" ? "number" : "text"}
+                      inputMode={f.kind === "number" ? "numeric" : undefined}
+                      value={cur}
+                      disabled={pending}
+                      onChange={(e) => setVal(f.key, e.target.value)}
+                      className={INPUT_CLS}
+                    />
+                  )}
+                </div>
+              );
+            })}
           </div>
           <button
             type="button"
@@ -253,19 +378,16 @@ export function ProposalCard({ proposal }: { proposal: OptimizerProposal }) {
 
       {showReject && (
         <div className="flex flex-col gap-2 rounded-lg border border-negative/30 bg-negative/5 p-3">
-          <label
-            htmlFor={`reject-${proposal.id}`}
-            className="text-[11px] text-muted"
-          >
-            却下の理由（任意・学習に使われます）
+          <label htmlFor={`reject-${proposal.id}`} className="text-[11px] text-muted">
+            却下の理由（任意・今後の提案精度に使われます）
           </label>
           <input
             id={`reject-${proposal.id}`}
             type="text"
             value={rejectNote}
-            onChange={(e) => setRejectNote(e.target.value)}
             disabled={pending}
-            className="h-11 rounded-lg border border-border bg-surface px-2 text-sm text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-negative disabled:opacity-50"
+            onChange={(e) => setRejectNote(e.target.value)}
+            className={INPUT_CLS.replace("focus-visible:outline-primary", "focus-visible:outline-negative")}
           />
           <button
             type="button"
@@ -282,7 +404,8 @@ export function ProposalCard({ proposal }: { proposal: OptimizerProposal }) {
         <button
           type="button"
           onClick={onApprove}
-          disabled={pending}
+          disabled={pending || !proposal.proposed_action}
+          title={!proposal.proposed_action ? "アクションが無いため承認できません（却下/スキップを）" : undefined}
           className={`${BTN_BASE} border-primary bg-primary text-white hover:bg-primary/90 focus-visible:outline-primary`}
         >
           承認
