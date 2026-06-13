@@ -1,6 +1,6 @@
 # mf-finance 引き継ぎ（別セッション再開用）
 
-最終更新: 2026-06-12 / 作業ブランチ: `task/260606-mf-finance`（worktree `/Users/rikukudo/Projects/all-good-ops-mf-finance`）
+最終更新: 2026-06-13 / 作業ブランチ: `task/260606-mf-finance`（worktree `/Users/rikukudo/Projects/all-good-ops-mf-finance`）
 
 ## 0. これは何
 マネーフォワードME（個人版・課金継続＝収集役）のデータを Claude 側で自動集計・分析する**個人家計ダッシュボード**。MF課金はやめず「収集=MF / 分析=本システム」。ユーザー=工藤陸（フリーランス・複数収入源）。
@@ -43,6 +43,14 @@ MF側でデータが回復していたため再取得を実施。chrome-devtools
 - **ラベリング**: agent(=Claude)が350 distinctを直接分類→`category_rules` 245件(source='llm')→`apply-rules.mjs` 冪等適用。**unknown 532→65**。`npm run refresh` = normalize→load→apply:rules→load:assets（/api/refresh も apply まで連鎖）。
 - 異常検知3ルール(急増/二重請求/初出大口)を home と /budget に表示。schema +3表(budgets/business_pl/tax_mappings)。
 - **freee**: 2025帳簿ゼロ・2026年度未作成と確認済 → `/tax` は「未取込」案内が正常系。freee側で記帳が始まったら `data/freee-pl.json` → `npm run load:freee`。
+
+### Optimizer（データ・スチュワード）✅ 完了（2026-06-13・5f1203f他・並列3WS+基盤+LLM実走）
+ダッシュボード全体のシグナルを拾い提案キューに出し、承認をルール化で永続する二層システム（spec `docs/.../2026-06-13-mf-finance-optimizer-design.md`、plan `docs/.../2026-06-13-mf-finance-optimizer.md`）。
+- **下層=コード**: `lib/optimizer/{detect.mjs純関数,signals.ts}`。振替ペア/ルール矛盾/ラベル不一致/未分類塊/未確定定期を検出→`optimizer_proposals` に dedup INSERT（実データ139シグナル）。/optimizer の[シグナル更新]ボタンで実行。
+- **上層=LLM(Claude・オンデマンド・¥0)**: `npm run optimizer:export`→`data/optimizer-input.json`→Claudeが読んで判断提案 JSON 生成→`npm run optimizer:propose`。**同 dedup_key の pending(問い)には答えを埋める**（重複せず）。
+- **UI**: `/optimizer`（承認/却下/修正して承認/スキップ・kind別・確度順・決定ログ・home バッジ）。承認→`lib/optimizer/actions.ts` が7アクション型(add_rule/edit_rule/delete_rule/set_override/mark_transfer/regroup/add_recurring)を反映+apply連鎖。
+- **永続3分担**: category_rules / `txn_overrides`(振替・一点修正、`apply-overrides.mjs`) / `category_groups`(?by=group ロールアップ)。承認は `npm run refresh` で再現（実証済: ANTHROPICルール修正が refresh後も fixed維持）。
+- **DB現状**: 139 pending(うち私のLLM答え11件、判断待ち=クドウリク→income等)、2件 demo承認済(rule#48 ANTHROPIC→fixed / 固定インフラ group)。DBはgitignore。ユーザーは /optimizer で残りを triage。会話で「オプティマイザー回して」と言えば Claude が新たな判断提案を生成。
 
 ### 既知のデータ整備課題（コードでなく運用）
 1. **CF予測が2026-07ゼロ割れ表示** = 定期収入の登録が¥31,080/月と過小（実3ヶ月平均 ¥367,465。BEAT ICE等が「スポット」扱い）。`/settings` で定期収入を確定すれば現実化。
