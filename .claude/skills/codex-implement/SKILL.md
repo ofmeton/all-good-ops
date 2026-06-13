@@ -21,7 +21,7 @@ description: まとまった機能の実装・テストを Codex(gpt-5.5 high・
    - `cwd` = 2 の worktree 絶対パス
    - `sandbox` = `workspace-write`
    - `approval-policy` = `never`（自律）
-   - `model` 既定 gpt-5.5 / high（`~/.codex/config.toml`）。必要時のみ上書き
+   - `model` 既定 gpt-5.5 / **medium**（`~/.codex/config.toml` の `model_reasoning_effort`）。設計は architect が固めて渡す＝Codex は実装担当なので medium で品質は落ちない（high は reasoning 消費が大きくサブスク枠を早く食う＝レート制限の主因）。**難所のみ high に上書き**: アルゴリズム的に難しい / 状態管理・並行処理が絡む / ブループリントに曖昧さが残る実装のみ、`mcp__codex__codex` の config で `model_reasoning_effort=high` を渡す。
    - `prompt` = ブループリント全文を埋め込む（Codex はリポジトリ規約を知らない。worktree root の `AGENTS.md` を自動で読むが、ブループリントにも要点を再掲する）
    - 完了後、Codex は**ビルダーサマリ**（追加/編集ファイル・契約差分・テスト結果・逸脱・人間ゲート該当）を返す。
    - **Codex がレート/使用量制限で落ちたら** → `## レート制限時の自動フォールバック`（Sonnet 4.6 へ自動切替）へ。
