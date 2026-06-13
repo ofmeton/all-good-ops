@@ -35,12 +35,16 @@ node apps/web-ui-bridge/daemon/server.mjs \
 cd outputs/clients/terra-isshiki/site && npm run dev
 ```
 
-ブラウザで開いて右下のボタン:
-- **🎯 選択**: 要素をホバー/クリックで選択。パネルで——
-  - **直接調整**: 画面幅(全/sm/md/lg/xl)を選び、余白±/詰め±/サイズ±/揃え/文字色・背景色/className をいじる（ライブプレビュー）→「適用」で実ソースへ即反映（Claude 不要・HMR 即時）。bp を md にすれば `md:my-4` のようにレスポンシブ別に効く。
-  - **構造**: 「複製」「削除」で選択要素を決定的に複製/削除（Claude 不要）。
-  - **Claudeに頼む**: 指示を書いて「キューに追加」→「Claudeへ送る」→ Claude Code 側で「キュー処理して」（or `/loop` 監視）。
-- **⇅ 並べ替え**: 要素をドラッグして別要素の上にドロップ → daemon が AST で **兄弟順 or 別親への移動(reparent)を決定的に**確定（Claude 不要）。`/reorder` `/delete` `/duplicate` はいずれも className 一意特定時のみ・純コード操作（移動だけ移動先 1 行目のインデントを合わせる best-effort）。
+UI は **STUDIO 風の右ドック・ダークインスペクタ**（Shadow DOM 隔離・Inter・SVG アイコン）。上部ツールバー = 選択 / 移動(⇅) / 戻る / 進む / 閉じる ＋ 画面幅(全/sm/md/lg/xl)セグメント。閉じると右上のランチャーから再表示。
+
+- **選択(カーソル)**: 要素をホバー/クリックで選択。インスペクタに——
+  - **直接調整**: 余白±/詰め±/サイズ±/揃え/文字色・背景色/className（ライブプレビュー）→「適用」で実ソースへ即反映（Claude 不要・HMR 即時）。bp を md にすれば `md:my-4` のようにレスポンシブ別に効く。
+  - **構造**: 「複製」「削除」で決定的に複製/削除（Claude 不要）。
+  - **Claudeに頼む**: 複雑な構造/文言は「キューに追加」→「Claudeへ送る」→ Claude Code 側で「キュー処理して」。
+- **移動(⇅)**: 要素をドラッグして別要素の上にドロップ → **兄弟順 or 別親への移動(reparent)を決定的に**確定。**ドラッグ中、表示端でカーソルを止めると自動スクロール**。
+- **戻る/進む**: ツールバーの ↶ ↷、または **⌘Z / ⌘⇧Z（Ctrl+Z / Ctrl+Y）**。daemon が編集前後スナップショットで undo/redo。テキスト入力中は OS ネイティブ undo を優先。外部(Claude/手編集)で変わっていたら潰さず警告。
+
+`/apply-style` `/reorder` `/delete` `/duplicate` `/undo` `/redo` はいずれも className 一意特定時のみの純コード操作（移動だけ移動先 1 行目のインデントを合わせる best-effort）。
 
 `/apply-style`・`/reorder` はいずれも **className を一意特定できた時だけ決定的に書き換え**（複数一致/動的 class/兄弟でない 等は安全側で拒否 → Claude 経路へ誘導）。`/reorder` は @babel/parser で各要素の正確なソース範囲を取り、要素テキストを元の空白スロットに入れ替える純文字列操作（整形保持・LLM 不介在）。
 
@@ -81,6 +85,9 @@ cd outputs/clients/terra-isshiki/site && npm run dev
 - ~~Phase B.2: フォントサイズ/色ピッカー、レスポンシブ別（bp 切替で md: 等）の編集~~（済）
 - ~~Phase C slice1: ドラッグで兄弟並べ替え（AST で決定的・Claude 不介在）~~（済）
 - ~~Phase C 続き: 複製/削除/別親への移動(reparent) も決定的 AST 操作で（Claude 不介在）~~（済）
+- ~~戻る/進む: daemon 編集履歴で undo/redo（↶↷ボタン・⌘Z/⌘⇧Z・Ctrl+Z/Ctrl+Y）~~（済）
+- ~~UI を STUDIO 風（右ドック・ダーク・SVG アイコン・セクション分けインスペクタ）に~~（済）
+- ~~D&D 中の自動スクロール（表示端で）~~（済）
 - 構造編集はこれで一通り（並べ替え/reparent/複製/削除）。さらに要素の新規追加が要れば「Claudeに頼む」経路で（自由形のため非決定的でよい領域）
 - Onlook 評価メモ: self-host は Supabase+Docker+CodeSandbox 必須・ローカル NodeFs は未配線・OSS は過渡期。「ローカル直編集 D&D」目的には重く不適合のため自作（決定的 reorder）を採用
 - 既知の制限: フォントサイズ stepper は Tailwind 名前付きサイズ(text-lg 等)を対象。`text-[clamp(..)]` 等の arbitrary 値は className エディタで直接編集。色は arbitrary hex(`text-[#..]`)で付与（同 bp の既存色のみ除去）。

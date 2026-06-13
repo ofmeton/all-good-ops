@@ -162,13 +162,13 @@ async function applyStyle({ route, oldClassName, newClassName }) {
   if (!insideTarget(target.file)) return { ok: false, reason: "outside-target" };
   const at = target.src.indexOf(oldClassName);
   const next = target.src.slice(0, at) + newClassName + target.src.slice(at + oldClassName.length);
-  await writeFile(target.file, next, "utf8");
+  await recordedWrite(target.file, target.src, next, "直接調整");
   return { ok: true, file: path.relative(TARGET_ROOT, target.file) };
 }
 
 // Phase C: 構造編集の共通実行。route→app/** の候補を順に試し、最初に確定した
 // ファイルへ書込。apply(src) は reorder.mjs の純関数（{ok,changed,src} or {reason}）。
-async function findAndApply(route, apply) {
+async function findAndApply(route, apply, label = "編集") {
   const candidates = [];
   const routeFile = routeToFile(route);
   if (routeFile) candidates.push(routeFile);
@@ -180,13 +180,48 @@ async function findAndApply(route, apply) {
     const src = await readFile(file, "utf8");
     const r = apply(src);
     if (r.ok && r.changed) {
-      await writeFile(file, r.src, "utf8");
+      await recordedWrite(file, src, r.src, label);
       return { ok: true, file: path.relative(TARGET_ROOT, file) };
     }
     if (r.ok && !r.changed) return { ok: true, file: path.relative(TARGET_ROOT, file), noop: true };
     if (r.reason && r.reason !== "not-found") lastReason = r.reason; // ambiguous/nested 等を優先表示
   }
   return { ok: false, reason: lastReason };
+}
+
+// ---- 編集履歴（undo/redo） --------------------------------------------
+// 各編集の前後スナップショットを積む。undo は「現在の内容が after のまま」の時だけ
+// before に戻す（外部=Claude/手編集/formatter の変更があれば潰さず拒否）。
+const undoStack = [];
+const redoStack = [];
+const HISTORY_MAX = 100;
+const rel = (f) => path.relative(TARGET_ROOT, f);
+
+async function recordedWrite(file, before, after, label) {
+  await writeFile(file, after, "utf8");
+  undoStack.push({ file, before, after, label });
+  if (undoStack.length > HISTORY_MAX) undoStack.shift();
+  redoStack.length = 0; // 新しい編集で redo 系列は無効化
+}
+
+async function undo() {
+  const e = undoStack.pop();
+  if (!e) return { ok: false, reason: "nothing" };
+  const cur = await readFile(e.file, "utf8");
+  if (cur !== e.after) { undoStack.push(e); return { ok: false, reason: "file-changed", file: rel(e.file) }; }
+  await writeFile(e.file, e.before, "utf8");
+  redoStack.push(e);
+  return { ok: true, file: rel(e.file), label: e.label, canUndo: undoStack.length > 0, canRedo: true };
+}
+
+async function redo() {
+  const e = redoStack.pop();
+  if (!e) return { ok: false, reason: "nothing" };
+  const cur = await readFile(e.file, "utf8");
+  if (cur !== e.before) { redoStack.push(e); return { ok: false, reason: "file-changed", file: rel(e.file) }; }
+  await writeFile(e.file, e.after, "utf8");
+  undoStack.push(e);
+  return { ok: true, file: rel(e.file), label: e.label, canUndo: true, canRedo: redoStack.length > 0 };
 }
 
 const server = http.createServer(async (req, res) => {
@@ -267,7 +302,7 @@ const server = http.createServer(async (req, res) => {
     if (!auth.ok) return send(res, auth.status, { "Content-Type": "application/json" }, JSON.stringify({ ok: false, error: auth.error }));
     try {
       const { route, dragClass, targetClass, position } = JSON.parse(await readBody(req));
-      const result = await findAndApply(route, (src) => moveInSource(src, dragClass, targetClass, position));
+      const result = await findAndApply(route, (src) => moveInSource(src, dragClass, targetClass, position), "並べ替え");
       console.log(`[web-ui-bridge] reorder/move → ${result.ok ? (result.file ?? "(noop)") : "skip:" + result.reason}`);
       return send(res, 200, { "Content-Type": "application/json" }, JSON.stringify(result));
     } catch (err) {
@@ -282,13 +317,32 @@ const server = http.createServer(async (req, res) => {
     try {
       const { route, targetClass } = JSON.parse(await readBody(req));
       const op = req.url === "/delete" ? deleteInSource : duplicateInSource;
-      const result = await findAndApply(route, (src) => op(src, targetClass));
+      const label = req.url === "/delete" ? "削除" : "複製";
+      const result = await findAndApply(route, (src) => op(src, targetClass), label);
       console.log(`[web-ui-bridge] ${req.url.slice(1)} → ${result.ok ? result.file : "skip:" + result.reason}`);
       return send(res, 200, { "Content-Type": "application/json" }, JSON.stringify(result));
     } catch (err) {
       return send(res, 400, { "Content-Type": "application/json" },
         JSON.stringify({ ok: false, error: err.message }));
     }
+  }
+
+  if (req.method === "POST" && (req.url === "/undo" || req.url === "/redo")) {
+    const auth = authorizeMutation(req);
+    if (!auth.ok) return send(res, auth.status, { "Content-Type": "application/json" }, JSON.stringify({ ok: false, error: auth.error }));
+    try {
+      const result = req.url === "/undo" ? await undo() : await redo();
+      console.log(`[web-ui-bridge] ${req.url.slice(1)} → ${result.ok ? result.label + " (" + result.file + ")" : "skip:" + result.reason}`);
+      return send(res, 200, { "Content-Type": "application/json" }, JSON.stringify(result));
+    } catch (err) {
+      return send(res, 400, { "Content-Type": "application/json" },
+        JSON.stringify({ ok: false, error: err.message }));
+    }
+  }
+
+  if (req.method === "GET" && req.url === "/history") {
+    return send(res, 200, { "Content-Type": "application/json" },
+      JSON.stringify({ ok: true, canUndo: undoStack.length > 0, canRedo: redoStack.length > 0 }));
   }
 
   send(res, 404, { "Content-Type": "text/plain" }, "not found");
