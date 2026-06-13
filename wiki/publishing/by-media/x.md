@@ -32,6 +32,15 @@ status: active
 - `format-dist.json` の広域平均では MakeAI_CEO thread 平均 6.7 parts だが、like 上位では長い chain が勝ち筋ではない。強い long single + tight 2-4 parts が優先。
 - 生成時は `---` 区切り、1本目=hook、2本目=具体/手順、3本目=補足/注意、4本目=まとめ/保存/note CTA。`thread_bodies` 最大 8 本は hard cap で、目標本数ではない。
 
+## 観測 [2026-06-13] — チャエン / X Article gap-fill
+
+出典: [2026-06-13 viral writing and thread study](../../../outputs/research/2026-06-13-viral-writing-and-thread-study.md)
+
+- チャエン型は `【速報】` 固定ではない。top20 では `【】` 始まりは 7/20 で、`Claude Code有能すぎる。` のような「ツール名 + 体感断定」も主力。表示上は 150-220 字前後で短く締める。
+- チャエンの保存価値は `【保存版】` ラベルではなく、速報/体感投稿の中に手順・数字・使いどころを埋め込むこと。スレッドは multi 8/15 でも最大3 parts、root完結 + 補足/ソース/導線に留める。
+- X Article は保存/教育/送客の資産型。9本の実例では nobel_824 が 5/9、root は 9/9 がリンクのみ、本文はタイトル/preview/章立てが本体。
+- Article を使う条件は、`タイトル（保存版/最新+ツール+到達状態+全手順/N選） → preview（悩み引用+共感+先に結論） → 章立て（手順/落とし穴/チェックリスト） → CTA/参考リンク` まで作れること。薄い素材は long single に留める。
+
 ## 媒体特化の禁忌
 
 - リンク貼って終わりの単発投稿（ALG 評価下がる）
