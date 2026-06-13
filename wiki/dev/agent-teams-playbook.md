@@ -34,13 +34,23 @@ status: active
 
 各工程は専用クリーンコンテキストで、前工程のサマリのみ受け取る（ドリフト防止）。Step0 調査は architect 起動手順か `feature-dev:code-explorer` を流用（専任新設なし）。
 
+## Codex-as-implementer レーン（実装委任が既定）
+
+実装・テストフェーズは最もトークンを食う。これを **Codex(gpt-5.5 high・定額サブスク)** に逃がし、Claude は設計(architect)とレビュー(pr-review/spec-validator)を握る**半委任**が既定。Codex turn は ChatGPT/Codex の定額枠（Claude サブスク／API 課金の外）で動くため、Claude 側トークンが激減し品質は保たれる。配線の正本は `skill:codex-implement`。
+
+- **いつ system-engineer(Claude) でなく Codex か**: 標準以上の実装は既定で Codex。Claude implementer は「Codex に出しづらい超密結合な小改修」「レビュー往復より直書きが速い軽微修正」など例外時のみ。
+- **起動**: `mcp__codex__codex` を `cwd=<案件 worktree 絶対パス>` / `sandbox=workspace-write` / `approval-policy=never` で呼ぶ。`prompt` に architect ブループリント全文を埋め込む（Codex は worktree root の `AGENTS.md` を自動で読むが、規約要点はブループリントにも再掲）。差し戻しは `mcp__codex__codex-reply`（`threadId`）。
+- **受け渡し**: Codex はビルダーサマリ（追加/編集ファイル・契約差分・テスト結果・逸脱・人間ゲート該当）を返す。lead はサマリ + `git diff` を pr-review-toolkit / spec-validator に渡す。
+- **並列**: 並列案件は Codex も**別 worktree**（1 案件=1 worktree 維持）。同一 worktree で複数 Codex を同時 commit させない（`.git/index.lock` 競合）。
+- **人間ゲート**: 人間承認・PR 承認は不要・**デプロイまで自走**（`feedback_deploy_no_confirm`）。ただし migration 本番適用 / 外部送信 / 金銭の硬ゲートは据え置き（Codex は実行せず Claude→人間にエスカレーション）。
+
 ## チーム編成（最大 4・スポット運用）
 
 | 役割 | 担当 | tools | 備考 |
 |---|---|---|---|
 | **lead** | セッション本体 | — | 指揮 + 人間への報告窓口。teammate を生成し統合 |
 | **architect** | `dev-automation/architect` | 読み取り専用 | 設計のみ。plan approval 必須。SSOT 必読 |
-| **implementer** | `dev-automation/system-engineer` | 書込可 | 1〜2 名（FE/BE 等ファイル領域が割れる時のみ 2 名） |
+| **implementer** | `dev-automation/system-engineer` **または Codex**（下記レーン） | 書込可 | 1〜2 名（FE/BE 等ファイル領域が割れる時のみ 2 名）。**実装は Codex 委任が既定**（トークン節約） |
 | **reviewer** | `pr-review-toolkit:*` | 読み取り専用 | 下記レシピで 2〜3 観点 |
 
 **人数は最大 4 に固定**（記事の 8 人案は採らない）。トークンは人数比例で増えるため、ルーティン作業に多人数を当てない（「3 人の集中 > 5 人の散漫」）。
