@@ -1,5 +1,6 @@
 import {
   fetchUserTweets,
+  fetchBookmarks,
   searchTweets,
   getTrends,
   searchUsers,
@@ -48,6 +49,79 @@ function jsonFetch(body: unknown, ok = true): typeof fetch {
 }
 
 describe("twitterapi-client extended", () => {
+  test("fetchBookmarks maps tweets and sends login_cookies/proxy in POST body", async () => {
+    const seen: Array<{ url: string; init?: RequestInit }> = [];
+    const fetchImpl = (async (url: RequestInfo | URL, init?: RequestInit) => {
+      seen.push({ url: String(url), init });
+      return {
+        ok: true,
+        status: 200,
+        statusText: "OK",
+        json: async () => ({
+          tweets: [
+            {
+              id: "b1",
+              text: "bookmarked",
+              createdAt: "Sat May 23 13:23:33 +0000 2026",
+              lang: "en",
+              author: { userName: "alice" },
+            },
+          ],
+        }),
+      } as Response;
+    }) as unknown as typeof fetch;
+
+    const out = await fetchBookmarks("cookie-value", "http://proxy.example", "k", fetchImpl);
+    expect(out).toEqual([
+      expect.objectContaining({
+        id: "b1",
+        text: "bookmarked",
+        author: { userName: "alice", id: undefined, isBlueVerified: undefined },
+        lang: "en",
+      }),
+    ]);
+    expect(seen).toHaveLength(1);
+    const url = new URL(seen[0].url);
+    expect(url.pathname).toBe("/twitter/bookmarks_v2");
+    expect(url.searchParams.get("login_cookie")).toBeNull();
+    expect(url.searchParams.get("login_cookies")).toBeNull();
+    expect(seen[0].init?.method).toBe("POST");
+    const body = JSON.parse(String(seen[0].init?.body)) as Record<string, unknown>;
+    expect(body).toEqual({ login_cookies: "cookie-value", proxy: "http://proxy.example", count: 20 });
+  });
+
+  test("fetchBookmarks returns [] for legitimate empty bookmarks page", async () => {
+    const out = await fetchBookmarks(
+      "secret-cookie",
+      "http://user:pass@proxy.example",
+      "k",
+      jsonFetch({ tweets: [] }),
+    );
+    expect(out).toEqual([]);
+  });
+
+  test("fetchBookmarks throws on HTTP 200 error payload without leaking cookie/proxy", async () => {
+    const p = fetchBookmarks(
+      "secret-cookie",
+      "http://user:pass@proxy.example",
+      "k",
+      jsonFetch({ status: "error", msg: "proxy connect failed" }),
+    );
+    await expect(p).rejects.toThrow(/twitterapi\.io bookmarks request failed: .*status=error.*msg=proxy connect failed/);
+    await expect(p).rejects.not.toThrow(/secret-cookie|user:pass@proxy/);
+  });
+
+  test("fetchBookmarks keeps auth-error payload as specific auth failure", async () => {
+    await expect(
+      fetchBookmarks(
+        "secret-cookie",
+        "http://proxy.example",
+        "k",
+        jsonFetch({ status: "error", msg: "login_cookie expired" }),
+      ),
+    ).rejects.toThrow("twitterapi.io bookmarks auth failed (login_cookie expired?)");
+  });
+
   test("searchTweets returns mapped tweets with extended fields", async () => {
     const fetchImpl = jsonFetch({
       tweets: [

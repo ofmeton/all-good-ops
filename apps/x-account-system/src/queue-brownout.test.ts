@@ -64,6 +64,8 @@ function makeEnv(overrides: Partial<Env> = {}): Env {
     X_ACCESS_TOKEN: "x-token",
     X_REFRESH_TOKEN: "x-refresh",
     TWITTERAPI_IO_KEY: "tw-key",
+    TWITTERAPI_IO_LOGIN_COOKIE: "login-cookie",
+    TWITTERAPI_IO_PROXY: "http://proxy.example",
     SUPABASE_URL: "https://test.supabase.co",
     SUPABASE_SERVICE_ROLE_KEY: "test-srk",
     LINE_CHANNEL_ACCESS_TOKEN: "test-line-token",

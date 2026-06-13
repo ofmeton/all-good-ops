@@ -101,6 +101,7 @@ describe("brownout 4-stage thresholds", () => {
     const d = await evaluateBrownout(5000);
     expect(d.allowedJobs).toContain("daily-digest");
     expect(d.allowedJobs).toContain("collect");
+    expect(d.allowedJobs).toContain("bookmark-collect");
     expect(d.allowedJobs).toContain("compose");
     expect(d.allowedJobs).toContain("check");
     expect(d.allowedJobs).toContain("line-event");
@@ -110,6 +111,7 @@ describe("brownout 4-stage thresholds", () => {
     const d = await evaluateBrownout(10000);
     expect(d.allowedJobs).toContain("daily-digest");
     expect(d.allowedJobs).toContain("collect");
+    expect(d.allowedJobs).toContain("bookmark-collect");
     expect(d.allowedJobs).toContain("line-event");
   });
 
@@ -118,6 +120,7 @@ describe("brownout 4-stage thresholds", () => {
     expect(d.allowedJobs).toContain("daily-digest");
     expect(d.allowedJobs).toContain("line-event");
     expect(d.allowedJobs).not.toContain("collect");
+    expect(d.allowedJobs).not.toContain("bookmark-collect");
     expect(d.allowedJobs).not.toContain("compose");
     expect(d.allowedJobs).not.toContain("check");
     expect(d.allowedJobs).not.toContain("optimizer-update");
@@ -128,6 +131,7 @@ describe("brownout 4-stage thresholds", () => {
     expect(d.allowedJobs).toContain("daily-digest");
     expect(d.allowedJobs).toContain("line-event");
     expect(d.allowedJobs).not.toContain("collect");
+    expect(d.allowedJobs).not.toContain("bookmark-collect");
     expect(d.allowedJobs).not.toContain("rollback-monitor");
     expect(d.allowedJobs).not.toContain("optimizer-update");
   });

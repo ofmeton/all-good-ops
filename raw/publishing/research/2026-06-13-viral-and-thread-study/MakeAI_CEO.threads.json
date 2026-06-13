@@ -1,0 +1,786 @@
+[
+  {
+    "handle": "MakeAI_CEO",
+    "root": {
+      "id": "2053688476412088356",
+      "text": "残り3つのプロンプト。\n\n④ネイティブ感覚の文法解説\n「[文法ルール]をネイティブの感覚で説明。例文は日常会話で出る場面に限定。日本人が99%間違える落とし穴3つと、修正する音読フレーズを5つずつ」\n\n⑤英作文クイズ＋弱点分析\n「今週学んだ単語と文法から10問の英作文クイズ。間違えた問題は7日後に再出題、弱点パターンを分析して次週の重点3つを提示」\n\n⑥TIMEレベル没入翻訳\n「このテキストをTIMEレベルに翻訳。必須語彙10個、英語独特の表現3つ、5分ディスカッション質問3問、私の回答にネイティブ視点でフィードバック」\n\n今日は①から音声モードで話しかけて。10分で世界変わる。",
+      "author": {
+        "userName": "MakeAI_CEO",
+        "id": "1912080237028114432",
+        "isBlueVerified": true
+      },
+      "createdAt": "Mon May 11 04:07:43 +0000 2026",
+      "lang": "ja",
+      "likeCount": 110,
+      "retweetCount": 6,
+      "replyCount": 1,
+      "quoteCount": 1,
+      "bookmarkCount": 317,
+      "viewCount": 25150,
+      "isReply": true,
+      "conversationId": "2053688437434450266",
+      "tweetUrl": "https://x.com/MakeAI_CEO/status/2053688476412088356"
+    },
+    "thread": [
+      {
+        "id": "2053688437434450266",
+        "text": "断言します。\n\n2026年、まだ英会話教室やDuolingoやBerlitzに毎月課金してる人、マジで時間と金の両方を捨ててます。\n\nAIを毎日触ってる人は、ChatGPTで英会話を勉強してる。たった「6つのプロンプト」をコピペするだけで、月3万のスクール超える学習環境が作れるから。理由を話します。",
+        "author": {
+          "userName": "MakeAI_CEO",
+          "id": "1912080237028114432",
+          "isBlueVerified": true
+        },
+        "createdAt": "Mon May 11 04:07:33 +0000 2026",
+        "lang": "ja",
+        "likeCount": 2385,
+        "retweetCount": 173,
+        "replyCount": 12,
+        "quoteCount": 13,
+        "bookmarkCount": 3698,
+        "viewCount": 473082,
+        "isReply": false,
+        "conversationId": "2053688437434450266",
+        "tweetUrl": "https://x.com/MakeAI_CEO/status/2053688437434450266"
+      },
+      {
+        "id": "2053688444124357113",
+        "text": "まず、2026年5月にOpenAIが発表した「GPT-Realtime-2」がエグい。\n\nこれは「推論しながら音声会話できる」新世代の音声AI。Big Bench Audioで96.6%の精度を記録、前世代比で15.2ポイント改善。128Kトークンのコンテキストで、長い会話の流れもリアルタイムで処理できる。\n\n英会話の壁打ち相手としては、事実上「人間超え」のレベルに到達した。",
+        "author": {
+          "userName": "MakeAI_CEO",
+          "id": "1912080237028114432",
+          "isBlueVerified": true
+        },
+        "createdAt": "Mon May 11 04:07:35 +0000 2026",
+        "lang": "ja",
+        "likeCount": 104,
+        "retweetCount": 5,
+        "replyCount": 2,
+        "quoteCount": 2,
+        "bookmarkCount": 142,
+        "viewCount": 34880,
+        "isReply": true,
+        "conversationId": "2053688437434450266",
+        "tweetUrl": "https://x.com/MakeAI_CEO/status/2053688444124357113"
+      }
+    ]
+  },
+  {
+    "handle": "MakeAI_CEO",
+    "root": {
+      "id": "2056610142930743300",
+      "text": "AIとこれさえやれば、誰でも1億円企業作れる。",
+      "author": {
+        "userName": "MakeAI_CEO",
+        "id": "1912080237028114432",
+        "isBlueVerified": true
+      },
+      "createdAt": "Tue May 19 05:37:22 +0000 2026",
+      "lang": "ja",
+      "likeCount": 218,
+      "retweetCount": 18,
+      "replyCount": 0,
+      "quoteCount": 0,
+      "bookmarkCount": 268,
+      "viewCount": 99993,
+      "isReply": false,
+      "conversationId": "2056610142930743300",
+      "tweetUrl": "https://x.com/MakeAI_CEO/status/2056610142930743300"
+    },
+    "thread": [
+      {
+        "id": "2056610142930743300",
+        "text": "AIとこれさえやれば、誰でも1億円企業作れる。",
+        "author": {
+          "userName": "MakeAI_CEO",
+          "id": "1912080237028114432",
+          "isBlueVerified": true
+        },
+        "createdAt": "Tue May 19 05:37:22 +0000 2026",
+        "lang": "ja",
+        "likeCount": 218,
+        "retweetCount": 18,
+        "replyCount": 0,
+        "quoteCount": 0,
+        "bookmarkCount": 268,
+        "viewCount": 99993,
+        "isReply": false,
+        "conversationId": "2056610142930743300",
+        "tweetUrl": "https://x.com/MakeAI_CEO/status/2056610142930743300"
+      }
+    ]
+  },
+  {
+    "handle": "MakeAI_CEO",
+    "root": {
+      "id": "2050891924656013634",
+      "text": "Claudeやべぇぇぇ、ちょっと聞いて。\n\nAI業界の常識が、また1個ぶっ壊れた。しかも、リアルタイムで目撃した。\n\n今まで絶対できないって言われてたことが、しれっとできるようになってる。進化の方向、誰も予想してなかった角度から来た。\n\nこれ言っていいのかわからん。でも、もう止まれない。言います。",
+      "author": {
+        "userName": "MakeAI_CEO",
+        "id": "1912080237028114432",
+        "isBlueVerified": true
+      },
+      "createdAt": "Sun May 03 10:55:13 +0000 2026",
+      "lang": "ja",
+      "likeCount": 162,
+      "retweetCount": 5,
+      "replyCount": 7,
+      "quoteCount": 1,
+      "bookmarkCount": 113,
+      "viewCount": 58198,
+      "isReply": false,
+      "conversationId": "2050891924656013634",
+      "tweetUrl": "https://x.com/MakeAI_CEO/status/2050891924656013634"
+    },
+    "thread": [
+      {
+        "id": "2050891924656013634",
+        "text": "Claudeやべぇぇぇ、ちょっと聞いて。\n\nAI業界の常識が、また1個ぶっ壊れた。しかも、リアルタイムで目撃した。\n\n今まで絶対できないって言われてたことが、しれっとできるようになってる。進化の方向、誰も予想してなかった角度から来た。\n\nこれ言っていいのかわからん。でも、もう止まれない。言います。",
+        "author": {
+          "userName": "MakeAI_CEO",
+          "id": "1912080237028114432",
+          "isBlueVerified": true
+        },
+        "createdAt": "Sun May 03 10:55:13 +0000 2026",
+        "lang": "ja",
+        "likeCount": 162,
+        "retweetCount": 5,
+        "replyCount": 7,
+        "quoteCount": 1,
+        "bookmarkCount": 113,
+        "viewCount": 58198,
+        "isReply": false,
+        "conversationId": "2050891924656013634",
+        "tweetUrl": "https://x.com/MakeAI_CEO/status/2050891924656013634"
+      },
+      {
+        "id": "2050891927168643462",
+        "text": "まず、Claudeに何が起きたか。\n\n「時計」を渡された。\nそれだけ。たった、それだけ。\n\nでもこれがヤバくて、AIってそもそも時間感覚がない。今が何時か、何分動いてるか、前のメッセージから何時間経ったか、全部わかってない状態でずっと生きてる。\n\nずっと時間盲だった。\nそこに、時計が来た。\n\nその瞬間、Claudeが変わった。",
+        "author": {
+          "userName": "MakeAI_CEO",
+          "id": "1912080237028114432",
+          "isBlueVerified": true
+        },
+        "createdAt": "Sun May 03 10:55:13 +0000 2026",
+        "lang": "ja",
+        "likeCount": 21,
+        "retweetCount": 0,
+        "replyCount": 1,
+        "quoteCount": 0,
+        "bookmarkCount": 11,
+        "viewCount": 8836,
+        "isReply": true,
+        "conversationId": "2050891924656013634",
+        "tweetUrl": "https://x.com/MakeAI_CEO/status/2050891927168643462"
+      }
+    ]
+  },
+  {
+    "handle": "MakeAI_CEO",
+    "root": {
+      "id": "2059472930283917560",
+      "text": "悲報。Gemini×NotebookLMが家庭教師になる時代、知らない家だけ毎月3万円損してます。\n\n教科書のページを写真で送るだけで、図表もグラフも手書きノートも読み取って、子どもの学年に合わせて解説。「小学◯年生に分かるように」と添えるだけで完璧。24時間対応・何回聞いても怒らない。完全無料。\n\nしかも今では、NotebookLMとGeminiを組み合わせる時代。2つのAIで塾の集団授業がまるごといらなくなります。\n\n塾代に消耗してる中学生の親、これマジで知って。全部解説します👇",
+      "author": {
+        "userName": "MakeAI_CEO",
+        "id": "1912080237028114432",
+        "isBlueVerified": true
+      },
+      "createdAt": "Wed May 27 03:13:04 +0000 2026",
+      "lang": "ja",
+      "likeCount": 252,
+      "retweetCount": 20,
+      "replyCount": 4,
+      "quoteCount": 1,
+      "bookmarkCount": 309,
+      "viewCount": 25005,
+      "isReply": false,
+      "conversationId": "2059472930283917560",
+      "tweetUrl": "https://x.com/MakeAI_CEO/status/2059472930283917560"
+    },
+    "thread": [
+      {
+        "id": "2059472930283917560",
+        "text": "悲報。Gemini×NotebookLMが家庭教師になる時代、知らない家だけ毎月3万円損してます。\n\n教科書のページを写真で送るだけで、図表もグラフも手書きノートも読み取って、子どもの学年に合わせて解説。「小学◯年生に分かるように」と添えるだけで完璧。24時間対応・何回聞いても怒らない。完全無料。\n\nしかも今では、NotebookLMとGeminiを組み合わせる時代。2つのAIで塾の集団授業がまるごといらなくなります。\n\n塾代に消耗してる中学生の親、これマジで知って。全部解説します👇",
+        "author": {
+          "userName": "MakeAI_CEO",
+          "id": "1912080237028114432",
+          "isBlueVerified": true
+        },
+        "createdAt": "Wed May 27 03:13:04 +0000 2026",
+        "lang": "ja",
+        "likeCount": 252,
+        "retweetCount": 20,
+        "replyCount": 4,
+        "quoteCount": 1,
+        "bookmarkCount": 309,
+        "viewCount": 25005,
+        "isReply": false,
+        "conversationId": "2059472930283917560",
+        "tweetUrl": "https://x.com/MakeAI_CEO/status/2059472930283917560"
+      },
+      {
+        "id": "2059472931928117302",
+        "text": "①Geminiの正しい聞き方。ここで差がつく。\n\nただ答えを聞くのは三流。「小学5年生に分かるように、答えじゃなく考え方を順番に教えて」と添える。すると解き方を1ステップずつ、つまずく所まで分解して教えてくれる。\n\nさらに「同じ考え方の問題を3問作って」で練習までその場で完結。分からない1問が、理解＋演習のセットに変わる。",
+        "author": {
+          "userName": "MakeAI_CEO",
+          "id": "1912080237028114432",
+          "isBlueVerified": true
+        },
+        "createdAt": "Wed May 27 03:13:04 +0000 2026",
+        "lang": "ja",
+        "likeCount": 7,
+        "retweetCount": 0,
+        "replyCount": 1,
+        "quoteCount": 0,
+        "bookmarkCount": 9,
+        "viewCount": 1875,
+        "isReply": true,
+        "conversationId": "2059472930283917560",
+        "tweetUrl": "https://x.com/MakeAI_CEO/status/2059472931928117302"
+      }
+    ]
+  },
+  {
+    "handle": "MakeAI_CEO",
+    "root": {
+      "id": "2053314739405783270",
+      "text": "これ確実に一部から袋叩きにされる覚悟で書くんだが、海外のAI研究者界隈で「日本人のプロンプトはDSPyすら知らない化石レベル」って堂々と煽ってる男がいて、最初は何言ってんだコイツと思ってたんだが、、、\n\nその男が普段使ってるChatGPT・Claude・Codexの設計を実際に見せてもらった瞬間、まじで衝撃だったのは、1行目から構造が完全に違ったこと。日本で出回ってる「使い方」と次元が3つくらい飛んでた。今日、その全構造を5つに分解して置いていく👇",
+      "author": {
+        "userName": "MakeAI_CEO",
+        "id": "1912080237028114432",
+        "isBlueVerified": true
+      },
+      "createdAt": "Sun May 10 03:22:37 +0000 2026",
+      "lang": "ja",
+      "likeCount": 2119,
+      "retweetCount": 175,
+      "replyCount": 14,
+      "quoteCount": 20,
+      "bookmarkCount": 4050,
+      "viewCount": 505306,
+      "isReply": false,
+      "conversationId": "2053314739405783270",
+      "tweetUrl": "https://x.com/MakeAI_CEO/status/2053314739405783270"
+    },
+    "thread": [
+      {
+        "id": "2053314739405783270",
+        "text": "これ確実に一部から袋叩きにされる覚悟で書くんだが、海外のAI研究者界隈で「日本人のプロンプトはDSPyすら知らない化石レベル」って堂々と煽ってる男がいて、最初は何言ってんだコイツと思ってたんだが、、、\n\nその男が普段使ってるChatGPT・Claude・Codexの設計を実際に見せてもらった瞬間、まじで衝撃だったのは、1行目から構造が完全に違ったこと。日本で出回ってる「使い方」と次元が3つくらい飛んでた。今日、その全構造を5つに分解して置いていく👇",
+        "author": {
+          "userName": "MakeAI_CEO",
+          "id": "1912080237028114432",
+          "isBlueVerified": true
+        },
+        "createdAt": "Sun May 10 03:22:37 +0000 2026",
+        "lang": "ja",
+        "likeCount": 2119,
+        "retweetCount": 175,
+        "replyCount": 14,
+        "quoteCount": 20,
+        "bookmarkCount": 4050,
+        "viewCount": 505306,
+        "isReply": false,
+        "conversationId": "2053314739405783270",
+        "tweetUrl": "https://x.com/MakeAI_CEO/status/2053314739405783270"
+      },
+      {
+        "id": "2053314741934993573",
+        "text": "1つ目、Context Engineering。2026年最大のパラダイムシフト。海外の研究者は「Prompt Engineering is what you say. Context Engineering is what the model sees.」と明確に区別してる。プロンプトを書くんじゃなく、AIが見る情報空間そのものを設計する思想。システムプロンプト・ナレッジ・履歴・ツール出力・制約を「AIが何を見るか」の階層構造で組む。日本人は脳内ゼロから言葉で指示する旧式。海外は情報空間をデザインしてから言葉を1行だけ追加する。これが3年遅れの正体。\n\n2つ目、XML Tagging。Claudeを本気で使うなら必須。「あなたは〜です」とベタ書きするのはHTMLをdiv1個で書くのと同じ。代わりに<context>背景</context><task>具体依頼</task><examples>例</examples><output_format>形式</output_format>のタグで構造を分離する。Anthropic公式が推奨してる方式で、Claudeの理解度が体感3倍。日本人の99%がこれを知らない。",
+        "author": {
+          "userName": "MakeAI_CEO",
+          "id": "1912080237028114432",
+          "isBlueVerified": true
+        },
+        "createdAt": "Sun May 10 03:22:37 +0000 2026",
+        "lang": "ja",
+        "likeCount": 387,
+        "retweetCount": 37,
+        "replyCount": 2,
+        "quoteCount": 4,
+        "bookmarkCount": 529,
+        "viewCount": 71029,
+        "isReply": true,
+        "conversationId": "2053314739405783270",
+        "tweetUrl": "https://x.com/MakeAI_CEO/status/2053314741934993573"
+      }
+    ]
+  },
+  {
+    "handle": "MakeAI_CEO",
+    "root": {
+      "id": "2054363831024152890",
+      "text": "断言する。スマホがOSで動く時代、今日で完全終了。\n\nGoogleが「Gemini Intelligence」発表。\nAndroidが「OS」から「インテリジェンスシステム」に進化する宣言。アプリ横断でAIが勝手にタスク完了、自然言語でウィジェット作成、Gmail＋Chrome＋Photosの情報でフォーム自動入力。\n\niPhoneユーザーは確実に取り残される。理由を全部解説する↓",
+      "author": {
+        "userName": "MakeAI_CEO",
+        "id": "1912080237028114432",
+        "isBlueVerified": true
+      },
+      "createdAt": "Wed May 13 00:51:20 +0000 2026",
+      "lang": "ja",
+      "likeCount": 68,
+      "retweetCount": 13,
+      "replyCount": 1,
+      "quoteCount": 2,
+      "bookmarkCount": 61,
+      "viewCount": 26781,
+      "isReply": false,
+      "conversationId": "2054363831024152890",
+      "tweetUrl": "https://x.com/MakeAI_CEO/status/2054363831024152890"
+    },
+    "thread": [
+      {
+        "id": "2054363831024152890",
+        "text": "断言する。スマホがOSで動く時代、今日で完全終了。\n\nGoogleが「Gemini Intelligence」発表。\nAndroidが「OS」から「インテリジェンスシステム」に進化する宣言。アプリ横断でAIが勝手にタスク完了、自然言語でウィジェット作成、Gmail＋Chrome＋Photosの情報でフォーム自動入力。\n\niPhoneユーザーは確実に取り残される。理由を全部解説する↓",
+        "author": {
+          "userName": "MakeAI_CEO",
+          "id": "1912080237028114432",
+          "isBlueVerified": true
+        },
+        "createdAt": "Wed May 13 00:51:20 +0000 2026",
+        "lang": "ja",
+        "likeCount": 68,
+        "retweetCount": 13,
+        "replyCount": 1,
+        "quoteCount": 2,
+        "bookmarkCount": 61,
+        "viewCount": 26781,
+        "isReply": false,
+        "conversationId": "2054363831024152890",
+        "tweetUrl": "https://x.com/MakeAI_CEO/status/2054363831024152890"
+      },
+      {
+        "id": "2054363832693444808",
+        "text": "まず、Gemini Intelligenceとは何か。\n\n2026年5月12日、GoogleがAndroid Show: I/O Edition 2026で発表。ひと言で説明すると↓\n「Androidが受動的なOSじゃなく、能動的なAIエージェントになる」\n\nAndroid責任者のSameer Samat氏が明言↓\n「我々はOSからインテリジェンスシステムへ移行する」\n\nこれは小さなアップデートじゃない。「スマホ＝OSが動く道具」って前提を破壊する宣言。",
+        "author": {
+          "userName": "MakeAI_CEO",
+          "id": "1912080237028114432",
+          "isBlueVerified": true
+        },
+        "createdAt": "Wed May 13 00:51:20 +0000 2026",
+        "lang": "ja",
+        "likeCount": 11,
+        "retweetCount": 0,
+        "replyCount": 1,
+        "quoteCount": 0,
+        "bookmarkCount": 5,
+        "viewCount": 3010,
+        "isReply": true,
+        "conversationId": "2054363831024152890",
+        "tweetUrl": "https://x.com/MakeAI_CEO/status/2054363832693444808"
+      }
+    ]
+  },
+  {
+    "handle": "MakeAI_CEO",
+    "root": {
+      "id": "2050508804115378549",
+      "text": "本当にCodexすごいな…\n「Webサイトのラフ案をGPT image2」で作って、そのままコーディングして」ってプロンプトで、素人でもここまでのWebサイトができる。\n\n元々コーディングはすごかったけど、画像生成と組み合わせることで、本気で売れるレベルまで仕上がってきた👇\n\n完全ど素人の非エンジニアがどんどんエンジニアの領域まで参入できそうですな！",
+      "author": {
+        "userName": "MakeAI_CEO",
+        "id": "1912080237028114432",
+        "isBlueVerified": true
+      },
+      "createdAt": "Sat May 02 09:32:50 +0000 2026",
+      "lang": "ja",
+      "likeCount": 329,
+      "retweetCount": 17,
+      "replyCount": 4,
+      "quoteCount": 4,
+      "bookmarkCount": 475,
+      "viewCount": 61890,
+      "isReply": false,
+      "conversationId": "2050508804115378549",
+      "tweetUrl": "https://x.com/MakeAI_CEO/status/2050508804115378549",
+      "media": [
+        {
+          "type": "video",
+          "url": "https://pbs.twimg.com/amplify_video_thumb/2050508395837583360/img/MYkkJwkYjhFoFCnM.jpg"
+        }
+      ]
+    },
+    "thread": [
+      {
+        "id": "2050508804115378549",
+        "text": "本当にCodexすごいな…\n「Webサイトのラフ案をGPT image2」で作って、そのままコーディングして」ってプロンプトで、素人でもここまでのWebサイトができる。\n\n元々コーディングはすごかったけど、画像生成と組み合わせることで、本気で売れるレベルまで仕上がってきた👇\n\n完全ど素人の非エンジニアがどんどんエンジニアの領域まで参入できそうですな！",
+        "author": {
+          "userName": "MakeAI_CEO",
+          "id": "1912080237028114432",
+          "isBlueVerified": true
+        },
+        "createdAt": "Sat May 02 09:32:50 +0000 2026",
+        "lang": "ja",
+        "likeCount": 329,
+        "retweetCount": 17,
+        "replyCount": 4,
+        "quoteCount": 4,
+        "bookmarkCount": 475,
+        "viewCount": 61890,
+        "isReply": false,
+        "conversationId": "2050508804115378549",
+        "tweetUrl": "https://x.com/MakeAI_CEO/status/2050508804115378549",
+        "media": [
+          {
+            "type": "video",
+            "url": "https://pbs.twimg.com/amplify_video_thumb/2050508395837583360/img/MYkkJwkYjhFoFCnM.jpg"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "handle": "MakeAI_CEO",
+    "root": {
+      "id": "2053606858779505064",
+      "text": "これ書いたら本気で日本のAI界隈の半分から軽蔑される覚悟で書くんだが、1体のAIだけを必死で使い倒してる時点で、もうF1の中を自転車で走ってる状態。AIに「丁寧にお願い」を繰り返してる運用、もう完全に時代遅れ。僕も最初は「1体のAIを極めれば勝てる」って本気で信じてた。海外のAIエンジニアと話して震えたのは、\n、、\n\n彼らが1体だけで運用してる人なんて誰もいなかったこと。全員「AI軍団」を運用してた。Anthropic公式がClaude Opus 4.7では、複数ツール協調ベンチMCP-Atlasで業界最高クラスの77.3%を記録。さらに導入企業のNotionは公式に「複雑な多段階ワークフローで精度+14%・ツールエラー1/3激減」を報告。Anthropic公式ブログにも「Opus 4.7は出力を自己検証してから報告する」と明記されてる。今日、その軍団の組み方を5つ全部置いていく👇",
+      "author": {
+        "userName": "MakeAI_CEO",
+        "id": "1912080237028114432",
+        "isBlueVerified": true
+      },
+      "createdAt": "Sun May 10 22:43:23 +0000 2026",
+      "lang": "ja",
+      "likeCount": 59,
+      "retweetCount": 7,
+      "replyCount": 4,
+      "quoteCount": 1,
+      "bookmarkCount": 68,
+      "viewCount": 7199,
+      "isReply": false,
+      "conversationId": "2053606858779505064",
+      "tweetUrl": "https://x.com/MakeAI_CEO/status/2053606858779505064"
+    },
+    "thread": [
+      {
+        "id": "2053606858779505064",
+        "text": "これ書いたら本気で日本のAI界隈の半分から軽蔑される覚悟で書くんだが、1体のAIだけを必死で使い倒してる時点で、もうF1の中を自転車で走ってる状態。AIに「丁寧にお願い」を繰り返してる運用、もう完全に時代遅れ。僕も最初は「1体のAIを極めれば勝てる」って本気で信じてた。海外のAIエンジニアと話して震えたのは、\n、、\n\n彼らが1体だけで運用してる人なんて誰もいなかったこと。全員「AI軍団」を運用してた。Anthropic公式がClaude Opus 4.7では、複数ツール協調ベンチMCP-Atlasで業界最高クラスの77.3%を記録。さらに導入企業のNotionは公式に「複雑な多段階ワークフローで精度+14%・ツールエラー1/3激減」を報告。Anthropic公式ブログにも「Opus 4.7は出力を自己検証してから報告する」と明記されてる。今日、その軍団の組み方を5つ全部置いていく👇",
+        "author": {
+          "userName": "MakeAI_CEO",
+          "id": "1912080237028114432",
+          "isBlueVerified": true
+        },
+        "createdAt": "Sun May 10 22:43:23 +0000 2026",
+        "lang": "ja",
+        "likeCount": 59,
+        "retweetCount": 7,
+        "replyCount": 4,
+        "quoteCount": 1,
+        "bookmarkCount": 68,
+        "viewCount": 7199,
+        "isReply": false,
+        "conversationId": "2053606858779505064",
+        "tweetUrl": "https://x.com/MakeAI_CEO/status/2053606858779505064"
+      },
+      {
+        "id": "2053606861291885052",
+        "text": "1つ目、Routing Pattern。Anthropic公式の6大エージェントパターンの1つで、入力を「分類役」のAIが受けて、適切な「専門役」のAIに振り分ける軍隊式組織化。普通の人は1体のAIに全部投げて中途半端な答えで終わる。プロは受付係を1体置いて、そこから専門家に振り分ける。コピペ用。「あなたは『振り分け担当』だ。以下の依頼を読み、①リサーチ系②執筆系③分析系④コード系のどれかに分類し、その分類に最適化されたシステムプロンプトを5行で作成し、それで再度この依頼を実行しろ」。1体のAIが万能を装うより、専門特化に振った方が精度が桁違いに上がる。これ知ってる日本人マジで少なすぎる。\n\n2つ目、Parallelization。Anthropic公式6大パターンのもう1つで、同じタスクを並列で複数体に実行させて多数決で確定するパターン。Anthropic公式が「分岐を予測できない複雑タスクで圧倒的優位」と明記してる正規型。コピペ用。「以下の問いに対し、まず5人の独立した専門家の視点から、それぞれ違うアプローチで回答案を1つずつ出せ。次にその5案を比較し、最も多くの視点で支持されている結論を最終回答とし、選定理由も述べろ」。ハルシネーションが激減する。重要判断系で別物になる。",
+        "author": {
+          "userName": "MakeAI_CEO",
+          "id": "1912080237028114432",
+          "isBlueVerified": true
+        },
+        "createdAt": "Sun May 10 22:43:24 +0000 2026",
+        "lang": "ja",
+        "likeCount": 7,
+        "retweetCount": 0,
+        "replyCount": 1,
+        "quoteCount": 0,
+        "bookmarkCount": 6,
+        "viewCount": 939,
+        "isReply": true,
+        "conversationId": "2053606858779505064",
+        "tweetUrl": "https://x.com/MakeAI_CEO/status/2053606861291885052"
+      }
+    ]
+  },
+  {
+    "handle": "MakeAI_CEO",
+    "root": {
+      "id": "2053053911750312303",
+      "text": "1行の構造が、日本で出回ってる「使い方」とまったく次元が違ったこと。日本では「役割を与えて」「丁寧に書いて」レベルで止まってる。海外のプロは6要素の設計図を当たり前に組んでる。\n\n1つ目、CREATEフレームワーク。Context（役）、Request（依頼）、Explanation（理由）、Action（動作）、Tone（口調）、Examples（例）の6要素を1プロンプトに必ず入れる。「コードを書いて」ではなく「あなたはシニアDevOpsエンジニア。\n\nEKSをコスト最適化前提でTerraform化。理由はAWS料金圧縮。出力はコメント付きHCL。簡潔な実務口調。例：以下のYAMLを参考に」。これだけで出力の解像度が3倍。\n\nあらゆるプロンプトはこの6要素に分解できる。一生使える武器になる。2つ目、1発目を捨てる原則。プロは1発目の出力を絶対に採用しない。\n\n「以下のテーマで①叩き台②自分で5つの欠点を辛口指摘③欠点を踏まえた完成版、を1レスで全部」と最初から投げる。3往復が1往復に圧縮。3時間が30分になる。",
+      "author": {
+        "userName": "MakeAI_CEO",
+        "id": "1912080237028114432",
+        "isBlueVerified": true
+      },
+      "createdAt": "Sat May 09 10:06:11 +0000 2026",
+      "lang": "ja",
+      "likeCount": 337,
+      "retweetCount": 18,
+      "replyCount": 2,
+      "quoteCount": 4,
+      "bookmarkCount": 601,
+      "viewCount": 24669,
+      "isReply": true,
+      "conversationId": "2053053885368111439",
+      "tweetUrl": "https://x.com/MakeAI_CEO/status/2053053911750312303"
+    },
+    "thread": [
+      {
+        "id": "2053053885368111439",
+        "text": "これ言うと一定数からブロックされるの覚悟で書くんだが、、、、\n\n海外のAIガチ勢で「日本人のプロンプトは原始時代レベル」って公然と煽ってる男がいて、最初は何言ってんだコイツと思ってたんだが、その男が普段使ってるChatGPT・Claude・Codexのプロンプトを実際に見せてもらった瞬間、まじで衝撃だったのは、、、",
+        "author": {
+          "userName": "MakeAI_CEO",
+          "id": "1912080237028114432",
+          "isBlueVerified": true
+        },
+        "createdAt": "Sat May 09 10:06:04 +0000 2026",
+        "lang": "ja",
+        "likeCount": 794,
+        "retweetCount": 58,
+        "replyCount": 14,
+        "quoteCount": 23,
+        "bookmarkCount": 1355,
+        "viewCount": 178128,
+        "isReply": false,
+        "conversationId": "2053053885368111439",
+        "tweetUrl": "https://x.com/MakeAI_CEO/status/2053053885368111439"
+      },
+      {
+        "id": "2053053911750312303",
+        "text": "1行の構造が、日本で出回ってる「使い方」とまったく次元が違ったこと。日本では「役割を与えて」「丁寧に書いて」レベルで止まってる。海外のプロは6要素の設計図を当たり前に組んでる。\n\n1つ目、CREATEフレームワーク。Context（役）、Request（依頼）、Explanation（理由）、Action（動作）、Tone（口調）、Examples（例）の6要素を1プロンプトに必ず入れる。「コードを書いて」ではなく「あなたはシニアDevOpsエンジニア。\n\nEKSをコスト最適化前提でTerraform化。理由はAWS料金圧縮。出力はコメント付きHCL。簡潔な実務口調。例：以下のYAMLを参考に」。これだけで出力の解像度が3倍。\n\nあらゆるプロンプトはこの6要素に分解できる。一生使える武器になる。2つ目、1発目を捨てる原則。プロは1発目の出力を絶対に採用しない。\n\n「以下のテーマで①叩き台②自分で5つの欠点を辛口指摘③欠点を踏まえた完成版、を1レスで全部」と最初から投げる。3往復が1往復に圧縮。3時間が30分になる。",
+        "author": {
+          "userName": "MakeAI_CEO",
+          "id": "1912080237028114432",
+          "isBlueVerified": true
+        },
+        "createdAt": "Sat May 09 10:06:11 +0000 2026",
+        "lang": "ja",
+        "likeCount": 337,
+        "retweetCount": 18,
+        "replyCount": 2,
+        "quoteCount": 4,
+        "bookmarkCount": 601,
+        "viewCount": 24669,
+        "isReply": true,
+        "conversationId": "2053053885368111439",
+        "tweetUrl": "https://x.com/MakeAI_CEO/status/2053053911750312303"
+      },
+      {
+        "id": "2053087780344078412",
+        "text": "ここでAI活用・マネタイズのすべてをお伝えしてます👇",
+        "author": {
+          "userName": "MakeAI_CEO",
+          "id": "1912080237028114432",
+          "isBlueVerified": true
+        },
+        "createdAt": "Sat May 09 12:20:46 +0000 2026",
+        "lang": "ja",
+        "likeCount": 14,
+        "retweetCount": 0,
+        "replyCount": 0,
+        "quoteCount": 0,
+        "bookmarkCount": 9,
+        "viewCount": 18422,
+        "isReply": true,
+        "conversationId": "2053053885368111439",
+        "tweetUrl": "https://x.com/MakeAI_CEO/status/2053087780344078412"
+      }
+    ]
+  },
+  {
+    "handle": "MakeAI_CEO",
+    "root": {
+      "id": "2059098711641526369",
+      "text": "100兆回言いますが、NotebookLMは「大人の仕事ツール」じゃないです。小中高生の勉強を根本から変える最強の家庭教師になる。塾に月3万払ってる場合じゃない。無料でできるのに、親が無知なだけで子どもが損するんです。すべて解説します👇",
+      "author": {
+        "userName": "MakeAI_CEO",
+        "id": "1912080237028114432",
+        "isBlueVerified": true
+      },
+      "createdAt": "Tue May 26 02:26:03 +0000 2026",
+      "lang": "ja",
+      "likeCount": 507,
+      "retweetCount": 56,
+      "replyCount": 4,
+      "quoteCount": 9,
+      "bookmarkCount": 967,
+      "viewCount": 74582,
+      "isReply": false,
+      "conversationId": "2059098711641526369",
+      "tweetUrl": "https://x.com/MakeAI_CEO/status/2059098711641526369"
+    },
+    "thread": [
+      {
+        "id": "2059098711641526369",
+        "text": "100兆回言いますが、NotebookLMは「大人の仕事ツール」じゃないです。小中高生の勉強を根本から変える最強の家庭教師になる。塾に月3万払ってる場合じゃない。無料でできるのに、親が無知なだけで子どもが損するんです。すべて解説します👇",
+        "author": {
+          "userName": "MakeAI_CEO",
+          "id": "1912080237028114432",
+          "isBlueVerified": true
+        },
+        "createdAt": "Tue May 26 02:26:03 +0000 2026",
+        "lang": "ja",
+        "likeCount": 507,
+        "retweetCount": 56,
+        "replyCount": 4,
+        "quoteCount": 9,
+        "bookmarkCount": 967,
+        "viewCount": 74582,
+        "isReply": false,
+        "conversationId": "2059098711641526369",
+        "tweetUrl": "https://x.com/MakeAI_CEO/status/2059098711641526369"
+      },
+      {
+        "id": "2059098713264648292",
+        "text": "①教科書を1枚撮るだけで、人気塾講師の授業に化けさせる。\n\n教科書のページを撮って入れて、音声解説を選ぶ。すると2人のAIが、そのページの内容を雑談形式で掛け合い解説してくれる。完全に人気塾講師のラジオ授業。\n\nこれをスマホに入れて、通学中や寝る前に聴く。机に向かうのが苦手な子でも、耳からなら勝手に入る。1ページ撮るだけで、その単元の専属講師がつく。",
+        "author": {
+          "userName": "MakeAI_CEO",
+          "id": "1912080237028114432",
+          "isBlueVerified": true
+        },
+        "createdAt": "Tue May 26 02:26:04 +0000 2026",
+        "lang": "ja",
+        "likeCount": 33,
+        "retweetCount": 1,
+        "replyCount": 1,
+        "quoteCount": 0,
+        "bookmarkCount": 43,
+        "viewCount": 7184,
+        "isReply": true,
+        "conversationId": "2059098711641526369",
+        "tweetUrl": "https://x.com/MakeAI_CEO/status/2059098713264648292"
+      }
+    ]
+  },
+  {
+    "handle": "MakeAI_CEO",
+    "root": {
+      "id": "2060302089344184600",
+      "text": "ElevenLabsやべぇぇぇ！！！\n新機能のDubbing v2を早速試したらマジで流暢な日本語生成できてぶっ飛んだ！\n\n百聞は一見にしかず！これ聞いて👇 https://t.co/BdBGT42v1D",
+      "author": {
+        "userName": "MakeAI_CEO",
+        "id": "1912080237028114432",
+        "isBlueVerified": true
+      },
+      "createdAt": "Fri May 29 10:07:51 +0000 2026",
+      "lang": "ja",
+      "likeCount": 89,
+      "retweetCount": 4,
+      "replyCount": 3,
+      "quoteCount": 2,
+      "bookmarkCount": 138,
+      "viewCount": 26717,
+      "isReply": false,
+      "conversationId": "2060302089344184600",
+      "tweetUrl": "https://x.com/MakeAI_CEO/status/2060302089344184600",
+      "media": [
+        {
+          "type": "video",
+          "url": "https://pbs.twimg.com/amplify_video_thumb/2060301941927038976/img/l4cW6uMa8-Cr7F4F.jpg"
+        }
+      ]
+    },
+    "thread": [
+      {
+        "id": "2060302089344184600",
+        "text": "ElevenLabsやべぇぇぇ！！！\n新機能のDubbing v2を早速試したらマジで流暢な日本語生成できてぶっ飛んだ！\n\n百聞は一見にしかず！これ聞いて👇 https://t.co/BdBGT42v1D",
+        "author": {
+          "userName": "MakeAI_CEO",
+          "id": "1912080237028114432",
+          "isBlueVerified": true
+        },
+        "createdAt": "Fri May 29 10:07:51 +0000 2026",
+        "lang": "ja",
+        "likeCount": 89,
+        "retweetCount": 4,
+        "replyCount": 3,
+        "quoteCount": 2,
+        "bookmarkCount": 138,
+        "viewCount": 26717,
+        "isReply": false,
+        "conversationId": "2060302089344184600",
+        "tweetUrl": "https://x.com/MakeAI_CEO/status/2060302089344184600",
+        "media": [
+          {
+            "type": "video",
+            "url": "https://pbs.twimg.com/amplify_video_thumb/2060301941927038976/img/l4cW6uMa8-Cr7F4F.jpg"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "handle": "MakeAI_CEO",
+    "root": {
+      "id": "2055220903466988018",
+      "text": "これ言うと一定数からブロックされるの覚悟で書くんだが、シリコンバレーで普通に億稼いでる日本人AIエンジニアが、Xで「日本のAI発信者の99%は、プロンプトじゃなくて『お祈り』をAIに投げてるだけ」って公然と煽ってバズってる男がいて、最初は何言ってんだコイツと思ってたんだが、その男が普段使ってるClaude・Codexのプロンプトを実際に見た瞬間、まじで衝撃だった。海外のプロは複数のAIを1チームで動かす編成思想が標準。Anthropic・OpenAIが公式リリースした最先端の設計5つ、全部今日置いていく。ブクマして全部パクれ👇",
+      "author": {
+        "userName": "MakeAI_CEO",
+        "id": "1912080237028114432",
+        "isBlueVerified": true
+      },
+      "createdAt": "Fri May 15 09:37:02 +0000 2026",
+      "lang": "ja",
+      "likeCount": 2469,
+      "retweetCount": 194,
+      "replyCount": 12,
+      "quoteCount": 34,
+      "bookmarkCount": 5901,
+      "viewCount": 428555,
+      "isReply": false,
+      "conversationId": "2055220903466988018",
+      "tweetUrl": "https://x.com/MakeAI_CEO/status/2055220903466988018"
+    },
+    "thread": [
+      {
+        "id": "2055220903466988018",
+        "text": "これ言うと一定数からブロックされるの覚悟で書くんだが、シリコンバレーで普通に億稼いでる日本人AIエンジニアが、Xで「日本のAI発信者の99%は、プロンプトじゃなくて『お祈り』をAIに投げてるだけ」って公然と煽ってバズってる男がいて、最初は何言ってんだコイツと思ってたんだが、その男が普段使ってるClaude・Codexのプロンプトを実際に見た瞬間、まじで衝撃だった。海外のプロは複数のAIを1チームで動かす編成思想が標準。Anthropic・OpenAIが公式リリースした最先端の設計5つ、全部今日置いていく。ブクマして全部パクれ👇",
+        "author": {
+          "userName": "MakeAI_CEO",
+          "id": "1912080237028114432",
+          "isBlueVerified": true
+        },
+        "createdAt": "Fri May 15 09:37:02 +0000 2026",
+        "lang": "ja",
+        "likeCount": 2469,
+        "retweetCount": 194,
+        "replyCount": 12,
+        "quoteCount": 34,
+        "bookmarkCount": 5901,
+        "viewCount": 428555,
+        "isReply": false,
+        "conversationId": "2055220903466988018",
+        "tweetUrl": "https://x.com/MakeAI_CEO/status/2055220903466988018"
+      },
+      {
+        "id": "2055220905182433382",
+        "text": "1つ目、Sub-Agent Orchestration。Anthropicが2026年5月に公式リリースした最新のマルチエージェント機能。日本人は1人のAIに全部やらせる。海外のプロは「リード司令官AI」と「専門サブエージェント」を並列起動させる。コピペ用がこれ。「あなたはリード司令官。このリサーチ案件を①ファクト調査役 ②競合分析役 ③構成設計役 ④批評役の4つに分解し、各役に独立したコンテキストと指示書を渡し、最終出力を統合せよ」。Anthropic公式評価でClaude単体比90.2%精度向上。NetflixとHarveyが本番運用してる。",
+        "author": {
+          "userName": "MakeAI_CEO",
+          "id": "1912080237028114432",
+          "isBlueVerified": true
+        },
+        "createdAt": "Fri May 15 09:37:02 +0000 2026",
+        "lang": "ja",
+        "likeCount": 318,
+        "retweetCount": 12,
+        "replyCount": 3,
+        "quoteCount": 2,
+        "bookmarkCount": 696,
+        "viewCount": 58855,
+        "isReply": true,
+        "conversationId": "2055220903466988018",
+        "tweetUrl": "https://x.com/MakeAI_CEO/status/2055220905182433382"
+      },
+      {
+        "id": "2055482773738242304",
+        "text": "これはチェックしておいた方がいい👇\nhttps://t.co/kD3R8BYVPu",
+        "author": {
+          "userName": "MakeAI_CEO",
+          "id": "1912080237028114432",
+          "isBlueVerified": true
+        },
+        "createdAt": "Sat May 16 02:57:36 +0000 2026",
+        "lang": "ja",
+        "likeCount": 9,
+        "retweetCount": 0,
+        "replyCount": 0,
+        "quoteCount": 0,
+        "bookmarkCount": 24,
+        "viewCount": 22788,
+        "isReply": true,
+        "conversationId": "2055220903466988018",
+        "tweetUrl": "https://x.com/MakeAI_CEO/status/2055482773738242304"
+      }
+    ]
+  }
+]

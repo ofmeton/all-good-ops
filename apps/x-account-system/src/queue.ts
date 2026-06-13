@@ -177,6 +177,82 @@ export async function handleJob(
     }
 
     // ----------------------------------------------------------------
+    // bookmark-collect: 手動 X ブックマーク取込 → 既存 scoring/translate/persist
+    // ----------------------------------------------------------------
+    case "bookmark-collect": {
+      const rid = runId ?? "";
+      const { createClient } = await import("@supabase/supabase-js");
+      const Anthropic = (await import("@anthropic-ai/sdk")).default;
+      const sb = createClient(env.SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY, {
+        db: { schema: process.env.SUPABASE_SCHEMA || "xad" },
+      });
+      const anthropic = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });
+      const { runBookmarkCollect } = await import("../lib/ingest/bookmark-collect.js");
+      if (rid) {
+        let traceMeta: import("../lib/trace/types.js").TraceMeta | undefined;
+        let collectStats: import("../lib/ingest/collector.js").CollectStats | undefined;
+        await withTrace(ctx, { runId: rid, stageId: "bookmark-collect" }, async () => {
+          const stats = await runBookmarkCollect({
+            anthropic: anthropic as never,
+            sb: sb as never,
+            twitterApiKey: env.TWITTERAPI_IO_KEY,
+            loginCookie: env.TWITTERAPI_IO_LOGIN_COOKIE,
+            proxy: env.TWITTERAPI_IO_PROXY,
+            fetchImpl: fetch,
+            runId: rid,
+            onTrace: (m) => {
+              traceMeta = m;
+            },
+          });
+          console.log(JSON.stringify({ level: "info", msg: "[bookmark-collect] 完了", date: msg.date, inserted: stats.inserted }));
+          const breakdown = { exploreJpy: stats.cost.exploreJpy, scoringJpy: stats.cost.scoringJpy, translateJpy: stats.cost.translateJpy };
+          collectStats = stats;
+          return {
+            result: stats.inserted,
+            output: {
+              inserted: stats.inserted,
+              fetched: stats.fetched,
+              deduped: stats.deduped,
+              scored: stats.scored,
+              breakdown,
+            },
+            meta: traceMeta,
+          };
+        });
+        {
+          const p = recordCostLedger(sb as never, {
+            category: "bookmark-collect",
+            costJpy: traceMeta?.costJpy ?? 0,
+            unitCount: (traceMeta?.tokensIn ?? 0) + (traceMeta?.tokensOut ?? 0),
+            meta: {
+              model: traceMeta?.model,
+              breakdown: collectStats
+                ? { exploreJpy: collectStats.cost.exploreJpy, scoringJpy: collectStats.cost.scoringJpy, translateJpy: collectStats.cost.translateJpy }
+                : undefined,
+              fetched: collectStats?.fetched,
+              deduped: collectStats?.deduped,
+              scored: collectStats?.scored,
+              inserted: collectStats?.inserted,
+            },
+          });
+          if (ctx) ctx.waitUntil(p);
+          else await p;
+        }
+      } else {
+        const stats = await runBookmarkCollect({
+          anthropic: anthropic as never,
+          sb: sb as never,
+          twitterApiKey: env.TWITTERAPI_IO_KEY,
+          loginCookie: env.TWITTERAPI_IO_LOGIN_COOKIE,
+          proxy: env.TWITTERAPI_IO_PROXY,
+          fetchImpl: fetch,
+        });
+        console.log(JSON.stringify({ level: "info", msg: "[bookmark-collect] 完了(untraced)", date: msg.date, inserted: stats.inserted }));
+      }
+      break;
+    }
+
+    // ----------------------------------------------------------------
     // compose: 執筆配管 stub — queued 素材の件数/ID を trace 記録
     // ----------------------------------------------------------------
     case "compose": {

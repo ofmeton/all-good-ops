@@ -1,0 +1,754 @@
+[
+  {
+    "handle": "obsidianstudio9",
+    "root": {
+      "id": "2062859489494331674",
+      "text": "【⚠️完全に超えてる⚠️】\n@0xSpivach がObsidianとClaudeを連携させてYouTube制作システム丸ごと自動化してます🔥\nやってることが頭おかしい。\nhttps://t.co/BEuDNsyj38\n仕組みはシンプルで、競合動画の文字起こし＋バズった動画のコメントを1つのフォルダに放り込むだけ。\nあとはClaudeが全部読んで「自分のジャンルで何が刺さるか」のナレッジベースを勝手に作っていく👇\n→ トップ動画のリテンション設計を抽出\n→ 視聴者がほんとに解決したい痛みを言語化\n→ 想定視聴者の文脈を先に書いておく\nさらに1本の台本が4媒体に分裂する仕組みも組まれていて、\nYouTube → ショート → Xスレ → Telegramまで自動で派生。\nもう「毎回AIに自己紹介し直す」フェーズじゃない。複利で積み上がる仕組みを持ってる人だけが勝つ。\nこのObsidian×Claude構成、ベースの組み方は記事で全部公開してます。\nこの下の記事を読むと理解が一気に深まる。マジでおすすめ👇",
+      "author": {
+        "userName": "obsidianstudio9",
+        "id": "2043209661525209088",
+        "isBlueVerified": true
+      },
+      "createdAt": "Fri Jun 05 11:30:03 +0000 2026",
+      "lang": "ja",
+      "likeCount": 661,
+      "retweetCount": 53,
+      "replyCount": 12,
+      "quoteCount": 1,
+      "bookmarkCount": 1124,
+      "viewCount": 170825,
+      "isReply": false,
+      "conversationId": "2062859489494331674",
+      "tweetUrl": "https://x.com/obsidianstudio9/status/2062859489494331674",
+      "media": [
+        {
+          "type": "video",
+          "url": "https://pbs.twimg.com/amplify_video_thumb/2061144585057796100/img/OGj6FgPh4VngjKsf.jpg"
+        }
+      ]
+    },
+    "thread": [
+      {
+        "id": "2062859489494331674",
+        "text": "【⚠️完全に超えてる⚠️】\n@0xSpivach がObsidianとClaudeを連携させてYouTube制作システム丸ごと自動化してます🔥\nやってることが頭おかしい。\nhttps://t.co/BEuDNsyj38\n仕組みはシンプルで、競合動画の文字起こし＋バズった動画のコメントを1つのフォルダに放り込むだけ。\nあとはClaudeが全部読んで「自分のジャンルで何が刺さるか」のナレッジベースを勝手に作っていく👇\n→ トップ動画のリテンション設計を抽出\n→ 視聴者がほんとに解決したい痛みを言語化\n→ 想定視聴者の文脈を先に書いておく\nさらに1本の台本が4媒体に分裂する仕組みも組まれていて、\nYouTube → ショート → Xスレ → Telegramまで自動で派生。\nもう「毎回AIに自己紹介し直す」フェーズじゃない。複利で積み上がる仕組みを持ってる人だけが勝つ。\nこのObsidian×Claude構成、ベースの組み方は記事で全部公開してます。\nこの下の記事を読むと理解が一気に深まる。マジでおすすめ👇",
+        "author": {
+          "userName": "obsidianstudio9",
+          "id": "2043209661525209088",
+          "isBlueVerified": true
+        },
+        "createdAt": "Fri Jun 05 11:30:03 +0000 2026",
+        "lang": "ja",
+        "likeCount": 661,
+        "retweetCount": 53,
+        "replyCount": 12,
+        "quoteCount": 1,
+        "bookmarkCount": 1124,
+        "viewCount": 170825,
+        "isReply": false,
+        "conversationId": "2062859489494331674",
+        "tweetUrl": "https://x.com/obsidianstudio9/status/2062859489494331674",
+        "media": [
+          {
+            "type": "video",
+            "url": "https://pbs.twimg.com/amplify_video_thumb/2061144585057796100/img/OGj6FgPh4VngjKsf.jpg"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "handle": "obsidianstudio9",
+    "root": {
+      "id": "2062451792806592578",
+      "text": "【速報｜眠らない第二の脳】\nClaude＋Obsidian＋Antigravity で“忘れない自分”を作った人が出てきた😳\n@marvin_x1 が動画で全工程を公開。\nhttps://t.co/F41GSzLlJO\n何が異常かというと👇\n・raw/フォルダにファイル・PDF・記事を全部放り込むだけでOK\n・Claudeが一度だけ整理・構造化・相互リンクして wiki/ フォルダに綺麗なマークダウンで吐き出す\n・あとはObsidianで開くとビジュアルなナレッジグラフが完成\n・以降は「wiki/ のナレッジベースを使って」と指示するだけで、自分でも気づかなかった概念同士の接続を即発見\nしかも動画にあった数字は強烈で、\nトークン消費は最大90%削減、回答の質は明らかに向上、しかも全部ローカル完結でクラウド送信なし。\nメモアプリじゃなくて、使うほど育つ第二の脳。\nここまで作り込まれたObsidian運用、ぶっちゃけ独学だとキツい。\nこの下の記事を読むと理解が一気に深まる。マジでおすすめ👇",
+      "author": {
+        "userName": "obsidianstudio9",
+        "id": "2043209661525209088",
+        "isBlueVerified": true
+      },
+      "createdAt": "Thu Jun 04 08:30:00 +0000 2026",
+      "lang": "ja",
+      "likeCount": 180,
+      "retweetCount": 14,
+      "replyCount": 5,
+      "quoteCount": 0,
+      "bookmarkCount": 233,
+      "viewCount": 40749,
+      "isReply": false,
+      "conversationId": "2062451792806592578",
+      "tweetUrl": "https://x.com/obsidianstudio9/status/2062451792806592578",
+      "media": [
+        {
+          "type": "video",
+          "url": "https://pbs.twimg.com/amplify_video_thumb/2060992847210221569/img/rZgHtlBMYaD57cUA.jpg"
+        }
+      ]
+    },
+    "thread": [
+      {
+        "id": "2062451792806592578",
+        "text": "【速報｜眠らない第二の脳】\nClaude＋Obsidian＋Antigravity で“忘れない自分”を作った人が出てきた😳\n@marvin_x1 が動画で全工程を公開。\nhttps://t.co/F41GSzLlJO\n何が異常かというと👇\n・raw/フォルダにファイル・PDF・記事を全部放り込むだけでOK\n・Claudeが一度だけ整理・構造化・相互リンクして wiki/ フォルダに綺麗なマークダウンで吐き出す\n・あとはObsidianで開くとビジュアルなナレッジグラフが完成\n・以降は「wiki/ のナレッジベースを使って」と指示するだけで、自分でも気づかなかった概念同士の接続を即発見\nしかも動画にあった数字は強烈で、\nトークン消費は最大90%削減、回答の質は明らかに向上、しかも全部ローカル完結でクラウド送信なし。\nメモアプリじゃなくて、使うほど育つ第二の脳。\nここまで作り込まれたObsidian運用、ぶっちゃけ独学だとキツい。\nこの下の記事を読むと理解が一気に深まる。マジでおすすめ👇",
+        "author": {
+          "userName": "obsidianstudio9",
+          "id": "2043209661525209088",
+          "isBlueVerified": true
+        },
+        "createdAt": "Thu Jun 04 08:30:00 +0000 2026",
+        "lang": "ja",
+        "likeCount": 180,
+        "retweetCount": 14,
+        "replyCount": 5,
+        "quoteCount": 0,
+        "bookmarkCount": 233,
+        "viewCount": 40749,
+        "isReply": false,
+        "conversationId": "2062451792806592578",
+        "tweetUrl": "https://x.com/obsidianstudio9/status/2062451792806592578",
+        "media": [
+          {
+            "type": "video",
+            "url": "https://pbs.twimg.com/amplify_video_thumb/2060992847210221569/img/rZgHtlBMYaD57cUA.jpg"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "handle": "obsidianstudio9",
+    "root": {
+      "id": "2063176569804464370",
+      "text": "Obsidian × Claudeで組む学習システムが、ファインマン原則をそのまま実装してて強すぎる。\n暗記ではなく『理解』を仕組み側で担保する設計。\nhttps://t.co/ZN47KJcycw\n・Vault（メモ倉庫）に追加した概念を、\n　自動でテスト・接続・復習スケジュールに乗せる\n・Claudeが順番に読むだけでは気づけない\n　ノート同士の接続を見つけてくれる\n・暗記ではなく『応用が必要な問い』を自動生成\nノーベル賞物理学者リチャード・ファインマンの『自分の言葉で説明できないなら、それは理解じゃなく暗記だ』をそのまま仕組み化した形。\n単なる勉強ノートでも、AI要約でもない。\n2倍速く、しかも残る学習設計👇\nObsidian×Claudeでどう組むか、続きはこちらから👇\nこの下の記事を読むと理解が一気に深まる。マジでおすすめ👇",
+      "author": {
+        "userName": "obsidianstudio9",
+        "id": "2043209661525209088",
+        "isBlueVerified": true
+      },
+      "createdAt": "Sat Jun 06 08:30:00 +0000 2026",
+      "lang": "ja",
+      "likeCount": 105,
+      "retweetCount": 11,
+      "replyCount": 2,
+      "quoteCount": 1,
+      "bookmarkCount": 144,
+      "viewCount": 25037,
+      "isReply": false,
+      "conversationId": "2063176569804464370",
+      "tweetUrl": "https://x.com/obsidianstudio9/status/2063176569804464370",
+      "media": [
+        {
+          "type": "video",
+          "url": "https://pbs.twimg.com/amplify_video_thumb/2060774986814525441/img/6RgDuQfVJnGXT0Hr.jpg"
+        }
+      ]
+    },
+    "thread": [
+      {
+        "id": "2063176569804464370",
+        "text": "Obsidian × Claudeで組む学習システムが、ファインマン原則をそのまま実装してて強すぎる。\n暗記ではなく『理解』を仕組み側で担保する設計。\nhttps://t.co/ZN47KJcycw\n・Vault（メモ倉庫）に追加した概念を、\n　自動でテスト・接続・復習スケジュールに乗せる\n・Claudeが順番に読むだけでは気づけない\n　ノート同士の接続を見つけてくれる\n・暗記ではなく『応用が必要な問い』を自動生成\nノーベル賞物理学者リチャード・ファインマンの『自分の言葉で説明できないなら、それは理解じゃなく暗記だ』をそのまま仕組み化した形。\n単なる勉強ノートでも、AI要約でもない。\n2倍速く、しかも残る学習設計👇\nObsidian×Claudeでどう組むか、続きはこちらから👇\nこの下の記事を読むと理解が一気に深まる。マジでおすすめ👇",
+        "author": {
+          "userName": "obsidianstudio9",
+          "id": "2043209661525209088",
+          "isBlueVerified": true
+        },
+        "createdAt": "Sat Jun 06 08:30:00 +0000 2026",
+        "lang": "ja",
+        "likeCount": 105,
+        "retweetCount": 11,
+        "replyCount": 2,
+        "quoteCount": 1,
+        "bookmarkCount": 144,
+        "viewCount": 25037,
+        "isReply": false,
+        "conversationId": "2063176569804464370",
+        "tweetUrl": "https://x.com/obsidianstudio9/status/2063176569804464370",
+        "media": [
+          {
+            "type": "video",
+            "url": "https://pbs.twimg.com/amplify_video_thumb/2060774986814525441/img/6RgDuQfVJnGXT0Hr.jpg"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "handle": "obsidianstudio9",
+    "root": {
+      "id": "2056598975604765071",
+      "text": "情報量エグい。\nHermes Agent、日本語でここまで整理されてる記事ほぼ見たことない👇「結局何がすごいの？」がやっと腹落ちした。保存推奨。",
+      "author": {
+        "userName": "obsidianstudio9",
+        "id": "2043209661525209088",
+        "isBlueVerified": true
+      },
+      "createdAt": "Tue May 19 04:53:00 +0000 2026",
+      "lang": "ja",
+      "likeCount": 268,
+      "retweetCount": 20,
+      "replyCount": 0,
+      "quoteCount": 0,
+      "bookmarkCount": 544,
+      "viewCount": 86626,
+      "isReply": false,
+      "conversationId": "2056598975604765071",
+      "tweetUrl": "https://x.com/obsidianstudio9/status/2056598975604765071"
+    },
+    "thread": [
+      {
+        "id": "2056598975604765071",
+        "text": "情報量エグい。\nHermes Agent、日本語でここまで整理されてる記事ほぼ見たことない👇「結局何がすごいの？」がやっと腹落ちした。保存推奨。",
+        "author": {
+          "userName": "obsidianstudio9",
+          "id": "2043209661525209088",
+          "isBlueVerified": true
+        },
+        "createdAt": "Tue May 19 04:53:00 +0000 2026",
+        "lang": "ja",
+        "likeCount": 268,
+        "retweetCount": 20,
+        "replyCount": 0,
+        "quoteCount": 0,
+        "bookmarkCount": 544,
+        "viewCount": 86626,
+        "isReply": false,
+        "conversationId": "2056598975604765071",
+        "tweetUrl": "https://x.com/obsidianstudio9/status/2056598975604765071"
+      }
+    ]
+  },
+  {
+    "handle": "obsidianstudio9",
+    "root": {
+      "id": "2056993355238977670",
+      "text": "キターーーー！\n\"AIニュースで溢れて何も覚えてない問題\"を、Obsidian + NotebookLM + Codex で組んだら研究システム化した事例がガチ💯\n情報を集めるじゃなく、\"自動で要点だけ残す\"側に変えた構造、これマジで革命的。\n保存して自分のVaultを進化させたい人ほど刺さる内容です。\n\nObsidianの使い方を一段上げたい人は、この下の記事も覗いてみてほしい。\nこの下の記事を読むと理解が一気に深まる。マジでおすすめ👇",
+      "author": {
+        "userName": "obsidianstudio9",
+        "id": "2043209661525209088",
+        "isBlueVerified": true
+      },
+      "createdAt": "Wed May 20 07:00:07 +0000 2026",
+      "lang": "ja",
+      "likeCount": 126,
+      "retweetCount": 9,
+      "replyCount": 4,
+      "quoteCount": 2,
+      "bookmarkCount": 157,
+      "viewCount": 13011,
+      "isReply": false,
+      "conversationId": "2056993355238977670",
+      "tweetUrl": "https://x.com/obsidianstudio9/status/2056993355238977670",
+      "media": [
+        {
+          "type": "photo",
+          "url": "https://pbs.twimg.com/media/HIvojiaaMAAK4AT.jpg"
+        }
+      ]
+    },
+    "thread": [
+      {
+        "id": "2056993355238977670",
+        "text": "キターーーー！\n\"AIニュースで溢れて何も覚えてない問題\"を、Obsidian + NotebookLM + Codex で組んだら研究システム化した事例がガチ💯\n情報を集めるじゃなく、\"自動で要点だけ残す\"側に変えた構造、これマジで革命的。\n保存して自分のVaultを進化させたい人ほど刺さる内容です。\n\nObsidianの使い方を一段上げたい人は、この下の記事も覗いてみてほしい。\nこの下の記事を読むと理解が一気に深まる。マジでおすすめ👇",
+        "author": {
+          "userName": "obsidianstudio9",
+          "id": "2043209661525209088",
+          "isBlueVerified": true
+        },
+        "createdAt": "Wed May 20 07:00:07 +0000 2026",
+        "lang": "ja",
+        "likeCount": 126,
+        "retweetCount": 9,
+        "replyCount": 4,
+        "quoteCount": 2,
+        "bookmarkCount": 157,
+        "viewCount": 13011,
+        "isReply": false,
+        "conversationId": "2056993355238977670",
+        "tweetUrl": "https://x.com/obsidianstudio9/status/2056993355238977670",
+        "media": [
+          {
+            "type": "photo",
+            "url": "https://pbs.twimg.com/media/HIvojiaaMAAK4AT.jpg"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "handle": "obsidianstudio9",
+    "root": {
+      "id": "2055566745679921280",
+      "text": "【衝撃】\nObsidianを作った本人が、自分のメモ術を全部公開していてヤバい🔥\nこれはマジで全人類見て！有益すぎたから日本語で全部解説する👇\nhttps://t.co/QMZg1bzs90\n内容は「フォルダもタグもほぼ使わない」「ノート同士のリンクで知識を育てる」常識破りなやり方だった👀\n\n❌たくさんフォルダを作って整理する\n⭕️ノート同士をリンクで繋いで関係を育てる\n\nこうすることで、後から見直したときに「使える知識」だけが残るようになる。\n\n\"いちばん大事なこと\"👇\n\nメモを書き残すだけでは意味がない。\n重要なのは、ノート同士の関係をリンクで残すこと。\n\nたとえば、\n\n・今日の打ち合わせメモ\n・関心がある人物のノート\n・進行中のプロジェクトメモ\n・気になる本の感想ノート\n・興味分野の学習ノート\n\nこれらが繋がっていると、検索しなくても\n\n「最近この話題を繰り返し書いている」\n「この人と興味と仕事が一本の線で繋がっている」\n\nという気づきがいつのまにか浮かび上がる❗️\n\n人間は時系列で大量のノートを横断するのが苦手。\nここを補ってくれるのがObsidianのリンクの仕組み。\n\n仕組みが整うと、自分でも気づいていなかった思考の癖や軸が見えてくる。\n\nもっと詳しくはこの動画見てみて👇\n\nObsidianでナレッジ管理を深めたい人は、\nこの下の記事を読むと理解が一気に深まる。マジでおすすめ👇",
+      "author": {
+        "userName": "obsidianstudio9",
+        "id": "2043209661525209088",
+        "isBlueVerified": true
+      },
+      "createdAt": "Sat May 16 08:31:17 +0000 2026",
+      "lang": "ja",
+      "likeCount": 493,
+      "retweetCount": 38,
+      "replyCount": 6,
+      "quoteCount": 3,
+      "bookmarkCount": 869,
+      "viewCount": 72005,
+      "isReply": false,
+      "conversationId": "2055566745679921280",
+      "tweetUrl": "https://x.com/obsidianstudio9/status/2055566745679921280",
+      "media": [
+        {
+          "type": "video",
+          "url": "https://pbs.twimg.com/amplify_video_thumb/2054664331380592640/img/xQWweySAIGxRgAS4.jpg"
+        }
+      ]
+    },
+    "thread": [
+      {
+        "id": "2055566745679921280",
+        "text": "【衝撃】\nObsidianを作った本人が、自分のメモ術を全部公開していてヤバい🔥\nこれはマジで全人類見て！有益すぎたから日本語で全部解説する👇\nhttps://t.co/QMZg1bzs90\n内容は「フォルダもタグもほぼ使わない」「ノート同士のリンクで知識を育てる」常識破りなやり方だった👀\n\n❌たくさんフォルダを作って整理する\n⭕️ノート同士をリンクで繋いで関係を育てる\n\nこうすることで、後から見直したときに「使える知識」だけが残るようになる。\n\n\"いちばん大事なこと\"👇\n\nメモを書き残すだけでは意味がない。\n重要なのは、ノート同士の関係をリンクで残すこと。\n\nたとえば、\n\n・今日の打ち合わせメモ\n・関心がある人物のノート\n・進行中のプロジェクトメモ\n・気になる本の感想ノート\n・興味分野の学習ノート\n\nこれらが繋がっていると、検索しなくても\n\n「最近この話題を繰り返し書いている」\n「この人と興味と仕事が一本の線で繋がっている」\n\nという気づきがいつのまにか浮かび上がる❗️\n\n人間は時系列で大量のノートを横断するのが苦手。\nここを補ってくれるのがObsidianのリンクの仕組み。\n\n仕組みが整うと、自分でも気づいていなかった思考の癖や軸が見えてくる。\n\nもっと詳しくはこの動画見てみて👇\n\nObsidianでナレッジ管理を深めたい人は、\nこの下の記事を読むと理解が一気に深まる。マジでおすすめ👇",
+        "author": {
+          "userName": "obsidianstudio9",
+          "id": "2043209661525209088",
+          "isBlueVerified": true
+        },
+        "createdAt": "Sat May 16 08:31:17 +0000 2026",
+        "lang": "ja",
+        "likeCount": 493,
+        "retweetCount": 38,
+        "replyCount": 6,
+        "quoteCount": 3,
+        "bookmarkCount": 869,
+        "viewCount": 72005,
+        "isReply": false,
+        "conversationId": "2055566745679921280",
+        "tweetUrl": "https://x.com/obsidianstudio9/status/2055566745679921280",
+        "media": [
+          {
+            "type": "video",
+            "url": "https://pbs.twimg.com/amplify_video_thumb/2054664331380592640/img/xQWweySAIGxRgAS4.jpg"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "handle": "obsidianstudio9",
+    "root": {
+      "id": "2053007090923491784",
+      "text": "【速報】\nObsidian Vaultで\"AIが勝手にプロジェクト管理\"する\nツールがアプデされた😳\nその名も──Hermes Kanban Bridge v1.2.0\nツールの特徴まとめる👇\n・ボードテンプレート → ワンクリックでセットアップ\n・ブロッカー自動追跡 → 詰まりを即検知\n・自律リチュアル → AIが定期的に進捗を整理\n・ローカルREST Bridge → 外部接続不要\n・Obsidianの中で完結 → 別ツール不要\n\nつまり、\n「アイデアを言語化するだけで\nプロジェクト管理が自動で回る」\n開発の常識が、静かに書き換わり始めてる。\n個人開発者も、スタートアップも、\n\"管理力\"より\"構想力\"の時代へ。\n\nObsidianでナレッジ管理を深めたい人は、この下の記事も参考になる。\nこの下の記事を読むと理解が一気に深まる。マジでおすすめ👇",
+      "author": {
+        "userName": "obsidianstudio9",
+        "id": "2043209661525209088",
+        "isBlueVerified": true
+      },
+      "createdAt": "Sat May 09 07:00:08 +0000 2026",
+      "lang": "ja",
+      "likeCount": 144,
+      "retweetCount": 9,
+      "replyCount": 1,
+      "quoteCount": 0,
+      "bookmarkCount": 143,
+      "viewCount": 12468,
+      "isReply": false,
+      "conversationId": "2053007090923491784",
+      "tweetUrl": "https://x.com/obsidianstudio9/status/2053007090923491784",
+      "media": [
+        {
+          "type": "photo",
+          "url": "https://pbs.twimg.com/media/HH2_EeubEAAjUsr.jpg"
+        }
+      ]
+    },
+    "thread": [
+      {
+        "id": "2053007090923491784",
+        "text": "【速報】\nObsidian Vaultで\"AIが勝手にプロジェクト管理\"する\nツールがアプデされた😳\nその名も──Hermes Kanban Bridge v1.2.0\nツールの特徴まとめる👇\n・ボードテンプレート → ワンクリックでセットアップ\n・ブロッカー自動追跡 → 詰まりを即検知\n・自律リチュアル → AIが定期的に進捗を整理\n・ローカルREST Bridge → 外部接続不要\n・Obsidianの中で完結 → 別ツール不要\n\nつまり、\n「アイデアを言語化するだけで\nプロジェクト管理が自動で回る」\n開発の常識が、静かに書き換わり始めてる。\n個人開発者も、スタートアップも、\n\"管理力\"より\"構想力\"の時代へ。\n\nObsidianでナレッジ管理を深めたい人は、この下の記事も参考になる。\nこの下の記事を読むと理解が一気に深まる。マジでおすすめ👇",
+        "author": {
+          "userName": "obsidianstudio9",
+          "id": "2043209661525209088",
+          "isBlueVerified": true
+        },
+        "createdAt": "Sat May 09 07:00:08 +0000 2026",
+        "lang": "ja",
+        "likeCount": 144,
+        "retweetCount": 9,
+        "replyCount": 1,
+        "quoteCount": 0,
+        "bookmarkCount": 143,
+        "viewCount": 12468,
+        "isReply": false,
+        "conversationId": "2053007090923491784",
+        "tweetUrl": "https://x.com/obsidianstudio9/status/2053007090923491784",
+        "media": [
+          {
+            "type": "photo",
+            "url": "https://pbs.twimg.com/media/HH2_EeubEAAjUsr.jpg"
+          }
+        ]
+      },
+      {
+        "id": "2053272391732932638",
+        "text": "多くの方に見ていただきありがとうございます😭\n\nこのアカウント( @obsidianstudio9 )は、\nClaude × Obsidianで「第2の脳」を構築するナレッジ設計アカウントです。\n\n表面的な情報ではなく、\n「思考をどう蓄積し、どう再利用するか」という本質にフォーカスし、\n日々の発信を行っています。\n\n現在は、\nコンテキスト総量100億字規模の設計思想をベースに、\n実運用レベルでのナレッジ管理・思考拡張の仕組みを構築中です。\n\n普段の発信内容👇\n・Claude × Obsidianによる「第2の脳」の構築方法\n・ナレッジ設計／情報整理の実践ノウハウ\n・思考を資産化するための運用設計\n・ローカル環境での長期的な情報蓄積戦略\n\n単なるツール紹介ではなく、\n「思考と情報をどう資産に変えるか」まで踏み込んで発信しています。\n\nご関心のある方は、ぜひフォローしてチェックしてみてください👀\n\nめちゃくちゃ有益だと思います！！！",
+        "author": {
+          "userName": "obsidianstudio9",
+          "id": "2043209661525209088",
+          "isBlueVerified": true
+        },
+        "createdAt": "Sun May 10 00:34:20 +0000 2026",
+        "lang": "ja",
+        "likeCount": 1,
+        "retweetCount": 0,
+        "replyCount": 0,
+        "quoteCount": 0,
+        "bookmarkCount": 0,
+        "viewCount": 455,
+        "isReply": true,
+        "conversationId": "2053007090923491784",
+        "tweetUrl": "https://x.com/obsidianstudio9/status/2053272391732932638"
+      }
+    ]
+  },
+  {
+    "handle": "obsidianstudio9",
+    "root": {
+      "id": "2053369509722108059",
+      "text": "【速報】\nObsidianの「デイリーノート」に新機能が追加😳\n結論 →テンプレート × AI連携で、毎日の記録が勝手に資産になります！\n正直、これはマジででかい活用法なので解説します👇\nこれまでのデイリーノートは「書く → 放置 → 忘れる」でした。\n\nでも テンプレート＋Claude Code を使うと\n\n・タスクを自動記録\n・メモと気づきを構造化\n・振り返りを定型フォーマットで蓄積\n・関連リンクを自動生成\n・AIへの質問メモを即座に処理\n・1日の学びをナレッジに変換\nこれをAIが継続的に処理。\n\n例えば👇\n\n日報を自動生成させる\n「今日のデイリーノートをまとめて」\nすると\n\nノート確認\n↓\n要約生成\n↓\n日報完成\n↓\n週報にも展開\n\nこれをAIが自動で回す。\n\nさらに\n\n振り返りの精度にも使えます。\n「先週と比べて進捗は？」\nに答えられるAIが手に入る。\nつまり\nAIが\"毎日の記録係\"として働く状態を作れる。\n\nこれ、地味に見えるけど\n日報も週報もナレッジ蓄積も\n全部がデイリーノート1つから始まる。\nしかもローカルでプライバシーも安心。\nNotionの日記機能より軽くて速い。しかもローカルでプライバシーも安心。\n\nObsidianでナレッジ管理を深めたい人は、この下の記事も参考になる。\nこの下の記事を読むと理解が一気に深まる。マジでおすすめ👇",
+      "author": {
+        "userName": "obsidianstudio9",
+        "id": "2043209661525209088",
+        "isBlueVerified": true
+      },
+      "createdAt": "Sun May 10 07:00:15 +0000 2026",
+      "lang": "ja",
+      "likeCount": 139,
+      "retweetCount": 18,
+      "replyCount": 2,
+      "quoteCount": 4,
+      "bookmarkCount": 160,
+      "viewCount": 44245,
+      "isReply": false,
+      "conversationId": "2053369509722108059",
+      "tweetUrl": "https://x.com/obsidianstudio9/status/2053369509722108059",
+      "media": [
+        {
+          "type": "photo",
+          "url": "https://pbs.twimg.com/media/HH8Ir8ia4AA9zn7.jpg"
+        }
+      ]
+    },
+    "thread": [
+      {
+        "id": "2053369509722108059",
+        "text": "【速報】\nObsidianの「デイリーノート」に新機能が追加😳\n結論 →テンプレート × AI連携で、毎日の記録が勝手に資産になります！\n正直、これはマジででかい活用法なので解説します👇\nこれまでのデイリーノートは「書く → 放置 → 忘れる」でした。\n\nでも テンプレート＋Claude Code を使うと\n\n・タスクを自動記録\n・メモと気づきを構造化\n・振り返りを定型フォーマットで蓄積\n・関連リンクを自動生成\n・AIへの質問メモを即座に処理\n・1日の学びをナレッジに変換\nこれをAIが継続的に処理。\n\n例えば👇\n\n日報を自動生成させる\n「今日のデイリーノートをまとめて」\nすると\n\nノート確認\n↓\n要約生成\n↓\n日報完成\n↓\n週報にも展開\n\nこれをAIが自動で回す。\n\nさらに\n\n振り返りの精度にも使えます。\n「先週と比べて進捗は？」\nに答えられるAIが手に入る。\nつまり\nAIが\"毎日の記録係\"として働く状態を作れる。\n\nこれ、地味に見えるけど\n日報も週報もナレッジ蓄積も\n全部がデイリーノート1つから始まる。\nしかもローカルでプライバシーも安心。\nNotionの日記機能より軽くて速い。しかもローカルでプライバシーも安心。\n\nObsidianでナレッジ管理を深めたい人は、この下の記事も参考になる。\nこの下の記事を読むと理解が一気に深まる。マジでおすすめ👇",
+        "author": {
+          "userName": "obsidianstudio9",
+          "id": "2043209661525209088",
+          "isBlueVerified": true
+        },
+        "createdAt": "Sun May 10 07:00:15 +0000 2026",
+        "lang": "ja",
+        "likeCount": 139,
+        "retweetCount": 18,
+        "replyCount": 2,
+        "quoteCount": 4,
+        "bookmarkCount": 160,
+        "viewCount": 44245,
+        "isReply": false,
+        "conversationId": "2053369509722108059",
+        "tweetUrl": "https://x.com/obsidianstudio9/status/2053369509722108059",
+        "media": [
+          {
+            "type": "photo",
+            "url": "https://pbs.twimg.com/media/HH8Ir8ia4AA9zn7.jpg"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "handle": "obsidianstudio9",
+    "root": {
+      "id": "2052644765787893980",
+      "text": "キターーーー！\nObsidian CLIの「orphans」コマンド、grepの54倍速くてMCPの7万倍安い🔥\nVaultが大きいほど差が開くって、もうCLI使わない理由がない👀\nObsidianの作者が自分で出した公式数値だから間違いない！\n\nObsidianでナレッジ管理を深めたい人は、この下の記事も参考になる。\nこの下の記事を読むと理解が一気に深まる。マジでおすすめ👇",
+      "author": {
+        "userName": "obsidianstudio9",
+        "id": "2043209661525209088",
+        "isBlueVerified": true
+      },
+      "createdAt": "Fri May 08 07:00:23 +0000 2026",
+      "lang": "ja",
+      "likeCount": 195,
+      "retweetCount": 14,
+      "replyCount": 3,
+      "quoteCount": 2,
+      "bookmarkCount": 253,
+      "viewCount": 24244,
+      "isReply": false,
+      "conversationId": "2052644765787893980",
+      "tweetUrl": "https://x.com/obsidianstudio9/status/2052644765787893980",
+      "media": [
+        {
+          "type": "photo",
+          "url": "https://pbs.twimg.com/media/HHx1iTeaEAAEmSi.jpg"
+        }
+      ]
+    },
+    "thread": [
+      {
+        "id": "2052644765787893980",
+        "text": "キターーーー！\nObsidian CLIの「orphans」コマンド、grepの54倍速くてMCPの7万倍安い🔥\nVaultが大きいほど差が開くって、もうCLI使わない理由がない👀\nObsidianの作者が自分で出した公式数値だから間違いない！\n\nObsidianでナレッジ管理を深めたい人は、この下の記事も参考になる。\nこの下の記事を読むと理解が一気に深まる。マジでおすすめ👇",
+        "author": {
+          "userName": "obsidianstudio9",
+          "id": "2043209661525209088",
+          "isBlueVerified": true
+        },
+        "createdAt": "Fri May 08 07:00:23 +0000 2026",
+        "lang": "ja",
+        "likeCount": 195,
+        "retweetCount": 14,
+        "replyCount": 3,
+        "quoteCount": 2,
+        "bookmarkCount": 253,
+        "viewCount": 24244,
+        "isReply": false,
+        "conversationId": "2052644765787893980",
+        "tweetUrl": "https://x.com/obsidianstudio9/status/2052644765787893980",
+        "media": [
+          {
+            "type": "photo",
+            "url": "https://pbs.twimg.com/media/HHx1iTeaEAAEmSi.jpg"
+          }
+        ]
+      },
+      {
+        "id": "2052731785709232529",
+        "text": "多くの方に見ていただきありがとうございます😭\n\nこのアカウント( @obsidianstudio9 )は、\nClaude × Obsidianで「第2の脳」を構築するナレッジ設計アカウントです。\n\n表面的な情報ではなく、\n「思考をどう蓄積し、どう再利用するか」という本質にフォーカスし、\n日々の発信を行っています。\n\n現在は、\nコンテキスト総量100億字規模の設計思想をベースに、\n実運用レベルでのナレッジ管理・思考拡張の仕組みを構築中です。\n\n普段の発信内容👇\n・Claude × Obsidianによる「第2の脳」の構築方法\n・ナレッジ設計／情報整理の実践ノウハウ\n・思考を資産化するための運用設計\n・ローカル環境での長期的な情報蓄積戦略\n\n単なるツール紹介ではなく、\n「思考と情報をどう資産に変えるか」まで踏み込んで発信しています。\n\nご関心のある方は、ぜひフォローしてチェックしてみてください👀\n\nめちゃくちゃ有益だと思います！！！",
+        "author": {
+          "userName": "obsidianstudio9",
+          "id": "2043209661525209088",
+          "isBlueVerified": true
+        },
+        "createdAt": "Fri May 08 12:46:10 +0000 2026",
+        "lang": "ja",
+        "likeCount": 1,
+        "retweetCount": 0,
+        "replyCount": 0,
+        "quoteCount": 0,
+        "bookmarkCount": 1,
+        "viewCount": 558,
+        "isReply": true,
+        "conversationId": "2052644765787893980",
+        "tweetUrl": "https://x.com/obsidianstudio9/status/2052731785709232529"
+      }
+    ]
+  },
+  {
+    "handle": "obsidianstudio9",
+    "root": {
+      "id": "2057227388661162350",
+      "text": "【速報】\nObsidianの創業者が、自社の有料Obsidian Syncを使わずに済む方法を\nわざわざ公式に明文化してくれているのが話題😳\nこれ何がヤバいかというと👇\n・公式が\"無料運用\"の選択肢を全部出してる\n・iCloud / Drive / GitでVault同期可能\n・ヘッドレスCLIで自動バックアップも組める\n・\"自由なツール\"であり続ける宣言と捉えられる\nプロダクトを売る側がここまで透明なのは異常です。Obsidianを長く使い続ける理由がまた一つ増えました。\n\nObsidianでナレッジ管理を深めたい人は、この下の記事も参考になる。\nこの下の記事を読むと理解が一気に深まる。マジでおすすめ👇",
+      "author": {
+        "userName": "obsidianstudio9",
+        "id": "2043209661525209088",
+        "isBlueVerified": true
+      },
+      "createdAt": "Wed May 20 22:30:05 +0000 2026",
+      "lang": "ja",
+      "likeCount": 403,
+      "retweetCount": 37,
+      "replyCount": 4,
+      "quoteCount": 4,
+      "bookmarkCount": 698,
+      "viewCount": 64527,
+      "isReply": false,
+      "conversationId": "2057227388661162350",
+      "tweetUrl": "https://x.com/obsidianstudio9/status/2057227388661162350",
+      "media": [
+        {
+          "type": "photo",
+          "url": "https://pbs.twimg.com/media/HIy9aDmasAE69ya.jpg"
+        }
+      ]
+    },
+    "thread": [
+      {
+        "id": "2057227388661162350",
+        "text": "【速報】\nObsidianの創業者が、自社の有料Obsidian Syncを使わずに済む方法を\nわざわざ公式に明文化してくれているのが話題😳\nこれ何がヤバいかというと👇\n・公式が\"無料運用\"の選択肢を全部出してる\n・iCloud / Drive / GitでVault同期可能\n・ヘッドレスCLIで自動バックアップも組める\n・\"自由なツール\"であり続ける宣言と捉えられる\nプロダクトを売る側がここまで透明なのは異常です。Obsidianを長く使い続ける理由がまた一つ増えました。\n\nObsidianでナレッジ管理を深めたい人は、この下の記事も参考になる。\nこの下の記事を読むと理解が一気に深まる。マジでおすすめ👇",
+        "author": {
+          "userName": "obsidianstudio9",
+          "id": "2043209661525209088",
+          "isBlueVerified": true
+        },
+        "createdAt": "Wed May 20 22:30:05 +0000 2026",
+        "lang": "ja",
+        "likeCount": 403,
+        "retweetCount": 37,
+        "replyCount": 4,
+        "quoteCount": 4,
+        "bookmarkCount": 698,
+        "viewCount": 64527,
+        "isReply": false,
+        "conversationId": "2057227388661162350",
+        "tweetUrl": "https://x.com/obsidianstudio9/status/2057227388661162350",
+        "media": [
+          {
+            "type": "photo",
+            "url": "https://pbs.twimg.com/media/HIy9aDmasAE69ya.jpg"
+          }
+        ]
+      },
+      {
+        "id": "2057460206892900419",
+        "text": "多くの方に見ていただきありがとうございます😭\n\nこのアカウント( @obsidianstudio9)は、\nClaude × Obsidianで「第2の脳」を構築するナレッジ設計アカウントです。\n\n表面的な情報ではなく、\n「思考をどう蓄積し、どう再利用するか」という本質にフォーカスし、\n日々の発信を行っています。\n\n現在は、\nコンテキスト総量100億字規模の設計思想をベースに、\n実運用レベルでのナレッジ管理・思考拡張の仕組みを構築中です。\n\n普段の発信内容👇\n・Claude × Obsidianによる「第2の脳」の構築方法\n・ナレッジ設計／情報整理の実践ノウハウ\n・思考を資産化するための運用設計\n・ローカル環境での長期的な情報蓄積戦略\n\n単なるツール紹介ではなく、\n「思考と情報をどう資産に変えるか」まで踏み込んで発信しています。\n\nご関心のある方は、ぜひフォローしてチェックしてみてください👀\n\nめちゃくちゃ有益だと思います！！！",
+        "author": {
+          "userName": "obsidianstudio9",
+          "id": "2043209661525209088",
+          "isBlueVerified": true
+        },
+        "createdAt": "Thu May 21 13:55:13 +0000 2026",
+        "lang": "ja",
+        "likeCount": 2,
+        "retweetCount": 0,
+        "replyCount": 0,
+        "quoteCount": 0,
+        "bookmarkCount": 0,
+        "viewCount": 418,
+        "isReply": true,
+        "conversationId": "2057227388661162350",
+        "tweetUrl": "https://x.com/obsidianstudio9/status/2057460206892900419"
+      }
+    ]
+  },
+  {
+    "handle": "obsidianstudio9",
+    "root": {
+      "id": "2053316621939404860",
+      "text": "【Obsidian革命｜Bases機能】\nついに紹介します！\nObsidianに搭載された\n次世代データベース機能 『Bases』 の活用法を完全解説します🔥\n◆ カスタムサイドバービュー\n　開いてるノート → 自動解析 → \"関連ノートをスコア順に表示\"\n◆ リンクとタグの重複数でソート\n◆ プロパティのフィルタ・集計・数式\n◆ CSVエクスポートでスプレッドシート連携\n◆ そして Markdownに埋め込んだレポート にも対応\n\"NotionのDBが欲しかった人\"が\nローカルファイルで、しかも無料で使えるところまで来た。\nノート管理のワークフローを根本から変えにいく機能。\nこれ使わない理由、ほんとにない。\nそして今回は──\nBasesの設定を試した人の感想がかなり好評。\n早期から触っていただき、Obsidianの使い方が変わる体験をしてください。\n\nObsidianでナレッジ管理を深めたい人は、この下の記事も参考になる。\nこの下の記事を読むと理解が一気に深まる。マジでおすすめ👇",
+      "author": {
+        "userName": "obsidianstudio9",
+        "id": "2043209661525209088",
+        "isBlueVerified": true
+      },
+      "createdAt": "Sun May 10 03:30:06 +0000 2026",
+      "lang": "ja",
+      "likeCount": 172,
+      "retweetCount": 20,
+      "replyCount": 2,
+      "quoteCount": 2,
+      "bookmarkCount": 208,
+      "viewCount": 19512,
+      "isReply": false,
+      "conversationId": "2053316621939404860",
+      "tweetUrl": "https://x.com/obsidianstudio9/status/2053316621939404860",
+      "media": [
+        {
+          "type": "photo",
+          "url": "https://pbs.twimg.com/media/HH7Yle3aAAA3mPP.jpg"
+        }
+      ]
+    },
+    "thread": [
+      {
+        "id": "2053316621939404860",
+        "text": "【Obsidian革命｜Bases機能】\nついに紹介します！\nObsidianに搭載された\n次世代データベース機能 『Bases』 の活用法を完全解説します🔥\n◆ カスタムサイドバービュー\n　開いてるノート → 自動解析 → \"関連ノートをスコア順に表示\"\n◆ リンクとタグの重複数でソート\n◆ プロパティのフィルタ・集計・数式\n◆ CSVエクスポートでスプレッドシート連携\n◆ そして Markdownに埋め込んだレポート にも対応\n\"NotionのDBが欲しかった人\"が\nローカルファイルで、しかも無料で使えるところまで来た。\nノート管理のワークフローを根本から変えにいく機能。\nこれ使わない理由、ほんとにない。\nそして今回は──\nBasesの設定を試した人の感想がかなり好評。\n早期から触っていただき、Obsidianの使い方が変わる体験をしてください。\n\nObsidianでナレッジ管理を深めたい人は、この下の記事も参考になる。\nこの下の記事を読むと理解が一気に深まる。マジでおすすめ👇",
+        "author": {
+          "userName": "obsidianstudio9",
+          "id": "2043209661525209088",
+          "isBlueVerified": true
+        },
+        "createdAt": "Sun May 10 03:30:06 +0000 2026",
+        "lang": "ja",
+        "likeCount": 172,
+        "retweetCount": 20,
+        "replyCount": 2,
+        "quoteCount": 2,
+        "bookmarkCount": 208,
+        "viewCount": 19512,
+        "isReply": false,
+        "conversationId": "2053316621939404860",
+        "tweetUrl": "https://x.com/obsidianstudio9/status/2053316621939404860",
+        "media": [
+          {
+            "type": "photo",
+            "url": "https://pbs.twimg.com/media/HH7Yle3aAAA3mPP.jpg"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "handle": "obsidianstudio9",
+    "root": {
+      "id": "2057333084014735506",
+      "text": "正直ここを知らずにObsidianをAIに繋ぐと、\n\"AIに汚染されたVault\"が出来上がる、ってObsidian創業者本人が警鐘鳴らしてた👇是非保存して自分のVault運用見直してほしいです。\n・自分のVaultとAI用Vaultは必ず分ける\n・個人Vaultは\"高信号低ノイズ\"で死守\n・AI生成物はメインVaultに混ぜない\n・出処不明のメモを残さない\n・Web Clipper等の流入は別フォルダに隔離\n・\"自分が書いた\"と\"AIが書いた\"を必ず区別\n・参照元URLを最低限残す\n・AIの推測を断定として保存しない\n・週次でVaultの掃除タイムを設ける\n・ナレッジの汚染は後から戻せない\n\"AIに任せる\"は便利。でもVault設計を雑にすると、\n自分の頭の延長線まで信用できなくなる。\n\nObsidian使い倒したい人は、この下の記事も合わせて読んでみて。\nこの下の記事を読むと理解が一気に深まる。マジでおすすめ👇",
+      "author": {
+        "userName": "obsidianstudio9",
+        "id": "2043209661525209088",
+        "isBlueVerified": true
+      },
+      "createdAt": "Thu May 21 05:30:05 +0000 2026",
+      "lang": "ja",
+      "likeCount": 159,
+      "retweetCount": 9,
+      "replyCount": 1,
+      "quoteCount": 0,
+      "bookmarkCount": 211,
+      "viewCount": 17670,
+      "isReply": false,
+      "conversationId": "2057333084014735506",
+      "tweetUrl": "https://x.com/obsidianstudio9/status/2057333084014735506",
+      "media": [
+        {
+          "type": "photo",
+          "url": "https://pbs.twimg.com/media/HI0diQrawAA9nJS.jpg"
+        }
+      ]
+    },
+    "thread": [
+      {
+        "id": "2057333084014735506",
+        "text": "正直ここを知らずにObsidianをAIに繋ぐと、\n\"AIに汚染されたVault\"が出来上がる、ってObsidian創業者本人が警鐘鳴らしてた👇是非保存して自分のVault運用見直してほしいです。\n・自分のVaultとAI用Vaultは必ず分ける\n・個人Vaultは\"高信号低ノイズ\"で死守\n・AI生成物はメインVaultに混ぜない\n・出処不明のメモを残さない\n・Web Clipper等の流入は別フォルダに隔離\n・\"自分が書いた\"と\"AIが書いた\"を必ず区別\n・参照元URLを最低限残す\n・AIの推測を断定として保存しない\n・週次でVaultの掃除タイムを設ける\n・ナレッジの汚染は後から戻せない\n\"AIに任せる\"は便利。でもVault設計を雑にすると、\n自分の頭の延長線まで信用できなくなる。\n\nObsidian使い倒したい人は、この下の記事も合わせて読んでみて。\nこの下の記事を読むと理解が一気に深まる。マジでおすすめ👇",
+        "author": {
+          "userName": "obsidianstudio9",
+          "id": "2043209661525209088",
+          "isBlueVerified": true
+        },
+        "createdAt": "Thu May 21 05:30:05 +0000 2026",
+        "lang": "ja",
+        "likeCount": 159,
+        "retweetCount": 9,
+        "replyCount": 1,
+        "quoteCount": 0,
+        "bookmarkCount": 211,
+        "viewCount": 17670,
+        "isReply": false,
+        "conversationId": "2057333084014735506",
+        "tweetUrl": "https://x.com/obsidianstudio9/status/2057333084014735506",
+        "media": [
+          {
+            "type": "photo",
+            "url": "https://pbs.twimg.com/media/HI0diQrawAA9nJS.jpg"
+          }
+        ]
+      },
+      {
+        "id": "2057460298987000024",
+        "text": "多くの方に見ていただきありがとうございます😭\n\nこのアカウント( @obsidianstudio9)は、\nClaude × Obsidianで「第2の脳」を構築するナレッジ設計アカウントです。\n\n表面的な情報ではなく、\n「思考をどう蓄積し、どう再利用するか」という本質にフォーカスし、\n日々の発信を行っています。\n\n現在は、\nコンテキスト総量100億字規模の設計思想をベースに、\n実運用レベルでのナレッジ管理・思考拡張の仕組みを構築中です。\n\n普段の発信内容👇\n・Claude × Obsidianによる「第2の脳」の構築方法\n・ナレッジ設計／情報整理の実践ノウハウ\n・思考を資産化するための運用設計\n・ローカル環境での長期的な情報蓄積戦略\n\n単なるツール紹介ではなく、\n「思考と情報をどう資産に変えるか」まで踏み込んで発信しています。\n\nご関心のある方は、ぜひフォローしてチェックしてみてください👀\n\nめちゃくちゃ有益だと思います！！！",
+        "author": {
+          "userName": "obsidianstudio9",
+          "id": "2043209661525209088",
+          "isBlueVerified": true
+        },
+        "createdAt": "Thu May 21 13:55:35 +0000 2026",
+        "lang": "ja",
+        "likeCount": 3,
+        "retweetCount": 0,
+        "replyCount": 0,
+        "quoteCount": 0,
+        "bookmarkCount": 0,
+        "viewCount": 406,
+        "isReply": true,
+        "conversationId": "2057333084014735506",
+        "tweetUrl": "https://x.com/obsidianstudio9/status/2057460298987000024"
+      }
+    ]
+  }
+]

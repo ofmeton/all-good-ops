@@ -55,6 +55,8 @@ export interface Env {
   // Admin secret gating /oauth/x/start (fail closed: unset → reject)
   OAUTH_ADMIN_SECRET: string;
   TWITTERAPI_IO_KEY: string;
+  TWITTERAPI_IO_LOGIN_COOKIE: string;
+  TWITTERAPI_IO_PROXY: string;
   SUPABASE_URL: string;
   SUPABASE_SERVICE_ROLE_KEY: string;
   LINE_CHANNEL_ACCESS_TOKEN: string;
@@ -73,6 +75,7 @@ export type JobMessage =
   | {
       job:
         | "collect"
+        | "bookmark-collect"
         | "daily-digest"
         | "optimizer-update"
         | "optimizer-analyst"
@@ -97,6 +100,7 @@ function jstDate(d: Date): string {
 // 注: "0 * /2 * * *" (スペースなし: 0 */2 * * *) は複数時刻に発火するが式文字列として一意なのでキーとして安全。
 const CRON_JOBS: Record<string, JobMessage["job"]> = {
   "30 20 * * *": "collect",          // 05:30 JST
+  "0 21 * * *": "bookmark-collect",  // 06:00 JST
   "0 11 * * *": "metrics-ingest",    // 20:00 JST（digest/optimizer の前）
   "0 12 * * *": "daily-digest",      // 21:00 JST
   "0 14 * * *": "optimizer-update",  // 23:00 JST
@@ -108,6 +112,7 @@ const CRON_JOBS: Record<string, JobMessage["job"]> = {
 /** /admin/enqueue で手動起動を許可する job 名（line-event は webhook 専用なので除外） */
 const CRON_JOBS_BY_NAME: Record<string, true> = {
   collect: true,
+  "bookmark-collect": true,
   "daily-digest": true,
   "optimizer-update": true,
   "optimizer-analyst": true,
