@@ -5,6 +5,7 @@
  *   - 要素ホバーでハイライト＋ラベル、クリックで選択
  *   - [直接調整] 余白/詰め/サイズ/揃え/色/className をその場でいじり、実ソースへ即書き戻し（Phase B/B.2・Claude 不介在）
  *     画面幅(bp: 全/sm/md/lg/xl)を切替えると以降の調整がその breakpoint(md: 等)に効く
+ *   - [⇅ 並べ替え] 要素をドラッグして兄弟の上にドロップ→daemon が AST で兄弟順を決定的に確定（Phase C・Claude 不介在）
  *   - [Claudeに頼む] 自然文プロンプトをキューに溜め「Claudeへ送る」(/enqueue)
  *
  * 設計判断（Spike 0 の実測に基づく）:
@@ -30,6 +31,10 @@
   let sourceClass = "";   // 確定済み（=ソースと一致）の className 基準
   let liveClass = "";     // 編集中の className（プレビュー反映済み）
   let bp = "";            // 編集対象のブレークポイント prefix（"" | "sm:" | "md:" | "lg:" | "xl:"）
+  let reordering = false; // 並べ替えモード
+  let dragEl2 = null;     // ドラッグ中の要素
+  let dropTarget = null;  // ドロップ先の兄弟候補
+  let dropPos = "before"; // before | after
   const pending = [];     // {payload, prompt}
 
   // ---- locator 収集 -----------------------------------------------------
@@ -132,6 +137,13 @@
              border: none; background: #2563eb; color: #fff; font-size: 20px; cursor: pointer;
              box-shadow: 0 4px 14px rgba(0,0,0,.35); pointer-events: auto; }
       .fab.on { background: #dc2626; }
+      .fab2 { position: fixed; bottom: 72px; right: 18px; width: 46px; height: 46px; border-radius: 50%;
+              border: none; background: #7c3aed; color: #fff; font-size: 18px; cursor: pointer;
+              box-shadow: 0 4px 14px rgba(0,0,0,.35); pointer-events: auto; }
+      .fab2.on { background: #dc2626; }
+      .dropline { position: fixed; pointer-events: none; z-index: 7; height: 3px; background: #a855f7;
+                  border-radius: 2px; display: none; box-shadow: 0 0 6px #a855f7; }
+      .hl.drag { border-color: #a855f7; background: rgba(168,85,247,.16); }
       .panel { position: fixed; bottom: 76px; right: 18px; width: 340px; max-height: 70vh; overflow: auto;
                background: #0f172a; color: #e2e8f0; border: 1px solid #334155; border-radius: 12px;
                padding: 14px; pointer-events: auto; display: none; box-shadow: 0 12px 40px rgba(0,0,0,.5); }
@@ -173,6 +185,8 @@
     </style>
     <div class="hl"></div>
     <div class="label"></div>
+    <div class="dropline"></div>
+    <button class="fab2" title="ドラッグで並べ替え (Esc で解除)">⇅</button>
     <button class="fab" title="要素を選択 (Esc で解除)">🎯</button>
     <div class="panel"></div>
     <div class="toast"></div>
@@ -180,7 +194,9 @@
 
   const $hl = root.querySelector(".hl");
   const $label = root.querySelector(".label");
+  const $dropline = root.querySelector(".dropline");
   const $fab = root.querySelector(".fab");
+  const $fab2 = root.querySelector(".fab2");
   const $panel = root.querySelector(".panel");
   const $toast = root.querySelector(".toast");
 
@@ -458,11 +474,76 @@
     }
   }
 
+  // ---- Phase C: ドラッグ並べ替え（決定的・daemon が AST で確定） ----------
+  function setReordering(on) {
+    reordering = on;
+    $fab2.classList.toggle("on", on);
+    $fab2.textContent = on ? "✕" : "⇅";
+    if (on) { setInspecting(false); closePanel(); toast("要素をドラッグして兄弟の上にドロップ"); }
+    else { dragEl2 = null; dropTarget = null; $dropline.style.display = "none"; $hl.classList.remove("drag"); hideHighlight(); }
+  }
+
+  function showDropline(target, pos) {
+    const r = target.getBoundingClientRect();
+    $dropline.style.display = "block";
+    $dropline.style.left = r.left + "px";
+    $dropline.style.width = r.width + "px";
+    $dropline.style.top = (pos === "before" ? r.top - 1 : r.bottom - 1) + "px";
+  }
+
+  async function doReorder(dragEl, target, pos) {
+    const dragClass = dragEl.getAttribute("class");
+    const targetClass = target.getAttribute("class");
+    if (!dragClass || !targetClass) { toast("class が無く並べ替え不可（Claudeに頼んで）", "#f59e0b"); return; }
+    try {
+      const res = await fetch(`${ORIGIN}/reorder`, {
+        method: "POST", headers: POST_HEADERS,
+        body: JSON.stringify({ route: location.pathname, dragClass, targetClass, position: pos }),
+      });
+      const j = await res.json();
+      if (j.ok && !j.noop) toast(`並べ替え反映 → ${j.file}`);
+      else if (j.ok) toast("変更なし");
+      else if (j.reason === "ambiguous") toast("同じclassが複数。Claudeに頼んで", "#f59e0b");
+      else if (j.reason === "not-siblings") toast("同じ親の兄弟同士でのみ並べ替え可", "#f59e0b");
+      else if (j.reason === "not-found") toast("ソース未特定(動的class?)。Claudeに頼んで", "#f59e0b");
+      else toast(`失敗: ${j.reason || j.error}`, "#dc2626");
+    } catch (err) { toast(`失敗: ${err.message}`, "#dc2626"); }
+  }
+
   // ---- イベント ---------------------------------------------------------
   $fab.onclick = () => {
+    if (reordering) setReordering(false);
     if (inspecting) { setInspecting(false); }
     else { setInspecting(true); openPanel(); }
   };
+  $fab2.onclick = () => setReordering(!reordering);
+
+  // 並べ替え: mousedown で掴む / mousemove でドロップ位置 / mouseup で確定
+  document.addEventListener("mousedown", (e) => {
+    if (!reordering || isOurs(e.target)) return;
+    e.preventDefault(); e.stopPropagation();
+    dragEl2 = e.target;
+    showHighlight(dragEl2);
+    $hl.classList.add("drag");
+  }, true);
+
+  document.addEventListener("mousemove", (e) => {
+    if (!reordering || !dragEl2) return;
+    const el = e.target;
+    if (isOurs(el) || el === dragEl2) { $dropline.style.display = "none"; dropTarget = null; return; }
+    const r = el.getBoundingClientRect();
+    dropPos = (e.clientY < r.top + r.height / 2) ? "before" : "after";
+    dropTarget = el;
+    showDropline(el, dropPos);
+  }, true);
+
+  document.addEventListener("mouseup", (e) => {
+    if (!reordering || !dragEl2) return;
+    e.preventDefault();
+    if (dropTarget && dropTarget !== dragEl2) doReorder(dragEl2, dropTarget, dropPos);
+    dragEl2 = null; dropTarget = null;
+    $dropline.style.display = "none"; $hl.classList.remove("drag"); hideHighlight();
+  }, true);
 
   document.addEventListener("mousemove", (e) => {
     if (!inspecting) return;
@@ -488,7 +569,8 @@
 
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
-      if (inspecting) setInspecting(false);
+      if (reordering) setReordering(false);
+      else if (inspecting) setInspecting(false);
       else closePanel();
     }
   });

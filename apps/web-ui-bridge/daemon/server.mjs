@@ -24,6 +24,7 @@ import { existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { randomUUID } from "node:crypto";
+import { reorderInSource } from "./reorder.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -165,6 +166,29 @@ async function applyStyle({ route, oldClassName, newClassName }) {
   return { ok: true, file: path.relative(TARGET_ROOT, target.file) };
 }
 
+// Phase C: 兄弟要素の決定的並べ替え。route→app/** の候補を順に試し、
+// className で一意特定でき兄弟である最初のファイルで reorderInSource を適用して書込。
+async function findAndReorder({ route, dragClass, targetClass, position }) {
+  const candidates = [];
+  const routeFile = routeToFile(route);
+  if (routeFile) candidates.push(routeFile);
+  const all = await walkTsx(path.join(TARGET_ROOT, "app"));
+  for (const f of all) if (!candidates.includes(f) && insideTarget(f)) candidates.push(f);
+
+  let lastReason = "not-found";
+  for (const file of candidates) {
+    const src = await readFile(file, "utf8");
+    const r = reorderInSource(src, dragClass, targetClass, position);
+    if (r.ok && r.changed) {
+      await writeFile(file, r.src, "utf8");
+      return { ok: true, file: path.relative(TARGET_ROOT, file) };
+    }
+    if (r.ok && !r.changed) return { ok: true, file: path.relative(TARGET_ROOT, file), noop: true };
+    if (r.reason && r.reason !== "not-found") lastReason = r.reason; // ambiguous/not-siblings 等を優先表示
+  }
+  return { ok: false, reason: lastReason };
+}
+
 const server = http.createServer(async (req, res) => {
   if (req.method === "OPTIONS") return send(res, 204, {}, "");
 
@@ -231,6 +255,21 @@ const server = http.createServer(async (req, res) => {
       const result = await applyStyle(body);
       if (result.ok) console.log(`[web-ui-bridge] apply-style → ${result.file ?? "(noop)"}`);
       else console.log(`[web-ui-bridge] apply-style skipped: ${result.reason}`);
+      return send(res, 200, { "Content-Type": "application/json" }, JSON.stringify(result));
+    } catch (err) {
+      return send(res, 400, { "Content-Type": "application/json" },
+        JSON.stringify({ ok: false, error: err.message }));
+    }
+  }
+
+  if (req.method === "POST" && req.url === "/reorder") {
+    const auth = authorizeMutation(req);
+    if (!auth.ok) return send(res, auth.status, { "Content-Type": "application/json" }, JSON.stringify({ ok: false, error: auth.error }));
+    try {
+      const { route, dragClass, targetClass, position } = JSON.parse(await readBody(req));
+      const result = await findAndReorder({ route, dragClass, targetClass, position });
+      if (result.ok) console.log(`[web-ui-bridge] reorder → ${result.file ?? "(noop)"}`);
+      else console.log(`[web-ui-bridge] reorder skipped: ${result.reason}`);
       return send(res, 200, { "Content-Type": "application/json" }, JSON.stringify(result));
     } catch (err) {
       return send(res, 400, { "Content-Type": "application/json" },
