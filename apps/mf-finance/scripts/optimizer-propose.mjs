@@ -159,18 +159,31 @@ function main() {
   db.pragma("journal_mode = WAL");
   db.pragma("foreign_keys = ON");
 
-  const existsDedup = db.prepare(
-    "SELECT 1 FROM optimizer_proposals WHERE dedup_key = ? LIMIT 1",
+  // dedup_key 一致の最新提案（id/status）を引く。
+  // - pending（＝下層シグナルの「問い」）にLLMの答えが来たら UPDATE で答えを埋める（source→llm）。
+  // - 決定済（accepted/rejected/dismissed/superseded）は再提案せずスキップ。
+  // - 一致なしは INSERT。
+  const findDedup = db.prepare(
+    "SELECT id, status FROM optimizer_proposals WHERE dedup_key = ? ORDER BY id DESC LIMIT 1",
   );
   const insert = db.prepare(
     `INSERT INTO optimizer_proposals
        (kind, source, status, title, rationale, confidence, target_ref, proposed_action, dedup_key)
      VALUES (@kind, 'llm', 'pending', @title, @rationale, @confidence, @target_ref, @proposed_action, @dedup_key)`,
   );
+  // pending の問いに答えを埋める（title は既存を尊重しつつ rationale/action/confidence を更新、source=llm）。
+  const answer = db.prepare(
+    `UPDATE optimizer_proposals
+     SET source='llm', rationale=@rationale, confidence=@confidence,
+         proposed_action=COALESCE(@proposed_action, proposed_action),
+         target_ref=COALESCE(@target_ref, target_ref)
+     WHERE id=@id`,
+  );
 
   let inserted = 0;
+  let answered = 0;
   let skippedInvalid = 0;
-  let skippedDedup = 0;
+  let skippedDecided = 0;
 
   const run = db.transaction(() => {
     parsed.forEach((p, i) => {
@@ -180,24 +193,33 @@ function main() {
         console.warn(`[skip 不正] #${i}: ${v.error}`);
         return;
       }
-      if (v.row.dedup_key && existsDedup.get(v.row.dedup_key)) {
-        skippedDedup++;
-        console.warn(`[skip 重複] #${i}: dedup_key '${v.row.dedup_key}' は既存`);
+      const existing = v.row.dedup_key ? findDedup.get(v.row.dedup_key) : null;
+      if (existing) {
+        if (existing.status === "pending") {
+          answer.run({ ...v.row, id: existing.id });
+          answered++;
+        } else {
+          skippedDecided++;
+          console.warn(`[skip 決定済] #${i}: dedup_key '${v.row.dedup_key}' は ${existing.status}`);
+        }
         return;
       }
       insert.run(v.row);
       inserted++;
     });
-    // 作業ログ（proposed=投入数）。
+    // 作業ログ（proposed=新規投入+回答）。
     db.prepare(
       `INSERT INTO optimizer_runs (ran_by, proposed, note)
        VALUES ('llm', ?, ?)`,
-    ).run(inserted, `propose: 入力${parsed.length} / 投入${inserted} / 不正skip${skippedInvalid} / 重複skip${skippedDedup}`);
+    ).run(
+      inserted + answered,
+      `propose: 入力${parsed.length} / 新規${inserted} / 回答${answered} / 不正skip${skippedInvalid} / 決定済skip${skippedDecided}`,
+    );
   });
   run();
 
   console.log(
-    `optimizer-propose: 入力 ${parsed.length} 件 → 投入 ${inserted} / 不正スキップ ${skippedInvalid} / 重複スキップ ${skippedDedup}`,
+    `optimizer-propose: 入力 ${parsed.length} 件 → 新規 ${inserted} / 既存pendingへ回答 ${answered} / 不正スキップ ${skippedInvalid} / 決定済スキップ ${skippedDecided}`,
   );
   db.close();
 }
