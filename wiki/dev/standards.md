@@ -42,6 +42,7 @@ status: active
 - 永続層のスキーマ変更は**実スキーマを先に Inspect**（既存構造・分布確認）してから設計 → `mem:feedback_db_migration_pre_inspect`
 - ユーザーシナリオ（正常/例外/権限差/空状態/エラー/同時操作）を網羅し必要機能を洗い出す → architect 設計プロセス §2
 - 改善シナリオ（拡張/スケール/仕様変更/障害）を見越し改善レバーを明確化 → architect 設計プロセス §4
+- **実装は Codex(gpt-5.5 high・定額) 委任が既定、Claude は設計(architect)＋レビュー(pr-review/spec-validator)を担当**（半委任・トークン節約）。architect ブループリントは Codex がそのまま実装できる粒度で書く（規約要点を再掲・受け入れ基準を明示）→ `skill:codex-implement` / [[dev/agent-teams-playbook]]
 
 ## A3. テスト・本番検証
 
