@@ -9,6 +9,14 @@
 //
 // 起動: web-ui-bridge --target <site-dir> [--port 7331]
 // 本番ビルドには一切関与しない（dev 専用のローカルツール）。
+//
+// セキュリティ（dev daemon だがソースを書き換える & ブラウザから到達可能なので CSRF/traversal 防御）:
+//   - 127.0.0.1 のみ listen（リモートから到達不可）
+//   - 状態変更(POST)は Origin が localhost/127.0.0.1 か検証 + 起動時生成のトークン必須
+//     （トークンは overlay.js に埋めて同一 daemon から配信。/overlay.js は CORS 不可にし
+//      クロスオリジン fetch で読めなくする＝script タグ実行のみ）
+//   - 書き換え対象は --target 配下に限定（path 解決後に prefix 検証）
+//   - newClassName は className literal を壊す文字（" { } < > ` ; 等）を拒否
 
 import http from "node:http";
 import { appendFile, readFile, writeFile, readdir } from "node:fs/promises";
@@ -31,23 +39,38 @@ function parseArgs(argv) {
 }
 
 const args = parseArgs(process.argv.slice(2));
-const QUEUE_FILE = path.join(args.target, ".claude-ui-queue.jsonl");
+const TARGET_ROOT = path.resolve(args.target);
+const QUEUE_FILE = path.join(TARGET_ROOT, ".claude-ui-queue.jsonl");
 const OVERLAY_FILE = args.overlay ?? path.join(__dirname, "..", "overlay", "overlay.js");
+const TOKEN = randomUUID(); // 起動毎に生成。overlay.js に埋めて配信し、POST で必須にする。
 
-if (!existsSync(args.target)) {
-  console.error(`[web-ui-bridge] target dir does not exist: ${args.target}`);
+if (!existsSync(TARGET_ROOT)) {
+  console.error(`[web-ui-bridge] target dir does not exist: ${TARGET_ROOT}`);
   process.exit(1);
 }
 
 const CORS = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type",
+  "Access-Control-Allow-Headers": "Content-Type, X-Bridge-Token",
 };
 
 function send(res, status, headers, body) {
   res.writeHead(status, { ...CORS, ...headers });
   res.end(body);
+}
+
+// 状態変更(POST)のガード: Origin が localhost 系 かつ トークン一致 のときだけ許可。
+// リモート悪意サイトからの CSRF（localhost への自動 POST でソース改竄）を遮断する。
+function authorizeMutation(req) {
+  const origin = req.headers.origin;
+  if (!origin || !/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) {
+    return { ok: false, status: 403, error: "forbidden-origin" };
+  }
+  if (req.headers["x-bridge-token"] !== TOKEN) {
+    return { ok: false, status: 403, error: "bad-token" };
+  }
+  return { ok: true };
 }
 
 function readBody(req, limit = 1_000_000) {
@@ -77,25 +100,41 @@ async function walkTsx(dir, acc = [], depth = 0) {
   return acc;
 }
 
+// TARGET_ROOT 配下に収まっているか（path traversal 防御）
+function insideTarget(full) {
+  const resolved = path.resolve(full);
+  return resolved === TARGET_ROOT || resolved.startsWith(TARGET_ROOT + path.sep);
+}
+
 function routeToFile(route) {
   const clean = (route || "/").split("?")[0].replace(/\/+$/, "");
+  // route は App Router のパス文字のみ許可（`..` やシェル文字を弾く）
+  if (clean !== "" && !/^\/[A-Za-z0-9_\-\/\[\]]*$/.test(clean)) return null;
   const rel = clean === "" ? "app/page.tsx" : `app${clean}/page.tsx`;
-  const full = path.join(args.target, rel);
+  const full = path.join(TARGET_ROOT, rel);
+  if (!insideTarget(full)) return null;
   return existsSync(full) ? full : null;
 }
 
 // oldClassName(= className 属性の literal)を一意に特定して newClassName へ置換。
 // className は静的文字列のときソースと完全一致する。一致しない（テンプレ/条件式）時は not-found→Claude にフォールバック。
+// className literal を壊さない文字だけ許可（Tailwind の arbitrary 値 text-[clamp(..)] や
+// CSS 変数 text-(--x) は許容しつつ、" { } < > ` ; = などの JSX/JS ブレイクアウト文字を拒否）。
+const CLASS_RE = /^[A-Za-z0-9 _:\-\/\[\]\.\(\)%,#!@]*$/;
+
 async function applyStyle({ route, oldClassName, newClassName }) {
   if (!oldClassName || !newClassName) return { ok: false, reason: "missing-classname" };
+  if (typeof newClassName !== "string" || newClassName.length > 2000 || !CLASS_RE.test(newClassName)) {
+    return { ok: false, reason: "invalid-classname" };
+  }
   if (oldClassName === newClassName) return { ok: true, file: null, noop: true };
 
   // 探索順: route のページファイル → app/ 配下全 tsx
   const candidates = [];
   const routeFile = routeToFile(route);
   if (routeFile) candidates.push(routeFile);
-  const all = await walkTsx(path.join(args.target, "app"));
-  for (const f of all) if (!candidates.includes(f)) candidates.push(f);
+  const all = await walkTsx(path.join(TARGET_ROOT, "app"));
+  for (const f of all) if (!candidates.includes(f) && insideTarget(f)) candidates.push(f);
 
   // 各ファイルでの出現回数を集計
   const hits = [];
@@ -118,11 +157,12 @@ async function applyStyle({ route, oldClassName, newClassName }) {
   }
   if (!target) return { ok: false, reason: "ambiguous", count: totalCount };
 
-  // 最初の 1 箇所だけ literal 置換して書き戻し
+  // 最初の 1 箇所だけ literal 置換して書き戻し（書込先が target 配下である最終確認）
+  if (!insideTarget(target.file)) return { ok: false, reason: "outside-target" };
   const at = target.src.indexOf(oldClassName);
   const next = target.src.slice(0, at) + newClassName + target.src.slice(at + oldClassName.length);
   await writeFile(target.file, next, "utf8");
-  return { ok: true, file: path.relative(args.target, target.file) };
+  return { ok: true, file: path.relative(TARGET_ROOT, target.file) };
 }
 
 const server = http.createServer(async (req, res) => {
@@ -130,21 +170,27 @@ const server = http.createServer(async (req, res) => {
 
   if (req.method === "GET" && req.url === "/health") {
     return send(res, 200, { "Content-Type": "application/json" },
-      JSON.stringify({ ok: true, target: args.target, queueFile: QUEUE_FILE }));
+      JSON.stringify({ ok: true, target: TARGET_ROOT, queueFile: QUEUE_FILE }));
   }
 
   if (req.method === "GET" && (req.url === "/overlay.js" || req.url?.startsWith("/overlay.js?"))) {
     try {
       const js = await readFile(OVERLAY_FILE, "utf8");
-      // overlay にデーモンの origin を埋め込む（自分自身の port を知らせる）
-      const injected = js.replace("__BRIDGE_ORIGIN__", `http://localhost:${args.port}`);
-      return send(res, 200, { "Content-Type": "text/javascript; charset=utf-8", "Cache-Control": "no-store" }, injected);
+      // overlay に origin とトークンを埋め込む。
+      const injected = js
+        .replace("__BRIDGE_ORIGIN__", `http://localhost:${args.port}`)
+        .replace("__BRIDGE_TOKEN__", TOKEN);
+      // CORS を付けない（= クロスオリジン fetch で本文＝トークンを読めない。script タグ実行は CORS 不要）
+      res.writeHead(200, { "Content-Type": "text/javascript; charset=utf-8", "Cache-Control": "no-store" });
+      return res.end(injected);
     } catch (err) {
       return send(res, 500, { "Content-Type": "text/plain" }, `overlay not found: ${err.message}`);
     }
   }
 
   if (req.method === "POST" && req.url === "/enqueue") {
+    const auth = authorizeMutation(req);
+    if (!auth.ok) return send(res, auth.status, { "Content-Type": "application/json" }, JSON.stringify({ ok: false, error: auth.error }));
     try {
       const raw = await readBody(req);
       const payload = JSON.parse(raw);
@@ -178,6 +224,8 @@ const server = http.createServer(async (req, res) => {
   }
 
   if (req.method === "POST" && req.url === "/apply-style") {
+    const auth = authorizeMutation(req);
+    if (!auth.ok) return send(res, auth.status, { "Content-Type": "application/json" }, JSON.stringify({ ok: false, error: auth.error }));
     try {
       const body = JSON.parse(await readBody(req));
       const result = await applyStyle(body);
@@ -193,9 +241,9 @@ const server = http.createServer(async (req, res) => {
   send(res, 404, { "Content-Type": "text/plain" }, "not found");
 });
 
-server.listen(args.port, () => {
-  console.log(`[web-ui-bridge] listening on http://localhost:${args.port}`);
-  console.log(`[web-ui-bridge] target : ${args.target}`);
+server.listen(args.port, "127.0.0.1", () => {
+  console.log(`[web-ui-bridge] listening on http://127.0.0.1:${args.port} (localhost only)`);
+  console.log(`[web-ui-bridge] target : ${TARGET_ROOT}`);
   console.log(`[web-ui-bridge] queue  : ${QUEUE_FILE}`);
   console.log(`[web-ui-bridge] overlay: ${OVERLAY_FILE}`);
   console.log(`[web-ui-bridge] inject in dev: <script src="http://localhost:${args.port}/overlay.js" async></script>`);

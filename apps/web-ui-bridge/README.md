@@ -54,6 +54,14 @@ cd outputs/clients/terra-isshiki/site && npm run dev
 - よって `file:line`・component 名に**依存しない**。確実な locator = **className（ソース一致・grep 一発）+ text 部分一致 + route + DOM パス**。
 - build 変換を入れない（`.babelrc` は next/font を壊す・Turbopack も維持）。
 
+## セキュリティ（dev daemon だがソースを書き換える）
+
+ブラウザから到達可能で実ファイルを書き換えるため、悪意あるサイトからの CSRF / パストラバーサルを防御:
+- daemon は **127.0.0.1 のみ listen**（リモート到達不可）。
+- 状態変更(POST `/enqueue` `/apply-style`)は **Origin が localhost/127.0.0.1 + 起動毎生成のトークン(`X-Bridge-Token`)** 必須。トークンは overlay.js に埋めて同一 daemon から配信し、`/overlay.js` は CORS 不可（クロスオリジン fetch で本文＝トークンを読めない／script タグ実行は CORS 不要）。
+- 書き換えは `--target` 配下に限定（path 解決後 prefix 検証）、route は App Router パス文字のみ許可。
+- `newClassName` は className literal を壊す文字（`" { } < > \` ; =`）を拒否＝JSX/JS ブレイクアウト防止。
+
 ## トラブルシュート
 
 - **worktree で `next dev` が next/font の `@vercel/turbopack-next/internal/font/google/font` を解決できず 500**: worktree × Next16 Turbopack × next/font の既知問題。対象サイトで `rm -rf node_modules .next package-lock.json && npm install` のクリーン再インストールで解消（初回コンパイルは ~30s かかる）。`--webpack` は Next16 dev では効かない。

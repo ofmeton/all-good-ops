@@ -17,7 +17,9 @@
   window.__WEB_UI_BRIDGE__ = true;
 
   const ORIGIN = "__BRIDGE_ORIGIN__"; // daemon が配信時に置換
+  const TOKEN = "__BRIDGE_TOKEN__";   // daemon が配信時に置換（POST の認可トークン）
   const HOST_ID = "web-ui-bridge-root";
+  const POST_HEADERS = { "Content-Type": "application/json", "X-Bridge-Token": TOKEN };
 
   // ---- 状態 -------------------------------------------------------------
   let inspecting = false;
@@ -257,7 +259,7 @@
     try {
       const res = await fetch(`${ORIGIN}/apply-style`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: POST_HEADERS,
         body: JSON.stringify({
           route: selected.route, oldClassName: sourceClass, newClassName: liveClass,
           selector: selected.selector, text: selected.text,
@@ -375,7 +377,7 @@
     try {
       const res = await fetch(`${ORIGIN}/enqueue`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: POST_HEADERS,
         body: JSON.stringify({ items }),
       });
       const json = await res.json();
