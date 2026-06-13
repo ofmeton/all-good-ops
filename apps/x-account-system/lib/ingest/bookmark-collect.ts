@@ -11,7 +11,7 @@ import { COLLECTOR_CONFIG } from "./collector-config.js";
 import { dedupByTweetId, saveScoredMaterials } from "./collector-persist.js";
 import { scoreCandidates, type Candidate, type CollectStats } from "./collector-scoring.js";
 import { translateCandidates } from "./collector-translate.js";
-import { fetchBookmarks } from "./twitterapi-client.js";
+import { fetchTweetsByIds } from "./twitterapi-client.js";
 
 interface AnthropicLike {
   messages: {
@@ -27,8 +27,7 @@ export interface RunBookmarkCollectDeps {
   anthropic: AnthropicLike;
   sb: SupabaseClient;
   twitterApiKey: string;
-  loginCookie: string;
-  proxy: string;
+  tweetIds: string[];
   fetchImpl: typeof fetch;
   now?: number;
   onTrace?: (m: TraceMeta) => void;
@@ -46,11 +45,17 @@ function zeroStats(): CollectStats {
 }
 
 /**
- * twitterapi.io bookmarks_v2 から手動ブックマークを取り込み、既存下流 pipeline に投入する。
+ * URL 貼付で受け取った tweet id を twitterapi.io から取得し、既存下流 pipeline に投入する。
  */
 export async function runBookmarkCollect(deps: RunBookmarkCollectDeps): Promise<CollectStats> {
   void deps.runId; // runId は queue trace の相関用に deps 契約へ残す。現時点では下流保存しない。
-  const tweets = await fetchBookmarks(deps.loginCookie, deps.proxy, deps.twitterApiKey, deps.fetchImpl);
+  if (deps.tweetIds.length === 0) {
+    const stats = zeroStats();
+    deps.onTrace?.({ model: COLLECTOR_CONFIG.scoringModel, tokensIn: 0, tokensOut: 0, costJpy: 0 });
+    return stats;
+  }
+
+  const tweets = await fetchTweetsByIds(deps.tweetIds, deps.twitterApiKey, deps.fetchImpl);
   if (tweets.length === 0) {
     const stats = zeroStats();
     deps.onTrace?.({ model: COLLECTOR_CONFIG.scoringModel, tokensIn: 0, tokensOut: 0, costJpy: 0 });
@@ -59,7 +64,7 @@ export async function runBookmarkCollect(deps: RunBookmarkCollectDeps): Promise<
 
   const candidates: Candidate[] = tweets.map((tweet) => ({
     tweet,
-    discovery: { via: "bookmark", query: "bookmarks_v2" },
+    discovery: { via: "bookmark", query: "url_paste" },
   }));
 
   let deduped: Candidate[];

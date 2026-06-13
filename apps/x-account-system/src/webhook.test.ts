@@ -35,8 +35,6 @@ function makeEnv(overrides: Partial<Env> = {}): Env & { JOBS: { send: jest.Mock 
     X_ACCESS_TOKEN: "x-token",
     X_REFRESH_TOKEN: "x-refresh",
     TWITTERAPI_IO_KEY: "tw-key",
-    TWITTERAPI_IO_LOGIN_COOKIE: "login-cookie",
-    TWITTERAPI_IO_PROXY: "http://proxy.example",
     SUPABASE_URL: "https://test.supabase.co",
     SUPABASE_SERVICE_ROLE_KEY: "test-srk",
     LINE_CHANNEL_ACCESS_TOKEN: "test-line-token",
@@ -289,6 +287,13 @@ describe("/admin/enqueue manual trigger", () => {
     expect(env.JOBS.send).not.toHaveBeenCalled();
   });
 
+  test("bookmark-collect is not allowed via generic enqueue", async () => {
+    const env = adminEnv();
+    const res = await worker.fetch(req({ job: "bookmark-collect", key: ADMIN_SECRET }), env, makeCtx());
+    expect(res.status).toBe(400);
+    expect(env.JOBS.send).not.toHaveBeenCalled();
+  });
+
   test("valid job → enqueues {job,date}", async () => {
     const env = adminEnv();
     const res = await worker.fetch(req({ job: "collect", key: ADMIN_SECRET }), env, makeCtx());
@@ -298,6 +303,102 @@ describe("/admin/enqueue manual trigger", () => {
     expect(msg.job).toBe("collect");
     expect(typeof msg.date).toBe("string");
     expect(msg.slot).toBeUndefined();
+  });
+});
+
+// ============================================================
+// /admin/ingest-bookmarks URL-paste trigger
+// ============================================================
+
+describe("/admin/ingest-bookmarks", () => {
+  const ADMIN_SECRET = "super-secret-admin-key";
+
+  function adminEnv(overrides: Partial<Env> = {}): Env & { JOBS: { send: jest.Mock } } {
+    return {
+      ...makeEnv(),
+      OAUTH_ADMIN_SECRET: ADMIN_SECRET,
+      ...overrides,
+    } as Env & { JOBS: { send: jest.Mock } };
+  }
+
+  function ingestReq(opts: { key?: string; bearer?: string; body?: BodyInit; contentType?: string } = {}): Request {
+    const u = new URL("https://worker.example.com/admin/ingest-bookmarks");
+    if (opts.key !== undefined) u.searchParams.set("key", opts.key);
+    const headers: Record<string, string> = {};
+    if (opts.bearer !== undefined) headers.authorization = `Bearer ${opts.bearer}`;
+    if (opts.contentType !== undefined) headers["content-type"] = opts.contentType;
+    return new Request(u.toString(), { method: "POST", headers, body: opts.body });
+  }
+
+  test("missing key → 401, no enqueue", async () => {
+    const env = adminEnv();
+    const res = await worker.fetch(
+      ingestReq({ body: JSON.stringify({ urls: ["https://x.com/a/status/123456"] }), contentType: "application/json" }),
+      env,
+      makeCtx(),
+    );
+    expect(res.status).toBe(401);
+    expect(env.JOBS.send).not.toHaveBeenCalled();
+  });
+
+  test("unset OAUTH_ADMIN_SECRET → fail CLOSED", async () => {
+    const env = adminEnv({ OAUTH_ADMIN_SECRET: "" });
+    const res = await worker.fetch(
+      ingestReq({ key: ADMIN_SECRET, body: "https://x.com/a/status/123456", contentType: "text/plain" }),
+      env,
+      makeCtx(),
+    );
+    expect(res.status).toBe(401);
+    expect(env.JOBS.send).not.toHaveBeenCalled();
+  });
+
+  test("JSON urls → enqueues bookmark-collect with parsed ids and runId", async () => {
+    const env = adminEnv();
+    const res = await worker.fetch(
+      ingestReq({
+        key: ADMIN_SECRET,
+        body: JSON.stringify({ urls: ["https://x.com/a/status/123456?s=20", "junk", "123456", "https://twitter.com/b/status/234567"] }),
+        contentType: "application/json",
+      }),
+      env,
+      makeCtx(),
+    );
+    expect(res.status).toBe(200);
+    const json = await res.json() as { ok: boolean; enqueued: { count: number }; runId: string };
+    expect(json).toMatchObject({ ok: true, enqueued: { count: 2 } });
+    expect(typeof json.runId).toBe("string");
+    expect(env.JOBS.send).toHaveBeenCalledTimes(1);
+    const msg = env.JOBS.send.mock.calls[0][0];
+    expect(msg.job).toBe("bookmark-collect");
+    expect(msg.tweetIds).toEqual(["123456", "234567"]);
+    expect(msg.runId).toBe(json.runId);
+  });
+
+  test("text/plain body with Bearer auth → enqueues parsed ids", async () => {
+    const env = adminEnv();
+    const res = await worker.fetch(
+      ingestReq({
+        bearer: ADMIN_SECRET,
+        body: "https://mobile.twitter.com/a/status/345678?s=1\n456789",
+        contentType: "text/plain",
+      }),
+      env,
+      makeCtx(),
+    );
+    expect(res.status).toBe(200);
+    expect(env.JOBS.send.mock.calls[0][0].tweetIds).toEqual(["345678", "456789"]);
+  });
+
+  test("0 valid ids → 400, no enqueue", async () => {
+    const env = adminEnv();
+    const res = await worker.fetch(
+      ingestReq({ key: ADMIN_SECRET, body: "junk\nhttps://example.com/a/status/1", contentType: "text/plain" }),
+      env,
+      makeCtx(),
+    );
+    expect(res.status).toBe(400);
+    expect(await res.text()).toContain("no valid tweet URLs");
+    expect(env.JOBS.send).not.toHaveBeenCalled();
   });
 });
 

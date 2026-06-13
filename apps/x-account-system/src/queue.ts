@@ -181,6 +181,7 @@ export async function handleJob(
     // ----------------------------------------------------------------
     case "bookmark-collect": {
       const rid = runId ?? "";
+      const tweetIds = msg.tweetIds ?? [];
       const { createClient } = await import("@supabase/supabase-js");
       const Anthropic = (await import("@anthropic-ai/sdk")).default;
       const sb = createClient(env.SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY, {
@@ -190,14 +191,13 @@ export async function handleJob(
       const { runBookmarkCollect } = await import("../lib/ingest/bookmark-collect.js");
       if (rid) {
         let traceMeta: import("../lib/trace/types.js").TraceMeta | undefined;
-        let collectStats: import("../lib/ingest/collector.js").CollectStats | undefined;
+        let collectStats: import("../lib/ingest/collector-scoring.js").CollectStats | undefined;
         await withTrace(ctx, { runId: rid, stageId: "bookmark-collect" }, async () => {
           const stats = await runBookmarkCollect({
             anthropic: anthropic as never,
             sb: sb as never,
             twitterApiKey: env.TWITTERAPI_IO_KEY,
-            loginCookie: env.TWITTERAPI_IO_LOGIN_COOKIE,
-            proxy: env.TWITTERAPI_IO_PROXY,
+            tweetIds,
             fetchImpl: fetch,
             runId: rid,
             onTrace: (m) => {
@@ -243,8 +243,7 @@ export async function handleJob(
           anthropic: anthropic as never,
           sb: sb as never,
           twitterApiKey: env.TWITTERAPI_IO_KEY,
-          loginCookie: env.TWITTERAPI_IO_LOGIN_COOKIE,
-          proxy: env.TWITTERAPI_IO_PROXY,
+          tweetIds,
           fetchImpl: fetch,
         });
         console.log(JSON.stringify({ level: "info", msg: "[bookmark-collect] 完了(untraced)", date: msg.date, inserted: stats.inserted }));

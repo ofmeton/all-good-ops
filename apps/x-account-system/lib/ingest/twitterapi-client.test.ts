@@ -1,6 +1,6 @@
 import {
   fetchUserTweets,
-  fetchBookmarks,
+  fetchTweetsByIds,
   searchTweets,
   getTrends,
   searchUsers,
@@ -49,7 +49,7 @@ function jsonFetch(body: unknown, ok = true): typeof fetch {
 }
 
 describe("twitterapi-client extended", () => {
-  test("fetchBookmarks maps tweets and sends login_cookies/proxy in POST body", async () => {
+  test("fetchTweetsByIds maps tweets and sends comma-separated ids in GET query", async () => {
     const seen: Array<{ url: string; init?: RequestInit }> = [];
     const fetchImpl = (async (url: RequestInfo | URL, init?: RequestInit) => {
       seen.push({ url: String(url), init });
@@ -71,7 +71,7 @@ describe("twitterapi-client extended", () => {
       } as Response;
     }) as unknown as typeof fetch;
 
-    const out = await fetchBookmarks("cookie-value", "http://proxy.example", "k", fetchImpl);
+    const out = await fetchTweetsByIds(["b1", "b2"], "k", fetchImpl);
     expect(out).toEqual([
       expect.objectContaining({
         id: "b1",
@@ -82,44 +82,34 @@ describe("twitterapi-client extended", () => {
     ]);
     expect(seen).toHaveLength(1);
     const url = new URL(seen[0].url);
-    expect(url.pathname).toBe("/twitter/bookmarks_v2");
-    expect(url.searchParams.get("login_cookie")).toBeNull();
-    expect(url.searchParams.get("login_cookies")).toBeNull();
-    expect(seen[0].init?.method).toBe("POST");
-    const body = JSON.parse(String(seen[0].init?.body)) as Record<string, unknown>;
-    expect(body).toEqual({ login_cookies: "cookie-value", proxy: "http://proxy.example", count: 20 });
+    expect(url.pathname).toBe("/twitter/tweets");
+    expect(url.searchParams.get("tweet_ids")).toBe("b1,b2");
+    expect(seen[0].init?.method).toBe("GET");
+    expect(seen[0].init?.body).toBeUndefined();
   });
 
-  test("fetchBookmarks returns [] for legitimate empty bookmarks page", async () => {
-    const out = await fetchBookmarks(
-      "secret-cookie",
-      "http://user:pass@proxy.example",
-      "k",
-      jsonFetch({ tweets: [] }),
-    );
+  test("fetchTweetsByIds returns [] without calling fetch for empty input", async () => {
+    const fetchImpl = jest.fn() as unknown as typeof fetch;
+    const out = await fetchTweetsByIds([], "k", fetchImpl);
     expect(out).toEqual([]);
+    expect(fetchImpl).not.toHaveBeenCalled();
   });
 
-  test("fetchBookmarks throws on HTTP 200 error payload without leaking cookie/proxy", async () => {
-    const p = fetchBookmarks(
-      "secret-cookie",
-      "http://user:pass@proxy.example",
-      "k",
-      jsonFetch({ status: "error", msg: "proxy connect failed" }),
-    );
-    await expect(p).rejects.toThrow(/twitterapi\.io bookmarks request failed: .*status=error.*msg=proxy connect failed/);
-    await expect(p).rejects.not.toThrow(/secret-cookie|user:pass@proxy/);
-  });
-
-  test("fetchBookmarks keeps auth-error payload as specific auth failure", async () => {
-    await expect(
-      fetchBookmarks(
-        "secret-cookie",
-        "http://proxy.example",
-        "k",
-        jsonFetch({ status: "error", msg: "login_cookie expired" }),
-      ),
-    ).rejects.toThrow("twitterapi.io bookmarks auth failed (login_cookie expired?)");
+  test("fetchTweetsByIds batches ids in chunks of 100", async () => {
+    const seen: string[] = [];
+    const fetchImpl = (async (url: RequestInfo | URL) => {
+      seen.push(new URL(String(url)).searchParams.get("tweet_ids") ?? "");
+      return {
+        ok: true,
+        status: 200,
+        statusText: "OK",
+        json: async () => ({ tweets: [] }),
+      } as Response;
+    }) as unknown as typeof fetch;
+    await fetchTweetsByIds(Array.from({ length: 101 }, (_, i) => String(i + 1)), "k", fetchImpl);
+    expect(seen).toHaveLength(2);
+    expect(seen[0].split(",")).toHaveLength(100);
+    expect(seen[1]).toBe("101");
   });
 
   test("searchTweets returns mapped tweets with extended fields", async () => {
