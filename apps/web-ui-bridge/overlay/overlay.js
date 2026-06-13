@@ -3,7 +3,8 @@
  * できること:
  *   - 🎯 ボタンで「選択モード」に入る
  *   - 要素ホバーでハイライト＋ラベル、クリックで選択
- *   - [直接調整] 余白/詰め/揃え/className をその場でいじり、実ソースへ即書き戻し（Phase B・Claude 不介在）
+ *   - [直接調整] 余白/詰め/サイズ/揃え/色/className をその場でいじり、実ソースへ即書き戻し（Phase B/B.2・Claude 不介在）
+ *     画面幅(bp: 全/sm/md/lg/xl)を切替えると以降の調整がその breakpoint(md: 等)に効く
  *   - [Claudeに頼む] 自然文プロンプトをキューに溜め「Claudeへ送る」(/enqueue)
  *
  * 設計判断（Spike 0 の実測に基づく）:
@@ -28,6 +29,7 @@
   let selectedEl = null;  // その DOM ノード（ライブプレビュー用）
   let sourceClass = "";   // 確定済み（=ソースと一致）の className 基準
   let liveClass = "";     // 編集中の className（プレビュー反映済み）
+  let bp = "";            // 編集対象のブレークポイント prefix（"" | "sm:" | "md:" | "lg:" | "xl:"）
   const pending = [];     // {payload, prompt}
 
   // ---- locator 収集 -----------------------------------------------------
@@ -161,6 +163,9 @@
                     color: #e2e8f0; border-radius: 5px; cursor: pointer; font-size: 13px; padding: 0; }
       .seg button { width: auto; padding: 0 8px; font-size: 11px; }
       .step button:hover, .seg button:hover { background: #334155; }
+      .bpseg button.on { background: #2563eb; border-color: #2563eb; color: #fff; }
+      .ctl input[type="color"] { width: 34px; height: 26px; padding: 0; border: 1px solid #334155;
+                    border-radius: 5px; background: #1e293b; cursor: pointer; }
       .cls { width: 100%; background: #1e293b; color: #93c5fd; border: 1px solid #334155; border-radius: 6px;
              padding: 7px; font-size: 11px; font-family: ui-monospace, monospace; resize: vertical; min-height: 48px; }
       .apply { background: #2563eb; color: #fff; }
@@ -215,8 +220,10 @@
     setTimeout(() => { $toast.style.display = "none"; }, 2200);
   }
 
-  // ---- Phase B: スタイル直接調整 ----------------------------------------
+  // ---- Phase B / B.2: スタイル直接調整 ----------------------------------
   const SCALE = [0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 24];
+  const SIZES = ["xs", "sm", "base", "lg", "xl", "2xl", "3xl", "4xl", "5xl", "6xl", "7xl", "8xl", "9xl"];
+  const reEsc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // bp の ":" 等を安全に正規表現へ
 
   function highlightSelected() { if (selectedEl && selected) showHighlight(selectedEl); }
 
@@ -249,8 +256,43 @@
   }
 
   function setAlign(val) {
-    const cleaned = liveClass.replace(/(^|\s)text-(left|center|right|justify)(?=\s|$)/g, " ").replace(/\s+/g, " ").trim();
-    applyLive((cleaned + ` text-${val}`).trim());
+    const p = reEsc(bp);
+    const cleaned = liveClass.replace(new RegExp(`(^|\\s)${p}text-(left|center|right|justify)(?=\\s|$)`, "g"), " ").replace(/\s+/g, " ").trim();
+    applyLive((cleaned + ` ${bp}text-${val}`).trim());
+  }
+
+  // フォントサイズ（名前付きスケール text-xs..9xl）を1段上下。bp 対応。
+  function stepSize(dir) {
+    const p = reEsc(bp);
+    const re = new RegExp(`(^|\\s)${p}text-(xs|sm|base|lg|xl|[2-9]xl)(?=\\s|$)`);
+    const m = liveClass.match(re);
+    let next;
+    if (m) {
+      let i = SIZES.indexOf(m[2]);
+      i = Math.max(0, Math.min(SIZES.length - 1, i + dir));
+      next = liveClass.replace(re, `$1${bp}text-${SIZES[i]}`);
+    } else if (dir > 0) {
+      next = (liveClass + ` ${bp}text-lg`).trim();
+    } else return;
+    applyLive(next.replace(/\s+/g, " ").trim());
+  }
+
+  // 色（文字色/背景色）を arbitrary hex で設定。同プロパティの既存色ユーティリティを除去して付与。
+  // kind = "text" | "bg"。bp 対応。
+  function setColor(kind, hex) {
+    const p = reEsc(bp);
+    // 同 bp・同プロパティの色クラスを除去: arbitrary [#..] / CSS変数 (--..) / 名前付き color-shade。
+    // ※ text-<size> / text-left 等（数字シェード無し）は温存される。
+    const strip = new RegExp(
+      `(^|\\s)${p}${kind}-(\\[#[0-9a-fA-F]{3,8}\\]|\\(--[^)]+\\)|[a-z]+-\\d{2,3})(?=\\s|$)`, "g");
+    const cleaned = liveClass.replace(strip, " ").replace(/\s+/g, " ").trim();
+    applyLive((cleaned + ` ${bp}${kind}-[${hex}]`).trim());
+  }
+
+  function rgbToHex(rgb) {
+    const m = (rgb || "").match(/\d+/g);
+    if (!m || m.length < 3) return "#000000";
+    return "#" + m.slice(0, 3).map((n) => Number(n).toString(16).padStart(2, "0")).join("");
   }
 
   async function commitStyle() {
@@ -294,6 +336,9 @@
 
   function renderPanel() {
     const sel = selected;
+    const cs = sel && selectedEl && selectedEl.isConnected ? getComputedStyle(selectedEl) : null;
+    const textHex = rgbToHex(cs && cs.color);
+    const bgHex = rgbToHex(cs && cs.backgroundColor);
     const list = pending.map((p, i) =>
       `<li><span class="t">&lt;${esc(p.payload.tag)}&gt; ${esc((p.payload.text || "").slice(0, 24) || p.payload.classes.slice(0, 24))} — ${esc(p.prompt.slice(0, 30))}</span><span class="x" data-i="${i}">✕</span></li>`
     ).join("");
@@ -306,12 +351,25 @@
         </div>
         <div class="sec">
           <div class="sec-h">直接調整（実コードに即反映）</div>
+          <div class="ctl"><label>画面幅 bp</label>
+            <span class="seg bpseg">
+              <button data-bp="" class="${bp===""?"on":""}">全</button>
+              <button data-bp="sm:" class="${bp==="sm:"?"on":""}">sm</button>
+              <button data-bp="md:" class="${bp==="md:"?"on":""}">md</button>
+              <button data-bp="lg:" class="${bp==="lg:"?"on":""}">lg</button>
+              <button data-bp="xl:" class="${bp==="xl:"?"on":""}">xl</button>
+            </span></div>
           <div class="ctl"><label>余白 margin</label><select class="m-side">${SIDE_OPTS}</select>
             <span class="step"><button data-act="m-">−</button><button data-act="m+">＋</button></span></div>
           <div class="ctl"><label>詰め padding</label><select class="p-side">${SIDE_OPTS}</select>
             <span class="step"><button data-act="p-">−</button><button data-act="p+">＋</button></span></div>
+          <div class="ctl"><label>サイズ text</label>
+            <span class="step"><button data-size="-1">−</button><button data-size="1">＋</button></span></div>
           <div class="ctl"><label>揃え align</label>
             <span class="seg"><button data-align="left">左</button><button data-align="center">中</button><button data-align="right">右</button></span></div>
+          <div class="ctl"><label>色 文字/背景</label>
+            <input type="color" class="c-text" value="${textHex}" title="文字色">
+            <input type="color" class="c-bg" value="${bgHex}" title="背景色"></div>
           <textarea class="cls" spellcheck="false">${esc(liveClass)}</textarea>
           <div class="row"><button class="act apply">適用</button><button class="act reset">戻す</button></div>
         </div>
@@ -329,16 +387,25 @@
 
     // 直接調整の配線
     const sideOf = (s) => $panel.querySelector(s).value;
-    $panel.querySelectorAll(".step button").forEach((b) => {
+    // ブレークポイント切替（以降の余白/サイズ/揃え/色がこの bp に効く）
+    $panel.querySelectorAll(".bpseg button").forEach((b) => {
+      b.onclick = () => { bp = b.dataset.bp; renderPanel(); };
+    });
+    $panel.querySelectorAll(".step button[data-act]").forEach((b) => {
       b.onclick = () => {
         const act = b.dataset.act; // m+ / m- / p+ / p-
         const kind = act[0], dir = act[1] === "+" ? 1 : -1;
-        stepSpacing(kind + sideOf(kind === "m" ? ".m-side" : ".p-side"), dir);
+        stepSpacing(bp + kind + sideOf(kind === "m" ? ".m-side" : ".p-side"), dir);
       };
     });
-    $panel.querySelectorAll(".seg button").forEach((b) => {
+    $panel.querySelectorAll(".step button[data-size]").forEach((b) => {
+      b.onclick = () => stepSize(Number(b.dataset.size));
+    });
+    $panel.querySelectorAll(".seg button[data-align]").forEach((b) => {
       b.onclick = () => setAlign(b.dataset.align);
     });
+    $panel.querySelector(".c-text").oninput = (e) => setColor("text", e.target.value);
+    $panel.querySelector(".c-bg").oninput = (e) => setColor("bg", e.target.value);
     const $cls = $panel.querySelector(".cls");
     $cls.oninput = (e) => {
       liveClass = e.target.value;

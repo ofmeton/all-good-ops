@@ -3,7 +3,7 @@
 動いている自分のサイト上で**要素をクリック**して直接 UI をいじる開発ツール。コードが正（source of truth）。
 
 2 つの編集経路:
-- **直接調整（Phase B）**: 余白/詰め/揃え/className をその場でいじり、**Claude を介さず実ソースへ即書き戻し**（daemon `/apply-style`）。HMR で即確認。軽い見た目調整向け。
+- **直接調整（Phase B / B.2）**: 余白/詰め/フォントサイズ/揃え/文字色・背景色/className をその場でいじり、**Claude を介さず実ソースへ即書き戻し**（daemon `/apply-style`）。画面幅 bp（全/sm/md/lg/xl）を切替えると以降の調整がその breakpoint（`md:` 等）に効く。HMR で即確認。軽い見た目調整向け。
 - **Claudeに頼む（Phase 0）**: `file:line` を毎回説明せず、要素文脈つきプロンプトを **Claude Code に正確に橋渡し**（queue 経由）。構造・文言・複雑な調整向け。
 
 ## 構成（疎結合 3 部品 + キューファイル）
@@ -33,7 +33,7 @@ cd outputs/clients/terra-isshiki/site && npm run dev
 ```
 
 ブラウザで開いて右下の 🎯 → 要素をホバー/クリックで選択。パネルで:
-- **直接調整**: 余白±/詰め±/揃え/className をいじる（ライブプレビュー）→「適用」で実ソースへ即反映（Claude 不要・HMR 即時）。
+- **直接調整**: 画面幅(全/sm/md/lg/xl)を選び、余白±/詰め±/サイズ±/揃え/文字色・背景色/className をいじる（ライブプレビュー）→「適用」で実ソースへ即反映（Claude 不要・HMR 即時）。bp を md にすれば `md:my-4` のようにレスポンシブ別に効く。
 - **Claudeに頼む**: 指示を書いて「キューに追加」→「Claudeへ送る」→ Claude Code 側で「キュー処理して」（or `/loop` 監視）。
 
 `/apply-style` は className の literal を一意に特定できた時だけ書き換える（複数一致/動的 class は安全側で拒否 → Claude 経路へ誘導）。
@@ -72,5 +72,6 @@ cd outputs/clients/terra-isshiki/site && npm run dev
 
 - ~~Phase 0: クリック→Claude 橋渡し~~（済）
 - ~~Phase B: プロパティ直接調整（余白/詰め/揃え/className を実コードへ即反映）~~（済）
-- Phase B.2（任意）: 色/フォントサイズのピッカー、レスポンシブ別（md: 等）の編集
-- Phase C: D&D・レスポンシブ構造編集 → [Onlook](https://github.com/onlook-dev/onlook) 採用を再評価
+- ~~Phase B.2: フォントサイズ/色ピッカー、レスポンシブ別（bp 切替で md: 等）の編集~~（済）
+- Phase C: D&D・要素の追加/削除/並べ替えなど**構造**編集 → [Onlook](https://github.com/onlook-dev/onlook) 採用を再評価
+- 既知の制限: フォントサイズ stepper は Tailwind 名前付きサイズ(text-lg 等)を対象。`text-[clamp(..)]` 等の arbitrary 値は className エディタで直接編集。色は arbitrary hex(`text-[#..]`)で付与（同 bp の既存色のみ除去）。
