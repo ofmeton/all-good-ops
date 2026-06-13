@@ -5,7 +5,8 @@
  *   - 要素ホバーでハイライト＋ラベル、クリックで選択
  *   - [直接調整] 余白/詰め/サイズ/揃え/色/className をその場でいじり、実ソースへ即書き戻し（Phase B/B.2・Claude 不介在）
  *     画面幅(bp: 全/sm/md/lg/xl)を切替えると以降の調整がその breakpoint(md: 等)に効く
- *   - [⇅ 並べ替え] 要素をドラッグして兄弟の上にドロップ→daemon が AST で兄弟順を決定的に確定（Phase C・Claude 不介在）
+ *   - [複製/削除] 選択要素を決定的に複製/削除（Phase C・Claude 不介在）
+ *   - [⇅ 並べ替え] 要素をドラッグして別要素の上にドロップ→daemon が AST で兄弟順 or 別親移動(reparent)を決定的に確定（Phase C・Claude 不介在）
  *   - [Claudeに頼む] 自然文プロンプトをキューに溜め「Claudeへ送る」(/enqueue)
  *
  * 設計判断（Spike 0 の実測に基づく）:
@@ -182,6 +183,8 @@
              padding: 7px; font-size: 11px; font-family: ui-monospace, monospace; resize: vertical; min-height: 48px; }
       .apply { background: #2563eb; color: #fff; }
       .reset { background: #334155; color: #cbd5e1; flex: none; width: 64px; }
+      .dup { background: #334155; color: #e2e8f0; }
+      .del { background: #7f1d1d; color: #fecaca; }
     </style>
     <div class="hl"></div>
     <div class="label"></div>
@@ -342,6 +345,25 @@
     }
   }
 
+  // 構造編集（複製/削除）: 選択要素の現ソース className を決定的に操作。
+  async function doStruct(endpoint) {
+    if (!selected) return;
+    const targetClass = sourceClass;
+    if (!targetClass) { toast("class が無く操作不可（Claudeに頼んで）", "#f59e0b"); return; }
+    const verb = endpoint === "/delete" ? "削除" : "複製";
+    try {
+      const res = await fetch(`${ORIGIN}${endpoint}`, {
+        method: "POST", headers: POST_HEADERS,
+        body: JSON.stringify({ route: selected.route, targetClass }),
+      });
+      const j = await res.json();
+      if (j.ok) { toast(`${verb}反映 → ${j.file}`); closePanel(); }
+      else if (j.reason === "ambiguous") toast("同じclassが複数。Claudeに頼んで", "#f59e0b");
+      else if (j.reason === "not-found") toast("ソース未特定(動的class?)。Claudeに頼んで", "#f59e0b");
+      else toast(`失敗: ${j.reason || j.error}`, "#dc2626");
+    } catch (err) { toast(`失敗: ${err.message}`, "#dc2626"); }
+  }
+
   // ---- パネル描画 -------------------------------------------------------
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) =>
     ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -390,8 +412,13 @@
           <div class="row"><button class="act apply">適用</button><button class="act reset">戻す</button></div>
         </div>
         <div class="sec">
-          <div class="sec-h">Claudeに頼む（構造・文言・複雑な調整）</div>
-          <textarea placeholder="この要素への指示（例: 2行に分けて、画像と左右入れ替えて）"></textarea>
+          <div class="sec-h">構造（決定的・Claude 不要）</div>
+          <div class="row"><button class="act dup">複製</button><button class="act del">削除</button></div>
+          <p class="hint">並べ替え/別親へ移動は ⇅ ボタンでドラッグ</p>
+        </div>
+        <div class="sec">
+          <div class="sec-h">Claudeに頼む（複雑な構造・文言）</div>
+          <textarea class="cprompt" placeholder="この要素への指示（例: 2行に分けて、画像と左右入れ替えて）"></textarea>
           <div class="row"><button class="act add">キューに追加</button></div>
         </div>
       ` : `<p class="hint">🎯 を押して要素をクリックで選択</p>`}
@@ -431,8 +458,12 @@
     $panel.querySelector(".apply").onclick = commitStyle;
     $panel.querySelector(".reset").onclick = () => applyLive(sourceClass);
 
+    // 構造（複製/削除）の配線
+    $panel.querySelector(".dup").onclick = () => doStruct("/duplicate");
+    $panel.querySelector(".del").onclick = () => doStruct("/delete");
+
     // Claude 依頼の配線
-    const $ta = $panel.querySelector(".sec:nth-of-type(2) textarea");
+    const $ta = $panel.querySelector(".cprompt");
     const $add = $panel.querySelector(".add");
     if ($add) $add.onclick = () => {
       const prompt = ($ta.value || "").trim();
@@ -504,7 +535,7 @@
       if (j.ok && !j.noop) toast(`並べ替え反映 → ${j.file}`);
       else if (j.ok) toast("変更なし");
       else if (j.reason === "ambiguous") toast("同じclassが複数。Claudeに頼んで", "#f59e0b");
-      else if (j.reason === "not-siblings") toast("同じ親の兄弟同士でのみ並べ替え可", "#f59e0b");
+      else if (j.reason === "nested") toast("自分の中/外へは移動不可", "#f59e0b");
       else if (j.reason === "not-found") toast("ソース未特定(動的class?)。Claudeに頼んで", "#f59e0b");
       else toast(`失敗: ${j.reason || j.error}`, "#dc2626");
     } catch (err) { toast(`失敗: ${err.message}`, "#dc2626"); }

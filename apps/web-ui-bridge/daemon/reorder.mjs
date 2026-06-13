@@ -1,9 +1,10 @@
-// Phase C: JSX 兄弟要素の決定的な並べ替え（Claude 不介在）。
+// Phase C: JSX 要素の決定的な構造編集（並べ替え/別親移動/複製/削除）。Claude 不介在。
 //
 // 方針: @babel/parser で TSX をパースし、各要素の正確なソース範囲(start/end)を得る。
-// 編集は「要素テキストを元の“空白スロット”に入れ替える純粋な文字列操作」だけ。
+// 編集は AST のオフセットを使った「純粋な文字列操作」だけ。
 //   - 同じ入力 → 必ず同じ出力（決定的）
-//   - 兄弟以外の空白・他要素・整形は一切触らない（formatting 保持）
+//   - 触らない要素・整形は一切変えない（formatting 保持。別親移動だけは移動先 1 行目の
+//     インデントを移動先に合わせ、内側行は元の深さを保つ best-effort）
 //   - className(静的文字列)で一意特定できない時は安全側で拒否（誤爆しない）
 
 import babelParser from "@babel/parser";
@@ -18,7 +19,7 @@ function parse(src) {
 
 const SKIP_KEYS = new Set(["loc", "start", "end", "range", "leadingComments", "trailingComments", "innerComments", "extra", "tokens", "comments"]);
 
-// AST を走査して全 JSXElement と「子要素→親コンテナ(JSXElement/JSXFragment)」の対応を作る。
+// 全 JSXElement と「子(element/fragment)→親コンテナ(element/fragment)」の対応を作る。
 function indexTree(ast) {
   const all = [];
   const parentOf = new Map();
@@ -28,7 +29,7 @@ function indexTree(ast) {
     if (node.type === "JSXElement") all.push(node);
     if (node.type === "JSXElement" || node.type === "JSXFragment") {
       for (const c of node.children || []) {
-        if (c && c.type === "JSXElement") parentOf.set(c, node);
+        if (c && (c.type === "JSXElement" || c.type === "JSXFragment")) parentOf.set(c, node);
       }
     }
     for (const k in node) {
@@ -41,13 +42,11 @@ function indexTree(ast) {
   return { all, parentOf };
 }
 
-// JSXElement の静的 className 文字列リテラルを返す（式・テンプレートは null）。
 function classNameOf(el) {
   const attrs = el.openingElement?.attributes || [];
   for (const a of attrs) {
     if (a.type === "JSXAttribute" && a.name?.name === "className") {
       if (a.value?.type === "StringLiteral") return a.value.value;
-      // className={"..."} の単純ケースも拾う
       if (a.value?.type === "JSXExpressionContainer" && a.value.expression?.type === "StringLiteral") {
         return a.value.expression.value;
       }
@@ -57,51 +56,131 @@ function classNameOf(el) {
   return null;
 }
 
+const isWs = (c) => c && c.type === "JSXText" && /^\s*$/.test(c.value);
+
+// a が b の祖先か（parentOf を辿る）
+function isAncestor(a, b, parentOf) {
+  let cur = parentOf.get(b);
+  while (cur) { if (cur === a) return true; cur = parentOf.get(cur); }
+  return false;
+}
+
+// 要素 + 隣接する空白 1 つ（=その要素の「行」）の削除範囲
+function lineRange(children, el) {
+  const idx = children.indexOf(el);
+  let start = el.start, end = el.end;
+  const prev = children[idx - 1], next = children[idx + 1];
+  if (isWs(prev)) start = prev.start;
+  else if (isWs(next)) end = next.end;
+  return [start, end];
+}
+
+// 要素の直前にある改行込みインデント文字列（挿入の区切りに使う）
+function indentBefore(children, el) {
+  const prev = children[children.indexOf(el) - 1];
+  if (prev && prev.type === "JSXText" && /\n/.test(prev.value)) {
+    const m = prev.value.match(/\n[^\n]*$/);
+    return m ? m[0] : "\n";
+  }
+  return "\n";
+}
+
+// className でただ 1 つの JSXElement を特定（0/複数は理由付きで失敗）
+function unique(all, cls) {
+  const hits = all.filter((el) => classNameOf(el) === cls);
+  if (hits.length === 0) return { err: "not-found" };
+  if (hits.length > 1) return { err: "ambiguous" };
+  return { el: hits[0] };
+}
+
+function load(src) {
+  let ast;
+  try { ast = parse(src); } catch { return { err: "parse-error" }; }
+  return { ...indexTree(ast) };
+}
+
 /**
- * 純関数: src 内で className=dragClass の要素を、className=targetClass の要素の
- * before/after へ移動した新しい src を返す。
- * 失敗時は { ok:false, reason } を返す（src は変更しない）。
+ * 移動: dragClass を targetClass の before/after へ。同じ親なら空白スロット入替、
+ * 別の親なら「削除＋挿入」で reparent。決定的。
  */
-export function reorderInSource(src, dragClass, targetClass, position = "before") {
+export function moveInSource(src, dragClass, targetClass, position = "before") {
   if (!dragClass || !targetClass) return { ok: false, reason: "missing-class" };
   if (dragClass === targetClass) return { ok: false, reason: "same-class" };
   if (!["before", "after"].includes(position)) return { ok: false, reason: "bad-position" };
 
-  let ast;
-  try { ast = parse(src); } catch (e) { return { ok: false, reason: "parse-error" }; }
-  const { all, parentOf } = indexTree(ast);
+  const tree = load(src);
+  if (tree.err) return { ok: false, reason: tree.err };
+  const { all, parentOf } = tree;
+  const d = unique(all, dragClass); if (d.err) return { ok: false, reason: d.err };
+  const t = unique(all, targetClass); if (t.err) return { ok: false, reason: t.err };
+  const dragEl = d.el, targetEl = t.el;
 
-  const drags = all.filter((el) => classNameOf(el) === dragClass);
-  const targets = all.filter((el) => classNameOf(el) === targetClass);
-  if (drags.length === 0 || targets.length === 0) return { ok: false, reason: "not-found" };
-  if (drags.length > 1 || targets.length > 1) return { ok: false, reason: "ambiguous" };
-
-  const dragEl = drags[0], targetEl = targets[0];
-  const parent = parentOf.get(dragEl);
-  if (!parent || parentOf.get(targetEl) !== parent) return { ok: false, reason: "not-siblings" };
-
-  const children = parent.children;
-  const elems = children.filter((c) => c.type === "JSXElement"); // ソース順の要素のみ
-  // 新しい要素順を作る（dragEl を抜いて target の前/後へ挿入）
-  const order = elems.filter((e) => e !== dragEl);
-  const tIdx = order.indexOf(targetEl);
-  if (tIdx === -1) return { ok: false, reason: "target-missing" };
-  order.splice(position === "before" ? tIdx : tIdx + 1, 0, dragEl);
-
-  // 子の範囲を、空白(JSXText 等)は据え置き・要素スロットだけ新順で再配置して再構築
-  const firstStart = children[0].start;
-  const lastEnd = children[children.length - 1].end;
-  let slot = 0;
-  let region = "";
-  for (const c of children) {
-    if (c.type === "JSXElement") {
-      const e = order[slot++];
-      region += src.slice(e.start, e.end);
-    } else {
-      region += src.slice(c.start, c.end);
-    }
+  if (isAncestor(dragEl, targetEl, parentOf) || isAncestor(targetEl, dragEl, parentOf)) {
+    return { ok: false, reason: "nested" }; // 自分の中/外へは動かせない
   }
-  const out = src.slice(0, firstStart) + region + src.slice(lastEnd);
-  if (out === src) return { ok: true, changed: false, src };
+
+  const dragParent = parentOf.get(dragEl);
+  const targetParent = parentOf.get(targetEl);
+  if (!dragParent || !targetParent) return { ok: false, reason: "no-parent" };
+
+  // 同じ親 → 空白スロットを保ったまま要素順だけ入替（整形完全保持）
+  if (dragParent === targetParent) {
+    const children = dragParent.children;
+    const elems = children.filter((c) => c.type === "JSXElement");
+    const order = elems.filter((e) => e !== dragEl);
+    const tIdx = order.indexOf(targetEl);
+    order.splice(position === "before" ? tIdx : tIdx + 1, 0, dragEl);
+    const firstStart = children[0].start, lastEnd = children[children.length - 1].end;
+    let slot = 0, region = "";
+    for (const c of children) {
+      if (c.type === "JSXElement") { const e = order[slot++]; region += src.slice(e.start, e.end); }
+      else region += src.slice(c.start, c.end);
+    }
+    const out = src.slice(0, firstStart) + region + src.slice(lastEnd);
+    return out === src ? { ok: true, changed: false, src } : { ok: true, changed: true, src: out };
+  }
+
+  // 別の親 → reparent（削除＋挿入）。範囲は非ネストなので必ず disjoint。
+  const dragText = src.slice(dragEl.start, dragEl.end);
+  const [rmStart, rmEnd] = lineRange(dragParent.children, dragEl);
+  const indent = indentBefore(targetParent.children, targetEl);
+  const insertPos = position === "before" ? targetEl.start : targetEl.end;
+  const insertText = position === "before" ? dragText + indent : indent + dragText;
+  const edits = [
+    { s: rmStart, e: rmEnd, text: "" },
+    { s: insertPos, e: insertPos, text: insertText },
+  ].sort((a, b) => b.s - a.s);
+  let out = src;
+  for (const ed of edits) out = out.slice(0, ed.s) + ed.text + out.slice(ed.e);
   return { ok: true, changed: true, src: out };
 }
+
+/** 削除: className=targetClass の要素 1 つを（その行ごと）削除。 */
+export function deleteInSource(src, targetClass) {
+  if (!targetClass) return { ok: false, reason: "missing-class" };
+  const tree = load(src);
+  if (tree.err) return { ok: false, reason: tree.err };
+  const u = unique(tree.all, targetClass); if (u.err) return { ok: false, reason: u.err };
+  const el = u.el;
+  const parent = tree.parentOf.get(el);
+  const [s, e] = parent ? lineRange(parent.children, el) : [el.start, el.end];
+  const out = src.slice(0, s) + src.slice(e);
+  return { ok: true, changed: true, src: out };
+}
+
+/** 複製: className=targetClass の要素 1 つを、同じインデントで直後に複製。 */
+export function duplicateInSource(src, targetClass) {
+  if (!targetClass) return { ok: false, reason: "missing-class" };
+  const tree = load(src);
+  if (tree.err) return { ok: false, reason: tree.err };
+  const u = unique(tree.all, targetClass); if (u.err) return { ok: false, reason: u.err };
+  const el = u.el;
+  const parent = tree.parentOf.get(el);
+  const indent = parent ? indentBefore(parent.children, el) : "\n";
+  const elemText = src.slice(el.start, el.end);
+  const out = src.slice(0, el.end) + indent + elemText + src.slice(el.end);
+  return { ok: true, changed: true, src: out };
+}
+
+// 後方互換（Phase C slice1 の呼び出し名）
+export const reorderInSource = moveInSource;
