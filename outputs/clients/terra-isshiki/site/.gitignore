@@ -42,3 +42,5 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+.web-ui-bridge-history.json
+.web-ui-bridge-token
