@@ -18,6 +18,7 @@ import { runNightlyApply } from "../lib/optimizer-apply/nightly.ts";
 import { defaultApplyDeps } from "../lib/optimizer-apply/apply-engine.ts";
 import { classifyTier } from "../lib/optimizer-apply/validation.ts";
 import { pushLine } from "../lib/line/line-client.ts";
+import { maybeAutoEnforce } from "../lib/optimizer-apply/enforce-check.ts";
 import type { NightlyApplyDeps } from "../lib/optimizer-apply/nightly.ts";
 import type { ProposalRow } from "../lib/optimizer-apply/types.ts";
 
@@ -150,6 +151,32 @@ function buildNightlyDeps(): NightlyApplyDeps {
     const deps = buildNightlyDeps();
     const result = await runNightlyApply(deps, { dryRun, force });
     console.log(JSON.stringify(result, null, 2));
+
+    // enforce 自動切替チェック（apply 後・dry-run では flip せず判定ログのみ）
+    {
+      const enforceSb = buildSb();
+      const enforceResult = await maybeAutoEnforce(
+        {
+          sb: enforceSb,
+          notify: async (text) => {
+            console.log(`[enforce-check] ${text}`);
+            const token = process.env.LINE_CHANNEL_ACCESS_TOKEN;
+            const userId = process.env.LINE_USER_ID_OFMETON;
+            if (token && userId) {
+              await pushLine(userId, text, token).catch((e) =>
+                console.warn("[enforce-check] LINE push failed (fail-open):", String(e)),
+              );
+            }
+          },
+        },
+        { dryRun },
+      ).catch((e) => {
+        console.warn("[enforce-check] maybeAutoEnforce threw (fail-open):", String(e));
+        return { flipped: false, reason: String(e), runsEvaluated: 0 };
+      });
+      console.log("[enforce-check]", JSON.stringify(enforceResult));
+    }
+
     process.exitCode = result.errors > 0 ? 1 : 0;
   } finally {
     if (existsSync(LOCK)) unlinkSync(LOCK);
