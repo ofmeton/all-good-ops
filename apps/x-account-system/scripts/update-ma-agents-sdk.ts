@@ -97,8 +97,16 @@ async function main(): Promise<void> {
     }
 
     // 3. SDK で update — tools は配列なので 400 が出ない
+    //    version は DB ではなく live の最新を fetch して渡す。DB(ma_agents) と API の version が
+    //    skew していると "Concurrent modification detected. fetch the latest version and retry" 409 に
+    //    なるため、API の指示どおり毎回 live 版を取得して楽観ロックに合わせる（再焼成の再発防止）。
+    const live = await ant.beta.agents.retrieve(existing.agent_id);
+    const liveVersion = Number((live as { version: number | string }).version);
+    if (liveVersion !== Number(existing.version)) {
+      console.log(`    ⚠️ version skew: DB=${existing.version} live=${liveVersion} → live を採用`);
+    }
     const result = await ant.beta.agents.update(existing.agent_id, {
-      version: Number(existing.version),
+      version: liveVersion,
       name: spec.name,
       model: spec.model,
       system: spec.system,
