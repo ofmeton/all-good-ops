@@ -27,6 +27,7 @@ export default function RootLayout({
             </a>
             {[
               ["/", "ダッシュボード"],
+              ["/cashflow", "資金繰り"],
               ["/categories", "カテゴリ"],
               ["/subscriptions", "サブスク"],
               ["/assets", "資産"],

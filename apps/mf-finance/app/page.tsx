@@ -18,6 +18,7 @@ import { AccountBreakdown } from "@/app/components/AccountBreakdown";
 import { Alerts } from "@/app/components/Alerts";
 import { PayoutCalendar } from "@/app/components/PayoutCalendar";
 import { AnomalyAlerts } from "@/app/components/AnomalyAlerts";
+import { MoneyRadar } from "@/app/components/MoneyRadar";
 import { getLatestAsset, getProjectedBalance } from "@/lib/calendar-queries";
 import { getProposalCounts } from "@/lib/optimizer/proposals-queries";
 
@@ -65,6 +66,8 @@ export default async function Home({
       <div className="mb-4">
         <FreshnessBanner data={freshness} />
       </div>
+
+      <MoneyRadar />
 
       <div className="mb-4">
         <MonthSelector ym={ym} maxYm={maxYm} />

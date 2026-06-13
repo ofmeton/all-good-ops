@@ -3,29 +3,11 @@ import { db } from "@/lib/db";
 import { getLatestAsset } from "@/lib/calendar-queries";
 // 純ロジック（DB非依存・テスト済み）。
 import { buildRolling, buildUpcomingWithdrawals } from "@/lib/cashflow/rolling.mjs";
+// kind 定数は client/server 両用の純モジュールへ分離（client が db を引き込まないため）。
+import { type BalanceKind, KIND_LABEL, guessKind } from "@/lib/cashflow/kinds";
+export { type BalanceKind, KIND_LABEL, guessKind };
 
 // お金レーダー / 資金繰りの読取クエリ（server-only）。
-
-export type BalanceKind = "bank" | "card" | "emoney" | "cash" | "crypto" | "other";
-
-export const KIND_LABEL: Record<BalanceKind, string> = {
-  bank: "銀行",
-  card: "カード",
-  emoney: "電子マネー",
-  cash: "現金",
-  crypto: "暗号資産",
-  other: "その他",
-};
-
-// 口座名 → kind の既定推定（投入時/未設定時のフォールバック）。
-export function guessKind(account: string): BalanceKind {
-  if (/銀行|ゆうちょ|bank/i.test(account)) return "bank";
-  if (/カード|card|JCB|VISA|Vpass|Amazon/i.test(account)) return "card";
-  if (/PayPay|PASMO|Suica|楽天ペイ|電子マネー|emoney/i.test(account)) return "emoney";
-  if (/現金|cash/i.test(account)) return "cash";
-  if (/暗号|crypto|bit/i.test(account)) return "crypto";
-  return "other";
-}
 
 export interface AccountBalanceRow {
   account: string;
@@ -136,6 +118,24 @@ export function getNextMonthCardCharge(): {
     .sort((a, b) => b.amount - a.amount);
   const total = byCard.reduce((s, c) => s + c.amount, 0);
   return { total, byCard, month: ym };
+}
+
+export interface ScheduledListRow {
+  id: number;
+  kind: "income" | "expense";
+  name: string;
+  amount: number;
+  scheduled_date: string;
+  account: string | null;
+}
+
+// 登録済みの単発予定一覧（id 付き・削除/編集 UI 用）。scheduled_date 昇順。
+export function getScheduledList(): ScheduledListRow[] {
+  return db
+    .prepare(
+      "SELECT id, kind, name, amount, scheduled_date, account FROM scheduled_cashflow ORDER BY scheduled_date, id",
+    )
+    .all() as ScheduledListRow[];
 }
 
 export interface RollingEvent {

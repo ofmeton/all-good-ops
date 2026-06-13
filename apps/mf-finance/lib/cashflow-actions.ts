@@ -2,7 +2,7 @@
 
 import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
-import { guessKind, type BalanceKind } from "@/lib/cashflow-queries";
+import { guessKind, type BalanceKind } from "@/lib/cashflow/kinds";
 
 // 資金繰り（scheduled_cashflow / account_balances）の書込 server actions。
 // 全て prepared statement・入力検証。{ok}|{ok,error} 返却（UI 例外回避）。
