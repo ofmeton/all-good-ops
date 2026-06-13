@@ -35,7 +35,9 @@ node apps/web-ui-bridge/daemon/server.mjs \
 cd outputs/clients/terra-isshiki/site && npm run dev
 ```
 
-UI は **STUDIO に忠実な右ドック・ダークインスペクタ**（Shadow DOM 隔離・Inter・SVG アイコン）。実機 devtools 調査に基づく（機能カタログ＆再現可否 → [STUDIO-PARITY.md](./STUDIO-PARITY.md)）。上部ツールバー = 選択 / 移動(⇅) / 戻る / 進む / 閉じる ＋ 画面幅(全/sm/md/lg/xl)セグメント。閉じると右上ランチャーから再表示。
+UI は **STUDIO に忠実な右ドック・ライトインスペクタ**（白 #fff・文字 #1a1a1a・ヘアライン罫線・アクセント #222・選択ハイライトのみ青／Shadow DOM 隔離・Inter・SVG アイコン）。STUDIO エディタは実機ではライトテーマ＝色も実機 devtools で抽出（機能カタログ＆再現可否 → [STUDIO-PARITY.md](./STUDIO-PARITY.md)）。上部ツールバー = 選択 / 移動(⇅) / 戻る / 進む / 閉じる ＋ 画面幅(全/sm/md/lg/xl)セグメント。閉じると右上ランチャーから再表示。
+
+> **永続 undo/redo & 安定トークン**: 編集履歴とトークンを target 配下に永続化（`.web-ui-bridge-history.json` / `.web-ui-bridge-token`、gitignore 済）。daemon を再起動しても **戻る/進むが効き、開いたままのページも編集を続けられる**（in-memory 履歴消失・トークン失効による「undo できない/編集できない」を解消）。
 
 - **選択**: 要素をクリックすると **タブ式インスペクタ**（STUDIO 同様）——
   - **テキスト**: 色・フォント・サイズ・太さ・行高・字間・整列・下線/斜体

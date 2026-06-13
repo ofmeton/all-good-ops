@@ -20,7 +20,7 @@
 
 import http from "node:http";
 import { appendFile, readFile, writeFile, readdir } from "node:fs/promises";
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { randomUUID } from "node:crypto";
@@ -43,7 +43,12 @@ const args = parseArgs(process.argv.slice(2));
 const TARGET_ROOT = path.resolve(args.target);
 const QUEUE_FILE = path.join(TARGET_ROOT, ".claude-ui-queue.jsonl");
 const OVERLAY_FILE = args.overlay ?? path.join(__dirname, "..", "overlay", "overlay.js");
-const TOKEN = randomUUID(); // 起動毎に生成。overlay.js に埋めて配信し、POST で必須にする。
+// トークンは target ごとに永続化（daemon 再起動でも同一→開いたままのページが無効化されない）。
+// 目的は CSRF 防御（リモートサイトから読めない）＝ローカルファイル化しても変わらない。
+const TOKEN_FILE = path.join(TARGET_ROOT, ".web-ui-bridge-token");
+let TOKEN;
+try { TOKEN = existsSync(TOKEN_FILE) ? readFileSync(TOKEN_FILE, "utf8").trim() : ""; } catch { TOKEN = ""; }
+if (!/^[0-9a-f-]{36}$/.test(TOKEN)) { TOKEN = randomUUID(); try { writeFileSync(TOKEN_FILE, TOKEN); } catch {} }
 
 if (!existsSync(TARGET_ROOT)) {
   console.error(`[web-ui-bridge] target dir does not exist: ${TARGET_ROOT}`);
@@ -192,16 +197,32 @@ async function findAndApply(route, apply, label = "編集") {
 // ---- 編集履歴（undo/redo） --------------------------------------------
 // 各編集の前後スナップショットを積む。undo は「現在の内容が after のまま」の時だけ
 // before に戻す（外部=Claude/手編集/formatter の変更があれば潰さず拒否）。
-const undoStack = [];
-const redoStack = [];
+// 履歴はディスク永続化し、daemon 再起動後も戻る/進むが効くようにする。
+let undoStack = [];
+let redoStack = [];
 const HISTORY_MAX = 100;
+const HISTORY_FILE = path.join(TARGET_ROOT, ".web-ui-bridge-history.json");
 const rel = (f) => path.relative(TARGET_ROOT, f);
+
+try {
+  if (existsSync(HISTORY_FILE)) {
+    const h = JSON.parse(readFileSync(HISTORY_FILE, "utf8"));
+    if (Array.isArray(h.undo)) undoStack = h.undo;
+    if (Array.isArray(h.redo)) redoStack = h.redo;
+    console.log(`[web-ui-bridge] history loaded: undo ${undoStack.length} / redo ${redoStack.length}`);
+  }
+} catch { /* 壊れていたら無視 */ }
+
+async function saveHistory() {
+  try { await writeFile(HISTORY_FILE, JSON.stringify({ undo: undoStack, redo: redoStack }), "utf8"); } catch {}
+}
 
 async function recordedWrite(file, before, after, label) {
   await writeFile(file, after, "utf8");
   undoStack.push({ file, before, after, label });
   if (undoStack.length > HISTORY_MAX) undoStack.shift();
   redoStack.length = 0; // 新しい編集で redo 系列は無効化
+  await saveHistory();
 }
 
 async function undo() {
@@ -211,6 +232,7 @@ async function undo() {
   if (cur !== e.after) { undoStack.push(e); return { ok: false, reason: "file-changed", file: rel(e.file) }; }
   await writeFile(e.file, e.before, "utf8");
   redoStack.push(e);
+  await saveHistory();
   return { ok: true, file: rel(e.file), label: e.label, canUndo: undoStack.length > 0, canRedo: true };
 }
 
@@ -221,6 +243,7 @@ async function redo() {
   if (cur !== e.before) { redoStack.push(e); return { ok: false, reason: "file-changed", file: rel(e.file) }; }
   await writeFile(e.file, e.after, "utf8");
   undoStack.push(e);
+  await saveHistory();
   return { ok: true, file: rel(e.file), label: e.label, canUndo: true, canRedo: redoStack.length > 0 };
 }
 
