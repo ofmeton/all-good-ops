@@ -1,0 +1,834 @@
+[
+  {
+    "handle": "Gencoin8",
+    "root": {
+      "id": "2064994087120650595",
+      "text": "Codexで動画制作を簡単に自動化する為の\n6つのGitHubスキルで\n自動コンテンツ製造機が構築できる\n\nまずはブクマして\nあなたの動画タイプに合ったスキルを\nインストールしましょう👇　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　\n\n動画編集、まだ手作業で消耗していませんか？\nCodexに6つのGitHubスキルを導入すれば\n企画から編集、公開まで\n一貫した動画制作が可能に！\n\nGitHub: https://t.co/0XyamvLB1n…\n1. HyperFrames：一言でモーショングラフィックス動画を生成。記事やツイート、製品紹介をMP4に。\n\nGitHub: https://t.co/OcZ6MiZejx…\n2. video-use：Codexが撮影素材を自動編集。不要な間や口癖を削除し、字幕、音声、カラーグレーディングまで。\n\nGitHub: https://t.co/FAEkNDxgTd…\n3. Remotion Skills：Reactで動画を一括制作。ランキングやデータ週報、定期番組に最適。\n\nGitHub: https://t.co/lb0zU8lZdU…\n4. Generative Media Skills：AIで画像、動画、音声を生成。製品広告やUGC動画、音楽動画も。\n\nGitHub: https://t.co/xHoHMRQna2…\n5. videocut-skills：日本語クリエイター向け動画編集Agent。素材、字幕、ショート動画制作を支援。\n\nGitHub: https://t.co/PNnEuTlUGm…\n6. seedance2-skill：即夢Seedance 2.0向けにプロの動画プロンプトを作成。絵コンテ、カメラワーク、セリフまで。\n\n【おすすめの組み合わせ】\n•記事、ツイート動画化: HyperFrames\n\n•実写スピーチ、インタビュー編集: video-use + HyperFrames\n\n•定期番組の一括制作: Remotion Skills + HyperFrames\n\n•AIショートドラマ、広告動画: seedance2-skill + 即夢 + video-use\n\n•AI動画を大量に試す: Generative Media Skills\n\nCodexの真価は\nこれらのスキルを組み合わせて\n自分だけの動画ワークフローを\n構築できる点にあります。\n\n「このツイートを45秒の縦型動画に。最初の3秒で注目を集め、日本語ナレーションと動的字幕を追加。完成後、画面と音量をチェックして。」\n\nと伝えるだけで\n\nスクリプト\n絵コンテ\nプロンプト\n編集\nパッケージングまで\nすべてCodexに任せられます。",
+      "author": {
+        "userName": "Gencoin8",
+        "id": "1764724505606578180",
+        "isBlueVerified": true
+      },
+      "createdAt": "Thu Jun 11 08:52:10 +0000 2026",
+      "lang": "ja",
+      "likeCount": 214,
+      "retweetCount": 20,
+      "replyCount": 1,
+      "quoteCount": 0,
+      "bookmarkCount": 253,
+      "viewCount": 11207,
+      "isReply": false,
+      "conversationId": "2064994087120650595",
+      "tweetUrl": "https://x.com/Gencoin8/status/2064994087120650595",
+      "media": [
+        {
+          "type": "photo",
+          "url": "https://pbs.twimg.com/media/HKhU0FObkAAk1yy.jpg"
+        }
+      ]
+    },
+    "thread": [
+      {
+        "id": "2064994087120650595",
+        "text": "Codexで動画制作を簡単に自動化する為の\n6つのGitHubスキルで\n自動コンテンツ製造機が構築できる\n\nまずはブクマして\nあなたの動画タイプに合ったスキルを\nインストールしましょう👇　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　\n\n動画編集、まだ手作業で消耗していませんか？\nCodexに6つのGitHubスキルを導入すれば\n企画から編集、公開まで\n一貫した動画制作が可能に！\n\nGitHub: https://t.co/0XyamvLB1n…\n1. HyperFrames：一言でモーショングラフィックス動画を生成。記事やツイート、製品紹介をMP4に。\n\nGitHub: https://t.co/OcZ6MiZejx…\n2. video-use：Codexが撮影素材を自動編集。不要な間や口癖を削除し、字幕、音声、カラーグレーディングまで。\n\nGitHub: https://t.co/FAEkNDxgTd…\n3. Remotion Skills：Reactで動画を一括制作。ランキングやデータ週報、定期番組に最適。\n\nGitHub: https://t.co/lb0zU8lZdU…\n4. Generative Media Skills：AIで画像、動画、音声を生成。製品広告やUGC動画、音楽動画も。\n\nGitHub: https://t.co/xHoHMRQna2…\n5. videocut-skills：日本語クリエイター向け動画編集Agent。素材、字幕、ショート動画制作を支援。\n\nGitHub: https://t.co/PNnEuTlUGm…\n6. seedance2-skill：即夢Seedance 2.0向けにプロの動画プロンプトを作成。絵コンテ、カメラワーク、セリフまで。\n\n【おすすめの組み合わせ】\n•記事、ツイート動画化: HyperFrames\n\n•実写スピーチ、インタビュー編集: video-use + HyperFrames\n\n•定期番組の一括制作: Remotion Skills + HyperFrames\n\n•AIショートドラマ、広告動画: seedance2-skill + 即夢 + video-use\n\n•AI動画を大量に試す: Generative Media Skills\n\nCodexの真価は\nこれらのスキルを組み合わせて\n自分だけの動画ワークフローを\n構築できる点にあります。\n\n「このツイートを45秒の縦型動画に。最初の3秒で注目を集め、日本語ナレーションと動的字幕を追加。完成後、画面と音量をチェックして。」\n\nと伝えるだけで\n\nスクリプト\n絵コンテ\nプロンプト\n編集\nパッケージングまで\nすべてCodexに任せられます。",
+        "author": {
+          "userName": "Gencoin8",
+          "id": "1764724505606578180",
+          "isBlueVerified": true
+        },
+        "createdAt": "Thu Jun 11 08:52:10 +0000 2026",
+        "lang": "ja",
+        "likeCount": 214,
+        "retweetCount": 20,
+        "replyCount": 1,
+        "quoteCount": 0,
+        "bookmarkCount": 253,
+        "viewCount": 11207,
+        "isReply": false,
+        "conversationId": "2064994087120650595",
+        "tweetUrl": "https://x.com/Gencoin8/status/2064994087120650595",
+        "media": [
+          {
+            "type": "photo",
+            "url": "https://pbs.twimg.com/media/HKhU0FObkAAk1yy.jpg"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "handle": "Gencoin8",
+    "root": {
+      "id": "2065259034027208735",
+      "text": "Claude Fable 5本当に凄いけど\n現実的にこの『費用感』なら\n人間を雇う方が圧倒的に安上がりです\n\nなので、リミット消費を\n50%程減らせるようにしてみた。\n\nやった事はシンプルなんだけど\n\nClaude Codeの中に\nOpenAI Codexプラグインを入れて\n役割分担させるだけなんよな\n\n解説👇 https://t.co/5ruqNF1oiL",
+      "author": {
+        "userName": "Gencoin8",
+        "id": "1764724505606578180",
+        "isBlueVerified": true
+      },
+      "createdAt": "Fri Jun 12 02:24:59 +0000 2026",
+      "lang": "ja",
+      "likeCount": 244,
+      "retweetCount": 20,
+      "replyCount": 8,
+      "quoteCount": 7,
+      "bookmarkCount": 298,
+      "viewCount": 54992,
+      "isReply": false,
+      "conversationId": "2065259034027208735",
+      "tweetUrl": "https://x.com/Gencoin8/status/2065259034027208735",
+      "media": [
+        {
+          "type": "photo",
+          "url": "https://pbs.twimg.com/media/HKlE1bqasAA5eM2.jpg"
+        }
+      ]
+    },
+    "thread": [
+      {
+        "id": "2065259034027208735",
+        "text": "Claude Fable 5本当に凄いけど\n現実的にこの『費用感』なら\n人間を雇う方が圧倒的に安上がりです\n\nなので、リミット消費を\n50%程減らせるようにしてみた。\n\nやった事はシンプルなんだけど\n\nClaude Codeの中に\nOpenAI Codexプラグインを入れて\n役割分担させるだけなんよな\n\n解説👇 https://t.co/5ruqNF1oiL",
+        "author": {
+          "userName": "Gencoin8",
+          "id": "1764724505606578180",
+          "isBlueVerified": true
+        },
+        "createdAt": "Fri Jun 12 02:24:59 +0000 2026",
+        "lang": "ja",
+        "likeCount": 244,
+        "retweetCount": 20,
+        "replyCount": 8,
+        "quoteCount": 7,
+        "bookmarkCount": 298,
+        "viewCount": 54992,
+        "isReply": false,
+        "conversationId": "2065259034027208735",
+        "tweetUrl": "https://x.com/Gencoin8/status/2065259034027208735",
+        "media": [
+          {
+            "type": "photo",
+            "url": "https://pbs.twimg.com/media/HKlE1bqasAA5eM2.jpg"
+          }
+        ]
+      },
+      {
+        "id": "2065259036594032773",
+        "text": "使い方はこの流れ。\n\n・Claude Fable 5 high：設計と計画\n・Codex 5.5 xhigh：実装\n・Claude Fable 5 max：レビュー\nつまり、Claudeに全部やらせるのではなく、\n得意な工程だけを担当させる。",
+        "author": {
+          "userName": "Gencoin8",
+          "id": "1764724505606578180",
+          "isBlueVerified": true
+        },
+        "createdAt": "Fri Jun 12 02:24:59 +0000 2026",
+        "lang": "ja",
+        "likeCount": 15,
+        "retweetCount": 0,
+        "replyCount": 1,
+        "quoteCount": 0,
+        "bookmarkCount": 12,
+        "viewCount": 3310,
+        "isReply": true,
+        "conversationId": "2065259034027208735",
+        "tweetUrl": "https://x.com/Gencoin8/status/2065259036594032773"
+      }
+    ]
+  },
+  {
+    "handle": "Gencoin8",
+    "root": {
+      "id": "2059189709935652952",
+      "text": "『Codex』『Claude Code』に\nプロジェクト全体を理解して\n複雑な問題を解決に導くAIエージェントの能力を\nコピペで授ける神オープンソースが登場🔥\n明日からはPCは触らずに　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　\n\nエージェント達が各々最高品質で\nタスクをこなしてくれる\n\n従来のAI開発ツールの課題\nClaude Code、Codex、Cursorといった\n従来のAI開発ツールは\nコード生成や簡単なデバッグには優れてたけど\n\nプロジェクトが一定規模を超えると\n「コードに直行し、手探りでデバッグする」\nこれがめんどくさかった\n\nこれは、人間で言えば\n設計図なしにいきなりコーディングを始めて\nエラーが出たら場当たり的に修正する\nジュニア開発者的存在\n\n全体像を把握せず、文脈を考慮しないため\n非効率的で大規模なプロジェクトには不向き。\n\nSuperpowersが注目されてる理由は⬇︎\n\nSuperpowersは\nこの課題を解決するために開発された\n「エージェント型スキルフレームワーク」\n\nこれは、AIエージェントに以下のような\n「スキル」を与えることで、より人間らしい\nシニア開発者のような振る舞いを可能にする。\n\n計画と戦略立案: 問題解決のためにどのようなステップを踏むべきか、事前に計画を立てる能力。\n\nコンテキスト理解: プロジェクトの全体像、既存のコードベース、要件などを深く理解し、適切な判断を下す能力。\n\n体系的なデバッグ: エラーが発生した際に、単にコードを修正するだけでなく、原因を特定し、体系的に問題を解決する能力。\n\nコードレビューと改善提案: 生成したコードの品質を評価し、より良い設計や実装方法を提案する能力。\n\nツール活用: 外部ツール（MCPツールなど）を適切に選択し、連携して作業を進める能力。\n\nつまり、Superpowersは\n単にコードを生成するだけでなく\nプロジェクトの初期段階から\n最終的なデプロイまで\n開発プロセス全体を自律的に管理、実行できるようにAIエージェントを強化してくれる\n\nこれにより、AIエージェントは\nまるで経験豊富なシニア開発者のように\n効率的かつ高品質なソフトウェア開発を支援できるようになったってこと\n\nリプのcodexの記事から\nサクッと導入して使ってみて",
+      "author": {
+        "userName": "Gencoin8",
+        "id": "1764724505606578180",
+        "isBlueVerified": true
+      },
+      "createdAt": "Tue May 26 08:27:39 +0000 2026",
+      "lang": "ja",
+      "likeCount": 90,
+      "retweetCount": 11,
+      "replyCount": 2,
+      "quoteCount": 0,
+      "bookmarkCount": 105,
+      "viewCount": 7941,
+      "isReply": false,
+      "conversationId": "2059189709935652952",
+      "tweetUrl": "https://x.com/Gencoin8/status/2059189709935652952",
+      "media": [
+        {
+          "type": "photo",
+          "url": "https://pbs.twimg.com/media/HJO2HombgAAIPc5.jpg"
+        }
+      ]
+    },
+    "thread": [
+      {
+        "id": "2059189709935652952",
+        "text": "『Codex』『Claude Code』に\nプロジェクト全体を理解して\n複雑な問題を解決に導くAIエージェントの能力を\nコピペで授ける神オープンソースが登場🔥\n明日からはPCは触らずに　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　\n\nエージェント達が各々最高品質で\nタスクをこなしてくれる\n\n従来のAI開発ツールの課題\nClaude Code、Codex、Cursorといった\n従来のAI開発ツールは\nコード生成や簡単なデバッグには優れてたけど\n\nプロジェクトが一定規模を超えると\n「コードに直行し、手探りでデバッグする」\nこれがめんどくさかった\n\nこれは、人間で言えば\n設計図なしにいきなりコーディングを始めて\nエラーが出たら場当たり的に修正する\nジュニア開発者的存在\n\n全体像を把握せず、文脈を考慮しないため\n非効率的で大規模なプロジェクトには不向き。\n\nSuperpowersが注目されてる理由は⬇︎\n\nSuperpowersは\nこの課題を解決するために開発された\n「エージェント型スキルフレームワーク」\n\nこれは、AIエージェントに以下のような\n「スキル」を与えることで、より人間らしい\nシニア開発者のような振る舞いを可能にする。\n\n計画と戦略立案: 問題解決のためにどのようなステップを踏むべきか、事前に計画を立てる能力。\n\nコンテキスト理解: プロジェクトの全体像、既存のコードベース、要件などを深く理解し、適切な判断を下す能力。\n\n体系的なデバッグ: エラーが発生した際に、単にコードを修正するだけでなく、原因を特定し、体系的に問題を解決する能力。\n\nコードレビューと改善提案: 生成したコードの品質を評価し、より良い設計や実装方法を提案する能力。\n\nツール活用: 外部ツール（MCPツールなど）を適切に選択し、連携して作業を進める能力。\n\nつまり、Superpowersは\n単にコードを生成するだけでなく\nプロジェクトの初期段階から\n最終的なデプロイまで\n開発プロセス全体を自律的に管理、実行できるようにAIエージェントを強化してくれる\n\nこれにより、AIエージェントは\nまるで経験豊富なシニア開発者のように\n効率的かつ高品質なソフトウェア開発を支援できるようになったってこと\n\nリプのcodexの記事から\nサクッと導入して使ってみて",
+        "author": {
+          "userName": "Gencoin8",
+          "id": "1764724505606578180",
+          "isBlueVerified": true
+        },
+        "createdAt": "Tue May 26 08:27:39 +0000 2026",
+        "lang": "ja",
+        "likeCount": 90,
+        "retweetCount": 11,
+        "replyCount": 2,
+        "quoteCount": 0,
+        "bookmarkCount": 105,
+        "viewCount": 7941,
+        "isReply": false,
+        "conversationId": "2059189709935652952",
+        "tweetUrl": "https://x.com/Gencoin8/status/2059189709935652952",
+        "media": [
+          {
+            "type": "photo",
+            "url": "https://pbs.twimg.com/media/HJO2HombgAAIPc5.jpg"
+          }
+        ]
+      },
+      {
+        "id": "2059189918447128944",
+        "text": "codexで副業を始めようと\n考えてる人には必ず為になると保証します⬇︎\nhttps://t.co/z2GfMhDO5H",
+        "author": {
+          "userName": "Gencoin8",
+          "id": "1764724505606578180",
+          "isBlueVerified": true
+        },
+        "createdAt": "Tue May 26 08:28:29 +0000 2026",
+        "lang": "ja",
+        "likeCount": 2,
+        "retweetCount": 0,
+        "replyCount": 0,
+        "quoteCount": 0,
+        "bookmarkCount": 2,
+        "viewCount": 1088,
+        "isReply": true,
+        "conversationId": "2059189709935652952",
+        "tweetUrl": "https://x.com/Gencoin8/status/2059189918447128944"
+      }
+    ]
+  },
+  {
+    "handle": "Gencoin8",
+    "root": {
+      "id": "2062082819095159165",
+      "text": "Claude Code終了のお知らせ📢\n\nOpenAIが約20万円分の\nCodex開発環境を、無料で配ってる！\n\n今すぐ受け取る方法は　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　\n\nGitHubに公開リポジトリが\n1つでもあれば申請出来る！\n「Codex for OSS」というプログラム\n\n申請して通れば、こんな特典が全部タダ\n・ChatGPT Pro 6ヶ月\n・Codexアクセス\n・API使用クレジット\n・Codex Security\n\n完全無料で申請する方法を\n詳しく解説します👇",
+      "author": {
+        "userName": "Gencoin8",
+        "id": "1764724505606578180",
+        "isBlueVerified": true
+      },
+      "createdAt": "Wed Jun 03 08:03:50 +0000 2026",
+      "lang": "ja",
+      "likeCount": 3389,
+      "retweetCount": 279,
+      "replyCount": 45,
+      "quoteCount": 91,
+      "bookmarkCount": 4609,
+      "viewCount": 862821,
+      "isReply": false,
+      "conversationId": "2062082819095159165",
+      "tweetUrl": "https://x.com/Gencoin8/status/2062082819095159165",
+      "media": [
+        {
+          "type": "photo",
+          "url": "https://pbs.twimg.com/media/HJ39ZR4awAE35Vw.jpg"
+        }
+      ]
+    },
+    "thread": [
+      {
+        "id": "2062082819095159165",
+        "text": "Claude Code終了のお知らせ📢\n\nOpenAIが約20万円分の\nCodex開発環境を、無料で配ってる！\n\n今すぐ受け取る方法は　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　\n\nGitHubに公開リポジトリが\n1つでもあれば申請出来る！\n「Codex for OSS」というプログラム\n\n申請して通れば、こんな特典が全部タダ\n・ChatGPT Pro 6ヶ月\n・Codexアクセス\n・API使用クレジット\n・Codex Security\n\n完全無料で申請する方法を\n詳しく解説します👇",
+        "author": {
+          "userName": "Gencoin8",
+          "id": "1764724505606578180",
+          "isBlueVerified": true
+        },
+        "createdAt": "Wed Jun 03 08:03:50 +0000 2026",
+        "lang": "ja",
+        "likeCount": 3389,
+        "retweetCount": 279,
+        "replyCount": 45,
+        "quoteCount": 91,
+        "bookmarkCount": 4609,
+        "viewCount": 862821,
+        "isReply": false,
+        "conversationId": "2062082819095159165",
+        "tweetUrl": "https://x.com/Gencoin8/status/2062082819095159165",
+        "media": [
+          {
+            "type": "photo",
+            "url": "https://pbs.twimg.com/media/HJ39ZR4awAE35Vw.jpg"
+          }
+        ]
+      },
+      {
+        "id": "2062083134125166704",
+        "text": "手順はシンプルです\n\n1. Codexを下記からインストールし記事に付属するSkillフォイルをコピペ\n\nhttps://t.co/lwoWdD6FS4",
+        "author": {
+          "userName": "Gencoin8",
+          "id": "1764724505606578180",
+          "isBlueVerified": true
+        },
+        "createdAt": "Wed Jun 03 08:05:05 +0000 2026",
+        "lang": "ja",
+        "likeCount": 45,
+        "retweetCount": 2,
+        "replyCount": 0,
+        "quoteCount": 0,
+        "bookmarkCount": 65,
+        "viewCount": 40480,
+        "isReply": true,
+        "conversationId": "2062082819095159165",
+        "tweetUrl": "https://x.com/Gencoin8/status/2062083134125166704"
+      },
+      {
+        "id": "2062083164110254396",
+        "text": "2. 何かプロジェクトを作る（小さくてOK)\n3. GitHubに公開\n4. スターを数個集める\n5. フォームに答えて申請\n\nスターがゼロでも\n申請自体はできる\nフォームでプロジェクトの\n価値を説明できれば大丈夫",
+        "author": {
+          "userName": "Gencoin8",
+          "id": "1764724505606578180",
+          "isBlueVerified": true
+        },
+        "createdAt": "Wed Jun 03 08:05:12 +0000 2026",
+        "lang": "ja",
+        "likeCount": 30,
+        "retweetCount": 2,
+        "replyCount": 1,
+        "quoteCount": 1,
+        "bookmarkCount": 30,
+        "viewCount": 34549,
+        "isReply": true,
+        "conversationId": "2062082819095159165",
+        "tweetUrl": "https://x.com/Gencoin8/status/2062083164110254396"
+      },
+      {
+        "id": "2062103608829915376",
+        "text": "今すぐ手を動かしながら学びたい方は\nこちらの記事を読んで下さい‼️\n\nhttps://t.co/Xm4PMB8VMN",
+        "author": {
+          "userName": "Gencoin8",
+          "id": "1764724505606578180",
+          "isBlueVerified": true
+        },
+        "createdAt": "Wed Jun 03 09:26:27 +0000 2026",
+        "lang": "ja",
+        "likeCount": 27,
+        "retweetCount": 5,
+        "replyCount": 0,
+        "quoteCount": 1,
+        "bookmarkCount": 67,
+        "viewCount": 48859,
+        "isReply": true,
+        "conversationId": "2062082819095159165",
+        "tweetUrl": "https://x.com/Gencoin8/status/2062103608829915376"
+      }
+    ]
+  },
+  {
+    "handle": "Gencoin8",
+    "root": {
+      "id": "2063177825721393175",
+      "text": "OpenAI APIクレジットが『15万円分』\n設定を1つオンにするだけで  \n「Codex」「Chat GPT」で使える\nクレジットを配布する制度を開始してる🔥\n\n誰でも受け取れるから今すぐやって👇　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　\n\n名前は\nData Sharing Program\n\nやることは簡単\n\nOpenAI Dashboard\n↓\nData Controls\n↓\nSharing\n↓\n対象プロジェクトでONにするだけ\n\nこれでAPI利用時に\n無料トークン枠が使えるようになります。\n\nつまり、今まで普通に課金して\nOpenAI APIを使っていた人は、\nこの設定を知らないだけで損している\n可能性があります\n\nしかも対象は最新モデルだけではなく、\n軽量モデルにも無料枠が用意されてる！\n\n高性能モデルは少なめの無料枠、\n軽量モデルはかなり大きめの無料枠。\n\nなので、GPT系のAPIを使って\nアプリ開発、AIエージェント、チャットBot、業務自動化ツールを作っている人は\nまず確認した方が賢明\n\n特に個人開発者、AI学習中の人、\nサイドプロジェクトでAPIコストを\n抑えたい人にはかなり大きいと思う\n\n注意点もある。\n\nこの設定をオンにすると、\nAPIで送った入力や出力データが\nOpenAIのモデル改善や評価に使われます。\n\nなので、クライアント案件や社内機密\n個人情報、未公開コードには使わない方が良い\n\n使うなら\n\n・学習用\n・検証用\n・サイドプロジェクト\n・ダミーデータ\n・個人開発\n・AIツールのプロトタイプ\n\nこのあたりが安全。\n\n要するに、\nデータ共有に協力する代わりに\nOpenAI APIの無料枠が使える制度ってこと\n\nAPIを触ってる人は、\nまずDashboardを開いて確認して。\n\n知らずに課金し続けてる人\nかなり多いと思う",
+      "author": {
+        "userName": "Gencoin8",
+        "id": "1764724505606578180",
+        "isBlueVerified": true
+      },
+      "createdAt": "Sat Jun 06 08:35:00 +0000 2026",
+      "lang": "ja",
+      "likeCount": 382,
+      "retweetCount": 24,
+      "replyCount": 9,
+      "quoteCount": 4,
+      "bookmarkCount": 553,
+      "viewCount": 47366,
+      "isReply": false,
+      "conversationId": "2063177825721393175",
+      "tweetUrl": "https://x.com/Gencoin8/status/2063177825721393175",
+      "media": [
+        {
+          "type": "video",
+          "url": "https://pbs.twimg.com/amplify_video_thumb/2062861463191261184/img/7PgDVQpEokNSDwOy.jpg"
+        }
+      ]
+    },
+    "thread": [
+      {
+        "id": "2063177825721393175",
+        "text": "OpenAI APIクレジットが『15万円分』\n設定を1つオンにするだけで  \n「Codex」「Chat GPT」で使える\nクレジットを配布する制度を開始してる🔥\n\n誰でも受け取れるから今すぐやって👇　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　\n\n名前は\nData Sharing Program\n\nやることは簡単\n\nOpenAI Dashboard\n↓\nData Controls\n↓\nSharing\n↓\n対象プロジェクトでONにするだけ\n\nこれでAPI利用時に\n無料トークン枠が使えるようになります。\n\nつまり、今まで普通に課金して\nOpenAI APIを使っていた人は、\nこの設定を知らないだけで損している\n可能性があります\n\nしかも対象は最新モデルだけではなく、\n軽量モデルにも無料枠が用意されてる！\n\n高性能モデルは少なめの無料枠、\n軽量モデルはかなり大きめの無料枠。\n\nなので、GPT系のAPIを使って\nアプリ開発、AIエージェント、チャットBot、業務自動化ツールを作っている人は\nまず確認した方が賢明\n\n特に個人開発者、AI学習中の人、\nサイドプロジェクトでAPIコストを\n抑えたい人にはかなり大きいと思う\n\n注意点もある。\n\nこの設定をオンにすると、\nAPIで送った入力や出力データが\nOpenAIのモデル改善や評価に使われます。\n\nなので、クライアント案件や社内機密\n個人情報、未公開コードには使わない方が良い\n\n使うなら\n\n・学習用\n・検証用\n・サイドプロジェクト\n・ダミーデータ\n・個人開発\n・AIツールのプロトタイプ\n\nこのあたりが安全。\n\n要するに、\nデータ共有に協力する代わりに\nOpenAI APIの無料枠が使える制度ってこと\n\nAPIを触ってる人は、\nまずDashboardを開いて確認して。\n\n知らずに課金し続けてる人\nかなり多いと思う",
+        "author": {
+          "userName": "Gencoin8",
+          "id": "1764724505606578180",
+          "isBlueVerified": true
+        },
+        "createdAt": "Sat Jun 06 08:35:00 +0000 2026",
+        "lang": "ja",
+        "likeCount": 382,
+        "retweetCount": 24,
+        "replyCount": 9,
+        "quoteCount": 4,
+        "bookmarkCount": 553,
+        "viewCount": 47366,
+        "isReply": false,
+        "conversationId": "2063177825721393175",
+        "tweetUrl": "https://x.com/Gencoin8/status/2063177825721393175",
+        "media": [
+          {
+            "type": "video",
+            "url": "https://pbs.twimg.com/amplify_video_thumb/2062861463191261184/img/7PgDVQpEokNSDwOy.jpg"
+          }
+        ]
+      },
+      {
+        "id": "2063219392591306879",
+        "text": "配布クレジットないでCodexを\n完全マスター出来るように記載した記事です！\n手を動かしながら学べます👇\n\nhttps://t.co/Xm4PMB8VMN",
+        "author": {
+          "userName": "Gencoin8",
+          "id": "1764724505606578180",
+          "isBlueVerified": true
+        },
+        "createdAt": "Sat Jun 06 11:20:10 +0000 2026",
+        "lang": "ja",
+        "likeCount": 9,
+        "retweetCount": 0,
+        "replyCount": 0,
+        "quoteCount": 0,
+        "bookmarkCount": 14,
+        "viewCount": 4060,
+        "isReply": true,
+        "conversationId": "2063177825721393175",
+        "tweetUrl": "https://x.com/Gencoin8/status/2063219392591306879"
+      }
+    ]
+  },
+  {
+    "handle": "Gencoin8",
+    "root": {
+      "id": "2059979752526758365",
+      "text": "『Codex』特大アップデート🔥\n今回のアップデートでブラウザで使う\nアプリをログインしたままに出来る‼️\n\nウェブブラウザが完全に置き換わる　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　\n\nパソコンに散らばったタブを持つ代わりに\n今度はタスクごとに整理される\n\n予測だけど、もうすぐOpenAIは\nセッションごとに複数のブラウザタブを\nリリースしてどのタスクのために\nどのタブを開くかを学習するようになると思う\n\nまずは導入から触ってみるところまで\n手を動かしてCodexを引用元記事から\nマスターしちゃって⬇︎",
+      "author": {
+        "userName": "Gencoin8",
+        "id": "1764724505606578180",
+        "isBlueVerified": true
+      },
+      "createdAt": "Thu May 28 12:47:00 +0000 2026",
+      "lang": "ja",
+      "likeCount": 405,
+      "retweetCount": 28,
+      "replyCount": 3,
+      "quoteCount": 4,
+      "bookmarkCount": 454,
+      "viewCount": 70825,
+      "isReply": false,
+      "conversationId": "2059979752526758365",
+      "tweetUrl": "https://x.com/Gencoin8/status/2059979752526758365",
+      "media": [
+        {
+          "type": "video",
+          "url": "https://pbs.twimg.com/amplify_video_thumb/2059979118880657408/img/N91q56XBVpuqBG7G.jpg"
+        }
+      ]
+    },
+    "thread": [
+      {
+        "id": "2059979752526758365",
+        "text": "『Codex』特大アップデート🔥\n今回のアップデートでブラウザで使う\nアプリをログインしたままに出来る‼️\n\nウェブブラウザが完全に置き換わる　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　\n\nパソコンに散らばったタブを持つ代わりに\n今度はタスクごとに整理される\n\n予測だけど、もうすぐOpenAIは\nセッションごとに複数のブラウザタブを\nリリースしてどのタスクのために\nどのタブを開くかを学習するようになると思う\n\nまずは導入から触ってみるところまで\n手を動かしてCodexを引用元記事から\nマスターしちゃって⬇︎",
+        "author": {
+          "userName": "Gencoin8",
+          "id": "1764724505606578180",
+          "isBlueVerified": true
+        },
+        "createdAt": "Thu May 28 12:47:00 +0000 2026",
+        "lang": "ja",
+        "likeCount": 405,
+        "retweetCount": 28,
+        "replyCount": 3,
+        "quoteCount": 4,
+        "bookmarkCount": 454,
+        "viewCount": 70825,
+        "isReply": false,
+        "conversationId": "2059979752526758365",
+        "tweetUrl": "https://x.com/Gencoin8/status/2059979752526758365",
+        "media": [
+          {
+            "type": "video",
+            "url": "https://pbs.twimg.com/amplify_video_thumb/2059979118880657408/img/N91q56XBVpuqBG7G.jpg"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "handle": "Gencoin8",
+    "root": {
+      "id": "2055847524292813048",
+      "text": "『Codex 』を使って自動化AIエージェントを\n5分で使いこなす方法\n\n①まず作るべき10のエージェント　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　\n②自動化の方法と識別\n③ローカルと常時稼働の使い分け\nなどが学べる記事\n自動化の解像度が上がりました。\n👇要約👇\nCodex Codeは\n「チャットで相談するツール」ではなく\n10人分のAIエージェントを並列で\n動かす業務OSとして使うべき、という話。\n例えば、\n・PRレビュー担当\n・テスト作成担当\n・バグ調査担当\n・ドキュメント更新担当\n・リファクタ候補の洗い出し担当\n・朝会レポート担当\n・顧客フィードバック分析担当\n・営業メール作成担当\n・コンテンツ再利用担当\n・メール仕分け担当\nみたいに、Codex Codeに役割を持たせる。\n\n重要なのは、ただ「これやって」と\n頼むのではなく、\n・職務定義 ・起動条件 ・出力形式\nまで設計すること。\n\nつまり、Codexエージェントとは\n会話相手ではなく\n「業務プロセスに組み込まれたAI社員」に近い\n\n・手動で動かすならSlash command。\n・特定の操作をきっかけに動かすならHooks。\n・24時間動かすならAgent SDK。\n\nここまで組めると\n1人の創業者や少人数チームでも\n裏側では10人分の\nAI部隊が常時稼働している状態になる。\n\nCodex Codeの本当の価値は\n単発の作業効率化ではなく\n\n業務そのものを自走化できること。\n\nこれからは「AIを使える人」ではなく\n「AIエージェント組織を設計できる人」が\n圧倒的に速くなる。",
+      "author": {
+        "userName": "Gencoin8",
+        "id": "1764724505606578180",
+        "isBlueVerified": true
+      },
+      "createdAt": "Sun May 17 03:07:00 +0000 2026",
+      "lang": "ja",
+      "likeCount": 196,
+      "retweetCount": 11,
+      "replyCount": 4,
+      "quoteCount": 5,
+      "bookmarkCount": 169,
+      "viewCount": 19936,
+      "isReply": false,
+      "conversationId": "2055847524292813048",
+      "tweetUrl": "https://x.com/Gencoin8/status/2055847524292813048",
+      "media": [
+        {
+          "type": "photo",
+          "url": "https://pbs.twimg.com/media/HIbRm4PbsAAaLbv.jpg"
+        }
+      ]
+    },
+    "thread": [
+      {
+        "id": "2055847524292813048",
+        "text": "『Codex 』を使って自動化AIエージェントを\n5分で使いこなす方法\n\n①まず作るべき10のエージェント　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　\n②自動化の方法と識別\n③ローカルと常時稼働の使い分け\nなどが学べる記事\n自動化の解像度が上がりました。\n👇要約👇\nCodex Codeは\n「チャットで相談するツール」ではなく\n10人分のAIエージェントを並列で\n動かす業務OSとして使うべき、という話。\n例えば、\n・PRレビュー担当\n・テスト作成担当\n・バグ調査担当\n・ドキュメント更新担当\n・リファクタ候補の洗い出し担当\n・朝会レポート担当\n・顧客フィードバック分析担当\n・営業メール作成担当\n・コンテンツ再利用担当\n・メール仕分け担当\nみたいに、Codex Codeに役割を持たせる。\n\n重要なのは、ただ「これやって」と\n頼むのではなく、\n・職務定義 ・起動条件 ・出力形式\nまで設計すること。\n\nつまり、Codexエージェントとは\n会話相手ではなく\n「業務プロセスに組み込まれたAI社員」に近い\n\n・手動で動かすならSlash command。\n・特定の操作をきっかけに動かすならHooks。\n・24時間動かすならAgent SDK。\n\nここまで組めると\n1人の創業者や少人数チームでも\n裏側では10人分の\nAI部隊が常時稼働している状態になる。\n\nCodex Codeの本当の価値は\n単発の作業効率化ではなく\n\n業務そのものを自走化できること。\n\nこれからは「AIを使える人」ではなく\n「AIエージェント組織を設計できる人」が\n圧倒的に速くなる。",
+        "author": {
+          "userName": "Gencoin8",
+          "id": "1764724505606578180",
+          "isBlueVerified": true
+        },
+        "createdAt": "Sun May 17 03:07:00 +0000 2026",
+        "lang": "ja",
+        "likeCount": 196,
+        "retweetCount": 11,
+        "replyCount": 4,
+        "quoteCount": 5,
+        "bookmarkCount": 169,
+        "viewCount": 19936,
+        "isReply": false,
+        "conversationId": "2055847524292813048",
+        "tweetUrl": "https://x.com/Gencoin8/status/2055847524292813048",
+        "media": [
+          {
+            "type": "photo",
+            "url": "https://pbs.twimg.com/media/HIbRm4PbsAAaLbv.jpg"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "handle": "Gencoin8",
+    "root": {
+      "id": "2056991824133374318",
+      "text": "今、最も海外で使われる\nAIエージェント運用方法🔥\n\n→ 追加のAPIキー不要\n→ ChatGPTでログインするだけ\n→ Codexがファイルとターミナルを実行\n→ Hermesがチャット間でメモリを保持\n→ Linear、GitHub、Gmailと連携\n→ プラグインを一度設定、常に準備完了\n\n先ずは動画編集からやらせてみて👇 https://t.co/1Fn26f0R4K",
+      "author": {
+        "userName": "Gencoin8",
+        "id": "1764724505606578180",
+        "isBlueVerified": true
+      },
+      "createdAt": "Wed May 20 06:54:02 +0000 2026",
+      "lang": "ja",
+      "likeCount": 122,
+      "retweetCount": 10,
+      "replyCount": 3,
+      "quoteCount": 5,
+      "bookmarkCount": 183,
+      "viewCount": 43212,
+      "isReply": false,
+      "conversationId": "2056991824133374318",
+      "tweetUrl": "https://x.com/Gencoin8/status/2056991824133374318",
+      "media": [
+        {
+          "type": "video",
+          "url": "https://pbs.twimg.com/amplify_video_thumb/2056991479965577216/img/uwU9g-Yze321MaHu.jpg"
+        }
+      ]
+    },
+    "thread": [
+      {
+        "id": "2056991824133374318",
+        "text": "今、最も海外で使われる\nAIエージェント運用方法🔥\n\n→ 追加のAPIキー不要\n→ ChatGPTでログインするだけ\n→ Codexがファイルとターミナルを実行\n→ Hermesがチャット間でメモリを保持\n→ Linear、GitHub、Gmailと連携\n→ プラグインを一度設定、常に準備完了\n\n先ずは動画編集からやらせてみて👇 https://t.co/1Fn26f0R4K",
+        "author": {
+          "userName": "Gencoin8",
+          "id": "1764724505606578180",
+          "isBlueVerified": true
+        },
+        "createdAt": "Wed May 20 06:54:02 +0000 2026",
+        "lang": "ja",
+        "likeCount": 122,
+        "retweetCount": 10,
+        "replyCount": 3,
+        "quoteCount": 5,
+        "bookmarkCount": 183,
+        "viewCount": 43212,
+        "isReply": false,
+        "conversationId": "2056991824133374318",
+        "tweetUrl": "https://x.com/Gencoin8/status/2056991824133374318",
+        "media": [
+          {
+            "type": "video",
+            "url": "https://pbs.twimg.com/amplify_video_thumb/2056991479965577216/img/uwU9g-Yze321MaHu.jpg"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "handle": "Gencoin8",
+    "root": {
+      "id": "2055912451988766942",
+      "text": "Codexを2ヶ月で\n海外でも通用するレベルまで引き上げる\n超絶簡単に使える指示書👇 https://t.co/4aYtpti71V",
+      "author": {
+        "userName": "Gencoin8",
+        "id": "1764724505606578180",
+        "isBlueVerified": true
+      },
+      "createdAt": "Sun May 17 07:25:00 +0000 2026",
+      "lang": "ja",
+      "likeCount": 212,
+      "retweetCount": 13,
+      "replyCount": 2,
+      "quoteCount": 0,
+      "bookmarkCount": 171,
+      "viewCount": 26289,
+      "isReply": false,
+      "conversationId": "2055912451988766942",
+      "tweetUrl": "https://x.com/Gencoin8/status/2055912451988766942",
+      "media": [
+        {
+          "type": "photo",
+          "url": "https://pbs.twimg.com/media/HIdqFPOa4AEfaWw.jpg"
+        }
+      ]
+    },
+    "thread": [
+      {
+        "id": "2055912451988766942",
+        "text": "Codexを2ヶ月で\n海外でも通用するレベルまで引き上げる\n超絶簡単に使える指示書👇 https://t.co/4aYtpti71V",
+        "author": {
+          "userName": "Gencoin8",
+          "id": "1764724505606578180",
+          "isBlueVerified": true
+        },
+        "createdAt": "Sun May 17 07:25:00 +0000 2026",
+        "lang": "ja",
+        "likeCount": 212,
+        "retweetCount": 13,
+        "replyCount": 2,
+        "quoteCount": 0,
+        "bookmarkCount": 171,
+        "viewCount": 26289,
+        "isReply": false,
+        "conversationId": "2055912451988766942",
+        "tweetUrl": "https://x.com/Gencoin8/status/2055912451988766942",
+        "media": [
+          {
+            "type": "photo",
+            "url": "https://pbs.twimg.com/media/HIdqFPOa4AEfaWw.jpg"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "handle": "Gencoin8",
+    "root": {
+      "id": "2056626351332020412",
+      "text": "これ、本当にすごい\nCodexを完璧にセットアップ\n出来る人間は世界の1割程度\nほとんどの人が自力では不可能\n\nもし数ヶ月前にこれを知っていたら\n10倍速く仕事ができていた\n\n正しく使えば、すべてが変わる\n\n主に重要なセットアップ項目👇 https://t.co/9A7sgBEfVu",
+      "author": {
+        "userName": "Gencoin8",
+        "id": "1764724505606578180",
+        "isBlueVerified": true
+      },
+      "createdAt": "Tue May 19 06:41:47 +0000 2026",
+      "lang": "ja",
+      "likeCount": 213,
+      "retweetCount": 15,
+      "replyCount": 4,
+      "quoteCount": 2,
+      "bookmarkCount": 251,
+      "viewCount": 28362,
+      "isReply": false,
+      "conversationId": "2056626351332020412",
+      "tweetUrl": "https://x.com/Gencoin8/status/2056626351332020412",
+      "media": [
+        {
+          "type": "photo",
+          "url": "https://pbs.twimg.com/media/HIqaw-9agAA7BUC.jpg"
+        }
+      ]
+    },
+    "thread": [
+      {
+        "id": "2056626351332020412",
+        "text": "これ、本当にすごい\nCodexを完璧にセットアップ\n出来る人間は世界の1割程度\nほとんどの人が自力では不可能\n\nもし数ヶ月前にこれを知っていたら\n10倍速く仕事ができていた\n\n正しく使えば、すべてが変わる\n\n主に重要なセットアップ項目👇 https://t.co/9A7sgBEfVu",
+        "author": {
+          "userName": "Gencoin8",
+          "id": "1764724505606578180",
+          "isBlueVerified": true
+        },
+        "createdAt": "Tue May 19 06:41:47 +0000 2026",
+        "lang": "ja",
+        "likeCount": 213,
+        "retweetCount": 15,
+        "replyCount": 4,
+        "quoteCount": 2,
+        "bookmarkCount": 251,
+        "viewCount": 28362,
+        "isReply": false,
+        "conversationId": "2056626351332020412",
+        "tweetUrl": "https://x.com/Gencoin8/status/2056626351332020412",
+        "media": [
+          {
+            "type": "photo",
+            "url": "https://pbs.twimg.com/media/HIqaw-9agAA7BUC.jpg"
+          }
+        ]
+      },
+      {
+        "id": "2056626355748630802",
+        "text": "セクション1 - まずはここから\n\n1.チャットではなく「プロジェクト」を作成する：Codexのチャットは記憶がゼロから始まる。プロジェクト機能を使えば、すべての会話でコンテキストを維持できる。一度設定して、すべてをその中に集約しよう。\n\n2.あなたが何者かをCodexに伝える：あなたの役割、責任、目標、ユースケース、知識レベル、好みのコミュニケーションスタイル、嫌いなこと、関心事を追加する。\n\n3.それをカスタム指示に変換する：Codexに、あなたの背景（あなたが何者か、返信の好み、トーン、デフォルト設定、避けるべきこと）をプロジェクト指示に変換するよう依頼する。",
+        "author": {
+          "userName": "Gencoin8",
+          "id": "1764724505606578180",
+          "isBlueVerified": true
+        },
+        "createdAt": "Tue May 19 06:41:48 +0000 2026",
+        "lang": "ja",
+        "likeCount": 2,
+        "retweetCount": 0,
+        "replyCount": 1,
+        "quoteCount": 0,
+        "bookmarkCount": 1,
+        "viewCount": 497,
+        "isReply": true,
+        "conversationId": "2056626351332020412",
+        "tweetUrl": "https://x.com/Gencoin8/status/2056626355748630802"
+      }
+    ]
+  },
+  {
+    "handle": "Gencoin8",
+    "root": {
+      "id": "2063856010406900037",
+      "text": "Claude Code でアプリ作ると 「機能は完璧でもUIデザインがダサい」 \nCodexなら1発で完璧な\nUIデザインで納品してくれる\n絶対待ち望んでた人多いと思うけど　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　\n\nその名もProduct Designプラグイン。\n \nインストールして @ProductDesign を付けて指示するだけ。\n \nAIがデザイナー役も兼任するようになる。\n \nAI開発はもう 「書かせる競争」じゃなく 「役割設計の競争」になってる。\n \nこれはかなり良かった。\n\n手を動かして進めるだけで\n勝手にCodexを使いこなせる様になる\n記事を書いています👇",
+      "author": {
+        "userName": "Gencoin8",
+        "id": "1764724505606578180",
+        "isBlueVerified": true
+      },
+      "createdAt": "Mon Jun 08 05:29:52 +0000 2026",
+      "lang": "ja",
+      "likeCount": 1638,
+      "retweetCount": 67,
+      "replyCount": 27,
+      "quoteCount": 24,
+      "bookmarkCount": 2000,
+      "viewCount": 444484,
+      "isReply": false,
+      "conversationId": "2063856010406900037",
+      "tweetUrl": "https://x.com/Gencoin8/status/2063856010406900037",
+      "media": [
+        {
+          "type": "photo",
+          "url": "https://pbs.twimg.com/media/HKRKGibasAARHJ8.jpg"
+        },
+        {
+          "type": "photo",
+          "url": "https://pbs.twimg.com/media/HKRKGiPbsAAEVsP.jpg"
+        }
+      ]
+    },
+    "thread": [
+      {
+        "id": "2063856010406900037",
+        "text": "Claude Code でアプリ作ると 「機能は完璧でもUIデザインがダサい」 \nCodexなら1発で完璧な\nUIデザインで納品してくれる\n絶対待ち望んでた人多いと思うけど　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　\n\nその名もProduct Designプラグイン。\n \nインストールして @ProductDesign を付けて指示するだけ。\n \nAIがデザイナー役も兼任するようになる。\n \nAI開発はもう 「書かせる競争」じゃなく 「役割設計の競争」になってる。\n \nこれはかなり良かった。\n\n手を動かして進めるだけで\n勝手にCodexを使いこなせる様になる\n記事を書いています👇",
+        "author": {
+          "userName": "Gencoin8",
+          "id": "1764724505606578180",
+          "isBlueVerified": true
+        },
+        "createdAt": "Mon Jun 08 05:29:52 +0000 2026",
+        "lang": "ja",
+        "likeCount": 1638,
+        "retweetCount": 67,
+        "replyCount": 27,
+        "quoteCount": 24,
+        "bookmarkCount": 2000,
+        "viewCount": 444484,
+        "isReply": false,
+        "conversationId": "2063856010406900037",
+        "tweetUrl": "https://x.com/Gencoin8/status/2063856010406900037",
+        "media": [
+          {
+            "type": "photo",
+            "url": "https://pbs.twimg.com/media/HKRKGibasAARHJ8.jpg"
+          },
+          {
+            "type": "photo",
+            "url": "https://pbs.twimg.com/media/HKRKGiPbsAAEVsP.jpg"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "handle": "Gencoin8",
+    "root": {
+      "id": "2054439487389020451",
+      "text": "2026年に『Codex』を使わず\n今だに「Claude Code」を\n使うユーザーの2027年の姿\n\ncodexを寝る前に\n完全マスターしちゃって！👇　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　\n\nCodexのコードを\nインストールする\nそれと2時間チャットする\n\n完璧に動作する\n\n今や自分はプログラマーやマーケターと\n皆んなして言う\n\n翌日、セットアップしたことを忘れる\n\nただチャットボットのように使うだけ\nXで誰かが一度に\n10個のエージェントを\n動かしているのを見る\n\n「そんなことできるの？」を意識して\n下の記事を開く\n寝る前に8つのプロンプトをコピペ​​​​​​​​​​​​​​​​👇",
+      "author": {
+        "userName": "Gencoin8",
+        "id": "1764724505606578180",
+        "isBlueVerified": true
+      },
+      "createdAt": "Wed May 13 05:51:58 +0000 2026",
+      "lang": "ja",
+      "likeCount": 228,
+      "retweetCount": 15,
+      "replyCount": 2,
+      "quoteCount": 2,
+      "bookmarkCount": 214,
+      "viewCount": 51348,
+      "isReply": false,
+      "conversationId": "2054439487389020451",
+      "tweetUrl": "https://x.com/Gencoin8/status/2054439487389020451",
+      "media": [
+        {
+          "type": "video",
+          "url": "https://pbs.twimg.com/amplify_video_thumb/2054439394732572672/img/0CQyYOS-dPecRu9Z.jpg"
+        }
+      ]
+    },
+    "thread": [
+      {
+        "id": "2054439487389020451",
+        "text": "2026年に『Codex』を使わず\n今だに「Claude Code」を\n使うユーザーの2027年の姿\n\ncodexを寝る前に\n完全マスターしちゃって！👇　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　\n\nCodexのコードを\nインストールする\nそれと2時間チャットする\n\n完璧に動作する\n\n今や自分はプログラマーやマーケターと\n皆んなして言う\n\n翌日、セットアップしたことを忘れる\n\nただチャットボットのように使うだけ\nXで誰かが一度に\n10個のエージェントを\n動かしているのを見る\n\n「そんなことできるの？」を意識して\n下の記事を開く\n寝る前に8つのプロンプトをコピペ​​​​​​​​​​​​​​​​👇",
+        "author": {
+          "userName": "Gencoin8",
+          "id": "1764724505606578180",
+          "isBlueVerified": true
+        },
+        "createdAt": "Wed May 13 05:51:58 +0000 2026",
+        "lang": "ja",
+        "likeCount": 228,
+        "retweetCount": 15,
+        "replyCount": 2,
+        "quoteCount": 2,
+        "bookmarkCount": 214,
+        "viewCount": 51348,
+        "isReply": false,
+        "conversationId": "2054439487389020451",
+        "tweetUrl": "https://x.com/Gencoin8/status/2054439487389020451",
+        "media": [
+          {
+            "type": "video",
+            "url": "https://pbs.twimg.com/amplify_video_thumb/2054439394732572672/img/0CQyYOS-dPecRu9Z.jpg"
+          }
+        ]
+      }
+    ]
+  }
+]

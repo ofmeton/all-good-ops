@@ -1,0 +1,740 @@
+[
+  {
+    "handle": "ClaudeCode_love",
+    "root": {
+      "id": "2061749686986510796",
+      "text": "【海外で話題】\nAnthropicの中の人が\nClaude Codeを“自走させる9つのコツ”をまとめた36分動画を無料公開👀ポイントはいきなりタスクを投げないこと！動画見たけどコツはこんな感じ👇\nhttps://t.co/DZrdgL9BiW\n① タスクを明確化\n「○○について作る」ではなく\n“成功の定義”まで書いて渡す。\n例：\n「[SUCCESS CRITERIA]を満たすバックエンドを\nClaude Codeで完成させたい」\n\n② コンテキストを渡す\nCLAUDE.md / ルール / 既存設計を\nリポにまとめて読み込ませる。\n③ verification層を組む\nClaude自身が差分・テスト・型を採点する仕組みを先に置く。\nAIは“ゴールと評価”が見えると精度が上がる。\n④ multi-Claudeで並列実行\n\n・実装担当\n・レビュー担当\n・テスト担当\n・ドキュメント担当\n・QA担当\nを別Claudeに分け、最低5体を同時に走らせる。\n⑤ loops層で自動回収\n\n各Claudeの出力を\n・差分\n・テスト結果\n・レビュー指摘\nを束ねて再投入する。\n\n⑥ まだ完成にしない\nここでは初稿だけ作る。\n⑦ 最後に統合\n整理した出力を\nClaude Codeに渡してPRに通す。\n⑧ ガードレール固定\nhooksでLint/型/危険コマンドをブロック。\n\n⑨ 最後だけ人間\nClaude が最終差分を要約\n人間はPR ボタンを押すだけ。\n\nこの流れで作ると\n“AIで雑に書かせた感”がほとんど無い\n本番品質のPRが普通に出てきます。\nClaude × 自走エージェント\n運用の地図はSkills 67選に集約されてる。気になる人はこの下の記事をどうぞ👇",
+      "author": {
+        "userName": "ClaudeCode_love",
+        "id": "2042103180478001153",
+        "isBlueVerified": true
+      },
+      "createdAt": "Tue Jun 02 10:00:05 +0000 2026",
+      "lang": "ja",
+      "likeCount": 198,
+      "retweetCount": 17,
+      "replyCount": 9,
+      "quoteCount": 4,
+      "bookmarkCount": 290,
+      "viewCount": 44540,
+      "isReply": false,
+      "conversationId": "2061749686986510796",
+      "tweetUrl": "https://x.com/ClaudeCode_love/status/2061749686986510796",
+      "media": [
+        {
+          "type": "video",
+          "url": "https://pbs.twimg.com/amplify_video_thumb/2061114612825595905/img/0cZ9tjNd7gLm5hlj.jpg"
+        }
+      ]
+    },
+    "thread": [
+      {
+        "id": "2061749686986510796",
+        "text": "【海外で話題】\nAnthropicの中の人が\nClaude Codeを“自走させる9つのコツ”をまとめた36分動画を無料公開👀ポイントはいきなりタスクを投げないこと！動画見たけどコツはこんな感じ👇\nhttps://t.co/DZrdgL9BiW\n① タスクを明確化\n「○○について作る」ではなく\n“成功の定義”まで書いて渡す。\n例：\n「[SUCCESS CRITERIA]を満たすバックエンドを\nClaude Codeで完成させたい」\n\n② コンテキストを渡す\nCLAUDE.md / ルール / 既存設計を\nリポにまとめて読み込ませる。\n③ verification層を組む\nClaude自身が差分・テスト・型を採点する仕組みを先に置く。\nAIは“ゴールと評価”が見えると精度が上がる。\n④ multi-Claudeで並列実行\n\n・実装担当\n・レビュー担当\n・テスト担当\n・ドキュメント担当\n・QA担当\nを別Claudeに分け、最低5体を同時に走らせる。\n⑤ loops層で自動回収\n\n各Claudeの出力を\n・差分\n・テスト結果\n・レビュー指摘\nを束ねて再投入する。\n\n⑥ まだ完成にしない\nここでは初稿だけ作る。\n⑦ 最後に統合\n整理した出力を\nClaude Codeに渡してPRに通す。\n⑧ ガードレール固定\nhooksでLint/型/危険コマンドをブロック。\n\n⑨ 最後だけ人間\nClaude が最終差分を要約\n人間はPR ボタンを押すだけ。\n\nこの流れで作ると\n“AIで雑に書かせた感”がほとんど無い\n本番品質のPRが普通に出てきます。\nClaude × 自走エージェント\n運用の地図はSkills 67選に集約されてる。気になる人はこの下の記事をどうぞ👇",
+        "author": {
+          "userName": "ClaudeCode_love",
+          "id": "2042103180478001153",
+          "isBlueVerified": true
+        },
+        "createdAt": "Tue Jun 02 10:00:05 +0000 2026",
+        "lang": "ja",
+        "likeCount": 198,
+        "retweetCount": 17,
+        "replyCount": 9,
+        "quoteCount": 4,
+        "bookmarkCount": 290,
+        "viewCount": 44540,
+        "isReply": false,
+        "conversationId": "2061749686986510796",
+        "tweetUrl": "https://x.com/ClaudeCode_love/status/2061749686986510796",
+        "media": [
+          {
+            "type": "video",
+            "url": "https://pbs.twimg.com/amplify_video_thumb/2061114612825595905/img/0cZ9tjNd7gLm5hlj.jpg"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "handle": "ClaudeCode_love",
+    "root": {
+      "id": "2058840543820689577",
+      "text": "【速報】\nClaudeの「メモリ（記憶）」が、まもなくファイル型に進化するそう😳\n従来方式に加えて、新しい「Memory Files」を選べるように！！！\nhttps://t.co/K41SXt1eye\nこれ何ができるかというと👇\n・会話の中で、Claudeが自分でメモ（ノート）を書きためていく\n・必要な話題になったとき、その関連ノートだけを読みに行く\n・たまったノートは、いつでも自分で見て、書き換えられる\n・従来の「Classic」（要点を1枚に圧縮する方式）と選べる\n・常時動くAIエージェントの記憶のしくみに、かなり近い形\nこれまでのClaudeは、セッションが切れると文脈が飛びがちでした。\nそれが「Memory Files」だと、文脈がファイルとして手元に残る。\nつまりClaudeが、「毎回忘れる相手」から「文脈を貯めて育つ相手」に変わる。\n記憶が増えるほど効くのが、文脈を無駄に食わない使い方の設計。\nトークン消費を67%まで削る「エスカレート式」運用術の記事が、相性ばっちり👇",
+      "author": {
+        "userName": "ClaudeCode_love",
+        "id": "2042103180478001153",
+        "isBlueVerified": true
+      },
+      "createdAt": "Mon May 25 09:20:11 +0000 2026",
+      "lang": "ja",
+      "likeCount": 551,
+      "retweetCount": 68,
+      "replyCount": 14,
+      "quoteCount": 15,
+      "bookmarkCount": 593,
+      "viewCount": 96040,
+      "isReply": false,
+      "conversationId": "2058840543820689577",
+      "tweetUrl": "https://x.com/ClaudeCode_love/status/2058840543820689577",
+      "media": [
+        {
+          "type": "video",
+          "url": "https://pbs.twimg.com/amplify_video_thumb/2058573387065077761/img/WMWcDqCCPHIF-cFI.jpg"
+        }
+      ]
+    },
+    "thread": [
+      {
+        "id": "2058840543820689577",
+        "text": "【速報】\nClaudeの「メモリ（記憶）」が、まもなくファイル型に進化するそう😳\n従来方式に加えて、新しい「Memory Files」を選べるように！！！\nhttps://t.co/K41SXt1eye\nこれ何ができるかというと👇\n・会話の中で、Claudeが自分でメモ（ノート）を書きためていく\n・必要な話題になったとき、その関連ノートだけを読みに行く\n・たまったノートは、いつでも自分で見て、書き換えられる\n・従来の「Classic」（要点を1枚に圧縮する方式）と選べる\n・常時動くAIエージェントの記憶のしくみに、かなり近い形\nこれまでのClaudeは、セッションが切れると文脈が飛びがちでした。\nそれが「Memory Files」だと、文脈がファイルとして手元に残る。\nつまりClaudeが、「毎回忘れる相手」から「文脈を貯めて育つ相手」に変わる。\n記憶が増えるほど効くのが、文脈を無駄に食わない使い方の設計。\nトークン消費を67%まで削る「エスカレート式」運用術の記事が、相性ばっちり👇",
+        "author": {
+          "userName": "ClaudeCode_love",
+          "id": "2042103180478001153",
+          "isBlueVerified": true
+        },
+        "createdAt": "Mon May 25 09:20:11 +0000 2026",
+        "lang": "ja",
+        "likeCount": 551,
+        "retweetCount": 68,
+        "replyCount": 14,
+        "quoteCount": 15,
+        "bookmarkCount": 593,
+        "viewCount": 96040,
+        "isReply": false,
+        "conversationId": "2058840543820689577",
+        "tweetUrl": "https://x.com/ClaudeCode_love/status/2058840543820689577",
+        "media": [
+          {
+            "type": "video",
+            "url": "https://pbs.twimg.com/amplify_video_thumb/2058573387065077761/img/WMWcDqCCPHIF-cFI.jpg"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "handle": "ClaudeCode_love",
+    "root": {
+      "id": "2059908830591692947",
+      "text": "海外で「AIでのWebサイトの作り方、これが正解すぎる」とバズってた手順を見つけた😳ChatGPT Image 2.0でデザインを作って、\nそれをClaude Opus 4.6にそのままWebサイトへ起こさせる、という流れ。詳しい手順はこう👇\nhttps://t.co/Gd7wb6tv4h\n① まず、\n画像AIに“完成イメージ”を1枚作らせる\n② 次に、\nその画像をClaude Opus 4.6に渡して「これを実装して」と頼む\n③ そのうえで、\n使う技術をはじめに固定して渡す",
+      "author": {
+        "userName": "ClaudeCode_love",
+        "id": "2042103180478001153",
+        "isBlueVerified": true
+      },
+      "createdAt": "Thu May 28 08:05:11 +0000 2026",
+      "lang": "ja",
+      "likeCount": 1015,
+      "retweetCount": 84,
+      "replyCount": 12,
+      "quoteCount": 10,
+      "bookmarkCount": 1541,
+      "viewCount": 75454,
+      "isReply": false,
+      "conversationId": "2059908830591692947",
+      "tweetUrl": "https://x.com/ClaudeCode_love/status/2059908830591692947",
+      "media": [
+        {
+          "type": "video",
+          "url": "https://pbs.twimg.com/amplify_video_thumb/2059293319994458113/img/rFxlPRkHO5m-zMYy.jpg"
+        }
+      ]
+    },
+    "thread": [
+      {
+        "id": "2059908830591692947",
+        "text": "海外で「AIでのWebサイトの作り方、これが正解すぎる」とバズってた手順を見つけた😳ChatGPT Image 2.0でデザインを作って、\nそれをClaude Opus 4.6にそのままWebサイトへ起こさせる、という流れ。詳しい手順はこう👇\nhttps://t.co/Gd7wb6tv4h\n① まず、\n画像AIに“完成イメージ”を1枚作らせる\n② 次に、\nその画像をClaude Opus 4.6に渡して「これを実装して」と頼む\n③ そのうえで、\n使う技術をはじめに固定して渡す",
+        "author": {
+          "userName": "ClaudeCode_love",
+          "id": "2042103180478001153",
+          "isBlueVerified": true
+        },
+        "createdAt": "Thu May 28 08:05:11 +0000 2026",
+        "lang": "ja",
+        "likeCount": 1015,
+        "retweetCount": 84,
+        "replyCount": 12,
+        "quoteCount": 10,
+        "bookmarkCount": 1541,
+        "viewCount": 75454,
+        "isReply": false,
+        "conversationId": "2059908830591692947",
+        "tweetUrl": "https://x.com/ClaudeCode_love/status/2059908830591692947",
+        "media": [
+          {
+            "type": "video",
+            "url": "https://pbs.twimg.com/amplify_video_thumb/2059293319994458113/img/rFxlPRkHO5m-zMYy.jpg"
+          }
+        ]
+      },
+      {
+        "id": "2059908842717409622",
+        "text": "渡す技術スタックはこれ。\nReact 19 ＋ Vite 6 ＋ Tailwind CSS 4 ＋ Motion（アニメ）＋ TypeScript。\n流れは デザイン → 実装 → 技術指定 の順で固定する。\nこの順番で渡すと、AIが迷わずに動くサイトまで一気に組む。\nポイントは“絵を先に決めて、実装はAIに任せる”という分担。\n絵と言葉でゴールを示せば、コードは後から付いてくる。",
+        "author": {
+          "userName": "ClaudeCode_love",
+          "id": "2042103180478001153",
+          "isBlueVerified": true
+        },
+        "createdAt": "Thu May 28 08:05:14 +0000 2026",
+        "lang": "ja",
+        "likeCount": 36,
+        "retweetCount": 1,
+        "replyCount": 0,
+        "quoteCount": 0,
+        "bookmarkCount": 69,
+        "viewCount": 5234,
+        "isReply": true,
+        "conversationId": "2059908830591692947",
+        "tweetUrl": "https://x.com/ClaudeCode_love/status/2059908842717409622"
+      }
+    ]
+  },
+  {
+    "handle": "ClaudeCode_love",
+    "root": {
+      "id": "2059107340327231543",
+      "text": "【復習】\nClaude Code の Fast mode、デフォルトが Opus 4.7 になりました👀\n「速いけど頭が悪くなるんでしょ？」と思った人、逆です。\nどこが変わったかというと👇\n・出力が約2.5倍速\n・品質は通常版 Opus と完全に同等\n・/fast で即オンオフ\n・レスポンス速度が効く場面ほど刺さる（その分レートは少し高め）\n\n賢さはそのままで、レスポンスだけ速い。\n普段づかいの体感がそのまま底上げされる変更です。\nOpus 4.7 が遅くて Codex に逃げてた人ほど、一回 /fast を試す価値あります。\nで、これも含めて今週のアプデ（v2.1.145〜150）、全部この記事にまとめてます👇",
+      "author": {
+        "userName": "ClaudeCode_love",
+        "id": "2042103180478001153",
+        "isBlueVerified": true
+      },
+      "createdAt": "Tue May 26 03:00:20 +0000 2026",
+      "lang": "ja",
+      "likeCount": 113,
+      "retweetCount": 5,
+      "replyCount": 9,
+      "quoteCount": 2,
+      "bookmarkCount": 74,
+      "viewCount": 39992,
+      "isReply": false,
+      "conversationId": "2059107340327231543",
+      "tweetUrl": "https://x.com/ClaudeCode_love/status/2059107340327231543",
+      "media": [
+        {
+          "type": "video",
+          "url": "https://pbs.twimg.com/amplify_video_thumb/2059107289504841728/img/LdBjWovkw5arqOlm.jpg"
+        }
+      ]
+    },
+    "thread": [
+      {
+        "id": "2059107340327231543",
+        "text": "【復習】\nClaude Code の Fast mode、デフォルトが Opus 4.7 になりました👀\n「速いけど頭が悪くなるんでしょ？」と思った人、逆です。\nどこが変わったかというと👇\n・出力が約2.5倍速\n・品質は通常版 Opus と完全に同等\n・/fast で即オンオフ\n・レスポンス速度が効く場面ほど刺さる（その分レートは少し高め）\n\n賢さはそのままで、レスポンスだけ速い。\n普段づかいの体感がそのまま底上げされる変更です。\nOpus 4.7 が遅くて Codex に逃げてた人ほど、一回 /fast を試す価値あります。\nで、これも含めて今週のアプデ（v2.1.145〜150）、全部この記事にまとめてます👇",
+        "author": {
+          "userName": "ClaudeCode_love",
+          "id": "2042103180478001153",
+          "isBlueVerified": true
+        },
+        "createdAt": "Tue May 26 03:00:20 +0000 2026",
+        "lang": "ja",
+        "likeCount": 113,
+        "retweetCount": 5,
+        "replyCount": 9,
+        "quoteCount": 2,
+        "bookmarkCount": 74,
+        "viewCount": 39992,
+        "isReply": false,
+        "conversationId": "2059107340327231543",
+        "tweetUrl": "https://x.com/ClaudeCode_love/status/2059107340327231543",
+        "media": [
+          {
+            "type": "video",
+            "url": "https://pbs.twimg.com/amplify_video_thumb/2059107289504841728/img/LdBjWovkw5arqOlm.jpg"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "handle": "ClaudeCode_love",
+    "root": {
+      "id": "2061449733089177636",
+      "text": "【保存版】\nClaude Codeを本気で身につけたいなら、\n一旦まず有料の講座にお金払わなくていいから\n最初は 𝕏 でこのAnthropicの社員9人を追え🫵\nマジでこの人たち追ってたら、内部で実際に使われている一次情報・運用テク・プロダクトの裏側が、Xで無料で手に入る👇\n\n1. @DarioAmodei\nAnthropic CEO。会社の方向性・AI安全・長期ビジョンを本人が発信。全体像を掴むのに必須。\n\n2. @karpathy\nAndrej Karpathy（2026年Anthropic参画）。AI教育・研究のド本命。技術的深みと教育的な発信が抜群。\n\n3. @bcherny\nBoris Cherny。Claude Codeの生みの親 / Head。セットアップ方法や内部事情の一次情報源。\n\n4. @trq212\nThariq。Claude Codeチームのエンジニア。社内での実践的な運用テクと長文スレッドが宝の山。\n\n5. @_catwu\nCat Wu。Claude Code Head of Product（Coworkも担当）。プロダクト開発の裏側とPM視点のインサイトが深い。\n\n6. @noahzweben\nNoah Zweben。Claude Code PM。プロダクト側の視点やアップデートの文脈がよくわかる。\n\n7. @alexalbert__\nAlex Albert。Research / Claude Relations。Claudeの使い方を最大化する実践的なTipsを積極的に発信。ユーザー目線が強い。\n\n8. @jackclarkSF\nJack Clark。AIポリシーやガバナンス、 bigger pictureの視点を提供。\n\n9. @mikeyk\nMike Krieger（元Instagram共同創業者）。現在Anthropic Labsでビルド中。プロダクトイノベーションと実験的な取り組みの視点が得られる。\n\nで、この人たちが内部で実際に使っている投稿をまとめて記事化したのがこの下の記事👇必見です。",
+      "author": {
+        "userName": "ClaudeCode_love",
+        "id": "2042103180478001153",
+        "isBlueVerified": true
+      },
+      "createdAt": "Mon Jun 01 14:08:10 +0000 2026",
+      "lang": "ja",
+      "likeCount": 246,
+      "retweetCount": 28,
+      "replyCount": 7,
+      "quoteCount": 5,
+      "bookmarkCount": 361,
+      "viewCount": 36398,
+      "isReply": false,
+      "conversationId": "2061449733089177636",
+      "tweetUrl": "https://x.com/ClaudeCode_love/status/2061449733089177636",
+      "media": [
+        {
+          "type": "photo",
+          "url": "https://pbs.twimg.com/media/HJu9hnuaEAAD-sp.jpg"
+        }
+      ]
+    },
+    "thread": [
+      {
+        "id": "2061449733089177636",
+        "text": "【保存版】\nClaude Codeを本気で身につけたいなら、\n一旦まず有料の講座にお金払わなくていいから\n最初は 𝕏 でこのAnthropicの社員9人を追え🫵\nマジでこの人たち追ってたら、内部で実際に使われている一次情報・運用テク・プロダクトの裏側が、Xで無料で手に入る👇\n\n1. @DarioAmodei\nAnthropic CEO。会社の方向性・AI安全・長期ビジョンを本人が発信。全体像を掴むのに必須。\n\n2. @karpathy\nAndrej Karpathy（2026年Anthropic参画）。AI教育・研究のド本命。技術的深みと教育的な発信が抜群。\n\n3. @bcherny\nBoris Cherny。Claude Codeの生みの親 / Head。セットアップ方法や内部事情の一次情報源。\n\n4. @trq212\nThariq。Claude Codeチームのエンジニア。社内での実践的な運用テクと長文スレッドが宝の山。\n\n5. @_catwu\nCat Wu。Claude Code Head of Product（Coworkも担当）。プロダクト開発の裏側とPM視点のインサイトが深い。\n\n6. @noahzweben\nNoah Zweben。Claude Code PM。プロダクト側の視点やアップデートの文脈がよくわかる。\n\n7. @alexalbert__\nAlex Albert。Research / Claude Relations。Claudeの使い方を最大化する実践的なTipsを積極的に発信。ユーザー目線が強い。\n\n8. @jackclarkSF\nJack Clark。AIポリシーやガバナンス、 bigger pictureの視点を提供。\n\n9. @mikeyk\nMike Krieger（元Instagram共同創業者）。現在Anthropic Labsでビルド中。プロダクトイノベーションと実験的な取り組みの視点が得られる。\n\nで、この人たちが内部で実際に使っている投稿をまとめて記事化したのがこの下の記事👇必見です。",
+        "author": {
+          "userName": "ClaudeCode_love",
+          "id": "2042103180478001153",
+          "isBlueVerified": true
+        },
+        "createdAt": "Mon Jun 01 14:08:10 +0000 2026",
+        "lang": "ja",
+        "likeCount": 246,
+        "retweetCount": 28,
+        "replyCount": 7,
+        "quoteCount": 5,
+        "bookmarkCount": 361,
+        "viewCount": 36398,
+        "isReply": false,
+        "conversationId": "2061449733089177636",
+        "tweetUrl": "https://x.com/ClaudeCode_love/status/2061449733089177636",
+        "media": [
+          {
+            "type": "photo",
+            "url": "https://pbs.twimg.com/media/HJu9hnuaEAAD-sp.jpg"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "handle": "ClaudeCode_love",
+    "root": {
+      "id": "2059484927129965045",
+      "text": "Claude、毎日使ってる人ほど絶対一回見た方がいい記事。\nまだやってない人は早くこの設定して👇保存推奨。",
+      "author": {
+        "userName": "ClaudeCode_love",
+        "id": "2042103180478001153",
+        "isBlueVerified": true
+      },
+      "createdAt": "Wed May 27 04:00:44 +0000 2026",
+      "lang": "ja",
+      "likeCount": 269,
+      "retweetCount": 17,
+      "replyCount": 1,
+      "quoteCount": 1,
+      "bookmarkCount": 392,
+      "viewCount": 76351,
+      "isReply": false,
+      "conversationId": "2059484927129965045",
+      "tweetUrl": "https://x.com/ClaudeCode_love/status/2059484927129965045"
+    },
+    "thread": [
+      {
+        "id": "2059484927129965045",
+        "text": "Claude、毎日使ってる人ほど絶対一回見た方がいい記事。\nまだやってない人は早くこの設定して👇保存推奨。",
+        "author": {
+          "userName": "ClaudeCode_love",
+          "id": "2042103180478001153",
+          "isBlueVerified": true
+        },
+        "createdAt": "Wed May 27 04:00:44 +0000 2026",
+        "lang": "ja",
+        "likeCount": 269,
+        "retweetCount": 17,
+        "replyCount": 1,
+        "quoteCount": 1,
+        "bookmarkCount": 392,
+        "viewCount": 76351,
+        "isReply": false,
+        "conversationId": "2059484927129965045",
+        "tweetUrl": "https://x.com/ClaudeCode_love/status/2059484927129965045"
+      }
+    ]
+  },
+  {
+    "handle": "ClaudeCode_love",
+    "root": {
+      "id": "2058201326593744916",
+      "text": "【速報】\nClaude Code 2.1.149に新機能「/usage」が追加😳\n結論 → どのSkill・Subagent・MCPがコストを食ってるかが一発で見えるようになりました\nhttps://t.co/LeAt1UsKpI\n正直、これはマジででかい機能追加なので解説します👇\nこれまでのClaude Codeは「Skillsもプラグインも全部一緒くた」でした。\n\nでも 2.1.149 で /usage を叩くと\n\n・Skills別の使用量\n・Subagent別の使用量\n・プラグイン別の使用量\n・MCPサーバー別のコスト\n・どれが原価ドライバーかが一目で見える\n・26件のCLI変更を1リリースに同梱\n\nつまり、コスト管理がプロンプト１発で完結する状態になります。",
+      "author": {
+        "userName": "ClaudeCode_love",
+        "id": "2042103180478001153",
+        "isBlueVerified": true
+      },
+      "createdAt": "Sat May 23 15:00:10 +0000 2026",
+      "lang": "ja",
+      "likeCount": 750,
+      "retweetCount": 87,
+      "replyCount": 12,
+      "quoteCount": 23,
+      "bookmarkCount": 710,
+      "viewCount": 68745,
+      "isReply": false,
+      "conversationId": "2058201326593744916",
+      "tweetUrl": "https://x.com/ClaudeCode_love/status/2058201326593744916",
+      "media": [
+        {
+          "type": "video",
+          "url": "https://pbs.twimg.com/ext_tw_video_thumb/2057950954322886656/pu/img/Ib73I01-MYiWhU6c.jpg"
+        }
+      ]
+    },
+    "thread": [
+      {
+        "id": "2058201326593744916",
+        "text": "【速報】\nClaude Code 2.1.149に新機能「/usage」が追加😳\n結論 → どのSkill・Subagent・MCPがコストを食ってるかが一発で見えるようになりました\nhttps://t.co/LeAt1UsKpI\n正直、これはマジででかい機能追加なので解説します👇\nこれまでのClaude Codeは「Skillsもプラグインも全部一緒くた」でした。\n\nでも 2.1.149 で /usage を叩くと\n\n・Skills別の使用量\n・Subagent別の使用量\n・プラグイン別の使用量\n・MCPサーバー別のコスト\n・どれが原価ドライバーかが一目で見える\n・26件のCLI変更を1リリースに同梱\n\nつまり、コスト管理がプロンプト１発で完結する状態になります。",
+        "author": {
+          "userName": "ClaudeCode_love",
+          "id": "2042103180478001153",
+          "isBlueVerified": true
+        },
+        "createdAt": "Sat May 23 15:00:10 +0000 2026",
+        "lang": "ja",
+        "likeCount": 750,
+        "retweetCount": 87,
+        "replyCount": 12,
+        "quoteCount": 23,
+        "bookmarkCount": 710,
+        "viewCount": 68745,
+        "isReply": false,
+        "conversationId": "2058201326593744916",
+        "tweetUrl": "https://x.com/ClaudeCode_love/status/2058201326593744916",
+        "media": [
+          {
+            "type": "video",
+            "url": "https://pbs.twimg.com/ext_tw_video_thumb/2057950954322886656/pu/img/Ib73I01-MYiWhU6c.jpg"
+          }
+        ]
+      },
+      {
+        "id": "2058201338715287707",
+        "text": "例えば👇\nコストが急に跳ねた\n↓\n/usage で内訳を表示\n↓\nMCPサーバーXが原因と判明\n↓\n即停止 or 別MCPに切替\n\nこれをエンジニアが手動で計測する必要はもうありません。\n\nさらに、PowerShellのcd..、cd\\、cd~、X: で\ncwdが黙って書き換わって\nワークスペース外を読まれるバグも閉じた。\n\nBashのfindで\nmacOSのvnodeテーブルが枯渇する\nパターンも修正済み。\nつまり、\n権限とリソースのガードが\n同時に強化された形です。",
+        "author": {
+          "userName": "ClaudeCode_love",
+          "id": "2042103180478001153",
+          "isBlueVerified": true
+        },
+        "createdAt": "Sat May 23 15:00:13 +0000 2026",
+        "lang": "ja",
+        "likeCount": 7,
+        "retweetCount": 0,
+        "replyCount": 1,
+        "quoteCount": 0,
+        "bookmarkCount": 5,
+        "viewCount": 4369,
+        "isReply": true,
+        "conversationId": "2058201326593744916",
+        "tweetUrl": "https://x.com/ClaudeCode_love/status/2058201338715287707"
+      }
+    ]
+  },
+  {
+    "handle": "ClaudeCode_love",
+    "root": {
+      "id": "2060672567975796913",
+      "text": "【事件】\nOpus 4.8リリースで\"Design Engineering\"が一気に主流化して話題😳こんなこと4.8ではできるようになった👇\nhttps://t.co/X2LSLsi8q3\n・カーソル位置と要素中心の距離を毎フレーム取得\n・120px以内に入ったら距離に応じてスケール変化\n・hoverのようなON/OFFではなく、連続的に変化\n・実装は pointermove + getBoundingClientRect が中心\n\nつまり、\nボタンに「触れたら変わる」ではなく、\nボタンに「近づいた時点で反応する」UIになる。\n\nこの差、かなり大きい。\n従来のUIは、\nhoverした瞬間に状態が切り替わるだけだった。\nでもこのパターンは、\n画面上の要素がまるで物体みたいに、\nユーザーの動きに合わせて“気配”で反応する。\nVercel、Linear、Arc系の気持ちいいUIって、\nこういう細かいインタラクションの積み重ねでできてる。\n\nそして今までは、\nこういう実装はデザイナーだけでは難しかった。\nでもOpus 4.8みたいなモデルが出てきたことで、\n「デザインできる人」がそのままコードまで触れる時代に入り始めてる。\nデザイナー、フロントエンド、LP制作をやってる人は、\nこの流れを見ない理由がない。\n\nこれは小手先のhover演出じゃない。\n\n“見た目を作るデザイン”から、\n“動きまで設計するデザイン”への変化。\nDesign Engineering、かなり来てる。\n\nコードはこれ👇\nonpointermove = e =>\n  document.querySelectorAll(\".dock>*\").forEach(el => {\n    const r = el.getBoundingClientRect();\n    const t = Math.max(\n      0,\n      1 - Math.abs(e.clientX - r.x - r.width / 2) / 120\n    );\n    https://t.co/6H3lTc9WNS.scale = 1 + t * .5;\n  });\n\nで、\n「Claude Code進化早すぎて、正直ついていけてない…」\nって感じてる人へ。\nその感覚、かなり正常です。\nここ最近だけでも、\n・/simplify → /code-review\n・Plugins\n・権限管理まわり\n・レビュー設計\n・Hooks\n・Subagents\n\nとか、思想レベルでかなり変わってきてる。\n\nただ、この変化についていけるかで、\n半年後の生産性かなり変わると思う。\nなので、\n「後で追えばいいや」より、\n最低限だけでも今追った方がいい。\nなので今回、先週のClaude Codeアップデート、\n全部この下の記事で整理しました👇是非これで追いついてください。",
+      "author": {
+        "userName": "ClaudeCode_love",
+        "id": "2042103180478001153",
+        "isBlueVerified": true
+      },
+      "createdAt": "Sat May 30 10:40:00 +0000 2026",
+      "lang": "ja",
+      "likeCount": 425,
+      "retweetCount": 29,
+      "replyCount": 5,
+      "quoteCount": 6,
+      "bookmarkCount": 501,
+      "viewCount": 75407,
+      "isReply": false,
+      "conversationId": "2060672567975796913",
+      "tweetUrl": "https://x.com/ClaudeCode_love/status/2060672567975796913",
+      "media": [
+        {
+          "type": "video",
+          "url": "https://pbs.twimg.com/amplify_video_thumb/2060335710649962497/img/P-mxf8MS8Whq_34D.jpg"
+        }
+      ]
+    },
+    "thread": [
+      {
+        "id": "2060672567975796913",
+        "text": "【事件】\nOpus 4.8リリースで\"Design Engineering\"が一気に主流化して話題😳こんなこと4.8ではできるようになった👇\nhttps://t.co/X2LSLsi8q3\n・カーソル位置と要素中心の距離を毎フレーム取得\n・120px以内に入ったら距離に応じてスケール変化\n・hoverのようなON/OFFではなく、連続的に変化\n・実装は pointermove + getBoundingClientRect が中心\n\nつまり、\nボタンに「触れたら変わる」ではなく、\nボタンに「近づいた時点で反応する」UIになる。\n\nこの差、かなり大きい。\n従来のUIは、\nhoverした瞬間に状態が切り替わるだけだった。\nでもこのパターンは、\n画面上の要素がまるで物体みたいに、\nユーザーの動きに合わせて“気配”で反応する。\nVercel、Linear、Arc系の気持ちいいUIって、\nこういう細かいインタラクションの積み重ねでできてる。\n\nそして今までは、\nこういう実装はデザイナーだけでは難しかった。\nでもOpus 4.8みたいなモデルが出てきたことで、\n「デザインできる人」がそのままコードまで触れる時代に入り始めてる。\nデザイナー、フロントエンド、LP制作をやってる人は、\nこの流れを見ない理由がない。\n\nこれは小手先のhover演出じゃない。\n\n“見た目を作るデザイン”から、\n“動きまで設計するデザイン”への変化。\nDesign Engineering、かなり来てる。\n\nコードはこれ👇\nonpointermove = e =>\n  document.querySelectorAll(\".dock>*\").forEach(el => {\n    const r = el.getBoundingClientRect();\n    const t = Math.max(\n      0,\n      1 - Math.abs(e.clientX - r.x - r.width / 2) / 120\n    );\n    https://t.co/6H3lTc9WNS.scale = 1 + t * .5;\n  });\n\nで、\n「Claude Code進化早すぎて、正直ついていけてない…」\nって感じてる人へ。\nその感覚、かなり正常です。\nここ最近だけでも、\n・/simplify → /code-review\n・Plugins\n・権限管理まわり\n・レビュー設計\n・Hooks\n・Subagents\n\nとか、思想レベルでかなり変わってきてる。\n\nただ、この変化についていけるかで、\n半年後の生産性かなり変わると思う。\nなので、\n「後で追えばいいや」より、\n最低限だけでも今追った方がいい。\nなので今回、先週のClaude Codeアップデート、\n全部この下の記事で整理しました👇是非これで追いついてください。",
+        "author": {
+          "userName": "ClaudeCode_love",
+          "id": "2042103180478001153",
+          "isBlueVerified": true
+        },
+        "createdAt": "Sat May 30 10:40:00 +0000 2026",
+        "lang": "ja",
+        "likeCount": 425,
+        "retweetCount": 29,
+        "replyCount": 5,
+        "quoteCount": 6,
+        "bookmarkCount": 501,
+        "viewCount": 75407,
+        "isReply": false,
+        "conversationId": "2060672567975796913",
+        "tweetUrl": "https://x.com/ClaudeCode_love/status/2060672567975796913",
+        "media": [
+          {
+            "type": "video",
+            "url": "https://pbs.twimg.com/amplify_video_thumb/2060335710649962497/img/P-mxf8MS8Whq_34D.jpg"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "handle": "ClaudeCode_love",
+    "root": {
+      "id": "2059519987774333317",
+      "text": "【保存版】\nClaude Code と GPT Image 2（画像生成AI）を組み合わせると\nこんな制作会社みたいな“3Dアニメ付きの高級サイト”が個人でも作れるらしい🔥これどうやってるかというと👇\nhttps://t.co/jlyupWhoiy\n・サイトのコードはClaude Codeが全部書く\n・ヒーロー画像やパーツはGPT Image 2で生成\n・動き付きのLP（縦長の紹介ページ）が丸ごと完成\nでプロンプトは......",
+      "author": {
+        "userName": "ClaudeCode_love",
+        "id": "2042103180478001153",
+        "isBlueVerified": true
+      },
+      "createdAt": "Wed May 27 06:20:03 +0000 2026",
+      "lang": "ja",
+      "likeCount": 276,
+      "retweetCount": 18,
+      "replyCount": 4,
+      "quoteCount": 1,
+      "bookmarkCount": 313,
+      "viewCount": 19341,
+      "isReply": false,
+      "conversationId": "2059519987774333317",
+      "tweetUrl": "https://x.com/ClaudeCode_love/status/2059519987774333317",
+      "media": [
+        {
+          "type": "video",
+          "url": "https://pbs.twimg.com/amplify_video_thumb/2058911391642435585/img/0K0oNL3oZTdf1fDU.jpg"
+        }
+      ]
+    },
+    "thread": [
+      {
+        "id": "2059519987774333317",
+        "text": "【保存版】\nClaude Code と GPT Image 2（画像生成AI）を組み合わせると\nこんな制作会社みたいな“3Dアニメ付きの高級サイト”が個人でも作れるらしい🔥これどうやってるかというと👇\nhttps://t.co/jlyupWhoiy\n・サイトのコードはClaude Codeが全部書く\n・ヒーロー画像やパーツはGPT Image 2で生成\n・動き付きのLP（縦長の紹介ページ）が丸ごと完成\nでプロンプトは......",
+        "author": {
+          "userName": "ClaudeCode_love",
+          "id": "2042103180478001153",
+          "isBlueVerified": true
+        },
+        "createdAt": "Wed May 27 06:20:03 +0000 2026",
+        "lang": "ja",
+        "likeCount": 276,
+        "retweetCount": 18,
+        "replyCount": 4,
+        "quoteCount": 1,
+        "bookmarkCount": 313,
+        "viewCount": 19341,
+        "isReply": false,
+        "conversationId": "2059519987774333317",
+        "tweetUrl": "https://x.com/ClaudeCode_love/status/2059519987774333317",
+        "media": [
+          {
+            "type": "video",
+            "url": "https://pbs.twimg.com/amplify_video_thumb/2058911391642435585/img/0K0oNL3oZTdf1fDU.jpg"
+          }
+        ]
+      },
+      {
+        "id": "2059520006296379493",
+        "text": "しかもこの人、再現用のプロンプトを丸ごと公開してる。\nReact + TypeScript + Tailwind 構成で、コピペ起点で組めるレベル。\nプロンプトは元ポストのツリーに置いてあるので、作りたい人はここから。\nhttps://t.co/HYCIsqwhYs\nこういう“作らせ方”を１ポチで簡単にできるようにするには、Skills 67選の記事がおすすめ👇",
+        "author": {
+          "userName": "ClaudeCode_love",
+          "id": "2042103180478001153",
+          "isBlueVerified": true
+        },
+        "createdAt": "Wed May 27 06:20:08 +0000 2026",
+        "lang": "ja",
+        "likeCount": 40,
+        "retweetCount": 3,
+        "replyCount": 0,
+        "quoteCount": 0,
+        "bookmarkCount": 67,
+        "viewCount": 8747,
+        "isReply": true,
+        "conversationId": "2059519987774333317",
+        "tweetUrl": "https://x.com/ClaudeCode_love/status/2059520006296379493",
+        "media": [
+          {
+            "type": "photo",
+            "url": "https://pbs.twimg.com/media/HJTih-2agAAIvUF.jpg"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "handle": "ClaudeCode_love",
+    "root": {
+      "id": "2059388466056810819",
+      "text": "【速報】\nClaude Codeに“セキュリティプラグイン”が正式追加👀\nこれマジでやばくて👇\nhttps://t.co/BpJGi37S8a\nコードを書いている最中に、\n・脆弱性を検知\n・危険な実装を警告\n・修正案まで提示\nしてくれる。\nしかも全Claude Codeユーザー向けに公開済み。\n導入方法も簡単で、\nClaude Code内の「/plugins」からインストールするだけ。\n\n「AIにコードを書かせる」\n↓\n「AIが脆弱性まで監査する」\n\nの流れが、完全に標準化され始めてる。\n\n特に、\n・認証周り\n・APIキー露出\n・SQL Injection\n・XSS\n・危険な権限設定\n\nみたいな“人間でも見落とす部分”を、開発中にリアルタイムで潰せるのが強い。\nAIコーディング、次は「速く作れる人」じゃなく\n「安全に作れる人」が勝ち始める。\n\nで、\n「Claude Code進化早すぎて、正直ついていけてない…」\nって感じてる人へ。\nその感覚、かなり正常です。\nここ最近だけでも、\n・/simplify → /code-review\n・Plugins\n・権限管理まわり\n・レビュー設計\n・Hooks\n・Subagents\n\nとか、思想レベルでかなり変わってきてる。\n\nただ、この変化についていけるかで、\n半年後の生産性かなり変わると思う。\nなので、\n「後で追えばいいや」より、\n最低限だけでも今追った方がいい。\nなので今回、先週のClaude Codeアップデート、\n全部この下の記事で整理しました👇是非これで追いついてください。",
+      "author": {
+        "userName": "ClaudeCode_love",
+        "id": "2042103180478001153",
+        "isBlueVerified": true
+      },
+      "createdAt": "Tue May 26 21:37:26 +0000 2026",
+      "lang": "ja",
+      "likeCount": 1675,
+      "retweetCount": 181,
+      "replyCount": 22,
+      "quoteCount": 38,
+      "bookmarkCount": 2109,
+      "viewCount": 267061,
+      "isReply": false,
+      "conversationId": "2059388466056810819",
+      "tweetUrl": "https://x.com/ClaudeCode_love/status/2059388466056810819",
+      "media": [
+        {
+          "type": "video",
+          "url": "https://pbs.twimg.com/amplify_video_thumb/2059385047984312320/img/48edQXTT4mgQocP9.jpg"
+        }
+      ]
+    },
+    "thread": [
+      {
+        "id": "2059388466056810819",
+        "text": "【速報】\nClaude Codeに“セキュリティプラグイン”が正式追加👀\nこれマジでやばくて👇\nhttps://t.co/BpJGi37S8a\nコードを書いている最中に、\n・脆弱性を検知\n・危険な実装を警告\n・修正案まで提示\nしてくれる。\nしかも全Claude Codeユーザー向けに公開済み。\n導入方法も簡単で、\nClaude Code内の「/plugins」からインストールするだけ。\n\n「AIにコードを書かせる」\n↓\n「AIが脆弱性まで監査する」\n\nの流れが、完全に標準化され始めてる。\n\n特に、\n・認証周り\n・APIキー露出\n・SQL Injection\n・XSS\n・危険な権限設定\n\nみたいな“人間でも見落とす部分”を、開発中にリアルタイムで潰せるのが強い。\nAIコーディング、次は「速く作れる人」じゃなく\n「安全に作れる人」が勝ち始める。\n\nで、\n「Claude Code進化早すぎて、正直ついていけてない…」\nって感じてる人へ。\nその感覚、かなり正常です。\nここ最近だけでも、\n・/simplify → /code-review\n・Plugins\n・権限管理まわり\n・レビュー設計\n・Hooks\n・Subagents\n\nとか、思想レベルでかなり変わってきてる。\n\nただ、この変化についていけるかで、\n半年後の生産性かなり変わると思う。\nなので、\n「後で追えばいいや」より、\n最低限だけでも今追った方がいい。\nなので今回、先週のClaude Codeアップデート、\n全部この下の記事で整理しました👇是非これで追いついてください。",
+        "author": {
+          "userName": "ClaudeCode_love",
+          "id": "2042103180478001153",
+          "isBlueVerified": true
+        },
+        "createdAt": "Tue May 26 21:37:26 +0000 2026",
+        "lang": "ja",
+        "likeCount": 1675,
+        "retweetCount": 181,
+        "replyCount": 22,
+        "quoteCount": 38,
+        "bookmarkCount": 2109,
+        "viewCount": 267061,
+        "isReply": false,
+        "conversationId": "2059388466056810819",
+        "tweetUrl": "https://x.com/ClaudeCode_love/status/2059388466056810819",
+        "media": [
+          {
+            "type": "video",
+            "url": "https://pbs.twimg.com/amplify_video_thumb/2059385047984312320/img/48edQXTT4mgQocP9.jpg"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "handle": "ClaudeCode_love",
+    "root": {
+      "id": "2058178661791215619",
+      "text": "【速報】\nAnthropic公式の「auto mode（自走モード）」が\nProプランとSonnet 4.6にも解放されました😳\n何が変わったかというと👇\n・auto modeがProプランで使用可能に\n・対応モデルにSonnet 4.6を正式追加\n・Opus 4.7との併用もそのまま継続\n・Shift+Tabで自走モードに即切替\n・1ステップごとの手動承認なしで連続実行可\nこのauto modeマジで便利だからぜひ使ってみてくださいね😆\n\nちなみに公式のアプデが続いているので、本社の中の人達が現場でどうClaude Codeを回してるかを並べて押さえると、新機能の使い所が一気に見える。\n生みの親Borisの30Tips完全版はこちら👇",
+      "author": {
+        "userName": "ClaudeCode_love",
+        "id": "2042103180478001153",
+        "isBlueVerified": true
+      },
+      "createdAt": "Sat May 23 13:30:06 +0000 2026",
+      "lang": "ja",
+      "likeCount": 125,
+      "retweetCount": 11,
+      "replyCount": 1,
+      "quoteCount": 4,
+      "bookmarkCount": 154,
+      "viewCount": 19341,
+      "isReply": false,
+      "conversationId": "2058178661791215619",
+      "tweetUrl": "https://x.com/ClaudeCode_love/status/2058178661791215619",
+      "media": [
+        {
+          "type": "photo",
+          "url": "https://pbs.twimg.com/media/HJAelb9aAAEoL-m.jpg"
+        }
+      ]
+    },
+    "thread": [
+      {
+        "id": "2058178661791215619",
+        "text": "【速報】\nAnthropic公式の「auto mode（自走モード）」が\nProプランとSonnet 4.6にも解放されました😳\n何が変わったかというと👇\n・auto modeがProプランで使用可能に\n・対応モデルにSonnet 4.6を正式追加\n・Opus 4.7との併用もそのまま継続\n・Shift+Tabで自走モードに即切替\n・1ステップごとの手動承認なしで連続実行可\nこのauto modeマジで便利だからぜひ使ってみてくださいね😆\n\nちなみに公式のアプデが続いているので、本社の中の人達が現場でどうClaude Codeを回してるかを並べて押さえると、新機能の使い所が一気に見える。\n生みの親Borisの30Tips完全版はこちら👇",
+        "author": {
+          "userName": "ClaudeCode_love",
+          "id": "2042103180478001153",
+          "isBlueVerified": true
+        },
+        "createdAt": "Sat May 23 13:30:06 +0000 2026",
+        "lang": "ja",
+        "likeCount": 125,
+        "retweetCount": 11,
+        "replyCount": 1,
+        "quoteCount": 4,
+        "bookmarkCount": 154,
+        "viewCount": 19341,
+        "isReply": false,
+        "conversationId": "2058178661791215619",
+        "tweetUrl": "https://x.com/ClaudeCode_love/status/2058178661791215619",
+        "media": [
+          {
+            "type": "photo",
+            "url": "https://pbs.twimg.com/media/HJAelb9aAAEoL-m.jpg"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "handle": "ClaudeCode_love",
+    "root": {
+      "id": "2061572249329778834",
+      "text": "【衝撃】\nAnthropicハッカソンで優勝した人が、自分の\nClaude Codeの開発セットを丸ごとOSSで公開してヤバい🔥これ何が入ってるかというと👇\nhttps://t.co/0RJtX8HBIZ\n・183個の agent skills（用途別に動くClaudeの“技”）\n・48個の sub-agents（役割で分担する小さなAI）\n・79個の ready-made commands（よく使う作業の一発コマンド）\n・Claude Code / Codex / Cursor / Gemini / OpenCode で動く\n・名前は「Everything Claude Code」、MITライセンスで商用利用OK\n\nつまり何ができるかというと…\n\n具体的に👇\n・183個のskillsを混ぜて自分のリポに足せる\n・サブエージェントは並列で走らせられる\n\n今夜リポを入れるだけで、\n本格的なエージェント開発環境が手に入る時代。\n\nAIの進化 止まらないですね。\n\nこの“skillsを束ねてClaudeをチーム化する”全体像を一気に押さえたいなら、Skills 67選の記事が一番速い。\n気になる人はこの下の記事を読むと解像度が一段上がる👇",
+      "author": {
+        "userName": "ClaudeCode_love",
+        "id": "2042103180478001153",
+        "isBlueVerified": true
+      },
+      "createdAt": "Mon Jun 01 22:15:01 +0000 2026",
+      "lang": "ja",
+      "likeCount": 1697,
+      "retweetCount": 169,
+      "replyCount": 26,
+      "quoteCount": 8,
+      "bookmarkCount": 2662,
+      "viewCount": 344264,
+      "isReply": false,
+      "conversationId": "2061572249329778834",
+      "tweetUrl": "https://x.com/ClaudeCode_love/status/2061572249329778834",
+      "media": [
+        {
+          "type": "video",
+          "url": "https://pbs.twimg.com/ext_tw_video_thumb/2061052733956968448/pu/img/j_7d9n0aV-gyStqE.jpg"
+        }
+      ]
+    },
+    "thread": [
+      {
+        "id": "2061572249329778834",
+        "text": "【衝撃】\nAnthropicハッカソンで優勝した人が、自分の\nClaude Codeの開発セットを丸ごとOSSで公開してヤバい🔥これ何が入ってるかというと👇\nhttps://t.co/0RJtX8HBIZ\n・183個の agent skills（用途別に動くClaudeの“技”）\n・48個の sub-agents（役割で分担する小さなAI）\n・79個の ready-made commands（よく使う作業の一発コマンド）\n・Claude Code / Codex / Cursor / Gemini / OpenCode で動く\n・名前は「Everything Claude Code」、MITライセンスで商用利用OK\n\nつまり何ができるかというと…\n\n具体的に👇\n・183個のskillsを混ぜて自分のリポに足せる\n・サブエージェントは並列で走らせられる\n\n今夜リポを入れるだけで、\n本格的なエージェント開発環境が手に入る時代。\n\nAIの進化 止まらないですね。\n\nこの“skillsを束ねてClaudeをチーム化する”全体像を一気に押さえたいなら、Skills 67選の記事が一番速い。\n気になる人はこの下の記事を読むと解像度が一段上がる👇",
+        "author": {
+          "userName": "ClaudeCode_love",
+          "id": "2042103180478001153",
+          "isBlueVerified": true
+        },
+        "createdAt": "Mon Jun 01 22:15:01 +0000 2026",
+        "lang": "ja",
+        "likeCount": 1697,
+        "retweetCount": 169,
+        "replyCount": 26,
+        "quoteCount": 8,
+        "bookmarkCount": 2662,
+        "viewCount": 344264,
+        "isReply": false,
+        "conversationId": "2061572249329778834",
+        "tweetUrl": "https://x.com/ClaudeCode_love/status/2061572249329778834",
+        "media": [
+          {
+            "type": "video",
+            "url": "https://pbs.twimg.com/ext_tw_video_thumb/2061052733956968448/pu/img/j_7d9n0aV-gyStqE.jpg"
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -18,6 +18,7 @@ export interface RuntimeParamBound {
 
 /** コード側が死守する bounds。DB に何が入っても必ずこの範囲に clip する。 */
 export const RUNTIME_PARAM_BOUNDS: Record<string, RuntimeParamBound> = {
+  collector_enabled: { min: 0, max: 1 },
   collector_shortlist_top_k: { min: 20, max: 120 },
   collector_exploration_quota: { min: 5, max: 30 }, // 下限>0＝計測ループ不滅（AD-3）
   collector_prerank_max_age_hours: { min: 48, max: 168 },
@@ -31,6 +32,7 @@ export const RUNTIME_PARAM_IDS = Object.keys(RUNTIME_PARAM_BOUNDS);
  * 数値レバーは COLLECTOR_CONFIG が SSOT（drift 防止）。enforce は 0=shadow（既定で挙動不変）。
  */
 export const RUNTIME_PARAM_DEFAULTS: Record<string, number> = {
+  collector_enabled: 1,
   collector_shortlist_top_k: COLLECTOR_CONFIG.shortlistTopK,
   collector_exploration_quota: COLLECTOR_CONFIG.explorationQuota,
   collector_prerank_max_age_hours: COLLECTOR_CONFIG.prerankMaxAgeHours,

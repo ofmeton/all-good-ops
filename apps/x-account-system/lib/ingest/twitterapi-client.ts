@@ -107,9 +107,91 @@ async function apiGet(
   return (await res.json()) as Record<string, unknown>;
 }
 
+async function apiPost(
+  path: string,
+  body: Record<string, unknown>,
+  key: string,
+  fetchImpl: typeof fetch,
+): Promise<Record<string, unknown>> {
+  const res = await fetchImpl(`${BASE_URL}${path}`, {
+    method: "POST",
+    headers: { "x-api-key": key, "Content-Type": "application/json", "Accept": "application/json" },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    throw new Error(`twitterapi.io error: ${res.status} ${res.statusText} for ${path}`);
+  }
+  return (await res.json()) as Record<string, unknown>;
+}
+
 interface TwitterApiResponse {
   tweets?: RawTweet[];
   data?: RawTweet[]; // legacy / fallback
+}
+
+interface BookmarkResponse extends TwitterApiResponse {
+  status?: unknown;
+  code?: unknown;
+  error?: unknown;
+  message?: unknown;
+  msg?: unknown;
+  next_cursor?: unknown;
+  nextCursor?: unknown;
+  cursor?: unknown;
+  has_next_page?: unknown;
+  hasNextPage?: unknown;
+}
+
+function isBookmarksAuthErrorPayload(json: BookmarkResponse): boolean {
+  const parts = [json.status, json.code, json.error, json.message, json.msg]
+    .filter((v) => typeof v === "string")
+    .map((v) => String(v).toLowerCase());
+  return parts.some((s) =>
+    s.includes("auth") ||
+    s.includes("unauthorized") ||
+    s.includes("forbidden") ||
+    s.includes("login_cookie") ||
+    s.includes("cookie expired")
+  );
+}
+
+function nonEmptyString(v: unknown): string | null {
+  return typeof v === "string" && v.trim().length > 0 ? v.trim() : null;
+}
+
+function isFailureStatusOrCode(v: unknown): boolean {
+  if (typeof v === "number") return Number.isFinite(v) && (v < 200 || v >= 300);
+  const s = nonEmptyString(v);
+  if (!s) return false;
+  const n = Number(s);
+  if (Number.isFinite(n)) return n < 200 || n >= 300;
+  const lower = s.toLowerCase();
+  return lower !== "success" && lower !== "ok";
+}
+
+function safeBookmarksErrorText(json: BookmarkResponse): string | null {
+  const parts: string[] = [];
+  const status = json.status;
+  const code = json.code;
+  if (isFailureStatusOrCode(status)) parts.push(`status=${String(status)}`);
+  if (isFailureStatusOrCode(code)) parts.push(`code=${String(code)}`);
+  for (const [k, v] of [["error", json.error], ["message", json.message], ["msg", json.msg]] as const) {
+    const s = nonEmptyString(v);
+    if (s) parts.push(`${k}=${s}`);
+  }
+  return parts.length > 0 ? parts.join(" ") : null;
+}
+
+function isBookmarksErrorPayload(json: BookmarkResponse): boolean {
+  return json.tweets === undefined && json.data === undefined && safeBookmarksErrorText(json) !== null;
+}
+
+function nextBookmarkCursor(json: BookmarkResponse): string | null {
+  const raw = json.next_cursor ?? json.nextCursor ?? json.cursor;
+  if (typeof raw !== "string" || raw.length === 0) return null;
+  if (raw === "0" || raw.toLowerCase() === "null") return null;
+  if (json.has_next_page === false || json.hasNextPage === false) return null;
+  return raw;
 }
 
 /**
@@ -157,6 +239,62 @@ export async function searchTweets(
   const arr = json.tweets ?? json.data ?? [];
   const raw = (Array.isArray(arr) ? arr : []) as RawTweet[];
   return raw.map(mapTweet);
+}
+
+/**
+ * Fetch authenticated user's bookmarks via twitterapi.io bookmarks_v2.
+ * Verified endpoint: POST /twitter/bookmarks_v2.
+ *
+ * Auth uses x-api-key header plus JSON body login_cookies/proxy. The cookie and proxy must never be logged.
+ */
+export async function fetchBookmarks(
+  loginCookies: string,
+  proxy: string,
+  key: string,
+  fetchImpl: typeof fetch = fetch,
+  maxPages = 5,
+): Promise<Tweet[]> {
+  const out: Tweet[] = [];
+  let cursor: string | null = null;
+  const pages = Math.max(1, maxPages);
+
+  for (let page = 0; page < pages; page += 1) {
+    let json: BookmarkResponse;
+    try {
+      json = await apiPost(
+        "/twitter/bookmarks_v2",
+        {
+          login_cookies: loginCookies,
+          proxy,
+          count: 20,
+          ...(cursor ? { cursor } : {}),
+        },
+        key,
+        fetchImpl,
+      ) as BookmarkResponse;
+    } catch (e) {
+      if (/\b(401|403)\b/.test(String(e))) {
+        throw new Error("twitterapi.io bookmarks auth failed (login_cookie expired?)");
+      }
+      throw e;
+    }
+
+    if (isBookmarksAuthErrorPayload(json)) {
+      throw new Error("twitterapi.io bookmarks auth failed (login_cookie expired?)");
+    }
+    if (isBookmarksErrorPayload(json)) {
+      throw new Error(`twitterapi.io bookmarks request failed: ${safeBookmarksErrorText(json)}`);
+    }
+
+    const arr = json.tweets ?? json.data ?? [];
+    const raw = (Array.isArray(arr) ? arr : []) as RawTweet[];
+    out.push(...raw.map(mapTweet));
+
+    cursor = nextBookmarkCursor(json);
+    if (!cursor) break;
+  }
+
+  return out;
 }
 
 /** 海外トレンド取得（woeid: 23424977=US 推奨。woeid=1 は実測で日本が返るため使わない） */

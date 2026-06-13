@@ -1,8 +1,8 @@
 ---
 type: concept
 created: 2026-05-20
-updated: 2026-05-20
-sources: [docs/superpowers/specs/2026-05-20-publishing-pivot-design.md]
+updated: 2026-06-13
+sources: [docs/superpowers/specs/2026-05-20-publishing-pivot-design.md, outputs/research/2026-06-13-viral-writing-and-thread-study.md]
 related: [[by-media/x]], [[by-media/note]], [[by-media/instagram]], [[by-theme/before-after]], [[by-theme/hook-patterns]]
 tags: [publishing, buzz-patterns, ofmeton]
 status: active
@@ -61,6 +61,14 @@ status: active
 出典: [[inspirations/note-2026-05-20-uravation-claude-x-viral]]
 Claude Code + プロンプト 7 選の形式で紹介。note 記事 1 本 → X 3 ツイート × 2-3 セットへの圧縮ワークフローとセットで設計すると効率的。
 
+### 観測 [2026-06-13] — 6アカ競合のスレッド運用
+
+出典: [2026-06-13 viral writing and thread study](../../outputs/research/2026-06-13-viral-writing-and-thread-study.md)
+
+3ツイート完結型は量産向き。2026-06-08 の広域分布では MakeAI_CEO の thread 平均は 6.7 parts だが、2026-06-13 の top-by-faves full thread sample では MakeAI_CEO max 3、Gencoin8 max 4。上位 engagement では長い chain より `hook → 具体/手順1-2本 → まとめCTA` の tight 2-4 parts を優先する。
+
+CTA は 1本目で「全部解説する↓」として続きを読ませ、途中は価値提供に集中し、最終投稿で保存/noteリンク/次の行動を置く。
+
 ## パターン 3: プロンプト集型（コピペで即使える）
 
 「コピペで使える Claude プロンプト 5 選」のような型。
@@ -97,6 +105,18 @@ Claude Code + プロンプト 7 選の形式で紹介。note 記事 1 本 → X 
 
 出典: [[inspirations/note-2026-05-20-smartround-cowork-cases]]
 「CS × Cowork」「経理 × Linear」のように職種名 + ツール固有名詞の組み合わせが読者の自分事化を促進。業種ごとに3-5事例をまとめる note 記事の型として有効。
+
+## パターン 5.5: 1行目の温度を型で選ぶ
+
+出典: [2026-06-13 viral writing and thread study](../../outputs/research/2026-06-13-viral-writing-and-thread-study.md)
+
+6アカウント 775 original posts の補助分類では、`【】` 等の記号フックが 447 件（57.7%）で最多。ただし MakeAI_CEO / nobel_824 の拡散系は bracket_hook が 1.6% / 1.5% と低く、口語リアクションや逆張りで止めている。
+
+使い分け:
+- 信頼・保存: `【保存版】【最新】` + 事例/出典。ClaudeCode_UT 型。
+- 感情・認知: `ガチで革命起きた` / `断言する`。MakeAI_CEO 型。
+- 議論・拡散: `まじ？` + 前提を覆すニュース。nobel_824 型。事実確認必須。
+- 誘導・保存: 金額/特典/手順数字 + 損失回避。Gencoin8 型。実在のお得情報がある時だけ。
 
 ## パターン 6: 視覚デザインのフォントワーク
 

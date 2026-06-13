@@ -37,6 +37,7 @@ export type BrownoutStatus = "ok" | "reduce" | "stop_posting" | "cron_halt" | "e
 /** ALL job names known to the queue consumer (legacy pipeline retire 後の生存ジョブ) */
 const ALL_JOBS: string[] = [
   "collect",
+  "bookmark-collect",
   "compose",
   "check",
   "daily-digest",

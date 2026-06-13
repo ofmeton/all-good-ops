@@ -7,7 +7,7 @@ import { buildScoringSystemPrompt } from "./collector-prompts.js";
 import type { Tweet } from "./twitterapi-client.js";
 
 export interface DiscoveryTag {
-  via: "fixed" | "keyword" | "trend" | "user_search" | "following";
+  via: "fixed" | "keyword" | "trend" | "user_search" | "following" | "bookmark";
   query: string;
 }
 
