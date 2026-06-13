@@ -20,7 +20,7 @@
 
 import http from "node:http";
 import { appendFile, readFile, writeFile, readdir } from "node:fs/promises";
-import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync, chmodSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { randomUUID } from "node:crypto";
@@ -47,8 +47,17 @@ const OVERLAY_FILE = args.overlay ?? path.join(__dirname, "..", "overlay", "over
 // 目的は CSRF 防御（リモートサイトから読めない）＝ローカルファイル化しても変わらない。
 const TOKEN_FILE = path.join(TARGET_ROOT, ".web-ui-bridge-token");
 let TOKEN;
-try { TOKEN = existsSync(TOKEN_FILE) ? readFileSync(TOKEN_FILE, "utf8").trim() : ""; } catch { TOKEN = ""; }
-if (!/^[0-9a-f-]{36}$/.test(TOKEN)) { TOKEN = randomUUID(); try { writeFileSync(TOKEN_FILE, TOKEN); } catch {} }
+try {
+  if (existsSync(TOKEN_FILE)) {
+    TOKEN = readFileSync(TOKEN_FILE, "utf8").trim();
+    try { chmodSync(TOKEN_FILE, 0o600); } catch {} // 既存ファイルを owner-only に締め直す
+  } else TOKEN = "";
+} catch { TOKEN = ""; }
+if (!/^[0-9a-f-]{36}$/.test(TOKEN)) {
+  TOKEN = randomUUID();
+  // owner 読み書きのみ（world-readable 回避）。トークンは CSRF 防御の秘密値。
+  try { writeFileSync(TOKEN_FILE, TOKEN, { mode: 0o600 }); } catch {}
+}
 
 if (!existsSync(TARGET_ROOT)) {
   console.error(`[web-ui-bridge] target dir does not exist: ${TARGET_ROOT}`);
