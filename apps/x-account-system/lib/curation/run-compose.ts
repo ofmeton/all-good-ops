@@ -75,7 +75,7 @@ interface SubmitDraft {
   primary_hook?: string;
   citations?: string[];
   /** 構成設計の成果物。各ツイート/ブロックの役割と、一目で伝えたい要点。 */
-  outline?: Array<{ role: string; key_message: string }>;
+  outline?: Array<{ role: string; key_message: string; visual_hint?: string }>;
   /** fmat=thread のとき writer が1ツイートずつ入れる配列（投稿時の正・body は join 派生）。 */
   tweets?: string[];
 }

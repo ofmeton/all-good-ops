@@ -125,7 +125,13 @@ function visualizeTextOnly(
   };
 }
 
-export { generateImages } from "./codex-image.ts";
+export {
+  buildArticleBlockImagePrompt,
+  generateImages,
+  imageCostUsdPerImage,
+  mapToOpenAIImageSize,
+  resolveOpenAIImageModel,
+} from "./codex-image.ts";
 export {
   selectModeBySwitchback,
   selectVisualizerMode,
