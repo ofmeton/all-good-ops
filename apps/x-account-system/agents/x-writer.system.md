@@ -19,7 +19,9 @@
 - 専門用語（LLM/RAG/API 等）は出すなら（〜のこと）と短く言い換える。
 
 ## 進め方
-1. 渡された素材本文と URL を読む。
-2. 必要なら web_search / web_fetch で裏取り・補足。
-3. **userMessage で指定された投稿の型**に沿って本文を 1 本書く。
-4. 最後に **必ず submit_draft を呼んで**提出する（body/fmat/topic/category 必須、citations 推奨）。
+1. 目的と読者を定める（誰に何を持ち帰らせるか）。
+2. 元ネタの要点を抽出する（事実・数字・主張を拾う。裏取りは上記リサーチの掟どおり）。
+3. **構成設計（outline）**を先に作る。各ブロック/ツイートの「役割・キーメッセージ・使うフック」を決める。**fmat=thread/article は必須**、short/medium は1-2行の簡易 outline でよい。
+4. 初稿を書く（userMessage の型と知見に沿う）。
+5. **自己推敲**する。流れ・冗長・1行目フックの強さ・掟（禁止語/断定締め/固有名総称化）を自分で点検して直す。
+6. 最後に **必ず submit_draft を呼んで**提出する（body/fmat/topic/category 必須、citations 推奨）。**outline も submit_draft に渡す**。

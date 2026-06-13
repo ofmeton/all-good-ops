@@ -5,7 +5,7 @@
  *    テンプレ patch は system に焼かない（永続 agent の system は固定・テンプレは user 側）。
  *  - buildComposeUserBlocks がテンプレ patch + 希望 fmat + 再生成フラグを userMessage 用に組む。
  */
-import { buildWriterSystemPrompt, buildComposeUserBlocks } from "./compose-prompts";
+import { buildWriterSystemPrompt, buildComposeUserBlocks, SUBMIT_DRAFT_TOOL } from "./compose-prompts";
 import { COMPOSE_TEMPLATES, DEFAULT_TEMPLATE_ID, HOOK_STRENGTH_LABEL } from "./compose-templates";
 
 describe("buildWriterSystemPrompt — テンプレ非依存 base", () => {
@@ -15,6 +15,7 @@ describe("buildWriterSystemPrompt — テンプレ非依存 base", () => {
     expect(p).toContain("## リサーチ");
     expect(p).toContain("## 掟");
     expect(p).toContain("## 進め方");
+    expect(p).toContain("構成設計（outline）");
     expect(p).toContain("submit_draft");
   });
 
@@ -52,6 +53,8 @@ describe("buildComposeUserBlocks — テンプレ/fmat/再生成を userMessage 
 
   test("fmat=thread でスレッド分割指示（tweets に1本ずつ・1本目=フック・最大8本）が入る", () => {
     const blocks = buildComposeUserBlocks(DEFAULT_TEMPLATE_ID, "thread");
+    expect(blocks).toContain("# 参考にする書き方の知見（このフォーマットで効くもの）");
+    expect(blocks).toContain("tight 2-4本");
     expect(blocks).toContain("# 希望フォーマット");
     expect(blocks).toContain("指定フォーマット=スレッド");
     expect(blocks).toContain("tweets に1ツイートずつ");
@@ -62,8 +65,11 @@ describe("buildComposeUserBlocks — テンプレ/fmat/再生成を userMessage 
   });
 
   test("fmat 未指定では希望フォーマット指示を入れない", () => {
-    const blocks = buildComposeUserBlocks(DEFAULT_TEMPLATE_ID);
+    const blocks = buildComposeUserBlocks(DEFAULT_TEMPLATE_ID, null);
     expect(blocks).not.toContain("# 希望フォーマット");
+    expect(blocks).toContain("# 参考にする書き方の知見（このフォーマットで効くもの）");
+    expect(blocks).toContain("## 共通知見");
+    expect(blocks).not.toContain("## thread 知見");
   });
 
   test("label 欠落 fmat でも raw 値で指示を出す（黙って無指示にしない）", () => {
@@ -82,5 +88,23 @@ describe("buildComposeUserBlocks — テンプレ/fmat/再生成を userMessage 
   test("redoFlags 空/未指定では『前回の指摘』を入れない", () => {
     expect(buildComposeUserBlocks(DEFAULT_TEMPLATE_ID)).not.toContain("前回の指摘");
     expect(buildComposeUserBlocks(DEFAULT_TEMPLATE_ID, null, [])).not.toContain("前回の指摘");
+  });
+});
+
+describe("SUBMIT_DRAFT_TOOL — outline 契約", () => {
+  test("outline を optional property として公開し required には含めない", () => {
+    const props = SUBMIT_DRAFT_TOOL.input_schema.properties as Record<string, unknown>;
+    const required = SUBMIT_DRAFT_TOOL.input_schema.required as string[];
+    expect(props.outline).toMatchObject({
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          role: { type: "string" },
+          key_message: { type: "string" },
+        },
+      },
+    });
+    expect(required).not.toContain("outline");
   });
 });
