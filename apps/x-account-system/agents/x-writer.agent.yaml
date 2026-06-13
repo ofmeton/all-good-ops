@@ -65,6 +65,9 @@ tools:
               key_message:
                 type: string
                 description: 一目で伝えたい要点
+              visual_hint:
+                type: string
+                description: この1枚で何を見せるか＝図/構図/被写体 ＋ 画像に載せる短い文字（gpt-imageが描くので短く・数字やキーワード中心。長い日本語文は破綻するので避ける）
             required:
               - role
               - key_message

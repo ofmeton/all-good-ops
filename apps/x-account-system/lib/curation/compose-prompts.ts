@@ -57,6 +57,11 @@ export const SUBMIT_DRAFT_TOOL = {
           properties: {
             role: { type: "string", description: "各ツイート/ブロックの役割" },
             key_message: { type: "string", description: "一目で伝えたい要点" },
+            visual_hint: {
+              type: "string",
+              description:
+                "この1枚で何を見せるか＝図/構図/被写体 ＋ 画像に載せる短い文字（gpt-imageが描くので短く・数字やキーワード中心。長い日本語文は破綻するので避ける）",
+            },
           },
           required: ["role", "key_message"],
           additionalProperties: false,
@@ -120,7 +125,7 @@ ${TARGET_DEFINITION}
 ## 進め方
 1. 目的と読者を定める（誰に何を持ち帰らせるか）。
 2. 元ネタの要点を抽出する（事実・数字・主張を拾う。裏取りは上記リサーチの掟どおり）。
-3. **構成設計（outline）**を先に作る。各ブロック/ツイートの「役割・キーメッセージ・使うフック」を決める。**fmat=thread/article は必須**、short/medium は1-2行の簡易 outline でよい。
+3. **構成設計（outline）**を先に作る。各ブロック/ツイートの「役割・キーメッセージ・使うフック」を決める。各ブロックの visual_hint（1枚で一目で伝わる絵＋短い文字）も決める。**fmat=thread/article は必須**、short/medium は1-2行の簡易 outline でよい。
 4. 初稿を書く（userMessage の型と知見に沿う）。
 5. **自己推敲**する。流れ・冗長・1行目フックの強さ・掟（禁止語/断定締め/固有名総称化）を自分で点検して直す。
 6. 最後に **必ず submit_draft を呼んで**提出する（body/fmat/topic/category 必須、citations 推奨）。**outline も submit_draft に渡す**。`;

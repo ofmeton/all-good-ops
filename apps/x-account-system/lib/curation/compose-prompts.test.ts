@@ -16,6 +16,7 @@ describe("buildWriterSystemPrompt — テンプレ非依存 base", () => {
     expect(p).toContain("## 掟");
     expect(p).toContain("## 進め方");
     expect(p).toContain("構成設計（outline）");
+    expect(p).toContain("visual_hint");
     expect(p).toContain("submit_draft");
   });
 
@@ -102,9 +103,16 @@ describe("SUBMIT_DRAFT_TOOL — outline 契約", () => {
         properties: {
           role: { type: "string" },
           key_message: { type: "string" },
+          visual_hint: { type: "string" },
         },
       },
     });
     expect(required).not.toContain("outline");
+
+    const outline = props.outline as {
+      items: { required: string[]; properties: Record<string, unknown> };
+    };
+    expect(outline.items.required).toEqual(["role", "key_message"]);
+    expect(outline.items.required).not.toContain("visual_hint");
   });
 });

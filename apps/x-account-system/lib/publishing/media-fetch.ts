@@ -36,6 +36,12 @@ export interface PhotoAttachment {
   mediaType: string;
   sourceUrl: string;
   sourceMaterialId?: string;
+  /** writer outline 由来のブロック番号（記事ブロック別生成画像）。 */
+  blockIndex?: number;
+  /** generated は Supabase Storage 由来。DL 配管では sourceUrl を通常写真として扱う。 */
+  source?: "generated" | "manual";
+  role?: string;
+  promptUsed?: string;
   localPath?: string;
   resolvedKind?: "upload" | "skipped";
   fallbackReason?: string;
