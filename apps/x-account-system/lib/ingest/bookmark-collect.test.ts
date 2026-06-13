@@ -76,8 +76,7 @@ describe("runBookmarkCollect", () => {
       anthropic: anthropic as never,
       sb: makeSbWithExisting(new Set(), inserts) as never,
       twitterApiKey: "k",
-      loginCookie: "cookie",
-      proxy: "http://proxy.example",
+      tweetIds: ["b1"],
       fetchImpl: bookmarkFetch([tweet("b1")]),
       now: Date.now(),
     });
@@ -90,7 +89,7 @@ describe("runBookmarkCollect", () => {
     const row = inserts[0] as { source_type: string; meta: { discovery: { via: string; query: string } } };
     expect(row.source_type).toBe("x_inspirations");
     expect(row.meta.discovery.via).toBe("bookmark");
-    expect(row.meta.discovery.query).toBe("bookmarks_v2");
+    expect(row.meta.discovery.query).toBe("url_paste");
   });
 
   test("already-existing tweet_id is deduped out before scoring/persist", async () => {
@@ -100,8 +99,7 @@ describe("runBookmarkCollect", () => {
       anthropic: anthropic as never,
       sb: makeSbWithExisting(new Set(["b2"]), inserts) as never,
       twitterApiKey: "k",
-      loginCookie: "cookie",
-      proxy: "http://proxy.example",
+      tweetIds: ["b1", "b2", "b1"],
       fetchImpl: bookmarkFetch([tweet("b1"), tweet("b2"), tweet("b1")]),
       now: Date.now(),
     });
@@ -112,5 +110,23 @@ describe("runBookmarkCollect", () => {
     expect(stats.scored).toBe(1);
     expect(stats.inserted).toBe(1);
     expect((inserts as Array<{ meta: { tweet_id: string } }>).map((r) => r.meta.tweet_id)).toEqual(["b1"]);
+  });
+
+  test("empty tweetIds returns zero stats without fetching", async () => {
+    const inserts: unknown[] = [];
+    const { anthropic } = scoringAnthropic();
+    const fetchImpl = jest.fn() as unknown as typeof fetch;
+    const stats = await runBookmarkCollect({
+      anthropic: anthropic as never,
+      sb: makeSbWithExisting(new Set(), inserts) as never,
+      twitterApiKey: "k",
+      tweetIds: [],
+      fetchImpl,
+      now: Date.now(),
+    });
+
+    expect(stats).toMatchObject({ inserted: 0, fetched: 0, deduped: 0, scored: 0 });
+    expect(fetchImpl).not.toHaveBeenCalled();
+    expect(inserts).toEqual([]);
   });
 });

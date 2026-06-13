@@ -27,6 +27,7 @@ import {
   recordScheduledPublish,
   type ScheduledReservation,
 } from "../lib/trace/scheduled-publish-trace.js";
+import { parseTweetIds } from "../lib/ingest/tweet-url.js";
 
 export interface Env {
   // vars (wrangler.toml [vars])
@@ -55,8 +56,6 @@ export interface Env {
   // Admin secret gating /oauth/x/start (fail closed: unset → reject)
   OAUTH_ADMIN_SECRET: string;
   TWITTERAPI_IO_KEY: string;
-  TWITTERAPI_IO_LOGIN_COOKIE: string;
-  TWITTERAPI_IO_PROXY: string;
   SUPABASE_URL: string;
   SUPABASE_SERVICE_ROLE_KEY: string;
   LINE_CHANNEL_ACCESS_TOKEN: string;
@@ -88,6 +87,8 @@ export type JobMessage =
       date: string;
       // 観測ダッシュボード用 run id (xad.run.id)。enqueue 時に発番。
       runId?: string;
+      // URL 貼付ブックマーク取込用。/admin/enqueue からは起動しない。
+      tweetIds?: string[];
     }
   | { job: "line-event"; date: string; payload: unknown; runId?: string };
 
@@ -100,7 +101,6 @@ function jstDate(d: Date): string {
 // 注: "0 * /2 * * *" (スペースなし: 0 */2 * * *) は複数時刻に発火するが式文字列として一意なのでキーとして安全。
 const CRON_JOBS: Record<string, JobMessage["job"]> = {
   "30 20 * * *": "collect",          // 05:30 JST
-  "0 21 * * *": "bookmark-collect",  // 06:00 JST
   "0 11 * * *": "metrics-ingest",    // 20:00 JST（digest/optimizer の前）
   "0 12 * * *": "daily-digest",      // 21:00 JST
   "0 14 * * *": "optimizer-update",  // 23:00 JST
@@ -112,7 +112,6 @@ const CRON_JOBS: Record<string, JobMessage["job"]> = {
 /** /admin/enqueue で手動起動を許可する job 名（line-event は webhook 専用なので除外） */
 const CRON_JOBS_BY_NAME: Record<string, true> = {
   collect: true,
-  "bookmark-collect": true,
   "daily-digest": true,
   "optimizer-update": true,
   "optimizer-analyst": true,
@@ -190,6 +189,46 @@ export default {
       }
       log(env, "info", `LINE webhook: enqueued ${(parsed.events ?? []).length} event(s)`);
       return new Response("OK", { status: 200 });
+    }
+
+    // 管理用: X アプリで保存したブックマーク URL を貼り付けて取り込む。
+    // POST /admin/ingest-bookmarks?key=<secret>
+    // body: JSON { urls: string[] } or text/plain newline/space/comma separated URLs
+    if (url.pathname === "/admin/ingest-bookmarks") {
+      if (request.method !== "POST") {
+        return new Response("method not allowed", { status: 405 });
+      }
+      const authHeader = request.headers.get("authorization");
+      const bearer = authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : null;
+      const key = bearer ?? url.searchParams.get("key");
+      if (!env.OAUTH_ADMIN_SECRET || key !== env.OAUTH_ADMIN_SECRET) {
+        return new Response("unauthorized", { status: 401 });
+      }
+
+      let input: string | string[];
+      const contentType = request.headers.get("content-type")?.split(";")[0]?.trim().toLowerCase();
+      if (contentType === "application/json") {
+        try {
+          const payload = (await request.json()) as { urls?: unknown };
+          input = Array.isArray(payload.urls) ? payload.urls.filter((v): v is string => typeof v === "string") : [];
+        } catch {
+          return new Response("bad json", { status: 400 });
+        }
+      } else {
+        input = await request.text();
+      }
+
+      const tweetIds = parseTweetIds(input);
+      if (tweetIds.length === 0) {
+        return new Response("no valid tweet URLs or tweet IDs found", { status: 400 });
+      }
+
+      const date = jstDate(new Date());
+      const runId = crypto.randomUUID();
+      await insertRun({ id: runId, job: "bookmark-collect", trigger: "manual", date, status: "running", attempt: 1 });
+      await env.JOBS.send({ job: "bookmark-collect", date, tweetIds, runId });
+      log(env, "info", `admin: enqueued bookmark-collect count=${tweetIds.length} (manual)`);
+      return Response.json({ ok: true, enqueued: { count: tweetIds.length }, runId });
     }
 
     // 管理用: cron job を手動で enqueue（OAUTH_ADMIN_SECRET ゲート）。
