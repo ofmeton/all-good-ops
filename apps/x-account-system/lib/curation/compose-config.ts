@@ -5,9 +5,9 @@
 export interface ComposeConfig {
   /** writer モデル（投稿品質。cost と相談） */
   writerModel: string;
-  /** 1 job 実行で処理する最大素材数（wall-clock bound。MA session ~12s/件） */
+  /** 1 job 実行で処理する最大素材数（wall-clock bound。v4 段取り writer は ~100-240s/件） */
   maxComposePerRun: number;
-  /** 1 MA session の wall-clock 上限 */
+  /** 1 MA session の wall-clock 上限（v4 段取り writer＋article fmat は長尺＝120s では timeout） */
   timeoutMs: number;
   /** 素材に template_id が無い時に使う既定テンプレ ID（compose-templates.ts と一致）。 */
   defaultTemplateId: string;
@@ -17,6 +17,6 @@ export const COMPOSE_CONFIG: ComposeConfig = {
   // P2: 永続 writer agent は opus-4-8 で執筆（cost は cost-of の opus-4-8 override 5/25 で計上）。
   writerModel: "claude-opus-4-8",
   maxComposePerRun: 3,
-  timeoutMs: 120_000,
+  timeoutMs: 240_000,
   defaultTemplateId: "template_chaen_gold",
 };
