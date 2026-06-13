@@ -3,6 +3,7 @@
 //
 // 役割:
 //   - overlay からの POST /enqueue を受け、対象サイト直下の .claude-ui-queue.jsonl に1行追記
+//   - POST /apply-style で className を一意性ガード付きでソース直書き換え（Phase B・Claude 不介在）
 //   - GET /overlay.js で overlay スクリプトを配信（対象サイトは <script src> 1行で読むだけ）
 //   - GET /health で疎通確認
 //
@@ -10,7 +11,7 @@
 // 本番ビルドには一切関与しない（dev 専用のローカルツール）。
 
 import http from "node:http";
-import { appendFile, readFile } from "node:fs/promises";
+import { appendFile, readFile, writeFile, readdir } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -61,6 +62,69 @@ function readBody(req, limit = 1_000_000) {
   });
 }
 
+// ---- Phase B: className → ソース直書き換え ------------------------------
+// route から候補ファイルを推定（App Router）。見つからなければ app/ 配下を広く探索。
+async function walkTsx(dir, acc = [], depth = 0) {
+  if (depth > 6) return acc;
+  let entries;
+  try { entries = await readdir(dir, { withFileTypes: true }); } catch { return acc; }
+  for (const e of entries) {
+    if (e.name === "node_modules" || e.name === ".next" || e.name.startsWith(".")) continue;
+    const full = path.join(dir, e.name);
+    if (e.isDirectory()) await walkTsx(full, acc, depth + 1);
+    else if (/\.(tsx|jsx)$/.test(e.name)) acc.push(full);
+  }
+  return acc;
+}
+
+function routeToFile(route) {
+  const clean = (route || "/").split("?")[0].replace(/\/+$/, "");
+  const rel = clean === "" ? "app/page.tsx" : `app${clean}/page.tsx`;
+  const full = path.join(args.target, rel);
+  return existsSync(full) ? full : null;
+}
+
+// oldClassName(= className 属性の literal)を一意に特定して newClassName へ置換。
+// className は静的文字列のときソースと完全一致する。一致しない（テンプレ/条件式）時は not-found→Claude にフォールバック。
+async function applyStyle({ route, oldClassName, newClassName }) {
+  if (!oldClassName || !newClassName) return { ok: false, reason: "missing-classname" };
+  if (oldClassName === newClassName) return { ok: true, file: null, noop: true };
+
+  // 探索順: route のページファイル → app/ 配下全 tsx
+  const candidates = [];
+  const routeFile = routeToFile(route);
+  if (routeFile) candidates.push(routeFile);
+  const all = await walkTsx(path.join(args.target, "app"));
+  for (const f of all) if (!candidates.includes(f)) candidates.push(f);
+
+  // 各ファイルでの出現回数を集計
+  const hits = [];
+  for (const file of candidates) {
+    const src = await readFile(file, "utf8");
+    let count = 0, idx = 0;
+    while ((idx = src.indexOf(oldClassName, idx)) !== -1) { count++; idx += oldClassName.length; }
+    if (count > 0) hits.push({ file, count, src });
+  }
+
+  const totalCount = hits.reduce((s, h) => s + h.count, 0);
+  if (totalCount === 0) return { ok: false, reason: "not-found" };
+
+  // 一意なら確定。route ファイルに 1 回だけ出るならそれを優先。
+  let target = null;
+  if (totalCount === 1) target = hits[0];
+  else if (routeFile) {
+    const inRoute = hits.find((h) => h.file === routeFile);
+    if (inRoute && inRoute.count === 1) target = inRoute;
+  }
+  if (!target) return { ok: false, reason: "ambiguous", count: totalCount };
+
+  // 最初の 1 箇所だけ literal 置換して書き戻し
+  const at = target.src.indexOf(oldClassName);
+  const next = target.src.slice(0, at) + newClassName + target.src.slice(at + oldClassName.length);
+  await writeFile(target.file, next, "utf8");
+  return { ok: true, file: path.relative(args.target, target.file) };
+}
+
 const server = http.createServer(async (req, res) => {
   if (req.method === "OPTIONS") return send(res, 204, {}, "");
 
@@ -107,6 +171,19 @@ const server = http.createServer(async (req, res) => {
       console.log(`[web-ui-bridge] enqueued ${enqueued.length} → ${QUEUE_FILE}`);
       return send(res, 200, { "Content-Type": "application/json" },
         JSON.stringify({ ok: true, ids: enqueued }));
+    } catch (err) {
+      return send(res, 400, { "Content-Type": "application/json" },
+        JSON.stringify({ ok: false, error: err.message }));
+    }
+  }
+
+  if (req.method === "POST" && req.url === "/apply-style") {
+    try {
+      const body = JSON.parse(await readBody(req));
+      const result = await applyStyle(body);
+      if (result.ok) console.log(`[web-ui-bridge] apply-style → ${result.file ?? "(noop)"}`);
+      else console.log(`[web-ui-bridge] apply-style skipped: ${result.reason}`);
+      return send(res, 200, { "Content-Type": "application/json" }, JSON.stringify(result));
     } catch (err) {
       return send(res, 400, { "Content-Type": "application/json" },
         JSON.stringify({ ok: false, error: err.message }));
