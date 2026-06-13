@@ -12,6 +12,11 @@
 - undo/redo: ↶↷ ボタン＋⌘Z/⌘⇧Z・Ctrl+Z/Ctrl+Y。**履歴とトークンを永続化**（daemon 再起動でも有効）
 - STUDIO 風タブ式インスペクタ（テキスト/ボックス/変形/設定）＋実機 devtools 計測で**ライト配色**
 - セキュリティ硬化（127.0.0.1 のみ・Origin+token・path traversal 防御・token 0o600）
+- **STUDIO 95% パリティ詰め（2026-06-14・実機再計測）**:
+  - マージン/パディングを STUDIO 型 **ボックスウィジェット**（ロックトグル＋単一/2×2の4辺入力・↑→↓←方向アイコン）に。STUDIO 実機は「ネスト矩形図」でなく **2×2グリッド＋方向アイコン＋ロックトグル**だった（計測で判明）。表示は className優先→computed フォールバックで実効px（`p-4`/`px-6 py-4` 等のスケール・軸クラスも正しく px 表示）、書込は px arbitrary で **4辺ロスレス再構成**（軸 strip 時に直交辺を保全）、不一致集約は warn toast
+  - **条件スタイル＝状態（通常/ホバー）**: インスペクタ右上の状態セグメント。`PFX()=bp+state` 合成で全プロパティが `hover:`（bp併用 `md:hover:`）を読み書き。通常↔hover は相互破壊しない
+  - 実機実測でピクセル合わせ込み（入力セル #f7f7f7・角丸8px・高32px / タブ14px/40px / color swatch 24px / section 左16px）
+  - 実装は **Codex(gpt-5.5 high) 委任**＋Claude 設計/レビュー(code-reviewer・silent-failure-hunter)/実機 chrome-devtools 検証。全操作を実ブラウザで実操作確認済み（py-2→8px 読み・1辺編集の直交辺保全・hover分離・集約 warn）
 
 ## 構成
 - **overlay** `apps/web-ui-bridge/overlay/overlay.js`: 自己完結 vanilla JS・Shadow DOM 隔離・SVG アイコン・daemon が origin/token を埋めて配信。
@@ -41,10 +46,12 @@ cd outputs/clients/terra-isshiki/site && npm run dev   # → localhost:3001（30
 - 色は STUDIO 実機（ライト）: 白#fff / 文字#1a1a1a / 罫線 rgba(34,34,34,.1)・#e5e5e5 / アクセント#222 / 選択ハイライトのみ青。
 
 ## 残作業（次セッション）
-1. **STUDIO 95% パリティ詰め**: ① マージン/パディングを STUDIO の**ボックスモデル・ウィジェット**（4辺数値＋図）に ② **条件スタイル＝hover 等の状態**（`hover:` プレフィックス）③ 下部中央のブレークポイントバー位置・AI(✨) など配置の細部 ④ セクション間隔/入力高さ/角丸の実機ピクセル合わせ込み。
-   - 進め方: **STUDIO を Chrome で開いて chrome-devtools で実測**（getComputedStyle・ボタンを実際に押す・要素追加→Cmd+Z で原状復帰）。推測で作らない。
-2. **Codex 委任を実践**: まとまった実装は `codex-implement` skill で Codex に委任（今回 Sonnet 並列レビューは使ったが Codex 未使用だった）。
-3. 要素の**新規追加**（STUDIO の追加パレット相当）は自由形＝「Claudeに頼む」経路で。
+- 旧残作業①②④は 2026-06-14 に完了（上記「現状」参照）。①の「4辺＋図」は実機計測の結果「2×2グリッド＋方向アイコン＋ロックトグル」が正だった。
+- ③ 下部中央 bp バー位置・AI(✨) は **別物として再現しない**（我々は右ドック overlay＝キャンバスが実サイトそのもの。bp は右ドックのセグメントで足り、✨AI は Claude 経路が担う）。bp セグメントの配色/高さの微調整のみ実施済み。
+- **hover 以外の状態**（アニメーション/出現時/スクロール）は STUDIO にあるが当面スコープ外（必要時に state を拡張可能な作りにはなっている）。
+- 既存課題（このセッションでは未対応）: 幅/高さ/角丸/枠線の数値も `numOf(readUtil)` で **スケールクラスを px と誤読**する（spacing と同じ問題が pre-existing で残存）。spacing と同様の className優先→computed ハイブリッド読みに揃えると一貫する。
+- 要素の**新規追加**（STUDIO の追加パレット相当）は自由形＝「Claudeに頼む」経路で。
+- arbitrary 値（`pt-[20px]` 等）の **live プレビューは Tailwind dev が未生成のため即時反映されない**（commit→HMR で反映）。入力値表示は className 優先読みで保持されるので消えはしない。
 
 ## 検証の作法（必須）
 ユーザーが取りうる操作は**全て実機ブラウザで実操作＋スクショ目視**で検証（D&D の実ドラッグ・別親移動・オートスクロール・再起動後 undo・壊れた後の復帰まで）。dispatch 成功や DOM count では不足。`reorder.test.mjs` も緑に保つ。
