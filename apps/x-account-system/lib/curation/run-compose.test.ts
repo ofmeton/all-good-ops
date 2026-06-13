@@ -118,7 +118,7 @@ describe("runCompose", () => {
   test("outline: submit_draft の構成設計を core_ideas.meta に保存する", async () => {
     const outline = [
       { role: "hook", key_message: "1行目で変化を断定する" },
-      { role: "detail", key_message: "非エンジニア向けに使いどころを開く" },
+      { role: "detail", key_message: "Claude Code を使う実務者向けに使いどころを開く" },
     ];
     const state: St = { materials: [mat("m1")], coreIdeas: [], postDrafts: [] };
     const r = await runCompose({

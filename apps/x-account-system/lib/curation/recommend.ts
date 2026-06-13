@@ -98,7 +98,7 @@ function renderTemplateLine(t: TemplateSummary): string {
 }
 
 const RECOMMEND_SYSTEM = [
-  "あなたは X(Twitter) 発信の編集者。AI 活用したい非エンジニア（中小事業者・士業・コンサル）に届く投稿を設計する。",
+  "あなたは X(Twitter) 発信の編集者。Claude Code を使う実務者層に、誰でも伝わる平易な言葉で届く投稿を設計する。",
   "与えられた素材ごとに、利用可能なテンプレ一覧から最適な templateId を 1 つ、最適な fmat（長さ）を 1 つ選ぶ。",
   "素材が薄い/短い → 短い fmat。手順や数字が多い → 中〜長め。逆張りや速報性は内容に合うテンプレを選ぶ。",
   "必ず recommend_posts ツールで {materialId, templateId, fmat, reason, confidence} の配列を返す。理由は日本語で簡潔に。",

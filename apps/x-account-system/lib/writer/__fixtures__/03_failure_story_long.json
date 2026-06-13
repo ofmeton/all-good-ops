@@ -7,13 +7,13 @@
     "primaryHook": "failure_story",
     "fmat": "long",
     "contentType": "failure_story",
-    "audience": "総務担当の非エンジニア",
+    "audience": "Claude Code を使い始めた総務担当者",
     "sourceMaterialIds": ["mat-fs-003"]
   },
   "expected": {
     "primaryHook": "failure_story",
     "generator": "stub",
-    "bodyMustContain": ["仕組み化", "総務担当の非エンジニア", "私は"],
+    "bodyMustContain": ["仕組み化", "Claude Code を使い始めた総務担当者", "私は"],
     "bodyMaxChars": 4000
   }
 }

@@ -5,7 +5,7 @@
  *   - main-design-all-versions.md §6.4.6 (note 生成フロー詳述)
  *   - initial-values-design.md §4.3 (note 4-6 本/月)
  *   - .claude/skills/note-revenue-playbook.md
- *   - .claude/skills/non-engineer-translation.md
+ *   - .claude/skills/content-quality-rubric.md
  *
  * 構成テンプレ 5 系統 (main-design §6.4.6.1):
  *   1. まとめ型     (how_to_summary)
