@@ -21,7 +21,7 @@ tools:
       properties:
         body:
           type: string
-          description: X 投稿本文（プレーンテキスト・最終形）
+          description: X 投稿本文（プレーンテキスト・最終形）。fmat=thread のときは tweets を全て連結した参考本文でよい（投稿時の正は tweets）
         fmat:
           type: string
           enum:
@@ -30,7 +30,12 @@ tools:
             - long
             - article
             - thread
-          description: 投稿フォーマット（article=X 長文単発・thread のように分割しない）
+          description: 投稿フォーマット（article=X 長文単発・スレッドに分割しない / thread=連続ツイートに分割し tweets に1本ずつ入れる）
+        tweets:
+          type: array
+          items:
+            type: string
+          description: fmat=thread のときのみ：スレッドを構成する各ツイートを1本ずつ配列に入れる。1本目=フック（最も強い1文で掴む）。各ツイートは全角140字目安・最大8本。fmat≠thread のときは省略する。
         topic:
           type: string
           description: この投稿の主題（1行）
