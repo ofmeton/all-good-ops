@@ -4,28 +4,6 @@ import { SiteHeader } from "./_components/SiteHeader";
 import { HeroSlideshow } from "./_components/HeroSlideshow";
 import { RevealRoot } from "./_components/RevealRoot";
 
-// スクロール最初に要点を掴める「ファクト帯」。
-const FACTS = [
-  { label: "Type", value: "一棟貸し" },
-  { label: "Capacity", value: "最大 8 名" },
-  { label: "Size", value: "75 ㎡" },
-  { label: "Parking", value: "2 台" },
-  { label: "Check-in / out", value: "16:00 / 11:00" },
-  { label: "Beach", value: "徒歩 8 分" },
-];
-
-// 設備ハイライト（詳細は Rooms へ）。
-const AMENITIES = [
-  "フルキッチン",
-  "ひのきの風呂",
-  "ドラム式洗濯機",
-  "抹茶マシーン",
-  "高速 Wi-Fi",
-  "駐車場 2 台",
-  "TV / 動画配信",
-  "各室エアコン",
-];
-
 // FV は「建物の外観・内観が伝わる写真」のみ（世界観カットは不使用）。
 // 外観 → 内観を交互に並べ、第一印象で建物が伝わる構成。
 const HERO_SLIDES = [
@@ -142,27 +120,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Facts strip — スクロール最初に要点を掴む */}
-      <section className="relative bg-(--color-base-light) border-b border-(--color-base-dark)/8 px-6 md:px-12">
-        <dl className="mx-auto max-w-[1480px] grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6">
-          {FACTS.map((f, i) => (
-            <div
-              key={f.label}
-              data-reveal
-              className="reveal flex flex-col gap-2 px-2 py-7 md:py-9 border-t border-(--color-base-dark)/10"
-              style={{ transitionDelay: `${i * 70}ms` }}
-            >
-              <dt className="font-garamond italic text-[9.5px] md:text-[clamp(8.4px,0.49vw,12.6px)] tracking-[0.32em] uppercase text-(--color-base-dark)/45">
-                {f.label}
-              </dt>
-              <dd className="font-serif text-[14px] md:text-[clamp(13px,0.9vw,21px)] tracking-[0.04em] text-(--color-base-dark)">
-                {f.value}
-              </dd>
-            </div>
-          ))}
-        </dl>
-      </section>
-
       {/* Concept — about から移設した本文 */}
       <section className="relative bg-(--color-paper) px-6 py-[clamp(112px,11.5vw,176px)] md:px-12">
         <div className="mx-auto max-w-[1280px] grid gap-12 md:grid-cols-[180px_1fr] md:gap-16">
@@ -269,48 +226,6 @@ export default function Home() {
             </div>
           );
         })}
-      </section>
-
-      {/* Amenities highlight — 設備ハイライト（詳細は Rooms へ） */}
-      <section className="relative bg-(--color-paper) px-6 py-[clamp(80px,8vw,128px)] md:px-12">
-        <div className="mx-auto max-w-[1480px]">
-          <p
-            data-reveal
-            className="reveal font-garamond italic text-[clamp(11px,0.6vw,15.4px)] tracking-[0.4em] uppercase text-(--color-soil) mb-4"
-          >
-            Amenities
-          </p>
-          <h2
-            data-reveal
-            className="reveal font-serif text-[18px] md:text-[clamp(17.92px,1.4vw,35.84px)] leading-[1.4] tracking-[0.04em] text-(--color-base-dark) mb-12 md:mb-16"
-          >
-            暮らすように過ごす、設備。
-          </h2>
-          <ul className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-px bg-(--color-base-dark)/10 border border-(--color-base-dark)/10">
-            {AMENITIES.map((a, i) => (
-              <li
-                key={a}
-                data-reveal
-                className="reveal bg-(--color-paper) px-5 py-7 md:py-9 font-mincho text-[13.5px] md:text-[clamp(11.2px,0.71vw,18.2px)] tracking-[0.06em] text-(--color-base-dark)/85"
-                style={{ transitionDelay: `${i * 55}ms` }}
-              >
-                {a}
-              </li>
-            ))}
-          </ul>
-          <div data-reveal className="reveal mt-12">
-            <Link
-              href="/rooms"
-              className="group inline-flex items-center gap-4 font-garamond text-[11px] md:text-[clamp(9.8px,0.6vw,15.4px)] tracking-[0.32em] uppercase text-(--color-base-dark)"
-            >
-              <span className="relative">
-                View all facilities
-                <span className="absolute -bottom-1 left-0 h-px w-full bg-(--color-base-dark)/30 transition-colors duration-500 group-hover:bg-(--color-base-dark)" />
-              </span>
-              <span aria-hidden className="text-[12px]">→</span>
-            </Link>
-          </div>
-        </div>
       </section>
 
       {/* Footer */}
