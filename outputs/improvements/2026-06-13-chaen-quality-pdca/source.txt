@@ -1,0 +1,38 @@
+テーマ: 1人で複数の Claude Code を並行運用する「オーケストレーション」の正しい構築方法（Claude Code 中級者向け・公式一次ソース準拠）。
+
+## 問題（読者の痛み）
+- 1つのセッションに実装・テスト・設計議論を全部詰め込むと、コンテキストが汚染されて精度が落ちる
+- 自分が AI に修正指示を出し続けること自体が一番の渋滞ポイントになる
+- 根本原因は3つ: コンテキスト汚染 / 指示のコンフリクト(スピード優先とセキュリティ厳格が同居) / トークン肥大化
+
+## 公式が用意した並列の3機能（似て非なる・混同厳禁）
+- subagent: 同一セッション内で動く補助AI。独自コンテキスト・専用system prompt・限定ツール権限で、結果の要約だけをメインに返す。subagent同士は通信しない
+- agent teams: 1セッションが team lead になり teammate を生成。共有タスクリスト+mailbox で連携、teammate 同士が直接メッセージを送り合える。1チーム3〜5人が公式目安
+- git worktree: `claude --worktree <name>` で起動。別ブランチ・別ディレクトリの隔離環境。変更なしで終了すれば自動片付け
+- 要点: worktree=ファイルの隔離、subagent/agent teams=作業の連携
+
+## 実践: 8セッションを3層構造で配置
+- 指揮層2: PM(進捗管理/タスク切り出し/人間報告)・Architect(整合性/構造・plan approvalで設計のみ)
+- 実装層4: Frontend / Backend / Infra-DevOps / Security（worktree隔離でファイル衝突防止）
+- 品質層2: QA-Reviewer / Technical Writer（subagent定義 or teammate として固定）
+- セッション間は共有Markdownファイルで情報リレー
+
+## 誤解訂正（独自価値・公式一次ソース）
+① 「CLAUDE.md に役割IDを書いてペルソナ切替」は公式機能として存在しない。CLAUDE.md は context であり強制設定ではない（公式明記）。役割固定は `.claude/agents/` の frontmatter 定義(name/description/tools/model)。必ず守らせたいことは hooks で強制
+② 「SQLite にタグ付きで記憶を貯めて動的注入」は標準機能ではない。公式 auto memory は markdown ベース（`~/.claude/projects/<p>/memory/` の MEMORY.md 索引200行/25KB上限＋話題別ファイルをオンデマンド読込）
+
+## 公式の活用パターン
+- 並列コードレビュー: 1つのPRに security/performance/test の3 teammate を立て lead が統合
+- 競合する仮説: 5 teammate にバグの別仮説を割り当て相互反証→生き残りに絞る
+- 表示: in-process(Shift+Down巡回) / split panes(tmux/iTerm2)
+
+## 落とし穴3点
+- トークンコスト: teammate ごと独立コンテキスト=人数比例増。「3人の集中 > 5人の散漫」が公式見解
+- worktree の隔離はファイルのみ: DB・環境変数・起動中サービスは共有。2セッションが同じDBにmigrationをかけると壊れる
+- 権限継承: lead を `--dangerously-skip-permissions` で動かすと全 teammate も無確認になる
+
+## スケール段階 / 品質ゲート
+- subagent(同一セッション内) → agent teams(会話する並列チーム) → background agents(独立セッション群)
+- 品質を必ず担保したいチェックは hooks で強制（TeammateIdle/TaskCreated/TaskCompleted・exit code 2 でフィードバック継続）
+
+注: 数字・事実はこの source 内のものを使う（裏が取れない数字は書かない）。読者=Claude Code を既にある程度使う中級者。
