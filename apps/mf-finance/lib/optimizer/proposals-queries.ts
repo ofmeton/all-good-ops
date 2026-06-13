@@ -105,8 +105,13 @@ export function getDecisionLog(limit = 50): OptimizerProposal[] {
   return rows.map(hydrate);
 }
 
-// 「修正して承認」の大項目・中項目プルダウン用の既存カテゴリ一覧。
-export function getCategoryOptions(): { majors: string[]; middles: string[] } {
+// 「修正して承認」の大項目・中項目プルダウン用の既存カテゴリ。
+// 中項目は大項目ごとに絞り込めるよう middlesByMajor で返す。
+export interface CategoryOptions {
+  majors: string[];
+  middlesByMajor: Record<string, string[]>;
+}
+export function getCategoryOptions(): CategoryOptions {
   const majors = (
     db
       .prepare(
@@ -116,16 +121,20 @@ export function getCategoryOptions(): { majors: string[]; middles: string[] } {
       )
       .all() as { category_major: string }[]
   ).map((r) => r.category_major);
-  const middles = (
-    db
-      .prepare(
-        `SELECT DISTINCT category_middle FROM transactions
-         WHERE category_middle IS NOT NULL AND category_middle != '' AND category_middle != '未分類'
-         ORDER BY category_middle`,
-      )
-      .all() as { category_middle: string }[]
-  ).map((r) => r.category_middle);
-  return { majors, middles };
+
+  const pairs = db
+    .prepare(
+      `SELECT DISTINCT category_major AS maj, category_middle AS mid FROM transactions
+       WHERE category_major IS NOT NULL AND category_major != '' AND category_major != '未分類'
+         AND category_middle IS NOT NULL AND category_middle != '' AND category_middle != '未分類'
+       ORDER BY category_major, category_middle`,
+    )
+    .all() as { maj: string; mid: string }[];
+  const middlesByMajor: Record<string, string[]> = {};
+  for (const { maj, mid } of pairs) {
+    (middlesByMajor[maj] ??= []).push(mid);
+  }
+  return { majors, middlesByMajor };
 }
 
 // 提案カードに出す該当明細サンプル（金額を見せる）。

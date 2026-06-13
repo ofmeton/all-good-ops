@@ -188,7 +188,7 @@ export function ProposalCard({
   proposal: OptimizerProposal;
   samples: ProposalSample[];
   sampleTotal: number;
-  categoryOptions: { majors: string[]; middles: string[] };
+  categoryOptions: { majors: string[]; middlesByMajor: Record<string, string[]> };
 }) {
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
@@ -202,6 +202,11 @@ export function ProposalCard({
 
   const setVal = (key: string, val: string) =>
     setEditValues((v) => ({ ...v, [key]: val }));
+
+  // 中項目は「選択中の大項目」で絞り込む。大項目を変えたら中項目はリセット。
+  const majorField = fields.find((f) => f.key === "category_major");
+  const currentMajor = editValues["category_major"] ?? majorField?.value ?? "";
+  const middleOptions = categoryOptions.middlesByMajor[currentMajor] ?? [];
 
   const handle = (fn: () => Promise<OptimizerActionResult>) => {
     setError(null);
@@ -340,15 +345,22 @@ export function ProposalCard({
                     </select>
                   ) : f.kind === "category" ? (
                     <CategorySelect
+                      key={f.key === "category_middle" ? `mid-${currentMajor}` : id}
                       id={id}
                       value={cur}
                       options={
-                        f.key === "category_major"
-                          ? categoryOptions.majors
-                          : categoryOptions.middles
+                        f.key === "category_major" ? categoryOptions.majors : middleOptions
                       }
                       disabled={pending}
-                      onChange={(val) => setVal(f.key, val)}
+                      onChange={(val) =>
+                        f.key === "category_major"
+                          ? setEditValues((v) => ({
+                              ...v,
+                              category_major: val,
+                              category_middle: "", // 大項目変更で中項目リセット
+                            }))
+                          : setVal(f.key, val)
+                      }
                     />
                   ) : (
                     <input
