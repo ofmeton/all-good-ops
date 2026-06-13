@@ -1,0 +1,13 @@
+{
+  "name": "web-ui-bridge-daemon",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "クリック→Claude Code プロンプト橋渡しのローカル中継デーモン（依存ゼロ）",
+  "bin": {
+    "web-ui-bridge": "./server.mjs"
+  },
+  "scripts": {
+    "start": "node server.mjs"
+  }
+}

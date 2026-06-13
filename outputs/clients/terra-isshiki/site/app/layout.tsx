@@ -83,6 +83,11 @@ export default function RootLayout({
         {children}
         <SideReserve />
         <MobileStickyReserve />
+        {/* web-ui-bridge: dev 限定。クリック→Claude Code 橋渡し overlay。本番ビルドには出力されない。 */}
+        {process.env.NODE_ENV === "development" && (
+          // eslint-disable-next-line @next/next/no-sync-scripts
+          <script src="http://localhost:7331/overlay.js" async />
+        )}
       </body>
     </html>
   );
