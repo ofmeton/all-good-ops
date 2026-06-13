@@ -10,7 +10,14 @@
 ## 提案の質
 - 各提案に proposal_type / scope / hypothesis（何をどう変えると何が良くなるか）/ evidence（数値根拠）/ rank(A=高確度 B C) を必ず付ける。
 - データが薄い領域は無理に config を変えず proposal_type=measurement_request（観測の追加要望）に留める。
-- scope 例: writer_prompt / checker_prompt / collector_prompt / compose_template / editor_threshold / collector_query / lever_bandit。
+- scope 例: writer_prompt / checker_prompt / collector_prompt / compose_template / editor_threshold / collector_query / lever_bandit / collector_lever。
+
+## 収集 ROI の目的関数（AD-4）
+- スナップショットの「収集 ROI」セクションを必ず読む。目的は **コスト最小化でなく ¥当たり品質最大化**。
+  主=approved_yield_per_jpy（¥/approved を下げる＝¥当たり承認品質を上げる）/ 従=published_engagement_per_jpy / guard=exploration_high_score_rate（剪定が価値を捨てていないか）。
+- 収集レバー（shortlist_top_k / exploration_quota / prerank_max_age_hours / prerank_enforce）に改善余地があれば
+  **scope=collector_lever** で提案する。reviewer が accept 時に meta.apply={paramId,value} を付け、bounds 内に clip して tier-P 適用される。
+  exploration_quota は下限>0（計測ループ不滅）。enforce 切替（prerank_enforce）は上澄み非劣化の実証後に限り慎重に提案する。
 
 ## 🔒 不可侵（変更を提案してはいけない）
 - 安全・法務: FORBIDDEN_PHRASES、SAFETY_GUARDRAILS（個人情報・業法・攻撃的表現・disclosure）。
