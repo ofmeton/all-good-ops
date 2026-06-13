@@ -7,6 +7,7 @@ import {
 } from "@/lib/category-queries";
 import { formatYm, isValidYm, parseYm, shortDate, yen, yenSigned } from "@/lib/format";
 import { MonthSelector } from "@/app/components/MonthSelector";
+import { getCategoryGroups, rollupByGroup } from "@/lib/optimizer/grouping";
 
 // SQLite ファイル更新を再ビルドなしで反映（毎リクエスト最新化）。
 export const dynamic = "force-dynamic";
@@ -84,6 +85,67 @@ function MajorList({ rows, ym }: { rows: CategorySpend[]; ym: string }) {
               </span>
             </div>
           </Link>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+// 集計の括り方トグル（大項目 ⇄ グループ）。現在の ym を保持して by を差し替える。
+function GroupToggle({ ym, by }: { ym: string; by: "major" | "group" }) {
+  const base =
+    "flex h-11 flex-1 items-center justify-center rounded-xl border px-3 text-sm font-medium transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
+  const active = "border-primary bg-surface text-primary shadow-sm";
+  const idle =
+    "border-border bg-background text-muted hover:border-primary hover:text-primary";
+  return (
+    <nav className="flex items-center gap-2" aria-label="集計の括り方">
+      <Link
+        href={`?ym=${ym}`}
+        className={`${base} ${by === "major" ? active : idle}`}
+        aria-current={by === "major" ? "page" : undefined}
+      >
+        大項目
+      </Link>
+      <Link
+        href={`?ym=${ym}&by=group`}
+        className={`${base} ${by === "group" ? active : idle}`}
+        aria-current={by === "group" ? "page" : undefined}
+      >
+        グループ
+      </Link>
+    </nav>
+  );
+}
+
+// グループ集計リスト（大項目をグループへ畳んだ表示・ドリルダウンなし）。
+// グループは複数大項目にまたがり得るため単一大項目への drilldown はせず静的カードで見せる。
+function GroupList({ rows }: { rows: CategorySpend[] }) {
+  const max = Math.max(...rows.map((r) => r.spend), 1);
+  return (
+    <ul className="space-y-2" aria-label="グループ別の支出一覧">
+      {rows.map((r) => (
+        <li
+          key={r.major}
+          className="block rounded-xl border border-border bg-surface p-3 shadow-sm"
+        >
+          <div className="flex items-baseline justify-between gap-2">
+            <span className="min-w-0 truncate text-sm font-medium text-foreground">
+              {r.major}
+              <span className="ml-1.5 text-[11px] font-normal text-muted">
+                {r.count}件
+              </span>
+            </span>
+            <span className="tabular shrink-0 text-sm font-semibold text-foreground">
+              ¥{yen(r.spend)}
+            </span>
+          </div>
+          <div className="mt-2">
+            <SpendBar ratio={r.spend / max} />
+          </div>
+          <div className="mt-1.5">
+            <SpendDelta spend={r.spend} prevSpend={r.prevSpend} />
+          </div>
         </li>
       ))}
     </ul>
@@ -191,7 +253,7 @@ export default async function CategoriesPage({
   searchParams,
 }: {
   // Next 16: searchParams は Promise。
-  searchParams: Promise<{ ym?: string; major?: string }>;
+  searchParams: Promise<{ ym?: string; major?: string; by?: string }>;
 }) {
   const sp = await searchParams;
   const now = new Date();
@@ -202,10 +264,22 @@ export default async function CategoriesPage({
     typeof sp.major === "string" && sp.major.trim() !== ""
       ? sp.major.trim()
       : null;
+  // 集計の括り方。'major'（既定）は従来挙動と完全同一・非破壊。'group' のみ畳み込み。
+  const by: "major" | "group" = sp.by === "group" ? "group" : "major";
 
   const maxYm = getCategoryMaxYm();
   // 詳細表示（major あり）では一覧集計（当月+前月）が未使用のためスキップ。
-  const rows = major ? [] : getCategorySpend(year, month);
+  const majorRows = major ? [] : getCategorySpend(year, month);
+  // group 表示時のみ大項目をグループへロールアップ（支出降順で再整列）。空マッピングは素通し。
+  const rows =
+    !major && by === "group"
+      ? rollupByGroup(
+          majorRows,
+          getCategoryGroups(),
+          "major",
+          ["spend", "prevSpend", "count"],
+        ).sort((a, b) => b.spend - a.spend)
+      : majorRows;
 
   return (
     <main className="mx-auto w-full max-w-3xl px-4 py-6 sm:py-10">
@@ -234,6 +308,12 @@ export default async function CategoriesPage({
         <MonthSelector ym={ym} maxYm={maxYm} />
       </div>
 
+      {!major && (
+        <div className="mb-4">
+          <GroupToggle ym={ym} by={by} />
+        </div>
+      )}
+
       {major ? (
         <>
           <h1 className="sr-only">{major} の支出内訳</h1>
@@ -253,6 +333,8 @@ export default async function CategoriesPage({
             この月の支出データはありません（連携待ちの可能性があります）。
           </p>
         </div>
+      ) : by === "group" ? (
+        <GroupList rows={rows} />
       ) : (
         <MajorList rows={rows} ym={ym} />
       )}

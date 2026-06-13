@@ -19,6 +19,7 @@ import { Alerts } from "@/app/components/Alerts";
 import { PayoutCalendar } from "@/app/components/PayoutCalendar";
 import { AnomalyAlerts } from "@/app/components/AnomalyAlerts";
 import { getLatestAsset, getProjectedBalance } from "@/lib/calendar-queries";
+import { getProposalCounts } from "@/lib/optimizer/proposals-queries";
 
 // SQLite ファイル更新を再ビルドなしで反映（毎リクエスト最新化）。
 export const dynamic = "force-dynamic";
@@ -51,6 +52,7 @@ export default async function Home({
   const latestAsset = getLatestAsset();
 
   const sparse = summary.count <= SPARSE_TX_THRESHOLD;
+  const proposalCounts = getProposalCounts();
 
   return (
     <main className="mx-auto w-full max-w-3xl px-4 py-6 sm:py-10">
@@ -79,6 +81,19 @@ export default async function Home({
 
       <Alerts disposable={disposable} largeIncomes={largeIncomes} />
       <AnomalyAlerts ym={ym} />
+
+      {proposalCounts.total > 0 && (
+        <a
+          href="/optimizer"
+          className="mt-4 flex items-center justify-between rounded-xl border border-warning/30 bg-warning/5 px-4 py-3 transition-colors duration-150 hover:bg-warning/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-warning"
+        >
+          <span className="text-sm font-semibold text-warning">
+            最適化提案{" "}
+            <span className="tabular">{proposalCounts.total}件</span>
+          </span>
+          <span className="text-xs font-medium text-warning">確認する →</span>
+        </a>
+      )}
 
       <DisposableHero data={disposable} />
       <DisposableBreakdown data={disposable} />
