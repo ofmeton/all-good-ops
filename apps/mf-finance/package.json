@@ -12,6 +12,7 @@
     "detect": "node scripts/detect-recurring.mjs",
     "load": "node scripts/load.mjs",
     "load:assets": "node scripts/load-assets.mjs",
+    "load:balances": "node scripts/load-balances.mjs",
     "load:freee": "node scripts/load-freee.mjs",
     "seed:recurring": "node scripts/seed-recurring.mjs",
     "export:unknowns": "node scripts/export-unknowns.mjs",
@@ -19,7 +20,7 @@
     "apply:overrides": "node scripts/apply-overrides.mjs",
     "optimizer:export": "node scripts/optimizer-export.mjs",
     "optimizer:propose": "node scripts/optimizer-propose.mjs",
-    "refresh": "npm run normalize && npm run load && npm run apply:rules && npm run apply:overrides && npm run load:assets"
+    "refresh": "npm run normalize && npm run load && npm run apply:rules && npm run apply:overrides && npm run load:assets && npm run load:balances"
   },
   "dependencies": {
     "better-sqlite3": "^11.8.1",

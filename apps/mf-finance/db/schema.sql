@@ -170,3 +170,29 @@ CREATE TABLE IF NOT EXISTS optimizer_runs (
   decided  INTEGER,
   note     TEXT
 );
+
+-- ===== お金レーダー / 資金繰り =====
+
+-- 口座別残高（現在値・1口座1行・最新）。MF /bs から投入 or 手入力。
+CREATE TABLE IF NOT EXISTS account_balances (
+  account    TEXT PRIMARY KEY,
+  kind       TEXT NOT NULL DEFAULT 'other'
+             CHECK (kind IN ('bank','card','emoney','cash','crypto','other')),
+  balance    INTEGER NOT NULL,
+  as_of      TEXT, -- 残高の基準日 'YYYY-MM-DD'
+  source     TEXT NOT NULL DEFAULT 'mf' CHECK (source IN ('mf','manual')),
+  updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
+);
+
+-- 特定日の単発予定（いつ・いくら入る/引き落とされる）。毎月定期は recurring_items 側。
+CREATE TABLE IF NOT EXISTS scheduled_cashflow (
+  id             INTEGER PRIMARY KEY AUTOINCREMENT,
+  kind           TEXT NOT NULL CHECK (kind IN ('income','expense')),
+  name           TEXT NOT NULL,
+  amount         INTEGER NOT NULL, -- 正の magnitude
+  scheduled_date TEXT NOT NULL,    -- 'YYYY-MM-DD'
+  account        TEXT,
+  note           TEXT,
+  created_at     TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
+);
+CREATE INDEX IF NOT EXISTS idx_scheduled_date ON scheduled_cashflow (scheduled_date);
