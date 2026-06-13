@@ -4,8 +4,7 @@
  * 役割:
  *   1. scheduled(): cron triggers (wrangler.toml) を Queue に enqueue するだけ。
  *      重い処理は queue() consumer 側 (src/queue.ts) に移譲。
- *      投稿 cron は draft 生成 + LINE 承認依頼のみ (実投稿は人の承認 → chrome-devtools 予約)。
- *      チャエン実測リズムに合わせ 6 本 (朝6-8/昼12/夕15-17 主軸)。X API 直投は廃止済。
+ *      実投稿は人の承認 → chrome-devtools 予約。X API 直投は廃止済。
  *   2. fetch(): LINE Webhook 受信 (設計 L1098)。承認タップ → queue にも enqueue。
  *   3. queue(): MessageBatch<JobMessage> を受け取り handleJob へ dispatch。
  *
@@ -20,6 +19,14 @@ import { insertRun, updateRun } from "../lib/trace/trace-store.js";
 import { verifyLineSignature, pkceChallenge, randomVerifier } from "../lib/crypto/webcrypto.js";
 import { exchangeCode } from "../lib/oauth/token-exchange.js";
 import { createClient } from "@supabase/supabase-js";
+import { listTemplateSummaries } from "../lib/curation/compose-templates.js";
+import { planSlots, clipPlanByDailyCap, type StockDraft } from "../lib/publishing/slot-planner.js";
+import { SCHEDULE_CONFIG, type ScheduleConfig } from "../lib/publishing/schedule-config.js";
+import { markScheduledReservations } from "../lib/publishing/mark-scheduled.js";
+import {
+  recordScheduledPublish,
+  type ScheduledReservation,
+} from "../lib/trace/scheduled-publish-trace.js";
 
 export interface Env {
   // vars (wrangler.toml [vars])
@@ -53,47 +60,30 @@ export interface Env {
   LINE_CHANNEL_ACCESS_TOKEN: string;
   LINE_CHANNEL_SECRET: string;
   LINE_USER_ID_OFMETON: string;
+  // 承認UI（xad-dashboard /approval）の URL。LINE 承認待ち通知に載せる。
+  APPROVAL_UI_URL: string;
 }
 
 /**
  * Queue に流れるメッセージ型。
- * - 投稿系: slot (morning/noon/evening) を付与。
- * - その他 job: date のみ。
+ * - cron / 手動 job: date のみ。
  * - LINE webhook 経由: payload を添付。
  */
 export type JobMessage =
   | {
       job:
-        | "post-morning"
-        | "post-morning2"
-        | "post-noon"
-        | "post-afternoon"
-        | "post-afternoon2"
-        | "post-evening";
-      date: string;
-      slot:
-        | "morning"
-        | "morning2"
-        | "noon"
-        | "afternoon"
-        | "afternoon2"
-        | "evening";
-      // 手動起動 (/admin/enqueue) は true。標準スロットを占有せず manual-xxx slot で投稿し、
-      // 「各スロット投稿済み」管理は自動(cron)起動のみに反映させる。
-      manual?: boolean;
-      // 観測ダッシュボード用 run id (xad.run.id)。enqueue 時に発番。
-      runId?: string;
-    }
-  | {
-      job:
-        | "ideation"
-        | "buzz-ingest"
+        | "collect"
         | "daily-digest"
         | "optimizer-update"
+        | "optimizer-analyst"
+        | "optimizer-apply"
         | "rollback-monitor"
-        | "inspirations-ingest"
-        | "rotation-notice";
+        | "rotation-notice"
+        | "metrics-ingest"
+        | "compose"
+        | "check";
       date: string;
+      // 観測ダッシュボード用 run id (xad.run.id)。enqueue 時に発番。
       runId?: string;
     }
   | { job: "line-event"; date: string; payload: unknown; runId?: string };
@@ -106,46 +96,27 @@ function jstDate(d: Date): string {
 // cron 式 → job 名。wrangler.toml の crons と 1:1 対応（文字列が MAP KEY = 必ず一意）。
 // 注: "0 * /2 * * *" (スペースなし: 0 */2 * * *) は複数時刻に発火するが式文字列として一意なのでキーとして安全。
 const CRON_JOBS: Record<string, JobMessage["job"]> = {
-  "0 21 * * *": "buzz-ingest",       // 06:00 JST (素材収集を最初に)
-  "30 21 * * *": "ideation",         // 06:30 JST (buzz の後で素材→ネタ変換)
-  "0 22 * * *": "post-morning",      // 07:00 JST
-  "0 23 * * *": "post-morning2",     // 08:00 JST (朝ピーク2本目)
-  "0 3 * * *": "post-noon",          // 12:00 JST
-  "0 6 * * *": "post-afternoon",     // 15:00 JST (夕ピーク1)
-  "0 8 * * *": "post-afternoon2",    // 17:00 JST (夕ピーク2)
-  "0 10 * * *": "post-evening",      // 19:00 JST (note 送客)
+  "30 20 * * *": "collect",          // 05:30 JST
+  "0 11 * * *": "metrics-ingest",    // 20:00 JST（digest/optimizer の前）
   "0 12 * * *": "daily-digest",      // 21:00 JST
   "0 14 * * *": "optimizer-update",  // 23:00 JST
   "0 */2 * * *": "rollback-monitor", // 毎2h
-  "0 0 * * 1": "inspirations-ingest", // 月曜 09:00 JST
   "0 15 1 * *": "rotation-notice",   // 月初 rotation 通知
+  "0 16 * * SUN": "optimizer-analyst", // 日曜16:00 UTC = 毎週月曜01:00 JST（CF Quartz: 日=SUN, 0 不可）
 };
-
-/** 投稿 job → slot 名のマップ */
-const POST_SLOTS = {
-  "post-morning": "morning",
-  "post-morning2": "morning2",
-  "post-noon": "noon",
-  "post-afternoon": "afternoon",
-  "post-afternoon2": "afternoon2",
-  "post-evening": "evening",
-} as const;
 
 /** /admin/enqueue で手動起動を許可する job 名（line-event は webhook 専用なので除外） */
 const CRON_JOBS_BY_NAME: Record<string, true> = {
-  ideation: true,
-  "buzz-ingest": true,
-  "post-morning": true,
-  "post-morning2": true,
-  "post-noon": true,
-  "post-afternoon": true,
-  "post-afternoon2": true,
-  "post-evening": true,
+  collect: true,
   "daily-digest": true,
   "optimizer-update": true,
+  "optimizer-analyst": true,
+  "optimizer-apply": true,
   "rollback-monitor": true,
-  "inspirations-ingest": true,
   "rotation-notice": true,
+  "metrics-ingest": true,
+  compose: true,
+  check: true,
 };
 
 export default {
@@ -165,10 +136,7 @@ export default {
     log(env, "info", `cron fired: ${event.cron} → job=${job} (enqueueing)`);
 
     const date = jstDate(new Date());
-    const slot = POST_SLOTS[job as keyof typeof POST_SLOTS];
-    const msg: JobMessage = slot
-      ? ({ job, date, slot } as JobMessage)
-      : ({ job, date } as JobMessage);
+    const msg: JobMessage = { job, date } as JobMessage;
 
     // run lifecycle: runId 発番 → insert(running) → send。
     // FK (run_trace.run_id → run.id) のため insert→send を 1 つの waitUntil で直列化。
@@ -222,7 +190,9 @@ export default {
     // 管理用: cron job を手動で enqueue（OAUTH_ADMIN_SECRET ゲート）。
     // GET /admin/enqueue?job=<name>&key=<secret>  → 該当 job を即 enqueue（consumer が処理）
     if (url.pathname === "/admin/enqueue") {
-      const key = url.searchParams.get("key");
+      const authHeader = request.headers.get("authorization");
+      const bearer = authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : null;
+      const key = bearer ?? url.searchParams.get("key");
       if (!env.OAUTH_ADMIN_SECRET || key !== env.OAUTH_ADMIN_SECRET) {
         return new Response("unauthorized", { status: 401 });
       }
@@ -234,17 +204,264 @@ export default {
         );
       }
       const date = jstDate(new Date());
-      const slot = POST_SLOTS[job as keyof typeof POST_SLOTS];
-      // 手動起動は manual:true。標準スロットを占有しない (handleJob 側で manual-xxx slot に振る)。
       // run lifecycle: runId 発番 → insert(running, trigger=manual) → send を直列化。
       const runId = crypto.randomUUID();
-      const msg: JobMessage = slot
-        ? ({ job, date, slot, manual: true, runId } as JobMessage)
-        : ({ job, date, runId } as JobMessage);
+      const msg: JobMessage = { job, date, runId } as JobMessage;
       await insertRun({ id: runId, job, trigger: "manual", date, status: "running", attempt: 1 });
       await env.JOBS.send(msg);
       log(env, "info", `admin: enqueued job=${job} (manual)`);
       return Response.json({ ok: true, enqueued: msg });
+    }
+
+    // 管理用: 投稿テンプレ registry の要約一覧を返す（dashboard のドリフト解消用）。
+    // GET /admin/templates  (Bearer <secret> or ?key=<secret>・/admin/enqueue と同じ fail-closed 認可)
+    if (url.pathname === "/admin/templates") {
+      const authHeader = request.headers.get("authorization");
+      const bearer = authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : null;
+      const key = bearer ?? url.searchParams.get("key");
+      if (!env.OAUTH_ADMIN_SECRET || key !== env.OAUTH_ADMIN_SECRET) {
+        return new Response("unauthorized", { status: 401 });
+      }
+      return Response.json({ templates: listTemplateSummaries() });
+    }
+
+    // 管理用: キュレ素材に最適なテンプレ/fmat を LLM（Haiku）が推薦する（on-demand）。
+    // POST /admin/recommend  (Bearer <secret>・/admin/templates と同じ fail-closed 認可)
+    // body: { materials: [{ id, text, lang?, hasMedia?, engagement? }] }
+    // 返り: { recommendations: [{ materialId, templateId, fmat, reason, confidence }] }
+    // 失敗時は fail-open（recommendations: [] + warning）。Anthropic は従量課金のため
+    // ユーザー操作起点に限定し、件数上限で volume を抑える。
+    if (url.pathname === "/admin/recommend") {
+      if (request.method !== "POST") {
+        return new Response("method not allowed", { status: 405 });
+      }
+      const authHeader = request.headers.get("authorization");
+      const bearer = authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : null;
+      const key = bearer ?? url.searchParams.get("key");
+      if (!env.OAUTH_ADMIN_SECRET || key !== env.OAUTH_ADMIN_SECRET) {
+        return new Response("unauthorized", { status: 401 });
+      }
+      let payload: { materials?: unknown };
+      try {
+        payload = (await request.json()) as { materials?: unknown };
+      } catch {
+        return new Response("bad json", { status: 400 });
+      }
+      const rawMaterials = Array.isArray(payload?.materials) ? payload.materials : [];
+      if (rawMaterials.length === 0) {
+        return Response.json({ recommendations: [] });
+      }
+      // 境界検証 + コスト上限: 1 リクエスト最大 20 素材（従量課金の暴走防止）。
+      const RECOMMEND_MAX = 20;
+      const materials = rawMaterials
+        .filter((m): m is Record<string, unknown> => !!m && typeof m === "object")
+        .map((m) => ({
+          id: typeof m.id === "string" ? m.id : "",
+          text: typeof m.text === "string" ? m.text : "",
+          lang: typeof m.lang === "string" ? m.lang : null,
+          hasMedia: !!m.hasMedia,
+          engagement:
+            m.engagement && typeof m.engagement === "object"
+              ? (m.engagement as Record<string, number>)
+              : null,
+        }))
+        .filter((m) => m.id.length > 0 && m.text.trim().length > 0)
+        .slice(0, RECOMMEND_MAX);
+      if (materials.length === 0) {
+        return Response.json({ recommendations: [] });
+      }
+      // 設定欠落（ANTHROPIC_API_KEY 未設定）は一過性の API 失敗と区別して明示ログ。
+      // これが無いと new Anthropic({apiKey:undefined})→401→広い catch で「毎回 fail-open」となり
+      // 設定ミスが恒久 silent 劣化する。
+      if (!env.ANTHROPIC_API_KEY) {
+        log(env, "error", "/admin/recommend: ANTHROPIC_API_KEY 未設定（設定欠落・推薦は恒久無効）");
+        return Response.json({ recommendations: [], warning: "config: ANTHROPIC_API_KEY unset" });
+      }
+      try {
+        const Anthropic = (await import("@anthropic-ai/sdk")).default;
+        const { createClient } = await import("@supabase/supabase-js");
+        const { recommendMaterials, RECOMMEND_MODEL } = await import("../lib/curation/recommend.js");
+        const { recordCostLedger } = await import("../lib/cost/cost-ledger.js");
+        // 重要: 課金前に fallible な準備（client 生成）を済ませる。Anthropic 課金が発生した後に
+        // createClient が env 欠落で throw すると、トークン消費したのに cost_ledger 未計上＝
+        // brownout 会計が過小になる。sb/anthropic を recommendMaterials より先に確定させ、
+        // 課金確定後は fail-open な recordCostLedger だけが走るようにする（charge→必ず ledger）。
+        const sb = createClient(env.SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY, {
+          db: { schema: process.env.SUPABASE_SCHEMA || "xad" },
+        });
+        const anthropic = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });
+        const { recommendations, costJpy } = await recommendMaterials(
+          anthropic as never,
+          materials,
+          { templates: listTemplateSummaries() },
+        );
+        // cost_ledger 計上（recordCostLedger は内部 fail-open で throw しない）。
+        // ctx.waitUntil で応答をブロックしない。
+        ctx.waitUntil(
+          recordCostLedger(sb as never, {
+            category: "recommend",
+            costJpy,
+            meta: { model: RECOMMEND_MODEL, materials: materials.length },
+          }),
+        );
+        log(env, "info", `admin: recommend ${materials.length} materials → ${recommendations.length} recs`);
+        return Response.json({ recommendations });
+      } catch (e) {
+        // fail-open: 推薦は付加価値。失敗しても UI を壊さず空推薦を返す（サイレント禁止＝warn）。
+        // この経路に来る = client 生成失敗 or LLM 呼び出し自体の失敗（=課金前 or 課金なし）。
+        log(env, "error", `/admin/recommend failed (fail-open): ${String(e)}`);
+        return Response.json({ recommendations: [], warning: "recommend failed" });
+      }
+    }
+
+    // 管理用: 承認済みストックのスロット割当プランを返す（read-only・DB 未書込）。
+    // POST /admin/plan-slots  (Bearer <secret>・/admin/templates と同じ fail-closed 認可)
+    // body: { includeToday?: boolean, days?: number }
+    //   includeToday=true → startOffsetDays=0（当日含む same-day。現在時刻より後のピーク帯のみ）
+    //   days → lookaheadDays 上書き（既定 SCHEDULE_CONFIG.lookaheadDays）
+    // 返り: { ok, plan: [{ draftId, scheduledForISO }], approvedCount, reservedCount, ... }
+    // CLI plan-scheduled-publish.ts と同じ planSlots(SSOT) を使い、二重予約/枠衝突を一意に防ぐ。
+    if (url.pathname === "/admin/plan-slots") {
+      if (request.method !== "POST") {
+        return new Response("method not allowed", { status: 405 });
+      }
+      const authHeader = request.headers.get("authorization");
+      const bearer = authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : null;
+      const key = bearer ?? url.searchParams.get("key");
+      if (!env.OAUTH_ADMIN_SECRET || key !== env.OAUTH_ADMIN_SECRET) {
+        return new Response("unauthorized", { status: 401 });
+      }
+      let payload: { includeToday?: unknown; days?: unknown };
+      try {
+        payload = (await request.json()) as { includeToday?: unknown; days?: unknown };
+      } catch {
+        return new Response("bad json", { status: 400 });
+      }
+      const includeToday = payload?.includeToday === true;
+      const daysNum = Number(payload?.days);
+      const config: ScheduleConfig =
+        Number.isFinite(daysNum) && daysNum > 0
+          ? { ...SCHEDULE_CONFIG, lookaheadDays: Math.floor(daysNum) }
+          : SCHEDULE_CONFIG;
+      try {
+        const sb = createClient(env.SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY, {
+          db: { schema: "xad" },
+        });
+        // 承認済み未予約・未公開ストック（承認順 FIFO・id で安定化）
+        // 決定1: スレッド draft (thread_bodies IS NOT NULL) は X 予約UIがスレッド未サポート
+        //   のため予約スロット計画から除外（即時投稿 x-immediate-publish のみ対応）。
+        // published_at IS NULL: 今すぐ投稿で公開済みの draft をプラン対象に含めると、FIFO で
+        //   先に空きスロット（lookaheadDays=1・ピーク数枠のみ）を食い潰し、実在庫に割当が回らない。
+        //   dashboard 表示 stock(schedule-queries) と同一3条件に揃える。
+        const { data: stockRows, error: stockErr } = await sb
+          .from("post_drafts")
+          .select("id, human_approved_at")
+          .eq("human_approval_status", "approved")
+          .is("scheduled_for", null)
+          .is("published_at", null)
+          .is("thread_bodies", null)
+          .order("human_approved_at", { ascending: true })
+          .order("id", { ascending: true });
+        if (stockErr) throw new Error(`approved ストック取得失敗: ${stockErr.message}`);
+        // 既予約（同一スロット衝突回避 + 当日残枠クリップ用）
+        const { data: reservedRows, error: reservedErr } = await sb
+          .from("post_drafts")
+          .select("scheduled_for")
+          .not("scheduled_for", "is", null);
+        if (reservedErr) throw new Error(`既予約取得失敗: ${reservedErr.message}`);
+
+        const stock: StockDraft[] = (stockRows ?? []).map((r) => ({
+          id: (r as { id: string }).id,
+          human_approved_at: (r as { human_approved_at: string | null }).human_approved_at,
+        }));
+        const existing = (reservedRows ?? [])
+          .map((r) => (r as { scheduled_for: string | null }).scheduled_for)
+          .filter((v): v is string => typeof v === "string");
+
+        const planned = planSlots(stock, {
+          now: new Date(),
+          config,
+          existing,
+          startOffsetDays: includeToday ? 0 : 1,
+        });
+        // endpoint 層の日次キャップ防御（非ピーク既予約が当日枠を超えないようクリップ）
+        const clipped = clipPlanByDailyCap(planned, existing, config);
+
+        return Response.json({
+          ok: true,
+          plan: clipped.map((p) => ({ draftId: p.draftId, scheduledForISO: p.scheduledForISO })),
+          approvedCount: stock.length,
+          reservedCount: existing.length,
+          includeToday,
+          lookaheadDays: config.lookaheadDays,
+        });
+      } catch (e) {
+        // plan は read-only。失敗は fail-loud（500）で UI に明示（黙って空プランにしない）。
+        log(env, "error", `/admin/plan-slots failed: ${String(e)}`);
+        return new Response(`plan-slots error: ${String(e)}`, { status: 500 });
+      }
+    }
+
+    // 管理用: 予約確定（本体 write）。冪等 UPDATE + 観測 trace を SSOT lib で実行。
+    // POST /admin/mark-scheduled  (Bearer <secret>・/admin/plan-slots と同じ fail-closed 認可)
+    // body: { reservations: [{ draftId, scheduledFor, scheduledPostId? }] }
+    // 返り: { ok, applied, noop, runId, results:[{draftId, applied}] }
+    // CLI record-scheduled-publish.ts と同一 lib（markScheduledReservations / recordScheduledPublish）。
+    if (url.pathname === "/admin/mark-scheduled") {
+      if (request.method !== "POST") {
+        return new Response("method not allowed", { status: 405 });
+      }
+      const authHeader = request.headers.get("authorization");
+      const bearer = authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : null;
+      const key = bearer ?? url.searchParams.get("key");
+      if (!env.OAUTH_ADMIN_SECRET || key !== env.OAUTH_ADMIN_SECRET) {
+        return new Response("unauthorized", { status: 401 });
+      }
+      let payload: { reservations?: unknown };
+      try {
+        payload = (await request.json()) as { reservations?: unknown };
+      } catch {
+        return new Response("bad json", { status: 400 });
+      }
+      const raw = Array.isArray(payload?.reservations) ? payload.reservations : [];
+      // 境界検証: draftId / scheduledFor(string) 必須。不正要素は弾く（二重予約の要なので厳格）。
+      const reservations: ScheduledReservation[] = [];
+      for (const r of raw) {
+        if (!r || typeof r !== "object") continue;
+        const o = r as Record<string, unknown>;
+        if (typeof o.draftId !== "string" || o.draftId.length === 0) continue;
+        if (typeof o.scheduledFor !== "string" || Number.isNaN(new Date(o.scheduledFor).getTime())) {
+          continue;
+        }
+        reservations.push({
+          draftId: o.draftId,
+          scheduledFor: o.scheduledFor,
+          scheduledPostId: typeof o.scheduledPostId === "string" ? o.scheduledPostId : undefined,
+        });
+      }
+      if (reservations.length === 0) {
+        return new Response("reservations required (draftId/scheduledFor)", { status: 400 });
+      }
+      try {
+        // 1. 本体 write: 冪等 UPDATE（scheduled_for IS NULL ガード）。既予約は no-op=applied:false。
+        const marks = await markScheduledReservations(
+          reservations.map((r) => ({
+            draftId: r.draftId,
+            scheduledFor: r.scheduledFor,
+            scheduledPostId: r.scheduledPostId,
+          })),
+        );
+        const applied = marks.filter((m) => m.applied).length;
+        const noop = marks.length - applied;
+        // 2. 観測 trace（fail-open）。runId を返す。
+        const runId = await recordScheduledPublish(reservations);
+        log(env, "info", `admin: mark-scheduled applied=${applied} noop=${noop} run=${runId}`);
+        return Response.json({ ok: true, applied, noop, runId, results: marks });
+      } catch (e) {
+        // 本体 write の失敗は fail-loud（500）。二重予約防止の要なので握りつぶさない。
+        log(env, "error", `/admin/mark-scheduled failed: ${String(e)}`);
+        return new Response(`mark-scheduled error: ${String(e)}`, { status: 500 });
+      }
     }
 
     // X OAuth PKCE Step 1: generate verifier/state → store in KV → redirect to X

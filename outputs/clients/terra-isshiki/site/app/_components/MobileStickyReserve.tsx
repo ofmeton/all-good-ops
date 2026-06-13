@@ -9,7 +9,7 @@ export function MobileStickyReserve() {
       aria-label="ご予約はこちら（Airbnb）"
       className="group xl:hidden fixed bottom-5 right-5 z-40 inline-flex items-center gap-3 rounded-full bg-(--color-base-dark) text-(--color-base-light) px-5 py-3.5 shadow-[0_8px_28px_-6px_rgba(26,20,16,0.55)] backdrop-blur-[2px] hover:bg-(--color-base-dark)/90 transition-colors duration-300"
     >
-      <span className="font-mincho text-[9.1px] tracking-[0.18em] leading-none">
+      <span className="font-mincho text-[11.1px] tracking-[0.18em] leading-none">
         ご予約はこちら
       </span>
       {/* Thin custom arrow — 細い水平線 + 控えめなシェブロン */}

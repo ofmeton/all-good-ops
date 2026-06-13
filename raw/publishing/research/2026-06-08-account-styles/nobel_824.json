@@ -1,0 +1,47 @@
+{
+  "status": "success",
+  "msg": "success",
+  "data": {
+    "id": "3102399630",
+    "name": "tatsuki",
+    "userName": "nobel_824",
+    "location": "note書いてます",
+    "url": "https://t.co/b3eEOoa7p2",
+    "description": "Claude Code活用支援｜職歴: ランサーズ ▶︎ UPSIDER  ▶︎ 独立｜CLAUDE.md設計・業務自動化・発信運用を支援｜AI導入は設計が9割｜海外AI最新情報を実務目線で解説｜コーヒーとコーラが好き｜相談はDMへ",
+    "entities": {
+      "description": {},
+      "url": {
+        "urls": [
+          {
+            "display_url": "note.com/nobel",
+            "expanded_url": "https://note.com/nobel",
+            "indices": [
+              0,
+              23
+            ],
+            "url": "https://t.co/b3eEOoa7p2"
+          }
+        ]
+      }
+    },
+    "protected": false,
+    "isVerified": false,
+    "isBlueVerified": true,
+    "verifiedType": null,
+    "followers": 11169,
+    "following": 397,
+    "favouritesCount": 9484,
+    "statusesCount": 5317,
+    "mediaCount": 774,
+    "createdAt": "2015-03-22T03:02:18.000000Z",
+    "coverPicture": "https://pbs.twimg.com/profile_banners/3102399630/1680271074",
+    "profilePicture": "https://pbs.twimg.com/profile_images/1663195371793965057/zpyy5s1l_normal.jpg",
+    "canDm": true,
+    "affiliatesHighlightedLabel": {},
+    "isAutomated": false,
+    "automatedBy": null,
+    "pinnedTweetIds": [
+      "2044963646628090297"
+    ]
+  }
+}

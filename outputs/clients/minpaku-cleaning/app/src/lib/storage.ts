@@ -5,6 +5,11 @@ import { resizeForUpload } from "@/lib/image";
 
 const BUCKET = "report-photos";
 
+// アップロード上限（DoS 防止）。sharp 処理の前に raw サイズで弾く。
+const MAX_UPLOAD_BYTES = 10 * 1024 * 1024; // 10MB
+// Storage パスに安全に埋め込める requestId のみ許可（パストラバーサル防止）。
+const SAFE_REQUEST_ID = /^[A-Za-z0-9_-]+$/;
+
 // 完了写真を Storage にアップロードし、保存パスを返す。
 // パスは requestId/タイムスタンプ-ランダム.拡張子 で衝突を避ける。
 export async function uploadReportPhoto(
@@ -12,6 +17,13 @@ export async function uploadReportPhoto(
   file: ArrayBuffer | Buffer,
   contentType: string,
 ): Promise<string> {
+  if (!SAFE_REQUEST_ID.test(requestId)) {
+    throw new Error("requestId が不正です");
+  }
+  const size = file instanceof Buffer ? file.length : file.byteLength;
+  if (size > MAX_UPLOAD_BYTES) {
+    throw new Error("ファイルサイズが上限（10MB）を超えています");
+  }
   const db = createServiceClient();
   // Plan 3: アップロード前にリサイズ・圧縮する（長辺1600px / JPEG q80 or PNG）
   const { buffer, contentType: outType } = await resizeForUpload(file, contentType);

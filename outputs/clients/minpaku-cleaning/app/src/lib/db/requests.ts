@@ -3,6 +3,7 @@ import { createServiceClient } from "@/lib/supabase-server";
 import { assertAdmin, StaffOnlyError } from "@/lib/db/scope";
 import { assertTransition, type CleaningStatus } from "@/lib/status-machine";
 import type { Actor } from "@/lib/auth";
+import { todayInJST } from "@/lib/date";
 import {
   notify,
   resolveStaffForProperty,
@@ -34,17 +35,7 @@ export type CleaningRequest = {
 
 // 当日割り当て不可: checkin は翌日以降。checkout > checkin。guest_count > 0。
 // current_date を使う CHECK 制約は immutable でないため不可 → アプリ層で検証する。
-// TZ は Vercel Serverless Runtime で予約されており env var で渡せないため、
-// Intl.DateTimeFormat で JST 日付を直接取得する（ランタイム TZ に依存しない）。
-function todayInJST(): string {
-  return new Intl.DateTimeFormat("en-CA", {
-    timeZone: "Asia/Tokyo",
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  }).format(new Date());
-}
-
+// 日付は JST 基準（@/lib/date の todayInJST）で取得しランタイム TZ に依存しない。
 function validateRequestFields(input: {
   checkin_date: string;
   checkout_date: string;
@@ -171,11 +162,17 @@ export async function cancelRequest(actor: Actor, id: string): Promise<void> {
   if (readError) throw readError;
   if (!req) throw new Error("依頼が見つかりません");
   assertTransition(req.status as CleaningStatus, "cancelled");
-  const { error } = await db
+  // 読取と更新の間に他処理が状態を変えていないか条件付きUPDATEで排他する（TOCTOU 対策）。
+  const { data, error } = await db
     .from("cleaning_requests")
     .update({ status: "cancelled", updated_at: new Date().toISOString() })
-    .eq("id", id);
+    .eq("id", id)
+    .eq("status", req.status)
+    .select("id");
   if (error) throw error;
+  if (!data || data.length === 0) {
+    throw new Error("依頼の状態が変更されたため取り消しできませんでした");
+  }
 }
 
 // ---- 割当・進行遷移 ----
@@ -201,6 +198,17 @@ async function assertStaffAssignedToRequestProperty(
     .eq("property_id", req.property_id)
     .maybeSingle();
   if (!assignment) throw new Error("この物件の担当ではありません");
+}
+
+// スタッフが対象依頼に対して操作権限を持つか（担当物件か）を検証する公開 API。
+// 写真アップロード等、requests 以外のエンドポイントから IDOR 防止のために呼ぶ。
+export async function assertStaffAssignedToRequest(
+  actor: Actor,
+  requestId: string,
+): Promise<void> {
+  if (actor.role !== "staff") throw new StaffOnlyError("スタッフ専用の操作です");
+  const db = createServiceClient();
+  await assertStaffAssignedToRequestProperty(db, actor.staffId, requestId);
 }
 
 // 早い者勝ち承認: status='unassigned' の条件付きUPDATEで排他する。
@@ -247,15 +255,21 @@ export async function assignRequest(
   if (req.status !== "unassigned" && req.status !== "assigned") {
     throw new Error(`${req.status} の依頼は割り当てを変更できません`);
   }
-  const { error } = await db
+  // 読取後に in_progress 等へ進んだ依頼を割当で上書きしないよう条件付きUPDATE（TOCTOU 対策）。
+  const { data, error } = await db
     .from("cleaning_requests")
     .update({
       status: "assigned",
       assigned_staff_id: staffId,
       updated_at: new Date().toISOString(),
     })
-    .eq("id", requestId);
+    .eq("id", requestId)
+    .in("status", ["unassigned", "assigned"])
+    .select("id");
   if (error) throw error;
+  if (!data || data.length === 0) {
+    throw new Error("依頼の状態が変更されたため割り当てできませんでした");
+  }
 }
 
 // スタッフが清掃を開始する（assigned → in_progress）。担当本人のみ。
@@ -275,11 +289,18 @@ export async function startRequest(
     throw new Error("自分が担当する依頼ではありません");
   }
   assertTransition(req.status as CleaningStatus, "in_progress");
-  const { error } = await db
+  // assigned かつ自分担当のままであることを条件付きUPDATEで保証する（TOCTOU 対策）。
+  const { data, error } = await db
     .from("cleaning_requests")
     .update({ status: "in_progress", updated_at: new Date().toISOString() })
-    .eq("id", requestId);
+    .eq("id", requestId)
+    .eq("status", "assigned")
+    .eq("assigned_staff_id", actor.staffId)
+    .select("id");
   if (error) throw error;
+  if (!data || data.length === 0) {
+    throw new Error("依頼の状態が変更されたため開始できませんでした");
+  }
 }
 
 // 管理者が完了報告を確認する（reported → confirmed）。
@@ -296,11 +317,17 @@ export async function confirmRequest(
     .maybeSingle();
   if (!req) throw new Error("依頼が見つかりません");
   assertTransition(req.status as CleaningStatus, "confirmed");
-  const { error } = await db
+  // reported のままであることを条件付きUPDATEで保証し、二重確定＝重複通知を防ぐ（TOCTOU 対策）。
+  const { data, error } = await db
     .from("cleaning_requests")
     .update({ status: "confirmed", updated_at: new Date().toISOString() })
-    .eq("id", requestId);
+    .eq("id", requestId)
+    .eq("status", "reported")
+    .select("id");
   if (error) throw error;
+  if (!data || data.length === 0) {
+    throw new Error("依頼の状態が変更されたため確認できませんでした");
+  }
   // 物件オーナーに確認完了を通知
   const owner = await resolveOwnerForProperty(req.property_id);
   if (owner) {

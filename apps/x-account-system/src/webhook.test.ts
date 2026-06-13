@@ -268,14 +268,14 @@ describe("/admin/enqueue manual trigger", () => {
 
   test("missing key → 401, no enqueue", async () => {
     const env = adminEnv();
-    const res = await worker.fetch(req({ job: "buzz-ingest" }), env, makeCtx());
+    const res = await worker.fetch(req({ job: "collect" }), env, makeCtx());
     expect(res.status).toBe(401);
     expect(env.JOBS.send).not.toHaveBeenCalled();
   });
 
   test("wrong key → 401", async () => {
     const env = adminEnv();
-    const res = await worker.fetch(req({ job: "buzz-ingest", key: "nope" }), env, makeCtx());
+    const res = await worker.fetch(req({ job: "collect", key: "nope" }), env, makeCtx());
     expect(res.status).toBe(401);
     expect(env.JOBS.send).not.toHaveBeenCalled();
   });
@@ -287,23 +287,75 @@ describe("/admin/enqueue manual trigger", () => {
     expect(env.JOBS.send).not.toHaveBeenCalled();
   });
 
-  test("valid non-post job → enqueues {job,date}", async () => {
+  test("valid job → enqueues {job,date}", async () => {
     const env = adminEnv();
-    const res = await worker.fetch(req({ job: "buzz-ingest", key: ADMIN_SECRET }), env, makeCtx());
+    const res = await worker.fetch(req({ job: "collect", key: ADMIN_SECRET }), env, makeCtx());
     expect(res.status).toBe(200);
     expect(env.JOBS.send).toHaveBeenCalledTimes(1);
     const msg = env.JOBS.send.mock.calls[0][0];
-    expect(msg.job).toBe("buzz-ingest");
+    expect(msg.job).toBe("collect");
     expect(typeof msg.date).toBe("string");
     expect(msg.slot).toBeUndefined();
   });
+});
 
-  test("valid post job → enqueues with slot", async () => {
-    const env = adminEnv();
-    const res = await worker.fetch(req({ job: "post-morning", key: ADMIN_SECRET }), env, makeCtx());
+// ============================================================
+// /admin/templates registry endpoint gate (T1)
+// ============================================================
+
+describe("/admin/templates registry endpoint", () => {
+  const ADMIN_SECRET = "super-secret-admin-key";
+
+  function adminEnv(overrides: Partial<Env> = {}): Env {
+    return {
+      ...makeEnv(),
+      OAUTH_ADMIN_SECRET: ADMIN_SECRET,
+      ...overrides,
+    } as Env;
+  }
+
+  function templatesReq(opts: { key?: string; bearer?: string } = {}): Request {
+    const u = new URL("https://worker.example.com/admin/templates");
+    if (opts.key !== undefined) u.searchParams.set("key", opts.key);
+    const headers: Record<string, string> = {};
+    if (opts.bearer !== undefined) headers["authorization"] = `Bearer ${opts.bearer}`;
+    return new Request(u.toString(), { method: "GET", headers });
+  }
+
+  test("missing key → 401", async () => {
+    const res = await worker.fetch(templatesReq(), adminEnv(), makeCtx());
+    expect(res.status).toBe(401);
+  });
+
+  test("wrong key → 401", async () => {
+    const res = await worker.fetch(templatesReq({ key: "nope" }), adminEnv(), makeCtx());
+    expect(res.status).toBe(401);
+  });
+
+  test("unset OAUTH_ADMIN_SECRET → fail CLOSED (401 even with a key)", async () => {
+    const env = adminEnv({ OAUTH_ADMIN_SECRET: "" });
+    const res = await worker.fetch(templatesReq({ key: ADMIN_SECRET }), env, makeCtx());
+    expect(res.status).toBe(401);
+  });
+
+  test("valid key (query) → 200 + templates shape", async () => {
+    const res = await worker.fetch(templatesReq({ key: ADMIN_SECRET }), adminEnv(), makeCtx());
     expect(res.status).toBe(200);
-    const msg = env.JOBS.send.mock.calls[0][0];
-    expect(msg.job).toBe("post-morning");
-    expect(msg.slot).toBe("morning");
+    const json = (await res.json()) as {
+      templates: Array<{ id: string; name: string; description: string; preferredFmats?: string[] }>;
+    };
+    expect(Array.isArray(json.templates)).toBe(true);
+    expect(json.templates.length).toBeGreaterThanOrEqual(2);
+    const gold = json.templates.find((t) => t.id === "template_chaen_gold");
+    expect(gold).toBeDefined();
+    expect(typeof gold!.name).toBe("string");
+    expect(typeof gold!.description).toBe("string");
+    // summary だけ（systemPromptPatch 等の本文は漏らさない）
+    expect((gold as Record<string, unknown>).systemPromptPatch).toBeUndefined();
+  });
+
+  test("valid key (Bearer header) → 200", async () => {
+    const res = await worker.fetch(templatesReq({ bearer: ADMIN_SECRET }), adminEnv(), makeCtx());
+    expect(res.status).toBe(200);
   });
 });

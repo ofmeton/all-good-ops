@@ -20,6 +20,19 @@ main = "src/worker.ts"
 compatibility_date = "2026-05-01"
 compatibility_flags = ["nodejs_compat"]
 
+# --------------------------------------------------------------------
+# モジュール alias: @anthropic-ai/sdk(0.101) の self-hosted agent-toolset が
+# 静的 import graph 経由で node:fs/node:fs/promises/node:child_process を
+# bundle に持ち込む。本 worker は cloud Managed Agents + SSE のみ使用し当該
+# コードは実行されない (task1 実証) ため空 stub に置換して bundle から除外。
+# workerd は node:child_process 非対応。本番自前コードは node:fs/child_process
+# 不使用 (使用は *.test.ts のみ=bundle 対象外)。詳細: src/stubs/node-empty.js
+# --------------------------------------------------------------------
+[alias]
+"node:child_process" = "./src/stubs/node-empty.js"
+"node:fs" = "./src/stubs/node-empty.js"
+"node:fs/promises" = "./src/stubs/node-empty.js"
+
 # 観測性 (設計 §observability、cron run を root span として記録)
 [observability]
 enabled = true
@@ -40,41 +53,29 @@ dead_letter_queue = "xad-jobs-dlq"
 
 # --------------------------------------------------------------------
 # Cron Triggers (Cloudflare は UTC 指定。JST = UTC+9)
-# 投稿頻度: チャエン実測リズム = 5〜7投稿/日 (朝6-8 / 昼12 / 夕15-17 を主軸)。
-# P1/P2 で X API 直投を廃止し chrome-devtools 予約投稿に移行したため、
-# 旧「X API 100/月上限 → 投稿 cron 3 本」制約は解消。生成 cron を 6 本に拡張。
-# (各 cron は draft 生成 + LINE 承認依頼のみ。実投稿は人の承認 → 予約投稿)。
+# legacy pipeline retire 後の生存 cron は 5 本のみ。
+# 旧（buzz-ingest/ideation/post-morning〜evening/inspirations-ingest）は削除。
+# 新アーキは collect(cron) → 人間キュレーションUI選抜 → compose/check(curation enqueue・連鎖、
+# cron ではない) → 人間承認 → 予約投稿。実投稿は人の承認 → chrome 予約投稿（X API 直投なし）。
 # --------------------------------------------------------------------
 # | JST       | UTC          | ジョブ                                      |
 # |-----------|--------------|---------------------------------------------|
-# | 06:00     | 21:00 (前日) | buzz-ingest (海外X buzz 日次, 素材収集を最初に) |
-# | 06:30     | 21:30 (前日) | ideation (materials→core_ideas LLM生成, buzzの後)|
-# | 07:00     | 22:00 (前日) | post-morning (朝ピーク1)                     |
-# | 08:00     | 23:00 (前日) | post-morning2 (朝ピーク2)                    |
-# | 12:00     | 03:00        | post-noon (昼ピーク)                         |
-# | 15:00     | 06:00        | post-afternoon (夕ピーク1)                   |
-# | 17:00     | 08:00        | post-afternoon2 (夕ピーク2)                  |
-# | 19:00     | 10:00        | post-evening (note 送客, URL末尾)            |
+# | 05:30     | 20:30 (前日) | collect (収集エージェント)                    |
+# | 20:00     | 11:00        | metrics-ingest (engagement 取込み)          |
 # | 21:00     | 12:00        | daily-digest (LINE 配信)                    |
 # | 23:00     | 14:00        | optimizer-update (posterior 更新)           |
 # | 毎2h      | */2          | rollback-monitor (異常検知)                 |
-# | 月曜 09:00 | 00:00 (Mon)  | inspirations-ingest (週次)                  |
 # | 毎月1日 00:00| 15:00 (1日) | rotation-notice (token rotation 通知)       |
+# | 毎週月曜01:00| 16:00 (日曜) | optimizer-analyst (週次改善提案生成)         |
 [triggers]
 crons = [
-  "0 21 * * *",    # 06:00 JST buzz-ingest (素材収集を最初に)
-  "30 21 * * *",   # 06:30 JST ideation (buzz の後で素材→ネタ変換)
-  "0 22 * * *",    # 07:00 JST post-morning (朝ピーク1)
-  "0 23 * * *",    # 08:00 JST post-morning2 (朝ピーク2)
-  "0 3 * * *",     # 12:00 JST post-noon (昼ピーク)
-  "0 6 * * *",     # 15:00 JST post-afternoon (夕ピーク1)
-  "0 8 * * *",     # 17:00 JST post-afternoon2 (夕ピーク2)
-  "0 10 * * *",    # 19:00 JST post-evening (note 送客)
+  "30 20 * * *",   # 05:30 JST collect (収集エージェント)
+  "0 11 * * *",    # 20:00 JST metrics-ingest (digest/optimizer の前)
   "0 12 * * *",    # 21:00 JST daily-digest
   "0 14 * * *",    # 23:00 JST optimizer-update
   "0 */2 * * *",   # rollback-monitor 毎2h
-  "0 0 * * 1",     # 月曜 09:00 JST inspirations-ingest
   "0 15 1 * *",    # 毎月1日 rotation-notice
+  "0 16 * * SUN",  # 日曜16:00 UTC = 毎週月曜01:00 JST optimizer-analyst（CF は Quartz: 日=SUN。0 は不可）
 ]
 
 # --------------------------------------------------------------------

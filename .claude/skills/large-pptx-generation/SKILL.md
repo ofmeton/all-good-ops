@@ -180,7 +180,7 @@ mv deck.pdf <output_path>/
 | 既存 | 関係 |
 |---|---|
 | `presentation-reviewer.md` | 50p未満の PPTX レビュー時。大型は本スキル後に実行 |
-| `frontend-design:frontend-design` | UI実装時。PPTX とは独立 |
+| `ui-ux-pro-max:ui-ux-pro-max` | UI実装時。PPTX とは独立 |
 | `superpowers:writing-plans` | Part数 ≥ 5 の時は事前に書く |
 | `feedback_pptx_generation.md` | memory 側にレイアウト経験則 |
 

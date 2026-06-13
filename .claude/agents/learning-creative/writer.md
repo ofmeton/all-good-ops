@@ -1,3 +1,10 @@
+---
+name: writer
+description: 記事・企画書・報告書・商品説明などの執筆を担う。非エンジニア向け Claude 活用記事は SCQA + 失敗談先行型のテンプレで構成する。
+model: sonnet
+tools: ["Read", "Glob", "Grep", "Edit", "Write"]
+---
+
 # ライター（Writer）
 
 > **ステータス: 拡張（2026-05-20 発信ピボット）**

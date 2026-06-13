@@ -1,7 +1,7 @@
 ---
 type: meta
 title: "Hot Cache"
-updated: 2026-06-05
+updated: 2026-06-12
 ---
 
 # Recent Context
@@ -9,25 +9,27 @@ updated: 2026-06-05
 > セッション間で保持される ~500 words のコンテキストキャッシュ。セッション開始時に最優先で読む。詳細: [[SCHEMA]] §ホットキャッシュ。
 
 ## Last Updated
-2026-06-05 — **Anthropic 公式 BP リサーチ → 反映**。横断ツール系**22スキルを `<name>/SKILL.md` 化**(PR#94)し自動検出/自動invoke 可に（flat .md は frontmatter があっても非検出が根本原因）。CLAUDE.md 誘導簡素化(164行維持)・陳腐化パス参照を全体修正・`claude-md-health-check` に公式チェックリスト item8・[[self/engineering-principles]] 原則6 追記。**pre-commit ガード復旧**（削除済 worktree への dangling symlink を自リポ tracked スクリプトへ再 install）。**plugin化(目的=token節約)は先送り＋監視**（~2026-07-05 revisit、[[project-skill-plugin-token-deferral]]）。**monetize-os / ai-radar 廃止**を反映（CLAUDE.md 外部スポーク除去・はぐりん委譲先保留）。
+2026-06-12 — **MF家計ダッシュボードのデータ基盤(Plan1)完成**。マネーフォワードME（個人版・課金継続＝収集役）のエクスポートを Claude で分析する個人家計システム。recon→全口座再連携→正規化ライブラリ(node:test 11緑)→Supabase `mf_finance`(7テーブル/RLS)へ **3,742行**冪等load→可処分ロジックtested。worktree `task/260606-mf-finance`（**未merge**・`[[../apps/mf-finance/HANDOFF.md]]`）。設計重心=「今月あといくら使えるか(可処分)」。retro [[../outputs/retrospectives/2026-06-12-1649-mf-finance-data-layer]]。
+直近の非開発伴走: journaling体制化（`~/journal/` git管理外＋毎晩22:00 routine `trig_01WxVif5yDtYqSRLuXnMxyqx`）[[project-journaling-system]]／子どもの居場所名称「えんがわ」確定・TERRA縁側構想 [[../outputs/retrospectives/2026-06-12-engawa-naming-vision]]／xadダッシュボード刷新 [[../outputs/retrospectives/2026-06-12-1130-xad-mission-control-ui]]。
 
 ## Current Focus
-- **スキル体系**: 22 SKILL.md 常時 on。使用頻度を一定期間監視し、低頻度を off 既定 plugin に逃がして起動メタ分(~1.3k tok/session)を回収する（revisit ~2026-07-05、頻度は `~/.claude/projects/**/*.jsonl` から集計）。
-- **🔴 はぐりん persona 運用**: monetize-os 廃止で収益化委譲先が消失 → 名義境界の戦略再判断が未着手。
-- **運用ハイジーン**: 安全網を **hook化で再建済**（cron復活せず）。`scripts/hooks/worktree-hygiene-scan.sh`(ゾンビworktree/merged済ブランチ検知をSessionStart常時化) + `stop-hygiene-reminder.sh`(Stop hook 未コミット警告)。決定論的・トークンゼロ。
-- **🔴 ミナト広告設定（再開待ち）**: chrome-devtools MCP 接続待ち。[[project-minato-ad-settings]]
+- **mf-finance（別ブランチ進行中）**: Plan1=データ基盤 完成。次=①PostgREST公開反映の稼働確認（`mf_finance`を exposed schemas追加済だが反映待ち [[reference-supabase-nonpublic-schema-exposed]]）②最新データ再取得（再連携後フル版）③**Plan2=可処分ダッシュボードUI**(Next.js)未着手。確定要件・鍵・ハマり所は HANDOFF.md。
+- **brownout 中（¥13,800超）**: X worker cron 停止中（daily-digest+line-eventのみ）。`!resume`か月初リセットで復帰。予約投稿はX側で発火継続。[[project-cron-automation-disabled]]
+- **x-account への routine 活用（提案止まり）**: 第一候補=朝の承認お膳立てdigest。投稿はローカルChrome必須でクラウド不可。
+- **optimizer 運用フェーズ**: `/proposals` accept→tier-Tはworker/config・promptは `x-optimizer-apply-code`。
+- **🔴 はぐりん persona**: monetize-os廃止で委譲先消失→名義境界の戦略再判断 未着手。
+- **🔴 ミナト広告設定（再開待ち）**: chrome-devtools MCP接続待ち。[[project-minato-ad-settings]]
 
 ## Recently Touched
-- [[../outputs/retrospectives/2026-06-05-2147-anthropic-skill-alignment]] / PR#94(22スキルSKILL.md化)
-- `.claude/skills/<22個>/SKILL.md` / `CLAUDE.md`(スポーク除去) / [[self/engineering-principles]](原則6)
-- memory 新規 [[feedback_bash_bulk_replace_one_file_first]] / [[feedback_git_mv_update_references]] / [[project-skill-plugin-token-deferral]]
-- `raw/facts/situations/2026-06-05-monetize-os-airadar-discontinued.md`
-- [[../outputs/retrospectives/2026-06-05-2009-cron-inventory-cleanup]] / PR#95(前スレッド)
+- `apps/mf-finance/**`（lib+CLI+migrations+HANDOFF/DESIGN）／`raw/finance/moneyforward/**`／memory [[reference-supabase-nonpublic-schema-exposed]]／Supabase `mf_finance` schema(本番)
+- 直前: journaling体制化 `.claude/skills/journaling/`・[[project-journaling-system]]／xad刷新 `apps/xad-dashboard/**`・[[feedback-css-fixed-containing-block]]
 
 ## Open Questions / Frontiers
-- はぐりん収益化: monetize-os 廃止後の委譲先・運用をどうするか（戦略再判断）
-- スキル頻度監視: revisit 時に low-freq を plugin 化するか、常時 on のままにするか
-- money-bot 解体で発信ピボットの note有料/IG/Stock 自動化は空白に → 役割を別系統で持つか、x-account 拡張で吸収するか
+- **mf-finance**: PostgREST公開反映が稼働インスタンスに乗ったか要確認（未反映なら `load-mgmt` 迂回継続）。max_rows=1000 なので3700件UIはページング/集計。
+- **journaling routine初回検証**: 今夜22:00 初回プッシュが届くか未verify。
+- **cwd-regression 3連続**: 全Bash `cd <abs> &&` 前置（[[bash-cwd-persistence]] #5）。4回目で別手段検討。
+- `listApprovedStock`相当フィルタ3箇所複製の SSOT 化（未着手）。
+- scheduled-publish: dashboard予約確定済は record CLI noop→scheduled_post_id 直接UPDATE要（skill追記済）。
 
 ## Conventions
 - 500 words 以内 / declarative present tense / 全置換更新（古い項目は間引く）

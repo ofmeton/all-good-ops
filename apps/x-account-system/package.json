@@ -10,6 +10,8 @@
   "type": "module",
   "scripts": {
     "budget": "tsx lib/cost/budget-cli.ts",
+    "apply-code": "tsx scripts/optimizer-apply-code.ts",
+    "apply-nightly": "tsx scripts/optimizer-apply-nightly.ts",
     "oauth:test": "tsx lib/oauth/pkce-test.ts",
     "fallback:dry-run": "tsx lib/fallback/trigger-cli.ts --dry-run",
     "relabel": "python3 scripts/relabel-tweets.py",
@@ -20,11 +22,12 @@
     "editor:cli": "tsx lib/editor/cli.ts",
     "publisher:test": "IN_MEMORY_FALLBACK=true jest lib/publisher",
     "writer:test": "IN_MEMORY_FALLBACK=true jest lib/writer",
-    "pipeline:dryrun": "IN_MEMORY_FALLBACK=true tsx lib/pipeline/e2e-dryrun.ts",
     "interviewer:test": "IN_MEMORY_FALLBACK=true jest lib/interviewer",
     "dashboard:test": "IN_MEMORY_FALLBACK=true jest lib/dashboard",
     "safety:test": "IN_MEMORY_FALLBACK=true jest lib/safety",
     "ma:test": "IN_MEMORY_FALLBACK=true jest lib/ma",
+    "ma:render": "tsx scripts/render-ma-agents.ts",
+    "ma:bootstrap": "tsx scripts/bootstrap-ma-agents.ts",
     "digest:cli": "IN_MEMORY_FALLBACK=true tsx lib/dashboard/digest-cli.ts",
     "optimizer:test": "IN_MEMORY_FALLBACK=true jest lib/optimizer",
     "visualizer:test": "IN_MEMORY_FALLBACK=true jest lib/visualizer",
@@ -38,7 +41,7 @@
     "build:registry": "tsx scripts/build-registry.ts"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.36.0",
+    "@anthropic-ai/sdk": "^0.101.0",
     "@supabase/supabase-js": "^2.45.0",
     "axios": "^1.16.1",
     "dotenv": "^16.4.5",

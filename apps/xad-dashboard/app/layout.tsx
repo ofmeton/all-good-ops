@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { NavBar } from "./components/NavBar";
+import { AmbientBackground } from "./components/AmbientBackground";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,13 +29,10 @@ export default function RootLayout({
       lang="ja"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
-        <header className="border-b px-4 py-2 flex items-center gap-4 text-sm">
-          <span className="font-bold">xad observability</span>
-          <a href="/" className="text-blue-600 hover:underline">工程図</a>
-          <a href="/runs" className="text-blue-600 hover:underline">Runs</a>
-        </header>
-        {children}
+      <body className="min-h-full flex flex-col bg-base text-slate-200">
+        <AmbientBackground />
+        <NavBar />
+        <div className="flex-1 min-h-0 flex flex-col">{children}</div>
       </body>
     </html>
   );

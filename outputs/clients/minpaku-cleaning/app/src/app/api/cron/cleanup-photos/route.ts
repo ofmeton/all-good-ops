@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createServiceClient } from "@/lib/supabase-server";
 import { isCronAuthenticated } from "@/lib/cron-auth";
+import { serverErrorResponse } from "@/lib/api-error";
 import { deletePhoto } from "@/lib/storage";
 
 // 毎日1回呼ばれ、expires_at を過ぎた report_photos の Storage 実体と DB 行を削除する。
@@ -15,7 +16,7 @@ export async function GET(req: NextRequest) {
     .select("id, storage_path")
     .lt("expires_at", now);
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return serverErrorResponse(error, "cron/cleanup-photos");
   }
   const list = (expired ?? []) as Array<{ id: string; storage_path: string }>;
 

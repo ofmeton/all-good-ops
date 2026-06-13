@@ -36,10 +36,12 @@ jest.mock("../lib/dashboard/digest.ts", () => ({
   runDailyDigest: (...args: unknown[]) => mockRunDailyDigest(...args),
 }));
 
-// ---- 3. mock ideation impl (another non-always-allowed job) ----
-const mockRunIdeation = jest.fn().mockResolvedValue(3);
-jest.mock("../lib/ideation/ideate.ts", () => ({
-  runIdeation: (...args: unknown[]) => mockRunIdeation(...args),
+// ---- 3. mock compose impl (another non-always-allowed job) ----
+const mockRunCompose = jest
+  .fn()
+  .mockResolvedValue({ processed: 0, draftCount: 0, errorCount: 0 });
+jest.mock("../lib/curation/run-compose.ts", () => ({
+  runCompose: (...args: unknown[]) => mockRunCompose(...args),
 }));
 
 // ---- 4. imports AFTER mocks ----
@@ -80,6 +82,16 @@ afterAll(() => {
   delete process.env.IN_MEMORY_FALLBACK;
 });
 
+describe("optimizer-apply brownout", () => {
+  it("ALL_JOBS と STOP_POSTING_ALLOWED に含まれ cron_halt/escalate には含まれない", async () => {
+    const { ALLOWED_JOBS_BY_STATUS } = await import("../lib/safety/brownout-handler.ts");
+    expect(ALLOWED_JOBS_BY_STATUS.ok).toContain("optimizer-apply");
+    expect(ALLOWED_JOBS_BY_STATUS.stop_posting).toContain("optimizer-apply");
+    expect(ALLOWED_JOBS_BY_STATUS.cron_halt).not.toContain("optimizer-apply");
+    expect(ALLOWED_JOBS_BY_STATUS.escalate).not.toContain("optimizer-apply");
+  });
+});
+
 describe("handleJob: brownout cost-fetch fails OPEN", () => {
   it("does NOT throw when getMonthlyCostJpy() rejects (would otherwise retry forever)", async () => {
     const msg: JobMessage = { job: "daily-digest", date: "2026-06-03" };
@@ -94,10 +106,10 @@ describe("handleJob: brownout cost-fetch fails OPEN", () => {
     expect(mockRunDailyDigest).toHaveBeenCalledTimes(1);
   });
 
-  it("still dispatches a non-always-allowed job (ideation) when cost fetch throws (cost defaults to 0 = healthy)", async () => {
-    const msg: JobMessage = { job: "ideation", date: "2026-06-03" };
+  it("still dispatches a non-always-allowed job (compose) when cost fetch throws (cost defaults to 0 = healthy)", async () => {
+    const msg: JobMessage = { job: "compose", date: "2026-06-03" };
     await handleJob(msg, makeEnv());
-    // cost defaulted to 0 → brownout status healthy → ideation allowed → dispatched
-    expect(mockRunIdeation).toHaveBeenCalledTimes(1);
+    // cost defaulted to 0 → brownout status healthy → compose allowed → dispatched
+    expect(mockRunCompose).toHaveBeenCalledTimes(1);
   });
 });

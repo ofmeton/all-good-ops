@@ -36,4 +36,21 @@ describe("storage（report-photos バケット）", () => {
     // 署名URL自体は発行できる（存在チェックはしない）が、再削除はエラーにならない
     await expect(deletePhoto(path)).resolves.toBeUndefined();
   });
+
+  it("パストラバーサルを含む requestId を拒否する", async () => {
+    const buf = Buffer.from("0", "utf8");
+    await expect(
+      uploadReportPhoto("../../secret/x", buf, "image/jpeg"),
+    ).rejects.toThrow(/requestId/);
+    await expect(
+      uploadReportPhoto("a/b", buf, "image/jpeg"),
+    ).rejects.toThrow(/requestId/);
+  });
+
+  it("上限サイズ超過のファイルを拒否する（DoS 防止・sharp 実行前）", async () => {
+    const tooBig = Buffer.alloc(11 * 1024 * 1024, 0); // 11MB
+    await expect(
+      uploadReportPhoto("req-big", tooBig, "image/jpeg"),
+    ).rejects.toThrow(/サイズ/);
+  });
 });

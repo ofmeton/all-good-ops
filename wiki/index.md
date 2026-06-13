@@ -9,6 +9,8 @@
 
 ## business
 
+- [freee-invoice](business/freee-invoice.md) — freee 請求書(invoice/iv API)運用 SSOT（company_id バグ・立替分類・POST 最小ペイロード）
+
 ### bsa
 - [overview](business/bsa/overview.md) — BSA 戦略全体像（4 ヶ月タイムボックス）
 - [pricing-catalog](business/bsa/pricing-catalog.md) — 商品ライン L1/L2/L3/L4 価格・納期・オプション SSOT
@@ -51,6 +53,14 @@
 - [streams](self/streams.md) — 現在の収入源ポートフォリオ（BSA・RICE CREAM・Shopify・稼働時間）
 - [engineering-principles](self/engineering-principles.md) — 振り返り由来のエンジニアリング/プロセス原則（連結学びノート・成長型）
 
+## dev
+
+- [standards](dev/standards.md) — 開発設計 SSOT（A:スタック非依存の設計規律 + B:スタック別規約[採用時のみ]・architect 必読）
+- [agent-teams-playbook](dev/agent-teams-playbook.md) — agent teams 運用正本（チーム編成・ワークフロー・ガードレール・有効化手順）
+- [external-api-ops](dev/external-api-ops.md) — 外部 API 運用 playbook（コスト先出し・料金 WebSearch・curl 事前確認・wrapper 1 ファイル化・社会 API first try・SDK deploy 検証）
+- [vercel-deploy-gotchas](dev/vercel-deploy-gotchas.md) — Vercel デプロイ ハマり集（env REST API 投入・env pull 罠・deploy 切り分け・Hobby cron・team author email・monorepo cwd）
+- [subagent-dispatch](dev/subagent-dispatch.md) — サブエージェント dispatch playbook（検証コマンド必須・固定制約・branch 報告・ts-jest CJS NG list・並列 shared file 直列化）
+
 ## ibasho
 
 - [overview](ibasho/overview.md) — 子どもの居場所構想 SSOT（draft、ingest で育てる）
@@ -76,7 +86,7 @@
 ---
 
 ## 統計（lint で更新）
-- 総ページ数: 23（SCHEMA/index/log 3 + コンテンツ 20：bsa 6 + icecream 1 + portfolio 1 + personal 1 + lp-hp-design 3 + image-processing 1 + ai-industry 1 + people 1 + self 3 + ibasho 1 + external 1）
+- 総ページ数: 25（SCHEMA/index/log 3 + コンテンツ 22：bsa 6 + icecream 1 + portfolio 1 + personal 1 + lp-hp-design 3 + image-processing 1 + ai-industry 1 + people 1 + self 3 + dev 2 + ibasho 1 + external 1）
 - 最終 ingest: 2026-05-10 (memory → raw 4本 → wiki 5ページ一括 ingest)
 - 最終 lint: 2026-05-10 (Phase 3 区切り lint - orphan 4 件全解消・曖昧 wikilink 修正)
-- 最終 phase: 2026-05-15 (Phase 3 完了 - external クラスタ作成・context → wiki 移行完了)
+- 最終 phase: 2026-06-06 (agent-teams 体制 Phase 0-3 - dev クラスタ/standards/architect/system-engineer拡張/playbook)

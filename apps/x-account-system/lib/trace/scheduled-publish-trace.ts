@@ -18,6 +18,8 @@ export interface ScheduledReservation {
   scheduledFor: string;
   /** X 予約投稿の識別子 (post_drafts.scheduled_post_id) */
   scheduledPostId?: string;
+  /** 写真添付の DL 解決結果 (media-fetch の uploaded/skipped 件数)。観測・再試行用。 */
+  attachmentsResolved?: { uploaded: number; skipped: number };
 }
 
 export interface RecordScheduledPublishDeps {
@@ -69,6 +71,7 @@ export async function recordScheduledPublish(
       output: {
         scheduledFor: r.scheduledFor,
         scheduledPostId: r.scheduledPostId ?? null,
+        attachmentsResolved: r.attachmentsResolved ?? null,
       },
     });
   }
