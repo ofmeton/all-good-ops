@@ -23,7 +23,8 @@
   // ---- 状態 -------------------------------------------------------------
   let inspecting = false, hovered = null;
   let selected = null, selectedEl = null;
-  let sourceClass = "", liveClass = "", bp = "", tab = "box";
+  let sourceClass = "", liveClass = "", bp = "", state = "", tab = "box";
+  let marginLocked = null, paddingLocked = null;
   let reordering = false, dragEl2 = null, dropTarget = null, dropPos = "before";
   let lastX = 0, lastY = 0, asTimer = null, asDir = 0; // D&D オートスクロール
   const pending = [];
@@ -38,6 +39,12 @@
     trash: '<polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>',
     chevron: '<polyline points="9 18 15 12 9 6"/>',
     send: '<line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>',
+    lock: '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+    unlock: '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 7.5-2"/>',
+    up: '<path d="M12 19V5"/><path d="M5 12l7-7 7 7"/>',
+    right: '<path d="M5 12h14"/><path d="M12 5l7 7-7 7"/>',
+    down: '<path d="M12 5v14"/><path d="M19 12l-7 7-7-7"/>',
+    left: '<path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/>',
   };
   const svg = (k, s = 16) => `<svg viewBox="0 0 24 24" width="${s}" height="${s}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${I[k]}</svg>`;
 
@@ -114,7 +121,7 @@
       :host { all: initial; }
       * { box-sizing: border-box; font-family: Inter, -apple-system, system-ui, sans-serif; }
       /* STUDIO 実機の色（ライト・モノクロ #222 アクセント）。選択ハイライトのみ青(--sel) */
-      :host { --bg:#ffffff; --surface:#ffffff; --surface2:#f5f5f5; --bd:rgba(34,34,34,.10); --bd2:#e5e5e5;
+      :host { --bg:#ffffff; --surface:#ffffff; --surface2:#f7f7f7; --bd:rgba(34,34,34,.10); --bd2:#e5e5e5;
               --tx:#1a1a1a; --muted:#8a8a8a; --accent:#222222; --sel:#2563eb; --danger:#e5484d; }
       .hl { position: fixed; pointer-events: none; border: 1.5px solid var(--sel);
             background: rgba(37,99,235,.08); border-radius: 2px; z-index: 5; display: none; transition: all .05s ease-out; }
@@ -144,8 +151,8 @@
       .tool:hover { background: var(--surface); color: var(--tx); }
       .tool.on { background: var(--accent); color: #fff; }
       .tool:disabled { opacity: .35; cursor: default; }
-      .bpseg { display: flex; background: var(--surface2); border: 1px solid var(--bd2); border-radius: 8px; padding: 2px; }
-      .bpseg button { flex: 1; height: 24px; border: none; background: transparent; color: var(--muted);
+      .bpseg { display: flex; background: var(--surface2); border: 1px solid var(--bd2); border-radius: 8px; padding: 2px; min-height: 32px; }
+      .bpseg button { flex: 1; height: 26px; border: none; background: transparent; color: var(--muted);
                       font-size: 11px; border-radius: 6px; cursor: pointer; transition: all .12s; }
       .bpseg button:hover { color: var(--tx); }
       .bpseg button.on { background: #fff; color: var(--tx); box-shadow: 0 1px 2px rgba(0,0,0,.12); }
@@ -153,7 +160,7 @@
       .empty { color: var(--muted); font-size: 12px; padding: 28px 16px; text-align: center; line-height: 1.7; }
       .meta { padding: 12px 14px 10px; font-family: ui-monospace, monospace; font-size: 11px; color: var(--muted); word-break: break-all; }
       .meta b { color: var(--accent); }
-      section { border-top: 1px solid var(--bd); padding: 12px 14px; }
+      section { border-top: 1px solid var(--bd); padding: 12px 16px; }
       h5 { margin: 0 0 10px; font-size: 12px; color: var(--tx); font-weight: 700; }
       .ctl { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
       .ctl:last-child { margin-bottom: 0; }
@@ -161,15 +168,11 @@
       select { background: var(--surface); color: var(--tx); border: 1px solid var(--bd2); border-radius: 7px;
                font-size: 11px; padding: 5px 6px; outline: none; }
       select:focus { border-color: var(--accent); }
-      .step { display: inline-flex; align-items: stretch; background: var(--surface); border: 1px solid var(--bd2); border-radius: 7px; overflow: hidden; }
-      .step button { width: 28px; border: none; background: transparent; color: var(--tx); cursor: pointer; font-size: 14px; }
-      .step button:hover { background: var(--surface2); }
-      .step .mid { min-width: 30px; display: inline-flex; align-items: center; justify-content: center; color: var(--muted); font-size: 11px; border-left: 1px solid var(--bd); border-right: 1px solid var(--bd); }
       .seg { display: inline-flex; background: var(--surface); border: 1px solid var(--bd2); border-radius: 7px; padding: 2px; gap: 2px; }
       .seg button { padding: 3px 9px; border: none; background: transparent; color: var(--muted); border-radius: 5px; cursor: pointer; font-size: 11px; }
       .seg button:hover { color: var(--tx); }
       .swatch { display: inline-flex; align-items: center; gap: 6px; }
-      input[type="color"] { width: 30px; height: 26px; padding: 0; border: 1px solid var(--bd2); border-radius: 6px; background: var(--surface); cursor: pointer; }
+      input[type="color"] { width: 24px; height: 24px; padding: 0; border: 1px solid var(--bd2); border-radius: 4px; background: var(--surface); cursor: pointer; }
       .cls { width: 100%; background: var(--surface); color: #93c5fd; border: 1px solid var(--bd2); border-radius: 8px;
              padding: 8px; font-size: 11px; font-family: ui-monospace, monospace; resize: vertical; min-height: 56px; outline: none; line-height: 1.5; }
       .cls:focus { border-color: var(--accent); }
@@ -194,20 +197,38 @@
                border: 1px solid var(--bd2); padding: 10px 14px; border-radius: 9px; font-size: 12px; display: none;
                pointer-events: none; box-shadow: 0 8px 24px rgba(0,0,0,.16); }
       .toast.warn { border-color: #b45309; } .toast.err { border-color: var(--danger); }
-      .elhdr { display: flex; align-items: center; gap: 7px; padding: 11px 14px 9px; color: var(--muted); }
+      .inspect-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 14px 8px 16px; }
+      .elhdr { display: flex; align-items: center; gap: 7px; min-width: 0; color: var(--muted); }
       .elhdr svg { color: var(--accent); }
       .eltag { font-family: ui-monospace, monospace; font-size: 12px; color: var(--tx); }
-      .elcomp { font-size: 11px; color: var(--muted); }
+      .elcomp { font-size: 11px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .state-ctl { display: inline-flex; align-items: center; border: 1px solid var(--bd2); border-radius: 2px; overflow: hidden; flex: none; }
+      .state-ctl button { height: 28px; padding: 0 8px; border: none; background: #fff; color: var(--muted); font-size: 14px; cursor: pointer; }
+      .state-ctl button + button { border-left: 1px solid var(--bd2); }
+      .state-ctl button.on { background: var(--accent); color: #fff; }
+      .state-badge { margin: 0 16px 8px; display: inline-flex; align-items: center; height: 20px; padding: 0 7px; border-radius: 2px; background: #222; color: #fff; font-size: 11px; }
       .tabs { display: flex; gap: 2px; padding: 0 10px; border-bottom: 1px solid var(--bd); }
-      .tab { padding: 8px 11px; border: none; background: transparent; color: var(--muted); font-size: 12px; cursor: pointer;
+      .tab { flex: 1; height: 40px; padding: 8px 0; border: none; background: transparent; color: var(--muted); font-size: 14px; cursor: pointer;
              border-bottom: 2px solid transparent; margin-bottom: -1px; }
       .tab:hover { color: var(--tx); }
       .tab.on { color: var(--tx); border-bottom-color: var(--accent); }
-      .num { display: inline-flex; align-items: center; background: var(--surface); border: 1px solid var(--bd2); border-radius: 7px; overflow: hidden; }
-      .num input { width: 52px; border: none; background: transparent; color: var(--tx); font-size: 12px; padding: 5px 6px; outline: none; -moz-appearance: textfield; }
+      .num { display: inline-flex; align-items: center; min-height: 32px; background: var(--surface2); border: 1px solid transparent; border-radius: 8px; overflow: hidden; padding: 0 4px; }
+      .num input { width: 52px; height: 30px; border: none; background: transparent; color: #222; font-size: 12px; padding: 0 2px; outline: none; -moz-appearance: textfield; }
       .num input::-webkit-outer-spin-button, .num input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-      .num input:focus { background: var(--surface2); }
-      .num .u { font-size: 10px; color: var(--muted); padding: 0 7px 0 2px; }
+      .num input:focus { background: transparent; }
+      .num .u { font-size: 10px; color: var(--muted); padding: 0 3px 0 2px; }
+      .spacing-ctl { align-items: flex-start; }
+      .spacing { flex: 1; min-width: 0; }
+      .spacing-line { display: grid; grid-template-columns: 1fr 32px; gap: 4px; align-items: center; }
+      .spacing-grid { display: grid; grid-template-columns: 1fr 1fr 32px; gap: 4px; align-items: center; }
+      .spacing-grid .spnum:nth-child(3) { grid-column: 1; }
+      .spnum { width: 100%; }
+      .spnum input { flex: 1; width: 0; min-width: 28px; }
+      .dir { display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; color: rgba(34,34,34,.7); flex: none; }
+      .dir svg { width: 16px; height: 16px; }
+      .lock-toggle { width: 32px; height: 32px; border-radius: 8px; border: 1px solid transparent; background: var(--surface2); color: rgba(34,34,34,.7); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
+      .lock-toggle:hover { color: var(--tx); border-color: var(--bd2); }
+      .source-label { font-size: 10px; color: var(--muted); background: var(--surface2); border-radius: 4px; padding: 2px 5px; }
       .seg button.on { background: var(--accent); color: #fff; }
       .kv { display: flex; gap: 8px; font-size: 11px; margin-bottom: 6px; }
       .kv span { color: var(--muted); width: 56px; flex: none; }
@@ -278,9 +299,9 @@
   }
 
   // ---- 直接調整ロジック（決定的・純文字列操作） -------------------------
-  const SCALE = [0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 24];
   const SIZES = ["xs", "sm", "base", "lg", "xl", "2xl", "3xl", "4xl", "5xl", "6xl", "7xl", "8xl", "9xl"];
   const reEsc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const PFX = () => bp + state;
 
   function applyLive(next) {
     liveClass = next;
@@ -288,43 +309,35 @@
     const c = $(".cls"); if (c && c.value !== next) c.value = next;
     highlightSelected();
   }
-  function stepSpacing(prefix, dir) {
-    const re = new RegExp(`(^|\\s)${prefix}-(\\d+)(?=\\s|$)`);
-    const m = liveClass.match(re);
-    let next;
-    if (m) {
-      const cur = Number(m[2]); let i = SCALE.indexOf(cur);
-      if (i === -1) i = SCALE.findIndex((v) => v >= cur);
-      i = Math.max(0, Math.min(SCALE.length - 1, i + dir));
-      next = liveClass.replace(re, `$1${prefix}-${SCALE[i]}`);
-    } else if (dir > 0) next = (liveClass + ` ${prefix}-4`).trim();
-    else return;
-    applyLive(next.replace(/\s+/g, " ").trim());
-  }
   function setAlign(val) {
-    const p = reEsc(bp);
+    const p = reEsc(PFX());
     const cleaned = liveClass.replace(new RegExp(`(^|\\s)${p}text-(left|center|right|justify)(?=\\s|$)`, "g"), " ").replace(/\s+/g, " ").trim();
-    applyLive((cleaned + ` ${bp}text-${val}`).trim());
+    applyLive((cleaned + ` ${PFX()}text-${val}`).trim());
   }
   function stepSize(dir) {
-    const p = reEsc(bp);
+    const p = reEsc(PFX());
     const re = new RegExp(`(^|\\s)${p}text-(xs|sm|base|lg|xl|[2-9]xl)(?=\\s|$)`);
     const m = liveClass.match(re);
     let next;
-    if (m) { let i = SIZES.indexOf(m[2]); i = Math.max(0, Math.min(SIZES.length - 1, i + dir)); next = liveClass.replace(re, `$1${bp}text-${SIZES[i]}`); }
-    else if (dir > 0) next = (liveClass + ` ${bp}text-lg`).trim();
+    if (m) { let i = SIZES.indexOf(m[2]); i = Math.max(0, Math.min(SIZES.length - 1, i + dir)); next = liveClass.replace(re, `$1${PFX()}text-${SIZES[i]}`); }
+    else if (dir > 0) next = (liveClass + ` ${PFX()}text-lg`).trim();
     else return;
     applyLive(next.replace(/\s+/g, " ").trim());
   }
   function setColor(kind, hex) {
-    const p = reEsc(bp);
+    const p = reEsc(PFX());
     const strip = new RegExp(`(^|\\s)${p}${kind}-(\\[#[0-9a-fA-F]{3,8}\\]|\\(--[^)]+\\)|[a-z]+-\\d{2,3})(?=\\s|$)`, "g");
     const cleaned = liveClass.replace(strip, " ").replace(/\s+/g, " ").trim();
-    applyLive((cleaned + ` ${bp}${kind}-[${hex}]`).trim());
+    applyLive((cleaned + ` ${PFX()}${kind}-[${hex}]`).trim());
+  }
+  function readColorInfo(kind, fallback) {
+    const m = liveClass.match(new RegExp(`(^|\\s)${reEsc(PFX())}${kind}-(\\[#[0-9a-fA-F]{3,8}\\])(?=\\s|$)`));
+    return m ? { value: m[2].slice(1, -1), source: "class" } : { value: fallback, source: "computed" };
   }
   function rgbToHex(rgb) {
     const m = (rgb || "").match(/\d+/g);
     if (!m || m.length < 3) return "#000000";
+    if (m.length >= 4 && Number(m[3]) === 0) return "#ffffff";
     return "#" + m.slice(0, 3).map((n) => Number(n).toString(16).padStart(2, "0")).join("");
   }
 
@@ -333,46 +346,52 @@
   const VAL = `(\\[[^\\]]*\\]|\\([^)]*\\)|[\\w./%#.]+)`;
   // prefix-value 系（w/h/rounded/opacity/z/leading/tracking 等。text-/font- のような多義prefixには使わない）
   function setUtil(prefix, value) {
-    const p = reEsc(bp), pf = reEsc(prefix);
+    const p = reEsc(PFX()), pf = reEsc(prefix);
     let next = liveClass.replace(new RegExp(`(^|\\s)${p}${pf}-${VAL}(?=\\s|$)`, "g"), " ").replace(/\s+/g, " ").trim();
-    if (value !== "" && value != null) next = (next + ` ${bp}${prefix}-${value}`).trim();
+    if (value !== "" && value != null) next = (next + ` ${PFX()}${prefix}-${value}`).trim();
     applyLive(next);
   }
   function readUtil(prefix) {
-    const m = liveClass.match(new RegExp(`(^|\\s)${reEsc(bp)}${reEsc(prefix)}-${VAL}(?=\\s|$)`));
+    const m = liveClass.match(new RegExp(`(^|\\s)${reEsc(PFX())}${reEsc(prefix)}-${VAL}(?=\\s|$)`));
     return m ? m[2] : "";
+  }
+  function readUtilLast(prefix) {
+    const re = new RegExp(`(^|\\s)${reEsc(PFX())}${reEsc(prefix)}-${VAL}(?=\\s|$)`, "g");
+    let found = "", m;
+    while ((m = re.exec(liveClass))) found = m[2];
+    return found;
   }
   // 排他キーワード集合（position/overflow/shadow 等）
   function setEnum(options, value) {
-    const p = reEsc(bp);
+    const p = reEsc(PFX());
     let next = liveClass.replace(new RegExp(`(^|\\s)${p}(${options.map(reEsc).join("|")})(?=\\s|$)`, "g"), " ").replace(/\s+/g, " ").trim();
-    if (value) next = (next + ` ${bp}${value}`).trim();
+    if (value) next = (next + ` ${PFX()}${value}`).trim();
     applyLive(next);
   }
   function readEnum(options) {
-    const m = liveClass.match(new RegExp(`(^|\\s)${reEsc(bp)}(${options.map(reEsc).join("|")})(?=\\s|$)`));
+    const m = liveClass.match(new RegExp(`(^|\\s)${reEsc(PFX())}(${options.map(reEsc).join("|")})(?=\\s|$)`));
     return m ? m[2] : "";
   }
   // on/off トグル（underline/italic 等）
   function toggleUtil(cls) {
-    const re = new RegExp(`(^|\\s)${reEsc(bp)}${reEsc(cls)}(?=\\s|$)`);
-    applyLive(re.test(liveClass) ? liveClass.replace(re, " ").replace(/\s+/g, " ").trim() : (liveClass + ` ${bp}${cls}`).trim());
+    const re = new RegExp(`(^|\\s)${reEsc(PFX())}${reEsc(cls)}(?=\\s|$)`);
+    applyLive(re.test(liveClass) ? liveClass.replace(re, " ").replace(/\s+/g, " ").trim() : (liveClass + ` ${PFX()}${cls}`).trim());
   }
-  function hasUtil(cls) { return new RegExp(`(^|\\s)${reEsc(bp)}${reEsc(cls)}(?=\\s|$)`).test(liveClass); }
+  function hasUtil(cls) { return new RegExp(`(^|\\s)${reEsc(PFX())}${reEsc(cls)}(?=\\s|$)`).test(liveClass); }
   const numOf = (v) => { const m = String(v).match(/-?\d+(\.\d+)?/); return m ? m[0] : ""; }; // "[200px]"→"200"
   // bracket 値(0-1等)は×100して%表示、素のTailwind階調(opacity-50/leading-6)はそのまま
   const pctBracket = (raw) => { if (!raw) return ""; if (raw.startsWith("[")) { const n = parseFloat(raw.replace(/[\[\]]/g, "")); return Number.isFinite(n) ? Math.round(n * 100) : ""; } return numOf(raw); };
 
   // フォントサイズ（色/揃えを潰さず size のみ差し替え）
   function setTextSize(px) {
-    const p = reEsc(bp);
+    const p = reEsc(PFX());
     const strip = new RegExp(`(^|\\s)${p}text-(\\[(?!#|var\\(|rgb|hsl|oklch)[^\\]]*\\]|xs|sm|base|lg|xl|[2-9]xl)(?=\\s|$)`, "g");
     let next = liveClass.replace(strip, " ").replace(/\s+/g, " ").trim();
-    if (px !== "") next = (next + ` ${bp}text-[${px}px]`).trim();
+    if (px !== "") next = (next + ` ${PFX()}text-[${px}px]`).trim();
     applyLive(next);
   }
   function readTextSize() {
-    const m = liveClass.match(new RegExp(`(^|\\s)${reEsc(bp)}text-(\\[(?!#|var\\(|rgb|hsl|oklch)[^\\]]*\\]|xs|sm|base|lg|xl|[2-9]xl)(?=\\s|$)`));
+    const m = liveClass.match(new RegExp(`(^|\\s)${reEsc(PFX())}text-(\\[(?!#|var\\(|rgb|hsl|oklch)[^\\]]*\\]|xs|sm|base|lg|xl|[2-9]xl)(?=\\s|$)`));
     return m ? numOf(m[2]) : "";
   }
   // フォント太さ（family を潰さず weight のみ）
@@ -426,13 +445,129 @@
 
   // ---- インスペクタ本文の描画 -------------------------------------------
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-  const SIDE = `<option value="">全</option><option value="x">左右</option><option value="y">上下</option><option value="t">上</option><option value="r">右</option><option value="b">下</option><option value="l">左</option>`;
-
   const TEXTUAL = /^(p|h[1-6]|span|a|button|li|label|strong|em|blockquote|figcaption|small|q|cite)$/;
   const POS = ["relative", "absolute", "fixed", "sticky"];
   const OVERFLOW = ["overflow-visible", "overflow-hidden", "overflow-auto", "overflow-scroll"];
   const SHADOWS = ["shadow-none", "shadow-sm", "shadow", "shadow-md", "shadow-lg", "shadow-xl", "shadow-2xl"];
   const opt = (val, cur, label) => `<option value="${val}"${val === cur ? " selected" : ""}>${label}</option>`;
+  const SPACING_SIDES = ["t", "r", "b", "l"];
+  const SPACING_ICONS = { t: "up", r: "right", b: "down", l: "left" };
+  const SPACING_AXIS = { t: "y", b: "y", r: "x", l: "x" };
+  const SPACING_PROP = {
+    m: { t: "marginTop", r: "marginRight", b: "marginBottom", l: "marginLeft" },
+    p: { t: "paddingTop", r: "paddingRight", b: "paddingBottom", l: "paddingLeft" },
+  };
+
+  function spacingOverride(kind) { return kind === "m" ? marginLocked : paddingLocked; }
+  function setSpacingOverride(kind, locked) { if (kind === "m") marginLocked = locked; else paddingLocked = locked; }
+  function spacingPrefix(kind, side) { return kind + (side || ""); }
+  function spacingTokenToPx(raw) {
+    if (!raw) return "";
+    const token = String(raw).trim();
+    if (token.startsWith("[")) {
+      const inner = token.slice(1, -1).trim();
+      const m = inner.match(/^(-?\d+(?:\.\d+)?)(px|rem)?$/);
+      if (!m) return "";
+      const n = Number(m[1]);
+      if (!Number.isFinite(n)) return "";
+      return String(Math.round(m[2] === "rem" ? n * 16 : n));
+    }
+    if (/^-?\d+(?:\.\d+)?$/.test(token)) return String(Math.round(Number(token) * 4));
+    return "";
+  }
+  function readComputedSpacingPx(kind, side) {
+    if (!selectedEl || !selectedEl.isConnected) return "";
+    const cs = getComputedStyle(selectedEl);
+    const readSide = (s) => {
+      const n = parseFloat(cs[SPACING_PROP[kind][s]]);
+      return Number.isFinite(n) ? String(Math.round(n)) : "";
+    };
+    if (side) return readSide(side);
+    const vals = SPACING_SIDES.map(readSide);
+    return vals.every((v) => v !== "" && v === vals[0]) ? vals[0] : "";
+  }
+  function readClassSpacingPx(kind, side) {
+    const readPrefix = (prefix) => spacingTokenToPx(readUtilLast(prefix));
+    if (!side) {
+      const vals = SPACING_SIDES.map((s) => readClassSpacingPx(kind, s));
+      return vals.every((v) => v !== "" && v === vals[0]) ? vals[0] : "";
+    }
+    return readPrefix(spacingPrefix(kind, side)) || readPrefix(spacingPrefix(kind, SPACING_AXIS[side])) || readPrefix(kind);
+  }
+  function readSpacingPx(kind, side) {
+    if (!side) {
+      const vals = SPACING_SIDES.map((s) => readSpacingPx(kind, s));
+      return vals.every((v) => v !== "" && v === vals[0]) ? vals[0] : "";
+    }
+    const classPx = readClassSpacingPx(kind, side);
+    if (classPx !== "") return classPx;
+    return state === "" ? readComputedSpacingPx(kind, side) : "";
+  }
+  function spacingStripTargets(kind, side) {
+    if (!side) return ["", "x", "y", ...SPACING_SIDES].map((s) => spacingPrefix(kind, s));
+    return [kind, spacingPrefix(kind, SPACING_AXIS[side]), spacingPrefix(kind, side)];
+  }
+  function stripSpacing(kind, prefixes) {
+    const p = reEsc(PFX());
+    const neg = kind === "m" ? "-?" : "";
+    const choices = prefixes.map(reEsc).join("|");
+    return liveClass.replace(new RegExp(`(^|\\s)${p}${neg}(${choices})-${VAL}(?=\\s|$)`, "g"), " ").replace(/\s+/g, " ").trim();
+  }
+  function isSpacingLocked(kind) {
+    const override = spacingOverride(kind);
+    if (override !== null) return override;
+    const hasAxisOrSide = ["x", "y", ...SPACING_SIDES].some((side) => readUtil(spacingPrefix(kind, side)));
+    if (hasAxisOrSide) return false;
+    // shorthand-only and unset both render as locked.
+    return true;
+  }
+  function appendSpacingPx(next, kind, side, px) {
+    const n = Number(px);
+    if (px === "" || px == null || (Number.isFinite(n) && n === 0)) return next;
+    return (next + ` ${PFX()}${spacingPrefix(kind, side)}-[${px}px]`).trim();
+  }
+  function setSpacingValue(kind, side, px) {
+    if (!side) {
+      let next = stripSpacing(kind, spacingStripTargets(kind, ""));
+      next = appendSpacingPx(next, kind, "", px);
+      applyLive(next);
+      return;
+    }
+    const vals = Object.fromEntries(SPACING_SIDES.map((s) => [s, readSpacingPx(kind, s)]));
+    vals[side] = px === "" || px == null ? "0" : String(px);
+    let next = stripSpacing(kind, spacingStripTargets(kind, ""));
+    SPACING_SIDES.forEach((s) => { next = appendSpacingPx(next, kind, s, vals[s]); });
+    applyLive(next);
+  }
+  function expandSpacing(kind) {
+    const vals = Object.fromEntries(SPACING_SIDES.map((side) => [side, readSpacingPx(kind, side)]));
+    SPACING_SIDES.forEach((side) => setSpacingValue(kind, side, vals[side]));
+    setSpacingOverride(kind, false);
+    renderBody();
+  }
+  function collapseSpacing(kind) {
+    const vals = SPACING_SIDES.map((side) => readSpacingPx(kind, side));
+    const px = vals[0];
+    if (vals.some((v) => v !== px)) toast("4辺の値が異なります。上の値で一括化しました", "warn");
+    setSpacingValue(kind, "", px);
+    setSpacingOverride(kind, true);
+    renderBody();
+  }
+  function renderSpacing(kind) {
+    const locked = isSpacingLocked(kind);
+    const prefix = kind === "m" ? "マージン" : "パディング";
+    const input = (side, val) => `<span class="num spnum">${side ? `<span class="dir">${svg(SPACING_ICONS[side], 16)}</span>` : ""}<input type="number" class="sp-input" data-kind="${kind}" data-side="${side}" value="${val}"><span class="u">px</span></span>`;
+    if (locked) {
+      return `<div class="ctl spacing-ctl"><label>${prefix}</label><div class="spacing"><div class="spacing-line">
+        ${input("", readSpacingPx(kind, ""))}
+        <button class="lock-toggle" data-spacing="${kind}" data-locked="true" title="${prefix}を方向別に編集">${svg("lock", 16)}</button>
+      </div></div></div>`;
+    }
+    return `<div class="ctl spacing-ctl"><label>${prefix}</label><div class="spacing"><div class="spacing-grid">
+      ${SPACING_SIDES.map((side) => input(side, readSpacingPx(kind, side))).join("")}
+      <button class="lock-toggle" data-spacing="${kind}" data-locked="false" title="${prefix}を一括編集">${svg("unlock", 16)}</button>
+    </div></div></div>`;
+  }
 
   function renderBody() {
     const sel = selected;
@@ -441,7 +576,11 @@
       return;
     }
     const cs = selectedEl && selectedEl.isConnected ? getComputedStyle(selectedEl) : null;
-    const textHex = rgbToHex(cs && cs.color), bgHex = rgbToHex(cs && cs.backgroundColor), bdHex = rgbToHex(cs && cs.borderColor);
+    const textColor = readColorInfo("text", rgbToHex(cs && cs.color));
+    const bgColor = readColorInfo("bg", rgbToHex(cs && cs.backgroundColor));
+    const bdColor = readColorInfo("border", rgbToHex(cs && cs.borderColor));
+    const textHex = textColor.value, bgHex = bgColor.value, bdHex = bdColor.value;
+    const sourceLabel = (info) => info.source === "computed" ? `<span class="source-label">${state ? "未設定" : "computed"}</span>` : "";
     const textual = TEXTUAL.test(sel.tag);
     const tabs = (textual ? [["text", "テキスト"]] : []).concat([["box", "ボックス"], ["transform", "変形"], ["settings", "設定"]]);
     if (!tabs.some(([k]) => k === tab)) tab = tabs[0][0];
@@ -463,13 +602,13 @@
     } else if (tab === "box") {
       panel = `<section><h5>レイアウト</h5>
         <div class="ctl"><label>幅</label>${num("l-w", numOf(readUtil("w")), "px")}<label style="width:auto">高さ</label>${num("l-h", numOf(readUtil("h")), "px")}</div>
-        <div class="ctl"><label>マージン</label><select class="m-side">${SIDE}</select><span class="step"><button data-act="m-">−</button><button data-act="m+">＋</button></span></div>
-        <div class="ctl"><label>パディング</label><select class="p-side">${SIDE}</select><span class="step"><button data-act="p-">−</button><button data-act="p+">＋</button></span></div>
+        ${renderSpacing("m")}
+        ${renderSpacing("p")}
       </section>
       <section><h5>外観</h5>
-        <div class="ctl"><label>背景色</label><span class="swatch"><input type="color" class="c-bg" value="${bgHex}"></span></div>
+        <div class="ctl"><label>背景色</label><span class="swatch"><input type="color" class="c-bg" value="${bgHex}">${sourceLabel(bgColor)}</span></div>
         <div class="ctl"><label>角丸</label>${num("a-radius", numOf(readUtil("rounded")), "px")}<label style="width:auto">不透明度</label>${num("a-opacity", pctBracket(readUtil("opacity")), "%")}</div>
-        <div class="ctl"><label>枠線</label>${num("a-border", numOf(readUtil("border")), "px")}<span class="swatch"><input type="color" class="c-border" value="${bdHex}"></span></div>
+        <div class="ctl"><label>枠線</label>${num("a-border", numOf(readUtil("border")), "px")}<span class="swatch"><input type="color" class="c-border" value="${bdHex}">${sourceLabel(bdColor)}</span></div>
         <div class="ctl"><label>影</label><select class="a-shadow">${["", ...SHADOWS].map((s) => opt(s, readEnum(SHADOWS), s ? s.replace("shadow-", "").replace("shadow", "default") : "—")).join("")}</select></div>
       </section>
       <section><h5>ポジション</h5>
@@ -497,7 +636,14 @@
     }
 
     $body.innerHTML = `
-      <div class="elhdr">${svg("cursor", 13)}<span class="eltag">&lt;${esc(sel.tag)}&gt;</span>${sel.component ? `<span class="elcomp">${esc(sel.component)}</span>` : ""}</div>
+      <div class="inspect-head">
+        <div class="elhdr">${svg("cursor", 13)}<span class="eltag">&lt;${esc(sel.tag)}&gt;</span>${sel.component ? `<span class="elcomp">${esc(sel.component)}</span>` : ""}</div>
+        <div class="state-ctl" title="条件スタイル">
+          <button class="${state === "" ? "on" : ""}" data-state="">通常</button>
+          <button class="${state === "hover:" ? "on" : ""}" data-state="hover:">ホバー</button>
+        </div>
+      </div>
+      ${state === "hover:" ? `<div class="state-badge">ホバー状態を編集中</div>` : ""}
       <div class="tabs">${tabs.map(([k, l]) => `<button class="tab${k === tab ? " on" : ""}" data-tab="${k}">${l}</button>`).join("")}</div>
       ${panel}
       <section class="ask-sec"><h5>Claudeに頼む（複雑な構造・文言）</h5>
@@ -508,6 +654,7 @@
 
     // タブ切替
     $body.querySelectorAll(".tab[data-tab]").forEach((b) => b.onclick = () => { tab = b.dataset.tab; renderBody(); });
+    $body.querySelectorAll(".state-ctl button[data-state]").forEach((b) => b.onclick = () => { state = b.dataset.state; renderBody(); });
     // 共通: 色/揃え/装飾
     const oc = (s, fn) => { const el = $(s); if (el) el.oninput = fn; };
     oc(".c-text", (e) => setColor("text", e.target.value));
@@ -523,11 +670,11 @@
     oc(".f-lh", (e) => setUtil("leading", e.target.value ? `[${e.target.value / 100}]` : ""));
     oc(".f-ls", (e) => setUtil("tracking", e.target.value ? `[${e.target.value}em]` : ""));
     // ボックス
-    const mside = () => ($(".m-side") || {}).value || "";
-    const pside = () => ($(".p-side") || {}).value || "";
-    $body.querySelectorAll(".step button[data-act]").forEach((b) => b.onclick = () => {
-      const a = b.dataset.act, kind = a[0], dir = a[1] === "+" ? 1 : -1;
-      stepSpacing(bp + kind + (kind === "m" ? mside() : pside()), dir);
+    $body.querySelectorAll(".sp-input").forEach((input) => {
+      input.oninput = (e) => setSpacingValue(e.target.dataset.kind, e.target.dataset.side, e.target.value);
+    });
+    $body.querySelectorAll(".lock-toggle[data-spacing]").forEach((b) => {
+      b.onclick = () => (b.dataset.locked === "true" ? expandSpacing(b.dataset.spacing) : collapseSpacing(b.dataset.spacing));
     });
     oc(".l-w", (e) => setUtil("w", e.target.value ? `[${e.target.value}px]` : ""));
     oc(".l-h", (e) => setUtil("h", e.target.value ? `[${e.target.value}px]` : ""));
@@ -556,7 +703,7 @@
   }
 
   function openPanel() { setCollapsed(false); renderBody(); }
-  function closePanel() { selected = null; selectedEl = null; hideHighlight(); renderBody(); }
+  function closePanel() { selected = null; selectedEl = null; state = ""; marginLocked = null; paddingLocked = null; hideHighlight(); renderBody(); }
 
   async function send() {
     if (!pending.length) return;
@@ -642,6 +789,7 @@
     if (!inspecting || isOurs(e.target)) return;
     e.preventDefault(); e.stopPropagation();
     selectedEl = e.target; selected = collect(e.target); sourceClass = selected.classes; liveClass = selected.classes;
+    state = ""; marginLocked = null; paddingLocked = null;
     tab = TEXTUAL.test(selected.tag) ? "text" : "box";
     setInspecting(false); openPanel(); highlightSelected();
   }, true);
