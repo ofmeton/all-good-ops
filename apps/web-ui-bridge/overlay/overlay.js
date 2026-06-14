@@ -22,8 +22,10 @@
 
   // ---- 状態 -------------------------------------------------------------
   let inspecting = false, hovered = null;
-  let selected = null, selectedEl = null;
-  let sourceClass = "", liveClass = "", bp = "", state = "", tab = "box";
+  let selection = [];
+  let primaryIdx = -1;
+  const cur = () => (primaryIdx >= 0 ? selection[primaryIdx] : null);
+  let bp = "", state = "", tab = "box";
   let marginLocked = null, paddingLocked = null;
   let reordering = false, dragEl2 = null, dropTarget = null, dropPos = "before";
   let lastX = 0, lastY = 0, asTimer = null, asDir = 0; // D&D オートスクロール
@@ -107,6 +109,53 @@
       textSnippets: snippets(own || text), domPath: domPath(el), selector: uniqueSelector(el),
     };
   }
+  function makeSel(el) {
+    const payload = collect(el);
+    return { el, payload, sourceClass: payload.classes, liveClass: payload.classes };
+  }
+  function resetEditState() { state = ""; marginLocked = null; paddingLocked = null; }
+  function setPrimaryLiveClass(next) {
+    const c = cur();
+    if (!c) return;
+    c.liveClass = next;
+    if (c.el && c.el.isConnected) c.el.setAttribute("class", next);
+  }
+  function removeSelectionAt(idx) {
+    if (idx < 0 || idx >= selection.length) return;
+    selection.splice(idx, 1);
+    if (!selection.length) primaryIdx = -1;
+    else primaryIdx = Math.min(primaryIdx === idx ? selection.length - 1 : primaryIdx > idx ? primaryIdx - 1 : primaryIdx, selection.length - 1);
+    resetEditState();
+    highlightSelection();
+    renderBody();
+  }
+  function clearSelection() {
+    selection = [];
+    primaryIdx = -1;
+    resetEditState();
+    hideHighlight();
+    renderBody();
+  }
+  function selectFromClick(el, e) {
+    const additive = e.metaKey || e.shiftKey;
+    const idx = selection.findIndex((s) => s.el === el);
+    if (additive) {
+      if (idx >= 0) selection.splice(idx, 1);
+      else selection.push(makeSel(el));
+      primaryIdx = selection.length - 1;
+    } else {
+      selection = [makeSel(el)];
+      primaryIdx = 0;
+    }
+    resetEditState();
+    const c = cur();
+    if (c) tab = TEXTUAL.test(c.payload.tag) ? "text" : "box";
+    // 複数選択は「クリックで選択を組み立てる」操作なので select モードは保持する
+    // （最初の選択後に OFF にすると 2 個目の ⌘/Shift+クリックが効かない）。
+    // exit は選択ツール再押下 or Esc。パネル内操作は isOurs ガードで選択に巻き込まれない。
+    openPanel();
+    highlightSelection();
+  }
 
   // ---- UI (Shadow DOM) — STUDIO 風ダークインスペクタ ---------------------
   const host = document.createElement("div");
@@ -125,6 +174,8 @@
               --tx:#1a1a1a; --muted:#8a8a8a; --accent:#222222; --sel:#2563eb; --danger:#e5484d; }
       .hl { position: fixed; pointer-events: none; border: 1.5px solid var(--sel);
             background: rgba(37,99,235,.08); border-radius: 2px; z-index: 5; display: none; transition: all .05s ease-out; }
+      .hl2 { position: fixed; pointer-events: none; border: 1.5px solid rgba(37,99,235,.5);
+             background: rgba(37,99,235,.04); border-radius: 2px; z-index: 4; display: block; transition: all .05s ease-out; }
       .hl.drag { border-color: #7c3aed; border-style: dashed; background: rgba(124,58,237,.12); }
       .label { position: fixed; pointer-events: none; z-index: 6; display: none; font-family: ui-monospace, monospace;
                background: var(--sel); color: #fff; font-size: 10.5px; padding: 2px 6px; border-radius: 4px; white-space: nowrap; }
@@ -202,6 +253,12 @@
       .elhdr svg { color: var(--accent); }
       .eltag { font-family: ui-monospace, monospace; font-size: 12px; color: var(--tx); }
       .elcomp { font-size: 11px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .chips { display: flex; flex-wrap: wrap; gap: 4px; padding: 0 14px 8px 16px; }
+      .chip { display: inline-flex; align-items: center; gap: 4px; max-width: 86px; height: 22px; padding: 0 6px; border: 1px solid var(--bd2); border-radius: 999px; color: var(--muted); background: var(--surface2); font-size: 11px; }
+      .chip.primary { color: var(--tx); border-color: rgba(37,99,235,.45); background: rgba(37,99,235,.08); }
+      .chip span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .chip button { width: 14px; height: 14px; border: none; background: transparent; color: var(--muted); cursor: pointer; padding: 0; line-height: 12px; }
+      .chip button:hover { color: var(--danger); }
       .state-ctl { display: inline-flex; align-items: center; border: 1px solid var(--bd2); border-radius: 2px; overflow: hidden; flex: none; }
       .state-ctl button { height: 28px; padding: 0 8px; border: none; background: #fff; color: var(--muted); font-size: 14px; cursor: pointer; }
       .state-ctl button + button { border-left: 1px solid var(--bd2); }
@@ -279,8 +336,23 @@
     $label.style.left = r.left + "px";
     $label.style.top = Math.max(0, r.top - 20) + "px";
   }
-  function hideHighlight() { $hl.style.display = "none"; $label.style.display = "none"; }
-  function highlightSelected() { if (selectedEl && selected) showHighlight(selectedEl); }
+  function removeExtraHighlights() { root.querySelectorAll(".hl2").forEach((n) => n.remove()); }
+  function hideHighlight() { $hl.style.display = "none"; $label.style.display = "none"; removeExtraHighlights(); }
+  function showBox(el, primary) {
+    if (!el || !el.isConnected) return;
+    if (primary) { showHighlight(el); return; }
+    const r = el.getBoundingClientRect();
+    const box = document.createElement("div");
+    box.className = "hl2";
+    box.style.cssText = `position:fixed;display:block;left:${r.left}px;top:${r.top}px;width:${r.width}px;height:${r.height}px;`;
+    root.appendChild(box);
+  }
+  function highlightSelection() {
+    removeExtraHighlights();
+    const c = cur();
+    if (!c?.el?.isConnected) { $hl.style.display = "none"; $label.style.display = "none"; return; }
+    selection.forEach((s, i) => showBox(s.el, i === primaryIdx));
+  }
 
   function setInspecting(on) { inspecting = on; $tSelect.classList.toggle("on", on); if (!on) { hideHighlight(); hovered = null; } }
 
@@ -315,36 +387,38 @@
   const SIZES = ["xs", "sm", "base", "lg", "xl", "2xl", "3xl", "4xl", "5xl", "6xl", "7xl", "8xl", "9xl"];
   const reEsc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   const PFX = () => bp + state;
+  const live = () => cur()?.liveClass ?? "";
+  const source = () => cur()?.sourceClass ?? "";
 
   function applyLive(next) {
-    liveClass = next;
-    if (selectedEl && selectedEl.isConnected) selectedEl.setAttribute("class", next);
+    setPrimaryLiveClass(next);
     const c = $(".cls"); if (c && c.value !== next) c.value = next;
-    highlightSelected();
+    highlightSelection();
   }
   function setAlign(val) {
     const p = reEsc(PFX());
-    const cleaned = liveClass.replace(new RegExp(`(^|\\s)${p}text-(left|center|right|justify)(?=\\s|$)`, "g"), " ").replace(/\s+/g, " ").trim();
+    const cleaned = live().replace(new RegExp(`(^|\\s)${p}text-(left|center|right|justify)(?=\\s|$)`, "g"), " ").replace(/\s+/g, " ").trim();
     applyLive((cleaned + ` ${PFX()}text-${val}`).trim());
   }
   function stepSize(dir) {
     const p = reEsc(PFX());
     const re = new RegExp(`(^|\\s)${p}text-(xs|sm|base|lg|xl|[2-9]xl)(?=\\s|$)`);
-    const m = liveClass.match(re);
+    const base = live();
+    const m = base.match(re);
     let next;
-    if (m) { let i = SIZES.indexOf(m[2]); i = Math.max(0, Math.min(SIZES.length - 1, i + dir)); next = liveClass.replace(re, `$1${PFX()}text-${SIZES[i]}`); }
-    else if (dir > 0) next = (liveClass + ` ${PFX()}text-lg`).trim();
+    if (m) { let i = SIZES.indexOf(m[2]); i = Math.max(0, Math.min(SIZES.length - 1, i + dir)); next = base.replace(re, `$1${PFX()}text-${SIZES[i]}`); }
+    else if (dir > 0) next = (base + ` ${PFX()}text-lg`).trim();
     else return;
     applyLive(next.replace(/\s+/g, " ").trim());
   }
   function setColor(kind, hex) {
     const p = reEsc(PFX());
     const strip = new RegExp(`(^|\\s)${p}${kind}-(\\[#[0-9a-fA-F]{3,8}\\]|\\(--[^)]+\\)|[a-z]+-\\d{2,3})(?=\\s|$)`, "g");
-    const cleaned = liveClass.replace(strip, " ").replace(/\s+/g, " ").trim();
+    const cleaned = live().replace(strip, " ").replace(/\s+/g, " ").trim();
     applyLive((cleaned + ` ${PFX()}${kind}-[${hex}]`).trim());
   }
   function readColorInfo(kind, fallback) {
-    const m = liveClass.match(new RegExp(`(^|\\s)${reEsc(PFX())}${kind}-(\\[#[0-9a-fA-F]{3,8}\\])(?=\\s|$)`));
+    const m = live().match(new RegExp(`(^|\\s)${reEsc(PFX())}${kind}-(\\[#[0-9a-fA-F]{3,8}\\])(?=\\s|$)`));
     return m ? { value: m[2].slice(1, -1), source: "class" } : { value: fallback, source: "computed" };
   }
   function rgbToHex(rgb) {
@@ -360,37 +434,38 @@
   // prefix-value 系（w/h/rounded/opacity/z/leading/tracking 等。text-/font- のような多義prefixには使わない）
   function setUtil(prefix, value) {
     const p = reEsc(PFX()), pf = reEsc(prefix);
-    let next = liveClass.replace(new RegExp(`(^|\\s)${p}${pf}-${VAL}(?=\\s|$)`, "g"), " ").replace(/\s+/g, " ").trim();
+    let next = live().replace(new RegExp(`(^|\\s)${p}${pf}-${VAL}(?=\\s|$)`, "g"), " ").replace(/\s+/g, " ").trim();
     if (value !== "" && value != null) next = (next + ` ${PFX()}${prefix}-${value}`).trim();
     applyLive(next);
   }
   function readUtil(prefix) {
-    const m = liveClass.match(new RegExp(`(^|\\s)${reEsc(PFX())}${reEsc(prefix)}-${VAL}(?=\\s|$)`));
+    const m = live().match(new RegExp(`(^|\\s)${reEsc(PFX())}${reEsc(prefix)}-${VAL}(?=\\s|$)`));
     return m ? m[2] : "";
   }
   function readUtilLast(prefix) {
     const re = new RegExp(`(^|\\s)${reEsc(PFX())}${reEsc(prefix)}-${VAL}(?=\\s|$)`, "g");
     let found = "", m;
-    while ((m = re.exec(liveClass))) found = m[2];
+    while ((m = re.exec(live()))) found = m[2];
     return found;
   }
   // 排他キーワード集合（position/overflow/shadow 等）
   function setEnum(options, value) {
     const p = reEsc(PFX());
-    let next = liveClass.replace(new RegExp(`(^|\\s)${p}(${options.map(reEsc).join("|")})(?=\\s|$)`, "g"), " ").replace(/\s+/g, " ").trim();
+    let next = live().replace(new RegExp(`(^|\\s)${p}(${options.map(reEsc).join("|")})(?=\\s|$)`, "g"), " ").replace(/\s+/g, " ").trim();
     if (value) next = (next + ` ${PFX()}${value}`).trim();
     applyLive(next);
   }
   function readEnum(options) {
-    const m = liveClass.match(new RegExp(`(^|\\s)${reEsc(PFX())}(${options.map(reEsc).join("|")})(?=\\s|$)`));
+    const m = live().match(new RegExp(`(^|\\s)${reEsc(PFX())}(${options.map(reEsc).join("|")})(?=\\s|$)`));
     return m ? m[2] : "";
   }
   // on/off トグル（underline/italic 等）
   function toggleUtil(cls) {
     const re = new RegExp(`(^|\\s)${reEsc(PFX())}${reEsc(cls)}(?=\\s|$)`);
-    applyLive(re.test(liveClass) ? liveClass.replace(re, " ").replace(/\s+/g, " ").trim() : (liveClass + ` ${PFX()}${cls}`).trim());
+    const base = live();
+    applyLive(re.test(base) ? base.replace(re, " ").replace(/\s+/g, " ").trim() : (base + ` ${PFX()}${cls}`).trim());
   }
-  function hasUtil(cls) { return new RegExp(`(^|\\s)${reEsc(PFX())}${reEsc(cls)}(?=\\s|$)`).test(liveClass); }
+  function hasUtil(cls) { return new RegExp(`(^|\\s)${reEsc(PFX())}${reEsc(cls)}(?=\\s|$)`).test(live()); }
   const numOf = (v) => { const m = String(v).match(/-?\d+(\.\d+)?/); return m ? m[0] : ""; }; // "[200px]"→"200"
   // bracket 値(0-1等)は×100して%表示、素のTailwind階調(opacity-50/leading-6)はそのまま
   const pctBracket = (raw) => { if (!raw) return ""; if (raw.startsWith("[")) { const n = parseFloat(raw.replace(/[\[\]]/g, "")); return Number.isFinite(n) ? Math.round(n * 100) : ""; } return numOf(raw); };
@@ -399,12 +474,12 @@
   function setTextSize(px) {
     const p = reEsc(PFX());
     const strip = new RegExp(`(^|\\s)${p}text-(\\[(?!#|var\\(|rgb|hsl|oklch)[^\\]]*\\]|xs|sm|base|lg|xl|[2-9]xl)(?=\\s|$)`, "g");
-    let next = liveClass.replace(strip, " ").replace(/\s+/g, " ").trim();
+    let next = live().replace(strip, " ").replace(/\s+/g, " ").trim();
     if (px !== "") next = (next + ` ${PFX()}text-[${px}px]`).trim();
     applyLive(next);
   }
   function readTextSize() {
-    const m = liveClass.match(new RegExp(`(^|\\s)${reEsc(PFX())}text-(\\[(?!#|var\\(|rgb|hsl|oklch)[^\\]]*\\]|xs|sm|base|lg|xl|[2-9]xl)(?=\\s|$)`));
+    const m = live().match(new RegExp(`(^|\\s)${reEsc(PFX())}text-(\\[(?!#|var\\(|rgb|hsl|oklch)[^\\]]*\\]|xs|sm|base|lg|xl|[2-9]xl)(?=\\s|$)`));
     return m ? numOf(m[2]) : "";
   }
   // フォント太さ（family を潰さず weight のみ）
@@ -420,25 +495,27 @@
   }
 
   async function commitStyle() {
-    if (!selected) return;
-    if (liveClass === sourceClass) { toast("変更なし"); return; }
+    const c = cur();
+    if (!c) return;
+    if (c.liveClass === c.sourceClass) { toast("変更なし"); return; }
     try {
-      const j = await post("/apply-style", { route: selected.route, oldClassName: sourceClass, newClassName: liveClass, selector: selected.selector, text: selected.text });
+      const j = await post("/apply-style", { route: c.payload.route, oldClassName: c.sourceClass, newClassName: c.liveClass, selector: c.payload.selector, text: c.payload.text });
       if (j.ok) {
         toast(`反映 → ${j.file ?? "noop"}`);
-        sourceClass = liveClass; selected.classes = liveClass;
-        setTimeout(() => { const fresh = document.querySelector(selected.selector); if (fresh) selectedEl = fresh; }, 1200);
+        c.sourceClass = c.liveClass; c.payload.classes = c.liveClass;
+        setTimeout(() => { const fresh = document.querySelector(c.payload.selector); if (fresh) c.el = fresh; }, 1200);
       } else if (j.reason === "ambiguous") toast(`同じclassが${j.count}箇所。Claudeに頼んで`, "warn");
       else if (j.reason === "not-found") toast("ソース未特定(動的class?)。Claudeに頼んで", "warn");
       else toast(`失敗: ${j.reason || j.error}`, "err");
     } catch (err) { toast(`失敗: ${err.message}（daemon 起動中？）`, "err"); }
   }
   async function doStruct(endpoint) {
-    if (!selected) return;
-    if (!sourceClass) { toast("class が無く操作不可（Claudeに頼んで）", "warn"); return; }
+    const c = cur();
+    if (!c) return;
+    if (!c.sourceClass) { toast("class が無く操作不可（Claudeに頼んで）", "warn"); return; }
     const verb = endpoint === "/delete" ? "削除" : "複製";
     try {
-      const j = await post(endpoint, { route: selected.route, targetClass: sourceClass });
+      const j = await post(endpoint, { route: c.payload.route, targetClass: c.sourceClass });
       if (j.ok) { toast(`${verb}反映 → ${j.file}`); closePanel(); }
       else if (j.reason === "ambiguous") toast("同じclassが複数。Claudeに頼んで", "warn");
       else if (j.reason === "not-found") toast("ソース未特定(動的class?)。Claudeに頼んで", "warn");
@@ -489,8 +566,9 @@
     return "";
   }
   function readComputedSpacingPx(kind, side) {
-    if (!selectedEl || !selectedEl.isConnected) return "";
-    const cs = getComputedStyle(selectedEl);
+    const c = cur();
+    if (!c?.el || !c.el.isConnected) return "";
+    const cs = getComputedStyle(c.el);
     const readSide = (s) => {
       const n = parseFloat(cs[SPACING_PROP[kind][s]]);
       return Number.isFinite(n) ? String(Math.round(n)) : "";
@@ -524,7 +602,7 @@
     const p = reEsc(PFX());
     const neg = kind === "m" ? "-?" : "";
     const choices = prefixes.map(reEsc).join("|");
-    return liveClass.replace(new RegExp(`(^|\\s)${p}${neg}(${choices})-${VAL}(?=\\s|$)`, "g"), " ").replace(/\s+/g, " ").trim();
+    return live().replace(new RegExp(`(^|\\s)${p}${neg}(${choices})-${VAL}(?=\\s|$)`, "g"), " ").replace(/\s+/g, " ").trim();
   }
   function isSpacingLocked(kind) {
     const override = spacingOverride(kind);
@@ -583,12 +661,13 @@
   }
 
   function renderBody() {
-    const sel = selected;
-    if (!sel) {
+    const active = cur();
+    const sel = active?.payload;
+    if (!active || !sel) {
       $body.innerHTML = `<div class="empty">ツールバーの選択アイコンを押して<br>要素をクリックで選択してください</div>`;
       return;
     }
-    const cs = selectedEl && selectedEl.isConnected ? getComputedStyle(selectedEl) : null;
+    const cs = active.el && active.el.isConnected ? getComputedStyle(active.el) : null;
     const textColor = readColorInfo("text", rgbToHex(cs && cs.color));
     const bgColor = readColorInfo("bg", rgbToHex(cs && cs.backgroundColor));
     const bdColor = readColorInfo("border", rgbToHex(cs && cs.borderColor));
@@ -599,6 +678,8 @@
     if (!tabs.some(([k]) => k === tab)) tab = tabs[0][0];
     const num = (cls, val, unit, ph = "") => `<span class="num"><input type="number" class="${cls}" value="${val}" placeholder="${ph}">${unit ? `<span class="u">${unit}</span>` : ""}</span>`;
     const list = pending.map((p, i) => `<li><span class="t">&lt;${esc(p.payload.tag)}&gt; ${esc(p.prompt.slice(0, 36))}</span><span class="x" data-i="${i}">✕</span></li>`).join("");
+    const multiHead = selection.length >= 2;
+    const chips = multiHead ? `<div class="chips">${selection.map((s, i) => `<span class="chip${i === primaryIdx ? " primary" : ""}"><span>&lt;${esc(s.payload.tag)}&gt;</span><button class="sel-x" data-i="${i}" title="選択解除">×</button></span>`).join("")}</div>` : "";
 
     let panel = "";
     if (tab === "text") {
@@ -635,7 +716,7 @@
       </section>`;
     } else {
       panel = `<section><h5>クラス（Tailwind）</h5>
-        <textarea class="cls" spellcheck="false">${esc(liveClass)}</textarea>
+        <textarea class="cls" spellcheck="false">${esc(active.liveClass)}</textarea>
         <div class="row"><button class="btn primary apply">適用</button><button class="btn ghost reset">戻す</button></div>
       </section>
       <section><h5>構造</h5>
@@ -650,12 +731,13 @@
 
     $body.innerHTML = `
       <div class="inspect-head">
-        <div class="elhdr">${svg("cursor", 13)}<span class="eltag">&lt;${esc(sel.tag)}&gt;</span>${sel.component ? `<span class="elcomp">${esc(sel.component)}</span>` : ""}</div>
+        <div class="elhdr">${svg("cursor", 13)}${multiHead ? `<span class="eltag">${selection.length}個選択中</span>` : `<span class="eltag">&lt;${esc(sel.tag)}&gt;</span>${sel.component ? `<span class="elcomp">${esc(sel.component)}</span>` : ""}`}</div>
         <div class="state-ctl" title="条件スタイル">
           <button class="${state === "" ? "on" : ""}" data-state="">通常</button>
           <button class="${state === "hover:" ? "on" : ""}" data-state="hover:">ホバー</button>
         </div>
       </div>
+      ${chips}
       ${state === "hover:" ? `<div class="state-badge">ホバー状態を編集中</div>` : ""}
       <div class="tabs">${tabs.map(([k, l]) => `<button class="tab${k === tab ? " on" : ""}" data-tab="${k}">${l}</button>`).join("")}</div>
       ${panel}
@@ -666,6 +748,7 @@
       </section>`;
 
     // タブ切替
+    $body.querySelectorAll(".sel-x").forEach((b) => b.onclick = () => removeSelectionAt(Number(b.dataset.i)));
     $body.querySelectorAll(".tab[data-tab]").forEach((b) => b.onclick = () => { tab = b.dataset.tab; renderBody(); });
     $body.querySelectorAll(".state-ctl button[data-state]").forEach((b) => b.onclick = () => { state = b.dataset.state; renderBody(); });
     // 共通: 色/揃え/装飾
@@ -703,20 +786,20 @@
     oc(".t-scale", (e) => setUtil("scale", e.target.value ? `[${e.target.value}]` : ""));
     // 設定タブ: class/構造
     const cls = $(".cls");
-    if (cls) cls.oninput = (e) => { liveClass = e.target.value; if (selectedEl && selectedEl.isConnected) selectedEl.setAttribute("class", liveClass); highlightSelected(); };
+    if (cls) cls.oninput = (e) => { setPrimaryLiveClass(e.target.value); highlightSelection(); };
     const ap = $(".apply"); if (ap) ap.onclick = commitStyle;
-    const rs = $(".reset"); if (rs) rs.onclick = () => applyLive(sourceClass);
+    const rs = $(".reset"); if (rs) rs.onclick = () => applyLive(source());
     const du = $(".dup"); if (du) du.onclick = () => doStruct("/duplicate");
     const de = $(".del"); if (de) de.onclick = () => doStruct("/delete");
     // Claude
     const ask = $(".ask"), add = $(".add");
-    if (add) add.onclick = () => { const p = (ask.value || "").trim(); if (!p) { toast("指示を入力してください", "warn"); return; } pending.push({ payload: selected, prompt: p }); renderBody(); };
+    if (add) add.onclick = () => { const p = (ask.value || "").trim(); if (!p) { toast("指示を入力してください", "warn"); return; } pending.push({ payload: sel, prompt: p }); renderBody(); };
     $body.querySelectorAll(".x").forEach((x) => x.onclick = () => { pending.splice(Number(x.dataset.i), 1); renderBody(); });
     const sendBtn = $(".send"); if (sendBtn) sendBtn.onclick = send;
   }
 
   function openPanel() { setCollapsed(false); renderBody(); }
-  function closePanel() { selected = null; selectedEl = null; state = ""; marginLocked = null; paddingLocked = null; hideHighlight(); renderBody(); }
+  function closePanel() { clearSelection(); }
 
   async function send() {
     if (!pending.length) return;
@@ -780,7 +863,7 @@
   setPageGutter(true); // 初期はインスペクタ開＝ガターを空ける
   root.querySelectorAll(".bpseg button").forEach((b) => {
     if (b.dataset.bp === bp) b.classList.add("on");
-    b.onclick = () => { bp = b.dataset.bp; root.querySelectorAll(".bpseg button").forEach((x) => x.classList.toggle("on", x.dataset.bp === bp)); if (selected) renderBody(); };
+    b.onclick = () => { bp = b.dataset.bp; root.querySelectorAll(".bpseg button").forEach((x) => x.classList.toggle("on", x.dataset.bp === bp)); if (cur()) renderBody(); };
   });
 
   // ---- ページ側イベント -------------------------------------------------
@@ -802,10 +885,7 @@
   document.addEventListener("click", (e) => {
     if (!inspecting || isOurs(e.target)) return;
     e.preventDefault(); e.stopPropagation();
-    selectedEl = e.target; selected = collect(e.target); sourceClass = selected.classes; liveClass = selected.classes;
-    state = ""; marginLocked = null; paddingLocked = null;
-    tab = TEXTUAL.test(selected.tag) ? "text" : "box";
-    setInspecting(false); openPanel(); highlightSelected();
+    selectFromClick(e.target, e);
   }, true);
 
   function isEditing() {
@@ -814,7 +894,7 @@
     return !!ae && (ae.tagName === "INPUT" || ae.tagName === "TEXTAREA" || ae.isContentEditable);
   }
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") { if (reordering) setReordering(false); else if (inspecting) setInspecting(false); else if (selected) closePanel(); return; }
+    if (e.key === "Escape") { if (reordering) setReordering(false); else if (inspecting) setInspecting(false); else if (cur()) closePanel(); return; }
     if (!(e.metaKey || e.ctrlKey) || isEditing()) return; // テキスト編集中は OS ネイティブの undo を優先
     const k = e.key.toLowerCase();
     if (k === "z" && !e.shiftKey) { e.preventDefault(); doHistory("/undo"); }
@@ -823,7 +903,7 @@
 
   window.addEventListener("scroll", () => {
     if (inspecting && hovered) showHighlight(hovered);
-    else if (selectedEl && selected) highlightSelected();
+    else if (cur()) highlightSelection();
   }, true);
 
   renderBody();
