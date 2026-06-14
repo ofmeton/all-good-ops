@@ -209,11 +209,12 @@ function RecurringRowItem({
 
   return (
     <li
-      className={`flex flex-col gap-3 rounded-xl border border-border bg-surface p-3 shadow-sm transition-opacity duration-150 sm:flex-row sm:items-center sm:gap-4 sm:p-4 ${
+      className={`flex flex-col gap-3 rounded-xl border border-border bg-surface p-3 shadow-sm transition-opacity duration-150 sm:p-4 ${
         pending ? "opacity-60" : ""
       } ${inactive ? "opacity-70" : ""}`}
     >
-      <div className="flex min-w-0 flex-1 items-center gap-2">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
+        <div className="flex min-w-0 flex-1 items-center gap-2">
         <span
           className={`min-w-0 flex-1 truncate text-sm font-medium ${
             inactive ? "text-muted line-through" : "text-foreground"
@@ -294,13 +295,14 @@ function RecurringRowItem({
           削除
         </button>
       </div>
+      </div>
       {error && (
-        <p className="text-xs font-medium text-negative sm:col-span-3" role="alert">
+        <p className="text-xs font-medium text-negative" role="alert">
           {error}
         </p>
       )}
       {item.kind === "income" && occurrences.length > 0 && (
-        <div className="sm:col-span-3">
+        <div className="mt-1 border-t border-border/60 pt-2">
           <p className="mb-1 text-[11px] font-medium text-muted">発生予定</p>
           <ul className="space-y-1.5">
             {occurrences.map((occurrence) => (
