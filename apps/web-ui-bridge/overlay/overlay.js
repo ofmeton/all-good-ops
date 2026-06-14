@@ -415,6 +415,15 @@
     const r = readAcross(readForSel);
     return r.mixed ? { value: "", ph: "—" } : { value: r.value ?? "", ph: "" };
   };
+  function skipNote(skipped) {
+    if (!skipped?.length) return "";
+    const amb = skipped.filter((s) => s.reason === "ambiguous").length;
+    const nf = skipped.filter((s) => s.reason === "not-found").length;
+    const parts = [];
+    if (amb) parts.push(`${amb}件は同一class複数→Claude経路`);
+    if (nf) parts.push(`${nf}件はソース未特定/別ファイル→Claude経路`);
+    return parts.length ? `（${parts.join("・")}）` : `（skip ${skipped.length}）`;
+  }
 
   function applyLive(next) {
     setPrimaryLiveClass(next);
@@ -440,7 +449,12 @@
     try {
       const j = await post("/apply-style-batch", { route: c.payload.route, edits });
       if (j.ok) {
+        if (j.changed === false || !j.file) {
+          toast(`対象が見つかりませんでした${skipNote(j.skipped)}`, "warn");
+          return;
+        }
         const skipped = new Set((j.skipped || []).map((s) => s.oldClassName));
+        // batch sourceClass 更新は 1 className=1 ソース位置を仮定する。
         for (const e of edits) {
           if (skipped.has(e.oldClassName)) continue;
           for (const s of selection) {
@@ -452,7 +466,7 @@
             }
           }
         }
-        toast(`一括反映(${j.applied ?? edits.length}) skip ${j.skipped?.length || 0}`);
+        toast(`一括反映(${j.applied ?? edits.length})${skipNote(j.skipped)}`, j.skipped?.length ? "warn" : undefined);
         highlightSelection(); renderBody();
       } else toast(`失敗: ${j.reason || j.error}`, "warn");
     } catch (err) { toast(`失敗: ${err.message}`, "err"); }
@@ -624,8 +638,20 @@
     try {
       const j = await post("/structure-batch", { route: c.payload.route, kind, targets });
       if (j.ok) {
-        toast(`${kind === "delete" ? "削除" : "複製"}一括 → ${j.file ?? "noop"}（skip ${j.skipped?.length || 0}）`);
-        if (kind === "delete") clearSelection();
+        if (j.changed === false || !j.file) {
+          toast(`対象が見つかりませんでした${skipNote(j.skipped)}`, "warn");
+          return;
+        }
+        toast(`${kind === "delete" ? "削除" : "複製"}一括 → ${j.file}${skipNote(j.skipped)}`, j.skipped?.length ? "warn" : undefined);
+        if (kind === "delete") {
+          const skippedClasses = new Set((j.skipped || []).map((s) => s.targetClass));
+          selection = selection.filter((s) => skippedClasses.has(s.sourceClass));
+          primaryIdx = selection.length ? selection.length - 1 : -1;
+          resetEditState();
+          updateMoveAvailability();
+          highlightSelection();
+          renderBody();
+        }
         else setTimeout(highlightSelection, 1200);
       } else toast(`失敗: ${j.reason || j.error}`, "warn");
     } catch (err) { toast(`失敗: ${err.message}`, "err"); }
@@ -1032,6 +1058,7 @@
       if (j.ok && !j.noop) toast(`グループ移動 → ${j.file}`);
       else if (j.ok) toast("変更なし");
       else if (j.reason === "not-same-parent") return claudeMoveFallback(targetEl, pos);
+      else if (j.reason === "overlap") return claudeMoveFallback(targetEl, pos);
       else if (j.reason === "nested") toast("自分の中/外へは移動不可", "warn");
       else if (j.reason === "ambiguous") toast("同じclassが複数。Claudeに頼んで", "warn");
       else if (j.reason === "target-in-group") toast("移動先が選択内です", "warn");

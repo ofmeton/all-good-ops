@@ -253,7 +253,12 @@ export function moveGroupInSource(src, dragClasses, targetClass, position = "bef
   const insertText = position === "before" ? joined + indent : indent + joined;
   const insertPos = position === "before" ? targetEl.start : targetEl.end;
   // 各 dragEl の lineRange 削除 op（降順）＋挿入 op を集めて offset 降順適用
-  const ops = orderedDrag.map((e) => { const [s, en] = lineRange(dragParent.children, e); return { s, e: en, text: "" }; });
+  const removeOps = orderedDrag.map((e) => { const [s, en] = lineRange(dragParent.children, e); return { s, e: en, text: "" }; });
+  const orderedRemovals = [...removeOps].sort((a, b) => a.s - b.s);
+  for (let i = 1; i < orderedRemovals.length; i++) {
+    if (orderedRemovals[i].s < orderedRemovals[i - 1].e) return { ok: false, reason: "overlap" };
+  }
+  const ops = [...removeOps];
   ops.push({ s: insertPos, e: insertPos, text: insertText });
   ops.sort((a, b) => b.s - a.s);
   let out = src; for (const op of ops) out = out.slice(0, op.s) + op.text + out.slice(op.e);

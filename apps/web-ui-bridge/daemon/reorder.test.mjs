@@ -94,5 +94,18 @@ t(tig.ok === false && tig.reason === "target-in-group", "moveGroupInSource: targ
 const nf = moveGroupInSource(GRP, ["x1", "zzz"], "x4", "before");
 t(nf.ok === false && nf.reason === "not-found", "moveGroupInSource: 特定不可は理由付き失敗");
 
+const OVERLAP = `export default function P(){return(
+  <main className="root">
+    <section className="from"><p className="o1">1</p>
+      <p className="o2">2</p>
+      <p className="o3">3</p>
+    </section>
+    <section className="to">
+      <p className="dest">D</p>
+    </section>
+  </main>);}`;
+const ov = moveGroupInSource(OVERLAP, ["o1", "o2"], "dest", "after");
+t(ov.ok === false && ov.reason === "overlap", "moveGroupInSource: 別親 reparent の削除範囲 overlap は拒否");
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
