@@ -182,5 +182,20 @@ export function duplicateInSource(src, targetClass) {
   return { ok: true, changed: true, src: out };
 }
 
+export function findElement(src, cls) {
+  const tree = load(src);
+  if (tree.err) return { err: tree.err };
+  return unique(tree.all, cls);
+}
+
+export function elementLineRange(src, cls) {
+  const tree = load(src);
+  if (tree.err) return { err: tree.err };
+  const u = unique(tree.all, cls); if (u.err) return u;
+  const parent = tree.parentOf.get(u.el);
+  const [s, e] = parent ? lineRange(parent.children, u.el) : [u.el.start, u.el.end];
+  return { s, e, el: u.el };
+}
+
 // 後方互換（Phase C slice1 の呼び出し名）
 export const reorderInSource = moveInSource;
