@@ -19,6 +19,8 @@ const INPUT_CLS =
 function BalanceRowItem({ item }: { item: AccountBalanceRow }) {
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
+  const [editing, setEditing] = useState(false);
+  const [draft, setDraft] = useState<string>(String(item.balance));
 
   const onDelete = () => {
     if (!window.confirm(`「${item.account}」の残高を削除します。よろしいですか？`)) return;
@@ -26,6 +28,34 @@ function BalanceRowItem({ item }: { item: AccountBalanceRow }) {
     startTransition(async () => {
       const res = await deleteAccountBalance(item.account);
       if (!res.ok) setError(res.error);
+    });
+  };
+
+  const startEdit = () => {
+    setError(null);
+    setDraft(String(item.balance));
+    setEditing(true);
+  };
+  const cancelEdit = () => {
+    setEditing(false);
+    setError(null);
+  };
+  const onSave = () => {
+    const bal = Number(draft);
+    if (!Number.isFinite(bal)) {
+      setError("残高は数値で入力してください");
+      return;
+    }
+    setError(null);
+    startTransition(async () => {
+      // 手入力（source='manual'）として保存。kind は据え置き。
+      // ※MF再取得時は最新MF値で上書きされる（一時的な修正という位置づけ）。
+      const res = await setAccountBalance(item.account, bal, item.kind);
+      if (!res.ok) {
+        setError(res.error);
+        return;
+      }
+      setEditing(false);
     });
   };
 
@@ -53,23 +83,64 @@ function BalanceRowItem({ item }: { item: AccountBalanceRow }) {
         </span>
       </div>
 
-      <div className="flex items-center justify-between gap-3 sm:justify-end">
-        <span className="tabular whitespace-nowrap text-sm font-semibold text-foreground">
-          <span className="text-xs" aria-hidden>
-            {item.balance < 0 ? "−¥" : "¥"}
+      {editing ? (
+        <div className="flex items-center justify-end gap-2">
+          <input
+            type="number"
+            inputMode="numeric"
+            step={1}
+            value={draft}
+            onChange={(e) => setDraft(e.target.value)}
+            disabled={pending}
+            autoFocus
+            aria-label={`${item.account} の残高`}
+            className={`tabular w-32 text-right ${INPUT_CLS}`}
+          />
+          <button
+            type="button"
+            onClick={onSave}
+            disabled={pending}
+            className="flex h-11 cursor-pointer items-center rounded-lg border border-primary bg-primary px-3 text-sm font-medium text-white transition-colors duration-150 hover:bg-primary/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            {pending ? "保存中…" : "保存"}
+          </button>
+          <button
+            type="button"
+            onClick={cancelEdit}
+            disabled={pending}
+            className="flex h-11 cursor-pointer items-center rounded-lg border border-border px-3 text-sm font-medium text-muted transition-colors duration-150 hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            取消
+          </button>
+        </div>
+      ) : (
+        <div className="flex items-center justify-between gap-3 sm:justify-end">
+          <span className="tabular whitespace-nowrap text-sm font-semibold text-foreground">
+            <span className="text-xs" aria-hidden>
+              {item.balance < 0 ? "−¥" : "¥"}
+            </span>
+            {yen(Math.abs(item.balance))}
           </span>
-          {yen(Math.abs(item.balance))}
-        </span>
-        <button
-          type="button"
-          onClick={onDelete}
-          disabled={pending}
-          aria-label={`${item.account} の残高を削除`}
-          className="flex h-11 min-w-11 cursor-pointer items-center justify-center rounded-lg border border-negative/40 px-3 text-sm font-medium text-negative transition-colors duration-150 hover:bg-negative/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-negative disabled:cursor-not-allowed disabled:opacity-40"
-        >
-          削除
-        </button>
-      </div>
+          <button
+            type="button"
+            onClick={startEdit}
+            disabled={pending}
+            aria-label={`${item.account} の残高を編集`}
+            className="flex h-11 min-w-11 cursor-pointer items-center justify-center rounded-lg border border-border px-3 text-sm font-medium text-foreground transition-colors duration-150 hover:border-primary hover:text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            編集
+          </button>
+          <button
+            type="button"
+            onClick={onDelete}
+            disabled={pending}
+            aria-label={`${item.account} の残高を削除`}
+            className="flex h-11 min-w-11 cursor-pointer items-center justify-center rounded-lg border border-negative/40 px-3 text-sm font-medium text-negative transition-colors duration-150 hover:bg-negative/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-negative disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            削除
+          </button>
+        </div>
+      )}
       {error && (
         <p className="text-xs font-medium text-negative" role="alert">
           {error}
@@ -193,7 +264,7 @@ export function AccountBalanceEditor({ items }: { items: AccountBalanceRow[] }) 
         </span>
       </h2>
       <p className="mb-2 text-[11px] text-muted">
-        MF取得分は再取得で上書きされます。ここは手入力（manual）用です。
+        各行の「編集」で残高を手入力できます（PayPay・現金など）。手入力すると手入力（manual）扱いになりますが、MF再取得時は最新のMF値で上書きされます。
       </p>
       {items.length === 0 ? (
         <p className="rounded-xl border border-border bg-surface px-4 py-3 text-sm text-muted">
