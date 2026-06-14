@@ -68,15 +68,17 @@ dead_letter_queue = "xad-jobs-dlq"
 # | 毎月1日 00:00| 15:00 (1日) | rotation-notice (token rotation 通知)       |
 # | 毎週月曜01:00| 16:00 (日曜) | optimizer-analyst (週次改善提案生成)         |
 [triggers]
-crons = [
-  "30 20 * * *",   # 05:30 JST collect (収集エージェント)
-  "0 11 * * *",    # 20:00 JST metrics-ingest (digest/optimizer の前)
-  "0 12 * * *",    # 21:00 JST daily-digest
-  "0 14 * * *",    # 23:00 JST optimizer-update
-  "0 */2 * * *",   # rollback-monitor 毎2h
-  "0 15 1 * *",    # 毎月1日 rotation-notice
-  "0 16 * * SUN",  # 日曜16:00 UTC = 毎週月曜01:00 JST optimizer-analyst（CF は Quartz: 日=SUN。0 は不可）
-]
+# 2026-06-14 本番 cron を一時全停止（ユーザー指示「いったんストップ」）。空配列で deploy すると
+# Cloudflare 側の cron trigger が全削除される。復活時は下記コメントを crons に戻して再 deploy するだけ。
+crons = []
+# 停止前の構成（復活用に保存）:
+#   "30 20 * * *",   # 05:30 JST collect (収集エージェント)
+#   "0 11 * * *",    # 20:00 JST metrics-ingest (digest/optimizer の前)
+#   "0 12 * * *",    # 21:00 JST daily-digest
+#   "0 14 * * *",    # 23:00 JST optimizer-update
+#   "0 */2 * * *",   # rollback-monitor 毎2h
+#   "0 15 1 * *",    # 毎月1日 rotation-notice
+#   "0 16 * * SUN",  # 日曜16:00 UTC = 毎週月曜01:00 JST optimizer-analyst（CF は Quartz: 日=SUN。0 は不可）
 
 # --------------------------------------------------------------------
 # KV Namespaces
