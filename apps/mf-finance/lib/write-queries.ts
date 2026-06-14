@@ -30,6 +30,12 @@ export interface LiabilityRow {
   as_of_date: string | null; // 'YYYY-MM-DD'
 }
 
+export interface TransferFeeRow {
+  from_account: string;
+  fee: number;
+  updated_at: string | null;
+}
+
 export function getRecurringItems(): RecurringRow[] {
   return db
     .prepare(
@@ -44,4 +50,10 @@ export function getManualLiabilities(): LiabilityRow[] {
       "SELECT id, name, lender, balance, rate, monthly_payment, as_of_date FROM manual_liabilities ORDER BY id",
     )
     .all() as LiabilityRow[];
+}
+
+export function getTransferFees(): TransferFeeRow[] {
+  return db
+    .prepare("SELECT from_account, fee, updated_at FROM transfer_fees ORDER BY from_account = '__default__' DESC, from_account")
+    .all() as TransferFeeRow[];
 }

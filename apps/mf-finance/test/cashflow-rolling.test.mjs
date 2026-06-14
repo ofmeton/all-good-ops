@@ -2,6 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   buildAccountRolling,
+  buildBalanceMatrix,
   buildRolling,
   buildUpcomingWithdrawals,
   effectiveDay,
@@ -160,6 +161,83 @@ test("buildAccountRolling: balances 非空で合計が total 起点と一致す�
     byAccount.locations.reduce((sum, location) => sum + location.start, 0),
     byAccount.total.start,
   );
+});
+
+test("buildBalanceMatrix: 複数口座を前方フィルし未指定・イベントなし行も踏襲", () => {
+  const byAccount = buildAccountRolling({
+    today: "2026-06-01",
+    days: 4,
+    startBalance: 17000,
+    balances: [
+      { account: "銀行A", kind: "bank", balance: 10000 },
+      { account: "PayPay", kind: "emoney", balance: 5000 },
+      { account: "現金", kind: "cash", balance: 2000 },
+    ],
+    recurring: [],
+    scheduled: [
+      { kind: "income", name: "入金A", amount: 3000, date: "2026-06-01", account: "銀行A" },
+      { kind: "expense", name: "未指定支払", amount: 700, date: "2026-06-02" },
+      { kind: "expense", name: "PayPay支払", amount: 1000, date: "2026-06-04", account: "PayPay" },
+    ],
+  });
+  const matrix = buildBalanceMatrix(byAccount.total.events, byAccount.locations);
+
+  assert.deepEqual(byAccount.total.events.map((event) => event.balanceAfter), [20000, 19300, 18300]);
+  assert.equal(matrix.rows.length, 3);
+  assert.deepEqual(matrix.rows.map((row) => row.event.balanceAfter), byAccount.total.events.map((event) => event.balanceAfter));
+  assert.equal(matrix.rows[0].balances["銀行A"], 13000);
+  assert.equal(matrix.rows[0].balances.PayPay, 5000);
+  assert.equal(matrix.rows[0].balances["現金"], 2000);
+  assert.equal(matrix.rows[0].balances.__unassigned__, 0);
+  assert.equal(matrix.rows[1].balances["銀行A"], 13000);
+  assert.equal(matrix.rows[1].balances.PayPay, 5000);
+  assert.equal(matrix.rows[1].balances.__unassigned__, -700);
+  assert.equal(matrix.rows[2].balances["銀行A"], 13000);
+  assert.equal(matrix.rows[2].balances.PayPay, 4000);
+  assert.equal(matrix.rows[2].balances["現金"], 2000);
+  assert.equal(matrix.endBalances["銀行A"], 13000);
+  assert.equal(matrix.endBalances.PayPay, 4000);
+  assert.equal(matrix.endBalances.__unassigned__, -700);
+});
+
+test("buildRolling/buildAccountRolling: pending transfer は口座残高を移動し合計は手数料だけ減る", () => {
+  const byAccount = buildAccountRolling({
+    today: "2026-06-01",
+    days: 1,
+    startBalance: 15000,
+    balances: [
+      { account: "銀行A", kind: "bank", balance: 10000 },
+      { account: "銀行B", kind: "bank", balance: 5000 },
+    ],
+    recurring: [],
+    scheduled: [],
+    transfers: [
+      {
+        from_account: "銀行A",
+        to_account: "銀行B",
+        amount: 3000,
+        fee: 220,
+        date: "2026-06-01",
+        name: "補填",
+        status: "pending",
+      },
+    ],
+  });
+  const matrix = buildBalanceMatrix(byAccount.total.events, byAccount.locations);
+  const locations = new Map(byAccount.locations.map((location) => [location.key, location]));
+
+  assert.deepEqual(byAccount.total.events.map((event) => event.name), [
+    "補填（振替出金）",
+    "補填（手数料）",
+    "補填（振替入金）",
+  ]);
+  assert.deepEqual(byAccount.total.events.map((event) => event.balanceAfter), [15000, 14780, 14780]);
+  assert.equal(byAccount.total.end, 14780);
+  assert.equal(locations.get("銀行A").end, 6780);
+  assert.equal(locations.get("銀行B").end, 8000);
+  assert.equal(matrix.rows[0].balances["銀行A"], 7000);
+  assert.equal(matrix.rows[1].balances["銀行A"], 6780);
+  assert.equal(matrix.rows[2].balances["銀行B"], 8000);
 });
 
 test("buildRolling: ゼロ割れ検出", () => {

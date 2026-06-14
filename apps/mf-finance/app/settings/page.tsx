@@ -1,7 +1,8 @@
-import { getRecurringItems, getManualLiabilities } from "@/lib/write-queries";
+import { getRecurringItems, getManualLiabilities, getTransferFees } from "@/lib/write-queries";
 import { getAccountOptions } from "@/lib/cashflow-queries";
 import { RecurringEditor } from "@/app/components/RecurringEditor";
 import { ManualLiabilityForm } from "@/app/components/ManualLiabilityForm";
+import { TransferFeeEditor } from "@/app/settings/TransferFeeEditor";
 
 // SQLite ファイル更新を再ビルドなしで反映（書込後の revalidate と整合）。
 export const dynamic = "force-dynamic";
@@ -9,6 +10,7 @@ export const dynamic = "force-dynamic";
 export default function SettingsPage() {
   const recurring = getRecurringItems();
   const liabilities = getManualLiabilities();
+  const transferFees = getTransferFees();
   const accountOptions = getAccountOptions();
 
   return (
@@ -31,6 +33,7 @@ export default function SettingsPage() {
       </header>
 
       <RecurringEditor items={recurring} occurrences={[]} accountOptions={accountOptions} />
+      <TransferFeeEditor accounts={accountOptions} fees={transferFees} />
       <ManualLiabilityForm items={liabilities} />
     </main>
   );

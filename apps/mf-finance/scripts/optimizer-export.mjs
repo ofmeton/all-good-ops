@@ -23,6 +23,9 @@ const parseJson = (s) => {
   }
 };
 
+const tableExists = (name) =>
+  Boolean(db.prepare("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?").get(name));
+
 // 1. pending シグナル（下層・上層問わず未処理の提案）
 const pending_signals = db
   .prepare(
@@ -111,6 +114,28 @@ const category_majors = db
   .all()
   .map((r) => r.category_major);
 
+// 8. 資金移動提案向けの口座残高・手数料・口座別不足見込み（単純な現在残高ベース）
+const account_balances = tableExists('account_balances')
+  ? db
+      .prepare(`SELECT account, kind, balance, as_of, source FROM account_balances ORDER BY kind, account`)
+      .all()
+  : [];
+
+const transfer_fees = tableExists('transfer_fees')
+  ? db
+      .prepare(`SELECT from_account, fee, updated_at FROM transfer_fees ORDER BY from_account = '__default__' DESC, from_account`)
+      .all()
+  : [];
+
+const account_shortfalls = account_balances
+  .filter((row) => Number(row.balance) < 0)
+  .map((row) => ({
+    account: row.account,
+    kind: row.kind,
+    shortage: Math.abs(Number(row.balance)),
+    as_of: row.as_of,
+  }));
+
 const out = {
   generated_at: new Date().toISOString(),
   pending_signals,
@@ -120,6 +145,9 @@ const out = {
   category_groups,
   decision_log,
   category_majors,
+  account_balances,
+  transfer_fees,
+  account_shortfalls,
 };
 
 writeFileSync(outPath, JSON.stringify(out, null, 2) + '\n');
@@ -129,5 +157,6 @@ console.log(`optimizer-input.json -> ${outPath}`);
 console.log(
   `  pending_signals=${pending_signals.length} unknowns=${unknowns.length} ` +
     `rules=${rules.length} category_groups=${category_groups.length} ` +
-    `decision_log=${decision_log.length} category_majors=${category_majors.length}`,
+    `decision_log=${decision_log.length} category_majors=${category_majors.length} ` +
+    `account_balances=${account_balances.length} transfer_fees=${transfer_fees.length}`,
 );

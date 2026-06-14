@@ -139,7 +139,7 @@ CREATE TABLE IF NOT EXISTS optimizer_proposals (
   kind            TEXT NOT NULL CHECK (kind IN (
                     'classify_unknown','fixed_vs_variable','relabel',
                     'transfer_pair','rule_suggest','rule_conflict',
-                    'label_add','category_regroup')),
+                    'label_add','category_regroup','suggest_transfer')),
   source          TEXT NOT NULL CHECK (source IN ('signal','llm')),
   status          TEXT NOT NULL DEFAULT 'pending' CHECK (status IN (
                     'pending','accepted','rejected','dismissed','superseded')),
@@ -211,3 +211,23 @@ CREATE TABLE IF NOT EXISTS scheduled_cashflow (
   created_at     TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
 );
 CREATE INDEX IF NOT EXISTS idx_scheduled_date ON scheduled_cashflow (scheduled_date);
+
+CREATE TABLE IF NOT EXISTS transfer_fees (
+  from_account TEXT PRIMARY KEY,
+  fee          INTEGER NOT NULL DEFAULT 0,
+  updated_at   TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
+);
+
+CREATE TABLE IF NOT EXISTS manual_transfers (
+  id             INTEGER PRIMARY KEY AUTOINCREMENT,
+  from_account   TEXT NOT NULL,
+  to_account     TEXT NOT NULL,
+  amount         INTEGER NOT NULL,
+  scheduled_date TEXT NOT NULL,
+  name           TEXT,
+  fee            INTEGER NOT NULL DEFAULT 0,
+  status         TEXT NOT NULL DEFAULT 'pending' CHECK(status IN('pending','done','cancelled')),
+  created_at     TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
+  done_at        TEXT
+);
+CREATE INDEX IF NOT EXISTS idx_manual_transfers_date_status ON manual_transfers (scheduled_date, status);

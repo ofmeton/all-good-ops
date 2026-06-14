@@ -62,6 +62,13 @@ function editableFields(action: ProposedAction | null): EditField[] {
         { key: "amount", label: "金額", value: String(action.amount), kind: "number" },
         { key: "day", label: "引落日(任意)", value: action.day != null ? String(action.day) : "", kind: "number" },
       ];
+    case "create_manual_transfer":
+      return [
+        { key: "from_account", label: "出金口座", value: action.from_account },
+        { key: "to_account", label: "入金口座", value: action.to_account },
+        { key: "amount", label: "金額", value: String(action.amount), kind: "number" },
+        { key: "date", label: "日付", value: action.date },
+      ];
     default:
       return []; // delete_rule / mark_transfer は inline 編集対象なし
   }
@@ -114,6 +121,14 @@ function rebuildAction(action: ProposedAction, values: Record<string, string>): 
           v("day", action.day != null ? String(action.day) : "").trim() === ""
             ? null
             : Number(v("day", "")),
+      };
+    case "create_manual_transfer":
+      return {
+        ...action,
+        from_account: v("from_account", action.from_account).trim(),
+        to_account: v("to_account", action.to_account).trim(),
+        amount: Number(v("amount", String(action.amount))),
+        date: v("date", action.date).trim(),
       };
     default:
       return action;

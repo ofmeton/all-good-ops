@@ -2,10 +2,12 @@ import {
   getAccountBalances,
   getUpcomingWithdrawals,
   getNextMonthCardCharge,
+  getDueTransfers,
   getRollingCashflow,
 } from "@/lib/cashflow-queries";
 import { yen, yenSigned, shortDate } from "@/lib/format";
 import { CashflowMiniChart } from "@/app/components/CashflowMiniChart";
+import { TransferDoneButton } from "@/app/cashflow/TransferEditor";
 
 // お金レーダー（TOP First View）。home を開いた瞬間の「今のお金の状況」を 4 ブロックで一望する。
 // server component: 内部で cashflow-queries を直接呼ぶ（props 無し）。
@@ -49,6 +51,7 @@ export function MoneyRadar() {
   const balances = getAccountBalances();
   const upcoming = getUpcomingWithdrawals();
   const nextCard = getNextMonthCardCharge();
+  const dueTransfers = getDueTransfers(3);
   const rolling = getRollingCashflow(30);
 
   const balancesEmpty = balances.total === 0 && balances.groups.length === 0;
@@ -190,6 +193,26 @@ export function MoneyRadar() {
           <p className="mt-2 text-[11px] text-muted">
             ※当月利用額からの見込み（引落日未確定）
           </p>
+        </Card>
+      )}
+
+      {dueTransfers.length > 0 && (
+        <Card title={`送金予定 ${dueTransfers.length}件`} note="3日以内">
+          <ul className="divide-y divide-border/60">
+            {dueTransfers.map((item) => (
+              <li key={item.id} className="flex flex-col gap-2 py-1.5 sm:flex-row sm:items-center sm:justify-between">
+                <span className="min-w-0">
+                  <span className="tabular mr-2 text-[11px] text-muted">{shortDate(item.scheduled_date)}</span>
+                  <span className="text-sm text-foreground">
+                    {item.from_account} → {item.to_account}
+                  </span>
+                  <span className="tabular ml-2 text-sm font-medium text-foreground">¥{yen(item.amount)}</span>
+                  {item.fee > 0 && <span className="ml-2 text-[11px] text-muted">手数料 ¥{yen(item.fee)}</span>}
+                </span>
+                <TransferDoneButton id={item.id} label="完了にする" />
+              </li>
+            ))}
+          </ul>
         </Card>
       )}
 

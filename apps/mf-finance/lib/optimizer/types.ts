@@ -9,7 +9,8 @@ export type ProposalKind =
   | "rule_suggest"
   | "rule_conflict"
   | "label_add"
-  | "category_regroup";
+  | "category_regroup"
+  | "suggest_transfer";
 
 export type ProposalSource = "signal" | "llm";
 
@@ -58,6 +59,14 @@ export type ProposedAction =
       name: string;
       amount: number;
       day?: number | null;
+    }
+  | {
+      type: "create_manual_transfer";
+      from_account: string;
+      to_account: string;
+      amount: number;
+      date: string;
+      name?: string;
     };
 
 export type ProposedActionType = ProposedAction["type"];

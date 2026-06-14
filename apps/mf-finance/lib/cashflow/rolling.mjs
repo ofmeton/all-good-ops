@@ -102,6 +102,7 @@ export function buildRolling(opts) {
   const startBalance = opts.startBalance ?? 0;
   const recurring = opts.recurring ?? [];
   const scheduled = opts.scheduled ?? [];
+  const transfers = opts.transfers ?? [];
   const overrides = indexOverrides(opts.overrides ?? []);
   const events = [];
   for (let i = 0; i <= days; i++) {
@@ -146,13 +147,55 @@ export function buildRolling(opts) {
         });
       }
     }
+    // manual_transfers: 元本移動は合計残高を変えず、手数料だけ合計残高を減らす。
+    for (const t of transfers) {
+      if (t.date === date && (t.status == null || t.status === "pending")) {
+        const amount = Math.abs(Number(t.amount) || 0);
+        const fee = Math.abs(Number(t.fee) || 0);
+        const name = t.name || "資金移動";
+        if (amount > 0) {
+          events.push({
+            date,
+            kind: "expense",
+            name: `${name}（振替出金）`,
+            amount,
+            account: t.from_account ?? null,
+            source: "transfer",
+            status: "normal",
+            affectsTotal: false,
+          });
+          if (fee > 0) {
+            events.push({
+              date,
+              kind: "expense",
+              name: `${name}（手数料）`,
+              amount: fee,
+              account: t.from_account ?? null,
+              source: "transfer",
+              status: "normal",
+              affectsTotal: true,
+            });
+          }
+          events.push({
+            date,
+            kind: "income",
+            name: `${name}（振替入金）`,
+            amount,
+            account: t.to_account ?? null,
+            source: "transfer",
+            status: "normal",
+            affectsTotal: false,
+          });
+        }
+      }
+    }
   }
   // date 昇順は生成順で担保。残高 walk。
   let running = startBalance;
   let minBalance = startBalance;
   let firstNegativeDate = null;
   const withBalance = events.map((e) => {
-    if (e.status === "normal") {
+    if (e.status === "normal" && e.affectsTotal !== false) {
       running += e.kind === "income" ? e.amount : -e.amount;
       if (running < minBalance) minBalance = running;
       if (running < 0 && firstNegativeDate == null) firstNegativeDate = e.date;
@@ -166,6 +209,56 @@ export function buildRolling(opts) {
     minBalance,
     firstNegativeDate,
   };
+}
+
+function locationKey(key) {
+  return key == null ? "__unassigned__" : String(key);
+}
+
+function sameEvent(a, b) {
+  return (
+    a != null &&
+    b != null &&
+    a.date === b.date &&
+    a.kind === b.kind &&
+    a.name === b.name &&
+    a.amount === b.amount &&
+    (a.account ?? null) === (b.account ?? null) &&
+    a.source === b.source &&
+    a.status === b.status
+  );
+}
+
+export function buildBalanceMatrix(totalEvents, locations) {
+  const cursors = new Map();
+  const running = new Map();
+  for (const location of locations ?? []) {
+    const key = locationKey(location.key ?? location.account ?? null);
+    cursors.set(key, 0);
+    running.set(key, Number(location.start) || 0);
+  }
+
+  const rows = (totalEvents ?? []).map((event) => {
+    const balances = {};
+    for (const location of locations ?? []) {
+      const key = locationKey(location.key ?? location.account ?? null);
+      const events = location.events ?? [];
+      const cursor = cursors.get(key) ?? 0;
+      const next = events[cursor];
+      if (sameEvent(next, event)) {
+        running.set(key, Number(next.balanceAfter) || 0);
+        cursors.set(key, cursor + 1);
+      }
+      balances[key] = running.get(key) ?? 0;
+    }
+    return { event, balances };
+  });
+
+  const endBalances = {};
+  for (const [key, value] of running.entries()) {
+    endBalances[key] = value;
+  }
+  return { rows, endBalances };
 }
 
 export function buildAccountRolling(opts) {

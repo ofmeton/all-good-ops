@@ -13,6 +13,7 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import Database from "better-sqlite3";
+import { applyRecurringMigrations } from "../db/migrate.mjs";
 
 // --- 許容セット（lib/optimizer/types.ts の ProposalKind / RuleMatchType / Confidence に一致。
 //     型は TS のため .mjs からは import できずハードコード。types.ts を変更したらここも追従） ---
@@ -25,6 +26,7 @@ const KINDS = new Set([
   "rule_conflict",
   "label_add",
   "category_regroup",
+  "suggest_transfer",
 ]);
 const CONFIDENCES = new Set(["high", "med", "low"]);
 const MATCH_TYPES = new Set(["exact", "contains"]);
@@ -36,11 +38,13 @@ const ACTION_TYPES = new Set([
   "mark_transfer",
   "regroup",
   "add_recurring",
+  "create_manual_transfer",
 ]);
 
 const isNonEmptyStr = (v) => typeof v === "string" && v.trim() !== "";
 const isStrArray = (v) => Array.isArray(v) && v.every((x) => isNonEmptyStr(x));
 const isObj = (v) => v != null && typeof v === "object" && !Array.isArray(v);
+const isYmd = (v) => typeof v === "string" && /^\d{4}-\d{2}-\d{2}$/.test(v);
 
 // proposed_action の型ごとの必須フィールド検証。{ ok:true } | { ok:false, error }。
 function validateAction(a) {
@@ -85,6 +89,18 @@ function validateAction(a) {
       if (!isNonEmptyStr(a.name)) return { ok: false, error: "add_recurring: name 必須" };
       if (typeof a.amount !== "number" || !Number.isFinite(a.amount))
         return { ok: false, error: "add_recurring: amount(数値) 必須" };
+      return { ok: true };
+    case "create_manual_transfer":
+      if (!isNonEmptyStr(a.from_account))
+        return { ok: false, error: "create_manual_transfer: from_account 必須" };
+      if (!isNonEmptyStr(a.to_account))
+        return { ok: false, error: "create_manual_transfer: to_account 必須" };
+      if (a.from_account.trim() === a.to_account.trim())
+        return { ok: false, error: "create_manual_transfer: from/to は別口座" };
+      if (typeof a.amount !== "number" || !Number.isFinite(a.amount) || a.amount <= 0)
+        return { ok: false, error: "create_manual_transfer: amount は正の数" };
+      if (!isYmd(a.date))
+        return { ok: false, error: "create_manual_transfer: date は YYYY-MM-DD" };
       return { ok: true };
     default:
       return { ok: false, error: `未対応 type: ${a.type}` };
@@ -158,6 +174,7 @@ function main() {
   const db = new Database(join(appRoot, "data", "mf-finance.db"));
   db.pragma("journal_mode = WAL");
   db.pragma("foreign_keys = ON");
+  applyRecurringMigrations(db);
 
   // dedup_key 一致の最新提案（id/status）を引く。
   // - pending（＝下層シグナルの「問い」）にLLMの答えが来たら UPDATE で答えを埋める（source→llm）。

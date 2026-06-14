@@ -4,6 +4,7 @@ import { getLatestAsset } from "@/lib/calendar-queries";
 // 純ロジック（DB非依存・テスト済み）。
 import {
   buildAccountRolling,
+  buildBalanceMatrix,
   buildRolling,
   buildUpcomingWithdrawals,
   monthEndOffsetDays,
@@ -121,6 +122,59 @@ function scheduledRows(): { kind: "income" | "expense"; name: string; amount: nu
     .all() as { kind: "income" | "expense"; name: string; amount: number; date: string; account: string | null }[];
 }
 
+export interface TransferRow {
+  id: number;
+  from_account: string;
+  to_account: string;
+  amount: number;
+  scheduled_date: string;
+  date: string;
+  name: string | null;
+  fee: number;
+  status: "pending" | "done" | "cancelled";
+  done_at: string | null;
+}
+
+function transferRows(): TransferRow[] {
+  return db
+    .prepare(
+      `SELECT id, from_account, to_account, amount, scheduled_date, scheduled_date AS date, name, fee, status, done_at
+         FROM manual_transfers
+        WHERE status = 'pending' AND scheduled_date >= ?
+        ORDER BY scheduled_date, id`,
+    )
+    .all(todayIso()) as TransferRow[];
+}
+
+export function getTransferList(): TransferRow[] {
+  return db
+    .prepare(
+      `SELECT id, from_account, to_account, amount, scheduled_date, scheduled_date AS date, name, fee, status, done_at
+         FROM manual_transfers
+        ORDER BY scheduled_date, id`,
+    )
+    .all() as TransferRow[];
+}
+
+function addDaysIso(iso: string, days: number): string {
+  const [y, m, d] = iso.split("-").map(Number);
+  const t = new Date(Date.UTC(y, m - 1, d + days));
+  return `${t.getUTCFullYear()}-${String(t.getUTCMonth() + 1).padStart(2, "0")}-${String(t.getUTCDate()).padStart(2, "0")}`;
+}
+
+export function getDueTransfers(withinDays = 3): TransferRow[] {
+  const today = todayIso();
+  const end = addDaysIso(today, Math.max(0, Math.round(withinDays)));
+  return db
+    .prepare(
+      `SELECT id, from_account, to_account, amount, scheduled_date, scheduled_date AS date, name, fee, status, done_at
+         FROM manual_transfers
+        WHERE status = 'pending' AND scheduled_date <= ?
+        ORDER BY scheduled_date, id`,
+    )
+    .all(end) as TransferRow[];
+}
+
 // 今月の引落予定トータル（今日〜月末）。
 export function getUpcomingWithdrawals(): {
   total: number;
@@ -187,11 +241,12 @@ export interface RollingEvent {
   name: string;
   amount: number;
   account: string | null;
-  source: string;
+  source: "recurring" | "scheduled" | "transfer" | string;
   recurringId?: number;
   occurrenceDate?: string;
   status: "normal" | "pending" | "skipped";
   balanceAfter: number;
+  affectsTotal?: boolean;
 }
 export interface RollingCashflow {
   start: number;
@@ -221,6 +276,10 @@ export interface AccountRollingCashflow {
   baseDate: string | null;
   total: RollingCashflow;
   locations: RollingLocation[];
+  matrix: {
+    rows: { event: RollingEvent; balances: Record<string, number> }[];
+    endBalances: Record<string, number>;
+  };
   cardChargeEstimate: number;
 }
 
@@ -258,6 +317,7 @@ export function getRollingCashflow(days = 30): RollingCashflow {
     startBalance: start,
     recurring: activeRecurring(),
     scheduled: scheduledRows(),
+    transfers: transferRows(),
     overrides,
   });
   return formatRollingResult(r, baseDate, days, getNextMonthCardCharge().total);
@@ -281,6 +341,7 @@ export function getAccountRollingCashflow(period: CashflowPeriod): AccountRollin
     })),
     recurring: activeRecurring(),
     scheduled: scheduledRows(),
+    transfers: transferRows(),
     overrides: getRecurringOverrides(),
   });
   const locations = (r.locations as RollingLocation[]).sort((a, b) => {
@@ -297,6 +358,7 @@ export function getAccountRollingCashflow(period: CashflowPeriod): AccountRollin
     baseDate,
     total: formatRollingResult(r.total, baseDate, days, cardChargeEstimate),
     locations,
+    matrix: buildBalanceMatrix(r.total.events, locations) as AccountRollingCashflow["matrix"],
     cardChargeEstimate,
   };
 }

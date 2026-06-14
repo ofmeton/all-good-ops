@@ -269,3 +269,40 @@ export async function deleteManualLiability(id: number): Promise<void> {
   db.prepare("DELETE FROM manual_liabilities WHERE id = ?").run(_id);
   revalidate();
 }
+
+export type ActionResult = { ok: true } | { ok: false; error: string };
+
+export async function setTransferFee(from_account: string, fee: number): Promise<ActionResult> {
+  try {
+    const account = trimOrNull(from_account);
+    if (!account) return { ok: false, error: "出金口座を選択してください" };
+    const n = Number(fee);
+    if (!Number.isFinite(n) || n < 0) {
+      return { ok: false, error: "手数料は0以上で入力してください" };
+    }
+    const amount = Math.round(n);
+    db.prepare(
+      `INSERT INTO transfer_fees (from_account, fee, updated_at)
+       VALUES (?, ?, strftime('%Y-%m-%dT%H:%M:%SZ','now'))
+       ON CONFLICT(from_account) DO UPDATE SET
+         fee = excluded.fee,
+         updated_at = excluded.updated_at`,
+    ).run(account, amount);
+    revalidate();
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : String(e) };
+  }
+}
+
+export async function deleteTransferFee(from_account: string): Promise<ActionResult> {
+  try {
+    const account = trimOrNull(from_account);
+    if (!account) return { ok: false, error: "出金口座が不正です" };
+    db.prepare("DELETE FROM transfer_fees WHERE from_account = ?").run(account);
+    revalidate();
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : String(e) };
+  }
+}

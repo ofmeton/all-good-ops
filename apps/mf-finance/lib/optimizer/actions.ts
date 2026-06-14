@@ -20,6 +20,7 @@ const execFileAsync = promisify(execFile);
 function revalidate(): void {
   revalidatePath("/optimizer");
   revalidatePath("/");
+  revalidatePath("/cashflow");
 }
 
 // id ガード（正の整数のみ）。
@@ -32,6 +33,27 @@ function s(v: unknown): string | null {
   if (typeof v !== "string") return null;
   const t = v.trim();
   return t.length > 0 ? t : null;
+}
+
+function isYmd(v: unknown): v is string {
+  return typeof v === "string" && /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/.test(v);
+}
+
+function resolveTransferFee(fromAccount: string): number {
+  const row = db
+    .prepare(
+      `SELECT fee FROM transfer_fees
+       WHERE from_account IN (?, '__default__')
+       ORDER BY CASE WHEN from_account = ? THEN 0 ELSE 1 END
+       LIMIT 1`,
+    )
+    .get(fromAccount, fromAccount) as { fee: number } | undefined;
+  return Math.max(0, Math.round(Number(row?.fee ?? 0)));
+}
+
+function assertAccountExists(account: string): void {
+  const row = db.prepare("SELECT 1 FROM account_balances WHERE account = ?").get(account);
+  if (!row) throw new Error(`口座が見つかりません: ${account}`);
 }
 
 // proposed_action(JSON) を安全に parse。
@@ -182,6 +204,25 @@ function applyActionToDb(action: ProposedAction): "rules" | "overrides" | null {
         `INSERT INTO recurring_items (kind, name, amount, day, active, confirmed)
          VALUES (?, ?, ?, ?, 1, 'user')`,
       ).run(kind, name, amount, day);
+      return null;
+    }
+    case "create_manual_transfer": {
+      const from = s(action.from_account);
+      const to = s(action.to_account);
+      if (!from || !to) throw new Error("create_manual_transfer の口座が不正です");
+      if (from === to) throw new Error("create_manual_transfer は別口座間で指定してください");
+      assertAccountExists(from);
+      assertAccountExists(to);
+      const amount = Math.abs(Math.round(Number(action.amount)));
+      if (!Number.isFinite(amount) || amount <= 0) {
+        throw new Error("create_manual_transfer の amount が不正です");
+      }
+      if (!isYmd(action.date)) throw new Error("create_manual_transfer の date が不正です");
+      db.prepare(
+        `INSERT INTO manual_transfers
+           (from_account, to_account, amount, scheduled_date, name, fee, status)
+         VALUES (?, ?, ?, ?, ?, ?, 'pending')`,
+      ).run(from, to, amount, action.date, s(action.name), resolveTransferFee(from));
       return null;
     }
     default: {

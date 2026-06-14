@@ -15,6 +15,7 @@ export const KIND_LABEL: Record<ProposalKind, string> = {
   rule_conflict: "ルール矛盾",
   label_add: "ラベル追加",
   category_regroup: "カテゴリ再編",
+  suggest_transfer: "資金移動提案",
 };
 
 export function kindLabel(kind: string): string {
@@ -57,6 +58,9 @@ export const FIELD_LABEL: Record<string, string> = {
   name: "名称",
   amount: "金額",
   day: "日",
+  from_account: "出金口座",
+  to_account: "入金口座",
+  date: "日付",
 };
 
 export const CONFIDENCE_LABEL: Record<Confidence, string> = {
@@ -137,6 +141,8 @@ export function actionSummary(action: ProposedAction | null): string {
         .join("、")}`;
     case "add_recurring":
       return `定期項目を追加: ${action.name}（${action.kind === "income" ? "収入" : "支出"} ¥${action.amount.toLocaleString()}）`;
+    case "create_manual_transfer":
+      return `資金移動: ${action.from_account} → ${action.to_account} ¥${action.amount.toLocaleString()}（${action.date}）`;
     default:
       return "アクション";
   }
