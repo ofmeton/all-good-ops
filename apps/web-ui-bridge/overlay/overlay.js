@@ -25,10 +25,10 @@
   let selection = [];
   let primaryIdx = -1;
   const cur = () => (primaryIdx >= 0 ? selection[primaryIdx] : null);
-  let bp = "", state = "", tab = "box";
+  let bp = "", state = "", tab = "box", collapsed = false;
   let marginLocked = null, paddingLocked = null;
   let reordering = false, dragEl2 = null, draggingGroup = false, dropTarget = null, dropPos = "before";
-  let lastX = 0, lastY = 0, asTimer = null, asDir = 0; // D&D オートスクロール
+  let lastX = 0, lastY = 0, rafId = null;
   const pending = [];
 
   // ---- SVG アイコン（Lucide 風・絵文字は使わない） ----------------------
@@ -111,7 +111,7 @@
   }
   function makeSel(el) {
     const payload = collect(el);
-    return { el, payload, sourceClass: payload.classes, liveClass: payload.classes };
+    return { el, payload, sourceClass: payload.classes, liveClass: payload.classes, box: null };
   }
   function resetEditState() { state = ""; marginLocked = null; paddingLocked = null; }
   function setPrimaryLiveClass(next) {
@@ -127,7 +127,7 @@
     else primaryIdx = Math.min(primaryIdx === idx ? selection.length - 1 : primaryIdx > idx ? primaryIdx - 1 : primaryIdx, selection.length - 1);
     resetEditState();
     updateMoveAvailability();
-    highlightSelection();
+    syncSelBoxes();
     renderBody();
   }
   function clearSelection() {
@@ -135,7 +135,8 @@
     primaryIdx = -1;
     resetEditState();
     updateMoveAvailability();
-    hideHighlight();
+    clearSelBoxes();
+    hideHover();
     renderBody();
   }
   function selectFromClick(el, e) {
@@ -157,7 +158,7 @@
     // exit は選択ツール再押下 or Esc。パネル内操作は isOurs ガードで選択に巻き込まれない。
     updateMoveAvailability();
     openPanel();
-    highlightSelection();
+    syncSelBoxes();
   }
 
   // ---- UI (Shadow DOM) — STUDIO 風ダークインスペクタ ---------------------
@@ -175,13 +176,15 @@
       /* STUDIO 実機の色（ライト・モノクロ #222 アクセント）。選択ハイライトのみ青(--sel) */
       :host { --bg:#ffffff; --surface:#ffffff; --surface2:#f7f7f7; --bd:rgba(34,34,34,.10); --bd2:#e5e5e5;
               --tx:#1a1a1a; --muted:#8a8a8a; --accent:#222222; --sel:#2563eb; --danger:#e5484d; }
+      /* reproject ループが毎フレーム座標を入れるため transition は付けない（付けると
+         スクロール/ドラッグ中に枠が常に遅れて追従する＝取り残し風になる） */
       .hl { position: fixed; pointer-events: none; border: 1.5px solid var(--sel);
-            background: rgba(37,99,235,.08); border-radius: 2px; z-index: 5; display: none; transition: all .05s ease-out; }
+            background: rgba(37,99,235,.08); border-radius: 2px; z-index: 5; display: none; }
       .hl2 { position: fixed; pointer-events: none; border: 1.5px solid rgba(37,99,235,.5);
-             background: rgba(37,99,235,.04); border-radius: 2px; z-index: 4; display: block; transition: all .05s ease-out; }
+             background: rgba(37,99,235,.04); border-radius: 2px; z-index: 4; display: block; }
       /* 選択中(primary=最後に選んだ要素)は強い青＋塗り。ホバー用 $hl とは別の固定枠 */
       .hl2.primary { border: 2px solid var(--sel); background: rgba(37,99,235,.12); z-index: 5; }
-      .sel-label { position: fixed; pointer-events: none; z-index: 6; display: block; font-family: ui-monospace, monospace;
+      .sel-label { position: fixed; pointer-events: none; z-index: 6; display: none; font-family: ui-monospace, monospace;
                    background: var(--sel); color: #fff; font-size: 10.5px; padding: 2px 6px; border-radius: 4px; white-space: nowrap; }
       .hl.drag { border-color: #7c3aed; border-style: dashed; background: rgba(124,58,237,.12); }
       .label { position: fixed; pointer-events: none; z-index: 6; display: none; font-family: ui-monospace, monospace;
@@ -305,6 +308,7 @@
     </style>
     <div class="hl"></div>
     <div class="label"></div>
+    <div class="sel-label"></div>
     <div class="dropline"></div>
     <button class="launcher" title="web-ui-bridge を開く">${svg("cursor", 18)}</button>
     <aside class="inspector show">
@@ -334,46 +338,144 @@
   `;
 
   const $ = (s) => root.querySelector(s);
-  const $hl = $(".hl"), $label = $(".label"), $dropline = $(".dropline");
+  const $hl = $(".hl"), $label = $(".label"), $selLabel = $(".sel-label"), $dropline = $(".dropline");
   const $launcher = $(".launcher"), $inspector = $(".inspector"), $body = $(".body"), $toast = $(".toast");
   const $tSelect = $(".t-select"), $tMove = $(".t-move"), $tUndo = $(".t-undo"), $tRedo = $(".t-redo");
 
   function isOurs(el) { return el === host || (el && el.id === HOST_ID) || (el && el.closest && el.closest(`#${HOST_ID}`)); }
 
-  function showHighlight(el, drag) {
-    const r = el.getBoundingClientRect();
-    $hl.style.cssText = `position:fixed;display:block;left:${r.left}px;top:${r.top}px;width:${r.width}px;height:${r.height}px;`;
-    $hl.className = "hl" + (drag ? " drag" : "");
-    const comp = componentName(el);
-    $label.textContent = `<${el.tagName.toLowerCase()}>` + (comp ? ` · ${comp}` : "");
-    $label.style.display = "block";
-    $label.style.left = r.left + "px";
-    $label.style.top = Math.max(0, r.top - 20) + "px";
-  }
-  function removeExtraHighlights() { root.querySelectorAll(".hl2, .sel-label").forEach((n) => n.remove()); }
-  function hideHighlight() { $hl.style.display = "none"; $label.style.display = "none"; removeExtraHighlights(); }
-  // 選択枠はホバー用 $hl とは独立した専用要素で描く（共用するとマウス移動で選択枠が
-  // カーソルに付いて離れてしまう＝「選択したものが青くならない」バグになる）。
-  function showBox(el, primary) {
-    if (!el || !el.isConnected) return;
-    const r = el.getBoundingClientRect();
-    const box = document.createElement("div");
-    box.className = "hl2" + (primary ? " primary" : "");
-    box.style.cssText = `position:fixed;display:block;left:${r.left}px;top:${r.top}px;width:${r.width}px;height:${r.height}px;`;
-    root.appendChild(box);
-    if (primary) {
-      const comp = componentName(el);
-      const lab = document.createElement("div");
-      lab.className = "sel-label";
-      lab.textContent = `<${el.tagName.toLowerCase()}>` + (comp ? ` · ${comp}` : "");
-      lab.style.cssText = `position:fixed;display:block;left:${r.left}px;top:${Math.max(0, r.top - 20)}px;`;
-      root.appendChild(lab);
+  const rectKey = (r) => r ? `${r.left}|${r.top}|${r.width}|${r.height}` : "";
+  function placeFixed($el, rect) {
+    if (!rect) {
+      if ($el.style.display !== "none") $el.style.display = "none";
+      $el._bridgeLastRect = "";
+      return;
     }
+    const key = rectKey(rect);
+    if ($el._bridgeLastRect === key && $el.style.display === "block") return;
+    $el._bridgeLastRect = key;
+    $el.style.position = "fixed";
+    $el.style.display = "block";
+    $el.style.left = rect.left + "px";
+    $el.style.top = rect.top + "px";
+    $el.style.width = rect.width + "px";
+    $el.style.height = rect.height + "px";
   }
-  function highlightSelection() {
-    removeExtraHighlights();
-    if (!cur()?.el?.isConnected) return;
-    selection.forEach((s, i) => showBox(s.el, i === primaryIdx));
+  function placeLabel($el, rect, text) {
+    if (!rect) {
+      if ($el.style.display !== "none") $el.style.display = "none";
+      $el._bridgeLastRect = "";
+      return;
+    }
+    const top = Math.max(0, rect.top - 20);
+    const key = `${rect.left}|${top}|${text}`;
+    if ($el._bridgeLastRect === key && $el.style.display === "block") return;
+    $el._bridgeLastRect = key;
+    $el.textContent = text;
+    $el.style.display = "block";
+    $el.style.left = rect.left + "px";
+    $el.style.top = top + "px";
+  }
+  function hideHover() {
+    placeFixed($hl, null);
+    placeLabel($label, null, "");
+  }
+  function clearSelBoxes() {
+    root.querySelectorAll(".hl2").forEach((n) => n.remove());
+    selection.forEach((s) => { s.box = null; });
+    placeLabel($selLabel, null, "");
+  }
+  function resolveEl(item) {
+    if (item.el && item.el.isConnected) return item.el;
+    const f = item.payload?.selector ? document.querySelector(item.payload.selector) : null;
+    if (f) { item.el = f; return f; }
+    return null;
+  }
+  function ensureLoop() {
+    if (!rafId) rafId = requestAnimationFrame(reproject);
+  }
+  function syncSelBoxes() {
+    const boxes = [...root.querySelectorAll(".hl2")];
+    while (boxes.length < selection.length) {
+      const box = document.createElement("div");
+      box.className = "hl2";
+      box.style.display = "none";
+      root.appendChild(box);
+      boxes.push(box);
+    }
+    while (boxes.length > selection.length) boxes.pop().remove();
+    selection.forEach((s, i) => {
+      const box = boxes[i];
+      s.box = box;
+      box.className = "hl2" + (i === primaryIdx ? " primary" : "");
+    });
+    if (!selection.length) placeLabel($selLabel, null, "");
+    ensureLoop();
+  }
+  function elementLabel(el) {
+    if (!el) return "";
+    const comp = componentName(el);
+    return `<${el.tagName.toLowerCase()}>` + (comp ? ` · ${comp}` : "");
+  }
+  function readDropTarget() {
+    if (!(reordering && dragEl2)) {
+      dropTarget = null;
+      return null;
+    }
+    const el = document.elementFromPoint(lastX, lastY);
+    if (!el || isOurs(el) || el === dragEl2) {
+      dropTarget = null;
+      return null;
+    }
+    const rect = el.getBoundingClientRect();
+    dropPos = lastY < rect.top + rect.height / 2 ? "before" : "after";
+    dropTarget = el;
+    return { rect, pos: dropPos };
+  }
+  function reproject() {
+    if (collapsed) { rafId = null; return; }
+    const selReads = selection.map((s, i) => {
+      const el = resolveEl(s);
+      return { item: s, el, rect: el ? el.getBoundingClientRect() : null, primary: i === primaryIdx };
+    });
+    const primary = selReads.find((s) => s.primary && s.rect);
+    const subject = (reordering && dragEl2 && !draggingGroup)
+      ? dragEl2
+      : (inspecting && hovered ? hovered : null);
+    const subjectRect = subject && subject.isConnected ? subject.getBoundingClientRect() : null;
+    const subjectDrag = !!(reordering && dragEl2 && !draggingGroup && subject === dragEl2);
+
+    const dropRead = readDropTarget();
+
+    selReads.forEach((s) => {
+      if (s.item.box) placeFixed(s.item.box, s.rect);
+    });
+    placeLabel($selLabel, primary?.rect || null, primary ? elementLabel(primary.el) : "");
+
+    $hl.classList.toggle("drag", subjectDrag);
+    placeFixed($hl, subjectRect);
+    placeLabel($label, subjectRect, subjectRect ? elementLabel(subject) : "");
+
+    if (dropRead) {
+      const width = Math.min(dropRead.rect.width, window.innerWidth - W - dropRead.rect.left);
+      placeFixed($dropline, {
+        left: dropRead.rect.left,
+        top: dropRead.pos === "before" ? dropRead.rect.top - 1 : dropRead.rect.bottom - 1,
+        width,
+        height: 2,
+      });
+    } else {
+      placeFixed($dropline, null);
+    }
+
+    if (reordering && dragEl2) {
+      const m = 90;
+      const asDir = lastY < m ? -1 : lastY > window.innerHeight - m ? 1 : 0;
+      if (asDir) window.scrollBy(0, asDir * 18);
+    }
+
+    const active = !collapsed && (selection.length || (inspecting && hovered) || (reordering && dragEl2));
+    rafId = active ? requestAnimationFrame(reproject) : null;
   }
   function allSameParent(items = selection) {
     if (items.length < 2) return true;
@@ -387,7 +489,7 @@
     if (disabled && reordering) setReordering(false);
   }
 
-  function setInspecting(on) { inspecting = on; $tSelect.classList.toggle("on", on); if (!on) { hideHighlight(); hovered = null; } }
+  function setInspecting(on) { inspecting = on; $tSelect.classList.toggle("on", on); if (!on) { hideHover(); hovered = null; } }
 
   function toast(msg, kind) {
     $toast.textContent = msg;
@@ -410,10 +512,12 @@
   }
 
   function setCollapsed(c) {
+    collapsed = c;
     $inspector.classList.toggle("show", !c);
     $launcher.classList.toggle("show", c);
     setPageGutter(!c);
-    if (c) { setInspecting(false); setReordering(false); hideHighlight(); }
+    if (c) { setInspecting(false); setReordering(false); clearSelBoxes(); hideHover(); }
+    else if (selection.length) syncSelBoxes();
   }
 
   // ---- 直接調整ロジック（決定的・純文字列操作） -------------------------
@@ -446,7 +550,7 @@
   function applyLive(next) {
     setPrimaryLiveClass(next);
     const c = $(".cls"); if (c && c.value !== next) c.value = next;
-    highlightSelection();
+    syncSelBoxes();
   }
   async function applyAbsoluteBatch(computeNewClass) {
     const c = cur();
@@ -485,7 +589,7 @@
           }
         }
         toast(`一括反映(${j.applied ?? edits.length})${skipNote(j.skipped)}`, j.skipped?.length ? "warn" : undefined);
-        highlightSelection(); renderBody();
+        syncSelBoxes(); renderBody();
       } else toast(`失敗: ${j.reason || j.error}`, "warn");
     } catch (err) { toast(`失敗: ${err.message}`, "err"); }
   }
@@ -667,10 +771,10 @@
           primaryIdx = selection.length ? selection.length - 1 : -1;
           resetEditState();
           updateMoveAvailability();
-          highlightSelection();
+          syncSelBoxes();
           renderBody();
         }
-        else setTimeout(highlightSelection, 1200);
+        else ensureLoop();
       } else toast(`失敗: ${j.reason || j.error}`, "warn");
     } catch (err) { toast(`失敗: ${err.message}`, "err"); }
   }
@@ -978,7 +1082,7 @@
     oc(".t-scale", (e) => setUtil("scale", e.target.value ? `[${e.target.value}]` : ""));
     // 設定タブ: class/構造
     const cls = $(".cls");
-    if (cls) cls.oninput = (e) => { setPrimaryLiveClass(e.target.value); highlightSelection(); };
+    if (cls) cls.oninput = (e) => { setPrimaryLiveClass(e.target.value); syncSelBoxes(); };
     const ap = $(".apply"); if (ap) ap.onclick = commitStyle;
     const rs = $(".reset"); if (rs) rs.onclick = () => applyLive(source());
     const du = $(".dup"); if (du) du.onclick = () => selection.length >= 2 ? doStructBatch("duplicate") : doStruct("/duplicate");
@@ -1016,29 +1120,8 @@
   function setReordering(on) {
     reordering = on; $tMove.classList.toggle("on", on);
     if (on) { setInspecting(false); toast("要素をドラッグして別の要素の上にドロップ"); }
-    else { dragEl2 = null; dropTarget = null; $dropline.style.display = "none"; stopAutoScroll(); hideHighlight(); }
+    else { dragEl2 = null; dropTarget = null; placeFixed($dropline, null); hideHover(); }
   }
-  function showDropline(target, pos) {
-    const r = target.getBoundingClientRect();
-    $dropline.style.display = "block";
-    $dropline.style.left = r.left + "px";
-    $dropline.style.width = Math.min(r.width, window.innerWidth - W - r.left) + "px";
-    $dropline.style.top = (pos === "before" ? r.top - 1 : r.bottom - 1) + "px";
-  }
-  function updateDrop() {
-    const el = document.elementFromPoint(lastX, lastY);
-    if (!el || isOurs(el) || el === dragEl2) { $dropline.style.display = "none"; dropTarget = null; return; }
-    const r = el.getBoundingClientRect();
-    dropPos = lastY < r.top + r.height / 2 ? "before" : "after";
-    dropTarget = el; showDropline(el, dropPos);
-  }
-  function setAutoScroll(y) {
-    const m = 90;
-    asDir = y < m ? -1 : y > window.innerHeight - m ? 1 : 0;
-    if (asDir && !asTimer) asTimer = setInterval(() => { window.scrollBy(0, asDir * 18); if (dragEl2) updateDrop(); }, 16);
-    else if (!asDir) stopAutoScroll();
-  }
-  function stopAutoScroll() { if (asTimer) { clearInterval(asTimer); asTimer = null; } asDir = 0; }
   async function doReorder(dragEl, target, pos) {
     const dragClass = dragEl.getAttribute("class"), targetClass = target.getAttribute("class");
     if (!dragClass || !targetClass) { toast("class が無く並べ替え不可（Claudeに頼んで）", "warn"); return; }
@@ -1085,6 +1168,76 @@
     } catch (err) { toast(`失敗: ${err.message}`, "err"); }
   }
 
+  function deltaRect(actual, expected) {
+    const left = Math.abs(actual.left - expected.left);
+    const top = Math.abs(actual.top - expected.top);
+    const width = Math.abs(actual.width - expected.width);
+    const height = Math.abs(actual.height - expected.height);
+    return { left, top, width, height, total: left + top + width + height };
+  }
+  function expectedLabelRect(targetRect, labelRect) {
+    return {
+      left: targetRect.left,
+      top: Math.max(0, targetRect.top - 20),
+      width: labelRect.width,
+      height: labelRect.height,
+    };
+  }
+  function expectedDropRect(targetRect, pos) {
+    return {
+      left: targetRect.left,
+      top: pos === "before" ? targetRect.top - 1 : targetRect.bottom - 1,
+      width: Math.min(targetRect.width, window.innerWidth - W - targetRect.left),
+      height: 2,
+    };
+  }
+  function selectorTarget(selector) {
+    try { return selector ? document.querySelector(selector) : null; }
+    catch { return null; }
+  }
+  function pushDecorationDelta(out, kind, selector, decoration, expected) {
+    if (!decoration || !expected) {
+      out.push({ kind, selector, delta: { left: 1, top: 0, width: 0, height: 0, total: 1, reason: "missing-target" } });
+      return;
+    }
+    const actual = decoration.getBoundingClientRect();
+    const delta = deltaRect(actual, expected);
+    if (getComputedStyle(decoration).display === "none") {
+      delta.hidden = true;
+      delta.total += 1;
+    }
+    if (delta.total >= 1) out.push({ kind, selector, delta });
+  }
+  function assertDecorationsTracked() {
+    const out = [];
+    selection.forEach((item, i) => {
+      const target = selectorTarget(item.payload?.selector);
+      const targetRect = target ? target.getBoundingClientRect() : null;
+      pushDecorationDelta(out, i === primaryIdx ? "selection-primary" : "selection", item.payload?.selector || null, item.box, targetRect);
+      if (i === primaryIdx) {
+        const labelRect = $selLabel.getBoundingClientRect();
+        pushDecorationDelta(out, "selection-label", item.payload?.selector || null, $selLabel, targetRect ? expectedLabelRect(targetRect, labelRect) : null);
+      }
+    });
+
+    const subject = (reordering && dragEl2 && !draggingGroup)
+      ? dragEl2
+      : (inspecting && hovered ? hovered : null);
+    if (subject && subject.isConnected) {
+      const subjectRect = subject.getBoundingClientRect();
+      const labelRect = $label.getBoundingClientRect();
+      const kind = reordering && dragEl2 && !draggingGroup ? "drag" : "hover";
+      pushDecorationDelta(out, kind, null, $hl, subjectRect);
+      pushDecorationDelta(out, `${kind}-label`, null, $label, expectedLabelRect(subjectRect, labelRect));
+    }
+
+    if (reordering && dragEl2 && dropTarget && dropTarget.isConnected) {
+      pushDecorationDelta(out, "dropline", null, $dropline, expectedDropRect(dropTarget.getBoundingClientRect(), dropPos));
+    }
+    return out;
+  }
+  window.__webUiBridgeAssert = assertDecorationsTracked;
+
   // ---- ツールバー配線 ---------------------------------------------------
   $tSelect.onclick = () => { setReordering(false); inspecting ? setInspecting(false) : (setInspecting(true), renderBody()); };
   $tMove.onclick = () => { setInspecting(false); setReordering(!reordering); };
@@ -1106,23 +1259,29 @@
     const grabbed = selection.find((s) => s.el === e.target || (s.el.contains && s.el.contains(e.target)));
     draggingGroup = selection.length >= 2 && !!grabbed;
     dragEl2 = draggingGroup ? grabbed.el : e.target; lastX = e.clientX; lastY = e.clientY;
-    if (draggingGroup) { highlightSelection(); toast(`${selection.length}要素移動中`); }
-    else showHighlight(dragEl2, true);
+    if (draggingGroup) { syncSelBoxes(); toast(`${selection.length}要素移動中`); }
+    ensureLoop();
   }, true);
   document.addEventListener("mousemove", (e) => {
-    if (reordering && dragEl2) { lastX = e.clientX; lastY = e.clientY; updateDrop(); setAutoScroll(lastY); return; }
-    if (inspecting) { const el = e.target; if (isOurs(el)) { hideHighlight(); return; } hovered = el; showHighlight(el); }
+    if (reordering && dragEl2) { lastX = e.clientX; lastY = e.clientY; ensureLoop(); return; }
+    if (inspecting) {
+      const el = e.target;
+      if (isOurs(el)) { hovered = null; hideHover(); return; }
+      hovered = el;
+      ensureLoop();
+    }
   }, true);
   document.addEventListener("mouseup", (e) => {
     if (!reordering || !dragEl2) return;
     e.preventDefault();
+    readDropTarget();
     if (dropTarget && dropTarget !== dragEl2) {
       if (draggingGroup) doReorderGroup(dropTarget, dropPos);
       else doReorder(dragEl2, dropTarget, dropPos);
     }
     const wasGroup = draggingGroup;
-    dragEl2 = null; draggingGroup = false; dropTarget = null; $dropline.style.display = "none"; stopAutoScroll(); hideHighlight();
-    if (wasGroup && selection.length) setTimeout(highlightSelection, 1200);
+    dragEl2 = null; draggingGroup = false; dropTarget = null; placeFixed($dropline, null); hideHover();
+    if (wasGroup && selection.length) syncSelBoxes();
   }, true);
   document.addEventListener("click", (e) => {
     if (!inspecting || isOurs(e.target)) return;
@@ -1141,11 +1300,6 @@
     const k = e.key.toLowerCase();
     if (k === "z" && !e.shiftKey) { e.preventDefault(); doHistory("/undo"); }
     else if ((k === "z" && e.shiftKey) || k === "y") { e.preventDefault(); doHistory("/redo"); }
-  }, true);
-
-  window.addEventListener("scroll", () => {
-    if (inspecting && hovered) showHighlight(hovered);
-    else if (cur()) highlightSelection();
   }, true);
 
   renderBody();
