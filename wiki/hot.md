@@ -8,14 +8,14 @@ updated: 2026-06-14
 > セッション間で保持される ~500 words のコンテキストキャッシュ。セッション開始時に最優先で読む。詳細: [[SCHEMA]] §ホットキャッシュ。
 
 ## Last Updated
-2026-06-14 — **X発信 大刷新(PR#185-205)**: ①collector自動収集をフラグ(`collector_enabled=0`)で可逆停止→**手動ブックマークURL貼付取込**(`/admin/ingest-bookmarks`→twitterapi `get_tweet_by_ids`・source_type=x_inspirations/via=bookmark→既存curation配管)。bookmarks_v2自動吸上げは proxy必須で却下→URL貼付採用 ②競合バズ/スレッド/チャエン/記事を研究→テンプレ拡充 ③writer改修=fmat別知見(`compose-knowledge.ts`)+段取りoutline先行(submit_draft.outline)+visual_hint ④**ターゲット再定義(メイン=Claude Code中級者)をブランド全体(CLAUDE.md/spec)へ** ⑤stop-slop導入 ⑥Phase2 slice1=記事ブロック画像 gpt-image-2(visual_hint駆動・ローカル`generate-draft-images.ts`→Storage `xad-generated`)・実物検収で**日本語テキスト◎=hybrid不要**・**画像genは保留(手動運用)** ⑦article品質PDCA=ローカルreplica評価(`pdca-eval.ts`)でロールモデル(nobel_824記事)基準 **62→88** 改善・本番反映(template patchはruntime注入=re-bake不要)。codex(gpt-5.5)多用。retro [[../outputs/retrospectives/2026-06-14-xad-bookmark-research-writer-image-quality]]。
-- 学び: codex外部API実装はguess→ブリーフにllms-full grep必須/article長文composeは240sでも重い→入力trim/段取り簡略要/LLM採点ノイズ±5→大レバー(few-shot)で動かす/worktree-file-reread 4連続(同一feature1 worktree使い回し未徹底)。
-- 前: web-ui-bridge(PR#195-204)・codex-implement堅牢化(PR#187-188)。
+2026-06-14 — **web-ui-bridge 機能大幅拡張＋堅牢化(PR#208-213)**: ①**複数選択**(⌘/Shift クリック+まとめてプロンプト/D&D group移動/スタイル一括/複製削除)=案Bアトミックバッチ(daemon純関数が範囲降順splice=1操作1undo・同一class dedup・skip理由warn・別親はClaude経路) ②ドック被りガター修正(html margin+body transform) ③UX微修正(画面幅ラベル/「マウスホバー」/選択枠とホバー枠分離) ④**装飾の連続射影リアーキ**=アクティブ中だけ回る単一rAFループ`reproject()`が毎フレーム全装飾をライブrectから再配置→スクロール/リサイズ/HMR/オートスクロールの**位置ズレ系を構造的根絶**(.hl/.hl2 transition除去・idle 0フレーム・`__webUiBridgeAssert`チェック口) ⑤スクロール二重青枠修正 ⑥**dynamic workflow(40エージェント)でユーザー操作バグ一掃**=多レンズ仮説→敵対反証→実機確定で本物4件修正(複数選択className/Apply/Reset一括化・入力中テキスト/フォーカス保持・launcher再描画・undo後sourceClass再同期)+**操作プローブパック**(`smoke/probes/*.mjs`+`run.mjs`・17緑5skip)。実装=Codex委任+Claude設計/レビュー/実機検証。retro [[../outputs/retrospectives/2026-06-14-1900-web-ui-bridge-multiselect-reproject-bughunt]]。
+- 学び: 多エージェント仮説はreasoning反証でなく**実システムで経験的確定**(workflowが26件realも実機で4件・primaryIdx偽陽性=到達不能をreasonerが見落とし→wiki原則新設)/Codex sandboxはChrome不可=ブラウザ駆動テストは盲目実装で脆い(構造セレクタ+自分で実走+skip許容→codex-implement追記)/daemonはoverlay.jsホット配信but server.mjsは起動時ロード=コード変更後は再起動/worktree-file-reread 5連続。
+- 前: X発信大刷新(PR#185-205)・web-ui-bridge Phase0-STUDIO(PR#195-206)。
 
 ## Current Focus
 - **X発信 新運用**: 自動収集OFF・**手動ブックマークURLを `scripts/ingest-bookmarks.ts`/`/admin/ingest-bookmarks` で投入**→curation→writer(知見+段取り+新ターゲット)→check→LINE承認。writer は MAv4(再焼成済)。テンプレ patch は runtime 注入(re-bake不要・deployのみ)。collector復活は `collector_enabled` 行削除/=1。
 - **X発信 残**: ①article compose軽量化(240sでも長文重い→入力trim/段取り簡略)未実装 ②Phase2画像 次スライス=publish側ブロック挿入(X Articleインライン/thread各ツイート)=**保留(手動画像gen運用)** ③writer品質~88 plateau・自己推敲2pass(compose費2倍)は要承認レバー。eval資産=`scripts/pdca-eval.ts`。
-- **web-ui-bridge**: 出荷済(PR#195-204)。残=STUDIO 95%パリティ。起動=`node apps/web-ui-bridge/daemon/server.mjs --target <site>`+対象`npm run dev`。
+- **web-ui-bridge**: 複数選択/連続射影/操作プローブまで出荷済(PR#195-213)。起動=`node apps/web-ui-bridge/daemon/server.mjs --target <site>`+対象`npm run dev`。回帰=`cd apps/web-ui-bridge/smoke && npm run probe`(daemon/terra稼働前提)。**server.mjs変更後はdaemon再起動**(overlay.jsはホット)。残=bug-hunt 2ラウンド目の中位候補(ユーザー保留)・STUDIO残パリティ。
 - **X collector 最適化＝自走化完了**: shadow データ蓄積中(現1/7)。**enforce 自動flip**(直近7run retention=100%∧pruned_fine_max<70)で削減発動(¥53→¥25-35・即revert=`collector_prerank_enforce`=0)。launchd 夜間apply(03:00JST)は real-mode だが brownout中は defer。MA live: collector v2(PR#169 keyword/trend主軸)・analyst v2(P4 collector_lever)。
 - **brownout 中（¥13,800超）**: X worker は daily-digest+line-event のみ。`!resume`か月初リセットで復帰。**enforce自動flip は collect 継続が前提**＝brownout で collect halt なら shadow 蓄積停止 → 要 `!resume`/監視。[[project-cron-automation-disabled]]
 - **mf-finance（別ブランチ進行中）**: Plan1+後続モジュール完了。worktree `task/260606-mf-finance` 未merge・[[../apps/mf-finance/HANDOFF.md]]。PostgREST公開反映の稼働確認が残。
@@ -23,10 +23,9 @@ updated: 2026-06-14
 - 🔴 **はぐりん persona**: 名義境界の戦略再判断 未着手。
 
 ## Recently Touched
-- `apps/x-account-system/lib/{ingest/twitterapi-client,ingest/bookmark-collect,ingest/tweet-url,curation/compose-prompts,curation/compose-knowledge,curation/compose-templates,curation/run-compose,visualizer/codex-image,visualizer/draft-images,params/runtime-params}.ts`・`scripts/{ingest-bookmarks,generate-draft-images,pdca-eval,x-bookmark-login,fetch-thread-study,fetch-chaen-article-study}.ts`・`agents/x-writer.{system.md,agent.yaml}`・`wrangler.toml`・`src/{worker,queue}.ts`
-- `CLAUDE.md`(ターゲット改定)・`docs/superpowers/specs/2026-05-20-publishing-pivot-design.md`・`.claude/skills/stop-slop/`・`outputs/improvements/2026-06-13-chaen-quality-pdca/`・`outputs/research/2026-06-13-*`・`raw/publishing/research/2026-06-13-*`
-- memory [[project-x-block-images]] [[project-x-writer-quality-pdca]] [[feedback-codex-permission-defaults]] [[feedback-deploy-no-confirm]] [[feedback-factcheck-external-specs]] [[project-x-collector-cost-optimization]]（collector retire pivot）
-- 本番反映: worker `v91d6666e`・x-writer MA `v4`・Storage bucket `xad-generated`・`runtime_params.collector_enabled=0`
+- `apps/web-ui-bridge/overlay/overlay.js`(複数選択/連続射影/各UX修正)・`daemon/{server,apply,reorder}.mjs`(batch endpoint/moveGroupInSource)・`smoke/{lib,run}.mjs`+`smoke/probes/*.mjs`(操作プローブパック)・`HANDOFF.md`/`STUDIO-PARITY.md`・`docs/superpowers/{specs,plans}/2026-06-14-web-ui-bridge-multi-select*.md`
+- wiki [[self/engineering-principles]](多エージェント仮説は実システムで確定・原則新設)・`.claude/skills/codex-implement/SKILL.md`(Codex sandboxはブラウザ不可)・memory [[project-web-ui-bridge]]
+- 前(X発信): `apps/x-account-system/lib/{ingest,curation,visualizer,params}/*.ts`・`scripts/{ingest-bookmarks,pdca-eval}.ts`・worker `v91d6666e`・x-writer MA `v4`・`runtime_params.collector_enabled=0`
 
 ## Open Questions / Frontiers
 - **enforce 自動flip 依存**: collect が回り続け shadow が7run貯まるか（brownout halt 注意）。基準到達で自動切替＋LINE通知。

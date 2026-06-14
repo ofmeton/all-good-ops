@@ -60,3 +60,4 @@ Codex が使えない時は**実装を止めず**、品質を落とさないフ�
 - 並列案件は Codex も**別 worktree**（1 案件=1 worktree 維持）。詳細 `wiki/dev/agent-teams-playbook.md` の Codex-as-implementer レーン。
 - **worktree commit hygiene**: worktree 内の commit は `git add -A` を避け `git add <対象パス>` で限定（worktree は node_modules を symlink で持ち `-A` が symlink を拾って混入する）。
 - **worktree 切替後の再 Read**: 別 worktree で同一相対パスを読んでいても、切替後の最初の Edit は必ず Read 先行（既読状態は worktree 単位。`feedback_worktree_file_reread`）。
+- **Codex sandbox はブラウザを起動できない**: Playwright/Chrome 駆動のテストコードを Codex に委任すると「実走できず盲目で書く」ため、exact className ハードコード等の脆い実装になりがち（実際 web-ui-bridge の操作プローブで3回 churn）。ブラウザ駆動テストを委任する時は ①**構造/部分一致セレクタ**で書くよう明示 ②**実走検証は Claude が行う前提**（Codex の「緑」を信じない）③環境依存で安定しないものは `skip:true`＋理由＋代替カバレッジを許容、を最初からブリーフに入れる。

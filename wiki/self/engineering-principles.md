@@ -85,5 +85,15 @@ optimizer apply-code runner（accepted 提案を nested `claude -p` に実装さ
 
 ---
 
+## 多エージェントの仮説は reasoning でなく実システムで確定する（2026-06-14）
+
+多エージェント/dynamic workflow でバグの「仮説」を並列生成し別エージェントで敵対的に反証しても、それは reasoning の確からしさに過ぎない。コードを読んだ反証者は「防御コードの有無」は見ても「その不具合状態に**実際に到達できるか**」を見落とす。
+
+- **事例 (2026-06-14, web-ui-bridge bug-hunt)**: 40エージェント workflow が 26件を「real clear bug」と判定。実機 chrome-devtools でトリアージすると本物は4件で、`primaryIdx` 系の「high severity バグ」は **primary が常に最後＝その壊れ状態に UI から到達不能**な偽陽性だった（reasoner は splice 後のインデックス計算だけ見て reachability を見落とした）。
+- **原則**: 仮説生成（広く）→ reasoning 反証（絞る）の後に、**必ず実システムでの経験的確認（実機/プローブで再現）を確定ゲートに置く**。reasoning の多数決で「real」を最終確定して自動修正に流さない。経験確認で4件に収束＝**経験確認こそ最大のレバー**（reasoning だけの多数決は ROI が低い）。
+- **ワークフロー設計への含意**: 並列で稼ぐのは「仮説生成」と「非破壊プローブ（実システム駆動）」。reasoning 反証は補助。可能なら反証段に再現プローブの実走まで内包し `real` を経験で裏取りしてから人に上げる。memory [[feedback_browser_test_all_user_ops]]。
+
+---
+
 ## メモ
 - これらは memory の atomic feedback（`feedback_llm_structured_output_validate` 等）からもリンクされる。**原子的リコールは memory、連結・高次化はこの wiki ノート**で役割分担する。
