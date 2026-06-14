@@ -30,6 +30,8 @@
   let reordering = false, dragEl2 = null, draggingGroup = false, dropTarget = null, dropPos = "before";
   let lastX = 0, lastY = 0, rafId = null;
   const pending = [];
+  let pendingPrompt = "";
+  let lastInputFocus = null;
 
   // ---- SVG アイコン（Lucide 風・絵文字は使わない） ----------------------
   const I = {
@@ -119,6 +121,28 @@
     if (!c) return;
     c.liveClass = next;
     if (c.el && c.el.isConnected) c.el.setAttribute("class", next);
+  }
+  function setLiveClassForSelection(next) {
+    if (!multi()) {
+      setPrimaryLiveClass(next);
+      return;
+    }
+    selection.forEach((s) => {
+      s.liveClass = next;
+      if (s.el && s.el.isConnected) s.el.setAttribute("class", next);
+    });
+  }
+  function resetLiveClassForSelection() {
+    if (!multi()) {
+      applyLive(source());
+      return;
+    }
+    selection.forEach((s) => {
+      s.liveClass = s.sourceClass;
+      if (s.el && s.el.isConnected) s.el.setAttribute("class", s.sourceClass);
+    });
+    syncSelBoxes();
+    renderBody();
   }
   function removeSelectionAt(idx) {
     if (idx < 0 || idx >= selection.length) return;
@@ -520,6 +544,42 @@
     else if (selection.length) syncSelBoxes();
   }
 
+  function selectedFocusKey() {
+    return selection.map((s) => s.payload.selector).join("|");
+  }
+  function inputSelectorFor(el) {
+    if (!el?.matches?.("input, textarea, select")) return "";
+    if (el.classList.contains("sp-input")) return `.sp-input[data-kind="${el.dataset.kind || ""}"][data-side="${el.dataset.side || ""}"]`;
+    const cls = [...el.classList].find(Boolean);
+    return cls ? `${el.tagName.toLowerCase()}.${cls}` : "";
+  }
+  function captureInputFocus() {
+    const el = root.activeElement;
+    const selector = inputSelectorFor(el);
+    if (!selector) return null;
+    const snap = {
+      selector,
+      selectionKey: selectedFocusKey(),
+      start: typeof el.selectionStart === "number" ? el.selectionStart : null,
+      end: typeof el.selectionEnd === "number" ? el.selectionEnd : null,
+    };
+    lastInputFocus = snap;
+    return snap;
+  }
+  function restoreInputFocus(snap) {
+    if (!snap) return;
+    if (snap.selector !== "textarea.ask" && snap.selectionKey !== selectedFocusKey()) return;
+    const el = $body.querySelector(snap.selector);
+    if (!el) return;
+    el.focus();
+    if (typeof el.setSelectionRange === "function" && snap.start != null && snap.end != null) {
+      const len = String(el.value ?? "").length;
+      el.setSelectionRange(Math.min(snap.start, len), Math.min(snap.end, len));
+    }
+  }
+  root.addEventListener("focusin", captureInputFocus, true);
+  ["input", "keyup", "click", "select"].forEach((type) => root.addEventListener(type, captureInputFocus, true));
+
   // ---- 直接調整ロジック（決定的・純文字列操作） -------------------------
   const SIZES = ["xs", "sm", "base", "lg", "xl", "2xl", "3xl", "4xl", "5xl", "6xl", "7xl", "8xl", "9xl"];
   const reEsc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -723,6 +783,7 @@
   async function commitStyle() {
     const c = cur();
     if (!c) return;
+    if (multi()) return applyAbsoluteBatch((s) => s.liveClass);
     if (c.liveClass === c.sourceClass) { toast("変更なし"); return; }
     try {
       const j = await post("/apply-style", { route: c.payload.route, oldClassName: c.sourceClass, newClassName: c.liveClass, selector: c.payload.selector, text: c.payload.text });
@@ -921,6 +982,7 @@
   }
 
   function renderBody() {
+    const focusSnap = captureInputFocus() || lastInputFocus;
     const active = cur();
     const sel = active?.payload;
     if (!active || !sel) {
@@ -1038,7 +1100,7 @@
       <div class="tabs">${tabs.map(([k, l]) => `<button class="tab${k === tab ? " on" : ""}" data-tab="${k}">${l}</button>`).join("")}</div>
       ${panel}
       <section class="ask-sec"><h5>Claudeに頼む（複雑な構造・文言）</h5>
-        <textarea class="ask" placeholder="例: 2行に分けて、画像と左右入れ替えて"></textarea>
+        <textarea class="ask" placeholder="例: 2行に分けて、画像と左右入れ替えて">${esc(pendingPrompt)}</textarea>
         <div class="row"><button class="btn add">キューに追加</button></div>
         ${pending.length ? `<ul>${list}</ul><div class="row"><button class="btn send">${svg("send", 14)} Claudeへ送る (${pending.length})</button></div>` : ""}
       </section>`;
@@ -1082,22 +1144,25 @@
     oc(".t-scale", (e) => setUtil("scale", e.target.value ? `[${e.target.value}]` : ""));
     // 設定タブ: class/構造
     const cls = $(".cls");
-    if (cls) cls.oninput = (e) => { setPrimaryLiveClass(e.target.value); syncSelBoxes(); };
+    if (cls) cls.oninput = (e) => { setLiveClassForSelection(e.target.value); syncSelBoxes(); };
     const ap = $(".apply"); if (ap) ap.onclick = commitStyle;
-    const rs = $(".reset"); if (rs) rs.onclick = () => applyLive(source());
+    const rs = $(".reset"); if (rs) rs.onclick = resetLiveClassForSelection;
     const du = $(".dup"); if (du) du.onclick = () => selection.length >= 2 ? doStructBatch("duplicate") : doStruct("/duplicate");
     const de = $(".del"); if (de) de.onclick = () => selection.length >= 2 ? doStructBatch("delete") : doStruct("/delete");
     // Claude
     const ask = $(".ask"), add = $(".add");
+    if (ask) ask.oninput = (e) => { pendingPrompt = e.target.value; };
     if (add) add.onclick = () => {
       const p = (ask.value || "").trim();
       if (!p) { toast("指示を入力してください", "warn"); return; }
       if (selection.length >= 2) pending.push({ payloads: selection.map((s) => s.payload), prompt: p });
       else pending.push({ payload: sel, prompt: p });
+      pendingPrompt = "";
       renderBody();
     };
     $body.querySelectorAll(".x").forEach((x) => x.onclick = () => { pending.splice(Number(x.dataset.i), 1); renderBody(); });
     const sendBtn = $(".send"); if (sendBtn) sendBtn.onclick = send;
+    restoreInputFocus(focusSnap);
   }
 
   function openPanel() { setCollapsed(false); renderBody(); }
@@ -1111,6 +1176,7 @@
     try {
       const json = await post("/enqueue", { items });
       if (!json.ok) throw new Error(json.error || "enqueue failed");
+      pendingPrompt = "";
       pending.length = 0; renderBody();
       toast(`${json.ids.length} 件を Claude のキューへ送りました`);
     } catch (err) { toast(`送信失敗: ${err.message}（daemon 起動中？）`, "err"); }
@@ -1244,7 +1310,7 @@
   $tUndo.onclick = () => doHistory("/undo");
   $tRedo.onclick = () => doHistory("/redo");
   $(".t-collapse").onclick = () => setCollapsed(true);
-  $launcher.onclick = () => setCollapsed(false);
+  $launcher.onclick = () => openPanel();
   setPageGutter(true); // 初期はインスペクタ開＝ガターを空ける
   root.querySelectorAll(".bpseg button").forEach((b) => {
     if (b.dataset.bp === bp) b.classList.add("on");
