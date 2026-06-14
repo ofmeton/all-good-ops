@@ -7,6 +7,7 @@
  */
 import { TARGET_DEFINITION } from "../ingest/collector-prompts.js";
 import { resolveTemplate, renderTemplatePrompt } from "./compose-templates.js";
+import { renderKnowledgeBriefing } from "./compose-knowledge.js";
 
 /** 許可フォーマット集合（SUBMIT_DRAFT_TOOL enum・run-compose validation・RPC と一致させる）。 */
 export const COMPOSE_FMATS = ["short", "medium", "long", "article", "thread"] as const;
@@ -49,6 +50,25 @@ export const SUBMIT_DRAFT_TOOL = {
         items: { type: "string" },
         description: "本文中の具体数字・主張の裏付けに使った URL/出典（素材本文 or web_search 由来）。無ければ空配列",
       },
+      outline: {
+        type: "array",
+        items: {
+          type: "object",
+          properties: {
+            role: { type: "string", description: "各ツイート/ブロックの役割" },
+            key_message: { type: "string", description: "一目で伝えたい要点" },
+            visual_hint: {
+              type: "string",
+              description:
+                "この1枚で何を見せるか＝図/構図/被写体 ＋ 画像に載せる短い文字（gpt-imageが描くので短く・数字やキーワード中心。長い日本語文は破綻するので避ける）",
+            },
+          },
+          required: ["role", "key_message"],
+          additionalProperties: false,
+        },
+        description:
+          "構成設計（outline）の成果物。各ツイート/ブロックの役割と、一目で伝えたい要点。将来のブロック別画像生成にも使う。",
+      },
     },
     required: ["body", "fmat", "topic", "category"],
     additionalProperties: false,
@@ -88,7 +108,7 @@ export function buildWriterSystemPrompt(): string {
   return `あなたは X 発信用の「執筆エージェント」です。1 つの素材（元ツイート/ニュース）から、X 投稿ドラフトを 1 本書きます。
 
 ${TARGET_DEFINITION}
-ポジション: 「AIニュースを非エンジニアの言葉に翻訳して即届ける速報屋」。
+ポジション: 「最新AIの実用的な使い方を、ターゲット層に、誰でも伝わる平易な言葉で噛み砕いて即届ける速報屋」。
 
 ## リサーチ（数字捏造の防止＝最重要）
 - 具体的な数字・金額・期間・固有の事実を本文に書くなら、**素材本文に在るもの**を使うか、**web_search で裏を取ってから**書く。
@@ -98,15 +118,17 @@ ${TARGET_DEFINITION}
 ## 掟（生成段階で必ず守る）
 - 禁止語を使わない: 時代遅れ / 無能 / 情弱 / 養分 / 搾取 / 奴隷（誰かを見下す表現は禁止）。
 - 末尾は断定形で締める（「〜かも」「〜だと思う」「〜なのかな」で終わらない）。
-- 読者像を意識（必要なら本文に「経営者向け」「士業向け」等を織り込む）。
+- 読者像（Claude Code を使う実務者）を意識する。
 - 顧客の固有名詞・案件名は出さない（「A社」「B様」等に総称化）。
-- 専門用語（LLM/RAG/API 等）は出すなら（〜のこと）と短く言い換える。
+- 専門用語: Claude Code を使う人なら分かる語（LLM/API/プロンプト/CLI/トークン 等）はそのまま使い、説明しない。明らかなエンジニア用語で、Claude Code を使い始めた人でも分からなそうな難しい語に限り、一度だけ短く平易に補足する。
 
 ## 進め方
-1. 渡された素材本文と URL を読む。
-2. 必要なら web_search / web_fetch で裏取り・補足。
-3. **userMessage で指定された投稿の型**に沿って本文を 1 本書く。
-4. 最後に **必ず submit_draft を呼んで**提出する（body/fmat/topic/category 必須、citations 推奨）。`;
+1. 目的と読者を定める（誰に何を持ち帰らせるか）。
+2. 元ネタの要点を抽出する（事実・数字・主張を拾う。裏取りは上記リサーチの掟どおり）。
+3. **構成設計（outline）**を先に作る。各ブロック/ツイートの「役割・キーメッセージ・使うフック」を決める。各ブロックの visual_hint（1枚で一目で伝わる絵＋短い文字）も決める。**fmat=thread/article は必須**、short/medium は1-2行の簡易 outline でよい。
+4. 初稿を書く（userMessage の型と知見に沿う）。
+5. **自己推敲**する。流れ・冗長・1行目フックの強さ・掟（禁止語/断定締め/固有名総称化）を自分で点検して直す。
+6. 最後に **必ず submit_draft を呼んで**提出する（body/fmat/topic/category 必須、citations 推奨）。**outline も submit_draft に渡す**。`;
 }
 
 /**
@@ -123,6 +145,9 @@ export function buildComposeUserBlocks(
 ): string {
   const tpl = resolveTemplate(templateId);
   const templateBlock = `# 投稿の型（この型に沿って書く）\n${renderTemplatePrompt(tpl)}\n\n`;
+  const knowledgeBlock =
+    `# 参考にする書き方の知見（このフォーマットで効くもの）\n` +
+    `${renderKnowledgeBriefing(fmat ?? "")}\n\n`;
 
   const fmatLabel = fmat ? (FMAT_LABELS[fmat] ?? fmat) : null;
   // fmat=thread のときは「1ツイートずつ tweets に入れる」契約を明示する（スレッド分割は writer の判断）。
@@ -143,5 +168,5 @@ export function buildComposeUserBlocks(
       ? `# 前回の指摘（必ず避けて書き直す）\n` + flags.map((f) => `- ${f}`).join("\n") + `\n\n`
       : "";
 
-  return templateBlock + fmatBlock + redoBlock;
+  return templateBlock + knowledgeBlock + fmatBlock + redoBlock;
 }

@@ -115,6 +115,28 @@ describe("runCompose", () => {
     expect(typeof r.perMaterial[0].costJpy).toBe("number");
   });
 
+  test("outline: submit_draft の構成設計を core_ideas.meta に保存する", async () => {
+    const outline = [
+      { role: "hook", key_message: "1行目で変化を断定する" },
+      { role: "detail", key_message: "Claude Code を使う実務者向けに使いどころを開く" },
+    ];
+    const state: St = { materials: [mat("m1")], coreIdeas: [], postDrafts: [] };
+    const r = await runCompose({
+      sb: makeSb(state),
+      apiKey: "k",
+      runSession: okSession({ outline }),
+      getAgentRef: okRef,
+      logger: silent,
+    });
+    expect(r.draftCount).toBe(1);
+    expect(state.coreIdeas[0].meta).toMatchObject({
+      citations: ["https://src"],
+      source_tweet_url: "https://x.com/t",
+      generator: "ma-writer",
+      outline,
+    });
+  });
+
   // ── P2: 永続ランタイム経路 ──
   test("永続: runSession に agentRef/environmentId を渡し system/tools は送らない", async () => {
     const state: St = { materials: [mat("m1")], coreIdeas: [], postDrafts: [] };

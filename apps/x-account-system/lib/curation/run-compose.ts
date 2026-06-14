@@ -74,6 +74,8 @@ interface SubmitDraft {
   category: string;
   primary_hook?: string;
   citations?: string[];
+  /** 構成設計の成果物。各ツイート/ブロックの役割と、一目で伝えたい要点。 */
+  outline?: Array<{ role: string; key_message: string; visual_hint?: string }>;
   /** fmat=thread のとき writer が1ツイートずつ入れる配列（投稿時の正・body は join 派生）。 */
   tweets?: string[];
 }
@@ -301,7 +303,12 @@ export async function runCompose(deps: RunComposeDeps): Promise<ComposeRunResult
           primary_hook: captured.primary_hook ?? null,
           fmat,
           status: "draft",
-          meta: { citations: captured.citations ?? [], source_tweet_url: tweetUrl, generator: "ma-writer" },
+          meta: {
+            citations: captured.citations ?? [],
+            source_tweet_url: tweetUrl,
+            generator: "ma-writer",
+            outline: captured.outline ?? null,
+          },
         })
         .select("id")
         .single();

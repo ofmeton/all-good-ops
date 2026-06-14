@@ -25,7 +25,10 @@ export type VisualizerMode = "image" | "video" | "text_only";
 export type ImageSize =
   | "1024x1024" // X (square)
   | "1080x1080" // Instagram square
-  | "1080x1350"; // Instagram portrait / note
+  | "1080x1350" // Instagram portrait / note
+  | "1536x1024"
+  | "1024x1536"
+  | "auto";
 
 /** Phase 0.5 では Codex API は呼ばず stub URL を返す */
 export type CodexImageRequest = {
@@ -40,8 +43,16 @@ export type CodexImageRequest = {
   prompts?: string[];
 };
 
+export type CodexGeneratedImage = {
+  /** GPT image models は b64_json を返す。Storage upload など bytes 化する経路で使う。 */
+  b64?: string;
+  /** stub / legacy image models 用。GPT image models では通常 undefined。 */
+  url?: string;
+  promptUsed: string;
+};
+
 export type CodexImageResponse = {
-  images: { url: string; promptUsed: string }[];
+  images: CodexGeneratedImage[];
   costUsd: number;
 };
 
@@ -80,7 +91,7 @@ export type VisualizerRequest = {
 export type ImageOutput = {
   kind: "image";
   draftId: string;
-  images: { url: string; promptUsed: string }[];
+  images: CodexGeneratedImage[];
   costUsd: number;
   carousel?: CarouselComposition;
   generator: "stub" | "codex-gpt-image-2";

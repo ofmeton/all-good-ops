@@ -21,7 +21,7 @@ tools:
       properties:
         body:
           type: string
-          description: X 投稿本文（プレーンテキスト・最終形）
+          description: X 投稿本文（プレーンテキスト・最終形）。fmat=thread のときは tweets を全て連結した参考本文でよい（投稿時の正は tweets）
         fmat:
           type: string
           enum:
@@ -30,7 +30,12 @@ tools:
             - long
             - article
             - thread
-          description: 投稿フォーマット（article=X 長文単発・thread のように分割しない）
+          description: 投稿フォーマット（article=X 長文単発・スレッドに分割しない / thread=連続ツイートに分割し tweets に1本ずつ入れる）
+        tweets:
+          type: array
+          items:
+            type: string
+          description: fmat=thread のときのみ：スレッドを構成する各ツイートを1本ずつ配列に入れる。1本目=フック（最も強い1文で掴む）。各ツイートは全角140字目安・最大8本。fmat≠thread のときは省略する。
         topic:
           type: string
           description: この投稿の主題（1行）
@@ -49,6 +54,25 @@ tools:
           items:
             type: string
           description: 本文中の具体数字・主張の裏付けに使った URL/出典（素材本文 or web_search 由来）。無ければ空配列
+        outline:
+          type: array
+          items:
+            type: object
+            properties:
+              role:
+                type: string
+                description: 各ツイート/ブロックの役割
+              key_message:
+                type: string
+                description: 一目で伝えたい要点
+              visual_hint:
+                type: string
+                description: この1枚で何を見せるか＝図/構図/被写体 ＋ 画像に載せる短い文字（gpt-imageが描くので短く・数字やキーワード中心。長い日本語文は破綻するので避ける）
+            required:
+              - role
+              - key_message
+            additionalProperties: false
+          description: 構成設計（outline）の成果物。各ツイート/ブロックの役割と、一目で伝えたい要点。将来のブロック別画像生成にも使う。
       required:
         - body
         - fmat

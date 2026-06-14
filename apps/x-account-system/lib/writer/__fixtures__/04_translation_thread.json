@@ -8,13 +8,13 @@
     "fmat": "thread",
     "contentType": "translation",
     "citationSource": "https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching",
-    "audience": "非エンジニアの開発リード",
+    "audience": "Claude Code を使う開発リード",
     "sourceMaterialIds": ["mat-tr-004"]
   },
   "expected": {
     "primaryHook": "translation",
     "generator": "stub",
-    "bodyMustContain": ["仕組み化", "非エンジニアの開発リード"],
+    "bodyMustContain": ["仕組み化", "Claude Code を使う開発リード"],
     "bodyMaxChars": 280
   }
 }

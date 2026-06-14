@@ -109,6 +109,30 @@ describe("fetchDraftMedia", () => {
     expect(writes["/tmp/xad-media/draft1-0.jpg"]).toEqual(new Uint8Array([9, 9]));
   });
 
+  test("source generated の写真も sourceUrl から通常 DL する", async () => {
+    const { deps } = makeDeps(() => ({ ok: true, body: new Uint8Array([7]) }));
+    const r = await fetchDraftMedia(
+      "draft-generated",
+      [{
+        kind: "upload",
+        mediaType: "photo",
+        source: "generated",
+        blockIndex: 0,
+        role: "導入",
+        sourceUrl: "https://storage.example/xad-generated/draft/0.png",
+        promptUsed: "prompt",
+      }],
+      deps,
+    );
+    expect(r.uploaded).toBe(1);
+    expect(r.resolved[0]).toMatchObject({
+      source: "generated",
+      blockIndex: 0,
+      resolvedKind: "upload",
+      localPath: "/tmp/xad-media/draft-generated-0.png",
+    });
+  });
+
   test("fetches the orig variant url", async () => {
     const seen: string[] = [];
     const { deps } = makeDeps((url) => {

@@ -1,5 +1,6 @@
 import {
   fetchUserTweets,
+  fetchTweetsByIds,
   searchTweets,
   getTrends,
   searchUsers,
@@ -48,6 +49,69 @@ function jsonFetch(body: unknown, ok = true): typeof fetch {
 }
 
 describe("twitterapi-client extended", () => {
+  test("fetchTweetsByIds maps tweets and sends comma-separated ids in GET query", async () => {
+    const seen: Array<{ url: string; init?: RequestInit }> = [];
+    const fetchImpl = (async (url: RequestInfo | URL, init?: RequestInit) => {
+      seen.push({ url: String(url), init });
+      return {
+        ok: true,
+        status: 200,
+        statusText: "OK",
+        json: async () => ({
+          tweets: [
+            {
+              id: "b1",
+              text: "bookmarked",
+              createdAt: "Sat May 23 13:23:33 +0000 2026",
+              lang: "en",
+              author: { userName: "alice" },
+            },
+          ],
+        }),
+      } as Response;
+    }) as unknown as typeof fetch;
+
+    const out = await fetchTweetsByIds(["b1", "b2"], "k", fetchImpl);
+    expect(out).toEqual([
+      expect.objectContaining({
+        id: "b1",
+        text: "bookmarked",
+        author: { userName: "alice", id: undefined, isBlueVerified: undefined },
+        lang: "en",
+      }),
+    ]);
+    expect(seen).toHaveLength(1);
+    const url = new URL(seen[0].url);
+    expect(url.pathname).toBe("/twitter/tweets");
+    expect(url.searchParams.get("tweet_ids")).toBe("b1,b2");
+    expect(seen[0].init?.method).toBe("GET");
+    expect(seen[0].init?.body).toBeUndefined();
+  });
+
+  test("fetchTweetsByIds returns [] without calling fetch for empty input", async () => {
+    const fetchImpl = jest.fn() as unknown as typeof fetch;
+    const out = await fetchTweetsByIds([], "k", fetchImpl);
+    expect(out).toEqual([]);
+    expect(fetchImpl).not.toHaveBeenCalled();
+  });
+
+  test("fetchTweetsByIds batches ids in chunks of 100", async () => {
+    const seen: string[] = [];
+    const fetchImpl = (async (url: RequestInfo | URL) => {
+      seen.push(new URL(String(url)).searchParams.get("tweet_ids") ?? "");
+      return {
+        ok: true,
+        status: 200,
+        statusText: "OK",
+        json: async () => ({ tweets: [] }),
+      } as Response;
+    }) as unknown as typeof fetch;
+    await fetchTweetsByIds(Array.from({ length: 101 }, (_, i) => String(i + 1)), "k", fetchImpl);
+    expect(seen).toHaveLength(2);
+    expect(seen[0].split(",")).toHaveLength(100);
+    expect(seen[1]).toBe("101");
+  });
+
   test("searchTweets returns mapped tweets with extended fields", async () => {
     const fetchImpl = jsonFetch({
       tweets: [

@@ -112,6 +112,12 @@ interface TwitterApiResponse {
   data?: RawTweet[]; // legacy / fallback
 }
 
+function chunk<T>(arr: T[], n: number): T[][] {
+  const out: T[][] = [];
+  for (let i = 0; i < arr.length; i += n) out.push(arr.slice(i, i + n));
+  return out;
+}
+
 /**
  * Fetch recent tweets for a given user handle via advanced_search.
  * Uses `from:<userName> -is:retweet` query.
@@ -157,6 +163,31 @@ export async function searchTweets(
   const arr = json.tweets ?? json.data ?? [];
   const raw = (Array.isArray(arr) ? arr : []) as RawTweet[];
   return raw.map(mapTweet);
+}
+
+/**
+ * Fetch specific tweets by tweet id.
+ * Endpoint: GET /twitter/tweets?tweet_ids=<comma-separated>
+ */
+export async function fetchTweetsByIds(
+  ids: string[],
+  key: string,
+  fetchImpl: typeof fetch = fetch,
+): Promise<Tweet[]> {
+  if (ids.length === 0) return [];
+  const tweets: Tweet[] = [];
+  for (const batch of chunk(ids, 100)) {
+    const json = await apiGet(
+      "/twitter/tweets",
+      { tweet_ids: batch.join(",") },
+      key,
+      fetchImpl,
+    ) as TwitterApiResponse;
+    const arr = json.tweets ?? json.data ?? [];
+    const raw = (Array.isArray(arr) ? arr : []) as RawTweet[];
+    tweets.push(...raw.map(mapTweet));
+  }
+  return tweets;
 }
 
 /** 海外トレンド取得（woeid: 23424977=US 推奨。woeid=1 は実測で日本が返るため使わない） */

@@ -66,6 +66,11 @@ export interface RunCollectDeps {
  */
 export async function runCollect(deps: RunCollectDeps): Promise<CollectStats> {
   const now = deps.now ?? Date.now();
+  const rp = await resolveRuntimeParams(deps.sb);
+  if (rp.collector_enabled === 0) {
+    console.log(JSON.stringify({ level: "info", msg: "[collect] disabled by runtime flag (collector_enabled=0)" }));
+    return { inserted: 0, fetched: 0, deduped: 0, scored: 0, cost: { exploreJpy: 0, scoringJpy: 0, translateJpy: 0, totalJpy: 0 } };
+  }
   const runSession = deps.runSession ?? runMaSession;
   const resolveAgentRef = deps.getAgentRef ?? getAgentRefDefault;
   const watchHandles = COLLECTOR_CONFIG.watchlist.map((s) => s.handle).join(", ");
@@ -173,10 +178,9 @@ export async function runCollect(deps: RunCollectDeps): Promise<CollectStats> {
   // P2 二段採点（prerank）: prior（決定的・無料）で三層選抜 = safeguard ∪ topK ∪ exploration。
   // selection の計算自体は純関数・無課金。挙動が変わるのは enforce のみ。
   //
-  // P3 閉ループ: runtime_params を 1 度だけ解決し、レバー（K/quota/age/enforce）の上書きに使う。
+  // P3 閉ループ: runtime_params は run 冒頭で 1 度だけ解決し、レバー（enabled/K/quota/age/enforce）の上書きに使う。
   //   resolveRuntimeParams は overlay+clip 済の確定値を返す。DB 不達/壊れ値/未投入は fail-open で
   //   COLLECTOR_CONFIG default＝挙動完全不変。これで optimizer が tier-P で書いた値を翌 collect が反映する。
-  const rp = await resolveRuntimeParams(deps.sb);
 
   // P2-enforce-flip: prerankMode は runtime_param collector_prerank_enforce で決定する。
   //   param=1 → enforce / 0 or 行なし / DB 不達 → shadow。deps.prerankMode はテスト/手動 override（優先）。

@@ -14,7 +14,7 @@ jest.mock("@anthropic-ai/sdk", () => {
     "**月3万円**のコスト削減に成功しました🎉\n" +
     "これは *重要* なポイントです。\n" +
     "## 手順\n" +
-    "経営者向け。私は自動化を試した。";
+    "Claude Code を使う実務者向け。私は自動化を試した。";
   const MockAnthropic = class {
     messages = {
       create: async () => ({
@@ -82,7 +82,7 @@ const idea: CoreIdea = {
   primaryHook: "number",
   fmat: "short",
   contentType: "first_hand",
-  audience: "経営者",
+  audience: "Claude Code を使う実務者",
   sourceMaterialIds: [],
 };
 

@@ -74,11 +74,13 @@ function makeFakeSb(
 describe("RUNTIME_PARAM_BOUNDS / IDS / DEFAULTS", () => {
   it("4 レバーが定義され、enforce 下限=0・quota 下限>0（計測ループ不滅）", () => {
     expect(RUNTIME_PARAM_IDS.sort()).toEqual(
-      ["collector_exploration_quota", "collector_prerank_enforce", "collector_prerank_max_age_hours", "collector_shortlist_top_k"],
+      ["collector_enabled", "collector_exploration_quota", "collector_prerank_enforce", "collector_prerank_max_age_hours", "collector_shortlist_top_k"],
     );
+    expect(RUNTIME_PARAM_BOUNDS.collector_enabled).toEqual({ min: 0, max: 1 });
     expect(RUNTIME_PARAM_BOUNDS.collector_prerank_enforce).toEqual({ min: 0, max: 1 });
     expect(RUNTIME_PARAM_BOUNDS.collector_exploration_quota.min).toBeGreaterThan(0);
     // default に全レバーが揃う。enforce は 0=shadow。
+    expect(RUNTIME_PARAM_DEFAULTS.collector_enabled).toBe(1);
     expect(RUNTIME_PARAM_DEFAULTS.collector_prerank_enforce).toBe(0);
     for (const id of RUNTIME_PARAM_IDS) expect(typeof RUNTIME_PARAM_DEFAULTS[id]).toBe("number");
   });
@@ -91,6 +93,8 @@ describe("clipRuntimeParam", () => {
     expect(clipRuntimeParam("collector_exploration_quota", 1)).toBe(5);
     expect(clipRuntimeParam("collector_prerank_enforce", 5)).toBe(1);
     expect(clipRuntimeParam("collector_prerank_enforce", -3)).toBe(0);
+    expect(clipRuntimeParam("collector_enabled", 9)).toBe(1);
+    expect(clipRuntimeParam("collector_enabled", -1)).toBe(0);
   });
   it("未知 paramId は素通し", () => {
     expect(clipRuntimeParam("nope", 42)).toBe(42);

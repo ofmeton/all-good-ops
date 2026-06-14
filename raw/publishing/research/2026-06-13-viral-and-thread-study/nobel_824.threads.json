@@ -1,0 +1,708 @@
+[
+  {
+    "handle": "nobel_824",
+    "root": {
+      "id": "2064946630944829480",
+      "text": "Claude Codeを使いたい人、まずはこれをみて。",
+      "author": {
+        "userName": "nobel_824",
+        "id": "3102399630",
+        "isBlueVerified": true
+      },
+      "createdAt": "Thu Jun 11 05:43:36 +0000 2026",
+      "lang": "ja",
+      "likeCount": 107,
+      "retweetCount": 3,
+      "replyCount": 1,
+      "quoteCount": 0,
+      "bookmarkCount": 158,
+      "viewCount": 42107,
+      "isReply": false,
+      "conversationId": "2064946630944829480",
+      "tweetUrl": "https://x.com/nobel_824/status/2064946630944829480"
+    },
+    "thread": [
+      {
+        "id": "2064946630944829480",
+        "text": "Claude Codeを使いたい人、まずはこれをみて。",
+        "author": {
+          "userName": "nobel_824",
+          "id": "3102399630",
+          "isBlueVerified": true
+        },
+        "createdAt": "Thu Jun 11 05:43:36 +0000 2026",
+        "lang": "ja",
+        "likeCount": 107,
+        "retweetCount": 3,
+        "replyCount": 1,
+        "quoteCount": 0,
+        "bookmarkCount": 158,
+        "viewCount": 42107,
+        "isReply": false,
+        "conversationId": "2064946630944829480",
+        "tweetUrl": "https://x.com/nobel_824/status/2064946630944829480"
+      }
+    ]
+  },
+  {
+    "handle": "nobel_824",
+    "root": {
+      "id": "2064946224751599698",
+      "text": "https://t.co/74tBSX45ps",
+      "author": {
+        "userName": "nobel_824",
+        "id": "3102399630",
+        "isBlueVerified": true
+      },
+      "createdAt": "Thu Jun 11 05:41:59 +0000 2026",
+      "lang": "zxx",
+      "likeCount": 69,
+      "retweetCount": 0,
+      "replyCount": 4,
+      "quoteCount": 1,
+      "bookmarkCount": 163,
+      "viewCount": 58073,
+      "isReply": false,
+      "conversationId": "2064946224751599698",
+      "tweetUrl": "https://x.com/nobel_824/status/2064946224751599698"
+    },
+    "thread": [
+      {
+        "id": "2064946224751599698",
+        "text": "https://t.co/74tBSX45ps",
+        "author": {
+          "userName": "nobel_824",
+          "id": "3102399630",
+          "isBlueVerified": true
+        },
+        "createdAt": "Thu Jun 11 05:41:59 +0000 2026",
+        "lang": "zxx",
+        "likeCount": 69,
+        "retweetCount": 0,
+        "replyCount": 4,
+        "quoteCount": 1,
+        "bookmarkCount": 163,
+        "viewCount": 58073,
+        "isReply": false,
+        "conversationId": "2064946224751599698",
+        "tweetUrl": "https://x.com/nobel_824/status/2064946224751599698"
+      }
+    ]
+  },
+  {
+    "handle": "nobel_824",
+    "root": {
+      "id": "2065352437645627694",
+      "text": "OpenAI 共同創業者Karpathyの CLAUDE.md が、GitHub トレンドで1位独走。 中身はライブラリでもアプリでもなく、たった65行のテキストファイルでした。 そこに書かれた4つの原則について解説します。\nhttps://t.co/CFJ5mPgxar",
+      "author": {
+        "userName": "nobel_824",
+        "id": "3102399630",
+        "isBlueVerified": true
+      },
+      "createdAt": "Fri Jun 12 08:36:08 +0000 2026",
+      "lang": "ja",
+      "likeCount": 176,
+      "retweetCount": 10,
+      "replyCount": 5,
+      "quoteCount": 1,
+      "bookmarkCount": 345,
+      "viewCount": 29299,
+      "isReply": false,
+      "conversationId": "2065352437645627694",
+      "tweetUrl": "https://x.com/nobel_824/status/2065352437645627694",
+      "media": [
+        {
+          "type": "video",
+          "url": "https://pbs.twimg.com/amplify_video_thumb/2057643403693940736/img/3bn5tpGtlLrZtKbH.jpg"
+        }
+      ]
+    },
+    "thread": [
+      {
+        "id": "2065352437645627694",
+        "text": "OpenAI 共同創業者Karpathyの CLAUDE.md が、GitHub トレンドで1位独走。 中身はライブラリでもアプリでもなく、たった65行のテキストファイルでした。 そこに書かれた4つの原則について解説します。\nhttps://t.co/CFJ5mPgxar",
+        "author": {
+          "userName": "nobel_824",
+          "id": "3102399630",
+          "isBlueVerified": true
+        },
+        "createdAt": "Fri Jun 12 08:36:08 +0000 2026",
+        "lang": "ja",
+        "likeCount": 176,
+        "retweetCount": 10,
+        "replyCount": 5,
+        "quoteCount": 1,
+        "bookmarkCount": 345,
+        "viewCount": 29299,
+        "isReply": false,
+        "conversationId": "2065352437645627694",
+        "tweetUrl": "https://x.com/nobel_824/status/2065352437645627694",
+        "media": [
+          {
+            "type": "video",
+            "url": "https://pbs.twimg.com/amplify_video_thumb/2057643403693940736/img/3bn5tpGtlLrZtKbH.jpg"
+          }
+        ]
+      },
+      {
+        "id": "2065352439390437575",
+        "text": "①Think Before Coding（書く前に考える） LLM の一番厄介な癖は、曖昧な指示を勝手に解釈して突き進むこと。だから「前提を声に出す／複数解釈があれば全部出す／詰まったら聞く」を強制する。要は黙って暴走するな、と。",
+        "author": {
+          "userName": "nobel_824",
+          "id": "3102399630",
+          "isBlueVerified": true
+        },
+        "createdAt": "Fri Jun 12 08:36:08 +0000 2026",
+        "lang": "ja",
+        "likeCount": 4,
+        "retweetCount": 0,
+        "replyCount": 1,
+        "quoteCount": 0,
+        "bookmarkCount": 4,
+        "viewCount": 2094,
+        "isReply": true,
+        "conversationId": "2065352437645627694",
+        "tweetUrl": "https://x.com/nobel_824/status/2065352439390437575"
+      }
+    ]
+  },
+  {
+    "handle": "nobel_824",
+    "root": {
+      "id": "2057643942980751527",
+      "text": "OpenAI 共同創業者Karpathyの CLAUDE.md が、GitHub トレンドで1位独走中。\n中身はライブラリでもアプリでもなく、たった65行のテキストファイル。Karpathy のコーディング観察を圧縮した1ファイルが、累計10万スター超え。\nそこに書かれた4つの原則について解説します。 https://t.co/CGs0MQ0OSP",
+      "author": {
+        "userName": "nobel_824",
+        "id": "3102399630",
+        "isBlueVerified": true
+      },
+      "createdAt": "Fri May 22 02:05:19 +0000 2026",
+      "lang": "ja",
+      "likeCount": 2564,
+      "retweetCount": 196,
+      "replyCount": 12,
+      "quoteCount": 23,
+      "bookmarkCount": 4494,
+      "viewCount": 657290,
+      "isReply": false,
+      "conversationId": "2057643942980751527",
+      "tweetUrl": "https://x.com/nobel_824/status/2057643942980751527",
+      "media": [
+        {
+          "type": "video",
+          "url": "https://pbs.twimg.com/amplify_video_thumb/2057643403693940736/img/3bn5tpGtlLrZtKbH.jpg"
+        }
+      ]
+    },
+    "thread": [
+      {
+        "id": "2057643942980751527",
+        "text": "OpenAI 共同創業者Karpathyの CLAUDE.md が、GitHub トレンドで1位独走中。\n中身はライブラリでもアプリでもなく、たった65行のテキストファイル。Karpathy のコーディング観察を圧縮した1ファイルが、累計10万スター超え。\nそこに書かれた4つの原則について解説します。 https://t.co/CGs0MQ0OSP",
+        "author": {
+          "userName": "nobel_824",
+          "id": "3102399630",
+          "isBlueVerified": true
+        },
+        "createdAt": "Fri May 22 02:05:19 +0000 2026",
+        "lang": "ja",
+        "likeCount": 2564,
+        "retweetCount": 196,
+        "replyCount": 12,
+        "quoteCount": 23,
+        "bookmarkCount": 4494,
+        "viewCount": 657306,
+        "isReply": false,
+        "conversationId": "2057643942980751527",
+        "tweetUrl": "https://x.com/nobel_824/status/2057643942980751527",
+        "media": [
+          {
+            "type": "video",
+            "url": "https://pbs.twimg.com/amplify_video_thumb/2057643403693940736/img/3bn5tpGtlLrZtKbH.jpg"
+          }
+        ]
+      },
+      {
+        "id": "2057643944893354229",
+        "text": "①Think Before Coding（書く前に考える）\nLLM の一番厄介な癖は、曖昧な指示を勝手に解釈して突き進むこと。だから「前提を声に出す／複数解釈があれば全部出す／詰まったら聞く」を強制する。要は黙って暴走するな、と。",
+        "author": {
+          "userName": "nobel_824",
+          "id": "3102399630",
+          "isBlueVerified": true
+        },
+        "createdAt": "Fri May 22 02:05:20 +0000 2026",
+        "lang": "ja",
+        "likeCount": 54,
+        "retweetCount": 5,
+        "replyCount": 1,
+        "quoteCount": 1,
+        "bookmarkCount": 41,
+        "viewCount": 29502,
+        "isReply": true,
+        "conversationId": "2057643942980751527",
+        "tweetUrl": "https://x.com/nobel_824/status/2057643944893354229"
+      }
+    ]
+  },
+  {
+    "handle": "nobel_824",
+    "root": {
+      "id": "2058403955647058242",
+      "text": "なぜAnthropicハッカソンを優勝した男の「Claude Code 設定一式」が、GitHubで10万スター付いたのか。 https://t.co/ZdMs6jomXj",
+      "author": {
+        "userName": "nobel_824",
+        "id": "3102399630",
+        "isBlueVerified": true
+      },
+      "createdAt": "Sun May 24 04:25:20 +0000 2026",
+      "lang": "ja",
+      "likeCount": 890,
+      "retweetCount": 65,
+      "replyCount": 4,
+      "quoteCount": 5,
+      "bookmarkCount": 1226,
+      "viewCount": 206058,
+      "isReply": false,
+      "conversationId": "2058403955647058242",
+      "tweetUrl": "https://x.com/nobel_824/status/2058403955647058242",
+      "media": [
+        {
+          "type": "video",
+          "url": "https://pbs.twimg.com/amplify_video_thumb/2058403707650449408/img/Ni9ZjXJqypJTou24.jpg"
+        }
+      ]
+    },
+    "thread": [
+      {
+        "id": "2058403955647058242",
+        "text": "なぜAnthropicハッカソンを優勝した男の「Claude Code 設定一式」が、GitHubで10万スター付いたのか。 https://t.co/ZdMs6jomXj",
+        "author": {
+          "userName": "nobel_824",
+          "id": "3102399630",
+          "isBlueVerified": true
+        },
+        "createdAt": "Sun May 24 04:25:20 +0000 2026",
+        "lang": "ja",
+        "likeCount": 890,
+        "retweetCount": 65,
+        "replyCount": 4,
+        "quoteCount": 5,
+        "bookmarkCount": 1226,
+        "viewCount": 206058,
+        "isReply": false,
+        "conversationId": "2058403955647058242",
+        "tweetUrl": "https://x.com/nobel_824/status/2058403955647058242",
+        "media": [
+          {
+            "type": "video",
+            "url": "https://pbs.twimg.com/amplify_video_thumb/2058403707650449408/img/Ni9ZjXJqypJTou24.jpg"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "handle": "nobel_824",
+    "root": {
+      "id": "2059917490222977185",
+      "text": "業務を自動化したい人向けです。",
+      "author": {
+        "userName": "nobel_824",
+        "id": "3102399630",
+        "isBlueVerified": true
+      },
+      "createdAt": "Thu May 28 08:39:35 +0000 2026",
+      "lang": "ja",
+      "likeCount": 273,
+      "retweetCount": 16,
+      "replyCount": 2,
+      "quoteCount": 0,
+      "bookmarkCount": 440,
+      "viewCount": 135062,
+      "isReply": false,
+      "conversationId": "2059917490222977185",
+      "tweetUrl": "https://x.com/nobel_824/status/2059917490222977185"
+    },
+    "thread": [
+      {
+        "id": "2059917490222977185",
+        "text": "業務を自動化したい人向けです。",
+        "author": {
+          "userName": "nobel_824",
+          "id": "3102399630",
+          "isBlueVerified": true
+        },
+        "createdAt": "Thu May 28 08:39:35 +0000 2026",
+        "lang": "ja",
+        "likeCount": 273,
+        "retweetCount": 16,
+        "replyCount": 2,
+        "quoteCount": 0,
+        "bookmarkCount": 440,
+        "viewCount": 135062,
+        "isReply": false,
+        "conversationId": "2059917490222977185",
+        "tweetUrl": "https://x.com/nobel_824/status/2059917490222977185"
+      }
+    ]
+  },
+  {
+    "handle": "nobel_824",
+    "root": {
+      "id": "2051835307591598103",
+      "text": "Anthropicが、金融業務に特化したAIエージェントを10種類、一気に発表しました。\n提案書作成、月次決算、顧客審査（KYC）、財務諸表チェックまで、これまで人がやっていた重めの定型業務を、AIに丸ごと任せられるという内容。\n中身を整理しておきます。 https://t.co/msZn1JIAO0",
+      "author": {
+        "userName": "nobel_824",
+        "id": "3102399630",
+        "isBlueVerified": true
+      },
+      "createdAt": "Wed May 06 01:23:53 +0000 2026",
+      "lang": "ja",
+      "likeCount": 595,
+      "retweetCount": 58,
+      "replyCount": 7,
+      "quoteCount": 3,
+      "bookmarkCount": 633,
+      "viewCount": 85091,
+      "isReply": false,
+      "conversationId": "2051835307591598103",
+      "tweetUrl": "https://x.com/nobel_824/status/2051835307591598103",
+      "media": [
+        {
+          "type": "video",
+          "url": "https://pbs.twimg.com/amplify_video_thumb/2051834788592730112/img/w15QK5syi-i17wbN.jpg"
+        }
+      ]
+    },
+    "thread": [
+      {
+        "id": "2051835307591598103",
+        "text": "Anthropicが、金融業務に特化したAIエージェントを10種類、一気に発表しました。\n提案書作成、月次決算、顧客審査（KYC）、財務諸表チェックまで、これまで人がやっていた重めの定型業務を、AIに丸ごと任せられるという内容。\n中身を整理しておきます。 https://t.co/msZn1JIAO0",
+        "author": {
+          "userName": "nobel_824",
+          "id": "3102399630",
+          "isBlueVerified": true
+        },
+        "createdAt": "Wed May 06 01:23:53 +0000 2026",
+        "lang": "ja",
+        "likeCount": 595,
+        "retweetCount": 58,
+        "replyCount": 7,
+        "quoteCount": 3,
+        "bookmarkCount": 633,
+        "viewCount": 85091,
+        "isReply": false,
+        "conversationId": "2051835307591598103",
+        "tweetUrl": "https://x.com/nobel_824/status/2051835307591598103",
+        "media": [
+          {
+            "type": "video",
+            "url": "https://pbs.twimg.com/amplify_video_thumb/2051834788592730112/img/w15QK5syi-i17wbN.jpg"
+          }
+        ]
+      },
+      {
+        "id": "2051835309462261876",
+        "text": "発表のポイントは大きく3つ。\n\n金融業務向けエージェント10種類\nExcel・PowerPoint・Word・Outlookとの統合（アプリをまたいでも文脈が引き継がれる）\nデータ連携パートナーの拡大（Moody's、Dun &amp; Bradstreet ほか）\n\nまず10種類のエージェントから見ていきます。",
+        "author": {
+          "userName": "nobel_824",
+          "id": "3102399630",
+          "isBlueVerified": true
+        },
+        "createdAt": "Wed May 06 01:23:53 +0000 2026",
+        "lang": "ja",
+        "likeCount": 4,
+        "retweetCount": 0,
+        "replyCount": 1,
+        "quoteCount": 0,
+        "bookmarkCount": 3,
+        "viewCount": 3449,
+        "isReply": true,
+        "conversationId": "2051835307591598103",
+        "tweetUrl": "https://x.com/nobel_824/status/2051835309462261876"
+      }
+    ]
+  },
+  {
+    "handle": "nobel_824",
+    "root": {
+      "id": "2063926685108727963",
+      "text": "https://t.co/O9eGCqSUT0",
+      "author": {
+        "userName": "nobel_824",
+        "id": "3102399630",
+        "isBlueVerified": true
+      },
+      "createdAt": "Mon Jun 08 10:10:42 +0000 2026",
+      "lang": "zxx",
+      "likeCount": 203,
+      "retweetCount": 10,
+      "replyCount": 0,
+      "quoteCount": 6,
+      "bookmarkCount": 593,
+      "viewCount": 583869,
+      "isReply": false,
+      "conversationId": "2063926685108727963",
+      "tweetUrl": "https://x.com/nobel_824/status/2063926685108727963"
+    },
+    "thread": [
+      {
+        "id": "2063926685108727963",
+        "text": "https://t.co/O9eGCqSUT0",
+        "author": {
+          "userName": "nobel_824",
+          "id": "3102399630",
+          "isBlueVerified": true
+        },
+        "createdAt": "Mon Jun 08 10:10:42 +0000 2026",
+        "lang": "zxx",
+        "likeCount": 203,
+        "retweetCount": 10,
+        "replyCount": 0,
+        "quoteCount": 6,
+        "bookmarkCount": 593,
+        "viewCount": 583870,
+        "isReply": false,
+        "conversationId": "2063926685108727963",
+        "tweetUrl": "https://x.com/nobel_824/status/2063926685108727963"
+      }
+    ]
+  },
+  {
+    "handle": "nobel_824",
+    "root": {
+      "id": "2050212561438769378",
+      "text": "https://t.co/1185i8Ia1b",
+      "author": {
+        "userName": "nobel_824",
+        "id": "3102399630",
+        "isBlueVerified": true
+      },
+      "createdAt": "Fri May 01 13:55:40 +0000 2026",
+      "lang": "zxx",
+      "likeCount": 805,
+      "retweetCount": 54,
+      "replyCount": 3,
+      "quoteCount": 13,
+      "bookmarkCount": 1185,
+      "viewCount": 183363,
+      "isReply": false,
+      "conversationId": "2050212561438769378",
+      "tweetUrl": "https://x.com/nobel_824/status/2050212561438769378"
+    },
+    "thread": [
+      {
+        "id": "2050212561438769378",
+        "text": "https://t.co/1185i8Ia1b",
+        "author": {
+          "userName": "nobel_824",
+          "id": "3102399630",
+          "isBlueVerified": true
+        },
+        "createdAt": "Fri May 01 13:55:40 +0000 2026",
+        "lang": "zxx",
+        "likeCount": 805,
+        "retweetCount": 54,
+        "replyCount": 3,
+        "quoteCount": 13,
+        "bookmarkCount": 1185,
+        "viewCount": 183363,
+        "isReply": false,
+        "conversationId": "2050212561438769378",
+        "tweetUrl": "https://x.com/nobel_824/status/2050212561438769378"
+      }
+    ]
+  },
+  {
+    "handle": "nobel_824",
+    "root": {
+      "id": "2058726263431573729",
+      "text": "③ コンピュートコストが人件費を超える日\nNvidiaのVPですら「チームの計算資源コストは、従業員のコストを遥かに超えている」と断言しています。チップを売る側のトップが、AI利用の経済性の不一致を認めている点は、今のAIブームにおける最大の「不都合な真実」と言えるでしょう。",
+      "author": {
+        "userName": "nobel_824",
+        "id": "3102399630",
+        "isBlueVerified": true
+      },
+      "createdAt": "Mon May 25 01:46:05 +0000 2026",
+      "lang": "ja",
+      "likeCount": 223,
+      "retweetCount": 61,
+      "replyCount": 2,
+      "quoteCount": 3,
+      "bookmarkCount": 15,
+      "viewCount": 80428,
+      "isReply": true,
+      "conversationId": "2058726257375027578",
+      "tweetUrl": "https://x.com/nobel_824/status/2058726263431573729"
+    },
+    "thread": [
+      {
+        "id": "2058726257375027578",
+        "text": "まじ？Microsoftが自社エンジニアにAI（Claude Code）の使用を事実上禁止しました。理由がかなり衝撃的で「AIを使うコストが、人間を雇うコストを上回ったから」という、これまでのAI導入の前提を根底から覆すようなものでした。\nhttps://t.co/SMw7nQgGCk \nこのニュースが示唆するAI活用の構造的限界について、実務的な視点で深掘りします。",
+        "author": {
+          "userName": "nobel_824",
+          "id": "3102399630",
+          "isBlueVerified": true
+        },
+        "createdAt": "Mon May 25 01:46:03 +0000 2026",
+        "lang": "ja",
+        "likeCount": 8031,
+        "retweetCount": 2907,
+        "replyCount": 146,
+        "quoteCount": 572,
+        "bookmarkCount": 2688,
+        "viewCount": 2496751,
+        "isReply": false,
+        "conversationId": "2058726257375027578",
+        "tweetUrl": "https://x.com/nobel_824/status/2058726257375027578",
+        "media": [
+          {
+            "type": "video",
+            "url": "https://pbs.twimg.com/ext_tw_video_thumb/2058546341312180224/pu/img/beuvKGDANEOJQOlN.jpg"
+          }
+        ]
+      },
+      {
+        "id": "2058726259421815225",
+        "text": "① 制御不能な「トークン課金」の経済性\nMicrosoftは10万人のエンジニアにClaude Codeを提供しましたが、開発、レビュー、デバッグのたびに発生するトークン費用が、企業予算の許容範囲を遥かに超えてしまいました。結果として、6月末までにライセンスをほぼ全廃し、自社の安価な内製ツールへの強制移行を命じています。投資先であるAnthropicの製品を「高すぎる」という理由で自ら禁止した事実は極めて重いです。",
+        "author": {
+          "userName": "nobel_824",
+          "id": "3102399630",
+          "isBlueVerified": true
+        },
+        "createdAt": "Mon May 25 01:46:04 +0000 2026",
+        "lang": "ja",
+        "likeCount": 298,
+        "retweetCount": 83,
+        "replyCount": 3,
+        "quoteCount": 3,
+        "bookmarkCount": 30,
+        "viewCount": 95545,
+        "isReply": true,
+        "conversationId": "2058726257375027578",
+        "tweetUrl": "https://x.com/nobel_824/status/2058726259421815225"
+      }
+    ]
+  },
+  {
+    "handle": "nobel_824",
+    "root": {
+      "id": "2054419919274725779",
+      "text": "Claude Codeを7分で最強環境にするセットアップ手順５つ書く。",
+      "author": {
+        "userName": "nobel_824",
+        "id": "3102399630",
+        "isBlueVerified": true
+      },
+      "createdAt": "Wed May 13 04:34:12 +0000 2026",
+      "lang": "ja",
+      "likeCount": 189,
+      "retweetCount": 6,
+      "replyCount": 1,
+      "quoteCount": 0,
+      "bookmarkCount": 333,
+      "viewCount": 29517,
+      "isReply": false,
+      "conversationId": "2054419919274725779",
+      "tweetUrl": "https://x.com/nobel_824/status/2054419919274725779"
+    },
+    "thread": [
+      {
+        "id": "2054419919274725779",
+        "text": "Claude Codeを7分で最強環境にするセットアップ手順５つ書く。",
+        "author": {
+          "userName": "nobel_824",
+          "id": "3102399630",
+          "isBlueVerified": true
+        },
+        "createdAt": "Wed May 13 04:34:12 +0000 2026",
+        "lang": "ja",
+        "likeCount": 189,
+        "retweetCount": 6,
+        "replyCount": 1,
+        "quoteCount": 0,
+        "bookmarkCount": 333,
+        "viewCount": 29517,
+        "isReply": false,
+        "conversationId": "2054419919274725779",
+        "tweetUrl": "https://x.com/nobel_824/status/2054419919274725779"
+      },
+      {
+        "id": "2054419922189738211",
+        "text": "①CLAUDE.mdを階層化する\nルールを1ファイルに全部書くと長くなって、読み込みコストも上がるんですよね。\n僕は context/ を切って分割してます: \n・brand-voice.md（口調ルール） \n・current-projects.md（進行中の案件） \n・about-me.md（自己紹介）\nCLAUDE.mdからは @context/brand-voice.md と参照するだけでOK。",
+        "author": {
+          "userName": "nobel_824",
+          "id": "3102399630",
+          "isBlueVerified": true
+        },
+        "createdAt": "Wed May 13 04:34:13 +0000 2026",
+        "lang": "ja",
+        "likeCount": 3,
+        "retweetCount": 0,
+        "replyCount": 1,
+        "quoteCount": 0,
+        "bookmarkCount": 15,
+        "viewCount": 2417,
+        "isReply": true,
+        "conversationId": "2054419919274725779",
+        "tweetUrl": "https://x.com/nobel_824/status/2054419922189738211"
+      }
+    ]
+  },
+  {
+    "handle": "nobel_824",
+    "root": {
+      "id": "2061303045582209271",
+      "text": "Anthropic公式が教える、AI活用の基礎がガチで学び深い。\n要点は一言で「良い回答は、お願いではなく業務設計から生まれる」でした。 https://t.co/1NFSQ6djPq",
+      "author": {
+        "userName": "nobel_824",
+        "id": "3102399630",
+        "isBlueVerified": true
+      },
+      "createdAt": "Mon Jun 01 04:25:17 +0000 2026",
+      "lang": "ja",
+      "likeCount": 64,
+      "retweetCount": 2,
+      "replyCount": 2,
+      "quoteCount": 1,
+      "bookmarkCount": 67,
+      "viewCount": 14562,
+      "isReply": false,
+      "conversationId": "2061303045582209271",
+      "tweetUrl": "https://x.com/nobel_824/status/2061303045582209271",
+      "media": [
+        {
+          "type": "video",
+          "url": "https://pbs.twimg.com/amplify_video_thumb/2061302750156296192/img/t_1o5Fh9xZfiWza0.jpg"
+        }
+      ]
+    },
+    "thread": [
+      {
+        "id": "2061303045582209271",
+        "text": "Anthropic公式が教える、AI活用の基礎がガチで学び深い。\n要点は一言で「良い回答は、お願いではなく業務設計から生まれる」でした。 https://t.co/1NFSQ6djPq",
+        "author": {
+          "userName": "nobel_824",
+          "id": "3102399630",
+          "isBlueVerified": true
+        },
+        "createdAt": "Mon Jun 01 04:25:17 +0000 2026",
+        "lang": "ja",
+        "likeCount": 64,
+        "retweetCount": 2,
+        "replyCount": 2,
+        "quoteCount": 1,
+        "bookmarkCount": 67,
+        "viewCount": 14562,
+        "isReply": false,
+        "conversationId": "2061303045582209271",
+        "tweetUrl": "https://x.com/nobel_824/status/2061303045582209271",
+        "media": [
+          {
+            "type": "video",
+            "url": "https://pbs.twimg.com/amplify_video_thumb/2061302750156296192/img/t_1o5Fh9xZfiWza0.jpg"
+          }
+        ]
+      }
+    ]
+  }
+]

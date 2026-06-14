@@ -36,6 +36,11 @@ yarn-error.log*
 # vercel
 .vercel
 
+# web-ui-bridge (dev only)
+.claude-ui-queue.jsonl
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+.web-ui-bridge-history.json
+.web-ui-bridge-token

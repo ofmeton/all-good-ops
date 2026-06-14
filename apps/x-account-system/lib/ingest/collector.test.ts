@@ -117,6 +117,30 @@ function tweet(id: string) {
 }
 
 describe("runCollect", () => {
+  test("collector_enabled=0: explore MA session を起動せずゼロ件で返す", async () => {
+    const stats = await runCollect({
+      anthropic: scoringAnthropic([]) as never,
+      sb: makeSbWithRuntimeParams({ collector_enabled: 0 }, []) as never,
+      twitterApiKey: "k",
+      fetchImpl: undefined as never,
+      apiKey: "sk-test",
+      runSession: async () => {
+        throw new Error("runSession must not be called when collector is disabled");
+      },
+      getAgentRef: async () => {
+        throw new Error("getAgentRef must not be called when collector is disabled");
+      },
+      now: Date.now(),
+    });
+    expect(stats).toEqual({
+      inserted: 0,
+      fetched: 0,
+      deduped: 0,
+      scored: 0,
+      cost: { exploreJpy: 0, scoringJpy: 0, translateJpy: 0, totalJpy: 0 },
+    });
+  });
+
   test("explore(MA session) → score → persist", async () => {
     const inserts: unknown[] = [];
     const stats = await runCollect({

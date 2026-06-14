@@ -1,0 +1,80 @@
+# web-ui-bridge — 引き継ぎ（2026-06-14 時点）
+
+> 動いている実 Next.js+Tailwind サイト上に dev 限定 overlay を注入し、要素をクリック/ドラッグして
+> **決定的に実コードを編集**（className literal 置換 / @babel/parser の AST 範囲入替）。複雑な構造・
+> 文言は「Claudeに頼む」キュー経由で Claude Code に橋渡し。**コードが正（source of truth）**。
+> UI は STUDIO（app.studio.design）を参照に寄せた**右ドック・ライトインスペクタ**。
+
+## 現状: 主要機能は出荷済み（PR #195–204・全て main マージ済み）
+- Phase 0: クリック→Claude プロンプト橋渡し（queue 経由）
+- Phase B / B.2: 直接調整（余白/詰め/サイズ/揃え/色/className、bp 全/sm/md/lg/xl 別）
+- Phase C: 構造編集（ドラッグ並べ替え / 別親移動 reparent / 複製 / 削除）— AST 決定的
+- undo/redo: ↶↷ ボタン＋⌘Z/⌘⇧Z・Ctrl+Z/Ctrl+Y。**履歴とトークンを永続化**（daemon 再起動でも有効）
+- STUDIO 風タブ式インスペクタ（テキスト/ボックス/変形/設定）＋実機 devtools 計測で**ライト配色**
+- セキュリティ硬化（127.0.0.1 のみ・Origin+token・path traversal 防御・token 0o600）
+- **STUDIO 95% パリティ詰め（2026-06-14・実機再計測）**:
+  - マージン/パディングを STUDIO 型 **ボックスウィジェット**（ロックトグル＋単一/2×2の4辺入力・↑→↓←方向アイコン）に。STUDIO 実機は「ネスト矩形図」でなく **2×2グリッド＋方向アイコン＋ロックトグル**だった（計測で判明）。表示は className優先→computed フォールバックで実効px（`p-4`/`px-6 py-4` 等のスケール・軸クラスも正しく px 表示）、書込は px arbitrary で **4辺ロスレス再構成**（軸 strip 時に直交辺を保全）、不一致集約は warn toast
+  - **条件スタイル＝状態（通常/ホバー）**: インスペクタ右上の状態セグメント。`PFX()=bp+state` 合成で全プロパティが `hover:`（bp併用 `md:hover:`）を読み書き。通常↔hover は相互破壊しない
+  - 実機実測でピクセル合わせ込み（入力セル #f7f7f7・角丸8px・高32px / タブ14px/40px / color swatch 24px / section 左16px）
+  - 実装は **Codex(gpt-5.5 high) 委任**＋Claude 設計/レビュー(code-reviewer・silent-failure-hunter)/実機 chrome-devtools 検証。全操作を実ブラウザで実操作確認済み（py-2→8px 読み・1辺編集の直交辺保全・hover分離・集約 warn）
+- **複数選択（2026-06-14）**: 修飾クリック（⌘/Shift+クリック）で要素を選択集合に追加/解除。primary=濃い青/他=半透明青ハイライト＋ヘッダ「N個選択中」＋チップ(×で解除)・Esc で選択モード解除。4アクション:
+  - **まとめてプロンプト**: `/enqueue` の `payloads:[...]` で複数 locator を1キューに（Claude 経路・常に可）
+  - **まとめて複製/削除**: `/structure-batch`（kind=delete/duplicate・1書込=1undo・削除後は適用分のみ選択解除）
+  - **まとめてスタイル一括**: `/apply-style-batch`。値が異なる要素は「—」mixed 表示→絶対入力で一律／± で各要素の現値から相対増減
+  - **D&D group 移動**: 同一親かつ class 一意なら `/reorder-group`（N要素を選択順保って一括移動・決定的）。別親が混在する選択は移動ツール(⇅)を無効化＋ツールチップ→「まとめてプロンプト」で Claude 移動。掴みは選択要素の内側(子)でも `contains` で group 判定
+  - 設計の核: バッチは daemon の純関数（`apply.mjs` applyStyleBatch/structureBatch・`reorder.mjs` moveGroupInSource）が範囲を集めて**降順 splice で1回適用**＝原子的・1undo。**同一 className は dedup**（map/loop で 1ソース→複数 DOM の二重適用を防ぐ）。一意特定不可/別親/別ファイルは **skip 理由を warn toast で表出**し Claude 経路へ（サイレント脱落なし）。reparent 分岐は削除範囲 overlap を検出して安全拒否
+  - 既知制約: バッチは**1ファイル単位**。複数選択が別コンポーネントファイルに跨ると、片方のファイルに適用し他は skip(「別ファイル→Claude経路」warn)。真の多ファイルバッチは未対応。ルート跨ぎ選択・グループの入れ子並べ替えも非スコープ
+  - 単体: `apply.test.mjs`(8) / `reorder.test.mjs`(22)。設計/計画: `docs/superpowers/specs/2026-06-14-web-ui-bridge-multi-select-design.md` / `docs/superpowers/plans/2026-06-14-web-ui-bridge-multi-select.md`
+- **右ドックがサイトに被らない（2026-06-14）**: インスペクタ表示中は `<html>` に右 margin-right ＋ `<body>` に transform を当て、`fixed inset-x-0` の全幅ヘッダー等も含めページをガター内へ回り込ませる（畳むと復帰）
+- **装飾の連続射影（2026-06-14・位置ズレ系を構造的に根絶）**: 選択枠/ホバー枠/ラベル/ドロップラインは以前 `getBoundingClientRect` のスナップショットを `position:fixed` でキャッシュしていたため、スクロール/リサイズ/オートスクロール/HMR再描画/遅延ロード/アニメ/祖先transform で取り残されていた。→ **アクティブ(選択orホバーorドラッグ)な間だけ回る単一 `requestAnimationFrame` ループ(`reproject()`)が毎フレーム全装飾をライブ rect から再配置**（read→write分離・DOM使い回し・`lastRect` skip・`resolveEl` が `payload.selector` で HMR ノード差し替えを再解決）。装飾が「スナップショット」から「ライブDOMへの単方向従属」になり、レイアウトが何の理由で動こうと次フレームが差を吸収＝**位置ズレは構造的に起こり得ない**。アイドルで rAF 完全停止(0フレーム)。`.hl`/`.hl2` の CSS transition は毎フレーム更新と競合するため除去。`window.__webUiBridgeAssert()`(dev限定)が「全装飾 rect ≈ 対象 rect(<1px)」を返す不変条件チェック口。
+  - **回帰スモーク** `apps/web-ui-bridge/smoke/`(Playwright): 選択×{スクロール/リサイズ/ホバー/HMR相当/複数選択/ドラッグdropline/アイドル停止} の9ステップで `__webUiBridgeAssert` mismatch 0 を機械検証。前提=daemon :7331＋terra :3001 起動済み。`cd apps/web-ui-bridge/smoke && npm install && npx playwright install chromium && npm run smoke`。今後この種の位置ズレ回帰を出荷前に検知する安全網。
+- **ユーザー操作バグ 一掃＋プローブパック（2026-06-14・dynamic workflow）**: 多レンズ並列で操作×不変条件のバグ仮説を生成→敵対的反証→実機で経験的確定→明白なものを修正。確定 clear バグ4件を修正: ①複数選択時の className直接編集/Apply/Reset が primary しか効かない→multi一括化（他スタイル操作と同様 `applyAbsoluteBatch`）②`renderBody` の innerHTML 再生成で入力中textarea値/フォーカスが消失→`pendingPrompt` 保持＋`captureInputFocus/restoreInputFocus` ③launcher 再オープンで renderBody 漏れ→openPanel統一 ④undo/redo後に選択要素の sourceClass が古く「編集→undo→再編集」が失敗→`doHistory` 後1200msで全selectionを現DOM classNameへ再同期。偽陽性（primaryIdx の chip 削除順＝primaryは常に最後で到達不能）は除外。
+  - **プローブパック** `apps/web-ui-bridge/smoke/`(probes/*.mjs + lib.mjs + run.mjs): 操作×不変条件を機械検証する持続資産。非破壊=並行/破壊=直列+各undo復帰、console.error は dev ノイズ除外し0件を不変条件に、最終 terra snapshot 一致でソース非汚染。`npm run probe`（`--only <cluster>`/`--list`）。実走 17緑+5skip(理由+代替カバレッジ明記=terra DOM依存で脆いもの。挙動は手動+別緑probe/reorder.testでカバー)。今回4修正の回帰(className単一/複数apply・undo後再編集)は緑。
+
+## 構成
+- **overlay** `apps/web-ui-bridge/overlay/overlay.js`: 自己完結 vanilla JS・Shadow DOM 隔離・SVG アイコン・daemon が origin/token を埋めて配信。
+- **daemon** `apps/web-ui-bridge/daemon/server.mjs`: Node http(:7331)。`/overlay.js` `/enqueue` `/apply-style` `/reorder` `/delete` `/duplicate` `/undo` `/redo` `/health`。依存 `@babel/parser`（reorder.mjs の AST 用）。
+- **reorder.mjs**: `moveInSource`/`deleteInSource`/`duplicateInSource`（決定的・整形保持・単体 `reorder.test.mjs` 17/17）。
+- **skill** `.claude/skills/web-ui-bridge/SKILL.md`: queue を読み実ソースへ反映（「キュー処理して」）。
+- **対象サイト**: `app/layout.tsx` の `</body>` 直前に dev 限定 `<script src="http://localhost:7331/overlay.js" async>` 1行。
+- **永続ファイル（target 配下・gitignore 済）**: `.claude-ui-queue.jsonl` / `.web-ui-bridge-history.json` / `.web-ui-bridge-token`。
+
+## 起動手順
+```bash
+# 初回のみ daemon 依存
+cd apps/web-ui-bridge/daemon && npm install && cd -
+# daemon（対象サイトを --target）
+node apps/web-ui-bridge/daemon/server.mjs --target outputs/clients/terra-isshiki/site
+# 対象サイト dev（注入1行は導入済み）
+cd outputs/clients/terra-isshiki/site && npm run dev   # → localhost:3001（3000 使用中なら 3001）
+```
+ブラウザで開く → 右ドックのインスペクタ。選択=カーソル / 移動=⇅ / 戻る進む=↶↷。
+
+パイロット = **terra葉山 HP**（`outputs/clients/terra-isshiki/site/` Next16+React19+Tailwind v4）。
+
+## 設計の要点（壊さないこと）
+- **全編集は決定的（Claude 不介在）**。className を一意特定できた時だけ実行し、複数一致/動的class/兄弟でない等は**安全側で拒否して「Claudeに頼む」経路へ誘導**。陸さんは非決定的（プロンプト→Claude）を嫌う。
+- 多義 prefix（`text-`/`font-`/`border-`/`rounded-`）は色/サイズ/方向別/階調を取り違えない**専用ストリップ**。`VAL` のバレア値はハイフン無し（`border-red-500` 等の巻き込み防止）。
+- Spike0: React19 は fiber に file:line 無・App Router の Server Component は名前が出ない → **file:line/component に依存しない**。
+- 色は STUDIO 実機（ライト）: 白#fff / 文字#1a1a1a / 罫線 rgba(34,34,34,.1)・#e5e5e5 / アクセント#222 / 選択ハイライトのみ青。
+
+## 残作業（次セッション）
+- 旧残作業①②④は 2026-06-14 に完了（上記「現状」参照）。①の「4辺＋図」は実機計測の結果「2×2グリッド＋方向アイコン＋ロックトグル」が正だった。
+- ③ 下部中央 bp バー位置・AI(✨) は **別物として再現しない**（我々は右ドック overlay＝キャンバスが実サイトそのもの。bp は右ドックのセグメントで足り、✨AI は Claude 経路が担う）。bp セグメントの配色/高さの微調整のみ実施済み。
+- **hover 以外の状態**（アニメーション/出現時/スクロール）は STUDIO にあるが当面スコープ外（必要時に state を拡張可能な作りにはなっている）。
+- 既存課題（このセッションでは未対応）: 幅/高さ/角丸/枠線の数値も `numOf(readUtil)` で **スケールクラスを px と誤読**する（spacing と同じ問題が pre-existing で残存）。spacing と同様の className優先→computed ハイブリッド読みに揃えると一貫する。
+- 要素の**新規追加**（STUDIO の追加パレット相当）は自由形＝「Claudeに頼む」経路で。
+- arbitrary 値（`pt-[20px]` 等）の **live プレビューは Tailwind dev が未生成のため即時反映されない**（commit→HMR で反映）。入力値表示は className 優先読みで保持されるので消えはしない。
+
+## 検証の作法（必須）
+ユーザーが取りうる操作は**全て実機ブラウザで実操作＋スクショ目視**で検証（D&D の実ドラッグ・別親移動・オートスクロール・再起動後 undo・壊れた後の復帰まで）。dispatch 成功や DOM count では不足。`reorder.test.mjs` も緑に保つ。
+
+## 運用上の注意
+- **同一機能の反復改善は worktree を使い回す**（増分ごとに新 worktree を切らない／merge 後 `git pull origin main` で同期）。今回 9 worktree＋terra 6回 reinstall の重複コストの反省。
+- worktree×Next16 Turbopack×next/font で dev が 500（font 解決不可）になったら、対象サイトで `rm -rf node_modules .next package-lock.json && npm install`。
+- daemon 再起動でトークンは同一（永続）なので開いたままのページも編集継続可。
+
+## 参照
+- 機能カタログ＆STUDIO 再現可否: [`STUDIO-PARITY.md`](./STUDIO-PARITY.md)
+- 使い方詳細: [`README.md`](./README.md)
+- recall: memory `project_web_ui_bridge` / 振り返り: `outputs/retrospectives/2026-06-14-web-ui-bridge-studio.md`
