@@ -197,5 +197,68 @@ export function elementLineRange(src, cls) {
   return { s, e, el: u.el };
 }
 
+export function moveGroupInSource(src, dragClasses, targetClass, position = "before") {
+  if (!Array.isArray(dragClasses) || dragClasses.length === 0) return { ok: false, reason: "missing-class" };
+  if (!targetClass) return { ok: false, reason: "missing-class" };
+  if (!["before", "after"].includes(position)) return { ok: false, reason: "bad-position" };
+  if (dragClasses.includes(targetClass)) return { ok: false, reason: "target-in-group" };
+
+  const tree = load(src); if (tree.err) return { ok: false, reason: tree.err };
+  const { all, parentOf } = tree;
+
+  const dragEls = [];
+  for (const cls of dragClasses) {
+    const u = unique(all, cls); if (u.err) return { ok: false, reason: u.err };
+    dragEls.push(u.el);
+  }
+  const t = unique(all, targetClass); if (t.err) return { ok: false, reason: t.err };
+  const targetEl = t.el;
+
+  // 全 dragEl が同一親であること（散らばりは Claude 経路）
+  const parents = new Set(dragEls.map((e) => parentOf.get(e)));
+  if (parents.size !== 1) return { ok: false, reason: "not-same-parent" };
+  const dragParent = [...parents][0];
+  if (!dragParent) return { ok: false, reason: "no-parent" };
+  const targetParent = parentOf.get(targetEl); if (!targetParent) return { ok: false, reason: "no-parent" };
+
+  // 非ネスト（target が group の祖先/子孫でない）
+  for (const d of dragEls) {
+    if (isAncestor(d, targetEl, parentOf) || isAncestor(targetEl, d, parentOf)) return { ok: false, reason: "nested" };
+  }
+
+  const dragSet = new Set(dragEls);
+  // dragClasses の順（=選択順）に並べた移動要素列
+  const orderedDrag = dragClasses.map((cls) => all.find((el) => classNameOf(el) === cls));
+
+  // --- 同一親移動: 空白スロット保持で要素順だけ入替（moveInSource と同方式の複数版） ---
+  if (dragParent === targetParent) {
+    const children = dragParent.children;
+    const elems = children.filter((c) => c.type === "JSXElement");
+    const rest = elems.filter((e) => !dragSet.has(e));         // 移動要素を抜いた残り
+    const tIdx = rest.indexOf(targetEl);
+    rest.splice(position === "before" ? tIdx : tIdx + 1, 0, ...orderedDrag); // target 位置にまとめて挿入
+    const firstStart = children[0].start, lastEnd = children[children.length - 1].end;
+    let slot = 0, region = "";
+    for (const c of children) {
+      if (c.type === "JSXElement") { const e = rest[slot++]; region += src.slice(e.start, e.end); }
+      else region += src.slice(c.start, c.end);
+    }
+    const out = src.slice(0, firstStart) + region + src.slice(lastEnd);
+    return out === src ? { ok: true, changed: false, src } : { ok: true, changed: true, src: out };
+  }
+
+  // --- 別親 reparent: group をまとめて削除し target 位置へ選択順で挿入 ---
+  const indent = indentBefore(targetParent.children, targetEl);
+  const joined = orderedDrag.map((e) => src.slice(e.start, e.end)).join(indent);
+  const insertText = position === "before" ? joined + indent : indent + joined;
+  const insertPos = position === "before" ? targetEl.start : targetEl.end;
+  // 各 dragEl の lineRange 削除 op（降順）＋挿入 op を集めて offset 降順適用
+  const ops = orderedDrag.map((e) => { const [s, en] = lineRange(dragParent.children, e); return { s, e: en, text: "" }; });
+  ops.push({ s: insertPos, e: insertPos, text: insertText });
+  ops.sort((a, b) => b.s - a.s);
+  let out = src; for (const op of ops) out = out.slice(0, op.s) + op.text + out.slice(op.e);
+  return { ok: true, changed: true, src: out };
+}
+
 // 後方互換（Phase C slice1 の呼び出し名）
 export const reorderInSource = moveInSource;
