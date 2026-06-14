@@ -1,0 +1,43 @@
+{
+  "name": "mf-finance",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "test": "node --test test/*.mjs",
+    "normalize": "node scripts/normalize.mjs",
+    "detect": "node scripts/detect-recurring.mjs",
+    "load": "node scripts/load.mjs",
+    "load:assets": "node scripts/load-assets.mjs",
+    "load:balances": "node scripts/load-balances.mjs",
+    "load:freee": "node scripts/load-freee.mjs",
+    "seed:recurring": "node scripts/seed-recurring.mjs",
+    "export:unknowns": "node scripts/export-unknowns.mjs",
+    "apply:rules": "node scripts/apply-rules.mjs",
+    "apply:overrides": "node scripts/apply-overrides.mjs",
+    "optimizer:export": "node scripts/optimizer-export.mjs",
+    "optimizer:propose": "node scripts/optimizer-propose.mjs",
+    "refresh": "npm run normalize && npm run load && npm run apply:rules && npm run apply:overrides && npm run load:assets && npm run load:balances"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.8.1",
+    "next": "16.2.7",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "server-only": "^0.0.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/better-sqlite3": "^7.6.11",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.7",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
