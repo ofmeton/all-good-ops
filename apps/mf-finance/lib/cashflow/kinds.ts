@@ -14,6 +14,8 @@ export const KIND_LABEL: Record<BalanceKind, string> = {
 
 export const KIND_OPTIONS: BalanceKind[] = ["bank", "card", "emoney", "cash", "crypto", "other"];
 
+export const WEEKDAY_LABELS = ["日", "月", "火", "水", "木", "金", "土"] as const;
+
 // 口座名 → kind の既定推定（投入時/未設定時のフォールバック）。
 export function guessKind(account: string): BalanceKind {
   if (/銀行|ゆうちょ|bank/i.test(account)) return "bank";

@@ -5,6 +5,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import Database from 'better-sqlite3';
+import { applyRecurringMigrations } from '../db/migrate.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const appRoot = join(__dirname, '..');
@@ -32,7 +33,9 @@ if (!Array.isArray(records)) {
 
 const db = new Database(dbPath);
 db.pragma('journal_mode = WAL');
+db.pragma('foreign_keys = ON');
 db.exec(readFileSync(schemaPath, 'utf8')); // IF NOT EXISTS のみ＝冪等
+applyRecurringMigrations(db);
 
 const ymRe = /^\d{4}-(0[1-9]|1[0-2])$/;
 // 数値正規化。非数値は null（NOT NULL 制約なしの列なので欠損許容）。

@@ -28,7 +28,7 @@ export default function SettingsPage() {
         </p>
       </header>
 
-      <RecurringEditor items={recurring} />
+      <RecurringEditor items={recurring} occurrences={[]} />
       <ManualLiabilityForm items={liabilities} />
     </main>
   );

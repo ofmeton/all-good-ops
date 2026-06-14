@@ -6,6 +6,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import Database from 'better-sqlite3';
 import { parseCsv } from './lib/csv.mjs';
+import { applyRecurringMigrations } from '../db/migrate.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const appRoot = join(__dirname, '..');
@@ -36,6 +37,7 @@ const db = new Database(dbPath);
 db.pragma('journal_mode = WAL');
 db.pragma('foreign_keys = ON');
 db.exec(readFileSync(schemaPath, 'utf8'));
+applyRecurringMigrations(db);
 
 // raw/finance/moneyforward/asset-history-*.csv を全て対象（複数あれば全部投入＝冪等）。
 const files = readdirSync(assetDir)

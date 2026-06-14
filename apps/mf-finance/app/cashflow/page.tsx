@@ -2,6 +2,7 @@ import {
   getRollingCashflow,
   getScheduledList,
   getAllAccountBalances,
+  getUpcomingOccurrences,
 } from "@/lib/cashflow-queries";
 import { getRecurringItems } from "@/lib/write-queries";
 import { RecurringEditor } from "@/app/components/RecurringEditor";
@@ -16,6 +17,7 @@ export default function CashflowPage() {
   const rolling = getRollingCashflow(30);
   const scheduled = getScheduledList();
   const recurring = getRecurringItems();
+  const occurrences = getUpcomingOccurrences(60);
   const balances = getAllAccountBalances();
 
   return (
@@ -47,7 +49,7 @@ export default function CashflowPage() {
         <p className="mb-1 text-[11px] text-muted">
           毎月くり返す収入・固定費はここで管理します（単発予定と二重に登録しないでください）。
         </p>
-        <RecurringEditor items={recurring} />
+        <RecurringEditor items={recurring} occurrences={occurrences} />
       </section>
 
       <AccountBalanceEditor items={balances} />

@@ -33,11 +33,25 @@ CREATE TABLE IF NOT EXISTS recurring_items (
   match_pattern TEXT,
   amount        INTEGER NOT NULL,
   day           INTEGER,
+  frequency     TEXT NOT NULL DEFAULT 'monthly' CHECK (frequency IN ('monthly','weekly')),
+  weekday       INTEGER,
+  amount_type   TEXT NOT NULL DEFAULT 'fixed' CHECK (amount_type IN ('fixed','variable')),
   source_type   TEXT,
   active        INTEGER NOT NULL DEFAULT 1 CHECK (active IN (0, 1)),
   confirmed     TEXT NOT NULL DEFAULT 'auto' CHECK (confirmed IN ('auto', 'user')),
   created_at    TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
 );
+
+CREATE TABLE IF NOT EXISTS recurring_overrides (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  recurring_id INTEGER NOT NULL REFERENCES recurring_items(id) ON DELETE CASCADE,
+  occurrence_date TEXT NOT NULL,
+  skip INTEGER NOT NULL DEFAULT 0 CHECK (skip IN (0,1)),
+  amount INTEGER,
+  created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')),
+  UNIQUE (recurring_id, occurrence_date)
+);
+CREATE INDEX IF NOT EXISTS idx_recurring_overrides_rid ON recurring_overrides (recurring_id);
 
 CREATE TABLE IF NOT EXISTS account_status (
   id              INTEGER PRIMARY KEY AUTOINCREMENT,

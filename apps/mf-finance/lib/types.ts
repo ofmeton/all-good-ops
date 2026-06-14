@@ -22,6 +22,9 @@ export interface RecurringItem {
   name: string;
   amount: number; // 正の magnitude
   day: number | null;
+  frequency: "monthly" | "weekly";
+  weekday: number | null;
+  amount_type: "fixed" | "variable";
   active: number; // 0/1
   confirmed: "auto" | "user";
 }

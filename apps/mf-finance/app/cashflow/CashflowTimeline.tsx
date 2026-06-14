@@ -1,5 +1,6 @@
 import type { RollingCashflow } from "@/lib/cashflow-queries";
 import { yen, shortDate } from "@/lib/format";
+import { OccurrenceActions } from "@/app/cashflow/OccurrenceActions";
 
 // 向こう1ヶ月の資金繰りタイムライン（server）。
 // getRollingCashflow(30) の起点残高 → events を日付順に残高推移で表示。
@@ -92,6 +93,11 @@ export function CashflowTimeline({ rolling }: { rolling: RollingCashflow }) {
               {events.map((ev, i) => {
                 const negative = ev.balanceAfter < 0;
                 const isIncome = ev.kind === "income";
+                const isRecurring =
+                  ev.kind === "income" &&
+                  ev.source === "recurring" &&
+                  ev.recurringId != null &&
+                  ev.occurrenceDate != null;
                 return (
                   <tr
                     key={`${ev.date}-${ev.source}-${i}`}
@@ -105,6 +111,13 @@ export function CashflowTimeline({ rolling }: { rolling: RollingCashflow }) {
                     </th>
                     <td className="py-2 pr-2 text-xs text-foreground">
                       {ev.name}
+                      {isRecurring && (
+                        <OccurrenceActions
+                          recurringId={ev.recurringId!}
+                          occurrenceDate={ev.occurrenceDate!}
+                          status={ev.status}
+                        />
+                      )}
                     </td>
                     <td
                       className={`tabular whitespace-nowrap py-2 pl-2 text-right text-xs font-medium ${
@@ -117,7 +130,7 @@ export function CashflowTimeline({ rolling }: { rolling: RollingCashflow }) {
                       <span className="sr-only">
                         {isIncome ? "入金 " : "引落 "}
                       </span>
-                      ¥{yen(ev.amount)}
+                      {ev.status === "pending" ? "未定" : `¥${yen(ev.amount)}`}
                     </td>
                     <td
                       className={`tabular whitespace-nowrap py-2 pl-2 text-right text-xs font-semibold ${

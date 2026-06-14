@@ -40,10 +40,14 @@ export function getDisposable(year: number, month: number): HomeData {
   const recurring = db
     .prepare("SELECT * FROM recurring_items WHERE active = 1")
     .all() as RecurringItem[];
+  const overrides = db
+    .prepare("SELECT recurring_id, occurrence_date, skip, amount FROM recurring_overrides")
+    .all();
 
   const disposable = computeMonthlyDisposable(txs, recurring, {
     year,
     month,
+    overrides,
   }) as DisposableResult;
   return { year, month, disposable };
 }

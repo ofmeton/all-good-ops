@@ -10,6 +10,7 @@ import { revalidatePath } from "next/cache";
 function revalidate(): void {
   revalidatePath("/");
   revalidatePath("/settings");
+  revalidatePath("/cashflow");
 }
 
 // 正の整数に正規化（金額・残高など magnitude 用）。NaN は 0。
@@ -33,6 +34,30 @@ function trimOrNull(v: unknown): string | null {
   if (typeof v !== "string") return null;
   const t = v.trim();
   return t.length > 0 ? t : null;
+}
+
+function parseMonthlyDay(v: unknown, required: boolean): number | null {
+  if (v == null || v === "") {
+    if (required) throw new Error("日を1〜31で入力してください");
+    return null;
+  }
+  const d = Number(v);
+  if (!Number.isInteger(d) || d < 1 || d > 31) {
+    throw new Error("日を1〜31で入力してください");
+  }
+  return d;
+}
+
+function positiveOverrideAmount(v: unknown): number {
+  const n = Number(v);
+  if (!Number.isFinite(n) || n <= 0) {
+    throw new Error("金額は正の数で入力してください");
+  }
+  const rounded = Math.round(n);
+  if (rounded <= 0) {
+    throw new Error("金額は正の数で入力してください");
+  }
+  return rounded;
 }
 
 // --- recurring_items ---
@@ -65,21 +90,53 @@ export interface AddRecurringInput {
   name: string;
   amount: number;
   day?: number | null;
+  frequency?: "monthly" | "weekly";
+  weekday?: number | null;
+  amount_type?: "fixed" | "variable";
 }
 
 export async function addRecurring(input: AddRecurringInput): Promise<void> {
   const kind = input.kind === "income" ? "income" : "expense";
   const name = trimOrNull(input.name);
   if (!name) throw new Error("名前は必須です");
-  const amount = toPositiveInt(input.amount);
+  let amount = toPositiveInt(input.amount);
   let day: number | null = null;
-  if (input.day != null) {
-    const d = Number(input.day);
-    if (Number.isInteger(d) && d >= 1 && d <= 31) day = d;
+  let frequency: "monthly" | "weekly" = "monthly";
+  let weekday: number | null = null;
+  let amountType: "fixed" | "variable" = "fixed";
+
+  if (kind === "income") {
+    frequency = input.frequency === "weekly" ? "weekly" : "monthly";
+    amountType = input.amount_type === "variable" ? "variable" : "fixed";
   }
+
+  if (kind === "expense") {
+    frequency = "monthly";
+    weekday = null;
+    amountType = "fixed";
+    day = parseMonthlyDay(input.day, false);
+  } else if (frequency === "weekly") {
+    const wd = Number(input.weekday);
+    if (!Number.isInteger(wd) || wd < 0 || wd > 6) {
+      throw new Error("曜日を選択してください");
+    }
+    day = null;
+    weekday = wd;
+  } else {
+    day = parseMonthlyDay(input.day, true);
+    weekday = null;
+  }
+
+  if (amountType === "fixed" && amount <= 0) {
+    throw new Error("金額は正の数で入力してください");
+  }
+  if (amountType === "variable") {
+    amount = 0;
+  }
+
   db.prepare(
-    "INSERT INTO recurring_items (kind, name, amount, day, active, confirmed) VALUES (?, ?, ?, ?, 1, 'user')",
-  ).run(kind, name, amount, day);
+    "INSERT INTO recurring_items (kind, name, amount, day, frequency, weekday, amount_type, active, confirmed) VALUES (?, ?, ?, ?, ?, ?, ?, 1, 'user')",
+  ).run(kind, name, amount, day, frequency, weekday, amountType);
   revalidate();
 }
 
@@ -87,6 +144,66 @@ export async function deleteRecurring(id: number): Promise<void> {
   const _id = ensureId(id);
   db.prepare("DELETE FROM recurring_items WHERE id = ?").run(_id);
   revalidate();
+}
+
+function ensureIsoDate(date: unknown): string {
+  const s = trimOrNull(date);
+  if (!s || !/^\d{4}-\d{2}-\d{2}$/.test(s)) {
+    throw new Error("日付形式が不正です");
+  }
+  return s;
+}
+
+export async function setOccurrenceOverride(
+  recurringId: number,
+  date: string,
+  patch: { skip?: boolean; amount?: number | null },
+): Promise<void> {
+  const _id = ensureId(recurringId);
+  const occurrenceDate = ensureIsoDate(date);
+  const recurring = db
+    .prepare("SELECT kind FROM recurring_items WHERE id = ?")
+    .get(_id) as { kind: "income" | "expense" } | undefined;
+  if (!recurring) throw new Error("定期項目が見つかりません");
+  if (recurring.kind !== "income") {
+    throw new Error("発生回の上書きは定期収入のみ対応しています");
+  }
+  const skip = patch.skip === true ? 1 : 0;
+  const amount =
+    Object.prototype.hasOwnProperty.call(patch, "amount") && patch.amount != null
+      ? positiveOverrideAmount(patch.amount)
+      : null;
+
+  db.prepare(
+    `INSERT INTO recurring_overrides (recurring_id, occurrence_date, skip, amount)
+     VALUES (?, ?, ?, ?)
+     ON CONFLICT(recurring_id, occurrence_date) DO UPDATE SET
+       skip = excluded.skip,
+       amount = excluded.amount`,
+  ).run(_id, occurrenceDate, skip, amount);
+  revalidatePath("/");
+  revalidatePath("/cashflow");
+}
+
+export async function clearOccurrenceOverride(
+  recurringId: number,
+  date: string,
+): Promise<void> {
+  const _id = ensureId(recurringId);
+  const occurrenceDate = ensureIsoDate(date);
+  const recurring = db
+    .prepare("SELECT kind FROM recurring_items WHERE id = ?")
+    .get(_id) as { kind: "income" | "expense" } | undefined;
+  if (!recurring) throw new Error("定期項目が見つかりません");
+  if (recurring.kind !== "income") {
+    throw new Error("発生回の上書きは定期収入のみ対応しています");
+  }
+  db.prepare("DELETE FROM recurring_overrides WHERE recurring_id = ? AND occurrence_date = ?").run(
+    _id,
+    occurrenceDate,
+  );
+  revalidatePath("/");
+  revalidatePath("/cashflow");
 }
 
 // --- manual_liabilities ---

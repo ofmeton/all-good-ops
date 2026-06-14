@@ -124,7 +124,9 @@ export function CashflowMiniChart({ data }: { data: RollingCashflow }) {
               <th scope="row">{shortDate(e.date)}</th>
               <td>{e.name}</td>
               <td>
-                {e.kind === "income" ? "+" : "−"}¥{yen(e.amount)}
+                {e.status === "pending"
+                  ? "未定"
+                  : `${e.kind === "income" ? "+" : "−"}¥${yen(e.amount)}`}
               </td>
               <td>¥{yenSigned(e.balanceAfter)}</td>
             </tr>

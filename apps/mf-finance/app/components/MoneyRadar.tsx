@@ -236,7 +236,7 @@ export function MoneyRadar() {
                         income ? "text-positive" : "text-foreground"
                       }`}
                     >
-                      {income ? "+" : "−"}¥{yen(e.amount)}
+                      {e.status === "pending" ? "未定" : `${income ? "+" : "−"}¥${yen(e.amount)}`}
                     </span>
                   </li>
                 );

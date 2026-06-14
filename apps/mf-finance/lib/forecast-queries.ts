@@ -1,6 +1,7 @@
 import "server-only";
 import { db } from "@/lib/db";
 import { addMonths, formatYm } from "@/lib/format";
+import { monthlyRecurringContribution } from "@/lib/cashflow/rolling.mjs";
 
 // /assets ページ専用: キャッシュフロー予測（今後 N ヶ月）。
 // 既存 lib/queries.ts / calendar-queries.ts には触れず本ファイルで自己完結させる。
@@ -73,6 +74,11 @@ function recentVariableActuals(
   }[];
 }
 
+function parseYm(ym: string): { year: number; month: number } {
+  const [year, month] = ym.split("-").map(Number);
+  return { year, month };
+}
+
 export function getForecast(months = 6): Forecast {
   // 起点残高（asset_history 最新 total）。
   const asset = db
@@ -85,16 +91,28 @@ export function getForecast(months = 6): Forecast {
   const baseDate = asset?.date ?? null;
   const startBalance = asset?.total ?? 0;
 
-  // 定期収入・支出（recurring_items.amount は正の magnitude）。
-  const rec = db
+  const recurring = db
     .prepare(
-      `SELECT
-         COALESCE(SUM(CASE WHEN kind = 'income' THEN amount ELSE 0 END), 0) AS income,
-         COALESCE(SUM(CASE WHEN kind = 'expense' THEN amount ELSE 0 END), 0) AS expense
+      `SELECT id, kind, name, amount, day, frequency, weekday, amount_type
        FROM recurring_items
        WHERE active = 1`,
     )
-    .get() as { income: number; expense: number };
+    .all() as {
+    id: number;
+    kind: "income" | "expense";
+    name: string;
+    amount: number;
+    day: number | null;
+    frequency: "monthly" | "weekly";
+    weekday: number | null;
+    amount_type: "fixed" | "variable";
+  }[];
+  const overrides = db
+    .prepare("SELECT recurring_id, occurrence_date, skip, amount FROM recurring_overrides")
+    .all();
+  const recurringExpense = recurring
+    .filter((r) => r.kind === "expense")
+    .reduce((sum, r) => sum + r.amount, 0);
 
   // 変動費見込み = 直近 3 populated 確定月の variable 実績平均。
   const varMonths = recentVariableActuals(3);
@@ -113,15 +131,20 @@ export function getForecast(months = 6): Forecast {
     )
     .get() as { total: number };
 
-  const projectedNet = rec.income - rec.expense - variableAvg - liab.total;
-
   // 当月から months ヶ月分を累積（当月は按分しない単純月次）。
   const startYm = baseDate ? baseDate.slice(0, 7) : currentYm();
   let balance = startBalance;
   let firstNegativeYm: string | null = null;
   const points: ForecastPoint[] = [];
+  let assumptionsRecurringIncome = 0;
   for (let i = 0; i < months; i++) {
     const ym = addMonths(startYm, i);
+    const { year, month } = parseYm(ym);
+    const recurringIncome = recurring
+      .filter((r) => r.kind === "income")
+      .reduce((sum, r) => sum + monthlyRecurringContribution(r, year, month, overrides), 0);
+    if (i === 0) assumptionsRecurringIncome = recurringIncome;
+    const projectedNet = recurringIncome - recurringExpense - variableAvg - liab.total;
     balance += projectedNet;
     if (balance < 0 && firstNegativeYm === null) firstNegativeYm = ym;
     points.push({ ym, projectedNet, projectedBalance: balance });
@@ -133,8 +156,8 @@ export function getForecast(months = 6): Forecast {
     points,
     firstNegativeYm,
     assumptions: {
-      recurringIncome: rec.income,
-      recurringExpense: rec.expense,
+      recurringIncome: assumptionsRecurringIncome,
+      recurringExpense,
       variableAvg,
       variableBasisYms: varMonths.map((m) => m.ym),
       liabilityPayment: liab.total,

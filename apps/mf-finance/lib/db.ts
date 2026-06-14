@@ -1,6 +1,7 @@
 import "server-only";
 import { join } from "node:path";
 import Database from "better-sqlite3";
+import { applyRecurringMigrations } from "../db/migrate.mjs";
 
 // better-sqlite3 は同期 API。server component / server action から直接呼べる（Promise不要）。
 // HMR で多重オープンしないよう globalThis にシングルトンをキャッシュ。
@@ -11,6 +12,7 @@ function openDb(): Database.Database {
   const d = new Database(dbPath, { readonly: false, fileMustExist: false });
   d.pragma("journal_mode = WAL");
   d.pragma("foreign_keys = ON");
+  applyRecurringMigrations(d);
   return d;
 }
 

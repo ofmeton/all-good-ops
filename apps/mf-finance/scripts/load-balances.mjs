@@ -5,6 +5,7 @@ import { readFileSync, existsSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import Database from "better-sqlite3";
+import { applyRecurringMigrations } from "../db/migrate.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const appRoot = join(__dirname, "..");
@@ -28,7 +29,9 @@ if (!existsSync(jsonPath)) {
 
 const db = new Database(dbPath);
 db.pragma("journal_mode = WAL");
+db.pragma("foreign_keys = ON");
 db.exec(readFileSync(schemaPath, "utf8"));
+applyRecurringMigrations(db);
 
 const rows = JSON.parse(readFileSync(jsonPath, "utf8"));
 if (!Array.isArray(rows)) {

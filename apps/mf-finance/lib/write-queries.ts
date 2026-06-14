@@ -11,6 +11,9 @@ export interface RecurringRow {
   name: string;
   amount: number; // 正の magnitude
   day: number | null;
+  frequency: "monthly" | "weekly";
+  weekday: number | null;
+  amount_type: "fixed" | "variable";
   active: number; // 0/1
   confirmed: "auto" | "user";
 }
@@ -29,7 +32,7 @@ export interface LiabilityRow {
 export function getRecurringItems(): RecurringRow[] {
   return db
     .prepare(
-      "SELECT id, kind, name, amount, day, active, confirmed FROM recurring_items ORDER BY kind, day IS NULL, day, id",
+      "SELECT id, kind, name, amount, day, frequency, weekday, amount_type, active, confirmed FROM recurring_items ORDER BY kind, frequency, day IS NULL, day, weekday, id",
     )
     .all() as RecurringRow[];
 }

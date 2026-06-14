@@ -2,7 +2,12 @@ import "server-only";
 import { db } from "@/lib/db";
 import { getLatestAsset } from "@/lib/calendar-queries";
 // 純ロジック（DB非依存・テスト済み）。
-import { buildRolling, buildUpcomingWithdrawals } from "@/lib/cashflow/rolling.mjs";
+import {
+  buildRolling,
+  buildUpcomingWithdrawals,
+  monthlyOccurrences,
+  resolveOccurrence,
+} from "@/lib/cashflow/rolling.mjs";
 // kind 定数は client/server 両用の純モジュールへ分離（client が db を引き込まないため）。
 import { type BalanceKind, KIND_LABEL, guessKind } from "@/lib/cashflow/kinds";
 export { type BalanceKind, KIND_LABEL, guessKind };
@@ -67,11 +72,36 @@ function startBalance(): { start: number; baseDate: string | null } {
   return { start: asset?.total ?? 0, baseDate: asset?.date ?? null };
 }
 
-function activeRecurring(): { kind: "income" | "expense"; name: string; amount: number; day: number | null }[] {
-  return db
-    .prepare("SELECT kind, name, amount, day FROM recurring_items WHERE active = 1")
-    .all() as { kind: "income" | "expense"; name: string; amount: number; day: number | null }[];
+export interface ActiveRecurringRow {
+  id: number;
+  kind: "income" | "expense";
+  name: string;
+  amount: number;
+  day: number | null;
+  frequency: "monthly" | "weekly";
+  weekday: number | null;
+  amount_type: "fixed" | "variable";
 }
+
+export interface RecurringOverrideRow {
+  recurring_id: number;
+  occurrence_date: string;
+  skip: number;
+  amount: number | null;
+}
+
+function activeRecurring(): ActiveRecurringRow[] {
+  return db
+    .prepare("SELECT id, kind, name, amount, day, frequency, weekday, amount_type FROM recurring_items WHERE active = 1")
+    .all() as ActiveRecurringRow[];
+}
+
+export function getRecurringOverrides(): RecurringOverrideRow[] {
+  return db
+    .prepare("SELECT recurring_id, occurrence_date, skip, amount FROM recurring_overrides")
+    .all() as RecurringOverrideRow[];
+}
+
 function scheduledRows(): { kind: "income" | "expense"; name: string; amount: number; date: string }[] {
   return db
     .prepare("SELECT kind, name, amount, scheduled_date AS date FROM scheduled_cashflow ORDER BY scheduled_date")
@@ -144,6 +174,9 @@ export interface RollingEvent {
   name: string;
   amount: number;
   source: string;
+  recurringId?: number;
+  occurrenceDate?: string;
+  status: "normal" | "pending" | "skipped";
   balanceAfter: number;
 }
 export interface RollingCashflow {
@@ -160,12 +193,14 @@ export interface RollingCashflow {
 // 向こう days 日のローリング資金繰り（recurring + scheduled。カード見込みは別参考値）。
 export function getRollingCashflow(days = 30): RollingCashflow {
   const { start, baseDate } = startBalance();
+  const overrides = getRecurringOverrides();
   const r = buildRolling({
     today: todayIso(),
     days,
     startBalance: start,
     recurring: activeRecurring(),
     scheduled: scheduledRows(),
+    overrides,
   });
   return {
     start: r.start,
@@ -177,4 +212,59 @@ export function getRollingCashflow(days = 30): RollingCashflow {
     firstNegativeDate: r.firstNegativeDate,
     cardChargeEstimate: getNextMonthCardCharge().total,
   };
+}
+
+export interface UpcomingOccurrence {
+  recurringId: number;
+  name: string;
+  date: string;
+  weekday: number;
+  status: "normal" | "pending" | "skipped";
+  amount: number;
+  overrideSkip: boolean;
+  overrideAmount: number | null;
+}
+
+function addMonthsToYearMonth(year: number, month: number, delta: number): { year: number; month: number } {
+  const zero = year * 12 + (month - 1) + delta;
+  return { year: Math.floor(zero / 12), month: (zero % 12) + 1 };
+}
+
+export function getUpcomingOccurrences(days = 60): UpcomingOccurrence[] {
+  const today = todayIso();
+  const end = (() => {
+    const [y, m, d] = today.split("-").map(Number);
+    const t = new Date(Date.UTC(y, m - 1, d + days));
+    return `${t.getUTCFullYear()}-${String(t.getUTCMonth() + 1).padStart(2, "0")}-${String(t.getUTCDate()).padStart(2, "0")}`;
+  })();
+  const [startYear, startMonth] = today.split("-").map(Number);
+  const monthSpan = Math.ceil((days + 31) / 28);
+  const recurring = activeRecurring().filter((r) => r.kind === "income");
+  const overrides = new Map(
+    getRecurringOverrides().map((ov) => [`${ov.recurring_id}|${ov.occurrence_date}`, ov]),
+  );
+  const out: UpcomingOccurrence[] = [];
+
+  for (const r of recurring) {
+    for (let i = 0; i < monthSpan; i++) {
+      const { year, month } = addMonthsToYearMonth(startYear, startMonth, i);
+      for (const date of monthlyOccurrences(r, year, month)) {
+        if (date < today || date > end) continue;
+        const ov = overrides.get(`${r.id}|${date}`) as RecurringOverrideRow | undefined;
+        const occurrence = resolveOccurrence(r, ov);
+        out.push({
+          recurringId: r.id,
+          name: r.name,
+          date,
+          weekday: new Date(Date.UTC(year, month - 1, Number(date.slice(8, 10)))).getUTCDay(),
+          status: occurrence.status as "normal" | "pending" | "skipped",
+          amount: occurrence.amount,
+          overrideSkip: Boolean(ov?.skip),
+          overrideAmount: ov?.amount ?? null,
+        });
+      }
+    }
+  }
+
+  return out.sort((a, b) => a.date.localeCompare(b.date) || a.recurringId - b.recurringId);
 }

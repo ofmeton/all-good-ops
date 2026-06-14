@@ -25,6 +25,57 @@ export function effectiveDay(day, year, month) {
   return Math.min(day, daysInMonth(year, month));
 }
 
+export function weekdayOf(iso) {
+  const { y, m, d } = parse(iso);
+  return new Date(Date.UTC(y, m - 1, d)).getUTCDay();
+}
+
+export function indexOverrides(arr) {
+  if (arr instanceof Map) return arr;
+  const map = new Map();
+  for (const ov of arr ?? []) {
+    map.set(`${ov.recurring_id}|${ov.occurrence_date}`, ov);
+  }
+  return map;
+}
+
+export function resolveOccurrence(r, ov) {
+  if (ov?.skip) return { status: "skipped", amount: 0 };
+  if (ov?.amount != null) return { status: "normal", amount: Math.abs(ov.amount) };
+  if (r.amount_type === "variable") return { status: "pending", amount: 0 };
+  return { status: "normal", amount: Math.abs(r.amount) };
+}
+
+export function monthlyOccurrences(r, year, month) {
+  if (r.frequency === "weekly" && r.weekday != null) {
+    const out = [];
+    const dim = daysInMonth(year, month);
+    for (let d = 1; d <= dim; d++) {
+      const date = fmt(year, month, d);
+      if (weekdayOf(date) === Number(r.weekday)) out.push(date);
+    }
+    return out;
+  }
+  // weekly は weekday 必須。DB 外から壊れた行が来た場合は発生なしとして扱う。
+  if (r.frequency === "weekly") return [];
+  if (r.day == null) return [];
+  return [fmt(year, month, effectiveDay(r.day, year, month))];
+}
+
+export function monthlyRecurringContribution(r, year, month, overrides = []) {
+  const ovMap = indexOverrides(overrides);
+  const dates = monthlyOccurrences(r, year, month);
+  if (dates.length === 0 && r.frequency !== "weekly") {
+    const occurrence = resolveOccurrence(r, undefined);
+    return occurrence.status === "normal" ? occurrence.amount : 0;
+  }
+  return dates.reduce((sum, date) => {
+    const ov = ovMap.get(`${r.id}|${date}`);
+    const occurrence = resolveOccurrence(r, ov);
+    return occurrence.status === "normal" ? sum + occurrence.amount : sum;
+  }, 0);
+}
+
 // 純: today(含む)〜today+days のイベントと残高推移を返す。
 // recurring: [{kind:'income'|'expense', name, amount(正), day}]
 // scheduled: [{kind, name, amount(正), date:'YYYY-MM-DD'}]
@@ -34,21 +85,39 @@ export function buildRolling(opts) {
   const startBalance = opts.startBalance ?? 0;
   const recurring = opts.recurring ?? [];
   const scheduled = opts.scheduled ?? [];
+  const overrides = indexOverrides(opts.overrides ?? []);
   const events = [];
   for (let i = 0; i <= days; i++) {
     const date = addDays(today, i);
     const { y, m, d } = parse(date);
-    // recurring: その月の effectiveDay と一致する日に発火
+    // recurring: monthly は effectiveDay、weekly は曜日一致で発火。
     for (const r of recurring) {
-      if (r.day == null) continue;
-      if (effectiveDay(r.day, y, m) === d) {
-        events.push({ date, kind: r.kind, name: r.name, amount: Math.abs(r.amount), source: "recurring" });
+      const fires =
+        r.frequency === "weekly" && r.weekday != null
+          ? weekdayOf(date) === Number(r.weekday)
+          : r.day != null && effectiveDay(r.day, y, m) === d;
+      if (fires) {
+        const occurrenceDate = date;
+        const ov = overrides.get(`${r.id}|${occurrenceDate}`);
+        const occurrence = resolveOccurrence(r, ov);
+        if (occurrence.status !== "skipped") {
+          events.push({
+            date,
+            kind: r.kind,
+            name: r.name,
+            amount: occurrence.amount,
+            source: "recurring",
+            recurringId: r.id,
+            occurrenceDate,
+            status: occurrence.status,
+          });
+        }
       }
     }
     // scheduled: 日付完全一致
     for (const s of scheduled) {
       if (s.date === date) {
-        events.push({ date, kind: s.kind, name: s.name, amount: Math.abs(s.amount), source: "scheduled" });
+        events.push({ date, kind: s.kind, name: s.name, amount: Math.abs(s.amount), source: "scheduled", status: "normal" });
       }
     }
   }
@@ -57,9 +126,11 @@ export function buildRolling(opts) {
   let minBalance = startBalance;
   let firstNegativeDate = null;
   const withBalance = events.map((e) => {
-    running += e.kind === "income" ? e.amount : -e.amount;
-    if (running < minBalance) minBalance = running;
-    if (running < 0 && firstNegativeDate == null) firstNegativeDate = e.date;
+    if (e.status === "normal") {
+      running += e.kind === "income" ? e.amount : -e.amount;
+      if (running < minBalance) minBalance = running;
+      if (running < 0 && firstNegativeDate == null) firstNegativeDate = e.date;
+    }
     return { ...e, balanceAfter: running };
   });
   return {
