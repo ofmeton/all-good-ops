@@ -292,9 +292,22 @@
     toast._t = setTimeout(() => { $toast.style.display = "none"; }, 2600);
   }
 
+  // ページに右ガター(余白)を空け、ドックが実サイトに被らないようにする。
+  // ・html margin-right で通常フローを左へ回り込ませる（body 幅 = 100%-W になる）。
+  // ・body に transform を当て、サイト側の position:fixed/sticky の包含ブロックを
+  //   ビューポート→body へ移す。これで `fixed inset-x-0` の全幅ヘッダー等もガター内に収まり、
+  //   ドック下に潜らない（包含ブロック奪取を逆用。cf. feedback_css_fixed_containing_block）。
+  function setPageGutter(on) {
+    const de = document.documentElement, b = document.body;
+    de.style.transition = "margin-right .18s ease";
+    de.style.marginRight = on ? W + "px" : "";
+    if (b) b.style.transform = on ? "translateZ(0)" : "";
+  }
+
   function setCollapsed(c) {
     $inspector.classList.toggle("show", !c);
     $launcher.classList.toggle("show", c);
+    setPageGutter(!c);
     if (c) { setInspecting(false); setReordering(false); hideHighlight(); }
   }
 
@@ -764,6 +777,7 @@
   $tRedo.onclick = () => doHistory("/redo");
   $(".t-collapse").onclick = () => setCollapsed(true);
   $launcher.onclick = () => setCollapsed(false);
+  setPageGutter(true); // 初期はインスペクタ開＝ガターを空ける
   root.querySelectorAll(".bpseg button").forEach((b) => {
     if (b.dataset.bp === bp) b.classList.add("on");
     b.onclick = () => { bp = b.dataset.bp; root.querySelectorAll(".bpseg button").forEach((x) => x.classList.toggle("on", x.dataset.bp === bp)); if (selected) renderBody(); };
