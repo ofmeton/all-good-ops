@@ -17,6 +17,9 @@ export function applyRecurringMigrations(db) {
       "ALTER TABLE recurring_items ADD COLUMN amount_type TEXT NOT NULL DEFAULT 'fixed' CHECK (amount_type IN ('fixed','variable'))",
     );
   }
+  if (!cols.includes("account")) {
+    db.exec("ALTER TABLE recurring_items ADD COLUMN account TEXT");
+  }
 
   db.exec(`
     CREATE TABLE IF NOT EXISTS recurring_overrides (

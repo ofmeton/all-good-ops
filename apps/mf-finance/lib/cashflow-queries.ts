@@ -3,14 +3,22 @@ import { db } from "@/lib/db";
 import { getLatestAsset } from "@/lib/calendar-queries";
 // 純ロジック（DB非依存・テスト済み）。
 import {
+  buildAccountRolling,
   buildRolling,
   buildUpcomingWithdrawals,
+  monthEndOffsetDays,
   monthlyOccurrences,
   resolveOccurrence,
 } from "@/lib/cashflow/rolling.mjs";
 // kind 定数は client/server 両用の純モジュールへ分離（client が db を引き込まないため）。
-import { type BalanceKind, KIND_LABEL, guessKind } from "@/lib/cashflow/kinds";
-export { type BalanceKind, KIND_LABEL, guessKind };
+import {
+  type BalanceKind,
+  type CashflowPeriod,
+  KIND_LABEL,
+  guessKind,
+  periodMonthsAhead,
+} from "@/lib/cashflow/kinds";
+export { type BalanceKind, type CashflowPeriod, KIND_LABEL, guessKind };
 
 // お金レーダー / 資金繰りの読取クエリ（server-only）。
 
@@ -39,6 +47,10 @@ export function getAllAccountBalances(): AccountBalanceRow[] {
   return db
     .prepare("SELECT account, kind, balance, as_of, source FROM account_balances ORDER BY balance DESC")
     .all() as AccountBalanceRow[];
+}
+
+export function getAccountOptions(): { account: string; kind: BalanceKind }[] {
+  return getAllAccountBalances().map((row) => ({ account: row.account, kind: row.kind }));
 }
 
 // kind 別グルーピング（表示順: bank→card→emoney→cash→crypto→other）。空なら groups=[]。
@@ -81,6 +93,7 @@ export interface ActiveRecurringRow {
   frequency: "monthly" | "weekly";
   weekday: number | null;
   amount_type: "fixed" | "variable";
+  account: string | null;
 }
 
 export interface RecurringOverrideRow {
@@ -92,7 +105,7 @@ export interface RecurringOverrideRow {
 
 function activeRecurring(): ActiveRecurringRow[] {
   return db
-    .prepare("SELECT id, kind, name, amount, day, frequency, weekday, amount_type FROM recurring_items WHERE active = 1")
+    .prepare("SELECT id, kind, name, amount, day, frequency, weekday, amount_type, account FROM recurring_items WHERE active = 1")
     .all() as ActiveRecurringRow[];
 }
 
@@ -102,10 +115,10 @@ export function getRecurringOverrides(): RecurringOverrideRow[] {
     .all() as RecurringOverrideRow[];
 }
 
-function scheduledRows(): { kind: "income" | "expense"; name: string; amount: number; date: string }[] {
+function scheduledRows(): { kind: "income" | "expense"; name: string; amount: number; date: string; account: string | null }[] {
   return db
-    .prepare("SELECT kind, name, amount, scheduled_date AS date FROM scheduled_cashflow ORDER BY scheduled_date")
-    .all() as { kind: "income" | "expense"; name: string; amount: number; date: string }[];
+    .prepare("SELECT kind, name, amount, scheduled_date AS date, account FROM scheduled_cashflow ORDER BY scheduled_date")
+    .all() as { kind: "income" | "expense"; name: string; amount: number; date: string; account: string | null }[];
 }
 
 // 今月の引落予定トータル（今日〜月末）。
@@ -173,6 +186,7 @@ export interface RollingEvent {
   kind: "income" | "expense";
   name: string;
   amount: number;
+  account: string | null;
   source: string;
   recurringId?: number;
   occurrenceDate?: string;
@@ -190,6 +204,50 @@ export interface RollingCashflow {
   cardChargeEstimate: number; // 参考（残高には未算入）
 }
 
+export interface RollingLocation {
+  key: string | null;
+  account: string | null;
+  kind: BalanceKind | null;
+  start: number;
+  end: number;
+  minBalance: number;
+  firstNegativeDate: string | null;
+  events: RollingEvent[];
+}
+
+export interface AccountRollingCashflow {
+  period: CashflowPeriod;
+  days: number;
+  baseDate: string | null;
+  total: RollingCashflow;
+  locations: RollingLocation[];
+  cardChargeEstimate: number;
+}
+
+function formatRollingResult(
+  r: {
+    start: number;
+    events: unknown[];
+    end: number;
+    minBalance: number;
+    firstNegativeDate: string | null;
+  },
+  baseDate: string | null,
+  days: number,
+  cardChargeEstimate: number,
+): RollingCashflow {
+  return {
+    start: r.start,
+    baseDate,
+    days,
+    events: r.events as RollingEvent[],
+    end: r.end,
+    minBalance: r.minBalance,
+    firstNegativeDate: r.firstNegativeDate,
+    cardChargeEstimate,
+  };
+}
+
 // 向こう days 日のローリング資金繰り（recurring + scheduled。カード見込みは別参考値）。
 export function getRollingCashflow(days = 30): RollingCashflow {
   const { start, baseDate } = startBalance();
@@ -202,15 +260,44 @@ export function getRollingCashflow(days = 30): RollingCashflow {
     scheduled: scheduledRows(),
     overrides,
   });
-  return {
-    start: r.start,
-    baseDate,
+  return formatRollingResult(r, baseDate, days, getNextMonthCardCharge().total);
+}
+
+const KIND_ORDER: BalanceKind[] = ["bank", "card", "emoney", "cash", "crypto", "other"];
+
+export function getAccountRollingCashflow(period: CashflowPeriod): AccountRollingCashflow {
+  const today = todayIso();
+  const days = monthEndOffsetDays(today, periodMonthsAhead(period));
+  const { start, baseDate } = startBalance();
+  const cardChargeEstimate = getNextMonthCardCharge().total;
+  const r = buildAccountRolling({
+    today,
     days,
-    events: r.events as RollingEvent[],
-    end: r.end,
-    minBalance: r.minBalance,
-    firstNegativeDate: r.firstNegativeDate,
-    cardChargeEstimate: getNextMonthCardCharge().total,
+    startBalance: start,
+    balances: getAllAccountBalances().map((row) => ({
+      account: row.account,
+      kind: row.kind,
+      balance: row.balance,
+    })),
+    recurring: activeRecurring(),
+    scheduled: scheduledRows(),
+    overrides: getRecurringOverrides(),
+  });
+  const locations = (r.locations as RollingLocation[]).sort((a, b) => {
+    if (a.key == null && b.key != null) return 1;
+    if (a.key != null && b.key == null) return -1;
+    const ai = a.kind ? KIND_ORDER.indexOf(a.kind) : KIND_ORDER.length;
+    const bi = b.kind ? KIND_ORDER.indexOf(b.kind) : KIND_ORDER.length;
+    if (ai !== bi) return ai - bi;
+    return String(a.account ?? "").localeCompare(String(b.account ?? ""), "ja");
+  });
+  return {
+    period,
+    days,
+    baseDate,
+    total: formatRollingResult(r.total, baseDate, days, cardChargeEstimate),
+    locations,
+    cardChargeEstimate,
   };
 }
 

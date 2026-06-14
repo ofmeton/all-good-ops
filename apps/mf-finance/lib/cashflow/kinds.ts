@@ -16,6 +16,22 @@ export const KIND_OPTIONS: BalanceKind[] = ["bank", "card", "emoney", "cash", "c
 
 export const WEEKDAY_LABELS = ["日", "月", "火", "水", "木", "金", "土"] as const;
 
+export type CashflowPeriod = "this" | "next" | "after";
+
+export const PERIOD_OPTIONS: { value: CashflowPeriod; label: string; monthsAhead: number }[] = [
+  { value: "this", label: "当月末", monthsAhead: 0 },
+  { value: "next", label: "来月末", monthsAhead: 1 },
+  { value: "after", label: "再来月末", monthsAhead: 2 },
+];
+
+export function parsePeriod(v: unknown): CashflowPeriod {
+  return v === "next" || v === "after" ? v : "this";
+}
+
+export function periodMonthsAhead(p: CashflowPeriod): number {
+  return PERIOD_OPTIONS.find((option) => option.value === p)?.monthsAhead ?? 0;
+}
+
 // 口座名 → kind の既定推定（投入時/未設定時のフォールバック）。
 export function guessKind(account: string): BalanceKind {
   if (/銀行|ゆうちょ|bank/i.test(account)) return "bank";

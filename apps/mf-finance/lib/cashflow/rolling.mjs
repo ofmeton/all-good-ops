@@ -19,6 +19,17 @@ function addDays(iso, i) {
   const t = new Date(Date.UTC(y, m - 1, d + i));
   return fmt(t.getUTCFullYear(), t.getUTCMonth() + 1, t.getUTCDate());
 }
+function addMonthsToYearMonth(year, month, delta) {
+  const zero = year * 12 + (month - 1) + delta;
+  return { y: Math.floor(zero / 12), m: (zero % 12) + 1 };
+}
+function diffDays(startIso, endIso) {
+  const s = parse(startIso);
+  const e = parse(endIso);
+  const start = Date.UTC(s.y, s.m - 1, s.d);
+  const end = Date.UTC(e.y, e.m - 1, e.d);
+  return Math.round((end - start) / 86400000);
+}
 
 // recurring の day を当該月の日数でクランプ（31→30 等）。
 export function effectiveDay(day, year, month) {
@@ -28,6 +39,12 @@ export function effectiveDay(day, year, month) {
 export function weekdayOf(iso) {
   const { y, m, d } = parse(iso);
   return new Date(Date.UTC(y, m - 1, d)).getUTCDay();
+}
+
+export function monthEndOffsetDays(today, monthsAhead) {
+  const { y, m } = parse(today);
+  const target = addMonthsToYearMonth(y, m, Number(monthsAhead) || 0);
+  return diffDays(today, fmt(target.y, target.m, daysInMonth(target.y, target.m)));
 }
 
 export function indexOverrides(arr) {
@@ -106,6 +123,7 @@ export function buildRolling(opts) {
             kind: r.kind,
             name: r.name,
             amount: occurrence.amount,
+            account: r.account ?? null,
             source: "recurring",
             recurringId: r.id,
             occurrenceDate,
@@ -117,7 +135,15 @@ export function buildRolling(opts) {
     // scheduled: 日付完全一致
     for (const s of scheduled) {
       if (s.date === date) {
-        events.push({ date, kind: s.kind, name: s.name, amount: Math.abs(s.amount), source: "scheduled", status: "normal" });
+        events.push({
+          date,
+          kind: s.kind,
+          name: s.name,
+          amount: Math.abs(s.amount),
+          account: s.account ?? null,
+          source: "scheduled",
+          status: "normal",
+        });
       }
     }
   }
@@ -140,6 +166,63 @@ export function buildRolling(opts) {
     minBalance,
     firstNegativeDate,
   };
+}
+
+export function buildAccountRolling(opts) {
+  const total = buildRolling(opts);
+  const balances = opts.balances ?? [];
+  const byAccount = new Map();
+  let balanceTotal = 0;
+  for (const b of balances) {
+    const key = b.account ?? null;
+    const start = Number(b.balance) || 0;
+    balanceTotal += start;
+    byAccount.set(key, {
+      account: key,
+      kind: b.kind ?? null,
+      start,
+    });
+  }
+  const unassignedStart = (opts.startBalance ?? 0) - balanceTotal;
+  if (byAccount.has(null)) {
+    const seed = byAccount.get(null);
+    byAccount.set(null, { ...seed, start: seed.start + unassignedStart });
+  } else if (unassignedStart !== 0) {
+    byAccount.set(null, { account: null, kind: null, start: unassignedStart });
+  }
+
+  const keys = new Set();
+  for (const key of byAccount.keys()) keys.add(key);
+  for (const e of total.events) keys.add(e.account ?? null);
+
+  const locations = [...keys].map((key) => {
+    const seed = byAccount.get(key) ?? { account: key, kind: null, start: 0 };
+    let running = seed.start;
+    let minBalance = seed.start;
+    let firstNegativeDate = null;
+    const events = total.events
+      .filter((e) => (e.account ?? null) === key)
+      .map((e) => {
+        if (e.status === "normal") {
+          running += e.kind === "income" ? e.amount : -e.amount;
+          if (running < minBalance) minBalance = running;
+          if (running < 0 && firstNegativeDate == null) firstNegativeDate = e.date;
+        }
+        return { ...e, balanceAfter: running };
+      });
+    return {
+      key,
+      account: key,
+      kind: seed.kind,
+      start: seed.start,
+      end: running,
+      minBalance,
+      firstNegativeDate,
+      events,
+    };
+  });
+
+  return { total, locations };
 }
 
 // 純: 今日〜今月末の引落予定（recurring expense で day>=今日, scheduled expense で当月内）。

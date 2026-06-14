@@ -3,10 +3,11 @@
 import { useState, useTransition } from "react";
 import type { RecurringRow } from "@/lib/write-queries";
 import type { UpcomingOccurrence } from "@/lib/cashflow-queries";
-import { WEEKDAY_LABELS } from "@/lib/cashflow/kinds";
+import { KIND_LABEL, WEEKDAY_LABELS, type BalanceKind } from "@/lib/cashflow/kinds";
 import {
   toggleRecurring,
   updateRecurringAmount,
+  updateRecurringAccount,
   deleteRecurring,
   addRecurring,
   setOccurrenceOverride,
@@ -15,6 +16,13 @@ import {
 
 // 定期項目（収入/固定費）の編集 UI。
 // 楽観的更新はせず、action 後の revalidate による再描画に委ねる。送信中は disabled + 視覚フィードバック。
+
+type AccountOption = { account: string; kind: BalanceKind };
+
+function accountOptionsWithCurrent(options: AccountOption[], current: string | null): AccountOption[] {
+  if (!current || options.some((option) => option.account === current)) return options;
+  return [...options, { account: current, kind: "other" }];
+}
 
 function actionErrorMessage(e: unknown): string {
   return e instanceof Error ? e.message : "保存に失敗しました";
@@ -152,15 +160,19 @@ function OccurrenceEditor({ occurrence }: { occurrence: UpcomingOccurrence }) {
 function RecurringRowItem({
   item,
   occurrences,
+  accountOptions,
 }: {
   item: RecurringRow;
   occurrences: UpcomingOccurrence[];
+  accountOptions: AccountOption[];
 }) {
   const [pending, startTransition] = useTransition();
   const [amount, setAmount] = useState(String(item.amount));
+  const [account, setAccount] = useState(item.account ?? "");
   const [error, setError] = useState<string | null>(null);
   const dirty = amount.trim() !== String(item.amount);
   const isVariable = item.amount_type === "variable";
+  const options = accountOptionsWithCurrent(accountOptions, item.account);
 
   const onToggle = () => {
     setError(null);
@@ -200,6 +212,19 @@ function RecurringRowItem({
       try {
         await deleteRecurring(item.id);
       } catch (e) {
+        setError(actionErrorMessage(e));
+      }
+    });
+  };
+
+  const onAccountChange = (value: string) => {
+    setAccount(value);
+    setError(null);
+    startTransition(async () => {
+      try {
+        await updateRecurringAccount(item.id, value || null);
+      } catch (e) {
+        setAccount(item.account ?? "");
         setError(actionErrorMessage(e));
       }
     });
@@ -270,6 +295,26 @@ function RecurringRowItem({
         </div>
       )}
 
+      <div className="flex flex-col gap-1">
+        <label className="text-[11px] text-muted" htmlFor={`recurring-account-${item.id}`}>
+          資金場所
+        </label>
+        <select
+          id={`recurring-account-${item.id}`}
+          value={account}
+          onChange={(e) => onAccountChange(e.target.value)}
+          disabled={pending}
+          className="h-11 max-w-44 rounded-lg border border-border bg-background px-2 text-xs text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary disabled:opacity-50"
+        >
+          <option value="">未指定</option>
+          {options.map((option) => (
+            <option key={option.account} value={option.account}>
+              {option.account}（{KIND_LABEL[option.kind]}）
+            </option>
+          ))}
+        </select>
+      </div>
+
       <div className="flex items-center justify-between gap-3 sm:justify-end">
         <label
           htmlFor={`active-${item.id}`}
@@ -318,13 +363,14 @@ function RecurringRowItem({
   );
 }
 
-function AddRecurringForm({ kind }: { kind: "income" | "expense" }) {
+function AddRecurringForm({ kind, accountOptions }: { kind: "income" | "expense"; accountOptions: AccountOption[] }) {
   const [pending, startTransition] = useTransition();
   const [name, setName] = useState("");
   const [amount, setAmount] = useState("");
   const [day, setDay] = useState("");
   const [frequency, setFrequency] = useState<"monthly" | "weekly">("monthly");
   const [weekday, setWeekday] = useState("1");
+  const [account, setAccount] = useState("");
   const [variable, setVariable] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const isIncome = kind === "income";
@@ -356,12 +402,14 @@ function AddRecurringForm({ kind }: { kind: "income" | "expense" }) {
           frequency: isIncome ? frequency : "monthly",
           weekday: isIncome && frequency === "weekly" ? Number(weekday) : null,
           amount_type: isIncome && variable ? "variable" : "fixed",
+          account: account || null,
         });
         setName("");
         setAmount("");
         setDay("");
         setFrequency("monthly");
         setWeekday("1");
+        setAccount("");
         setVariable(false);
       } catch (e) {
         setError(actionErrorMessage(e));
@@ -478,6 +526,25 @@ function AddRecurringForm({ kind }: { kind: "income" | "expense" }) {
             />
           )}
         </div>
+        <div className="flex flex-col gap-1">
+          <label htmlFor={`${fieldId}-account`} className="text-[11px] text-muted">
+            資金場所
+          </label>
+          <select
+            id={`${fieldId}-account`}
+            value={account}
+            onChange={(e) => setAccount(e.target.value)}
+            disabled={pending}
+            className="h-11 rounded-lg border border-border bg-surface px-2 text-sm text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary disabled:opacity-50"
+          >
+            <option value="">未指定</option>
+            {accountOptions.map((option) => (
+              <option key={option.account} value={option.account}>
+                {option.account}（{KIND_LABEL[option.kind]}）
+              </option>
+            ))}
+          </select>
+        </div>
         <button
           type="submit"
           disabled={pending}
@@ -500,11 +567,13 @@ function Section({
   kind,
   items,
   occurrences,
+  accountOptions,
 }: {
   title: string;
   kind: "income" | "expense";
   items: RecurringRow[];
   occurrences: UpcomingOccurrence[];
+  accountOptions: AccountOption[];
 }) {
   return (
     <section className="mt-6" aria-label={title}>
@@ -525,11 +594,12 @@ function Section({
               key={item.id}
               item={item}
               occurrences={occurrences.filter((o) => o.recurringId === item.id)}
+              accountOptions={accountOptions}
             />
           ))}
         </ul>
       )}
-      <AddRecurringForm kind={kind} />
+      <AddRecurringForm kind={kind} accountOptions={accountOptions} />
     </section>
   );
 }
@@ -537,17 +607,19 @@ function Section({
 export function RecurringEditor({
   items,
   occurrences,
+  accountOptions,
 }: {
   items: RecurringRow[];
   occurrences: UpcomingOccurrence[];
+  accountOptions: AccountOption[];
 }) {
   const income = items.filter((i) => i.kind === "income");
   const expense = items.filter((i) => i.kind === "expense");
 
   return (
     <div>
-      <Section title="定期収入" kind="income" items={income} occurrences={occurrences} />
-      <Section title="固定費（定期支出）" kind="expense" items={expense} occurrences={[]} />
+      <Section title="定期収入" kind="income" items={income} occurrences={occurrences} accountOptions={accountOptions} />
+      <Section title="固定費（定期支出）" kind="expense" items={expense} occurrences={[]} accountOptions={accountOptions} />
     </div>
   );
 }

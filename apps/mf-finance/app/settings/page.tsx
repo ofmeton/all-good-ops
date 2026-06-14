@@ -1,4 +1,5 @@
 import { getRecurringItems, getManualLiabilities } from "@/lib/write-queries";
+import { getAccountOptions } from "@/lib/cashflow-queries";
 import { RecurringEditor } from "@/app/components/RecurringEditor";
 import { ManualLiabilityForm } from "@/app/components/ManualLiabilityForm";
 
@@ -8,6 +9,7 @@ export const dynamic = "force-dynamic";
 export default function SettingsPage() {
   const recurring = getRecurringItems();
   const liabilities = getManualLiabilities();
+  const accountOptions = getAccountOptions();
 
   return (
     <main className="mx-auto w-full max-w-3xl px-4 py-6 sm:py-10">
@@ -28,7 +30,7 @@ export default function SettingsPage() {
         </p>
       </header>
 
-      <RecurringEditor items={recurring} occurrences={[]} />
+      <RecurringEditor items={recurring} occurrences={[]} accountOptions={accountOptions} />
       <ManualLiabilityForm items={liabilities} />
     </main>
   );

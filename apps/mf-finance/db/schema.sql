@@ -36,6 +36,7 @@ CREATE TABLE IF NOT EXISTS recurring_items (
   frequency     TEXT NOT NULL DEFAULT 'monthly' CHECK (frequency IN ('monthly','weekly')),
   weekday       INTEGER,
   amount_type   TEXT NOT NULL DEFAULT 'fixed' CHECK (amount_type IN ('fixed','variable')),
+  account       TEXT,
   source_type   TEXT,
   active        INTEGER NOT NULL DEFAULT 1 CHECK (active IN (0, 1)),
   confirmed     TEXT NOT NULL DEFAULT 'auto' CHECK (confirmed IN ('auto', 'user')),

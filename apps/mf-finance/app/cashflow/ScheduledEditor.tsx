@@ -2,7 +2,8 @@
 
 import { useState, useTransition } from "react";
 import type { ScheduledListRow } from "@/lib/cashflow-queries";
-import { addScheduled, deleteScheduled } from "@/lib/cashflow-actions";
+import { addScheduled, deleteScheduled, setScheduledAccount } from "@/lib/cashflow-actions";
+import { KIND_LABEL, type BalanceKind } from "@/lib/cashflow/kinds";
 import { yen, shortDate } from "@/lib/format";
 
 // 単発予定（特定日の入金/引落）の登録・一覧・削除 UI。
@@ -11,10 +12,19 @@ import { yen, shortDate } from "@/lib/format";
 const INPUT_CLS =
   "h-11 rounded-lg border border-border bg-surface px-2 text-sm text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary disabled:opacity-50";
 
-function ScheduledRowItem({ item }: { item: ScheduledListRow }) {
+type AccountOption = { account: string; kind: BalanceKind };
+
+function accountOptionsWithCurrent(options: AccountOption[], current: string | null): AccountOption[] {
+  if (!current || options.some((option) => option.account === current)) return options;
+  return [...options, { account: current, kind: "other" }];
+}
+
+function ScheduledRowItem({ item, accountOptions }: { item: ScheduledListRow; accountOptions: AccountOption[] }) {
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
+  const [account, setAccount] = useState(item.account ?? "");
   const isIncome = item.kind === "income";
+  const options = accountOptionsWithCurrent(accountOptions, item.account);
 
   const onDelete = () => {
     if (!window.confirm(`「${item.name}」（${shortDate(item.scheduled_date)}）を削除します。よろしいですか？`))
@@ -23,6 +33,18 @@ function ScheduledRowItem({ item }: { item: ScheduledListRow }) {
     startTransition(async () => {
       const res = await deleteScheduled(item.id);
       if (!res.ok) setError(res.error);
+    });
+  };
+
+  const onAccountChange = (value: string) => {
+    setAccount(value);
+    setError(null);
+    startTransition(async () => {
+      const res = await setScheduledAccount(item.id, value || null);
+      if (!res.ok) {
+        setAccount(item.account ?? "");
+        setError(res.error);
+      }
     });
   };
 
@@ -42,14 +64,26 @@ function ScheduledRowItem({ item }: { item: ScheduledListRow }) {
         >
           {item.name}
         </span>
-        {item.account && (
-          <span className="shrink-0 truncate text-[11px] text-muted" title={item.account}>
-            {item.account}
-          </span>
-        )}
       </div>
 
       <div className="flex items-center justify-between gap-3 sm:justify-end">
+        <label className="sr-only" htmlFor={`sched-account-${item.id}`}>
+          {item.name} の資金場所
+        </label>
+        <select
+          id={`sched-account-${item.id}`}
+          value={account}
+          onChange={(e) => onAccountChange(e.target.value)}
+          disabled={pending}
+          className="h-11 max-w-44 rounded-lg border border-border bg-background px-2 text-xs text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary disabled:opacity-50"
+        >
+          <option value="">未指定</option>
+          {options.map((option) => (
+            <option key={option.account} value={option.account}>
+              {option.account}（{KIND_LABEL[option.kind]}）
+            </option>
+          ))}
+        </select>
         <span
           className={`tabular whitespace-nowrap text-sm font-medium ${
             isIncome ? "text-positive" : "text-foreground"
@@ -80,7 +114,7 @@ function ScheduledRowItem({ item }: { item: ScheduledListRow }) {
   );
 }
 
-function AddScheduledForm() {
+function AddScheduledForm({ accountOptions }: { accountOptions: AccountOption[] }) {
   const [pending, startTransition] = useTransition();
   const [date, setDate] = useState("");
   const [kind, setKind] = useState<"income" | "expense">("expense");
@@ -197,14 +231,20 @@ function AddScheduledForm() {
           <label htmlFor="sched-account" className="text-[11px] text-muted">
             口座（任意）
           </label>
-          <input
+          <select
             id="sched-account"
-            type="text"
             value={account}
             onChange={(e) => setAccount(e.target.value)}
             disabled={pending}
             className={INPUT_CLS}
-          />
+          >
+            <option value="">未指定</option>
+            {accountOptions.map((option) => (
+              <option key={option.account} value={option.account}>
+                {option.account}（{KIND_LABEL[option.kind]}）
+              </option>
+            ))}
+          </select>
         </div>
         <button
           type="submit"
@@ -223,7 +263,13 @@ function AddScheduledForm() {
   );
 }
 
-export function ScheduledEditor({ items }: { items: ScheduledListRow[] }) {
+export function ScheduledEditor({
+  items,
+  accountOptions,
+}: {
+  items: ScheduledListRow[];
+  accountOptions: AccountOption[];
+}) {
   return (
     <section className="mt-6" aria-label="単発予定">
       <h2 className="mb-2 text-sm font-semibold text-foreground">
@@ -239,11 +285,11 @@ export function ScheduledEditor({ items }: { items: ScheduledListRow[] }) {
       ) : (
         <ul className="space-y-2">
           {items.map((item) => (
-            <ScheduledRowItem key={item.id} item={item} />
+            <ScheduledRowItem key={item.id} item={item} accountOptions={accountOptions} />
           ))}
         </ul>
       )}
-      <AddScheduledForm />
+      <AddScheduledForm accountOptions={accountOptions} />
     </section>
   );
 }

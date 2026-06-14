@@ -39,17 +39,12 @@ export async function addScheduled(input: ScheduledInput): Promise<CashflowActio
     if (!name) return { ok: false, error: "名称を入力してください" };
     if (amount <= 0) return { ok: false, error: "金額を入力してください" };
     if (!isYmd(input.scheduled_date)) return { ok: false, error: "日付が不正です（YYYY-MM-DD）" };
+    const account = typeof input.account === "string" && input.account.trim().length > 0 ? input.account.trim() : null;
+    const note = typeof input.note === "string" && input.note.trim().length > 0 ? input.note.trim() : null;
     db.prepare(
       `INSERT INTO scheduled_cashflow (kind, name, amount, scheduled_date, account, note)
        VALUES (?, ?, ?, ?, ?, ?)`,
-    ).run(
-      kind,
-      name,
-      amount,
-      input.scheduled_date,
-      input.account ? String(input.account).trim() : null,
-      input.note ? String(input.note).trim() : null,
-    );
+    ).run(kind, name, amount, input.scheduled_date, account, note);
     revalidate();
     return { ok: true };
   } catch (e) {
@@ -62,6 +57,20 @@ export async function deleteScheduled(id: number): Promise<CashflowActionResult>
     const n = Number(id);
     if (!Number.isInteger(n) || n <= 0) return { ok: false, error: "無効な id です" };
     db.prepare("DELETE FROM scheduled_cashflow WHERE id = ?").run(n);
+    revalidate();
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : String(e) };
+  }
+}
+
+export async function setScheduledAccount(id: number, account: string | null): Promise<CashflowActionResult> {
+  try {
+    const n = Number(id);
+    if (!Number.isInteger(n) || n <= 0) return { ok: false, error: "無効な id です" };
+    const acc = typeof account === "string" && account.trim().length > 0 ? account.trim() : null;
+    const info = db.prepare("UPDATE scheduled_cashflow SET account = ? WHERE id = ?").run(acc, n);
+    if (info.changes === 0) return { ok: false, error: "対象の予定が見つかりません" };
     revalidate();
     return { ok: true };
   } catch (e) {

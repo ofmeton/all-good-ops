@@ -93,6 +93,7 @@ export interface AddRecurringInput {
   frequency?: "monthly" | "weekly";
   weekday?: number | null;
   amount_type?: "fixed" | "variable";
+  account?: string | null;
 }
 
 export async function addRecurring(input: AddRecurringInput): Promise<void> {
@@ -133,10 +134,26 @@ export async function addRecurring(input: AddRecurringInput): Promise<void> {
   if (amountType === "variable") {
     amount = 0;
   }
+  const account = trimOrNull(input.account);
 
   db.prepare(
-    "INSERT INTO recurring_items (kind, name, amount, day, frequency, weekday, amount_type, active, confirmed) VALUES (?, ?, ?, ?, ?, ?, ?, 1, 'user')",
-  ).run(kind, name, amount, day, frequency, weekday, amountType);
+    "INSERT INTO recurring_items (kind, name, amount, day, frequency, weekday, amount_type, account, active, confirmed) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, 'user')",
+  ).run(kind, name, amount, day, frequency, weekday, amountType, account);
+  revalidate();
+}
+
+export async function updateRecurringAccount(
+  id: number,
+  account: string | null,
+): Promise<void> {
+  const _id = ensureId(id);
+  // 資金場所もユーザー編集なので、金額編集と同じく確認済みにする。
+  const info = db.prepare(
+    "UPDATE recurring_items SET account = ?, confirmed = 'user' WHERE id = ?",
+  ).run(trimOrNull(account), _id);
+  if (info.changes === 0) {
+    throw new Error("対象の定期項目が見つかりません");
+  }
   revalidate();
 }
 
