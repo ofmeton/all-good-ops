@@ -24,7 +24,8 @@ import { existsSync, readFileSync, writeFileSync, chmodSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { randomUUID } from "node:crypto";
-import { moveInSource, deleteInSource, duplicateInSource } from "./reorder.mjs";
+import { applyStyleBatch, structureBatch } from "./apply.mjs";
+import { moveInSource, deleteInSource, duplicateInSource, moveGroupInSource } from "./reorder.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -203,6 +204,42 @@ async function findAndApply(route, apply, label = "編集") {
   return { ok: false, reason: lastReason };
 }
 
+async function findAndApplyBatch(route, apply, label, mapResult) {
+  const candidates = [];
+  const routeFile = routeToFile(route);
+  if (routeFile) candidates.push(routeFile);
+  const all = await walkTsx(path.join(TARGET_ROOT, "app"));
+  for (const f of all) if (!candidates.includes(f) && insideTarget(f)) candidates.push(f);
+
+  let fallback = null;
+  let lastReason = "not-found";
+  for (const file of candidates) {
+    const src = await readFile(file, "utf8");
+    const r = apply(src);
+    if (r.ok && r.changed) {
+      await recordedWrite(file, src, r.src, label(r));
+      return mapResult(r, file);
+    }
+    if (r.ok && !r.changed) {
+      fallback ??= mapResult(r, file);
+      continue;
+    }
+    if (r.reason && r.reason !== "not-found") lastReason = r.reason;
+  }
+  return fallback ?? { ok: false, reason: lastReason };
+}
+
+function validateStyleBatchEdits(edits) {
+  if (!Array.isArray(edits)) return { ok: false, reason: "missing-edits" };
+  for (const e of edits) {
+    if (!e?.oldClassName || !e?.newClassName) return { ok: false, reason: "missing-classname" };
+    if (typeof e.newClassName !== "string" || e.newClassName.length > 2000 || !CLASS_RE.test(e.newClassName)) {
+      return { ok: false, reason: "invalid-classname" };
+    }
+  }
+  return { ok: true };
+}
+
 // ---- 編集履歴（undo/redo） --------------------------------------------
 // 各編集の前後スナップショットを積む。undo は「現在の内容が after のまま」の時だけ
 // before に戻す（外部=Claude/手編集/formatter の変更があれば潰さず拒否）。
@@ -300,6 +337,7 @@ const server = http.createServer(async (req, res) => {
           textSnippets: item.textSnippets ?? null,
           domPath: item.domPath ?? null,
           selector: item.selector ?? null,
+          payloads: Array.isArray(item.payloads) ? item.payloads : null,
           prompt: item.prompt ?? "",
         };
         await appendFile(QUEUE_FILE, JSON.stringify(entry) + "\n", "utf8");
@@ -329,6 +367,30 @@ const server = http.createServer(async (req, res) => {
     }
   }
 
+  if (req.method === "POST" && req.url === "/apply-style-batch") {
+    const auth = authorizeMutation(req);
+    if (!auth.ok) return send(res, auth.status, { "Content-Type": "application/json" }, JSON.stringify({ ok: false, error: auth.error }));
+    try {
+      const { route, edits } = JSON.parse(await readBody(req));
+      const valid = validateStyleBatchEdits(edits);
+      if (!valid.ok) return send(res, 200, { "Content-Type": "application/json" }, JSON.stringify(valid));
+
+      const result = await findAndApplyBatch(
+        route,
+        (src) => applyStyleBatch(src, edits),
+        (r) => `スタイル一括(${r.applied})`,
+        (r, file) => r.changed
+          ? { ok: true, file: rel(file), applied: r.applied, skipped: r.skipped }
+          : { ok: true, changed: false, applied: 0, skipped: r.skipped },
+      );
+      console.log(`[web-ui-bridge] apply-style-batch → ${result.ok ? (result.file ?? "(noop)") : "skip:" + result.reason}`);
+      return send(res, 200, { "Content-Type": "application/json" }, JSON.stringify(result));
+    } catch (err) {
+      return send(res, 400, { "Content-Type": "application/json" },
+        JSON.stringify({ ok: false, error: err.message }));
+    }
+  }
+
   if (req.method === "POST" && req.url === "/reorder") {
     const auth = authorizeMutation(req);
     if (!auth.ok) return send(res, auth.status, { "Content-Type": "application/json" }, JSON.stringify({ ok: false, error: auth.error }));
@@ -336,6 +398,20 @@ const server = http.createServer(async (req, res) => {
       const { route, dragClass, targetClass, position } = JSON.parse(await readBody(req));
       const result = await findAndApply(route, (src) => moveInSource(src, dragClass, targetClass, position), "並べ替え");
       console.log(`[web-ui-bridge] reorder/move → ${result.ok ? (result.file ?? "(noop)") : "skip:" + result.reason}`);
+      return send(res, 200, { "Content-Type": "application/json" }, JSON.stringify(result));
+    } catch (err) {
+      return send(res, 400, { "Content-Type": "application/json" },
+        JSON.stringify({ ok: false, error: err.message }));
+    }
+  }
+
+  if (req.method === "POST" && req.url === "/reorder-group") {
+    const auth = authorizeMutation(req);
+    if (!auth.ok) return send(res, auth.status, { "Content-Type": "application/json" }, JSON.stringify({ ok: false, error: auth.error }));
+    try {
+      const { route, dragClasses, targetClass, position } = JSON.parse(await readBody(req));
+      const result = await findAndApply(route, (src) => moveGroupInSource(src, dragClasses, targetClass, position), `グループ移動(${Array.isArray(dragClasses) ? dragClasses.length : 0})`);
+      console.log(`[web-ui-bridge] reorder-group → ${result.ok ? (result.file ?? "(noop)") : "skip:" + result.reason}`);
       return send(res, 200, { "Content-Type": "application/json" }, JSON.stringify(result));
     } catch (err) {
       return send(res, 400, { "Content-Type": "application/json" },
@@ -352,6 +428,28 @@ const server = http.createServer(async (req, res) => {
       const label = req.url === "/delete" ? "削除" : "複製";
       const result = await findAndApply(route, (src) => op(src, targetClass), label);
       console.log(`[web-ui-bridge] ${req.url.slice(1)} → ${result.ok ? result.file : "skip:" + result.reason}`);
+      return send(res, 200, { "Content-Type": "application/json" }, JSON.stringify(result));
+    } catch (err) {
+      return send(res, 400, { "Content-Type": "application/json" },
+        JSON.stringify({ ok: false, error: err.message }));
+    }
+  }
+
+  if (req.method === "POST" && req.url === "/structure-batch") {
+    const auth = authorizeMutation(req);
+    if (!auth.ok) return send(res, auth.status, { "Content-Type": "application/json" }, JSON.stringify({ ok: false, error: auth.error }));
+    try {
+      const { route, kind, targets } = JSON.parse(await readBody(req));
+      if (!Array.isArray(targets)) return send(res, 200, { "Content-Type": "application/json" }, JSON.stringify({ ok: false, reason: "missing-class" }));
+      const result = await findAndApplyBatch(
+        route,
+        (src) => structureBatch(src, kind, targets),
+        (r) => `${kind === "duplicate" ? "複製" : "削除"}一括(${targets.length - r.skipped.length})`,
+        (r, file) => r.changed
+          ? { ok: true, file: rel(file), skipped: r.skipped }
+          : { ok: true, changed: false, skipped: r.skipped },
+      );
+      console.log(`[web-ui-bridge] structure-batch/${kind} → ${result.ok ? (result.file ?? "(noop)") : "skip:" + result.reason}`);
       return send(res, 200, { "Content-Type": "application/json" }, JSON.stringify(result));
     } catch (err) {
       return send(res, 400, { "Content-Type": "application/json" },
