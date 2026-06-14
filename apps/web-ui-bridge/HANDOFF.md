@@ -26,6 +26,8 @@
   - 既知制約: バッチは**1ファイル単位**。複数選択が別コンポーネントファイルに跨ると、片方のファイルに適用し他は skip(「別ファイル→Claude経路」warn)。真の多ファイルバッチは未対応。ルート跨ぎ選択・グループの入れ子並べ替えも非スコープ
   - 単体: `apply.test.mjs`(8) / `reorder.test.mjs`(22)。設計/計画: `docs/superpowers/specs/2026-06-14-web-ui-bridge-multi-select-design.md` / `docs/superpowers/plans/2026-06-14-web-ui-bridge-multi-select.md`
 - **右ドックがサイトに被らない（2026-06-14）**: インスペクタ表示中は `<html>` に右 margin-right ＋ `<body>` に transform を当て、`fixed inset-x-0` の全幅ヘッダー等も含めページをガター内へ回り込ませる（畳むと復帰）
+- **装飾の連続射影（2026-06-14・位置ズレ系を構造的に根絶）**: 選択枠/ホバー枠/ラベル/ドロップラインは以前 `getBoundingClientRect` のスナップショットを `position:fixed` でキャッシュしていたため、スクロール/リサイズ/オートスクロール/HMR再描画/遅延ロード/アニメ/祖先transform で取り残されていた。→ **アクティブ(選択orホバーorドラッグ)な間だけ回る単一 `requestAnimationFrame` ループ(`reproject()`)が毎フレーム全装飾をライブ rect から再配置**（read→write分離・DOM使い回し・`lastRect` skip・`resolveEl` が `payload.selector` で HMR ノード差し替えを再解決）。装飾が「スナップショット」から「ライブDOMへの単方向従属」になり、レイアウトが何の理由で動こうと次フレームが差を吸収＝**位置ズレは構造的に起こり得ない**。アイドルで rAF 完全停止(0フレーム)。`.hl`/`.hl2` の CSS transition は毎フレーム更新と競合するため除去。`window.__webUiBridgeAssert()`(dev限定)が「全装飾 rect ≈ 対象 rect(<1px)」を返す不変条件チェック口。
+  - **回帰スモーク** `apps/web-ui-bridge/smoke/`(Playwright): 選択×{スクロール/リサイズ/ホバー/HMR相当/複数選択/ドラッグdropline/アイドル停止} の9ステップで `__webUiBridgeAssert` mismatch 0 を機械検証。前提=daemon :7331＋terra :3001 起動済み。`cd apps/web-ui-bridge/smoke && npm install && npx playwright install chromium && npm run smoke`。今後この種の位置ズレ回帰を出荷前に検知する安全網。
 
 ## 構成
 - **overlay** `apps/web-ui-bridge/overlay/overlay.js`: 自己完結 vanilla JS・Shadow DOM 隔離・SVG アイコン・daemon が origin/token を埋めて配信。
