@@ -179,6 +179,10 @@
             background: rgba(37,99,235,.08); border-radius: 2px; z-index: 5; display: none; transition: all .05s ease-out; }
       .hl2 { position: fixed; pointer-events: none; border: 1.5px solid rgba(37,99,235,.5);
              background: rgba(37,99,235,.04); border-radius: 2px; z-index: 4; display: block; transition: all .05s ease-out; }
+      /* 選択中(primary=最後に選んだ要素)は強い青＋塗り。ホバー用 $hl とは別の固定枠 */
+      .hl2.primary { border: 2px solid var(--sel); background: rgba(37,99,235,.12); z-index: 5; }
+      .sel-label { position: fixed; pointer-events: none; z-index: 6; display: block; font-family: ui-monospace, monospace;
+                   background: var(--sel); color: #fff; font-size: 10.5px; padding: 2px 6px; border-radius: 4px; white-space: nowrap; }
       .hl.drag { border-color: #7c3aed; border-style: dashed; background: rgba(124,58,237,.12); }
       .label { position: fixed; pointer-events: none; z-index: 6; display: none; font-family: ui-monospace, monospace;
                background: var(--sel); color: #fff; font-size: 10.5px; padding: 2px 6px; border-radius: 4px; white-space: nowrap; }
@@ -205,6 +209,9 @@
       .tool:hover { background: var(--surface); color: var(--tx); }
       .tool.on { background: var(--accent); color: #fff; }
       .tool:disabled { opacity: .35; cursor: default; }
+      .bp-wrap { display: flex; align-items: center; gap: 8px; }
+      .seg-label { font-size: 11px; color: var(--muted); flex: none; }
+      .bp-wrap .bpseg { flex: 1; }
       .bpseg { display: flex; background: var(--surface2); border: 1px solid var(--bd2); border-radius: 8px; padding: 2px; min-height: 32px; }
       .bpseg button { flex: 1; height: 26px; border: none; background: transparent; color: var(--muted);
                       font-size: 11px; border-radius: 6px; cursor: pointer; transition: all .12s; }
@@ -314,8 +321,11 @@
             <button class="tool t-collapse" title="閉じる">${svg("chevron")}</button>
           </span>
         </div>
-        <div class="bar-row bpseg">
-          <button data-bp="">全</button><button data-bp="sm:">sm</button><button data-bp="md:">md</button><button data-bp="lg:">lg</button><button data-bp="xl:">xl</button>
+        <div class="bar-row bp-wrap">
+          <span class="seg-label" title="編集中の画面幅（レスポンシブ断点）。狭い幅で基本を作り、広い幅だけ上書きします">画面幅</span>
+          <div class="bpseg">
+            <button data-bp="" title="すべての画面幅で適用（まずはここで基本スタイル）">全</button><button data-bp="sm:" title="640px以上（横向きスマホ〜）だけ上書き">sm</button><button data-bp="md:" title="768px以上（タブレット〜）だけ上書き">md</button><button data-bp="lg:" title="1024px以上（PC〜）だけ上書き">lg</button><button data-bp="xl:" title="1280px以上（大きい画面）だけ上書き">xl</button>
+          </div>
         </div>
       </div>
       <div class="body"></div>
@@ -340,21 +350,29 @@
     $label.style.left = r.left + "px";
     $label.style.top = Math.max(0, r.top - 20) + "px";
   }
-  function removeExtraHighlights() { root.querySelectorAll(".hl2").forEach((n) => n.remove()); }
+  function removeExtraHighlights() { root.querySelectorAll(".hl2, .sel-label").forEach((n) => n.remove()); }
   function hideHighlight() { $hl.style.display = "none"; $label.style.display = "none"; removeExtraHighlights(); }
+  // 選択枠はホバー用 $hl とは独立した専用要素で描く（共用するとマウス移動で選択枠が
+  // カーソルに付いて離れてしまう＝「選択したものが青くならない」バグになる）。
   function showBox(el, primary) {
     if (!el || !el.isConnected) return;
-    if (primary) { showHighlight(el); return; }
     const r = el.getBoundingClientRect();
     const box = document.createElement("div");
-    box.className = "hl2";
+    box.className = "hl2" + (primary ? " primary" : "");
     box.style.cssText = `position:fixed;display:block;left:${r.left}px;top:${r.top}px;width:${r.width}px;height:${r.height}px;`;
     root.appendChild(box);
+    if (primary) {
+      const comp = componentName(el);
+      const lab = document.createElement("div");
+      lab.className = "sel-label";
+      lab.textContent = `<${el.tagName.toLowerCase()}>` + (comp ? ` · ${comp}` : "");
+      lab.style.cssText = `position:fixed;display:block;left:${r.left}px;top:${Math.max(0, r.top - 20)}px;`;
+      root.appendChild(lab);
+    }
   }
   function highlightSelection() {
     removeExtraHighlights();
-    const c = cur();
-    if (!c?.el?.isConnected) { $hl.style.display = "none"; $label.style.display = "none"; return; }
+    if (!cur()?.el?.isConnected) return;
     selection.forEach((s, i) => showBox(s.el, i === primaryIdx));
   }
   function allSameParent(items = selection) {
@@ -905,14 +923,14 @@
     $body.innerHTML = `
       <div class="inspect-head">
         <div class="elhdr">${svg("cursor", 13)}${multiHead ? `<span class="eltag">${selection.length}個選択中</span>` : `<span class="eltag">&lt;${esc(sel.tag)}&gt;</span>${sel.component ? `<span class="elcomp">${esc(sel.component)}</span>` : ""}`}</div>
-        <div class="state-ctl" title="条件スタイル">
-          <button class="${state === "" ? "on" : ""}" data-state="">通常</button>
-          <button class="${state === "hover:" ? "on" : ""}" data-state="hover:">ホバー</button>
+        <div class="state-ctl" title="条件スタイル（状態別）。通常時とマウスを乗せた時で別々に編集できます">
+          <button class="${state === "" ? "on" : ""}" data-state="" title="通常時のスタイル">通常</button>
+          <button class="${state === "hover:" ? "on" : ""}" data-state="hover:" title="マウスを乗せた時(hover:)のスタイル">マウスホバー</button>
         </div>
       </div>
       ${chips}
       ${classMissingHint}
-      ${state === "hover:" ? `<div class="state-badge">ホバー状態を編集中</div>` : ""}
+      ${state === "hover:" ? `<div class="state-badge">マウスホバー状態を編集中</div>` : ""}
       <div class="tabs">${tabs.map(([k, l]) => `<button class="tab${k === tab ? " on" : ""}" data-tab="${k}">${l}</button>`).join("")}</div>
       ${panel}
       <section class="ask-sec"><h5>Claudeに頼む（複雑な構造・文言）</h5>
