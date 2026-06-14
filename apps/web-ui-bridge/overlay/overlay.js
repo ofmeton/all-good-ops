@@ -27,7 +27,7 @@
   const cur = () => (primaryIdx >= 0 ? selection[primaryIdx] : null);
   let bp = "", state = "", tab = "box";
   let marginLocked = null, paddingLocked = null;
-  let reordering = false, dragEl2 = null, dropTarget = null, dropPos = "before";
+  let reordering = false, dragEl2 = null, draggingGroup = false, dropTarget = null, dropPos = "before";
   let lastX = 0, lastY = 0, asTimer = null, asDir = 0; // D&D オートスクロール
   const pending = [];
 
@@ -1008,6 +1008,37 @@
       else toast(`失敗: ${j.reason || j.error}`, "err");
     } catch (err) { toast(`失敗: ${err.message}`, "err"); }
   }
+  function claudeMoveFallback(targetEl, pos) {
+    const tinfo = collect(targetEl);
+    const label = tinfo.text ? `「${tinfo.text.slice(0, 20)}」` : targetEl.tagName.toLowerCase();
+    pending.push({
+      payloads: selection.map((s) => s.payload),
+      prompt: `次の${selection.length}要素を、${label}の${pos === "before" ? "前" : "後"}へ、選択順を保ってまとめて移動してください。`,
+      moveTarget: tinfo,
+    });
+    toast("別親のため Claude 経路にまとめて移動を積みました", "warn");
+    renderBody();
+  }
+  async function doReorderGroup(targetEl, pos) {
+    const rawClasses = selection.map((s) => s.sourceClass);
+    const dragClasses = [...new Set(rawClasses.filter(Boolean))];
+    const targetClass = targetEl.getAttribute("class");
+    if (dragClasses.length < selection.length || !targetClass) return claudeMoveFallback(targetEl, pos);
+    if (!allSameParent(selection)) return claudeMoveFallback(targetEl, pos);
+    if (selection.some((s) => s.el === targetEl)) { toast("移動先が選択内です", "warn"); return; }
+    if (dragClasses.includes(targetClass)) { toast("移動先が選択内です", "warn"); return; }
+    try {
+      const j = await post("/reorder-group", { route: location.pathname, dragClasses, targetClass, position: pos });
+      if (j.ok && !j.noop) toast(`グループ移動 → ${j.file}`);
+      else if (j.ok) toast("変更なし");
+      else if (j.reason === "not-same-parent") return claudeMoveFallback(targetEl, pos);
+      else if (j.reason === "nested") toast("自分の中/外へは移動不可", "warn");
+      else if (j.reason === "ambiguous") toast("同じclassが複数。Claudeに頼んで", "warn");
+      else if (j.reason === "target-in-group") toast("移動先が選択内です", "warn");
+      else if (j.reason === "not-found") toast("ソース未特定(動的class?)。Claudeに頼んで", "warn");
+      else toast(`失敗: ${j.reason || j.error}`, "warn");
+    } catch (err) { toast(`失敗: ${err.message}`, "err"); }
+  }
 
   // ---- ツールバー配線 ---------------------------------------------------
   $tSelect.onclick = () => { setReordering(false); inspecting ? setInspecting(false) : (setInspecting(true), renderBody()); };
@@ -1026,7 +1057,12 @@
   document.addEventListener("mousedown", (e) => {
     if (!reordering || isOurs(e.target)) return;
     e.preventDefault(); e.stopPropagation();
-    dragEl2 = e.target; lastX = e.clientX; lastY = e.clientY; showHighlight(dragEl2, true);
+    // 選択要素「内側」を掴んでも group 扱い（子を持つ要素は mousedown が子に当たるため contains で判定）
+    const grabbed = selection.find((s) => s.el === e.target || (s.el.contains && s.el.contains(e.target)));
+    draggingGroup = selection.length >= 2 && !!grabbed;
+    dragEl2 = draggingGroup ? grabbed.el : e.target; lastX = e.clientX; lastY = e.clientY;
+    if (draggingGroup) { highlightSelection(); toast(`${selection.length}要素移動中`); }
+    else showHighlight(dragEl2, true);
   }, true);
   document.addEventListener("mousemove", (e) => {
     if (reordering && dragEl2) { lastX = e.clientX; lastY = e.clientY; updateDrop(); setAutoScroll(lastY); return; }
@@ -1035,8 +1071,13 @@
   document.addEventListener("mouseup", (e) => {
     if (!reordering || !dragEl2) return;
     e.preventDefault();
-    if (dropTarget && dropTarget !== dragEl2) doReorder(dragEl2, dropTarget, dropPos);
-    dragEl2 = null; dropTarget = null; $dropline.style.display = "none"; stopAutoScroll(); hideHighlight();
+    if (dropTarget && dropTarget !== dragEl2) {
+      if (draggingGroup) doReorderGroup(dropTarget, dropPos);
+      else doReorder(dragEl2, dropTarget, dropPos);
+    }
+    const wasGroup = draggingGroup;
+    dragEl2 = null; draggingGroup = false; dropTarget = null; $dropline.style.display = "none"; stopAutoScroll(); hideHighlight();
+    if (wasGroup && selection.length) setTimeout(highlightSelection, 1200);
   }, true);
   document.addEventListener("click", (e) => {
     if (!inspecting || isOurs(e.target)) return;
