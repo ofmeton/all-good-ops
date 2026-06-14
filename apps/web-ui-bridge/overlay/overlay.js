@@ -126,6 +126,7 @@
     if (!selection.length) primaryIdx = -1;
     else primaryIdx = Math.min(primaryIdx === idx ? selection.length - 1 : primaryIdx > idx ? primaryIdx - 1 : primaryIdx, selection.length - 1);
     resetEditState();
+    updateMoveAvailability();
     highlightSelection();
     renderBody();
   }
@@ -133,6 +134,7 @@
     selection = [];
     primaryIdx = -1;
     resetEditState();
+    updateMoveAvailability();
     hideHighlight();
     renderBody();
   }
@@ -153,6 +155,7 @@
     // 複数選択は「クリックで選択を組み立てる」操作なので select モードは保持する
     // （最初の選択後に OFF にすると 2 個目の ⌘/Shift+クリックが効かない）。
     // exit は選択ツール再押下 or Esc。パネル内操作は isOurs ガードで選択に巻き込まれない。
+    updateMoveAvailability();
     openPanel();
     highlightSelection();
   }
@@ -264,6 +267,7 @@
       .state-ctl button + button { border-left: 1px solid var(--bd2); }
       .state-ctl button.on { background: var(--accent); color: #fff; }
       .state-badge { margin: 0 16px 8px; display: inline-flex; align-items: center; height: 20px; padding: 0 7px; border-radius: 2px; background: #222; color: #fff; font-size: 11px; }
+      .hint { margin: 0 16px 8px; color: var(--muted); font-size: 11px; line-height: 1.5; }
       .tabs { display: flex; gap: 2px; padding: 0 10px; border-bottom: 1px solid var(--bd); }
       .tab { flex: 1; height: 40px; padding: 8px 0; border: none; background: transparent; color: var(--muted); font-size: 14px; cursor: pointer;
              border-bottom: 2px solid transparent; margin-bottom: -1px; }
@@ -353,6 +357,17 @@
     if (!c?.el?.isConnected) { $hl.style.display = "none"; $label.style.display = "none"; return; }
     selection.forEach((s, i) => showBox(s.el, i === primaryIdx));
   }
+  function allSameParent(items = selection) {
+    if (items.length < 2) return true;
+    const p = items[0].el?.parentElement;
+    return !!p && items.every((s) => s.el?.parentElement === p);
+  }
+  function updateMoveAvailability() {
+    const disabled = selection.length >= 2 && !allSameParent();
+    $tMove.disabled = disabled;
+    $tMove.title = disabled ? "親が異なるため決定移動不可。『まとめてClaude移動』を使用" : "ドラッグで並べ替え/移動";
+    if (disabled && reordering) setReordering(false);
+  }
 
   function setInspecting(on) { inspecting = on; $tSelect.classList.toggle("on", on); if (!on) { hideHighlight(); hovered = null; } }
 
@@ -389,36 +404,96 @@
   const PFX = () => bp + state;
   const live = () => cur()?.liveClass ?? "";
   const source = () => cur()?.sourceClass ?? "";
+  function readAcross(readForSel) {
+    const vals = selection.map(readForSel);
+    const uniq = [...new Set(vals.map((v) => JSON.stringify(v)))];
+    return uniq.length === 1 ? { mixed: false, value: vals[0] } : { mixed: true };
+  }
+  const multi = () => selection.length >= 2;
+  const fieldVal = (single, readForSel) => {
+    if (!multi()) return { value: single ?? "", ph: "" };
+    const r = readAcross(readForSel);
+    return r.mixed ? { value: "", ph: "—" } : { value: r.value ?? "", ph: "" };
+  };
 
   function applyLive(next) {
     setPrimaryLiveClass(next);
     const c = $(".cls"); if (c && c.value !== next) c.value = next;
     highlightSelection();
   }
-  function setAlign(val) {
-    const p = reEsc(PFX());
-    const cleaned = live().replace(new RegExp(`(^|\\s)${p}text-(left|center|right|justify)(?=\\s|$)`, "g"), " ").replace(/\s+/g, " ").trim();
-    applyLive((cleaned + ` ${PFX()}text-${val}`).trim());
+  async function applyAbsoluteBatch(computeNewClass) {
+    const c = cur();
+    if (!c) return;
+    const seen = new Set();
+    const edits = [];
+    let missing = 0, dup = 0;
+    for (const s of selection) {
+      if (!s.sourceClass) { missing++; continue; }
+      if (seen.has(s.sourceClass)) { dup++; continue; }
+      seen.add(s.sourceClass);
+      const nc = computeNewClass(s);
+      if (nc && nc !== s.sourceClass) edits.push({ oldClassName: s.sourceClass, newClassName: nc });
+    }
+    if (missing) toast("一部は class 無→Claude経路", "warn");
+    if (dup) toast(`${selection.length - missing}要素は同一ソース→${seen.size}箇所に適用`);
+    if (edits.length === 0) { toast("変更なし"); return; }
+    try {
+      const j = await post("/apply-style-batch", { route: c.payload.route, edits });
+      if (j.ok) {
+        const skipped = new Set((j.skipped || []).map((s) => s.oldClassName));
+        for (const e of edits) {
+          if (skipped.has(e.oldClassName)) continue;
+          for (const s of selection) {
+            if (s.sourceClass === e.oldClassName) {
+              s.sourceClass = e.newClassName;
+              s.liveClass = e.newClassName;
+              s.payload.classes = e.newClassName;
+              if (s.el?.isConnected) s.el.setAttribute("class", e.newClassName);
+            }
+          }
+        }
+        toast(`一括反映(${j.applied ?? edits.length}) skip ${j.skipped?.length || 0}`);
+        highlightSelection(); renderBody();
+      } else toast(`失敗: ${j.reason || j.error}`, "warn");
+    } catch (err) { toast(`失敗: ${err.message}`, "err"); }
   }
-  function stepSize(dir) {
+  const norm = (s) => String(s || "").replace(/\s+/g, " ").trim();
+  const nextAlignClass = (base, val) => {
+    const p = reEsc(PFX());
+    const cleaned = base.replace(new RegExp(`(^|\\s)${p}text-(left|center|right|justify)(?=\\s|$)`, "g"), " ");
+    return norm(cleaned + ` ${PFX()}text-${val}`);
+  };
+  function setAlign(val) {
+    if (multi()) return applyAbsoluteBatch((s) => nextAlignClass(s.sourceClass, val));
+    applyLive(nextAlignClass(live(), val));
+  }
+  const nextStepSizeClass = (base, dir) => {
     const p = reEsc(PFX());
     const re = new RegExp(`(^|\\s)${p}text-(xs|sm|base|lg|xl|[2-9]xl)(?=\\s|$)`);
-    const base = live();
     const m = base.match(re);
-    let next;
-    if (m) { let i = SIZES.indexOf(m[2]); i = Math.max(0, Math.min(SIZES.length - 1, i + dir)); next = base.replace(re, `$1${PFX()}text-${SIZES[i]}`); }
-    else if (dir > 0) next = (base + ` ${PFX()}text-lg`).trim();
-    else return;
-    applyLive(next.replace(/\s+/g, " ").trim());
+    if (m) {
+      let i = SIZES.indexOf(m[2]);
+      i = Math.max(0, Math.min(SIZES.length - 1, i + dir));
+      return norm(base.replace(re, `$1${PFX()}text-${SIZES[i]}`));
+    }
+    return dir > 0 ? norm(base + ` ${PFX()}text-lg`) : base;
+  };
+  function stepSize(dir) {
+    if (multi()) return applyAbsoluteBatch((s) => nextStepSizeClass(s.sourceClass, dir));
+    const next = nextStepSizeClass(live(), dir);
+    if (next !== live()) applyLive(next);
   }
-  function setColor(kind, hex) {
+  const nextColorClass = (base, kind, hex) => {
     const p = reEsc(PFX());
     const strip = new RegExp(`(^|\\s)${p}${kind}-(\\[#[0-9a-fA-F]{3,8}\\]|\\(--[^)]+\\)|[a-z]+-\\d{2,3})(?=\\s|$)`, "g");
-    const cleaned = live().replace(strip, " ").replace(/\s+/g, " ").trim();
-    applyLive((cleaned + ` ${PFX()}${kind}-[${hex}]`).trim());
+    return norm(base.replace(strip, " ") + ` ${PFX()}${kind}-[${hex}]`);
+  };
+  function setColor(kind, hex) {
+    if (multi()) return applyAbsoluteBatch((s) => nextColorClass(s.sourceClass, kind, hex));
+    applyLive(nextColorClass(live(), kind, hex));
   }
-  function readColorInfo(kind, fallback) {
-    const m = live().match(new RegExp(`(^|\\s)${reEsc(PFX())}${kind}-(\\[#[0-9a-fA-F]{3,8}\\])(?=\\s|$)`));
+  function readColorInfo(kind, fallback, cls = live()) {
+    const m = cls.match(new RegExp(`(^|\\s)${reEsc(PFX())}${kind}-(\\[#[0-9a-fA-F]{3,8}\\])(?=\\s|$)`));
     return m ? { value: m[2].slice(1, -1), source: "class" } : { value: fallback, source: "computed" };
   }
   function rgbToHex(rgb) {
@@ -432,54 +507,69 @@
   // 値1つ: [arbitrary] / (paren) / 単一トークン(ハイフン無し=方向別/色階調クラスを巻き込まない)
   const VAL = `(\\[[^\\]]*\\]|\\([^)]*\\)|[\\w./%#.]+)`;
   // prefix-value 系（w/h/rounded/opacity/z/leading/tracking 等。text-/font- のような多義prefixには使わない）
-  function setUtil(prefix, value) {
+  const nextUtilClass = (base, prefix, value) => {
     const p = reEsc(PFX()), pf = reEsc(prefix);
-    let next = live().replace(new RegExp(`(^|\\s)${p}${pf}-${VAL}(?=\\s|$)`, "g"), " ").replace(/\s+/g, " ").trim();
-    if (value !== "" && value != null) next = (next + ` ${PFX()}${prefix}-${value}`).trim();
-    applyLive(next);
+    let next = base.replace(new RegExp(`(^|\\s)${p}${pf}-${VAL}(?=\\s|$)`, "g"), " ");
+    if (value !== "" && value != null) next = next + ` ${PFX()}${prefix}-${value}`;
+    return norm(next);
+  };
+  function setUtil(prefix, value) {
+    if (multi()) return applyAbsoluteBatch((s) => nextUtilClass(s.sourceClass, prefix, value));
+    applyLive(nextUtilClass(live(), prefix, value));
   }
-  function readUtil(prefix) {
-    const m = live().match(new RegExp(`(^|\\s)${reEsc(PFX())}${reEsc(prefix)}-${VAL}(?=\\s|$)`));
+  function readUtil(prefix, cls = live()) {
+    const m = cls.match(new RegExp(`(^|\\s)${reEsc(PFX())}${reEsc(prefix)}-${VAL}(?=\\s|$)`));
     return m ? m[2] : "";
   }
-  function readUtilLast(prefix) {
+  function readUtilLast(prefix, cls = live()) {
     const re = new RegExp(`(^|\\s)${reEsc(PFX())}${reEsc(prefix)}-${VAL}(?=\\s|$)`, "g");
     let found = "", m;
-    while ((m = re.exec(live()))) found = m[2];
+    while ((m = re.exec(cls))) found = m[2];
     return found;
   }
   // 排他キーワード集合（position/overflow/shadow 等）
-  function setEnum(options, value) {
+  const nextEnumClass = (base, options, value) => {
     const p = reEsc(PFX());
-    let next = live().replace(new RegExp(`(^|\\s)${p}(${options.map(reEsc).join("|")})(?=\\s|$)`, "g"), " ").replace(/\s+/g, " ").trim();
-    if (value) next = (next + ` ${PFX()}${value}`).trim();
-    applyLive(next);
+    let next = base.replace(new RegExp(`(^|\\s)${p}(${options.map(reEsc).join("|")})(?=\\s|$)`, "g"), " ");
+    if (value) next = next + ` ${PFX()}${value}`;
+    return norm(next);
+  };
+  function setEnum(options, value) {
+    if (multi()) return applyAbsoluteBatch((s) => nextEnumClass(s.sourceClass, options, value));
+    applyLive(nextEnumClass(live(), options, value));
   }
-  function readEnum(options) {
-    const m = live().match(new RegExp(`(^|\\s)${reEsc(PFX())}(${options.map(reEsc).join("|")})(?=\\s|$)`));
+  function readEnum(options, cls = live()) {
+    const m = cls.match(new RegExp(`(^|\\s)${reEsc(PFX())}(${options.map(reEsc).join("|")})(?=\\s|$)`));
     return m ? m[2] : "";
   }
   // on/off トグル（underline/italic 等）
-  function toggleUtil(cls) {
+  const nextToggleClass = (base, cls) => {
     const re = new RegExp(`(^|\\s)${reEsc(PFX())}${reEsc(cls)}(?=\\s|$)`);
-    const base = live();
-    applyLive(re.test(base) ? base.replace(re, " ").replace(/\s+/g, " ").trim() : (base + ` ${PFX()}${cls}`).trim());
+    return norm(re.test(base) ? base.replace(re, " ") : base + ` ${PFX()}${cls}`);
+  };
+  function toggleUtil(cls) {
+    if (multi()) return applyAbsoluteBatch((s) => nextToggleClass(s.sourceClass, cls));
+    applyLive(nextToggleClass(live(), cls));
   }
-  function hasUtil(cls) { return new RegExp(`(^|\\s)${reEsc(PFX())}${reEsc(cls)}(?=\\s|$)`).test(live()); }
+  function hasUtil(cls, className = live()) { return new RegExp(`(^|\\s)${reEsc(PFX())}${reEsc(cls)}(?=\\s|$)`).test(className); }
   const numOf = (v) => { const m = String(v).match(/-?\d+(\.\d+)?/); return m ? m[0] : ""; }; // "[200px]"→"200"
   // bracket 値(0-1等)は×100して%表示、素のTailwind階調(opacity-50/leading-6)はそのまま
   const pctBracket = (raw) => { if (!raw) return ""; if (raw.startsWith("[")) { const n = parseFloat(raw.replace(/[\[\]]/g, "")); return Number.isFinite(n) ? Math.round(n * 100) : ""; } return numOf(raw); };
 
   // フォントサイズ（色/揃えを潰さず size のみ差し替え）
-  function setTextSize(px) {
+  const nextTextSizeClass = (base, px) => {
     const p = reEsc(PFX());
     const strip = new RegExp(`(^|\\s)${p}text-(\\[(?!#|var\\(|rgb|hsl|oklch)[^\\]]*\\]|xs|sm|base|lg|xl|[2-9]xl)(?=\\s|$)`, "g");
-    let next = live().replace(strip, " ").replace(/\s+/g, " ").trim();
-    if (px !== "") next = (next + ` ${PFX()}text-[${px}px]`).trim();
-    applyLive(next);
+    let next = base.replace(strip, " ");
+    if (px !== "") next = next + ` ${PFX()}text-[${px}px]`;
+    return norm(next);
+  };
+  function setTextSize(px) {
+    if (multi()) return applyAbsoluteBatch((s) => nextTextSizeClass(s.sourceClass, px));
+    applyLive(nextTextSizeClass(live(), px));
   }
-  function readTextSize() {
-    const m = live().match(new RegExp(`(^|\\s)${reEsc(PFX())}text-(\\[(?!#|var\\(|rgb|hsl|oklch)[^\\]]*\\]|xs|sm|base|lg|xl|[2-9]xl)(?=\\s|$)`));
+  function readTextSize(cls = live()) {
+    const m = cls.match(new RegExp(`(^|\\s)${reEsc(PFX())}text-(\\[(?!#|var\\(|rgb|hsl|oklch)[^\\]]*\\]|xs|sm|base|lg|xl|[2-9]xl)(?=\\s|$)`));
     return m ? numOf(m[2]) : "";
   }
   // フォント太さ（family を潰さず weight のみ）
@@ -583,10 +673,9 @@
     if (/^-?\d+(?:\.\d+)?$/.test(token)) return String(Math.round(Number(token) * 4));
     return "";
   }
-  function readComputedSpacingPx(kind, side) {
-    const c = cur();
-    if (!c?.el || !c.el.isConnected) return "";
-    const cs = getComputedStyle(c.el);
+  function readComputedSpacingPx(kind, side, sel = cur()) {
+    if (!sel?.el || !sel.el.isConnected) return "";
+    const cs = getComputedStyle(sel.el);
     const readSide = (s) => {
       const n = parseFloat(cs[SPACING_PROP[kind][s]]);
       return Number.isFinite(n) ? String(Math.round(n)) : "";
@@ -595,32 +684,33 @@
     const vals = SPACING_SIDES.map(readSide);
     return vals.every((v) => v !== "" && v === vals[0]) ? vals[0] : "";
   }
-  function readClassSpacingPx(kind, side) {
-    const readPrefix = (prefix) => spacingTokenToPx(readUtilLast(prefix));
+  function readClassSpacingPx(kind, side, className = live()) {
+    const readPrefix = (prefix) => spacingTokenToPx(readUtilLast(prefix, className));
     if (!side) {
-      const vals = SPACING_SIDES.map((s) => readClassSpacingPx(kind, s));
+      const vals = SPACING_SIDES.map((s) => readClassSpacingPx(kind, s, className));
       return vals.every((v) => v !== "" && v === vals[0]) ? vals[0] : "";
     }
     return readPrefix(spacingPrefix(kind, side)) || readPrefix(spacingPrefix(kind, SPACING_AXIS[side])) || readPrefix(kind);
   }
-  function readSpacingPx(kind, side) {
+  function readSpacingPx(kind, side, sel = cur()) {
+    const className = sel?.liveClass ?? "";
     if (!side) {
-      const vals = SPACING_SIDES.map((s) => readSpacingPx(kind, s));
+      const vals = SPACING_SIDES.map((s) => readSpacingPx(kind, s, sel));
       return vals.every((v) => v !== "" && v === vals[0]) ? vals[0] : "";
     }
-    const classPx = readClassSpacingPx(kind, side);
+    const classPx = readClassSpacingPx(kind, side, className);
     if (classPx !== "") return classPx;
-    return state === "" ? readComputedSpacingPx(kind, side) : "";
+    return state === "" ? readComputedSpacingPx(kind, side, sel) : "";
   }
   function spacingStripTargets(kind, side) {
     if (!side) return ["", "x", "y", ...SPACING_SIDES].map((s) => spacingPrefix(kind, s));
     return [kind, spacingPrefix(kind, SPACING_AXIS[side]), spacingPrefix(kind, side)];
   }
-  function stripSpacing(kind, prefixes) {
+  function stripSpacing(kind, prefixes, className = live()) {
     const p = reEsc(PFX());
     const neg = kind === "m" ? "-?" : "";
     const choices = prefixes.map(reEsc).join("|");
-    return live().replace(new RegExp(`(^|\\s)${p}${neg}(${choices})-${VAL}(?=\\s|$)`, "g"), " ").replace(/\s+/g, " ").trim();
+    return norm(className.replace(new RegExp(`(^|\\s)${p}${neg}(${choices})-${VAL}(?=\\s|$)`, "g"), " "));
   }
   function isSpacingLocked(kind) {
     const override = spacingOverride(kind);
@@ -635,18 +725,21 @@
     if (px === "" || px == null || (Number.isFinite(n) && n === 0)) return next;
     return (next + ` ${PFX()}${spacingPrefix(kind, side)}-[${px}px]`).trim();
   }
-  function setSpacingValue(kind, side, px) {
+  function nextSpacingValueClass(base, kind, side, px, sel) {
     if (!side) {
-      let next = stripSpacing(kind, spacingStripTargets(kind, ""));
-      next = appendSpacingPx(next, kind, "", px);
-      applyLive(next);
-      return;
+      let next = stripSpacing(kind, spacingStripTargets(kind, ""), base);
+      return appendSpacingPx(next, kind, "", px);
     }
-    const vals = Object.fromEntries(SPACING_SIDES.map((s) => [s, readSpacingPx(kind, s)]));
+    const baseSel = sel ? { ...sel, liveClass: base } : cur();
+    const vals = Object.fromEntries(SPACING_SIDES.map((s) => [s, readSpacingPx(kind, s, baseSel)]));
     vals[side] = px === "" || px == null ? "0" : String(px);
-    let next = stripSpacing(kind, spacingStripTargets(kind, ""));
+    let next = stripSpacing(kind, spacingStripTargets(kind, ""), base);
     SPACING_SIDES.forEach((s) => { next = appendSpacingPx(next, kind, s, vals[s]); });
-    applyLive(next);
+    return next;
+  }
+  function setSpacingValue(kind, side, px) {
+    if (multi()) return applyAbsoluteBatch((s) => nextSpacingValueClass(s.sourceClass, kind, side, px, { ...s, liveClass: s.sourceClass }));
+    applyLive(nextSpacingValueClass(live(), kind, side, px, cur()));
   }
   function expandSpacing(kind) {
     const vals = Object.fromEntries(SPACING_SIDES.map((side) => [side, readSpacingPx(kind, side)]));
@@ -665,15 +758,16 @@
   function renderSpacing(kind) {
     const locked = isSpacingLocked(kind);
     const prefix = kind === "m" ? "マージン" : "パディング";
-    const input = (side, val) => `<span class="num spnum">${side ? `<span class="dir">${svg(SPACING_ICONS[side], 16)}</span>` : ""}<input type="number" class="sp-input" data-kind="${kind}" data-side="${side}" value="${val}"><span class="u">px</span></span>`;
+    const input = (side, val) => `<span class="num spnum">${side ? `<span class="dir">${svg(SPACING_ICONS[side], 16)}</span>` : ""}<input type="number" class="sp-input" data-kind="${kind}" data-side="${side}" value="${val.value}" placeholder="${val.ph || ""}"><span class="u">px</span></span>`;
+    const spacingVal = (side) => fieldVal(readSpacingPx(kind, side), (s) => readSpacingPx(kind, side, s));
     if (locked) {
       return `<div class="ctl spacing-ctl"><label>${prefix}</label><div class="spacing"><div class="spacing-line">
-        ${input("", readSpacingPx(kind, ""))}
+        ${input("", spacingVal(""))}
         <button class="lock-toggle" data-spacing="${kind}" data-locked="true" title="${prefix}を方向別に編集">${svg("lock", 16)}</button>
       </div></div></div>`;
     }
     return `<div class="ctl spacing-ctl"><label>${prefix}</label><div class="spacing"><div class="spacing-grid">
-      ${SPACING_SIDES.map((side) => input(side, readSpacingPx(kind, side))).join("")}
+      ${SPACING_SIDES.map((side) => input(side, spacingVal(side))).join("")}
       <button class="lock-toggle" data-spacing="${kind}" data-locked="false" title="${prefix}を一括編集">${svg("unlock", 16)}</button>
     </div></div></div>`;
   }
@@ -683,8 +777,10 @@
     const sel = active?.payload;
     if (!active || !sel) {
       $body.innerHTML = `<div class="empty">ツールバーの選択アイコンを押して<br>要素をクリックで選択してください</div>`;
+      updateMoveAvailability();
       return;
     }
+    updateMoveAvailability();
     const cs = active.el && active.el.isConnected ? getComputedStyle(active.el) : null;
     const textColor = readColorInfo("text", rgbToHex(cs && cs.color));
     const bgColor = readColorInfo("bg", rgbToHex(cs && cs.backgroundColor));
@@ -694,44 +790,76 @@
     const textual = TEXTUAL.test(sel.tag);
     const tabs = (textual ? [["text", "テキスト"]] : []).concat([["box", "ボックス"], ["transform", "変形"], ["settings", "設定"]]);
     if (!tabs.some(([k]) => k === tab)) tab = tabs[0][0];
-    const num = (cls, val, unit, ph = "") => `<span class="num"><input type="number" class="${cls}" value="${val}" placeholder="${ph}">${unit ? `<span class="u">${unit}</span>` : ""}</span>`;
+    const num = (cls, val, unit, ph = "") => {
+      const v = val && typeof val === "object" ? val : { value: val, ph };
+      return `<span class="num"><input type="number" class="${cls}" value="${v.value ?? ""}" placeholder="${v.ph || ""}">${unit ? `<span class="u">${unit}</span>` : ""}</span>`;
+    };
     const pendingLabel = (p) => p.payloads ? `${p.payloads.length}要素` : `&lt;${esc(p.payload.tag)}&gt;`;
     const list = pending.map((p, i) => `<li><span class="t">${pendingLabel(p)} ${esc(p.prompt.slice(0, 36))}</span><span class="x" data-i="${i}">✕</span></li>`).join("");
     const multiHead = selection.length >= 2;
     const chips = multiHead ? `<div class="chips">${selection.map((s, i) => `<span class="chip${i === primaryIdx ? " primary" : ""}"><span>&lt;${esc(s.payload.tag)}&gt;</span><button class="sel-x" data-i="${i}" title="選択解除">×</button></span>`).join("")}</div>` : "";
+    const classMissingHint = multiHead && selection.some((s) => !s.sourceClass) ? `<div class="hint">class の無い要素は一括スタイル・複製/削除から除外されます</div>` : "";
+    const valOf = (single, readForSel) => fieldVal(single, readForSel);
+    const readColorValue = (kind, s) => {
+      const style = s.el?.isConnected ? getComputedStyle(s.el) : null;
+      const prop = kind === "text" ? "color" : kind === "bg" ? "backgroundColor" : "borderColor";
+      return readColorInfo(kind, rgbToHex(style && style[prop]), s.liveClass).value;
+    };
+    const mixedBadge = (isMixed) => isMixed ? `<span class="source-label">—</span>` : "";
+    const textColorMixed = multi() && readAcross((s) => readColorValue("text", s)).mixed;
+    const bgColorMixed = multi() && readAcross((s) => readColorValue("bg", s)).mixed;
+    const bdColorMixed = multi() && readAcross((s) => readColorValue("border", s)).mixed;
+    const textSizeVal = valOf(readTextSize(), (s) => readTextSize(s.liveClass));
+    const familyVal = valOf(readEnum(FAMILIES), (s) => readEnum(FAMILIES, s.liveClass)).value;
+    const weightVal = valOf(readEnum(WEIGHTS), (s) => readEnum(WEIGHTS, s.liveClass)).value;
+    const leadingVal = valOf(pctBracket(readUtil("leading")), (s) => pctBracket(readUtil("leading", s.liveClass)));
+    const trackingVal = valOf(numOf(readUtil("tracking")), (s) => numOf(readUtil("tracking", s.liveClass)));
+    const widthVal = valOf(numOf(readUtil("w")), (s) => numOf(readUtil("w", s.liveClass)));
+    const heightVal = valOf(numOf(readUtil("h")), (s) => numOf(readUtil("h", s.liveClass)));
+    const radiusVal = valOf(numOf(readUtil("rounded")), (s) => numOf(readUtil("rounded", s.liveClass)));
+    const opacityVal = valOf(pctBracket(readUtil("opacity")), (s) => pctBracket(readUtil("opacity", s.liveClass)));
+    const borderVal = valOf(numOf(readUtil("border")), (s) => numOf(readUtil("border", s.liveClass)));
+    const shadowVal = valOf(readEnum(SHADOWS), (s) => readEnum(SHADOWS, s.liveClass)).value;
+    const posVal = valOf(readEnum(POS), (s) => readEnum(POS, s.liveClass)).value;
+    const zVal = valOf(numOf(readUtil("z")), (s) => numOf(readUtil("z", s.liveClass)));
+    const overflowVal = valOf(readEnum(OVERFLOW), (s) => readEnum(OVERFLOW, s.liveClass)).value;
+    const rotateVal = valOf(numOf(readUtil("rotate")), (s) => numOf(readUtil("rotate", s.liveClass)));
+    const scaleVal = valOf(readUtil("scale").replace(/[\[\]]/g, ""), (s) => readUtil("scale", s.liveClass).replace(/[\[\]]/g, ""));
+    const underlineMixed = multi() && readAcross((s) => hasUtil("underline", s.liveClass)).mixed;
+    const italicMixed = multi() && readAcross((s) => hasUtil("italic", s.liveClass)).mixed;
 
     let panel = "";
     if (tab === "text") {
       panel = `<section><h5>タイポグラフィ</h5>
-        <div class="ctl"><label>色</label><span class="swatch"><input type="color" class="c-text" value="${textHex}"></span></div>
-        <div class="ctl"><label>フォント</label><select class="f-family">${opt("", readEnum(FAMILIES), "—")}${opt("font-sans", readEnum(FAMILIES), "Sans")}${opt("font-serif", readEnum(FAMILIES), "Serif")}${opt("font-mono", readEnum(FAMILIES), "Mono")}</select></div>
-        <div class="ctl"><label>サイズ</label>${num("f-size", readTextSize(), "px")}
-          <label style="width:auto">太さ</label><select class="f-weight">${["", ...WEIGHTS].map((w) => opt(w, readEnum(WEIGHTS), w ? w.replace("font-", "") : "—")).join("")}</select></div>
-        <div class="ctl"><label>行高</label>${num("f-lh", pctBracket(readUtil("leading")), "%")}
-          <label style="width:auto">字間</label>${num("f-ls", numOf(readUtil("tracking")), "em")}</div>
+        <div class="ctl"><label>色</label><span class="swatch"><input type="color" class="c-text" value="${textHex}">${mixedBadge(textColorMixed)}</span></div>
+        <div class="ctl"><label>フォント</label><select class="f-family">${opt("", familyVal, "—")}${opt("font-sans", familyVal, "Sans")}${opt("font-serif", familyVal, "Serif")}${opt("font-mono", familyVal, "Mono")}</select></div>
+        <div class="ctl"><label>サイズ</label>${num("f-size", textSizeVal, "px")}
+          <label style="width:auto">太さ</label><select class="f-weight">${["", ...WEIGHTS].map((w) => opt(w, weightVal, w ? w.replace("font-", "") : "—")).join("")}</select></div>
+        <div class="ctl"><label>行高</label>${num("f-lh", leadingVal, "%")}
+          <label style="width:auto">字間</label>${num("f-ls", trackingVal, "em")}</div>
         <div class="ctl"><label>整列</label><span class="seg"><button data-align="left">左</button><button data-align="center">中</button><button data-align="right">右</button><button data-align="justify">両端</button></span></div>
-        <div class="ctl"><label>装飾</label><span class="seg"><button class="t-ul${hasUtil("underline") ? " on" : ""}">下線</button><button class="t-it${hasUtil("italic") ? " on" : ""}"><i>斜体</i></button></span></div>
+        <div class="ctl"><label>装飾</label><span class="seg"><button class="t-ul${hasUtil("underline") && !underlineMixed ? " on" : ""}" title="${underlineMixed ? "—" : ""}">下線</button><button class="t-it${hasUtil("italic") && !italicMixed ? " on" : ""}" title="${italicMixed ? "—" : ""}"><i>斜体</i></button></span></div>
       </section>`;
     } else if (tab === "box") {
       panel = `<section><h5>レイアウト</h5>
-        <div class="ctl"><label>幅</label>${num("l-w", numOf(readUtil("w")), "px")}<label style="width:auto">高さ</label>${num("l-h", numOf(readUtil("h")), "px")}</div>
+        <div class="ctl"><label>幅</label>${num("l-w", widthVal, "px")}<label style="width:auto">高さ</label>${num("l-h", heightVal, "px")}</div>
         ${renderSpacing("m")}
         ${renderSpacing("p")}
       </section>
       <section><h5>外観</h5>
-        <div class="ctl"><label>背景色</label><span class="swatch"><input type="color" class="c-bg" value="${bgHex}">${sourceLabel(bgColor)}</span></div>
-        <div class="ctl"><label>角丸</label>${num("a-radius", numOf(readUtil("rounded")), "px")}<label style="width:auto">不透明度</label>${num("a-opacity", pctBracket(readUtil("opacity")), "%")}</div>
-        <div class="ctl"><label>枠線</label>${num("a-border", numOf(readUtil("border")), "px")}<span class="swatch"><input type="color" class="c-border" value="${bdHex}">${sourceLabel(bdColor)}</span></div>
-        <div class="ctl"><label>影</label><select class="a-shadow">${["", ...SHADOWS].map((s) => opt(s, readEnum(SHADOWS), s ? s.replace("shadow-", "").replace("shadow", "default") : "—")).join("")}</select></div>
+        <div class="ctl"><label>背景色</label><span class="swatch"><input type="color" class="c-bg" value="${bgHex}">${mixedBadge(bgColorMixed) || sourceLabel(bgColor)}</span></div>
+        <div class="ctl"><label>角丸</label>${num("a-radius", radiusVal, "px")}<label style="width:auto">不透明度</label>${num("a-opacity", opacityVal, "%")}</div>
+        <div class="ctl"><label>枠線</label>${num("a-border", borderVal, "px")}<span class="swatch"><input type="color" class="c-border" value="${bdHex}">${mixedBadge(bdColorMixed) || sourceLabel(bdColor)}</span></div>
+        <div class="ctl"><label>影</label><select class="a-shadow">${["", ...SHADOWS].map((s) => opt(s, shadowVal, s ? s.replace("shadow-", "").replace("shadow", "default") : "—")).join("")}</select></div>
       </section>
       <section><h5>ポジション</h5>
-        <div class="ctl"><label>位置</label><select class="p-pos">${["", ...POS].map((v) => opt(v, readEnum(POS), v || "static")).join("")}</select><label style="width:auto">重ね順</label>${num("p-z", numOf(readUtil("z")), "")}</div>
-        <div class="ctl"><label>はみ出し</label><select class="p-of">${["", ...OVERFLOW].map((v) => opt(v, readEnum(OVERFLOW), v ? v.replace("overflow-", "") : "—")).join("")}</select></div>
+        <div class="ctl"><label>位置</label><select class="p-pos">${["", ...POS].map((v) => opt(v, posVal, v || "static")).join("")}</select><label style="width:auto">重ね順</label>${num("p-z", zVal, "")}</div>
+        <div class="ctl"><label>はみ出し</label><select class="p-of">${["", ...OVERFLOW].map((v) => opt(v, overflowVal, v ? v.replace("overflow-", "") : "—")).join("")}</select></div>
       </section>`;
     } else if (tab === "transform") {
       panel = `<section><h5>変形</h5>
-        <div class="ctl"><label>回転</label>${num("t-rot", numOf(readUtil("rotate")), "deg")}</div>
-        <div class="ctl"><label>拡縮</label>${num("t-scale", readUtil("scale").replace(/[\[\]]/g, ""), "×", "1")}</div>
+        <div class="ctl"><label>回転</label>${num("t-rot", rotateVal, "deg")}</div>
+        <div class="ctl"><label>拡縮</label>${num("t-scale", scaleVal, "×", "1")}</div>
       </section>`;
     } else {
       panel = `<section><h5>クラス（Tailwind）</h5>
@@ -757,6 +885,7 @@
         </div>
       </div>
       ${chips}
+      ${classMissingHint}
       ${state === "hover:" ? `<div class="state-badge">ホバー状態を編集中</div>` : ""}
       <div class="tabs">${tabs.map(([k, l]) => `<button class="tab${k === tab ? " on" : ""}" data-tab="${k}">${l}</button>`).join("")}</div>
       ${panel}
