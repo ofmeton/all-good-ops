@@ -439,9 +439,9 @@
       return { item: s, el, rect: el ? el.getBoundingClientRect() : null, primary: i === primaryIdx };
     });
     const primary = selReads.find((s) => s.primary && s.rect);
-    const subject = (reordering && dragEl2 && !draggingGroup)
-      ? dragEl2
-      : (inspecting && hovered ? hovered : null);
+    // ホバー枠は「選択済み要素の上」には出さない（選択枠と二重になるのを防ぐ）。
+    const hoverSubject = (inspecting && hovered && !selection.some((s) => s.el === hovered)) ? hovered : null;
+    const subject = (reordering && dragEl2 && !draggingGroup) ? dragEl2 : hoverSubject;
     const subjectRect = subject && subject.isConnected ? subject.getBoundingClientRect() : null;
     const subjectDrag = !!(reordering && dragEl2 && !draggingGroup && subject === dragEl2);
 
@@ -1270,6 +1270,11 @@
       hovered = el;
       ensureLoop();
     }
+  }, true);
+  // スクロールするとカーソル下の要素が変わる（mousemove は発火しない）ため hovered が古くなる。
+  // ホバー枠を一旦消し、次のマウス移動で正しい要素に付け直す（選択枠は reproject が追従継続）。
+  window.addEventListener("scroll", () => {
+    if (!reordering && hovered) { hovered = null; hideHover(); }
   }, true);
   document.addEventListener("mouseup", (e) => {
     if (!reordering || !dragEl2) return;
