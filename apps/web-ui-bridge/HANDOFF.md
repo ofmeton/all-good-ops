@@ -17,6 +17,15 @@
   - **条件スタイル＝状態（通常/ホバー）**: インスペクタ右上の状態セグメント。`PFX()=bp+state` 合成で全プロパティが `hover:`（bp併用 `md:hover:`）を読み書き。通常↔hover は相互破壊しない
   - 実機実測でピクセル合わせ込み（入力セル #f7f7f7・角丸8px・高32px / タブ14px/40px / color swatch 24px / section 左16px）
   - 実装は **Codex(gpt-5.5 high) 委任**＋Claude 設計/レビュー(code-reviewer・silent-failure-hunter)/実機 chrome-devtools 検証。全操作を実ブラウザで実操作確認済み（py-2→8px 読み・1辺編集の直交辺保全・hover分離・集約 warn）
+- **複数選択（2026-06-14）**: 修飾クリック（⌘/Shift+クリック）で要素を選択集合に追加/解除。primary=濃い青/他=半透明青ハイライト＋ヘッダ「N個選択中」＋チップ(×で解除)・Esc で選択モード解除。4アクション:
+  - **まとめてプロンプト**: `/enqueue` の `payloads:[...]` で複数 locator を1キューに（Claude 経路・常に可）
+  - **まとめて複製/削除**: `/structure-batch`（kind=delete/duplicate・1書込=1undo・削除後は適用分のみ選択解除）
+  - **まとめてスタイル一括**: `/apply-style-batch`。値が異なる要素は「—」mixed 表示→絶対入力で一律／± で各要素の現値から相対増減
+  - **D&D group 移動**: 同一親かつ class 一意なら `/reorder-group`（N要素を選択順保って一括移動・決定的）。別親が混在する選択は移動ツール(⇅)を無効化＋ツールチップ→「まとめてプロンプト」で Claude 移動。掴みは選択要素の内側(子)でも `contains` で group 判定
+  - 設計の核: バッチは daemon の純関数（`apply.mjs` applyStyleBatch/structureBatch・`reorder.mjs` moveGroupInSource）が範囲を集めて**降順 splice で1回適用**＝原子的・1undo。**同一 className は dedup**（map/loop で 1ソース→複数 DOM の二重適用を防ぐ）。一意特定不可/別親/別ファイルは **skip 理由を warn toast で表出**し Claude 経路へ（サイレント脱落なし）。reparent 分岐は削除範囲 overlap を検出して安全拒否
+  - 既知制約: バッチは**1ファイル単位**。複数選択が別コンポーネントファイルに跨ると、片方のファイルに適用し他は skip(「別ファイル→Claude経路」warn)。真の多ファイルバッチは未対応。ルート跨ぎ選択・グループの入れ子並べ替えも非スコープ
+  - 単体: `apply.test.mjs`(8) / `reorder.test.mjs`(22)。設計/計画: `docs/superpowers/specs/2026-06-14-web-ui-bridge-multi-select-design.md` / `docs/superpowers/plans/2026-06-14-web-ui-bridge-multi-select.md`
+- **右ドックがサイトに被らない（2026-06-14）**: インスペクタ表示中は `<html>` に右 margin-right ＋ `<body>` に transform を当て、`fixed inset-x-0` の全幅ヘッダー等も含めページをガター内へ回り込ませる（畳むと復帰）
 
 ## 構成
 - **overlay** `apps/web-ui-bridge/overlay/overlay.js`: 自己完結 vanilla JS・Shadow DOM 隔離・SVG アイコン・daemon が origin/token を埋めて配信。
