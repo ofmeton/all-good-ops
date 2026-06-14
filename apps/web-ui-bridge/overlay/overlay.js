@@ -522,6 +522,24 @@
       else toast(`失敗: ${j.reason || j.error}`, "err");
     } catch (err) { toast(`失敗: ${err.message}`, "err"); }
   }
+  async function doStructBatch(kind) {
+    const c = cur();
+    if (!c) return;
+    const withClass = selection.map((s) => s.sourceClass).filter(Boolean);
+    if (withClass.length < selection.length) toast("一部は class 無→Claude経路", "warn");
+    // 同一 className を除去（map/loop 生成で 1 ソース→複数 DOM の時、二重適用を防ぐ）。
+    const targets = [...new Set(withClass)];
+    if (targets.length < withClass.length) toast(`${withClass.length}要素は同一ソース→${targets.length}箇所に適用`);
+    if (targets.length === 0) { toast("class が無く操作不可（Claudeに頼んで）", "warn"); return; }
+    try {
+      const j = await post("/structure-batch", { route: c.payload.route, kind, targets });
+      if (j.ok) {
+        toast(`${kind === "delete" ? "削除" : "複製"}一括 → ${j.file ?? "noop"}（skip ${j.skipped?.length || 0}）`);
+        if (kind === "delete") clearSelection();
+        else setTimeout(highlightSelection, 1200);
+      } else toast(`失敗: ${j.reason || j.error}`, "warn");
+    } catch (err) { toast(`失敗: ${err.message}`, "err"); }
+  }
   async function doHistory(endpoint) {
     const verb = endpoint === "/undo" ? "戻す" : "進む";
     try {
@@ -677,7 +695,8 @@
     const tabs = (textual ? [["text", "テキスト"]] : []).concat([["box", "ボックス"], ["transform", "変形"], ["settings", "設定"]]);
     if (!tabs.some(([k]) => k === tab)) tab = tabs[0][0];
     const num = (cls, val, unit, ph = "") => `<span class="num"><input type="number" class="${cls}" value="${val}" placeholder="${ph}">${unit ? `<span class="u">${unit}</span>` : ""}</span>`;
-    const list = pending.map((p, i) => `<li><span class="t">&lt;${esc(p.payload.tag)}&gt; ${esc(p.prompt.slice(0, 36))}</span><span class="x" data-i="${i}">✕</span></li>`).join("");
+    const pendingLabel = (p) => p.payloads ? `${p.payloads.length}要素` : `&lt;${esc(p.payload.tag)}&gt;`;
+    const list = pending.map((p, i) => `<li><span class="t">${pendingLabel(p)} ${esc(p.prompt.slice(0, 36))}</span><span class="x" data-i="${i}">✕</span></li>`).join("");
     const multiHead = selection.length >= 2;
     const chips = multiHead ? `<div class="chips">${selection.map((s, i) => `<span class="chip${i === primaryIdx ? " primary" : ""}"><span>&lt;${esc(s.payload.tag)}&gt;</span><button class="sel-x" data-i="${i}" title="選択解除">×</button></span>`).join("")}</div>` : "";
 
@@ -789,11 +808,17 @@
     if (cls) cls.oninput = (e) => { setPrimaryLiveClass(e.target.value); highlightSelection(); };
     const ap = $(".apply"); if (ap) ap.onclick = commitStyle;
     const rs = $(".reset"); if (rs) rs.onclick = () => applyLive(source());
-    const du = $(".dup"); if (du) du.onclick = () => doStruct("/duplicate");
-    const de = $(".del"); if (de) de.onclick = () => doStruct("/delete");
+    const du = $(".dup"); if (du) du.onclick = () => selection.length >= 2 ? doStructBatch("duplicate") : doStruct("/duplicate");
+    const de = $(".del"); if (de) de.onclick = () => selection.length >= 2 ? doStructBatch("delete") : doStruct("/delete");
     // Claude
     const ask = $(".ask"), add = $(".add");
-    if (add) add.onclick = () => { const p = (ask.value || "").trim(); if (!p) { toast("指示を入力してください", "warn"); return; } pending.push({ payload: sel, prompt: p }); renderBody(); };
+    if (add) add.onclick = () => {
+      const p = (ask.value || "").trim();
+      if (!p) { toast("指示を入力してください", "warn"); return; }
+      if (selection.length >= 2) pending.push({ payloads: selection.map((s) => s.payload), prompt: p });
+      else pending.push({ payload: sel, prompt: p });
+      renderBody();
+    };
     $body.querySelectorAll(".x").forEach((x) => x.onclick = () => { pending.splice(Number(x.dataset.i), 1); renderBody(); });
     const sendBtn = $(".send"); if (sendBtn) sendBtn.onclick = send;
   }
@@ -803,7 +828,9 @@
 
   async function send() {
     if (!pending.length) return;
-    const items = pending.map((p) => ({ ...p.payload, prompt: p.prompt }));
+    const items = pending.map((p) => p.payloads
+      ? { ...p.payloads[0], payloads: p.payloads, prompt: p.prompt }
+      : { ...p.payload, prompt: p.prompt });
     try {
       const json = await post("/enqueue", { items });
       if (!json.ok) throw new Error(json.error || "enqueue failed");

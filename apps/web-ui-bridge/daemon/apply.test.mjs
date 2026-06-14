@@ -64,6 +64,19 @@ test("structureBatch: 特定不可 target は skip", () => {
   assert.doesNotMatch(r.src, /className="i1"/);
 });
 
+// map/loop 由来で 1 ソース→複数 DOM を選んだ時、同一 className が重複して渡る。
+test("structureBatch duplicate: 同一 className の重複 target は1回だけ複製(二重複製しない)", () => {
+  const r = structureBatch(S2, "duplicate", ["i2", "i2"]);
+  assert.equal(r.ok, true);
+  assert.equal((r.src.match(/className="i2"/g) || []).length, 2); // 元1+複製1=2（3ではない）
+});
+
+test("structureBatch delete: 同一 className の重複 target は1回だけ削除(overlapで失敗しない)", () => {
+  const r = structureBatch(S2, "delete", ["i2", "i2"]);
+  assert.equal(r.ok, true);
+  assert.equal((r.src.match(/className="i2"/g) || []).length, 0);
+});
+
 function parseOk(s) {
   try {
     babelParser.parse(s, { sourceType: "module", plugins: ["typescript", "jsx"] });

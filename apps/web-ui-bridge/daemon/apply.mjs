@@ -81,9 +81,12 @@ export function structureBatch(src, kind, targets) {
   if (!["delete", "duplicate"].includes(kind)) return { ok: false, reason: "bad-kind" };
   try { parse(src); } catch { return { ok: false, reason: "parse-error" }; }
 
+  // 同一 className の重複を除去（map/loop で 1 ソース→複数 DOM の時、二重削除/二重複製を防ぐ）。
+  const uniqueTargets = [...new Set(targets)];
+
   const skipped = [];
   const ranges = [];
-  for (const targetClass of targets) {
+  for (const targetClass of uniqueTargets) {
     if (kind === "delete") {
       const r = elementLineRange(src, targetClass);
       if (r.err) { skipped.push({ targetClass, reason: r.err }); continue; }
