@@ -415,6 +415,22 @@
     if (f) { item.el = f; return f; }
     return null;
   }
+  function resyncSelectionClassesAfterHmr() {
+    setTimeout(() => {
+      for (const s of selection) {
+        const fresh = s.payload?.selector ? document.querySelector(s.payload.selector) : null;
+        const el = fresh && fresh.isConnected ? fresh : (s.el?.isConnected ? s.el : null);
+        if (!el) continue;
+        s.el = el;
+        const currentClass = el.getAttribute("class") || "";
+        s.sourceClass = currentClass;
+        s.liveClass = currentClass;
+        s.payload.classes = currentClass;
+      }
+      syncSelBoxes();
+      if (!collapsed) renderBody();
+    }, 1200);
+  }
   function ensureLoop() {
     if (!rafId) rafId = requestAnimationFrame(reproject);
   }
@@ -843,7 +859,10 @@
     const verb = endpoint === "/undo" ? "戻す" : "進む";
     try {
       const j = await post(endpoint);
-      if (j.ok) toast(`${verb}: ${j.label}（${j.file}）`);
+      if (j.ok) {
+        toast(`${verb}: ${j.label}（${j.file}）`);
+        resyncSelectionClassesAfterHmr();
+      }
       else if (j.reason === "nothing") toast(`これ以上「${verb}」操作はありません`);
       else if (j.reason === "file-changed") toast(`外部変更があり「${verb}」できません`, "warn");
       else toast(`失敗: ${j.reason || j.error}`, "err");
