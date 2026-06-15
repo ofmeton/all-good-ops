@@ -238,108 +238,113 @@ function RecurringRowItem({
         pending ? "opacity-60" : ""
       } ${inactive ? "opacity-70" : ""}`}
     >
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
-        <div className="flex min-w-0 flex-1 items-center gap-2">
-        <span
-          className={`min-w-0 flex-1 truncate text-sm font-medium ${
-            inactive ? "text-muted line-through" : "text-foreground"
-          }`}
-          title={item.name}
-        >
-          {item.name}
-        </span>
-        <ConfirmedBadge confirmed={item.confirmed} />
-        {item.frequency === "weekly" && item.weekday != null ? (
-          <span className="tabular shrink-0 text-[11px] text-muted">
-            毎週{WEEKDAY_LABELS[item.weekday]}曜
-          </span>
-        ) : item.day != null ? (
-          <span className="tabular shrink-0 text-[11px] text-muted">
-            毎月{item.day}日
-          </span>
-        ) : null}
-        {isVariable && (
-          <span className="shrink-0 rounded-full bg-warning/10 px-2 py-0.5 text-[11px] font-medium text-warning">
-            変動
-          </span>
-        )}
-      </div>
-
-      {!isVariable && (
+      <div className="flex flex-col gap-3">
+        {/* 1段目: 名称・状態と 有効/削除。操作を上段右に分離し名称の横潰れを防ぐ */}
         <div className="flex items-center gap-2">
-          <label className="sr-only" htmlFor={`amount-${item.id}`}>
-            {item.name} の金額
-          </label>
-          <span aria-hidden className="text-sm text-muted">
-            ¥
-          </span>
-          <input
-            id={`amount-${item.id}`}
-            type="number"
-            inputMode="numeric"
-            min={0}
-            step={1}
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            disabled={pending}
-            className="tabular h-11 w-28 rounded-lg border border-border bg-background px-2 text-right text-sm text-foreground transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50"
-          />
-          <button
-            type="button"
-            onClick={onSaveAmount}
-            disabled={pending || !dirty}
-            className="h-11 shrink-0 cursor-pointer rounded-lg border border-primary bg-primary px-3 text-sm font-medium text-white transition-colors duration-150 hover:bg-primary/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-40"
-          >
-            保存
-          </button>
+          <div className="flex min-w-0 flex-1 items-center gap-2">
+            <span
+              className={`min-w-0 flex-1 truncate text-sm font-medium ${
+                inactive ? "text-muted line-through" : "text-foreground"
+              }`}
+              title={item.name}
+            >
+              {item.name}
+            </span>
+            <ConfirmedBadge confirmed={item.confirmed} />
+            {item.frequency === "weekly" && item.weekday != null ? (
+              <span className="tabular shrink-0 text-[11px] text-muted">
+                毎週{WEEKDAY_LABELS[item.weekday]}曜
+              </span>
+            ) : item.day != null ? (
+              <span className="tabular shrink-0 text-[11px] text-muted">
+                毎月{item.day}日
+              </span>
+            ) : null}
+            {isVariable && (
+              <span className="shrink-0 rounded-full bg-warning/10 px-2 py-0.5 text-[11px] font-medium text-warning">
+                変動
+              </span>
+            )}
+          </div>
+          <div className="flex shrink-0 items-center gap-3">
+            <label
+              htmlFor={`active-${item.id}`}
+              className="flex cursor-pointer items-center gap-2 text-sm text-foreground"
+            >
+              <input
+                id={`active-${item.id}`}
+                type="checkbox"
+                checked={item.active === 1}
+                onChange={onToggle}
+                disabled={pending}
+                className="h-5 w-5 cursor-pointer rounded border-border text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed"
+              />
+              <span>{item.active === 1 ? "有効" : "無効"}</span>
+            </label>
+            <button
+              type="button"
+              onClick={onDelete}
+              disabled={pending}
+              aria-label={`${item.name} を削除`}
+              className="flex h-11 min-w-11 cursor-pointer items-center justify-center rounded-lg border border-negative/40 px-3 text-sm font-medium text-negative transition-colors duration-150 hover:bg-negative/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-negative disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              削除
+            </button>
+          </div>
         </div>
-      )}
 
-      <div className="flex flex-col gap-1">
-        <label className="text-[11px] text-muted" htmlFor={`recurring-account-${item.id}`}>
-          資金場所
-        </label>
-        <select
-          id={`recurring-account-${item.id}`}
-          value={account}
-          onChange={(e) => onAccountChange(e.target.value)}
-          disabled={pending}
-          className="h-11 max-w-44 rounded-lg border border-border bg-background px-2 text-xs text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary disabled:opacity-50"
-        >
-          <option value="">未指定</option>
-          {options.map((option) => (
-            <option key={option.account} value={option.account}>
-              {option.account}（{KIND_LABEL[option.kind]}）
-            </option>
-          ))}
-        </select>
-      </div>
+        {/* 2段目: 金額 と 資金場所。フル幅段に分離し select の見切れを解消 */}
+        <div className="flex flex-wrap items-end gap-x-4 gap-y-3">
+          {!isVariable && (
+            <div className="flex items-center gap-2">
+              <label className="sr-only" htmlFor={`amount-${item.id}`}>
+                {item.name} の金額
+              </label>
+              <span aria-hidden className="text-sm text-muted">
+                ¥
+              </span>
+              <input
+                id={`amount-${item.id}`}
+                type="number"
+                inputMode="numeric"
+                min={0}
+                step={1}
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                disabled={pending}
+                className="tabular h-11 w-28 rounded-lg border border-border bg-background px-2 text-right text-sm text-foreground transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50"
+              />
+              <button
+                type="button"
+                onClick={onSaveAmount}
+                disabled={pending || !dirty}
+                className="h-11 shrink-0 cursor-pointer rounded-lg border border-primary bg-primary px-3 text-sm font-medium text-white transition-colors duration-150 hover:bg-primary/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                保存
+              </button>
+            </div>
+          )}
 
-      <div className="flex items-center justify-between gap-3 sm:justify-end">
-        <label
-          htmlFor={`active-${item.id}`}
-          className="flex cursor-pointer items-center gap-2 text-sm text-foreground"
-        >
-          <input
-            id={`active-${item.id}`}
-            type="checkbox"
-            checked={item.active === 1}
-            onChange={onToggle}
-            disabled={pending}
-            className="h-5 w-5 cursor-pointer rounded border-border text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed"
-          />
-          <span>{item.active === 1 ? "有効" : "無効"}</span>
-        </label>
-        <button
-          type="button"
-          onClick={onDelete}
-          disabled={pending}
-          aria-label={`${item.name} を削除`}
-          className="flex h-11 min-w-11 cursor-pointer items-center justify-center rounded-lg border border-negative/40 px-3 text-sm font-medium text-negative transition-colors duration-150 hover:bg-negative/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-negative disabled:cursor-not-allowed disabled:opacity-40"
-        >
-          削除
-        </button>
-      </div>
+          <div className="flex w-full flex-col gap-1 sm:w-auto">
+            <label className="text-[11px] text-muted" htmlFor={`recurring-account-${item.id}`}>
+              資金場所
+            </label>
+            <select
+              id={`recurring-account-${item.id}`}
+              value={account}
+              onChange={(e) => onAccountChange(e.target.value)}
+              disabled={pending}
+              className="h-11 w-full rounded-lg border border-border bg-background px-2 text-xs text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary disabled:opacity-50 sm:w-72"
+            >
+              <option value="">未指定</option>
+              {options.map((option) => (
+                <option key={option.account} value={option.account}>
+                  {option.account}（{KIND_LABEL[option.kind]}）
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
       </div>
       {error && (
         <p className="text-xs font-medium text-negative" role="alert">
