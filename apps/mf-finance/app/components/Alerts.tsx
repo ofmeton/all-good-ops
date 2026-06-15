@@ -34,14 +34,15 @@ function buildAlerts(
     });
   }
 
-  for (const inc of largeIncomes) {
+  // 同日・同額の大口着金が複数あり得る（例: 同日に同額の振込2件）ため index で key を一意化する。
+  largeIncomes.forEach((inc, i) => {
     alerts.push({
-      key: `income-${inc.date}-${inc.amount}`,
+      key: `income-${inc.date}-${inc.amount}-${i}`,
       tone: "positive",
       title: `大口の着金 +¥${yen(inc.amount)}`,
       detail: `${shortDate(inc.date)} ${inc.description}`,
     });
-  }
+  });
 
   return alerts;
 }

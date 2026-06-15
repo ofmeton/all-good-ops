@@ -66,7 +66,7 @@ function ScheduledRowItem({ item, accountOptions }: { item: ScheduledListRow; ac
         </span>
       </div>
 
-      <div className="flex items-center justify-between gap-3 sm:justify-end">
+      <div className="flex flex-wrap items-center justify-between gap-3 sm:justify-end">
         <label className="sr-only" htmlFor={`sched-account-${item.id}`}>
           {item.name} の資金場所
         </label>
@@ -75,7 +75,7 @@ function ScheduledRowItem({ item, accountOptions }: { item: ScheduledListRow; ac
           value={account}
           onChange={(e) => onAccountChange(e.target.value)}
           disabled={pending}
-          className="h-11 max-w-44 rounded-lg border border-border bg-background px-2 text-xs text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary disabled:opacity-50"
+          className="h-11 w-full max-w-full rounded-lg border border-border bg-background px-2 text-xs text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary disabled:opacity-50 sm:w-64"
         >
           <option value="">未指定</option>
           {options.map((option) => (
