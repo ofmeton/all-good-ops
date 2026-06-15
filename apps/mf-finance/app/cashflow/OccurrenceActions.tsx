@@ -15,6 +15,7 @@ export function OccurrenceActions({
   const [pending, startTransition] = useTransition();
   const [amount, setAmount] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [open, setOpen] = useState(false);
 
   const errorMessage = (e: unknown) => (e instanceof Error ? e.message : "保存に失敗しました");
 
@@ -59,55 +60,78 @@ export function OccurrenceActions({
   };
 
   return (
-    <div className={`mt-1 ${pending ? "opacity-60" : ""}`}>
+    <div className={pending ? "opacity-60" : ""}>
       <div className="flex flex-wrap items-center gap-1.5">
         {status === "pending" && (
           <span className="rounded-full bg-warning/10 px-2 py-0.5 text-[11px] font-medium text-warning">
             金額未定
           </span>
         )}
-        {status === "normal" && (
+        {!open ? (
+          // 既定は畳む。操作（スキップ/実額変更）は 3 点リーダから開く（常時表示で行が混むのを防ぐ）。
           <button
             type="button"
-            onClick={skip}
-            disabled={pending}
-            className="h-8 rounded-lg border border-border px-2 text-[11px] font-medium text-foreground hover:bg-border/40 disabled:opacity-40"
+            onClick={() => setOpen(true)}
+            aria-label="操作（スキップ・実額変更）を開く"
+            title="操作"
+            className="flex h-8 w-8 items-center justify-center rounded-lg border border-border text-base leading-none text-muted hover:bg-border/40"
           >
-            スキップ
+            ⋯
           </button>
-        )}
-        <label className="sr-only" htmlFor={`timeline-occ-${recurringId}-${occurrenceDate}`}>
-          実額に変更
-        </label>
-        <input
-          id={`timeline-occ-${recurringId}-${occurrenceDate}`}
-          type="number"
-          inputMode="numeric"
-          min={1}
-          step={1}
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-          disabled={pending}
-          placeholder="実額"
-          className="tabular h-8 w-24 rounded-lg border border-border bg-background px-2 text-right text-[11px] text-foreground disabled:opacity-40"
-        />
-        <button
-          type="button"
-          onClick={saveAmount}
-          disabled={pending || amount.trim() === ""}
-          className="h-8 rounded-lg border border-primary bg-primary px-2 text-[11px] font-medium text-white hover:bg-primary/90 disabled:opacity-40"
-        >
-          {status === "pending" ? "入力" : "変更"}
-        </button>
-        {status === "normal" && (
-          <button
-            type="button"
-            onClick={clear}
-            disabled={pending}
-            className="h-8 rounded-lg border border-border px-2 text-[11px] font-medium text-muted hover:bg-border/40 disabled:opacity-40"
-          >
-            戻す
-          </button>
+        ) : (
+          <>
+            {status === "normal" && (
+              <button
+                type="button"
+                onClick={skip}
+                disabled={pending}
+                className="h-8 rounded-lg border border-border px-2 text-[11px] font-medium text-foreground hover:bg-border/40 disabled:opacity-40"
+              >
+                スキップ
+              </button>
+            )}
+            <label className="sr-only" htmlFor={`timeline-occ-${recurringId}-${occurrenceDate}`}>
+              実額に変更
+            </label>
+            <input
+              id={`timeline-occ-${recurringId}-${occurrenceDate}`}
+              type="number"
+              inputMode="numeric"
+              min={1}
+              step={1}
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              disabled={pending}
+              placeholder="実額"
+              className="tabular h-8 w-24 rounded-lg border border-border bg-background px-2 text-right text-[11px] text-foreground disabled:opacity-40"
+            />
+            <button
+              type="button"
+              onClick={saveAmount}
+              disabled={pending || amount.trim() === ""}
+              className="h-8 rounded-lg border border-primary bg-primary px-2 text-[11px] font-medium text-white hover:bg-primary/90 disabled:opacity-40"
+            >
+              {status === "pending" ? "入力" : "変更"}
+            </button>
+            {status === "normal" && (
+              <button
+                type="button"
+                onClick={clear}
+                disabled={pending}
+                className="h-8 rounded-lg border border-border px-2 text-[11px] font-medium text-muted hover:bg-border/40 disabled:opacity-40"
+              >
+                戻す
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              aria-label="操作を閉じる"
+              className="h-8 rounded-lg border border-border px-2 text-[11px] font-medium text-muted hover:bg-border/40"
+            >
+              閉じる
+            </button>
+          </>
         )}
       </div>
       {error && (

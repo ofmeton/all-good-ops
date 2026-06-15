@@ -170,6 +170,7 @@ function RecurringRowItem({
   const [amount, setAmount] = useState(String(item.amount));
   const [account, setAccount] = useState(item.account ?? "");
   const [error, setError] = useState<string | null>(null);
+  const [showOccurrences, setShowOccurrences] = useState(false);
   const dirty = amount.trim() !== String(item.amount);
   const isVariable = item.amount_type === "variable";
   const options = accountOptionsWithCurrent(accountOptions, item.account);
@@ -325,8 +326,8 @@ function RecurringRowItem({
             </div>
           )}
 
-          <div className="flex w-full flex-col gap-1 sm:w-auto">
-            <label className="text-[11px] text-muted" htmlFor={`recurring-account-${item.id}`}>
+          <div className="flex w-full items-center gap-2 sm:w-auto">
+            <label className="shrink-0 text-[11px] text-muted" htmlFor={`recurring-account-${item.id}`}>
               資金場所
             </label>
             <select
@@ -353,15 +354,28 @@ function RecurringRowItem({
       )}
       {item.kind === "income" && occurrences.length > 0 && (
         <div className="mt-1 border-t border-border/60 pt-2">
-          <p className="mb-1 text-[11px] font-medium text-muted">発生予定</p>
-          <ul className="space-y-1.5">
-            {occurrences.map((occurrence) => (
-              <OccurrenceEditor
-                key={`${occurrence.recurringId}-${occurrence.date}`}
-                occurrence={occurrence}
-              />
-            ))}
-          </ul>
+          <button
+            type="button"
+            onClick={() => setShowOccurrences((v) => !v)}
+            aria-expanded={showOccurrences}
+            className="flex cursor-pointer items-center gap-1 text-[11px] font-medium text-muted transition-colors duration-150 hover:text-foreground"
+          >
+            <span aria-hidden className="inline-block w-3 text-center">
+              {showOccurrences ? "▾" : "▸"}
+            </span>
+            発生予定
+            <span className="tabular">{occurrences.length}件</span>
+          </button>
+          {showOccurrences && (
+            <ul className="mt-1.5 space-y-1.5">
+              {occurrences.map((occurrence) => (
+                <OccurrenceEditor
+                  key={`${occurrence.recurringId}-${occurrence.date}`}
+                  occurrence={occurrence}
+                />
+              ))}
+            </ul>
+          )}
         </div>
       )}
     </li>

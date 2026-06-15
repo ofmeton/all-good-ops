@@ -31,6 +31,23 @@
   let lastX = 0, lastY = 0, rafId = null;
   const pending = [];
   let pendingPrompt = "";
+
+  // 「キュー前のキュー」(まだ Claude へ送っていない pending / 入力途中の prompt) を
+  // ページ遷移・フルリロードを跨いで保持する。素の <a> 遷移でも overlay 再注入で消えないよう
+  // sessionStorage に永続化（同タブ・同オリジン内で保持、タブを閉じると破棄）。
+  const PENDING_KEY = "__webUiBridge.pending";
+  function savePending() {
+    try { sessionStorage.setItem(PENDING_KEY, JSON.stringify({ pending, pendingPrompt })); } catch {}
+  }
+  function restorePending() {
+    try {
+      const raw = sessionStorage.getItem(PENDING_KEY);
+      if (!raw) return;
+      const data = JSON.parse(raw);
+      if (Array.isArray(data.pending)) pending.push(...data.pending.filter((p) => p && p.prompt));
+      if (typeof data.pendingPrompt === "string") pendingPrompt = data.pendingPrompt;
+    } catch {}
+  }
   let lastInputFocus = null;
 
   // ---- SVG アイコン（Lucide 風・絵文字は使わない） ----------------------
@@ -1170,16 +1187,17 @@
     const de = $(".del"); if (de) de.onclick = () => selection.length >= 2 ? doStructBatch("delete") : doStruct("/delete");
     // Claude
     const ask = $(".ask"), add = $(".add");
-    if (ask) ask.oninput = (e) => { pendingPrompt = e.target.value; };
+    if (ask) ask.oninput = (e) => { pendingPrompt = e.target.value; savePending(); };
     if (add) add.onclick = () => {
       const p = (ask.value || "").trim();
       if (!p) { toast("指示を入力してください", "warn"); return; }
       if (selection.length >= 2) pending.push({ payloads: selection.map((s) => s.payload), prompt: p });
       else pending.push({ payload: sel, prompt: p });
       pendingPrompt = "";
+      savePending();
       renderBody();
     };
-    $body.querySelectorAll(".x").forEach((x) => x.onclick = () => { pending.splice(Number(x.dataset.i), 1); renderBody(); });
+    $body.querySelectorAll(".x").forEach((x) => x.onclick = () => { pending.splice(Number(x.dataset.i), 1); savePending(); renderBody(); });
     const sendBtn = $(".send"); if (sendBtn) sendBtn.onclick = send;
     restoreInputFocus(focusSnap);
   }
@@ -1196,7 +1214,7 @@
       const json = await post("/enqueue", { items });
       if (!json.ok) throw new Error(json.error || "enqueue failed");
       pendingPrompt = "";
-      pending.length = 0; renderBody();
+      pending.length = 0; savePending(); renderBody();
       toast(`${json.ids.length} 件を Claude のキューへ送りました`);
     } catch (err) { toast(`送信失敗: ${err.message}（daemon 起動中？）`, "err"); }
   }
@@ -1392,6 +1410,7 @@
     else if ((k === "z" && e.shiftKey) || k === "y") { e.preventDefault(); doHistory("/redo"); }
   }, true);
 
+  restorePending(); // ページ遷移前に溜めた「キュー前のキュー」を復元
   renderBody();
   console.log("[web-ui-bridge] overlay loaded →", ORIGIN);
 })();
