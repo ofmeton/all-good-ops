@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Lexend } from "next/font/google";
 import "./globals.css";
-import { Nav } from "./components/Nav";
+import { AppShell } from "./components/AppShell";
 
 // 信頼系フォント（design-system: Lexend）。大きな金額の可読性に効く。
 const lexend = Lexend({
@@ -21,8 +21,7 @@ export default function RootLayout({
   return (
     <html lang="ja" className={`${lexend.variable} light h-full antialiased`}>
       <body className="min-h-full">
-        <Nav />
-        {children}
+        <AppShell>{children}</AppShell>
         {/* dev 限定: web-ui-bridge オーバーレイ（要素クリック→Claude へプロンプトをキュー）。
             daemon: node apps/web-ui-bridge/daemon/server.mjs --target apps/mf-finance */}
         {process.env.NODE_ENV === "development" && (

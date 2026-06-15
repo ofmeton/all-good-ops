@@ -6,8 +6,10 @@ import {
   type BudgetVsActualRow,
 } from "@/lib/budget-queries";
 import { formatYm, isValidYm, parseYm, yen } from "@/lib/format";
-import { AnomalyAlerts } from "@/app/components/AnomalyAlerts";
 import { MonthSelector } from "@/app/components/MonthSelector";
+import { Container } from "@/app/components/Container";
+import { PageHeader } from "@/app/components/PageHeader";
+import { SectionTabs } from "@/app/components/SectionTabs";
 import { getCategoryGroups, rollupByGroup } from "@/lib/optimizer/grouping";
 import { BudgetRow } from "./BudgetRow";
 
@@ -151,15 +153,12 @@ export default async function BudgetPage({
   const totalRemaining = totalBudget - totalActual;
 
   return (
-    <main className="mx-auto w-full max-w-3xl px-4 py-6 sm:py-10">
-      <header className="mb-4">
-        <h1 className="text-lg font-semibold text-foreground sm:text-xl">
-          予算と実績
-        </h1>
-        <p className="mt-1 text-[11px] text-muted">
-          カテゴリごとに月予算を設定し、当月の消化率を確認します。
-        </p>
-      </header>
+    <Container>
+      <PageHeader
+        title="予算と実績"
+        description="カテゴリごとに月予算を設定し、当月の消化率を確認します。"
+        subnav={<SectionTabs group="expense" />}
+      />
 
       <div className="mb-4">
         <MonthSelector ym={ym} maxYm={maxYm} />
@@ -174,10 +173,6 @@ export default async function BudgetPage({
           グループ表示は消化率の俯瞰のみです。予算の編集は「大項目」表示で行えます。
         </p>
       )}
-
-      <div className="mb-4">
-        <AnomalyAlerts ym={ym} />
-      </div>
 
       {budgeted.length > 0 && (
         <section
@@ -240,6 +235,6 @@ export default async function BudgetPage({
           )}
         </ul>
       )}
-    </main>
+    </Container>
   );
 }

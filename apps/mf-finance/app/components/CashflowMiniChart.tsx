@@ -101,8 +101,9 @@ export function CashflowMiniChart({ data }: { data: RollingCashflow }) {
         />
       </svg>
 
-      {/* スクリーンリーダー / 視覚の代替表 */}
-      <table className="sr-only">
+      {/* スクリーンリーダー / 視覚の代替表。table は width:1px を無視するため div.sr-only で包み clip。 */}
+      <div className="sr-only">
+      <table>
         <caption>向こう{data.days}日の見込み残高推移</caption>
         <thead>
           <tr>
@@ -133,6 +134,7 @@ export function CashflowMiniChart({ data }: { data: RollingCashflow }) {
           ))}
         </tbody>
       </table>
+      </div>
     </div>
   );
 }

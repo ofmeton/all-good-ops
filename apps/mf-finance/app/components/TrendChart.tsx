@@ -116,8 +116,10 @@ export function TrendChart({
           })}
         </svg>
 
-        {/* スクリーンリーダー / 視覚の代替: 簡易テーブル */}
-        <table className="sr-only">
+        {/* スクリーンリーダー / 視覚の代替: 簡易テーブル。
+            table は width:1px を無視するため div.sr-only で包んで clip し横スクロールを防ぐ。 */}
+        <div className="sr-only">
+        <table>
           <caption>直近{n}ヶ月の月次収支</caption>
           <thead>
             <tr>
@@ -138,6 +140,7 @@ export function TrendChart({
             ))}
           </tbody>
         </table>
+        </div>
       </div>
     </section>
   );
