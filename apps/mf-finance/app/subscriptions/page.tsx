@@ -4,6 +4,9 @@ import {
   type SubscriptionRow,
 } from "@/lib/subscription-queries";
 import { yen } from "@/lib/format";
+import { Container } from "@/app/components/Container";
+import { PageHeader } from "@/app/components/PageHeader";
+import { SectionTabs } from "@/app/components/SectionTabs";
 
 // SQLite ファイル更新を再ビルドなしで反映（毎リクエスト最新化）。
 export const dynamic = "force-dynamic";
@@ -92,15 +95,12 @@ export default async function SubscriptionsPage() {
   const threshold = dormantThreshold();
 
   return (
-    <main className="mx-auto w-full max-w-3xl px-4 py-6 sm:py-10">
-      <header className="mb-4">
-        <h1 className="text-lg font-semibold text-foreground sm:text-xl">
-          サブスク・定期支出
-        </h1>
-        <p className="mt-1 text-[11px] text-muted">
-          解約検討の参考用。確定・解除（ON/OFF）は設定ページで行います。
-        </p>
-      </header>
+    <Container>
+      <PageHeader
+        title="サブスク・定期支出"
+        description="解約検討の参考用。確定・解除（ON/OFF）は設定ページで行います。"
+        subnav={<SectionTabs group="expense" />}
+      />
 
       <section
         className="mb-4 rounded-xl border border-border bg-surface p-4 shadow-sm"
@@ -158,6 +158,6 @@ export default async function SubscriptionsPage() {
           設定で確定・解除する ›
         </Link>
       </div>
-    </main>
+    </Container>
   );
 }

@@ -19,6 +19,8 @@ import { Alerts } from "@/app/components/Alerts";
 import { PayoutCalendar } from "@/app/components/PayoutCalendar";
 import { AnomalyAlerts } from "@/app/components/AnomalyAlerts";
 import { MoneyRadar } from "@/app/components/MoneyRadar";
+import { Container } from "@/app/components/Container";
+import { PageHeader } from "@/app/components/PageHeader";
 import { getLatestAsset, getProjectedBalance } from "@/lib/calendar-queries";
 import { getProposalCounts } from "@/lib/optimizer/proposals-queries";
 
@@ -56,12 +58,11 @@ export default async function Home({
   const proposalCounts = getProposalCounts();
 
   return (
-    <main className="mx-auto w-full max-w-3xl px-4 py-6 sm:py-10">
-      <header className="mb-4">
-        <h1 className="text-lg font-semibold text-foreground sm:text-xl">
-          家計ダッシュボード
-        </h1>
-      </header>
+    <Container>
+      <PageHeader
+        title="家計ダッシュボード"
+        actions={<MonthSelector ym={ym} maxYm={maxYm} />}
+      />
 
       <div className="mb-4">
         <FreshnessBanner data={freshness} />
@@ -69,9 +70,7 @@ export default async function Home({
 
       <MoneyRadar />
 
-      <div className="mb-4">
-        <MonthSelector ym={ym} maxYm={maxYm} />
-      </div>
+      <DisposableHero data={disposable} />
 
       {sparse && (
         <p
@@ -82,28 +81,34 @@ export default async function Home({
         </p>
       )}
 
-      <Alerts disposable={disposable} largeIncomes={largeIncomes} />
-      <AnomalyAlerts ym={ym} />
+      <div className="grid gap-4 lg:grid-cols-3 lg:gap-6">
+        <div className="space-y-4 lg:col-span-2">
+          <DisposableBreakdown data={disposable} />
+          <MonthlySummary data={summary} />
+          <TrendChart series={series} selectedYm={ym} />
+        </div>
 
-      {proposalCounts.total > 0 && (
-        <a
-          href="/optimizer"
-          className="mt-4 flex items-center justify-between rounded-xl border border-warning/30 bg-warning/5 px-4 py-3 transition-colors duration-150 hover:bg-warning/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-warning"
-        >
-          <span className="text-sm font-semibold text-warning">
-            最適化提案{" "}
-            <span className="tabular">{proposalCounts.total}件</span>
-          </span>
-          <span className="text-xs font-medium text-warning">確認する →</span>
-        </a>
-      )}
+        <aside className="space-y-4" aria-label="通知と口座">
+          <Alerts disposable={disposable} largeIncomes={largeIncomes} />
+          <AnomalyAlerts ym={ym} />
 
-      <DisposableHero data={disposable} />
-      <DisposableBreakdown data={disposable} />
-      <MonthlySummary data={summary} />
-      <AccountBreakdown data={accounts} />
-      <PayoutCalendar projected={projected} latestAsset={latestAsset} />
-      <TrendChart series={series} selectedYm={ym} />
-    </main>
+          {proposalCounts.total > 0 && (
+            <a
+              href="/optimizer"
+              className="flex items-center justify-between rounded-xl border border-warning/30 bg-warning/5 px-4 py-3 transition-colors duration-150 hover:bg-warning/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-warning"
+            >
+              <span className="text-sm font-semibold text-warning">
+                最適化提案{" "}
+                <span className="tabular">{proposalCounts.total}件</span>
+              </span>
+              <span className="text-xs font-medium text-warning">確認する →</span>
+            </a>
+          )}
+
+          <AccountBreakdown data={accounts} />
+          <PayoutCalendar projected={projected} latestAsset={latestAsset} />
+        </aside>
+      </div>
+    </Container>
   );
 }

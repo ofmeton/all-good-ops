@@ -7,6 +7,9 @@ import {
 } from "@/lib/category-queries";
 import { formatYm, isValidYm, parseYm, shortDate, yen, yenSigned } from "@/lib/format";
 import { MonthSelector } from "@/app/components/MonthSelector";
+import { Container } from "@/app/components/Container";
+import { PageHeader } from "@/app/components/PageHeader";
+import { SectionTabs } from "@/app/components/SectionTabs";
 import { getCategoryGroups, rollupByGroup } from "@/lib/optimizer/grouping";
 
 // SQLite ファイル更新を再ビルドなしで反映（毎リクエスト最新化）。
@@ -282,27 +285,11 @@ export default async function CategoriesPage({
       : majorRows;
 
   return (
-    <main className="mx-auto w-full max-w-3xl px-4 py-6 sm:py-10">
-      <header className="mb-4">
-        {major ? (
-          <nav aria-label="パンくず" className="text-sm">
-            <Link
-              href={`/categories?ym=${ym}`}
-              className="font-medium text-primary hover:underline"
-            >
-              カテゴリ
-            </Link>
-            <span aria-hidden className="mx-1.5 text-muted">
-              ›
-            </span>
-            <span className="font-semibold text-foreground">{major}</span>
-          </nav>
-        ) : (
-          <h1 className="text-lg font-semibold text-foreground sm:text-xl">
-            カテゴリ別支出
-          </h1>
-        )}
-      </header>
+    <Container>
+      <PageHeader
+        title={major ? `${major} の支出内訳` : "カテゴリ別支出"}
+        subnav={<SectionTabs group="expense" />}
+      />
 
       <div className="mb-4">
         <MonthSelector ym={ym} maxYm={maxYm} />
@@ -316,7 +303,6 @@ export default async function CategoriesPage({
 
       {major ? (
         <>
-          <h1 className="sr-only">{major} の支出内訳</h1>
           <MajorDetail ym={ym} year={year} month={month} major={major} />
           <div className="mt-4">
             <Link
@@ -338,6 +324,6 @@ export default async function CategoriesPage({
       ) : (
         <MajorList rows={rows} ym={ym} />
       )}
-    </main>
+    </Container>
   );
 }

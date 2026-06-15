@@ -7,6 +7,9 @@ import {
   type BusinessPlRow,
 } from "@/lib/tax-queries";
 import { yen, yenSigned } from "@/lib/format";
+import { Container } from "@/app/components/Container";
+import { PageHeader } from "@/app/components/PageHeader";
+import { SectionTabs } from "@/app/components/SectionTabs";
 import { TaxMappingTable } from "./TaxMappingTable";
 
 // SQLite ファイル更新を再ビルドなしで反映（書込後の revalidate と整合）。
@@ -124,30 +127,22 @@ export default async function TaxPage({
   const businessPl = getBusinessPl();
 
   return (
-    <main className="mx-auto w-full max-w-3xl px-4 py-6 sm:py-10">
-      <a
-        href="/"
-        className="inline-flex h-9 items-center text-sm font-medium text-primary transition-colors duration-150 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-      >
-        ← ダッシュボードへ戻る
-      </a>
+    <Container>
+      <PageHeader
+        title="確定申告用 経費集計"
+        description="カテゴリごとに事業按分（%）と青色申告の科目を設定すると、年間支出 × 按分率で経費の見込み額を試算します（試算であり確定値ではありません）。"
+        subnav={<SectionTabs group="expense" />}
+      />
 
-      <header className="mb-4 mt-3">
-        <h1 className="text-lg font-semibold text-foreground sm:text-xl">
-          確定申告用 経費集計
-        </h1>
+      <div className="mb-4">
         <p
-          className="mt-2 rounded-xl border border-warning/40 bg-warning/10 px-3 py-2 text-xs font-medium text-warning"
+          className="rounded-xl border border-warning/40 bg-warning/10 px-3 py-2 text-xs font-medium text-warning"
           role="note"
         >
           本集計は参考値です。確定申告の最終判断は freee
           上の帳簿と税理士確認を優先してください。
         </p>
-        <p className="mt-2 text-xs text-muted">
-          カテゴリごとに事業按分（%）と青色申告の科目を設定すると、年間支出 ×
-          按分率で経費の見込み額を試算します（試算であり確定値ではありません）。
-        </p>
-      </header>
+      </div>
 
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <YearSelector years={years} current={year} />
@@ -176,6 +171,6 @@ export default async function TaxPage({
       </p>
 
       <BusinessPlSection rows={businessPl} />
-    </main>
+    </Container>
   );
 }

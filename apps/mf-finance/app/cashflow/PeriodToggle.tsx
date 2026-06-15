@@ -5,7 +5,7 @@ import { PERIOD_OPTIONS, type CashflowPeriod } from "@/lib/cashflow/kinds";
 
 export function PeriodToggle({ current }: { current: CashflowPeriod }) {
   return (
-    <nav className="mt-4 flex rounded-lg border border-border bg-surface p-1" aria-label="資金繰り期間">
+    <nav className="mt-4 flex rounded-lg border border-border bg-surface p-1" aria-label="キャッシュフロー期間">
       {PERIOD_OPTIONS.map((option) => {
         const active = option.value === current;
         return (

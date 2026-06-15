@@ -73,7 +73,7 @@ export function MoneyRadar() {
         {balancesEmpty ? (
           <p className="rounded-lg border border-dashed border-border bg-background px-3 py-4 text-center text-xs text-muted">
             残高未取得 —{" "}
-            <CashflowLink label="「資金繰り」ページ" />
+            <CashflowLink label="「キャッシュフロー」ページ" />
             で取得/手入力できます
           </p>
         ) : (
@@ -217,11 +217,11 @@ export function MoneyRadar() {
       )}
 
       {/* ④ 向こう1ヶ月キャッシュフロー */}
-      <Card title="向こう1ヶ月の資金繰り" note="見込み残高推移">
+      <Card title="向こう1ヶ月のキャッシュフロー" note="見込み残高推移">
         {rolling.events.length === 0 ? (
           <p className="rounded-lg border border-dashed border-border bg-background px-3 py-4 text-center text-xs text-muted">
             登録された予定はありません —{" "}
-            <CashflowLink label="「資金繰り」ページ" />
+            <CashflowLink label="「キャッシュフロー」ページ" />
             で登録できます
           </p>
         ) : (

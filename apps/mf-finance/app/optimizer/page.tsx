@@ -10,6 +10,9 @@ import type { OptimizerProposal } from "@/lib/optimizer/types";
 import { ProposalCard } from "@/app/optimizer/ProposalCard";
 import { DecisionLog } from "@/app/optimizer/DecisionLog";
 import { RefreshButton } from "@/app/optimizer/RefreshButton";
+import { Container } from "@/app/components/Container";
+import { PageHeader } from "@/app/components/PageHeader";
+import { SectionTabs } from "@/app/components/SectionTabs";
 import { kindLabel, dateTimeLabel } from "@/app/optimizer/labels";
 
 // SQLite ファイル更新を再ビルドなしで反映（承認後の revalidate と整合）。
@@ -37,20 +40,11 @@ export default function OptimizerPage() {
   const grouped = groupByKind(pending);
 
   return (
-    <main className="mx-auto w-full max-w-3xl px-4 py-6 sm:py-10">
-      <a
-        href="/"
-        className="inline-flex h-9 items-center text-sm font-medium text-primary transition-colors duration-150 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-      >
-        ← ダッシュボードへ戻る
-      </a>
-
-      <header className="mb-4 mt-3 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <div>
-          <h1 className="text-lg font-semibold text-foreground sm:text-xl">
-            オプティマイザー — 提案キュー
-          </h1>
-          <p className="mt-1 text-xs text-muted">
+    <Container>
+      <PageHeader
+        title="オプティマイザー — 提案キュー"
+        description={
+          <>
             未処理{" "}
             <span className="tabular font-semibold text-foreground">
               {counts.total}件
@@ -65,22 +59,24 @@ export default function OptimizerPage() {
                 ({lastRun.ran_by === "signal" ? "シグナル" : "LLM"})
               </>
             )}
-          </p>
-          {counts.total > 0 && (
-            <div className="mt-2 flex flex-wrap gap-1.5">
-              {Object.entries(counts.byKind).map(([kind, c]) => (
-                <span
-                  key={kind}
-                  className="tabular inline-flex items-center rounded-full border border-border bg-surface px-2 py-0.5 text-[11px] text-muted"
-                >
-                  {kindLabel(kind)} {c}
-                </span>
-              ))}
-            </div>
-          )}
+          </>
+        }
+        actions={<RefreshButton />}
+        subnav={<SectionTabs group="settings" />}
+      />
+
+      {counts.total > 0 && (
+        <div className="mb-4 flex flex-wrap gap-1.5">
+          {Object.entries(counts.byKind).map(([kind, c]) => (
+            <span
+              key={kind}
+              className="tabular inline-flex items-center rounded-full border border-border bg-surface px-2 py-0.5 text-[11px] text-muted"
+            >
+              {kindLabel(kind)} {c}
+            </span>
+          ))}
         </div>
-        <RefreshButton />
-      </header>
+      )}
 
       {pending.length === 0 ? (
         <p
@@ -127,6 +123,6 @@ export default function OptimizerPage() {
         </h2>
         <DecisionLog items={decisions} />
       </section>
-    </main>
+    </Container>
   );
 }

@@ -20,7 +20,7 @@ function SummaryCards({ rolling }: { rolling: AccountRollingCashflow }) {
     <div className="rounded-xl border border-border bg-surface p-4 shadow-sm">
       <div className="flex items-baseline justify-between gap-3">
         <div>
-          <h2 className="text-sm font-semibold text-foreground">資金繰りタイムライン</h2>
+          <h2 className="text-sm font-semibold text-foreground">キャッシュフロータイムライン</h2>
           <p className="mt-0.5 text-[11px] text-muted">
             今日から{total.days}日後まで{rolling.baseDate ? `（残高基準 ${shortDate(rolling.baseDate)}）` : ""}
           </p>
@@ -95,7 +95,7 @@ export function CashflowTimeline({ rolling }: { rolling: AccountRollingCashflow 
   const noBalance = rolling.total.start === 0 && rolling.total.baseDate == null;
 
   return (
-    <section className="mt-4 space-y-3" aria-label="資金繰りタイムライン">
+    <section className="mt-4 space-y-3" aria-label="キャッシュフロータイムライン">
       <SummaryCards rolling={rolling} />
 
       <div className="rounded-xl border border-border bg-surface p-4 shadow-sm">
