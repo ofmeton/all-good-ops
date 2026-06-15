@@ -9,3 +9,8 @@ node_modules/
 .next/
 next-env.d.ts
 tsconfig.tsbuildinfo
+
+# web-ui-bridge（dev 専用キュー・編集履歴・トークン）
+.claude-ui-queue.jsonl
+.web-ui-bridge-history.json
+.web-ui-bridge-token

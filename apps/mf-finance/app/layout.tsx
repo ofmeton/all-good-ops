@@ -47,6 +47,12 @@ export default function RootLayout({
           </div>
         </nav>
         {children}
+        {/* dev 限定: web-ui-bridge オーバーレイ（要素クリック→Claude へプロンプトをキュー）。
+            daemon: node apps/web-ui-bridge/daemon/server.mjs --target apps/mf-finance */}
+        {process.env.NODE_ENV === "development" && (
+          // eslint-disable-next-line @next/next/no-sync-scripts
+          <script src="http://localhost:7331/overlay.js" async />
+        )}
       </body>
     </html>
   );
