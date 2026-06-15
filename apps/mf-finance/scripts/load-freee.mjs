@@ -4,14 +4,15 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { dataDir } from './lib/paths.mjs';
 import Database from 'better-sqlite3';
 import { applyRecurringMigrations } from '../db/migrate.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const appRoot = join(__dirname, '..');
-const dbPath = join(appRoot, 'data', 'mf-finance.db');
+const dbPath = join(dataDir(), 'mf-finance.db');
 const schemaPath = join(appRoot, 'db', 'schema.sql');
-const dataPath = join(appRoot, 'data', 'freee-pl.json');
+const dataPath = join(dataDir(), 'freee-pl.json');
 
 if (!existsSync(dataPath)) {
   console.log('未取込: data/freee-pl.json を置いて再実行してください。');

@@ -5,14 +5,15 @@
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { dataDir } from './lib/paths.mjs';
 import Database from 'better-sqlite3';
 import { applyRecurringMigrations } from '../db/migrate.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const appRoot = join(__dirname, '..');
-const dbPath = join(appRoot, 'data', 'mf-finance.db');
+const dbPath = join(dataDir(), 'mf-finance.db');
 const schemaPath = join(appRoot, 'db', 'schema.sql');
-const candPath = join(appRoot, 'data', 'recurring-candidates.json');
+const candPath = join(dataDir(), 'recurring-candidates.json');
 
 const db = new Database(dbPath);
 db.pragma('journal_mode = WAL');

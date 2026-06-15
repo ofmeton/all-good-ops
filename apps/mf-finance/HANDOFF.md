@@ -1,11 +1,12 @@
 # mf-finance 引き継ぎ（別セッション再開用）
 
-最終更新: 2026-06-13 / 作業ブランチ: `task/260606-mf-finance`（worktree `/Users/rikukudo/Projects/all-good-ops-mf-finance`）
+最終更新: 2026-06-15（DB をメインリポへ移設）/ DB 正準位置は §0 参照（worktree 非依存）。新規改修は origin/main 派生で自由に worktree を切ってよい。
 
 ## 0. これは何
 マネーフォワードME（個人版・課金継続＝収集役）のデータを Claude 側で自動集計・分析する**個人家計ダッシュボード**。MF課金はやめず「収集=MF / 分析=本システム」。ユーザー=工藤陸（フリーランス・複数収入源）。
 - **設計の重心**: home を開いた瞬間に「**今月あといくら使えるか**（可処分）」が分かること。
 - **アーキ（2026-06-12 方針転換）**: コスト=無料＋家計データ非公開のため **完全ローカル**。データ=**SQLite 単一ファイル `data/mf-finance.db`（better-sqlite3, git ignore）**、UI=**ローカル Next.js（localhost のみ・認証なし・単一ユーザー）**。旧 Supabase 依存は撤廃（`legacy/` へ退役）。詳細 memory `project_mf_finance_dashboard.md`。
+- **データ正準位置（2026-06-15 移設）**: 実 DB / 中間 JSON は **メインリポ（main worktree）の `apps/mf-finance/data/`** に集約。`/Users/rikukudo/Projects/private-agents/all-good-ops/apps/mf-finance/data/`。worktree を削除しても家計データは消えない。アプリ/スクリプトは `lib/data-dir.ts`・`scripts/lib/paths.mjs` の共通リゾルバ経由で参照（解決順: env `MF_FINANCE_DATA_DIR` > git 共通ディレクトリから辿る main repo > cwd/data）。**どの worktree から `npm run dev`/CLI を実行しても同じ DB を読む**＝今後の改修は自由に新 worktree を切ってよい。`MF_FINANCE_DATA_DIR` を設定すれば任意の場所に上書き可。
 
 ## 1. 必読ドキュメント（この順で読む）
 1. 仕様: `docs/superpowers/specs/2026-06-06-mf-finance-dashboard-design.md`（ユーザーシナリオ・データモデル・可処分ロジック）
