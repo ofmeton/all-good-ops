@@ -4,14 +4,15 @@
 import { readFileSync, existsSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { dataDir } from "./lib/paths.mjs";
 import Database from "better-sqlite3";
 import { applyRecurringMigrations } from "../db/migrate.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const appRoot = join(__dirname, "..");
-const dbPath = join(appRoot, "data", "mf-finance.db");
+const dbPath = join(dataDir(), "mf-finance.db");
 const schemaPath = join(appRoot, "db", "schema.sql");
-const jsonPath = join(appRoot, "data", "account-balances.json");
+const jsonPath = join(dataDir(), "account-balances.json");
 
 function guessKind(account) {
   if (/銀行|ゆうちょ|bank/i.test(account)) return "bank";

@@ -4,6 +4,7 @@
 import { readFileSync, readdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { dataDir } from './lib/paths.mjs';
 import Database from 'better-sqlite3';
 import { parseCsv } from './lib/csv.mjs';
 import { applyRecurringMigrations } from '../db/migrate.mjs';
@@ -11,7 +12,7 @@ import { applyRecurringMigrations } from '../db/migrate.mjs';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const appRoot = join(__dirname, '..');
 const repoRoot = join(appRoot, '..', '..'); // worktree ルート（raw/ はここ配下）
-const dbPath = join(appRoot, 'data', 'mf-finance.db');
+const dbPath = join(dataDir(), 'mf-finance.db');
 const schemaPath = join(appRoot, 'db', 'schema.sql');
 const assetDir = join(repoRoot, 'raw', 'finance', 'moneyforward');
 

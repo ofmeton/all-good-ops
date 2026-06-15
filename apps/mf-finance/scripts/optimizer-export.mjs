@@ -4,12 +4,13 @@
 import { writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { dataDir } from './lib/paths.mjs';
 import Database from 'better-sqlite3';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const appRoot = join(__dirname, '..');
-const dbPath = join(appRoot, 'data', 'mf-finance.db');
-const outPath = join(appRoot, 'data', 'optimizer-input.json');
+const dbPath = join(dataDir(), 'mf-finance.db');
+const outPath = join(dataDir(), 'optimizer-input.json');
 
 const db = new Database(dbPath, { readonly: true });
 

@@ -6,8 +6,10 @@
 // getCategoryGroups だけ DB を読む。db.ts は `import "server-only"` を持ち、
 // プレーン Node（テスト）では server-only が throw するため、ここでは db.ts を静的 import せず
 // better-sqlite3 を lazy に開く（db.ts と同じ globalThis シングルトンを共有）。
-import { join } from "node:path";
 import Database from "better-sqlite3";
+// node:test は本ファイルを型ストリップで直接ロードするため、拡張子付き .mjs リゾルバを使う
+// （拡張子なし TS import は node が解決できない）。data-dir.ts と同一規約。
+import { dbPath } from "../../scripts/lib/paths.mjs";
 
 // マッピング: category_major → group_name。未設定の大項目は自身名にフォールバック。
 export type GroupMapping = Record<string, string>;
@@ -53,7 +55,7 @@ export function rollupByGroup<T extends object>(
 function groupingDb(): Database.Database {
   const g = globalThis as unknown as { __mfDb?: Database.Database };
   if (g.__mfDb) return g.__mfDb;
-  const d = new Database(join(process.cwd(), "data", "mf-finance.db"), {
+  const d = new Database(dbPath(), {
     readonly: false,
     fileMustExist: false,
   });

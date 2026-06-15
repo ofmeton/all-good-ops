@@ -14,12 +14,13 @@
 //   3. ログ: 適用前後の unknown 件数・ルール数・マッチ件数
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { dataDir } from './lib/paths.mjs';
 import Database from 'better-sqlite3';
 import { applyRulesToRows } from './lib/rules.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const appRoot = join(__dirname, '..');
-const db = new Database(join(appRoot, 'data', 'mf-finance.db'));
+const db = new Database(join(dataDir(), 'mf-finance.db'));
 db.pragma('journal_mode = WAL');
 
 const unknownCount = () =>

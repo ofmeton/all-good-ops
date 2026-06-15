@@ -2,11 +2,12 @@
 import { readFileSync, writeFileSync, mkdirSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { parseCsv } from './lib/csv.mjs';
+import { dataDir } from './lib/paths.mjs';
 import { normalizeRows } from './lib/normalize.mjs';
 import { isInternalMove, deriveClassification, inferSourceType } from './lib/classify.mjs';
 
 const RAW_DIR = '../../raw/finance/moneyforward';
-const OUT = 'data/normalized.json';
+const OUT = join(dataDir(), 'normalized.json');
 const SOURCE_RULES = []; // 後で給与口座等を追加
 
 // 引数があればそのファイル、無ければ raw の全 cashflow-*.csv を読む。
@@ -27,7 +28,7 @@ const records = base.map(r => ({
   classification: deriveClassification(r),
   source_type: inferSourceType(r, SOURCE_RULES),
 }));
-mkdirSync('data', { recursive: true });
+mkdirSync(dataDir(), { recursive: true });
 writeFileSync(OUT, JSON.stringify(records, null, 2));
 const inc = records.filter(r => r.included && !r.is_transfer).length;
 console.log(`normalized ${records.length} rows from ${sources.length} CSV (収支対象 ${inc}) -> ${OUT}`);
