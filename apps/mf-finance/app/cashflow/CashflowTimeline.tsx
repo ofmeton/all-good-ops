@@ -164,14 +164,16 @@ export function CashflowTimeline({ rolling }: { rolling: AccountRollingCashflow 
                         {shortDate(event.date)}
                       </th>
                       <td className="min-w-44 py-2 pr-3 text-xs text-foreground">
-                        <span>{event.name}</span>
-                        {isRecurring && (
-                          <OccurrenceActions
-                            recurringId={event.recurringId!}
-                            occurrenceDate={event.occurrenceDate!}
-                            status={event.status}
-                          />
-                        )}
+                        <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                          <span>{event.name}</span>
+                          {isRecurring && (
+                            <OccurrenceActions
+                              recurringId={event.recurringId!}
+                              occurrenceDate={event.occurrenceDate!}
+                              status={event.status}
+                            />
+                          )}
+                        </div>
                       </td>
                       <DeltaCell event={event} />
                       <BalanceCell value={event.balanceAfter} />

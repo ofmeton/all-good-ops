@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Lexend } from "next/font/google";
 import "./globals.css";
+import { Nav } from "./components/Nav";
 
 // 信頼系フォント（design-system: Lexend）。大きな金額の可読性に効く。
 const lexend = Lexend({
@@ -20,32 +21,7 @@ export default function RootLayout({
   return (
     <html lang="ja" className={`${lexend.variable} light h-full antialiased`}>
       <body className="min-h-full">
-        <nav className="border-b border-border bg-surface">
-          <div className="mx-auto flex w-full max-w-3xl flex-wrap items-center gap-x-4 gap-y-1 px-4 py-2.5 text-sm">
-            <a href="/" className="font-semibold text-foreground">
-              家計
-            </a>
-            {[
-              ["/", "ダッシュボード"],
-              ["/cashflow", "資金繰り"],
-              ["/categories", "カテゴリ"],
-              ["/subscriptions", "サブスク"],
-              ["/assets", "資産"],
-              ["/budget", "予算"],
-              ["/rules", "ルール"],
-              ["/tax", "税"],
-              ["/settings", "設定"],
-            ].map(([href, label]) => (
-              <a
-                key={href}
-                href={href}
-                className="py-1 text-muted transition-colors duration-150 hover:text-primary"
-              >
-                {label}
-              </a>
-            ))}
-          </div>
-        </nav>
+        <Nav />
         {children}
         {/* dev 限定: web-ui-bridge オーバーレイ（要素クリック→Claude へプロンプトをキュー）。
             daemon: node apps/web-ui-bridge/daemon/server.mjs --target apps/mf-finance */}

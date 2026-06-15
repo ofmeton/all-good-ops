@@ -60,7 +60,7 @@ export function OccurrenceActions({
   };
 
   return (
-    <div className={`mt-1 ${pending ? "opacity-60" : ""}`}>
+    <div className={pending ? "opacity-60" : ""}>
       <div className="flex flex-wrap items-center gap-1.5">
         {status === "pending" && (
           <span className="rounded-full bg-warning/10 px-2 py-0.5 text-[11px] font-medium text-warning">
