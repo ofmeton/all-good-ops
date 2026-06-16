@@ -539,3 +539,10 @@ document.querySelectorAll('.js-bleedTitle').forEach(el => io.observe(el));
 **参考実装**: `madoguchi-study/styles.css: .rc__marquee / .rc__marqueeTrack / .rc__marqueeSeq`
 
 **注意**: シーケンスを 2 回複製しないと末尾でジャンプが見える。 hover 減速は memory の `feedback_marquee_for_repeating_content` と整合（CSS Houdini @property も併用するとさらに洗練）。
+
+---
+
+## 関連カタログ（系統別の引き出し）
+
+- VFX・暗黒・編集系の派手め語彙はこのページ（spade / madoguchi 由来）。
+- **和モダン／静謐ラグジュアリー／旅館・ホテル系**の「静かに現れる」動きは → [[ryokan-scroll-motion-catalog]]（kikka-hirado / shuku-kokon / oga.yamado の3サイト観測。フェードアップ基礎・固定被せ・全画面クロスフェード・ピン留め横ギャラリー・ずらし配置パララックス・コラージュリビール 等）。
