@@ -61,6 +61,10 @@ Telegram へ通知（着手前＋完了後）
 | Links | url/rich text | PR URL・成果物パス |
 | LastNudge | date | 最終催促日（催促頻度制御用） |
 | RawSourceId | rich text | 取り込み元の一意 ID（Apple Notes note id 等・dedup 用） |
+| ThreadKey | rich text | Telegram 会話スレッドとカードの対応キー（会話の集約先を特定） |
+| ConversationLog | rich text | Telegram やりとりの転記先（コメント不採用時のフォールバック・経緯ログ） |
+
+会話の経緯は原則 **Notion コメントスレッド**に集約し、`ConversationLog` は補助。`ThreadKey` で Telegram スレッド ↔ カードを対応づけ、どのカードに転記するかを判定する（§5-E）。
 
 ### Status ステートマシン
 
@@ -117,6 +121,21 @@ Inbox → NeedInfo → Ready → InProgress → Blocked → Review → Done
 - `reminder` カードと停滞カード（`Ready`/`Blocked`/`NeedInfo` で `LastNudge` から一定経過）を Telegram でまとめて催促
 - **静時間帯 22:00–8:00 は通知抑制**、夜に発生したものは朝にまとめて届ける（journaling routine 22:00 とぶつからない）
 
+### E. 会話チャネル（2層）とカードへのログ集約
+タスクをめぐる会話を 2 つの経路で行い、**最終的に全部 Notion カードに集約**して「1 枚 = そのタスクの議事録」にする。
+
+| チャネル | 役割 | 速度 |
+|---|---|---|
+| **Telegram** | 即時の捕捉・逆質問・催促・承認・通知 | リアルタイム push |
+| **Notion カードコメント** | タスク単位の深掘り議論・指示追記・経緯ログ（JIRA/Linear 的） | poll（数分ラグ） |
+
+- **Notion コメント会話**: hermes は poll サイクルで担当カードの未読コメントを `notion-get-comments` で確認し、同じスレッドへ `notion-create-comment` で返信する。必要に応じて `Details`/`Status` を更新。Notion は新着コメントを push しないため、応答は poll 間隔（既定 30 分。逆質問系は短縮可）のラグを伴う
+- **Telegram 会話のカード集約**: Telegram 上のやりとりが特定タスクに紐づく場合、hermes はその発言を**該当カードに転記**する。仕組み:
+  - 各 Telegram 会話スレッドと Notion カードの対応を `ThreadKey`（後述）で保持し、捕捉・逆質問・承認のメッセージを発生のつど該当カードの**コメント（または `ConversationLog`）に追記**
+  - これにより Telegram で完結したやりとりも、後から Notion カードだけ見れば**捕捉元メッセージ→逆質問→回答→実行→承認までの全経緯**が辿れる
+- **単一ソース原則**: Telegram は速い窓口、Notion カードは永続の真実。会話は最終的にカードに寄せ、AI も人間も経緯をカード 1 枚で追える
+- **コスト**: コメント走査＋ LLM 返信は毎回トークンを食うため、コメント poll も実行 poll と同じ 30 分間隔に乗せ、月 1,500 円上限の内側に収める
+
 ## 6. ガードレール
 
 - **モデル/コスト**: hermes 常駐ループは GLM/Kimi 等の安モデル固定。**月 1,500 円上限**、日次トークン天井を設け、usage-analyst で追跡。超過時はキルスイッチで停止
@@ -137,8 +156,8 @@ Inbox → NeedInfo → Ready → InProgress → Blocked → Review → Done
 | Phase | 内容 | 完了条件 |
 |---|---|---|
 | 0 | Notion DB（プロパティ＋ Status × Autonomy）＋カンバンビュー作成 | 手動でカードを作り、カンバンで運用できる |
-| 1 | hermes を Mac に隔離インストール → Telegram ＋ Notion MCP 配線 → 捕捉＋トリアージ＋逆質問ループ | Telegram で投げたメモが逆質問を経て Notion の Ready に乗る |
-| 2 | Apple Notes ローカル読み skill（直近 N 日・dedup）＋カレンダー準備タスク生成 | メモ・予定が自動で Inbox に乗る |
+| 1 | hermes を Mac に隔離インストール → Telegram ＋ Notion MCP 配線 → 捕捉＋トリアージ＋逆質問ループ＋**会話のカード集約**（Telegram やりとりを `ThreadKey` で該当カードのコメントへ転記） | Telegram で投げたメモが逆質問を経て Notion の Ready に乗り、そのやりとりがカードに残る |
+| 2 | Apple Notes ローカル読み skill（直近 N 日・dedup）＋カレンダー準備タスク生成＋**Notion カードコメント会話**（未読コメントを poll→同スレッド返信） | メモ・予定が自動で Inbox に乗り、カードのコメントで AI と会話できる |
 | 3 | launchd 自走実行ランナー（30 分 poll・2〜3 並列 worktree・硬ゲート・低リスク自動 merge・Telegram 承認/通知）＋キルスイッチ＋コスト上限 | Ready の cc-auto/draft-only が自走し、Review/Blocked/Done が通知される |
 | 4 | 催促ループ＋ Priority/Project 紐づけ運用チューニング | 停滞カードが朝に催促され、優先度順に並ぶ |
 
