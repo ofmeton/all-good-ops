@@ -95,4 +95,18 @@ export function applyRecurringMigrations(db) {
     )
   `);
   db.exec("CREATE INDEX IF NOT EXISTS idx_manual_transfers_date_status ON manual_transfers (scheduled_date, status)");
+
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS card_charge_schedules (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      card_account TEXT NOT NULL,
+      charge_day INTEGER NOT NULL,
+      amount_type TEXT NOT NULL DEFAULT 'variable' CHECK (amount_type IN ('fixed','variable')),
+      fixed_amount INTEGER,
+      note TEXT,
+      active INTEGER NOT NULL DEFAULT 1,
+      created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now'))
+    )
+  `);
+  db.exec("CREATE INDEX IF NOT EXISTS idx_card_charge_schedules_account ON card_charge_schedules (card_account, active)");
 }

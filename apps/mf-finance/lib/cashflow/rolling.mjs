@@ -1,6 +1,5 @@
 // lib/cashflow/rolling.mjs — 向こう N 日のローリング資金繰りの純ロジック（DB非依存・テスト対象）。
-// recurring(毎月day) と scheduled(特定日) を起点残高に適用し、残高推移を返す。
-// カード引落見込みは引落日が未知のため**含めない**（別表示）。
+// recurring(毎月day) / scheduled(特定日) / cardCharges(展開済みカード引落) を起点残高に適用し、残高推移を返す。
 
 // 'YYYY-MM-DD' → {y,m,d}
 function parse(iso) {
@@ -45,6 +44,50 @@ export function monthEndOffsetDays(today, monthsAhead) {
   const { y, m } = parse(today);
   const target = addMonthsToYearMonth(y, m, Number(monthsAhead) || 0);
   return diffDays(today, fmt(target.y, target.m, daysInMonth(target.y, target.m)));
+}
+
+export function monthlyChargeDates(today, days, chargeDay) {
+  const start = parse(today);
+  const end = addDays(today, Math.max(0, Math.round(Number(days) || 0)));
+  const monthSpan = Math.ceil(((Number(days) || 0) + 31) / 28);
+  const out = [];
+  for (let i = 0; i < monthSpan; i++) {
+    const target = addMonthsToYearMonth(start.y, start.m, i);
+    const date = fmt(target.y, target.m, effectiveDay(chargeDay, target.y, target.m));
+    if (date >= today && date <= end) out.push(date);
+  }
+  return out;
+}
+
+export function expandCardChargeSchedules({ schedules = [], today, days, variableByCard = new Map() }) {
+  const variableMap =
+    variableByCard instanceof Map
+      ? variableByCard
+      : new Map(Object.entries(variableByCard ?? {}));
+  const out = [];
+
+  for (const schedule of schedules) {
+    const amountType = schedule.amount_type === "fixed" || schedule.amountType === "fixed" ? "fixed" : "variable";
+    const account = schedule.card_account ?? schedule.account;
+    if (!account) continue;
+    for (const date of monthlyChargeDates(today, days, schedule.charge_day ?? schedule.chargeDay)) {
+      const amount =
+        amountType === "fixed"
+          ? Math.abs(Math.round(Number(schedule.fixed_amount ?? schedule.fixedAmount) || 0))
+          : Math.abs(Math.round(Number(variableMap.get(account)) || 0));
+      if (amountType === "fixed" && amount <= 0) continue;
+      out.push({
+        date,
+        amount,
+        account,
+        name: schedule.name ?? `${account} カード引落`,
+        amountType,
+        estimated: amountType === "variable",
+      });
+    }
+  }
+
+  return out.sort((a, b) => a.date.localeCompare(b.date) || a.account.localeCompare(b.account, "ja"));
 }
 
 export function indexOverrides(arr) {
@@ -96,12 +139,14 @@ export function monthlyRecurringContribution(r, year, month, overrides = []) {
 // 純: today(含む)〜today+days のイベントと残高推移を返す。
 // recurring: [{kind:'income'|'expense', name, amount(正), day}]
 // scheduled: [{kind, name, amount(正), date:'YYYY-MM-DD'}]
+// cardCharges: [{date:'YYYY-MM-DD', amount(正), account, name, amountType, estimated}]
 export function buildRolling(opts) {
   const today = opts.today;
   const days = opts.days ?? 30;
   const startBalance = opts.startBalance ?? 0;
   const recurring = opts.recurring ?? [];
   const scheduled = opts.scheduled ?? [];
+  const cardCharges = opts.cardCharges ?? [];
   const transfers = opts.transfers ?? [];
   const overrides = indexOverrides(opts.overrides ?? []);
   const events = [];
@@ -144,6 +189,22 @@ export function buildRolling(opts) {
           account: s.account ?? null,
           source: "scheduled",
           status: "normal",
+        });
+      }
+    }
+    // card charge schedules are pre-expanded by query layer because DB-specific
+    // estimated amount resolution belongs outside this pure rolling logic.
+    for (const c of cardCharges) {
+      if (c.date === date) {
+        events.push({
+          date,
+          kind: "expense",
+          name: c.name,
+          amount: Math.abs(c.amount),
+          account: c.account ?? null,
+          source: "card_charge",
+          status: "normal",
+          estimated: !!c.estimated,
         });
       }
     }

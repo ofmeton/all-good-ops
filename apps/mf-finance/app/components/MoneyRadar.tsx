@@ -57,6 +57,11 @@ export function MoneyRadar() {
   const balancesEmpty = balances.total === 0 && balances.groups.length === 0;
   const upcomingTop = upcoming.items.slice(0, 5);
   const rollingTop = rolling.events.slice(0, 5);
+  const reflectedCardCharge = rolling.events
+    .filter((event) => event.source === "card_charge")
+    .reduce((sum, event) => sum + event.amount, 0);
+  const unreflectedCardCharge = Math.max(0, rolling.cardChargeEstimate - reflectedCardCharge);
+  const showCardChargeNotice = rolling.cardChargeEstimate > 0 || reflectedCardCharge > 0;
 
   // 来月見込みの「◯月」ラベル（month は 'YYYY-MM'）。
   const nextMonthLabel = (() => {
@@ -219,11 +224,19 @@ export function MoneyRadar() {
       {/* ④ 向こう1ヶ月キャッシュフロー */}
       <Card title="向こう1ヶ月のキャッシュフロー" note="見込み残高推移">
         {rolling.events.length === 0 ? (
-          <p className="rounded-lg border border-dashed border-border bg-background px-3 py-4 text-center text-xs text-muted">
-            登録された予定はありません —{" "}
-            <CashflowLink label="「キャッシュフロー」ページ" />
-            で登録できます
-          </p>
+          <>
+            <p className="rounded-lg border border-dashed border-border bg-background px-3 py-4 text-center text-xs text-muted">
+              登録された予定はありません —{" "}
+              <CashflowLink label="「キャッシュフロー」ページ" />
+              で登録できます
+            </p>
+            {showCardChargeNotice && (
+              <p className="mt-2 text-[11px] text-muted">
+                ※カード引落予定が未登録です。「カード引落予定」で登録すると、当月利用 ¥
+                {yen(rolling.cardChargeEstimate)} 相当を見込みに反映できます。
+              </p>
+            )}
+          </>
         ) : (
           <>
             {rolling.firstNegativeDate && (
@@ -289,10 +302,21 @@ export function MoneyRadar() {
               </div>
             </dl>
 
-            {rolling.cardChargeEstimate > 0 && (
+            {showCardChargeNotice && (
               <p className="mt-2 text-[11px] text-muted">
-                ※カード引落見込み ¥{yen(rolling.cardChargeEstimate)}{" "}
-                は未算入（引落日未確定のため）
+                {reflectedCardCharge > 0 ? (
+                  <>
+                    ※カード引落 ¥{yen(reflectedCardCharge)} を見込みに反映済み
+                    {unreflectedCardCharge > 0 && (
+                      <>（未登録カードの当月利用 ¥{yen(unreflectedCardCharge)} は未反映）</>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    ※カード引落予定が未登録です。「カード引落予定」で登録すると、当月利用 ¥
+                    {yen(rolling.cardChargeEstimate)} 相当を見込みに反映できます。
+                  </>
+                )}
               </p>
             )}
           </>

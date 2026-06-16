@@ -2,6 +2,7 @@
 
 import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
+import { isKnownCardAccount } from "@/lib/cashflow-queries";
 import { guessKind, type BalanceKind } from "@/lib/cashflow/kinds";
 
 // 資金繰り（scheduled_cashflow / account_balances）の書込 server actions。
@@ -45,6 +46,12 @@ function accountExists(account: string): boolean {
   return Boolean(row);
 }
 
+function validateChargeDay(value: unknown): number {
+  const n = Number(value);
+  if (!Number.isInteger(n) || n < 1 || n > 31) return 0;
+  return n;
+}
+
 export interface ScheduledInput {
   kind: "income" | "expense";
   name: string;
@@ -52,6 +59,113 @@ export interface ScheduledInput {
   scheduled_date: string;
   account?: string | null;
   note?: string | null;
+}
+
+export interface CardChargeScheduleInput {
+  card_account: string;
+  charge_day: number;
+  amount_type: "fixed" | "variable";
+  fixed_amount?: number | null;
+  note?: string | null;
+  active?: number | boolean;
+}
+
+type NormalizedCardChargeInput =
+  | { ok: false; error: string }
+  | {
+  ok: true;
+  value: {
+    cardAccount: string;
+    chargeDay: number;
+    amountType: "fixed" | "variable";
+    fixedAmount: number | null;
+    note: string | null;
+    active: 0 | 1;
+  };
+};
+
+function normalizeCardChargeInput(input: CardChargeScheduleInput): NormalizedCardChargeInput {
+  const cardAccount = trimOrNull(input.card_account);
+  if (!cardAccount) return { ok: false, error: "カード口座を選択してください" };
+  if (!isKnownCardAccount(cardAccount)) return { ok: false, error: `カード口座が見つかりません: ${cardAccount}` };
+  const chargeDay = validateChargeDay(input.charge_day);
+  if (chargeDay === 0) return { ok: false, error: "引落日は1〜31で入力してください" };
+  const amountType = input.amount_type === "fixed" ? "fixed" : "variable";
+  const fixedAmount = amountType === "fixed" ? toPositiveInt(input.fixed_amount) : null;
+  if (amountType === "fixed" && (!fixedAmount || fixedAmount <= 0)) {
+    return { ok: false, error: "固定額は正の金額で入力してください" };
+  }
+  const note = trimOrNull(input.note);
+  const active = input.active === false || input.active === 0 ? 0 : 1;
+  return { ok: true, value: { cardAccount, chargeDay, amountType, fixedAmount, note, active } };
+}
+
+export async function addCardChargeSchedule(input: CardChargeScheduleInput): Promise<CashflowActionResult> {
+  try {
+    const normalized = normalizeCardChargeInput(input);
+    if (!normalized.ok) return normalized;
+    const v = normalized.value;
+    db.prepare(
+      `INSERT INTO card_charge_schedules
+         (card_account, charge_day, amount_type, fixed_amount, note, active)
+       VALUES (?, ?, ?, ?, ?, ?)`,
+    ).run(v.cardAccount, v.chargeDay, v.amountType, v.fixedAmount, v.note, v.active);
+    revalidate();
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : String(e) };
+  }
+}
+
+export async function updateCardChargeSchedule(
+  id: number,
+  input: CardChargeScheduleInput,
+): Promise<CashflowActionResult> {
+  try {
+    const n = Number(id);
+    if (!Number.isInteger(n) || n <= 0) return { ok: false, error: "無効な id です" };
+    const normalized = normalizeCardChargeInput(input);
+    if (!normalized.ok) return normalized;
+    const v = normalized.value;
+    const info = db
+      .prepare(
+        `UPDATE card_charge_schedules
+            SET card_account = ?, charge_day = ?, amount_type = ?, fixed_amount = ?, note = ?, active = ?
+          WHERE id = ?`,
+      )
+      .run(v.cardAccount, v.chargeDay, v.amountType, v.fixedAmount, v.note, v.active, n);
+    if (info.changes === 0) return { ok: false, error: "対象のカード引落予定が見つかりません" };
+    revalidate();
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : String(e) };
+  }
+}
+
+export async function deleteCardChargeSchedule(id: number): Promise<CashflowActionResult> {
+  try {
+    const n = Number(id);
+    if (!Number.isInteger(n) || n <= 0) return { ok: false, error: "無効な id です" };
+    const info = db.prepare("DELETE FROM card_charge_schedules WHERE id = ?").run(n);
+    if (info.changes === 0) return { ok: false, error: "対象のカード引落予定が見つかりません" };
+    revalidate();
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : String(e) };
+  }
+}
+
+export async function toggleCardChargeSchedule(id: number, active: boolean): Promise<CashflowActionResult> {
+  try {
+    const n = Number(id);
+    if (!Number.isInteger(n) || n <= 0) return { ok: false, error: "無効な id です" };
+    const info = db.prepare("UPDATE card_charge_schedules SET active = ? WHERE id = ?").run(active ? 1 : 0, n);
+    if (info.changes === 0) return { ok: false, error: "対象のカード引落予定が見つかりません" };
+    revalidate();
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : String(e) };
+  }
 }
 
 export async function addScheduled(input: ScheduledInput): Promise<CashflowActionResult> {
