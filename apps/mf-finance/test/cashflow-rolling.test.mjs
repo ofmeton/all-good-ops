@@ -6,7 +6,9 @@ import {
   buildRolling,
   buildUpcomingWithdrawals,
   effectiveDay,
+  expandCardChargeSchedules,
   monthEndOffsetDays,
+  monthlyChargeDates,
   monthlyOccurrences,
   monthlyRecurringContribution,
   weekdayOf,
@@ -118,6 +120,120 @@ test("buildAccountRolling: 口座別・未指定へ分配し total の rolling �
   assert.equal(locations.get("空口座").start, 700);
   assert.equal(locations.get("空口座").end, 700);
   assert.equal(byAccount.total.events.some((event) => event.name === "スキップ報酬"), false);
+});
+
+test("buildRolling: cardCharges を expense イベント化し残高に算入する", () => {
+  const r = buildRolling({
+    today: "2026-06-01",
+    days: 30,
+    startBalance: 100000,
+    recurring: [],
+    scheduled: [],
+    cardCharges: [
+      {
+        date: "2026-06-27",
+        amount: 42000,
+        account: "VISAカード",
+        name: "VISAカード カード引落",
+        amountType: "variable",
+        estimated: true,
+      },
+    ],
+  });
+
+  assert.equal(r.events.length, 1);
+  assert.equal(r.events[0].date, "2026-06-27");
+  assert.equal(r.events[0].kind, "expense");
+  assert.equal(r.events[0].source, "card_charge");
+  assert.equal(r.events[0].status, "normal");
+  assert.equal(r.events[0].estimated, true);
+  assert.equal(r.events[0].account, "VISAカード");
+  assert.equal(r.events[0].amount, 42000);
+  assert.equal(r.events[0].balanceAfter, 58000);
+  assert.equal(r.end, 58000);
+});
+
+test("buildAccountRolling: fixed/variable cardCharges を口座別残高にも算入する", () => {
+  const byAccount = buildAccountRolling({
+    today: "2026-06-01",
+    days: 30,
+    startBalance: 150000,
+    balances: [
+      { account: "VISAカード", kind: "card", balance: -50000 },
+      { account: "Masterカード", kind: "card", balance: -20000 },
+      { account: "銀行A", kind: "bank", balance: 220000 },
+    ],
+    recurring: [],
+    scheduled: [],
+    cardCharges: [
+      {
+        date: "2026-06-26",
+        amount: 30000,
+        account: "Masterカード",
+        name: "Masterカード カード引落",
+        amountType: "fixed",
+        estimated: false,
+      },
+      {
+        date: "2026-06-27",
+        amount: 42000,
+        account: "VISAカード",
+        name: "VISAカード カード引落",
+        amountType: "variable",
+        estimated: true,
+      },
+    ],
+  });
+  const locations = new Map(byAccount.locations.map((location) => [location.key, location]));
+
+  assert.deepEqual(byAccount.total.events.map((event) => [event.name, event.amount, event.estimated]), [
+    ["Masterカード カード引落", 30000, false],
+    ["VISAカード カード引落", 42000, true],
+  ]);
+  assert.equal(byAccount.total.end, 78000);
+  assert.equal(locations.get("Masterカード").end, -50000);
+  assert.equal(locations.get("VISAカード").end, -92000);
+  assert.equal(locations.get("銀行A").end, 220000);
+});
+
+test("monthlyChargeDates: charge_day を期間内の月次日付へ展開し月末超過をクランプ", () => {
+  assert.deepEqual(monthlyChargeDates("2026-01-30", 40, 31), ["2026-01-31", "2026-02-28"]);
+  assert.deepEqual(monthlyChargeDates("2026-06-16", 45, 10), ["2026-07-10"]);
+  assert.deepEqual(monthlyChargeDates("2026-06-16", 45, 27), ["2026-06-27", "2026-07-27"]);
+});
+
+test("expandCardChargeSchedules: variable は当月利用0でもイベントを残す", () => {
+  const charges = expandCardChargeSchedules({
+    today: "2026-06-16",
+    days: 20,
+    schedules: [
+      {
+        card_account: "ポケットカード",
+        charge_day: 27,
+        amount_type: "variable",
+        fixed_amount: null,
+      },
+    ],
+    variableByCard: new Map(),
+  });
+
+  assert.equal(charges.length, 1);
+  assert.equal(charges[0].date, "2026-06-27");
+  assert.equal(charges[0].account, "ポケットカード");
+  assert.equal(charges[0].amount, 0);
+  assert.equal(charges[0].estimated, true);
+
+  const rolling = buildRolling({
+    today: "2026-06-16",
+    days: 20,
+    startBalance: 1000,
+    recurring: [],
+    scheduled: [],
+    cardCharges: charges,
+  });
+  assert.equal(rolling.events.length, 1);
+  assert.equal(rolling.events[0].source, "card_charge");
+  assert.equal(rolling.events[0].balanceAfter, 1000);
 });
 
 test("buildAccountRolling: balances 空で asset 起点だけある場合は未指定に起点を寄せる", () => {

@@ -7,10 +7,12 @@ import {
   buildBalanceMatrix,
   buildRolling,
   buildUpcomingWithdrawals,
+  expandCardChargeSchedules,
   monthEndOffsetDays,
   monthlyOccurrences,
   resolveOccurrence,
 } from "@/lib/cashflow/rolling.mjs";
+import { isKnownCardAccount as isKnownCardAccountFromSources } from "@/lib/cashflow/card-accounts.mjs";
 // kind 定数は client/server 両用の純モジュールへ分離（client が db を引き込まないため）。
 import {
   type BalanceKind,
@@ -135,6 +137,17 @@ export interface TransferRow {
   done_at: string | null;
 }
 
+export interface CardChargeScheduleRow {
+  id: number;
+  card_account: string;
+  charge_day: number;
+  amount_type: "fixed" | "variable";
+  fixed_amount: number | null;
+  note: string | null;
+  active: number;
+  created_at: string;
+}
+
 function transferRows(): TransferRow[] {
   return db
     .prepare(
@@ -154,6 +167,27 @@ export function getTransferList(): TransferRow[] {
         ORDER BY scheduled_date, id`,
     )
     .all() as TransferRow[];
+}
+
+export function getCardChargeSchedules(): CardChargeScheduleRow[] {
+  return db
+    .prepare(
+      `SELECT id, card_account, charge_day, amount_type, fixed_amount, note, active, created_at
+         FROM card_charge_schedules
+        WHERE active = 1
+        ORDER BY card_account, charge_day, id`,
+    )
+    .all() as CardChargeScheduleRow[];
+}
+
+export function getCardChargeScheduleList(): CardChargeScheduleRow[] {
+  return db
+    .prepare(
+      `SELECT id, card_account, charge_day, amount_type, fixed_amount, note, active, created_at
+         FROM card_charge_schedules
+        ORDER BY active DESC, card_account, charge_day, id`,
+    )
+    .all() as CardChargeScheduleRow[];
 }
 
 function addDaysIso(iso: string, days: number): string {
@@ -217,6 +251,14 @@ export function getNextMonthCardCharge(): {
   return { total, byCard, month: ym };
 }
 
+export function isKnownCardAccount(account: string): boolean {
+  return isKnownCardAccountFromSources(account, {
+    accountBalanceCards: getAllAccountBalances().filter((row) => row.kind === "card"),
+    nextMonthCards: getNextMonthCardCharge().byCard,
+    guessKindFn: guessKind,
+  });
+}
+
 export interface ScheduledListRow {
   id: number;
   kind: "income" | "expense";
@@ -241,12 +283,13 @@ export interface RollingEvent {
   name: string;
   amount: number;
   account: string | null;
-  source: "recurring" | "scheduled" | "transfer" | string;
+  source: "recurring" | "scheduled" | "transfer" | "card_charge" | string;
   recurringId?: number;
   occurrenceDate?: string;
   status: "normal" | "pending" | "skipped";
   balanceAfter: number;
   affectsTotal?: boolean;
+  estimated?: boolean;
 }
 export interface RollingCashflow {
   start: number;
@@ -256,7 +299,7 @@ export interface RollingCashflow {
   end: number;
   minBalance: number;
   firstNegativeDate: string | null;
-  cardChargeEstimate: number; // 参考（残高には未算入）
+  cardChargeEstimate: number; // 参考表示用の当月カード利用額合計
 }
 
 export interface RollingLocation {
@@ -283,6 +326,15 @@ export interface AccountRollingCashflow {
   cardChargeEstimate: number;
 }
 
+type ExpandedCardCharge = {
+  date: string;
+  amount: number;
+  account: string;
+  name: string;
+  amountType: "fixed" | "variable";
+  estimated: boolean;
+};
+
 function formatRollingResult(
   r: {
     start: number;
@@ -307,20 +359,39 @@ function formatRollingResult(
   };
 }
 
-// 向こう days 日のローリング資金繰り（recurring + scheduled。カード見込みは別参考値）。
+function expandCardCharges(
+  schedules: CardChargeScheduleRow[],
+  today: string,
+  days: number,
+  cardChargeEstimate: ReturnType<typeof getNextMonthCardCharge>,
+): ExpandedCardCharge[] {
+  const variableByCard = new Map(cardChargeEstimate.byCard.map((row) => [row.account, row.amount]));
+  const expand = expandCardChargeSchedules as (input: {
+    schedules: CardChargeScheduleRow[];
+    today: string;
+    days: number;
+    variableByCard: Map<string, number>;
+  }) => ExpandedCardCharge[];
+  return expand({ schedules, today, days, variableByCard });
+}
+
+// 向こう days 日のローリング資金繰り（recurring + scheduled + transfer + cardCharges）。
 export function getRollingCashflow(days = 30): RollingCashflow {
+  const today = todayIso();
   const { start, baseDate } = startBalance();
   const overrides = getRecurringOverrides();
+  const cardChargeEstimate = getNextMonthCardCharge();
   const r = buildRolling({
-    today: todayIso(),
+    today,
     days,
     startBalance: start,
     recurring: activeRecurring(),
     scheduled: scheduledRows(),
+    cardCharges: expandCardCharges(getCardChargeSchedules(), today, days, cardChargeEstimate),
     transfers: transferRows(),
     overrides,
   });
-  return formatRollingResult(r, baseDate, days, getNextMonthCardCharge().total);
+  return formatRollingResult(r, baseDate, days, cardChargeEstimate.total);
 }
 
 const KIND_ORDER: BalanceKind[] = ["bank", "card", "emoney", "cash", "crypto", "other"];
@@ -329,7 +400,7 @@ export function getAccountRollingCashflow(period: CashflowPeriod): AccountRollin
   const today = todayIso();
   const days = monthEndOffsetDays(today, periodMonthsAhead(period));
   const { start, baseDate } = startBalance();
-  const cardChargeEstimate = getNextMonthCardCharge().total;
+  const cardChargeEstimate = getNextMonthCardCharge();
   const r = buildAccountRolling({
     today,
     days,
@@ -341,6 +412,7 @@ export function getAccountRollingCashflow(period: CashflowPeriod): AccountRollin
     })),
     recurring: activeRecurring(),
     scheduled: scheduledRows(),
+    cardCharges: expandCardCharges(getCardChargeSchedules(), today, days, cardChargeEstimate),
     transfers: transferRows(),
     overrides: getRecurringOverrides(),
   });
@@ -356,10 +428,10 @@ export function getAccountRollingCashflow(period: CashflowPeriod): AccountRollin
     period,
     days,
     baseDate,
-    total: formatRollingResult(r.total, baseDate, days, cardChargeEstimate),
+    total: formatRollingResult(r.total, baseDate, days, cardChargeEstimate.total),
     locations,
     matrix: buildBalanceMatrix(r.total.events, locations) as AccountRollingCashflow["matrix"],
-    cardChargeEstimate,
+    cardChargeEstimate: cardChargeEstimate.total,
   };
 }
 

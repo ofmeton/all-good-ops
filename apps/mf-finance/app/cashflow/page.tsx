@@ -1,7 +1,9 @@
 import {
   getAccountOptions,
   getAccountRollingCashflow,
+  getCardChargeScheduleList,
   getDueTransfers,
+  getNextMonthCardCharge,
   getScheduledList,
   getAllAccountBalances,
   getTransferList,
@@ -11,6 +13,7 @@ import { parsePeriod } from "@/lib/cashflow/kinds";
 import { getRecurringItems } from "@/lib/write-queries";
 import { RecurringEditor } from "@/app/components/RecurringEditor";
 import { CashflowTimeline } from "@/app/cashflow/CashflowTimeline";
+import { CardChargeScheduleEditor } from "@/app/cashflow/CardChargeScheduleEditor";
 import { ScheduledEditor } from "@/app/cashflow/ScheduledEditor";
 import { AccountBalanceEditor } from "@/app/cashflow/AccountBalanceEditor";
 import { PeriodToggle } from "@/app/cashflow/PeriodToggle";
@@ -31,12 +34,33 @@ export default async function CashflowPage({
   const period = parsePeriod(params.period);
   const accountRolling = getAccountRollingCashflow(period);
   const scheduled = getScheduledList();
+  const cardChargeSchedules = getCardChargeScheduleList();
   const transfers = getTransferList();
   const dueTransfers = getDueTransfers(3);
   const recurring = getRecurringItems();
   const occurrences = getUpcomingOccurrences(60);
   const balances = getAllAccountBalances();
   const accountOptions = getAccountOptions();
+  // カード口座 = account_balances(kind=card) ＋ 取引履歴から検出されたカード（getNextMonthCardCharge）。
+  // 実データではカードが account_balances に kind=card 登録されておらず transactions の guessKind 由来のことが多いため、
+  // 利用実績のあるカードも選択肢に含めて「登録できない」を防ぐ。
+  const cardOptions = (() => {
+    const seen = new Set<string>();
+    const out: { account: string; kind: "card" }[] = [];
+    for (const o of accountOptions) {
+      if (o.kind === "card" && !seen.has(o.account)) {
+        seen.add(o.account);
+        out.push({ account: o.account, kind: "card" });
+      }
+    }
+    for (const c of getNextMonthCardCharge().byCard) {
+      if (!seen.has(c.account)) {
+        seen.add(c.account);
+        out.push({ account: c.account, kind: "card" });
+      }
+    }
+    return out;
+  })();
 
   return (
     <Container>
@@ -74,6 +98,7 @@ export default async function CashflowPage({
       <CashflowTimeline rolling={accountRolling} />
 
       <ScheduledEditor items={scheduled} accountOptions={accountOptions} />
+      <CardChargeScheduleEditor items={cardChargeSchedules} cardOptions={cardOptions} />
       <TransferEditor items={transfers} accountOptions={accountOptions} />
 
       <section className="mt-6" aria-label="毎月の定期">
