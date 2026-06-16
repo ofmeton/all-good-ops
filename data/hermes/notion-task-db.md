@@ -35,8 +35,24 @@
 - DB は工藤陸の claude.ai Notion 接続で作成済み。**hermes 側から読むには Task 1 の内部インテグレーション `hermes-todo-partner` に本 DB を Connections 追加で共有が必要**。
 - サンプルカード（RawSourceId=`sample-0001`）は動作確認用。検収後に削除可。
 
+## hermes 稼働設定の要点（`~/.hermes/config.yaml`・2026-06-17 検証済み）
+
+捕捉が動くまでに踏んだハマりどころと、効いた設定：
+
+1. **database_id ≠ data_source_id**（最大の罠）: Notion MCP `mcp_notion_API_post_page` の `parent` には **database_id=`2159405e11a84e7f90a8b6252bb43d38`** を渡す。data_source_id(`782773d8…`)を渡すと `404 object_not_found`。
+2. **Status は select 型**: `{"Status":{"select":{"name":"Inbox"}}}`。`{"status":{...}}` は不可（プロパティ名が Status でも型は select）。
+3. **ツール激減で notion を露出**: `tools.exclude` で notion ツールを 22→6 に絞り（残す: post_search/query_data_source/post_page/patch_page/create_a_comment/retrieve_a_data_source）、`agent.disabled_toolsets` で browser/terminal/code_execution/computer_use/image_gen/moa/delegation/cronjob/context_engine/todo を無効化。これで `tool_search` 閾値を下回り、agent が notion を直接呼べる（絞らないと tool_search の裏に隠れて curl を書く）。
+4. **enforcement = `agent.environment_hint`**（YAML リテラルブロック `|`）に、post_page の**正確な引数 JSON**（database_id＋完全プロパティ形式）を明示。これが無いと Haiku は会話に流れてカードを作らない。headless `-z` には hint が載らない/ MCP が不安定 → **検証は必ず Telegram(gateway)経路で**。
+5. **古いセッションに旧 hint が焼き付く**: 設定変更後は Telegram で **`/new`** を送って新セッションにしないと反映されない（`hermes sessions delete` ＋ gateway 再起動でも在席セッションは復活する）。
+6. モデル = `anthropic/claude-haiku-4.5`（OpenRouter・要残高チャージ。無料枠は実質不可）。常駐ループ用。
+7. キル/再起動: `hermes gateway restart` / 停止は launchd。バックアップは `config.yaml.bak*`。
+
+> 注: §5-E（会話のカードコメント集約）は未達。capture は安定したが、create_a_comment での経緯転記は別途強化が要る。
+
 ## ステータス
 
 - [x] Phase 0 / Task 2: DB＋カンバン＋サンプルカード作成（2026-06-16・Claude の Notion MCP で実施）
-- [ ] Phase 0 / Task 1: hermes 内部インテグレーション作成＋本 DB を共有（人間アクション）
-- [ ] Phase 1: hermes 導入・安モデル・Telegram・Notion MCP 配線・todo-partner SKILL（人間アクション＋ローカル Mac）
+- [x] Phase 0 / Task 1: hermes 内部インテグレーション作成＋本 DB を共有（2026-06-17）
+- [x] Phase 1 核: hermes 導入・Haiku・Telegram・Notion MCP 配線・**Telegram メモ→Notion Inbox カード自動作成を実証**（2026-06-17）
+- [ ] Phase 1 残: 逆質問→Details 充填→Autonomy 確定→Ready 化の一連、会話のカードコメント集約（§5-E）の安定化
+- [ ] Phase 2 以降: Apple Notes / カレンダー捕捉、launchd 自走実行、催促ループ
