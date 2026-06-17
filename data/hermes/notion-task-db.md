@@ -47,12 +47,14 @@
 6. モデル = `anthropic/claude-haiku-4.5`（OpenRouter・要残高チャージ。無料枠は実質不可）。常駐ループ用。
 7. キル/再起動: `hermes gateway restart` / 停止は launchd。バックアップは `config.yaml.bak*`。
 
-> 注: §5-E（会話のカードコメント集約）は未達。capture は安定したが、create_a_comment での経緯転記は別途強化が要る。
+8. **auxiliary は openrouter/haiku に固定**（既定の `provider: auto` は Nous 未ログインで死ぬ→compression/要約/curator/title が `no provider` 警告）。`auxiliary.*` 全サブタスクを provider=openrouter / model=anthropic/claude-haiku-4.5 / base_url=https://openrouter.ai/api/v1 に。
+9. **full flow の enforcement も environment_hint**: カード作成後に逆質問→`patch_page`でDetails/Due/NextAction→Autonomy提案→Ready化→`create_a_comment`で会話集約、まで hint に明記すると Haiku が一連を自走する（2026-06-17 実証）。
 
 ## ステータス
 
 - [x] Phase 0 / Task 2: DB＋カンバン＋サンプルカード作成（2026-06-16・Claude の Notion MCP で実施）
 - [x] Phase 0 / Task 1: hermes 内部インテグレーション作成＋本 DB を共有（2026-06-17）
-- [x] Phase 1 核: hermes 導入・Haiku・Telegram・Notion MCP 配線・**Telegram メモ→Notion Inbox カード自動作成を実証**（2026-06-17）
-- [ ] Phase 1 残: 逆質問→Details 充填→Autonomy 確定→Ready 化の一連、会話のカードコメント集約（§5-E）の安定化
-- [ ] Phase 2 以降: Apple Notes / カレンダー捕捉、launchd 自走実行、催促ループ
+- [x] **Phase 1 完了**（2026-06-17）: Telegram メモ→カード作成→逆質問→Details/Due/NextAction 充填→Autonomy 提案・確定→Ready 化→**§5-E 会話のカードコメント集約**まで full flow を実証（実例「つかさママに返信」でコメント2件＋Ready＋reminder 確認）
+- [ ] Phase 2: Apple Notes(Mac NoteStore.sqlite・直近N日) / Google カレンダー（要準備をhermes判別）捕捉
+- [ ] Phase 3: launchd 自走実行ランナー（Ready×{cc-auto,draft-only} を 30分poll・worktree隔離・硬ゲート・低リスク自動merge）＋キルスイッチ
+- [ ] Phase 4: 催促ループ（reminder/停滞カードを朝にTelegram・静時間帯22-8）＋Priority/Project運用
