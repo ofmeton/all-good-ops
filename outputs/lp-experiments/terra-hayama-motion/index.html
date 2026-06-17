@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>TERRA HAYAMA ｜ 葉山の風景に、ゆっくり溶ける宿。</title>
+<meta name="description" content="神奈川・葉山一色の一棟貸しの宿 TERRA HAYAMA。一色海岸まで徒歩8分。海と里山に抱かれた静かな住宅地で、時の流れが少し緩む滞在を。" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%231A1410'/%3E%3Ctext x='16' y='23' font-family='serif' font-size='20' fill='%23F5F1EA' text-anchor='middle'%3ET%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@500;700;900&family=Zen+Old+Mincho:wght@400;500;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<a class="skip" href="#concept">本文へスキップ</a>
+
+<!-- 和紙ノイズ overlay -->
+<svg class="grain" aria-hidden="true" width="0" height="0"><filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter></svg>
+
+<!-- ===== Header ===== -->
+<header class="hdr" id="hdr">
+  <a class="hdr__logo" href="#top">TERRA<span>HAYAMA</span></a>
+  <nav class="hdr__nav" aria-label="主要ナビゲーション">
+    <a href="#concept">Concept</a>
+    <a href="#rooms">Rooms</a>
+    <a href="#stay">Stay</a>
+    <a href="#access">Access</a>
+    <a class="hdr__cta" href="#reserve">予約</a>
+  </nav>
+</header>
+
+<!-- ===== Hero ===== -->
+<section class="hero" id="top">
+  <div class="hero__media" aria-hidden="true">
+    <img class="hero__img is-active" src="assets/hero/hero-01-living.webp" alt="" />
+    <img class="hero__img" src="assets/hero/hero-03-dining.webp" alt="" />
+    <img class="hero__img" src="assets/hero/hero-02-bedroom.webp" alt="" />
+    <img class="hero__img" src="assets/hero/hero-04-arch.webp" alt="" />
+  </div>
+  <div class="hero__scrim" aria-hidden="true"></div>
+
+  <div class="hero__inner">
+    <p class="hero__eyebrow">A QUIET VILLA IN HAYAMA, ISSHIKI</p>
+    <h1 class="hero__title">TERRA<br><span>HAYAMA</span></h1>
+    <p class="hero__lead">
+      <span class="line">葉山の風景に、</span>
+      <span class="line">ゆっくり溶ける宿。</span>
+    </p>
+    <p class="hero__sub">一色海岸まで徒歩 8 分 ── 海と里山に抱かれた一棟貸し</p>
+  </div>
+
+  <a class="hero__vcta" href="#reserve" aria-label="予約は Airbnb から">予約は Airbnb から　→</a>
+
+  <a class="hero__scroll" href="#concept" aria-label="下へスクロール">
+    <span>scroll</span>
+    <svg viewBox="0 0 12 28" width="12" height="28" aria-hidden="true"><path d="M6 0v24M1 19l5 6 5-6" fill="none" stroke="currentColor" stroke-width="1"/></svg>
+  </a>
+
+  <!-- 葉山の山影＋波線 -->
+  <svg class="hero__hills" viewBox="0 0 1440 220" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0 150 L300 70 L470 140 L640 50 L860 150 L1080 90 L1440 160 L1440 220 L0 220 Z" fill="#1A1410" opacity="0.92"/>
+    <path d="M0 185 C220 165 360 205 600 185 S980 165 1440 195 L1440 220 L0 220 Z" fill="#1A1410"/>
+  </svg>
+</section>
+
+<!-- ===== Concept ===== -->
+<section class="concept" id="concept">
+  <div class="concept__wrap">
+    <p class="sec-eyebrow reveal">Concept</p>
+
+    <h2 class="tate reveal" data-split>葉山への愛から生まれた、一棟貸しの宿。</h2>
+
+    <div class="concept__body reveal">
+      <p class="line">TERRA HAYAMA は、葉山への愛から生まれました。</p>
+      <p class="line">この土地に暮らして十年、私たちは今もなお、この町の風景に魅了され続けています。</p>
+      <p class="line">海越しに望む富士山、棚田が広がる里山。</p>
+      <p class="line">それらに触れる中で、時の流れが少し緩み、呼吸が整っていく。</p>
+      <p class="line">ここでは、訪れる人と葉山との距離が、ゆっくりとほどけていきます。</p>
+    </div>
+
+    <figure class="concept__art" data-speed="0.06">
+      <img class="reveal" src="assets/about-hero-poem.webp" alt="床の間に飾られた押し花のアートと詩" loading="lazy" />
+      <figcaption class="reveal">— 風景とはきっと、人の営みと自然が、時間をかけて育まれてきたもの。</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ===== Rooms (pinned horizontal gallery) ===== -->
+<section class="rooms" id="rooms">
+  <div class="rooms__head">
+    <h2 class="big-title reveal">Rooms<span class="div" aria-hidden="true">—</span><em>客室</em></h2>
+    <p class="rooms__lead reveal">
+      <span class="line">最大8名で泊まれる、ゆとりの間取り。</span>
+      <span class="line">リビングダイニング・寝室・ひのきのバス・フルキッチン。</span>
+    </p>
+  </div>
+
+  <div class="gallery" id="gallery">
+    <div class="gallery__track" id="galleryTrack">
+      <figure class="gcard"><img src="assets/rooms/ldk-01.webp" alt="木天井のリビングダイニング" loading="lazy"/><figcaption><em>01</em>リビングダイニング</figcaption></figure>
+      <figure class="gcard"><img src="assets/rooms/ldk-03.webp" alt="光の入る引きのリビング" loading="lazy"/><figcaption><em>02</em>くつろぎの居間</figcaption></figure>
+      <figure class="gcard"><img src="assets/hero/hero-04-arch.webp" alt="赤土壁と漆喰アーチの和モダン空間" loading="lazy"/><figcaption><em>03</em>漆喰のアーチ</figcaption></figure>
+      <figure class="gcard"><img src="assets/rooms/bedroom-01.webp" alt="寝室の様子" loading="lazy"/><figcaption><em>04</em>寝室</figcaption></figure>
+      <figure class="gcard"><img src="assets/rooms/bath.webp" alt="木壁と大窓のひのきのバスルーム" loading="lazy"/><figcaption><em>05</em>ひのきのバス</figcaption></figure>
+      <figure class="gcard"><img src="assets/rooms/laundry.webp" alt="ランドリーと洗面の一体空間" loading="lazy"/><figcaption><em>06</em>ランドリー</figcaption></figure>
+      <figure class="gcard"><img src="assets/rooms/kitchen-01.webp" alt="自炊できるフルキッチン" loading="lazy"/><figcaption><em>07</em>フルキッチン</figcaption></figure>
+    </div>
+  </div>
+  <p class="gallery__hint reveal" aria-hidden="true">← スクロールで客室をめぐる →</p>
+</section>
+
+<!-- ===== Stay (magazine offset) ===== -->
+<section class="stay" id="stay">
+  <div class="stay__head">
+    <h2 class="big-title reveal">Stay<span class="div" aria-hidden="true">—</span><em>葉山で過ごす一日</em></h2>
+    <p class="stay__lead reveal">棚田・夕陽・葉山の食・抹茶。滞在中に出会える、葉山らしい四つの過ごし方。</p>
+  </div>
+
+  <div class="stay__grid">
+    <article class="exp exp--photo exp--a reveal" data-speed="0.05">
+      <div class="exp__img"><img src="assets/stay/stay-tanada.webp" alt="夕陽を映す上山口の棚田" loading="lazy"/></div>
+      <div class="exp__txt">
+        <p class="exp__no">01</p>
+        <h3>棚田を見て、味わう</h3>
+        <p>葉山の棚田で育てたお米が、葉山アイスのアイスクリームに変わる。風景を「食べる」体験を、滞在中に。</p>
+      </div>
+    </article>
+
+    <article class="exp exp--text exp--b reveal" data-speed="0.03">
+      <p class="exp__deco" aria-hidden="true">富士</p>
+      <div class="exp__txt">
+        <p class="exp__no">02</p>
+        <h3>海越しの富士山、夕陽</h3>
+        <p>一色海岸まで徒歩8分。澄んだ空気の晴れた日は、海の向こうに富士山。沈む夕陽が、海と山を一筋に染める。</p>
+      </div>
+    </article>
+
+    <article class="exp exp--text exp--c reveal" data-speed="0.04">
+      <p class="exp__deco" aria-hidden="true">食</p>
+      <div class="exp__txt">
+        <p class="exp__no">03</p>
+        <h3>葉山の海の幸、山の幸</h3>
+        <p>葉山の漁港から朝の魚、山の畑から旬の野菜。地元の食材で、自分たちの食卓を整える喜び。</p>
+      </div>
+    </article>
+
+    <article class="exp exp--photo exp--d reveal" data-speed="0.06">
+      <div class="exp__img"><img src="assets/stay/stay-matcha.webp" alt="キッチンに置かれた抹茶マシーンと茶碗" loading="lazy"/></div>
+      <div class="exp__txt">
+        <p class="exp__no">04</p>
+        <h3>抹茶マシーン</h3>
+        <p>京都生まれの抹茶マシーンを、宿のキッチンに。挽きたての一服を、いつでも手元に。</p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ===== Nature collage ===== -->
+<section class="nature" id="nature">
+  <p class="sec-eyebrow reveal">The Landscape of Hayama</p>
+  <div class="collage">
+    <figure class="collage__a reveal"><img src="assets/about-hero-tanada.webp" alt="棚田の広がる里山の風景" loading="lazy"/></figure>
+    <figure class="collage__b reveal"><img src="assets/about-exterior.webp" alt="白漆喰と焼杉の蔵のような外観" loading="lazy"/></figure>
+    <figure class="collage__c reveal"><img src="assets/access/access-balcony.webp" alt="バルコニーから望む葉山の町並み" loading="lazy"/></figure>
+    <figure class="collage__d reveal"><img src="assets/hero/hero-exterior-01.webp" alt="葉山の佇まいの外観" loading="lazy"/></figure>
+    <figure class="collage__e reveal"><img src="assets/hero/hero-exterior-02.webp" alt="二階デッキのある建物の外観" loading="lazy"/></figure>
+  </div>
+  <p class="nature__quote reveal">
+    <span class="line">海と山が織りなす自然のリズム、</span>
+    <span class="line">ここに息づく人の営み。</span>
+    <span class="line">その重なりの中へ、ゆっくり。</span>
+  </p>
+</section>
+
+<!-- ===== Access ===== -->
+<section class="access" id="access">
+  <div class="access__head">
+    <h2 class="big-title reveal">Access<span class="div" aria-hidden="true">—</span><em>アクセス</em></h2>
+    <p class="access__lead reveal">
+      <span class="line">一色海岸からほど近い、静かな住宅地に。</span>
+      <span class="line">海まで、徒歩8分。</span>
+    </p>
+  </div>
+
+  <div class="access__cols">
+    <figure class="access__photo reveal" data-speed="0.04">
+      <img src="assets/access/access-approach.webp" alt="1階の駐車スペースと外階段のアプローチ" loading="lazy"/>
+      <figcaption>1階に駐車スペース。正面玄関ではなく、外階段を上ってお入りください。</figcaption>
+    </figure>
+
+    <div class="access__info">
+      <dl class="reveal">
+        <div><dt>住所</dt><dd>〒240-0111<br>神奈川県三浦郡葉山町一色 1759-1-5</dd></div>
+        <div><dt>チェックイン</dt><dd>16:00 〜 / アウト 10:00</dd></div>
+        <div><dt>駐車場</dt><dd>1階フロアに駐車スペースあり</dd></div>
+      </dl>
+      <ul class="poi reveal">
+        <li class="line"><span>一色海岸</span><em>徒歩 8 分・葉山きっての海水浴と日没スポット</em></li>
+        <li class="line"><span>上山口の棚田</span><em>葉山アイスのお米を育てる棚田</em></li>
+        <li class="line"><span>森戸海岸</span><em>世界の厳選ビーチにも選ばれた渚</em></li>
+        <li class="line"><span>スズキヤ 葉山一色店</span><em>滞在中の自炊に。地元の食材が揃う</em></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="access__map reveal">
+    <iframe title="TERRA HAYAMA 周辺地図" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+      src="https://maps.google.com/maps?q=%E7%A5%9E%E5%A5%88%E5%B7%9D%E7%9C%8C%E4%B8%89%E6%B5%A6%E9%83%A1%E8%91%89%E5%B1%B1%E7%94%BA%E4%B8%80%E8%89%B2&z=15&output=embed"></iframe>
+  </div>
+</section>
+
+<!-- ===== Reserve / Footer ===== -->
+<footer class="reserve" id="reserve">
+  <div class="reserve__inner">
+    <p class="reserve__tate" aria-hidden="true">ご予約</p>
+    <div class="reserve__body">
+      <p class="reserve__eyebrow reveal">Reservation</p>
+      <p class="reserve__copy reveal">空き状況の確認・ご予約は<br>Airbnb から承っております。</p>
+      <a class="reserve__btn reveal" href="https://www.airbnb.jp/" target="_blank" rel="noopener">Airbnbで予約する　→</a>
+      <p class="reserve__mail reveal">お問い合わせ：<a href="mailto:info@terra-hayama.example">info@terra-hayama.example</a></p>
+    </div>
+  </div>
+
+  <svg class="reserve__hills" viewBox="0 0 1440 160" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0 110 L320 50 L520 100 L720 40 L980 110 L1200 70 L1440 120 L1440 160 L0 160 Z" fill="#0E0B08"/>
+  </svg>
+
+  <div class="footmeta">
+    <p class="footmeta__logo">TERRA HAYAMA</p>
+    <p class="footmeta__addr">〒240-0111 神奈川県三浦郡葉山町一色 1759-1-5</p>
+    <p class="footmeta__cr">© 2026 TERRA HAYAMA</p>
+  </div>
+</footer>
+
+<!-- 常駐CTA（モバイル） -->
+<a class="dock" href="https://www.airbnb.jp/" target="_blank" rel="noopener">Airbnbで予約する　→</a>
+
+<script src="assets/vendor/gsap.min.js"></script>
+<script src="assets/vendor/ScrollTrigger.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
