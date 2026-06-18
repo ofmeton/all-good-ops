@@ -77,9 +77,19 @@ status: active
 - Airbnb 規約: 外部 → Airbnb への誘導 OK / Airbnb → 外部直予約への誘導は規約違反になりがち
 - 民泊新法の法定表示義務（Airbnb 経由運営のため不要との確定だが要再確認）
 
+## 実装・公開状況（2026-06-18 改修第1-3弾）
+
+- **本番公開**: https://site-eosin-one-44.vercel.app （Vercel team プロジェクト `site`・カスタムドメイン未設定）。コード = `outputs/clients/terra-isshiki/site/`（Next.js 16 App Router / Tailwind v4）
+- **改修第1弾（PR #144）**: TOP を「浅く広く網羅→詳細へ」型に再設計（FV=外観+内観のみ／about のコンセプト本文を FV 下へ移設／Rooms・Stay・Owner・Access の交互バンド）・**about 削除**・**OWNER ページ新設**（BEAT ICE 紹介、活動写真/SNS はプレースホルダ）・スマホ文字 +約22%・ROOMS のひのき/真鍮文言/Kitchen 写真削除/調味料=塩こしょう・油・ACCESS の御用邸削除/スズキヤ note 強化・**ハンバーガーバグ修正**（`isolate` な FV section に fixed ヘッダーが閉じ込められスクロールで後続セクションに覆われる→ヘッダーを section 外へ）
+- **改修第2弾（PR #148）**: スクロール出現演出（`RevealRoot`=IntersectionObserver、`html.js-reveal` ゲートで no-JS でも本文表示、reduced-motion 尊重）・**ROOMS 自動送り横カルーセル**（手動スワイプ/ドット/タップ拡大 lightbox 維持）・FV コピー可読性（サイズUP+局所スクリム）・**旧役場前バス停=徒歩1分**・next/image quality 設定で console 警告解消
+- **改修第3弾（PR #207）**: TOP のファクト帯・設備ハイライトを削除（オーナー要望）・出現演出を 0.7s→1.5s に減速
+- **オーナー提供待ち（届き次第差替え→再デプロイ）**: OWNER 活動写真4枚（アイス/学校給食/田んぼで子供達/夫婦）・BEAT ICE の SNS URL・フルキッチン具体スペック
+- デプロイ手順: site dir で `vercel --prod`（env 不要・iCal 未設定時は空室カレンダーが graceful fallback）。**毎回人間確認**
+
 ## raw source
 
 - `raw/deals/2026-04-terra-isshiki/01-confirmation-items.md` (v0.1, 2026-05-01)
 - `raw/deals/2026-04-terra-isshiki/02-confirmation-items-v0.2.md` (v0.2, 2026-05-07)
 - `raw/deals/2026-04-terra-isshiki/03-photo-mapping-v0.2.md`
 - `raw/deals/2026-04-terra-isshiki/04-design-direction-v0.1.md`
+- 改修第1-3弾の提供写真フォルダ: `~/Downloads/TERRA/写真/drive-download-20260609T065722Z-3-001/`（外観=102/103 を採用、49枚）

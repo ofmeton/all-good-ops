@@ -8,9 +8,9 @@ updated: 2026-06-18
 > セッション間で保持される ~500 words のコンテキストキャッシュ。セッション開始時に最優先で読む。詳細: [[SCHEMA]] §ホットキャッシュ。
 
 ## Last Updated
-2026-06-18 — **家庭教師そうまの高校選びを調査→カルテ追記**(軽量・非コーディング): 葉山通学圏(逗子/鎌倉/横須賀/横浜)で「行事盛ん×軽音楽部」の候補校を並列WebSearchで調査(◎逗子葉山/◎七里ヶ浜・○鎌倉/柏陽/横浜栄・△市ケ尾・私立=鎌倉学園)→`wiki/people/students/souma.md` の高校選びセクションに希望条件+候補リスト追記。偏差値は確度低く「要確認」明示。bg isolation guard でworktree隔離→main merge(未追跡CSV重複はハッシュ照合で同一確認の上退避)。retro [[../outputs/retrospectives/2026-06-18-souma-highschool]]。
-- 前(2026-06-18): クラウドワークス エージェント全14ページGoogleフォームをchrome-devtoolsで代理入力→本人送信完了。学び→memory `feedback_chrome_devtools_fill_limitations`: chrome `fill`はForms listbox/date非対応→dropdown=click+ArrowDown×index+Enter / date=click+type / 検証=evaluate_script。
-- 前(2026-06-15): mf-finance 資金繰り強化フルセット PR#214。web-ui-bridge(PR#208-213)・X発信刷新(PR#185-205)。学び=chrome制御input未更新→setter+dispatch/Next+next/fontはCodex build不可/worktreeのgitignore実DBは削除厳禁。
+2026-06-18 — **TERRA HAYAMA HP 改修第1-3弾を1セッションで本番反映**(PR#144/#148/#207 / https://site-eosin-one-44.vercel.app): TOP再設計(FV→Concept→Rooms/Stay/Owner/Accessバンド→Footer)/about削除/OWNER新設/スマホ可読性/**ハンバーガーバグ根治**(`isolate`な FV section に fixed ヘッダーが閉じ込められスクロールで後続セクションに覆われる→ヘッダーをsection外へ)/スクロール出現演出(`RevealRoot`+`html.js-reveal`ゲートでno-JS本文表示+reduced-motion尊重・第3弾で0.7→1.5s減速)/ROOMS自動送りカルーセル/旧役場前1分。ファクト帯・設備は追加後オーナー要望で削除。実機Playwrightで自動送り/reveal/lightbox/console cleanを実証。retro [[../outputs/retrospectives/2026-06-18-terra-hp-redesign-motion]]。
+- 前(2026-06-18): そうま高校選び調査→souma.md追記(軽量)。クラウドワークスForm代理入力→本人送信(chrome fill制限=dropdown keyboard/date type/検証evaluate_script)。
+- 前(2026-06-15): mf-finance 資金繰りPR#214・web-ui-bridge(PR#208-213)・X発信刷新(PR#185-205)。
 
 ## Current Focus
 - **X発信 新運用**: 自動収集OFF・**手動ブックマークURLを `scripts/ingest-bookmarks.ts`/`/admin/ingest-bookmarks` で投入**→curation→writer(知見+段取り+新ターゲット)→check→LINE承認。writer は MAv4(再焼成済)。テンプレ patch は runtime 注入(re-bake不要・deployのみ)。collector復活は `collector_enabled` 行削除/=1。
@@ -20,6 +20,7 @@ updated: 2026-06-18
 - **brownout 中（¥13,800超）**: X worker は daily-digest+line-event のみ。`!resume`か月初リセットで復帰。**enforce自動flip は collect 継続が前提**＝brownout で collect halt なら shadow 蓄積停止 → 要 `!resume`/監視。[[project-cron-automation-disabled]]
 - **mf-finance（資金繰り一式 main反映済 PR#214）**: 完全ローカルSQLite・無料・非公開。worktree `task/260606-mf-finance` は **merge後も残置**(gitignore実DB `data/mf-finance.db`=家計データ保持のため・削除厳禁)。dev=`cd apps/mf-finance && PORT=3000 npm run dev`。migration変更後はdev再起動(globalThis singleton)。残=Phase2の手数料/振替の継続活用・optimizer suggest_transfer のLLM実走検証(未テスト)・既存scheduledの旧自由入力account("横浜銀行")を登録名へ割当直し。次の大型改修はDB保持で新task branch。
 - **求職活動 2026**: クラウドワークス/SOKUDAN/ITプロパートナーズ/レバテック登録。クラウドワークスはフォーム提出済(担当者メッセージ待ち)。他3社は案件打診・面談予約のアクション待ち。希望=専業/月60h/平日土日両方/リモート/マーケ広告+エンジニア。[[project-job-search-2026]]
+- **TERRA HAYAMA HP（本番公開・反復改修中）**: https://site-eosin-one-44.vercel.app 。code=`outputs/clients/terra-isshiki/site`(Next16)。デプロイ=site dirで`vercel --prod`(人間確認)。**次の改修は1 worktree使い回し**(同一feature反復はwt-newを繰り返さずmerge後pull)。オーナー提供待ち=OWNER写真4枚/SNS URL/フルキッチンspec→届き次第差替え再デプロイ。SSOT=[[business/personal/deals/2026-04-terra-isshiki]]。
 - 🔴 **ミナト広告設定（再開待ち）**: chrome-devtools MCP接続待ち。[[project-minato-ad-settings]]
 - 🔴 **はぐりん persona**: 名義境界の戦略再判断 未着手。
 
