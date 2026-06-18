@@ -80,11 +80,14 @@ raw/ は immutable（上書き・削除禁止、古くなれば別ファイル�
 
 | タスク | プラグインスキル |
 |---|---|
-| 機能実装・設計 | 設計 architect → **実装は Codex 委任が既定（`codex-implement`）** → Claude レビュー(pr-review/spec-validator)。設計検討は `superpowers:brainstorming` → `writing-plans`。仕様照合・工程分離を重視する時は `feature-factory`（実装工程を Codex 化可） |
-| バグ・テスト失敗 | `superpowers:systematic-debugging` |
+| 機能実装・設計 | 設計 architect → **実装は Codex 委任が既定（`codex-implement`）** → Claude レビュー(pr-review/spec-validator)。設計検討は `superpowers:brainstorming` → `writing-plans`。仕様照合・工程分離を重視する時は `feature-factory`（実装工程を Codex 化可）。テストファースト = `superpowers:test-driven-development`（discipline）or `tdd`（vertical slice/integration-style の具体ガイド） |
+| バグ・テスト失敗 | `superpowers:systematic-debugging`。バグを対話的に整理して GitHub issue 化 = `qa` |
 | 完了 / PR 前検証 | `superpowers:verification-before-completion` |
 | 2+ 独立タスク並列 | `superpowers:dispatching-parallel-agents` |
-| Web / UI 実装 | `ui-ux-pro-max`（常時・設計/実装）＋ UI監査=`web-design-guidelines` / React最適化=`vercel-react-best-practices` / 構成設計=`vercel-composition-patterns` |
+| Web / UI 実装 | `ui-ux-pro-max`（常時・設計/実装）＋ UI監査=`web-design-guidelines` / React最適化=`vercel-react-best-practices` / 構成設計=`vercel-composition-patterns`。成果物(スライド/doc/HTML)への一貫テーマ適用=`theme-factory`（10プリセット）。参考デザイン仕様は `design-md-workflow.md`（Google Stitch DESIGN.md。カタログ=github VoltAgent/awesome-design-md） |
+| 画像生成 | gpt-image-2 = `visual-design-system.md`(Codex MCP・既定) / Gemini系 = `nano-banana`（要 `@google/genai`＋API キー・**従量課金**）。ポスター/静的アート(PNG/PDF) = `canvas-design` |
+| Google Workspace ヘッドレス自動化 | `gws-workspace-cli`（Docs/Slides 生成・Gmail/Sheets バッチ・--dry-run。会話内即時は MCP）。書込/送信は人間確認 |
+| 記事の編集・推敲 | `edit-article`（再構成/明瞭化/短縮）。執筆前構成=`scqa-writing-framework.md` / AI文体除去=`stop-slop` |
 | Supabase | `supabase:*` |
 | Web 多 source 調査 | `firecrawl:*` / `deep-research` |
 | 差分 / PR レビュー | `code-review` / `simplify` / `pr-review-toolkit:review-pr` |
