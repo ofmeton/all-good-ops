@@ -30,6 +30,23 @@ interface EditField {
   kind?: "text" | "number" | "match_type" | "classification" | "category";
 }
 
+function classifyUnknownDescription(targetRef: unknown): string {
+  if (targetRef == null || typeof targetRef !== "object") return "";
+  const description = (targetRef as { description?: unknown }).description;
+  return typeof description === "string" ? description : "";
+}
+
+function blankAddRuleAction(description: string): ProposedAction {
+  return {
+    type: "add_rule",
+    pattern: description,
+    match_type: "contains",
+    classification: "",
+    category_major: undefined,
+    category_middle: undefined,
+  };
+}
+
 // action から編集可能フィールドを抽出。空配列 = inline 編集不可（修正ボタン非表示）。
 function editableFields(action: ProposedAction | null): EditField[] {
   if (!action) return [];
@@ -194,6 +211,100 @@ function CategorySelect({
 const BTN_BASE =
   "h-11 shrink-0 cursor-pointer rounded-lg border px-3 text-sm font-medium transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-40";
 
+function ActionEditFields({
+  proposalId,
+  fields,
+  editValues,
+  pending,
+  categoryOptions,
+  onChange,
+  onChangeValues,
+}: {
+  proposalId: number;
+  fields: EditField[];
+  editValues: Record<string, string>;
+  pending: boolean;
+  categoryOptions: { majors: string[]; middlesByMajor: Record<string, string[]> };
+  onChange: (key: string, val: string) => void;
+  onChangeValues: (fn: (values: Record<string, string>) => Record<string, string>) => void;
+}) {
+  const majorField = fields.find((f) => f.key === "category_major");
+  const currentMajor = editValues["category_major"] ?? majorField?.value ?? "";
+  const middleOptions = categoryOptions.middlesByMajor[currentMajor] ?? [];
+
+  return (
+    <div className="flex flex-col gap-2">
+      {fields.map((f) => {
+        const id = `edit-${proposalId}-${f.key}`;
+        const cur = editValues[f.key] ?? f.value;
+        return (
+          <div key={f.key} className="flex flex-col gap-1">
+            <label htmlFor={id} className="text-[11px] text-muted">
+              {f.label}
+            </label>
+            {f.kind === "match_type" ? (
+              <select
+                id={id}
+                value={cur}
+                disabled={pending}
+                onChange={(e) => onChange(f.key, e.target.value)}
+                className={INPUT_CLS}
+              >
+                <option value="exact">完全一致（この摘要だけ）</option>
+                <option value="contains">部分一致（含む取引すべて）</option>
+              </select>
+            ) : f.kind === "classification" ? (
+              <select
+                id={id}
+                value={cur}
+                disabled={pending}
+                onChange={(e) => onChange(f.key, e.target.value)}
+                className={INPUT_CLS}
+              >
+                <option value="">分類を選択</option>
+                {CLASSIFICATION_OPTIONS.map((o) => (
+                  <option key={o.value} value={o.value}>
+                    {o.label}
+                  </option>
+                ))}
+              </select>
+            ) : f.kind === "category" ? (
+              <CategorySelect
+                key={f.key === "category_middle" ? `mid-${currentMajor}` : id}
+                id={id}
+                value={cur}
+                options={
+                  f.key === "category_major" ? categoryOptions.majors : middleOptions
+                }
+                disabled={pending}
+                onChange={(val) =>
+                  f.key === "category_major"
+                    ? onChangeValues((v) => ({
+                        ...v,
+                        category_major: val,
+                        category_middle: "", // 大項目変更で中項目リセット
+                      }))
+                    : onChange(f.key, val)
+                }
+              />
+            ) : (
+              <input
+                id={id}
+                type={f.kind === "number" ? "number" : "text"}
+                inputMode={f.kind === "number" ? "numeric" : undefined}
+                value={cur}
+                disabled={pending}
+                onChange={(e) => onChange(f.key, e.target.value)}
+                className={INPUT_CLS}
+              />
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 export function ProposalCard({
   proposal,
   samples,
@@ -212,16 +323,16 @@ export function ProposalCard({
   const [showEdit, setShowEdit] = useState(false);
   const [editValues, setEditValues] = useState<Record<string, string>>({});
 
-  const fields = editableFields(proposal.proposed_action);
+  const blankAction =
+    !proposal.proposed_action && proposal.kind === "classify_unknown"
+      ? blankAddRuleAction(classifyUnknownDescription(proposal.target_ref))
+      : null;
+  const editAction = proposal.proposed_action ?? blankAction;
+  const fields = editableFields(editAction);
   const targetText = targetSummary(proposal.kind, proposal.target_ref);
 
   const setVal = (key: string, val: string) =>
     setEditValues((v) => ({ ...v, [key]: val }));
-
-  // 中項目は「選択中の大項目」で絞り込む。大項目を変えたら中項目はリセット。
-  const majorField = fields.find((f) => f.key === "category_major");
-  const currentMajor = editValues["category_major"] ?? majorField?.value ?? "";
-  const middleOptions = categoryOptions.middlesByMajor[currentMajor] ?? [];
 
   const handle = (fn: () => Promise<OptimizerActionResult>) => {
     setError(null);
@@ -240,8 +351,25 @@ export function ProposalCard({
   const onReject = () =>
     handle(() => rejectProposal(proposal.id, rejectNote.trim() || undefined));
   const onEditApply = () => {
-    if (!proposal.proposed_action) return;
-    const patched = rebuildAction(proposal.proposed_action, editValues);
+    if (!editAction) return;
+    if (!proposal.proposed_action && editAction.type === "add_rule") {
+      const pattern = (editValues.pattern ?? editAction.pattern).trim();
+      const classification = (editValues.classification ?? editAction.classification).trim();
+      const categoryMajor = (editValues.category_major ?? editAction.category_major ?? "").trim();
+      if (!pattern) {
+        setError("パターンを入力してください");
+        return;
+      }
+      if (!classification) {
+        setError("分類を選択してください");
+        return;
+      }
+      if (!categoryMajor) {
+        setError("大項目を選択してください");
+        return;
+      }
+    }
+    const patched = rebuildAction(editAction, editValues);
     handle(() => editAndApply(proposal.id, patched));
   };
 
@@ -319,86 +447,27 @@ export function ProposalCard({
         {actionSummary(proposal.proposed_action)}
       </p>
 
-      {showEdit && fields.length > 0 && (
+      {showEdit && editAction && fields.length > 0 && (
         <div className="rounded-lg border border-primary/30 bg-primary/5 p-3">
           <p className="mb-2 text-[11px] font-medium text-primary">
-            修正して承認
+            {proposal.proposed_action ? "修正して承認" : "この提案の分類を作成"}
           </p>
-          <div className="flex flex-col gap-2">
-            {fields.map((f) => {
-              const id = `edit-${proposal.id}-${f.key}`;
-              const cur = editValues[f.key] ?? f.value;
-              return (
-                <div key={f.key} className="flex flex-col gap-1">
-                  <label htmlFor={id} className="text-[11px] text-muted">
-                    {f.label}
-                  </label>
-                  {f.kind === "match_type" ? (
-                    <select
-                      id={id}
-                      value={cur}
-                      disabled={pending}
-                      onChange={(e) => setVal(f.key, e.target.value)}
-                      className={INPUT_CLS}
-                    >
-                      <option value="exact">完全一致（この摘要だけ）</option>
-                      <option value="contains">部分一致（含む取引すべて）</option>
-                    </select>
-                  ) : f.kind === "classification" ? (
-                    <select
-                      id={id}
-                      value={cur}
-                      disabled={pending}
-                      onChange={(e) => setVal(f.key, e.target.value)}
-                      className={INPUT_CLS}
-                    >
-                      {CLASSIFICATION_OPTIONS.map((o) => (
-                        <option key={o.value} value={o.value}>
-                          {o.label}
-                        </option>
-                      ))}
-                    </select>
-                  ) : f.kind === "category" ? (
-                    <CategorySelect
-                      key={f.key === "category_middle" ? `mid-${currentMajor}` : id}
-                      id={id}
-                      value={cur}
-                      options={
-                        f.key === "category_major" ? categoryOptions.majors : middleOptions
-                      }
-                      disabled={pending}
-                      onChange={(val) =>
-                        f.key === "category_major"
-                          ? setEditValues((v) => ({
-                              ...v,
-                              category_major: val,
-                              category_middle: "", // 大項目変更で中項目リセット
-                            }))
-                          : setVal(f.key, val)
-                      }
-                    />
-                  ) : (
-                    <input
-                      id={id}
-                      type={f.kind === "number" ? "number" : "text"}
-                      inputMode={f.kind === "number" ? "numeric" : undefined}
-                      value={cur}
-                      disabled={pending}
-                      onChange={(e) => setVal(f.key, e.target.value)}
-                      className={INPUT_CLS}
-                    />
-                  )}
-                </div>
-              );
-            })}
-          </div>
+          <ActionEditFields
+            proposalId={proposal.id}
+            fields={fields}
+            editValues={editValues}
+            pending={pending}
+            categoryOptions={categoryOptions}
+            onChange={setVal}
+            onChangeValues={(fn) => setEditValues(fn)}
+          />
           <button
             type="button"
             onClick={onEditApply}
             disabled={pending}
             className={`mt-3 ${BTN_BASE} border-primary bg-primary text-white hover:bg-primary/90 focus-visible:outline-primary`}
           >
-            修正内容で承認
+            {proposal.proposed_action ? "修正内容で承認" : "この分類で承認"}
           </button>
         </div>
       )}
@@ -455,7 +524,7 @@ export function ProposalCard({
             disabled={pending}
             className={`${BTN_BASE} border-border text-foreground hover:bg-background focus-visible:outline-primary`}
           >
-            修正して承認
+            {proposal.proposed_action ? "修正して承認" : "分類を作って承認"}
           </button>
         )}
         <button
