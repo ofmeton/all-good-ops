@@ -159,18 +159,22 @@ function CardChargeRowItem({
           />
         </label>
         <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={onToggle}
-            disabled={pending}
-            className={`h-11 rounded-lg border px-3 text-xs font-medium disabled:opacity-40 ${
-              active
-                ? "border-border text-foreground hover:bg-background"
-                : "border-warning/40 text-warning hover:bg-warning/10"
-            }`}
+          {/* チェックボックス式トグル: checked=有効。押すと現在状態が反転する仕様を、
+              状態を直接表すチェックボックスにして「有効と表示されているのに押すと無効化」する誤操作を防ぐ。 */}
+          <label
+            className={`flex h-11 cursor-pointer items-center gap-2 rounded-lg border px-3 text-xs font-medium ${
+              active ? "border-border text-foreground" : "border-warning/40 text-warning"
+            } ${pending ? "opacity-40" : ""}`}
           >
+            <input
+              type="checkbox"
+              checked={active}
+              onChange={onToggle}
+              disabled={pending}
+              className="h-4 w-4 cursor-pointer rounded border-border text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+            />
             {active ? "有効" : "停止中"}
-          </button>
+          </label>
           <button
             type="button"
             onClick={onSave}
