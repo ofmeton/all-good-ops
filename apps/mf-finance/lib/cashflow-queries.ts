@@ -236,10 +236,12 @@ export function getNextMonthCardCharge(): {
   );
   const rows = db
     .prepare(
+      // カード請求額＝そのカード口座への全チャージ。Suica/PASMO チャージ等は is_transfer=1 /
+      // included=0（収支対象外）だが実際にカードに請求され引落される債務なので、カード口座では
+      // それらも含めて合計する（included/is_transfer/is_internal_move でフィルタしない）。
       `SELECT account, COALESCE(SUM(CASE WHEN amount < 0 THEN -amount ELSE 0 END), 0) AS spent
          FROM transactions
-        WHERE included = 1 AND is_transfer = 0 AND is_internal_move = 0
-          AND substr(date,1,7) = ? AND account IS NOT NULL
+        WHERE substr(date,1,7) = ? AND account IS NOT NULL
         GROUP BY account`,
     )
     .all(ym) as { account: string; spent: number }[];
@@ -270,11 +272,12 @@ export function getCardUsageByMonth(accounts: string[], months: string[]): Map<s
   const monthPlaceholders = monthList.map(() => "?").join(", ");
   const rows = db
     .prepare(
+      // カード請求額なので included/is_transfer/is_internal_move でフィルタしない（getNextMonthCardCharge と同方針）。
+      // ここで渡る accounts はカード口座に限定されている。
       `SELECT account, substr(date,1,7) AS month,
               COALESCE(SUM(CASE WHEN amount < 0 THEN -amount ELSE 0 END), 0) AS spent
          FROM transactions
-        WHERE included = 1 AND is_transfer = 0 AND is_internal_move = 0
-          AND account IN (${accountPlaceholders})
+        WHERE account IN (${accountPlaceholders})
           AND substr(date,1,7) IN (${monthPlaceholders})
         GROUP BY account, substr(date,1,7)`,
     )
