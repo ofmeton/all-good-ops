@@ -9,6 +9,7 @@ import {
   buildUpcomingWithdrawals,
   expandCardChargeSchedules,
   monthEndOffsetDays,
+  monthlyChargeDates,
   monthlyOccurrences,
   resolveOccurrence,
 } from "@/lib/cashflow/rolling.mjs";
@@ -251,6 +252,40 @@ export function getNextMonthCardCharge(): {
   return { total, byCard, month: ym };
 }
 
+function previousYearMonthFromDate(iso: string): string {
+  const [year, month] = iso.split("-").map(Number);
+  const zeroBasedMonth = year * 12 + (month - 1) - 1;
+  const billingYear = Math.floor(zeroBasedMonth / 12);
+  const billingMonth = (zeroBasedMonth % 12) + 1;
+  return `${billingYear}-${String(billingMonth).padStart(2, "0")}`;
+}
+
+export function getCardUsageByMonth(accounts: string[], months: string[]): Map<string, number> {
+  const accountList = [...new Set(accounts.filter(Boolean))].sort();
+  const monthList = [...new Set(months.filter(Boolean))].sort();
+  const out = new Map<string, number>();
+  if (accountList.length === 0 || monthList.length === 0) return out;
+
+  const accountPlaceholders = accountList.map(() => "?").join(", ");
+  const monthPlaceholders = monthList.map(() => "?").join(", ");
+  const rows = db
+    .prepare(
+      `SELECT account, substr(date,1,7) AS month,
+              COALESCE(SUM(CASE WHEN amount < 0 THEN -amount ELSE 0 END), 0) AS spent
+         FROM transactions
+        WHERE included = 1 AND is_transfer = 0 AND is_internal_move = 0
+          AND account IN (${accountPlaceholders})
+          AND substr(date,1,7) IN (${monthPlaceholders})
+        GROUP BY account, substr(date,1,7)`,
+    )
+    .all(...accountList, ...monthList) as { account: string; month: string; spent: number }[];
+
+  for (const row of rows) {
+    out.set(`${row.account}|${row.month}`, Number(row.spent) || 0);
+  }
+  return out;
+}
+
 export function isKnownCardAccount(account: string): boolean {
   return isKnownCardAccountFromSources(account, {
     accountBalanceCards: getAllAccountBalances().filter((row) => row.kind === "card"),
@@ -363,16 +398,29 @@ function expandCardCharges(
   schedules: CardChargeScheduleRow[],
   today: string,
   days: number,
-  cardChargeEstimate: ReturnType<typeof getNextMonthCardCharge>,
 ): ExpandedCardCharge[] {
-  const variableByCard = new Map(cardChargeEstimate.byCard.map((row) => [row.account, row.amount]));
+  const accounts = new Set<string>();
+  const months = new Set<string>();
+  const chargeDates = monthlyChargeDates as (today: string, days: number, chargeDay: number) => string[];
+
+  for (const schedule of schedules) {
+    const amountType = schedule.amount_type === "fixed" ? "fixed" : "variable";
+    const account = schedule.card_account;
+    if (!account || amountType === "fixed") continue;
+    accounts.add(account);
+    for (const date of chargeDates(today, days, schedule.charge_day)) {
+      months.add(previousYearMonthFromDate(date));
+    }
+  }
+
+  const variableByCardMonth = getCardUsageByMonth([...accounts], [...months]);
   const expand = expandCardChargeSchedules as (input: {
     schedules: CardChargeScheduleRow[];
     today: string;
     days: number;
-    variableByCard: Map<string, number>;
+    variableByCardMonth: Map<string, number>;
   }) => ExpandedCardCharge[];
-  return expand({ schedules, today, days, variableByCard });
+  return expand({ schedules, today, days, variableByCardMonth });
 }
 
 // 向こう days 日のローリング資金繰り（recurring + scheduled + transfer + cardCharges）。
@@ -387,7 +435,7 @@ export function getRollingCashflow(days = 30): RollingCashflow {
     startBalance: start,
     recurring: activeRecurring(),
     scheduled: scheduledRows(),
-    cardCharges: expandCardCharges(getCardChargeSchedules(), today, days, cardChargeEstimate),
+    cardCharges: expandCardCharges(getCardChargeSchedules(), today, days),
     transfers: transferRows(),
     overrides,
   });
@@ -412,7 +460,7 @@ export function getAccountRollingCashflow(period: CashflowPeriod): AccountRollin
     })),
     recurring: activeRecurring(),
     scheduled: scheduledRows(),
-    cardCharges: expandCardCharges(getCardChargeSchedules(), today, days, cardChargeEstimate),
+    cardCharges: expandCardCharges(getCardChargeSchedules(), today, days),
     transfers: transferRows(),
     overrides: getRecurringOverrides(),
   });

@@ -195,7 +195,7 @@ function CardChargeRowItem({
       </div>
       <p className="mt-2 text-[11px] text-muted">
         {amountType === "variable"
-          ? "変動: 当月利用額を暫定の来月引落額として見込みに反映。当月利用額が未取得なら¥0見込みで表示"
+          ? "変動: 各引落は前月利用額を見込みに反映。将来分でデータ無しなら¥0見込みで表示"
           : `固定: ¥${yen(Number(fixedAmount) || 0)} を見込みに反映`}
       </p>
       {error && (
@@ -368,7 +368,7 @@ export function CardChargeScheduleEditor({
         <span className="ml-2 tabular text-xs font-normal text-muted">{items.length}件</span>
       </h2>
       <p className="mb-2 text-[11px] text-muted">
-        カードごとの引落日を登録すると、変動額は当月利用額を暫定額として見込み残高に反映します。
+        カードごとの引落日を登録すると、変動額は各引落月の前月利用額を見込み残高に反映します。
         単発予定で同じカード引落を登録済みの場合は二重計上になります。どちらかに統一してください。
       </p>
       {items.length === 0 ? (

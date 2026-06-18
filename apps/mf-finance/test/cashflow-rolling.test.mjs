@@ -202,7 +202,35 @@ test("monthlyChargeDates: charge_day を期間内の月次日付へ展開し月�
   assert.deepEqual(monthlyChargeDates("2026-06-16", 45, 27), ["2026-06-27", "2026-07-27"]);
 });
 
-test("expandCardChargeSchedules: variable は当月利用0でもイベントを残す", () => {
+test("expandCardChargeSchedules: variable は引落日の前月利用額を月別に反映する", () => {
+  const charges = expandCardChargeSchedules({
+    today: "2026-06-16",
+    days: 72,
+    schedules: [
+      {
+        card_account: "三井住友カード",
+        charge_day: 26,
+        amount_type: "variable",
+        fixed_amount: null,
+      },
+    ],
+    variableByCardMonth: new Map([
+      ["三井住友カード|2026-05", 51000],
+      ["三井住友カード|2026-06", 108444],
+    ]),
+  });
+
+  assert.deepEqual(
+    charges.map((charge) => [charge.date, charge.amount, charge.estimated]),
+    [
+      ["2026-06-26", 51000, true],
+      ["2026-07-26", 108444, true],
+      ["2026-08-26", 0, true],
+    ],
+  );
+});
+
+test("expandCardChargeSchedules: variable は前月利用0でもイベントを残す", () => {
   const charges = expandCardChargeSchedules({
     today: "2026-06-16",
     days: 20,
@@ -214,7 +242,7 @@ test("expandCardChargeSchedules: variable は当月利用0でもイベントを�
         fixed_amount: null,
       },
     ],
-    variableByCard: new Map(),
+    variableByCardMonth: new Map(),
   });
 
   assert.equal(charges.length, 1);
