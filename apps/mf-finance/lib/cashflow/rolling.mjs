@@ -59,11 +59,17 @@ export function monthlyChargeDates(today, days, chargeDay) {
   return out;
 }
 
-export function expandCardChargeSchedules({ schedules = [], today, days, variableByCard = new Map() }) {
+function previousYearMonth(iso) {
+  const { y, m } = parse(iso);
+  const target = addMonthsToYearMonth(y, m, -1);
+  return `${target.y}-${String(target.m).padStart(2, "0")}`;
+}
+
+export function expandCardChargeSchedules({ schedules = [], today, days, variableByCardMonth = new Map() }) {
   const variableMap =
-    variableByCard instanceof Map
-      ? variableByCard
-      : new Map(Object.entries(variableByCard ?? {}));
+    variableByCardMonth instanceof Map
+      ? variableByCardMonth
+      : new Map(Object.entries(variableByCardMonth ?? {}));
   const out = [];
 
   for (const schedule of schedules) {
@@ -71,10 +77,11 @@ export function expandCardChargeSchedules({ schedules = [], today, days, variabl
     const account = schedule.card_account ?? schedule.account;
     if (!account) continue;
     for (const date of monthlyChargeDates(today, days, schedule.charge_day ?? schedule.chargeDay)) {
+      const billingMonth = previousYearMonth(date);
       const amount =
         amountType === "fixed"
           ? Math.abs(Math.round(Number(schedule.fixed_amount ?? schedule.fixedAmount) || 0))
-          : Math.abs(Math.round(Number(variableMap.get(account)) || 0));
+          : Math.abs(Math.round(Number(variableMap.get(`${account}|${billingMonth}`)) || 0));
       if (amountType === "fixed" && amount <= 0) continue;
       out.push({
         date,
