@@ -8,8 +8,9 @@ updated: 2026-06-18
 > セッション間で保持される ~500 words のコンテキストキャッシュ。セッション開始時に最優先で読む。詳細: [[SCHEMA]] §ホットキャッシュ。
 
 ## Last Updated
-2026-06-18 — **非コーディング操作代行**: クラウドワークス エージェントの全14ページ Google フォームを chrome-devtools で代理入力(復元下書き検証→稼働条件/職歴4件/希望分野/分野別細目)→本人が送信完了(21:39控えメール)。完了後クラウドワークス関連メール確認=自動案件提案のみ・個別アクション要求なし。学び→memory `feedback_chrome_devtools_fill_limitations`(新規): chrome `fill`はForms listbox/dateで非対応→dropdown=click-open+ArrowDown×index+Enter / date=click+type / 検証=evaluate_script(巨大snapshot回避) / 漢字化け(寝→寢,寄→嬄)はfill後に原文照合。外部送信ゲート遵守(送信は本人)。retro [[../outputs/retrospectives/2026-06-18-2206-crowdworks-form-proxy-fill]]。
-- 前(2026-06-15): mf-finance 資金繰り強化フルセット PR#214(squash)main反映。学び=chrome `fill`はReact制御input未更新→setter+dispatch/Next+next/fontはCodex sandbox build不可/worktreeのgitignore実DBは削除厳禁。web-ui-bridge(PR#208-213)・X発信大刷新(PR#185-205)。
+2026-06-18 — **家庭教師そうまの高校選びを調査→カルテ追記**(軽量・非コーディング): 葉山通学圏(逗子/鎌倉/横須賀/横浜)で「行事盛ん×軽音楽部」の候補校を並列WebSearchで調査(◎逗子葉山/◎七里ヶ浜・○鎌倉/柏陽/横浜栄・△市ケ尾・私立=鎌倉学園)→`wiki/people/students/souma.md` の高校選びセクションに希望条件+候補リスト追記。偏差値は確度低く「要確認」明示。bg isolation guard でworktree隔離→main merge(未追跡CSV重複はハッシュ照合で同一確認の上退避)。retro [[../outputs/retrospectives/2026-06-18-souma-highschool]]。
+- 前(2026-06-18): クラウドワークス エージェント全14ページGoogleフォームをchrome-devtoolsで代理入力→本人送信完了。学び→memory `feedback_chrome_devtools_fill_limitations`: chrome `fill`はForms listbox/date非対応→dropdown=click+ArrowDown×index+Enter / date=click+type / 検証=evaluate_script。
+- 前(2026-06-15): mf-finance 資金繰り強化フルセット PR#214。web-ui-bridge(PR#208-213)・X発信刷新(PR#185-205)。学び=chrome制御input未更新→setter+dispatch/Next+next/fontはCodex build不可/worktreeのgitignore実DBは削除厳禁。
 
 ## Current Focus
 - **X発信 新運用**: 自動収集OFF・**手動ブックマークURLを `scripts/ingest-bookmarks.ts`/`/admin/ingest-bookmarks` で投入**→curation→writer(知見+段取り+新ターゲット)→check→LINE承認。writer は MAv4(再焼成済)。テンプレ patch は runtime 注入(re-bake不要・deployのみ)。collector復活は `collector_enabled` 行削除/=1。
