@@ -1,0 +1,12 @@
+{
+  "id": "kingbootoshi-nano-banana-2-skill-skill-md",
+  "name": "nano-banana",
+  "author": "kingbootoshi",
+  "authorAvatar": "https://avatars.githubusercontent.com/u/127834715?v=4",
+  "description": "Generates AI images using the nano-banana CLI (Gemini 3.1 Flash default, Pro available). Handles multi-resolution (512-4K), aspect ratios, reference images for style transfer, green screen workflow for transparent assets, cost tracking, and exact dimension control.",
+  "githubUrl": "https://github.com/kingbootoshi/nano-banana-2-skill/tree/main/plugins/nano-banana/skills/nano-banana",
+  "stars": 386,
+  "hasMarketplace": true,
+  "path": "SKILL.md",
+  "branch": "main"
+}
