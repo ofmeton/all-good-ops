@@ -144,6 +144,7 @@ export interface CardChargeScheduleRow {
   charge_day: number;
   amount_type: "fixed" | "variable";
   fixed_amount: number | null;
+  billing_month_offset: number;
   note: string | null;
   active: number;
   created_at: string;
@@ -173,7 +174,7 @@ export function getTransferList(): TransferRow[] {
 export function getCardChargeSchedules(): CardChargeScheduleRow[] {
   return db
     .prepare(
-      `SELECT id, card_account, charge_day, amount_type, fixed_amount, note, active, created_at
+      `SELECT id, card_account, charge_day, amount_type, fixed_amount, billing_month_offset, note, active, created_at
          FROM card_charge_schedules
         WHERE active = 1
         ORDER BY card_account, charge_day, id`,
@@ -184,7 +185,7 @@ export function getCardChargeSchedules(): CardChargeScheduleRow[] {
 export function getCardChargeScheduleList(): CardChargeScheduleRow[] {
   return db
     .prepare(
-      `SELECT id, card_account, charge_day, amount_type, fixed_amount, note, active, created_at
+      `SELECT id, card_account, charge_day, amount_type, fixed_amount, billing_month_offset, note, active, created_at
          FROM card_charge_schedules
         ORDER BY active DESC, card_account, charge_day, id`,
     )
@@ -254,12 +255,17 @@ export function getNextMonthCardCharge(): {
   return { total, byCard, month: ym };
 }
 
-function previousYearMonthFromDate(iso: string): string {
+function shiftYearMonth(iso: string, delta: number): string {
   const [year, month] = iso.split("-").map(Number);
-  const zeroBasedMonth = year * 12 + (month - 1) - 1;
+  const zeroBasedMonth = year * 12 + (month - 1) + delta;
   const billingYear = Math.floor(zeroBasedMonth / 12);
   const billingMonth = (zeroBasedMonth % 12) + 1;
   return `${billingYear}-${String(billingMonth).padStart(2, "0")}`;
+}
+
+function billingMonthOffset(value: unknown): number {
+  const n = Number(value);
+  return Number.isInteger(n) && n >= 1 && n <= 6 ? n : 1;
 }
 
 export function getCardUsageByMonth(accounts: string[], months: string[]): Map<string, number> {
@@ -412,7 +418,7 @@ function expandCardCharges(
     if (!account || amountType === "fixed") continue;
     accounts.add(account);
     for (const date of chargeDates(today, days, schedule.charge_day)) {
-      months.add(previousYearMonthFromDate(date));
+      months.add(shiftYearMonth(date, -billingMonthOffset(schedule.billing_month_offset)));
     }
   }
 
