@@ -59,10 +59,16 @@ export function monthlyChargeDates(today, days, chargeDay) {
   return out;
 }
 
-function previousYearMonth(iso) {
+function shiftYearMonth(iso, delta) {
   const { y, m } = parse(iso);
-  const target = addMonthsToYearMonth(y, m, -1);
+  const target = addMonthsToYearMonth(y, m, delta);
   return `${target.y}-${String(target.m).padStart(2, "0")}`;
+}
+
+function billingMonthForChargeDate(iso, offset) {
+  const n = Number(offset);
+  const months = Number.isInteger(n) && n >= 1 && n <= 6 ? n : 1;
+  return shiftYearMonth(iso, -months);
 }
 
 export function expandCardChargeSchedules({ schedules = [], today, days, variableByCardMonth = new Map() }) {
@@ -77,7 +83,10 @@ export function expandCardChargeSchedules({ schedules = [], today, days, variabl
     const account = schedule.card_account ?? schedule.account;
     if (!account) continue;
     for (const date of monthlyChargeDates(today, days, schedule.charge_day ?? schedule.chargeDay)) {
-      const billingMonth = previousYearMonth(date);
+      const billingMonth = billingMonthForChargeDate(
+        date,
+        schedule.billing_month_offset ?? schedule.billingMonthOffset,
+      );
       const amount =
         amountType === "fixed"
           ? Math.abs(Math.round(Number(schedule.fixed_amount ?? schedule.fixedAmount) || 0))
