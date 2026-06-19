@@ -77,7 +77,11 @@ PC を閉じても 24/7 で捕捉するため、hermes を Mac から **GCP 無�
 - [x] **Phase 3 保守版 完了**（2026-06-19）: 自走実行ランナー（`data/hermes/autorun_executor.py`）。Notion Ready×**draft-only** を拾い headless `claude -p`（Claude サブスク内・Web可・scratch dir・秘密env非渡し）で成果テキスト生成→Notion コメント＋Status=Review＋Telegram 通知。**編集/コミット/merge/送信/金銭は一切しない**。キルスイッチ=`~/.hermes/autorun_enabled`（"0"で停止）。launchd `com.hermes.autorun`（30分・--max 2）。**claude は launchd でも認証OK**。実証=サンプル draft 生成→Review。
 - [ ] Phase 3 拡張（escalation・要人間判断）: cc-auto のコード実行（worktree隔離＋Codex＋硬ゲート＋低リスク自動merge）。挙動を見て信頼できたら draft-only から段階的に拡大。
 - [ ] Phase 2b: Google カレンダー捕捉（要準備を判別→準備タスク生成）。Google Calendar API OAuth 整備が要るため後回し。
-- [ ] Phase 4: 催促ループ（reminder/停滞カードを朝に Telegram・静時間帯22-8）＋Priority/Project 運用
+- [x] **Phase 4 完了**（2026-06-20）: 催促ループ（`data/hermes/nudge_loop.py`・**VM 24/7**・cron 毎時）。停滞カード(Blocked=要対応/NeedInfo=情報待ち/reminder×Ready,Inbox=リマインド/放置Inbox)を Telegram にダイジェスト送信。**静時間帯 22:00-08:00 JST 抑制**・LastNudge で 1カード1日1回スロットル。実証=2件送信。
+- [x] **モデル試験切替**（2026-06-20）: 常駐メイン model を `anthropic/claude-haiku-4.5` → **`openai/gpt-4o-mini`**（約1/7コスト）。捕捉の tool-calling 維持を要検証。退避=`config.yaml.bak.modelswap`。auxiliary/Mac poller の分類は Haiku のまま。
+- [ ] Phase 2b: Google カレンダー捕捉（要準備を判別→準備タスク生成）。Google Calendar API OAuth 整備が要るため後回し。
+- [ ] Phase 3 拡張（escalation・要人間判断）: cc-auto のコード実行（worktree隔離＋Codex＋硬ゲート＋低リスク自動merge）。挙動を見て信頼できたら draft-only から段階的に拡大。
 - [ ] Oracle Always Free 解決後に GCP→Oracle 再移設（任意・`~/.hermes` rsync で簡単）
 
-> Mac 側 launchd（scoped 例外）: `com.hermes.applenotes`(捕捉) / `com.hermes.autorun`(自走実行)。Mac 起動時のみ稼働。VM 側は Telegram 捕捉のみ常時。
+> Mac 側 launchd（scoped 例外）: `com.hermes.applenotes`(捕捉) / `com.hermes.autorun`(自走実行)。Mac 起動時のみ稼働。
+> VM 側 24/7: hermes gateway(systemd・Telegram捕捉) / cron `nudge_loop.py`(催促)。
