@@ -13,7 +13,7 @@ const createSchema = z.object({
 });
 const updateSchema = z
   .object({ id: z.string().uuid() })
-  .and(createSchema.omit({ owner_id: true }).partial());
+  .and(createSchema.partial());
 
 export async function GET() {
   const actor = await resolveAdminActor();

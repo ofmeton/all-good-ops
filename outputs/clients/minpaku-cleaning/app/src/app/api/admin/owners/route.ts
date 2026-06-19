@@ -1,7 +1,13 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
 import { resolveAdminActor } from "@/lib/supabase-auth";
-import { listOwners, createOwner, updateOwner } from "@/lib/db/owners";
+import {
+  OwnerDeleteBlockedError,
+  listOwners,
+  createOwner,
+  updateOwner,
+  deleteOwner,
+} from "@/lib/db/owners";
 import { AuthorizationError } from "@/lib/db/scope";
 
 const createSchema = z.object({
@@ -45,6 +51,30 @@ export async function PATCH(req: NextRequest) {
     await updateOwner(actor, id, patch);
     return NextResponse.json({ ok: true });
   } catch (e) {
+    if (e instanceof AuthorizationError) return NextResponse.json({ error: e.message }, { status: 403 });
+    throw e;
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  const actor = await resolveAdminActor();
+  if (!actor) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+  const id = new URL(req.url).searchParams.get("id");
+  if (!id || !z.string().uuid().safeParse(id).success)
+    return NextResponse.json({ error: "id が不正です" }, { status: 400 });
+  try {
+    await deleteOwner(actor, id);
+    return NextResponse.json({ ok: true });
+  } catch (e) {
+    if (e instanceof OwnerDeleteBlockedError) {
+      return NextResponse.json(
+        {
+          error:
+            "この物件オーナーは物件に紐づいているため削除できません。先に物件のオーナーを変更してください",
+        },
+        { status: 409 },
+      );
+    }
     if (e instanceof AuthorizationError) return NextResponse.json({ error: e.message }, { status: 403 });
     throw e;
   }

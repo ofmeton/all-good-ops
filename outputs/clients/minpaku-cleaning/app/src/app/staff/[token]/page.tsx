@@ -4,6 +4,7 @@ import { listProperties } from "@/lib/db/properties";
 import { createServiceClient } from "@/lib/supabase-server";
 import { Avatar } from "@/components/ui/Avatar";
 import { RequestList } from "./RequestList";
+import { ProfilePanel } from "./ProfilePanel";
 
 export default async function StaffRequestsPage({
   params,
@@ -24,7 +25,7 @@ export default async function StaffRequestsPage({
   const db = createServiceClient();
   const { data: staffRow } = await db
     .from("staff")
-    .select("name")
+    .select("name, email")
     .eq("id", actor.staffId)
     .maybeSingle();
   const staffName = staffRow?.name ?? "スタッフ";
@@ -47,6 +48,7 @@ export default async function StaffRequestsPage({
           <p className="num text-[11.5px] text-ink-500">本日の予定: {todayCount} 件</p>
         </div>
       </div>
+      <ProfilePanel token={token} email={staffRow?.email ?? null} />
       <RequestList token={token} requests={enriched} />
     </div>
   );

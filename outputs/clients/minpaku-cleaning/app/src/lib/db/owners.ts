@@ -3,6 +3,8 @@ import { createServiceClient } from "@/lib/supabase-server";
 import { assertAdmin } from "@/lib/db/scope";
 import type { Actor } from "@/lib/auth";
 
+export class OwnerDeleteBlockedError extends Error {}
+
 export type OwnerInput = {
   name: string;
   line_user_id?: string;
@@ -47,5 +49,24 @@ export async function updateOwner(
   assertAdmin(actor);
   const db = createServiceClient();
   const { error } = await db.from("owners").update(patch).eq("id", id);
+  if (error) throw error;
+}
+
+export async function deleteOwner(actor: Actor, id: string): Promise<void> {
+  assertAdmin(actor);
+  const db = createServiceClient();
+  const { data: properties, error: checkError } = await db
+    .from("properties")
+    .select("id")
+    .eq("owner_id", id)
+    .limit(1);
+  if (checkError) throw checkError;
+  if (properties && properties.length > 0) {
+    throw new OwnerDeleteBlockedError(
+      "この物件オーナーは物件に紐づいているため削除できません",
+    );
+  }
+
+  const { error } = await db.from("owners").delete().eq("id", id);
   if (error) throw error;
 }
