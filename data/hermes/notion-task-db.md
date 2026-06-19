@@ -50,11 +50,30 @@
 8. **auxiliary は openrouter/haiku に固定**（既定の `provider: auto` は Nous 未ログインで死ぬ→compression/要約/curator/title が `no provider` 警告）。`auxiliary.*` 全サブタスクを provider=openrouter / model=anthropic/claude-haiku-4.5 / base_url=https://openrouter.ai/api/v1 に。
 9. **full flow の enforcement も environment_hint**: カード作成後に逆質問→`patch_page`でDetails/Due/NextAction→Autonomy提案→Ready化→`create_a_comment`で会話集約、まで hint に明記すると Haiku が一連を自走する（2026-06-17 実証）。
 
+## クラウド常駐化（GCP・2026-06-19 稼働）
+
+PC を閉じても 24/7 で捕捉するため、hermes を Mac から **GCP 無料 VM へ移設**。Telegram 捕捉はクラウド常駐、Apple Notes 捕捉のみ将来 Mac 側（Mac 依存のため）。
+
+- **ホスト**: GCP Compute Engine **e2-micro（Always Free・x86_64・Ubuntu 24.04・RAM 955MB）**。無料条件＝リージョン us-west1/us-central1/us-east1＋標準ディスク30GB。料金見積もりは Always Free 割引を反映せず$6表示でも実請求$0。
+- **接続**: Mac→VM は SSH 鍵（`~/.ssh/hermes_oracle`）。IP `35.222.76.101`、user `off_me_ton_gmail_com`（OS Login）。
+- **常駐**: `hermes gateway install`（systemd user service）＋`loginctl enable-linger`＝ログオフ/再起動でも自動復帰。
+- **移設手順**: Mac の `~/.hermes/{config.yaml,.env,skills}` を scp（.env は WhatsApp 無効化・Mac browser パス除外）。状態(state.db)は持ち込まず VM 新規（新セッションで hint 即適用）。cutover は **Mac `hermes gateway stop`→VM `hermes gateway start`**（bot は同時1ヶ所のみ poll 可）。
+
+**クラウド移設のハマりどころ**:
+10. **GCP OS Login**: 既定で OS Login 強制。metadata SSH 鍵は無視される→`gcloud compute os-login ssh-keys add` で鍵登録し、username は `gcloud compute os-login describe-profile` で取得（`off_me_ton_gmail_com`）。`enable-oslogin=FALSE` を入れると逆に詰まる（OS Login 鍵が無効化される）→ON のままにする。
+11. **小RAM対策**: 2GB swap 必須（`fallocate`）。hermes 初回起動は plugin 読込で重い。WhatsApp 無効化（RAM 節約）。installer のブラウザ Node 依存(npm)は不要・停止可。
+12. **python-telegram-bot 別途導入**: install では入らない→`~/.hermes/bin/uv pip install --python <venv> python-telegram-bot`。
+13. **IPv6 罠（致命）**: GCP VM は IPv6 egress 無し。api.telegram.org が AAAA 解決され Telegram 接続が **30秒タイムアウト**。`/etc/gai.conf` に `precedence ::ffff:0:0/96 100`＋`sysctl net.ipv6.conf.all.disable_ipv6=1`（/etc/sysctl.d 永続化）で IPv4 強制→接続成功。
+14. **wrapper**: installer 未完時は `~/.local/bin/hermes` が無い→venv 実体 `~/.hermes/hermes-agent/venv/bin/hermes` を指す3行 wrapper を手動作成。
+- 将来 Oracle へ再移設する場合も同手順（`~/.hermes` を rsync＋install＋IPv4 強制＋gateway install）。ARM でも installer 自動対応。
+
 ## ステータス
 
 - [x] Phase 0 / Task 2: DB＋カンバン＋サンプルカード作成（2026-06-16・Claude の Notion MCP で実施）
 - [x] Phase 0 / Task 1: hermes 内部インテグレーション作成＋本 DB を共有（2026-06-17）
 - [x] **Phase 1 完了**（2026-06-17）: Telegram メモ→カード作成→逆質問→Details/Due/NextAction 充填→Autonomy 提案・確定→Ready 化→**§5-E 会話のカードコメント集約**まで full flow を実証（実例「つかさママに返信」でコメント2件＋Ready＋reminder 確認）
-- [ ] Phase 2: Apple Notes(Mac NoteStore.sqlite・直近N日) / Google カレンダー（要準備をhermes判別）捕捉
+- [x] **クラウド常駐化完了**（2026-06-19）: GCP e2-micro へ移設・systemd常駐・Telegram→Notion を VM から実証（カード「充電コード返品交換」）。Mac 閉じても 24/7 稼働。
+- [ ] Phase 2: Apple Notes(Mac NoteStore.sqlite・直近N日・**osascript で読取可確認済**) / Google カレンダー（要準備をhermes判別）捕捉 — Apple Notes は Mac 側 poller（hermes不要・Notion API 直書き）で実装予定
+- [ ] Oracle Always Free 解決後に GCP→Oracle 再移設（任意・`~/.hermes` rsync で簡単）
 - [ ] Phase 3: launchd 自走実行ランナー（Ready×{cc-auto,draft-only} を 30分poll・worktree隔離・硬ゲート・低リスク自動merge）＋キルスイッチ
 - [ ] Phase 4: 催促ループ（reminder/停滞カードを朝にTelegram・静時間帯22-8）＋Priority/Project運用
