@@ -144,6 +144,7 @@ SessionStart hook で cwd/branch/uncommitted 確認 → ブランチ判定を 1 
 - **エージェント管理**: 発見 → 取り込み（重複チェック・人間承認）→ 品質監視（6 軸 100 点）→ 使用追跡 → ランク → 自己改善（SAFE 即適用 / RISKY エスカレーション）→ Git 同期。月次中心
 - **自動化スケジュール**: 2026-06-03 全停止中（手動運用）。復活手順・根本原因は memory `project_cron_automation_disabled.md`
 - **振り返り**: `session-retrospective` スキル（「振り返って」で自動起動）
+- **mattpocock 工程スキル**（`to-prd`/`to-issues`/`triage` 等、手動起動）: issue tracker = **GitHub Issues**（`gh` CLI）/ triage ラベル = 既定5種 / domain = single-context。設定 SSOT は `docs/agents/{issue-tracker,triage-labels,domain}.md`。「publish to issue tracker」= `gh issue create`
 
 ---
 
