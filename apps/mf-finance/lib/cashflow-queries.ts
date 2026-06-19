@@ -7,6 +7,7 @@ import {
   buildBalanceMatrix,
   buildRolling,
   buildUpcomingWithdrawals,
+  cardBillingPeriod,
   expandCardChargeSchedules,
   monthEndOffsetDays,
   monthlyChargeDates,
@@ -145,6 +146,7 @@ export interface CardChargeScheduleRow {
   amount_type: "fixed" | "variable";
   fixed_amount: number | null;
   billing_month_offset: number;
+  closing_day: number;
   note: string | null;
   active: number;
   created_at: string;
@@ -174,7 +176,7 @@ export function getTransferList(): TransferRow[] {
 export function getCardChargeSchedules(): CardChargeScheduleRow[] {
   return db
     .prepare(
-      `SELECT id, card_account, charge_day, amount_type, fixed_amount, billing_month_offset, note, active, created_at
+      `SELECT id, card_account, charge_day, amount_type, fixed_amount, billing_month_offset, closing_day, note, active, created_at
          FROM card_charge_schedules
         WHERE active = 1
         ORDER BY card_account, charge_day, id`,
@@ -185,7 +187,7 @@ export function getCardChargeSchedules(): CardChargeScheduleRow[] {
 export function getCardChargeScheduleList(): CardChargeScheduleRow[] {
   return db
     .prepare(
-      `SELECT id, card_account, charge_day, amount_type, fixed_amount, billing_month_offset, note, active, created_at
+      `SELECT id, card_account, charge_day, amount_type, fixed_amount, billing_month_offset, closing_day, note, active, created_at
          FROM card_charge_schedules
         ORDER BY active DESC, card_account, charge_day, id`,
     )
@@ -255,42 +257,58 @@ export function getNextMonthCardCharge(): {
   return { total, byCard, month: ym };
 }
 
-function shiftYearMonth(iso: string, delta: number): string {
-  const [year, month] = iso.split("-").map(Number);
-  const zeroBasedMonth = year * 12 + (month - 1) + delta;
-  const billingYear = Math.floor(zeroBasedMonth / 12);
-  const billingMonth = (zeroBasedMonth % 12) + 1;
-  return `${billingYear}-${String(billingMonth).padStart(2, "0")}`;
-}
-
 function billingMonthOffset(value: unknown): number {
   const n = Number(value);
   return Number.isInteger(n) && n >= 1 && n <= 6 ? n : 1;
 }
 
-export function getCardUsageByMonth(accounts: string[], months: string[]): Map<string, number> {
-  const accountList = [...new Set(accounts.filter(Boolean))].sort();
-  const monthList = [...new Set(months.filter(Boolean))].sort();
-  const out = new Map<string, number>();
-  if (accountList.length === 0 || monthList.length === 0) return out;
+function closingDay(value: unknown): number {
+  const n = Number(value);
+  return Number.isInteger(n) && n >= 1 && n <= 31 ? n : 31;
+}
 
-  const accountPlaceholders = accountList.map(() => "?").join(", ");
-  const monthPlaceholders = monthList.map(() => "?").join(", ");
+interface CardUsagePeriod {
+  account: string;
+  start: string;
+  end: string;
+}
+
+export function getCardUsageByPeriod(periods: CardUsagePeriod[]): Map<string, number> {
+  const out = new Map<string, number>();
+  const periodList = [
+    ...new Map(
+      periods
+        .filter((period) => period.account && period.start && period.end)
+        .map((period) => [`${period.account}|${period.start}|${period.end}`, period] as const),
+    ).values(),
+  ].sort(
+    (a, b) =>
+      a.account.localeCompare(b.account, "ja") || a.start.localeCompare(b.start) || a.end.localeCompare(b.end),
+  );
+  if (periodList.length === 0) return out;
+
+  const values = periodList.map(() => "(?, ?, ?)").join(", ");
+  const params = periodList.flatMap((period) => [period.account, period.start, period.end]);
   const rows = db
     .prepare(
       // カード請求額なので included/is_transfer/is_internal_move でフィルタしない（getNextMonthCardCharge と同方針）。
-      // ここで渡る accounts はカード口座に限定されている。
-      `SELECT account, substr(date,1,7) AS month,
-              COALESCE(SUM(CASE WHEN amount < 0 THEN -amount ELSE 0 END), 0) AS spent
-         FROM transactions
-        WHERE account IN (${accountPlaceholders})
-          AND substr(date,1,7) IN (${monthPlaceholders})
-        GROUP BY account, substr(date,1,7)`,
+      // ここで渡る account はカード口座に限定されている。
+      `WITH requested(account, start_date, end_date) AS (VALUES ${values})
+       SELECT requested.account,
+              requested.end_date,
+              COALESCE(SUM(CASE WHEN transactions.amount < 0 THEN -transactions.amount ELSE 0 END), 0) AS spent
+         FROM requested
+         LEFT JOIN transactions
+           ON transactions.account = requested.account
+          AND transactions.date > requested.start_date
+          AND transactions.date <= requested.end_date
+        GROUP BY requested.account, requested.end_date
+        ORDER BY requested.account, requested.end_date`,
     )
-    .all(...accountList, ...monthList) as { account: string; month: string; spent: number }[];
+    .all(...params) as { account: string; end_date: string; spent: number }[];
 
   for (const row of rows) {
-    out.set(`${row.account}|${row.month}`, Number(row.spent) || 0);
+    out.set(`${row.account}|${row.end_date}`, Number(row.spent) || 0);
   }
   return out;
 }
@@ -408,28 +426,31 @@ function expandCardCharges(
   today: string,
   days: number,
 ): ExpandedCardCharge[] {
-  const accounts = new Set<string>();
-  const months = new Set<string>();
+  const periods: CardUsagePeriod[] = [];
   const chargeDates = monthlyChargeDates as (today: string, days: number, chargeDay: number) => string[];
 
   for (const schedule of schedules) {
     const amountType = schedule.amount_type === "fixed" ? "fixed" : "variable";
     const account = schedule.card_account;
     if (!account || amountType === "fixed") continue;
-    accounts.add(account);
     for (const date of chargeDates(today, days, schedule.charge_day)) {
-      months.add(shiftYearMonth(date, -billingMonthOffset(schedule.billing_month_offset)));
+      const period = cardBillingPeriod(
+        date,
+        billingMonthOffset(schedule.billing_month_offset),
+        closingDay(schedule.closing_day),
+      ) as { start: string; end: string };
+      periods.push({ account, start: period.start, end: period.end });
     }
   }
 
-  const variableByCardMonth = getCardUsageByMonth([...accounts], [...months]);
+  const variableByPeriod = getCardUsageByPeriod(periods);
   const expand = expandCardChargeSchedules as (input: {
     schedules: CardChargeScheduleRow[];
     today: string;
     days: number;
-    variableByCardMonth: Map<string, number>;
+    variableByPeriod: Map<string, number>;
   }) => ExpandedCardCharge[];
-  return expand({ schedules, today, days, variableByCardMonth });
+  return expand({ schedules, today, days, variableByPeriod });
 }
 
 // 向こう days 日のローリング資金繰り（recurring + scheduled + transfer + cardCharges）。

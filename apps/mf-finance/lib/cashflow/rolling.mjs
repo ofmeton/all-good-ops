@@ -22,6 +22,14 @@ function addMonthsToYearMonth(year, month, delta) {
   const zero = year * 12 + (month - 1) + delta;
   return { y: Math.floor(zero / 12), m: (zero % 12) + 1 };
 }
+function normalizedOffsetMonths(value) {
+  const n = Number(value);
+  return Number.isInteger(n) && n >= 1 && n <= 6 ? n : 1;
+}
+function normalizedClosingDay(value) {
+  const n = Number(value);
+  return Number.isInteger(n) && n >= 1 && n <= 31 ? n : 31;
+}
 function diffDays(startIso, endIso) {
   const s = parse(startIso);
   const e = parse(endIso);
@@ -59,23 +67,22 @@ export function monthlyChargeDates(today, days, chargeDay) {
   return out;
 }
 
-function shiftYearMonth(iso, delta) {
-  const { y, m } = parse(iso);
-  const target = addMonthsToYearMonth(y, m, delta);
-  return `${target.y}-${String(target.m).padStart(2, "0")}`;
+export function cardBillingPeriod(chargeDateIso, offsetMonths, closingDay) {
+  const charge = parse(chargeDateIso);
+  const closeMonth = addMonthsToYearMonth(charge.y, charge.m, -normalizedOffsetMonths(offsetMonths));
+  const startMonth = addMonthsToYearMonth(closeMonth.y, closeMonth.m, -1);
+  const closeDay = normalizedClosingDay(closingDay);
+  return {
+    start: fmt(startMonth.y, startMonth.m, effectiveDay(closeDay, startMonth.y, startMonth.m)),
+    end: fmt(closeMonth.y, closeMonth.m, effectiveDay(closeDay, closeMonth.y, closeMonth.m)),
+  };
 }
 
-function billingMonthForChargeDate(iso, offset) {
-  const n = Number(offset);
-  const months = Number.isInteger(n) && n >= 1 && n <= 6 ? n : 1;
-  return shiftYearMonth(iso, -months);
-}
-
-export function expandCardChargeSchedules({ schedules = [], today, days, variableByCardMonth = new Map() }) {
+export function expandCardChargeSchedules({ schedules = [], today, days, variableByPeriod = new Map() }) {
   const variableMap =
-    variableByCardMonth instanceof Map
-      ? variableByCardMonth
-      : new Map(Object.entries(variableByCardMonth ?? {}));
+    variableByPeriod instanceof Map
+      ? variableByPeriod
+      : new Map(Object.entries(variableByPeriod ?? {}));
   const out = [];
 
   for (const schedule of schedules) {
@@ -83,14 +90,15 @@ export function expandCardChargeSchedules({ schedules = [], today, days, variabl
     const account = schedule.card_account ?? schedule.account;
     if (!account) continue;
     for (const date of monthlyChargeDates(today, days, schedule.charge_day ?? schedule.chargeDay)) {
-      const billingMonth = billingMonthForChargeDate(
+      const period = cardBillingPeriod(
         date,
         schedule.billing_month_offset ?? schedule.billingMonthOffset,
+        schedule.closing_day ?? schedule.closingDay,
       );
       const amount =
         amountType === "fixed"
           ? Math.abs(Math.round(Number(schedule.fixed_amount ?? schedule.fixedAmount) || 0))
-          : Math.abs(Math.round(Number(variableMap.get(`${account}|${billingMonth}`)) || 0));
+          : Math.abs(Math.round(Number(variableMap.get(`${account}|${period.end}`)) || 0));
       if (amountType === "fixed" && amount <= 0) continue;
       out.push({
         date,
