@@ -134,7 +134,8 @@ body.pinmode .tour__hint{display:none}
 .exp__no{font-family:var(--eb);font-style:italic;color:var(--tsuchi);letter-spacing:.1em;margin:18px 0 4px}
 .exp h3{font-family:var(--serif);font-weight:700;font-size:clamp(19px,2.2vw,26px);margin:0 0 10px}
 .exp p{color:var(--ink70);margin:0;max-width:40ch}
-.exp .wait{color:var(--ink45);font-size:12px}
+.exp .wait{display:inline-block;margin-top:10px;padding:3px 11px;border:1px solid rgba(139,90,60,.34);border-radius:999px;
+  color:var(--tsuchi);font-family:var(--eb);font-style:italic;font-size:11px;letter-spacing:.06em;opacity:.85}
 @media(min-width:781px){
   .stay__grid{grid-template-columns:30% 1fr}
   .stay__title{position:sticky;top:32vh;height:max-content}
