@@ -3,6 +3,13 @@
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const $$ = (s,c=document)=>[...c.querySelectorAll(s)];
 
+  /* nav パネル：リンク選択 / Esc で閉じる */
+  const navt = document.getElementById('navt');
+  if (navt) {
+    $$('.nav__panel a').forEach(a=>a.addEventListener('click',()=>{navt.checked=false;}));
+    addEventListener('keydown',e=>{ if(e.key==='Escape') navt.checked=false; });
+  }
+
   /* reveal / 畔 */
   const io = new IntersectionObserver((es)=>es.forEach(e=>{
     if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
