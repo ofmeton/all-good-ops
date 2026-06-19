@@ -1,0 +1,61 @@
+(() => {
+  'use strict';
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const $$ = (s,c=document)=>[...c.querySelectorAll(s)];
+
+  /* reveal / 畔 */
+  const io = new IntersectionObserver((es)=>es.forEach(e=>{
+    if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+  }), {threshold:0.16, rootMargin:'0px 0px -8% 0px'});
+  $$('.reveal, .aze-wrap').forEach(el=>io.observe(el));
+
+  /* k. オープニング */
+  if (!reduce && window.gsap) {
+    gsap.timeline()
+      .to('.opening__line',{autoAlpha:1,duration:1.1,ease:'power2.out'},.25)
+      .to('.opening__line',{autoAlpha:0,duration:.7},'+=.7')
+      .to('.opening',{yPercent:-100,duration:1.0,ease:'power3.inOut'},'-=.15')
+      .set('.opening',{display:'none'});
+  } else { const op=document.querySelector('.opening'); if(op) op.style.display='none'; }
+
+  if (reduce || !window.gsap) return;
+  gsap.registerPlugin(ScrollTrigger);
+  const wide = matchMedia('(min-width:781px)').matches;
+
+  /* INTRO：背景固定で FV→Concept 入替 */
+  /* ピン留めはCSS sticky。外観を少しホールド→前景フェード→外観→内観クロスフェード→暗転。本文はその上を自然スクロールで上がってくる */
+  gsap.to('.intro__hero',{autoAlpha:0,yPercent:-8,ease:'none',
+    scrollTrigger:{trigger:'.intro',start:'top top',end:'+=70%',scrub:true}});
+  gsap.to('.intro__bg2',{autoAlpha:1,ease:'none',
+    scrollTrigger:{trigger:'.intro',start:'8% top',end:'+=70%',scrub:true}});
+  gsap.to('.intro__dark',{opacity:.55,ease:'none',
+    scrollTrigger:{trigger:'.intro',start:'top top',end:'+=88%',scrub:true}});
+  gsap.to('.intro__scroll',{autoAlpha:0,ease:'none',
+    scrollTrigger:{trigger:'.intro',start:'top top',end:'+=12%',scrub:true}});
+
+  if (!wide) return; /* 以降の大きな動きはデスクトップ限定 */
+
+  /* INFORMATION：滲み出る（ぼかし暗→クリア） */
+  gsap.fromTo('.info__photo',{filter:'blur(22px) brightness(.55)',scale:1.05},
+    {filter:'blur(0px) brightness(1)',scale:1,ease:'power2.out',duration:1.8,
+     scrollTrigger:{trigger:'.info',start:'top 64%'}});
+
+  /* ROOMS：横スクロールで巡る（pin） */
+  document.body.classList.add('pinmode');
+  $$('.tour').forEach(sec=>{
+    const track=sec.querySelector('.tour__track');
+    const dist=()=>Math.max(0, track.scrollWidth - innerWidth);
+    gsap.to(track,{x:()=>-dist(),ease:'none',
+      scrollTrigger:{trigger:sec,start:'top top',end:()=>'+='+dist(),pin:true,scrub:0.5,invalidateOnRefresh:true,anticipatePin:1}});
+  });
+
+  /* STAY：写真が縦にゆっくり流れる（控えめ視差） */
+  $$('.stay .exp[data-para]').forEach(el=>{
+    const sp=parseFloat(el.dataset.para)||0.05;
+    gsap.fromTo(el.querySelector('.fr'),{yPercent:sp*60},{yPercent:-sp*60,ease:'none',
+      scrollTrigger:{trigger:el,start:'top bottom',end:'bottom top',scrub:true}});
+  });
+
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(()=>ScrollTrigger.refresh());
+  addEventListener('load',()=>ScrollTrigger.refresh());
+})();
