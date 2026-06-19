@@ -50,10 +50,15 @@
 
   if (!wide) return; /* 以降の大きな動きはデスクトップ限定 */
 
-  /* INFORMATION：滲み出る（ぼかし暗→クリア） */
-  gsap.fromTo('.info__photo',{filter:'blur(22px) brightness(.55)',scale:1.05},
-    {filter:'blur(0px) brightness(1)',scale:1,ease:'power2.out',duration:1.8,
-     scrollTrigger:{trigger:'.info',start:'top 64%'}});
+  /* 写真の登場＝「滲み出る（ぼかし暗→クリア）」で全ページ統一。
+     住まいの概要の写真／ROOMSギャラリー／寝床写真を同一パラメータで浮かび上がらせる */
+  const emerge = (el, trig, start) => { if(!el) return;
+    gsap.set(el,{filter:'blur(22px) brightness(.55)',scale:1.05});
+    gsap.to(el,{filter:'blur(0px) brightness(1)',scale:1,ease:'power2.out',duration:1.8,
+      scrollTrigger:{trigger:trig||el,start:start||'top 80%'}}); };
+  emerge(document.querySelector('.info__photo'), '.info', 'top 64%');
+  $$('.gal__item img').forEach(img=>emerge(img, img.closest('.gal__item'), 'top 84%'));
+  emerge(document.querySelector('.sleep__ph img'), '.sleep__ph', 'top 84%');
 
   /* ROOMS：横スクロールで巡る（pin） */
   document.body.classList.add('pinmode');
