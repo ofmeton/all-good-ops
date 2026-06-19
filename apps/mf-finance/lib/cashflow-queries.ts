@@ -142,6 +142,7 @@ export interface TransferRow {
 export interface CardChargeScheduleRow {
   id: number;
   card_account: string;
+  debit_account: string | null;
   charge_day: number;
   amount_type: "fixed" | "variable";
   fixed_amount: number | null;
@@ -176,7 +177,7 @@ export function getTransferList(): TransferRow[] {
 export function getCardChargeSchedules(): CardChargeScheduleRow[] {
   return db
     .prepare(
-      `SELECT id, card_account, charge_day, amount_type, fixed_amount, billing_month_offset, closing_day, note, active, created_at
+      `SELECT id, card_account, debit_account, charge_day, amount_type, fixed_amount, billing_month_offset, closing_day, note, active, created_at
          FROM card_charge_schedules
         WHERE active = 1
         ORDER BY card_account, charge_day, id`,
@@ -187,7 +188,7 @@ export function getCardChargeSchedules(): CardChargeScheduleRow[] {
 export function getCardChargeScheduleList(): CardChargeScheduleRow[] {
   return db
     .prepare(
-      `SELECT id, card_account, charge_day, amount_type, fixed_amount, billing_month_offset, closing_day, note, active, created_at
+      `SELECT id, card_account, debit_account, charge_day, amount_type, fixed_amount, billing_month_offset, closing_day, note, active, created_at
          FROM card_charge_schedules
         ORDER BY active DESC, card_account, charge_day, id`,
     )
@@ -391,7 +392,7 @@ export interface AccountRollingCashflow {
 type ExpandedCardCharge = {
   date: string;
   amount: number;
-  account: string;
+  account: string | null;
   name: string;
   amountType: "fixed" | "variable";
   estimated: boolean;

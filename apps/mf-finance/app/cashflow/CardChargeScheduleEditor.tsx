@@ -38,13 +38,16 @@ function toAmountType(value: string): AmountType {
 function CardChargeRowItem({
   item,
   cardOptions,
+  debitAccountOptions,
 }: {
   item: CardChargeScheduleRow;
   cardOptions: AccountOption[];
+  debitAccountOptions: AccountOption[];
 }) {
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const [cardAccount, setCardAccount] = useState(item.card_account);
+  const [debitAccount, setDebitAccount] = useState(item.debit_account ?? "");
   const [chargeDay, setChargeDay] = useState(String(item.charge_day));
   const [amountType, setAmountType] = useState<AmountType>(item.amount_type);
   const [fixedAmount, setFixedAmount] = useState(item.fixed_amount ? String(item.fixed_amount) : "");
@@ -55,9 +58,14 @@ function CardChargeRowItem({
   const options = cardOptions.some((option) => option.account === item.card_account)
     ? cardOptions
     : [...cardOptions, { account: item.card_account, kind: "card" as const }];
+  const debitOptions =
+    item.debit_account && !debitAccountOptions.some((option) => option.account === item.debit_account)
+      ? [...debitAccountOptions, { account: item.debit_account, kind: "other" as const }]
+      : debitAccountOptions;
 
   const buildInput = () => ({
     card_account: cardAccount,
+    debit_account: debitAccount.trim() || null,
     charge_day: Number(chargeDay),
     amount_type: amountType,
     fixed_amount: amountType === "fixed" ? Number(fixedAmount) : null,
@@ -104,6 +112,22 @@ function CardChargeRowItem({
             className={INPUT_CLS}
           >
             {options.map((option) => (
+              <option key={option.account} value={option.account}>
+                {option.account}（{KIND_LABEL[option.kind]}）
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="flex flex-col gap-1">
+          <span className="text-[11px] text-muted">引落先口座</span>
+          <select
+            value={debitAccount}
+            onChange={(e) => setDebitAccount(e.target.value)}
+            disabled={pending}
+            className={INPUT_CLS}
+          >
+            <option value="">未指定</option>
+            {debitOptions.map((option) => (
               <option key={option.account} value={option.account}>
                 {option.account}（{KIND_LABEL[option.kind]}）
               </option>
@@ -255,9 +279,16 @@ function CardChargeRowItem({
   );
 }
 
-function AddCardChargeScheduleForm({ cardOptions }: { cardOptions: AccountOption[] }) {
+function AddCardChargeScheduleForm({
+  cardOptions,
+  debitAccountOptions,
+}: {
+  cardOptions: AccountOption[];
+  debitAccountOptions: AccountOption[];
+}) {
   const [pending, startTransition] = useTransition();
   const [cardAccount, setCardAccount] = useState("");
+  const [debitAccount, setDebitAccount] = useState("");
   const [chargeDay, setChargeDay] = useState("27");
   const [amountType, setAmountType] = useState<AmountType>("variable");
   const [fixedAmount, setFixedAmount] = useState("");
@@ -277,6 +308,7 @@ function AddCardChargeScheduleForm({ cardOptions }: { cardOptions: AccountOption
     startTransition(async () => {
       const res = await addCardChargeSchedule({
         card_account: cardAccount,
+        debit_account: debitAccount.trim() || null,
         charge_day: Number(chargeDay),
         amount_type: amountType,
         fixed_amount: amountType === "fixed" ? Number(fixedAmount) : null,
@@ -289,6 +321,7 @@ function AddCardChargeScheduleForm({ cardOptions }: { cardOptions: AccountOption
         return;
       }
       setCardAccount("");
+      setDebitAccount("");
       setChargeDay("27");
       setAmountType("variable");
       setFixedAmount("");
@@ -313,6 +346,22 @@ function AddCardChargeScheduleForm({ cardOptions }: { cardOptions: AccountOption
           >
             <option value="">選択</option>
             {cardOptions.map((option) => (
+              <option key={option.account} value={option.account}>
+                {option.account}（{KIND_LABEL[option.kind]}）
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="flex flex-col gap-1">
+          <span className="text-[11px] text-muted">引落先口座</span>
+          <select
+            value={debitAccount}
+            onChange={(e) => setDebitAccount(e.target.value)}
+            disabled={pending}
+            className={INPUT_CLS}
+          >
+            <option value="">未指定</option>
+            {debitAccountOptions.map((option) => (
               <option key={option.account} value={option.account}>
                 {option.account}（{KIND_LABEL[option.kind]}）
               </option>
@@ -441,10 +490,14 @@ function AddCardChargeScheduleForm({ cardOptions }: { cardOptions: AccountOption
 export function CardChargeScheduleEditor({
   items,
   cardOptions,
+  accountOptions,
 }: {
   items: CardChargeScheduleRow[];
   cardOptions: AccountOption[];
+  accountOptions: AccountOption[];
 }) {
+  const debitAccountOptions = accountOptions.filter((option) => option.kind !== "card");
+
   return (
     <section className="mt-6" aria-label="カード引落予定">
       <h2 className="mb-1 text-sm font-semibold text-foreground">
@@ -462,11 +515,16 @@ export function CardChargeScheduleEditor({
       ) : (
         <ul className="space-y-2">
           {items.map((item) => (
-            <CardChargeRowItem key={item.id} item={item} cardOptions={cardOptions} />
+            <CardChargeRowItem
+              key={item.id}
+              item={item}
+              cardOptions={cardOptions}
+              debitAccountOptions={debitAccountOptions}
+            />
           ))}
         </ul>
       )}
-      <AddCardChargeScheduleForm cardOptions={cardOptions} />
+      <AddCardChargeScheduleForm cardOptions={cardOptions} debitAccountOptions={debitAccountOptions} />
     </section>
   );
 }

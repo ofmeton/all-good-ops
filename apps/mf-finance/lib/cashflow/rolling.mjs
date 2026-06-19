@@ -87,8 +87,9 @@ export function expandCardChargeSchedules({ schedules = [], today, days, variabl
 
   for (const schedule of schedules) {
     const amountType = schedule.amount_type === "fixed" || schedule.amountType === "fixed" ? "fixed" : "variable";
-    const account = schedule.card_account ?? schedule.account;
-    if (!account) continue;
+    const cardAccount = schedule.card_account ?? schedule.account;
+    if (!cardAccount) continue;
+    const debitAccount = schedule.debit_account ?? schedule.debitAccount ?? null;
     for (const date of monthlyChargeDates(today, days, schedule.charge_day ?? schedule.chargeDay)) {
       const period = cardBillingPeriod(
         date,
@@ -98,20 +99,20 @@ export function expandCardChargeSchedules({ schedules = [], today, days, variabl
       const amount =
         amountType === "fixed"
           ? Math.abs(Math.round(Number(schedule.fixed_amount ?? schedule.fixedAmount) || 0))
-          : Math.abs(Math.round(Number(variableMap.get(`${account}|${period.end}`)) || 0));
+          : Math.abs(Math.round(Number(variableMap.get(`${cardAccount}|${period.end}`)) || 0));
       if (amountType === "fixed" && amount <= 0) continue;
       out.push({
         date,
         amount,
-        account,
-        name: schedule.name ?? `${account} カード引落`,
+        account: debitAccount,
+        name: schedule.name ?? `${cardAccount} カード引落`,
         amountType,
         estimated: amountType === "variable",
       });
     }
   }
 
-  return out.sort((a, b) => a.date.localeCompare(b.date) || a.account.localeCompare(b.account, "ja"));
+  return out.sort((a, b) => a.date.localeCompare(b.date) || String(a.account ?? "").localeCompare(String(b.account ?? ""), "ja"));
 }
 
 export function indexOverrides(arr) {
