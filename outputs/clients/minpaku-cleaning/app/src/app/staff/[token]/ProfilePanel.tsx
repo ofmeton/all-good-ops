@@ -1,6 +1,7 @@
 "use client";
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Icon } from "@/components/ui/Icon";
@@ -11,9 +12,13 @@ const inputCls =
 export function ProfilePanel({
   token,
   email: initialEmail,
+  lineUserId,
+  lineLinkStatus,
 }: {
   token: string;
   email: string | null;
+  lineUserId: string | null;
+  lineLinkStatus?: "success" | "error";
 }) {
   const router = useRouter();
   const [email, setEmail] = useState(initialEmail ?? "");
@@ -63,6 +68,16 @@ export function ProfilePanel({
             メールアドレスを保存しました。
           </p>
         )}
+        {lineLinkStatus === "success" && (
+          <p className="text-[12px] text-st-confirmed-text bg-st-confirmed-bg px-3 py-2 rounded-lg">
+            LINE連携が完了しました。
+          </p>
+        )}
+        {lineLinkStatus === "error" && (
+          <p className="text-[12px] text-st-cancelled-text bg-st-cancelled-bg px-3 py-2 rounded-lg">
+            LINE連携に失敗しました。時間をおいて再度お試しください。
+          </p>
+        )}
         <label className="block">
           <span className="block text-[11.5px] text-ink-600 font-medium mb-1.5">
             メールアドレス
@@ -76,9 +91,20 @@ export function ProfilePanel({
           />
         </label>
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <Button type="button" variant="secondary" icon="MessageCircle" disabled>
-            LINE連携 近日対応
-          </Button>
+          {lineUserId ? (
+            <div className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-st-confirmed-bg px-3.5 text-[13px] font-medium text-st-confirmed-text">
+              <Icon name="CircleCheckBig" size={14} />
+              連携済み
+            </div>
+          ) : (
+            <Link
+              href={`/api/line/link/start?token=${encodeURIComponent(token)}`}
+              className="inline-flex h-9 items-center justify-center gap-1.5 rounded-lg bg-white px-3.5 text-[13px] font-medium text-ink-800 ring-1 ring-ink-200 transition-[background-color,color,box-shadow,transform,opacity] duration-150 ease-out hover:bg-ink-50 hover:ring-ink-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40 focus-visible:ring-offset-1 focus-visible:ring-offset-white active:scale-[0.98]"
+            >
+              <Icon name="MessageCircle" size={14} />
+              LINE連携
+            </Link>
+          )}
           <Button type="submit" variant="primary" icon="Save" loading={loading}>
             保存
           </Button>

@@ -8,10 +8,13 @@ import { ProfilePanel } from "./ProfilePanel";
 
 export default async function StaffRequestsPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ token: string }>;
+  searchParams?: Promise<{ line_link?: string }>;
 }) {
   const { token } = await params;
+  const sp = await searchParams;
   const actor = await resolveActorByToken(token);
   if (!actor || actor.role !== "staff") return null;
 
@@ -25,10 +28,12 @@ export default async function StaffRequestsPage({
   const db = createServiceClient();
   const { data: staffRow } = await db
     .from("staff")
-    .select("name, email")
+    .select("name, email, line_user_id")
     .eq("id", actor.staffId)
     .maybeSingle();
   const staffName = staffRow?.name ?? "スタッフ";
+  const lineLinkStatus =
+    sp?.line_link === "success" || sp?.line_link === "error" ? sp.line_link : undefined;
 
   const enriched = requests.map((r) => ({
     ...r,
@@ -48,7 +53,12 @@ export default async function StaffRequestsPage({
           <p className="num text-[11.5px] text-ink-500">本日の予定: {todayCount} 件</p>
         </div>
       </div>
-      <ProfilePanel token={token} email={staffRow?.email ?? null} />
+      <ProfilePanel
+        token={token}
+        email={staffRow?.email ?? null}
+        lineUserId={staffRow?.line_user_id ?? null}
+        lineLinkStatus={lineLinkStatus}
+      />
       <RequestList token={token} requests={enriched} />
     </div>
   );
