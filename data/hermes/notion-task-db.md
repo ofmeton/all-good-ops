@@ -78,9 +78,7 @@ PC を閉じても 24/7 で捕捉するため、hermes を Mac から **GCP 無�
 - [ ] Phase 3 拡張（escalation・要人間判断）: cc-auto のコード実行（worktree隔離＋Codex＋硬ゲート＋低リスク自動merge）。挙動を見て信頼できたら draft-only から段階的に拡大。
 - [ ] Phase 2b: Google カレンダー捕捉（要準備を判別→準備タスク生成）。Google Calendar API OAuth 整備が要るため後回し。
 - [x] **Phase 4 完了**（2026-06-20）: 催促ループ（`data/hermes/nudge_loop.py`・**VM 24/7**・cron 毎時）。停滞カード(Blocked=要対応/NeedInfo=情報待ち/reminder×Ready,Inbox=リマインド/放置Inbox)を Telegram にダイジェスト送信。**静時間帯 22:00-08:00 JST 抑制**・LastNudge で 1カード1日1回スロットル。実証=2件送信。
-- [x] **モデル試験切替**（2026-06-20）: 常駐メイン model を `anthropic/claude-haiku-4.5` → **`openai/gpt-4o-mini`**（約1/7コスト）。捕捉の tool-calling 維持を要検証。退避=`config.yaml.bak.modelswap`。auxiliary/Mac poller の分類は Haiku のまま。
-- [ ] Phase 2b: Google カレンダー捕捉（要準備を判別→準備タスク生成）。Google Calendar API OAuth 整備が要るため後回し。
-- [ ] Phase 3 拡張（escalation・要人間判断）: cc-auto のコード実行（worktree隔離＋Codex＋硬ゲート＋低リスク自動merge）。挙動を見て信頼できたら draft-only から段階的に拡大。
+- [x] **モデル試験→Haiku 維持**（2026-06-20）: `openai/gpt-4o-mini`（約1/7コスト）を試したが**重度退行で不採用**＝post_page を呼ばず `skill_manage` を11回以上ループして api 上限(16/16)を使い切り捕捉失敗。弱いモデルは厳密 tool-calling＋不要ツール回避ができない。→ **Haiku に revert**。併せて `skills` ツールセットも `disabled_toolsets` に追加（skill_manage 迷い込み封じ・全モデルで安全側）。Haiku が現状の信頼下限。次に試すなら gemini-2.5-flash 等だが要慎重検証。
 - [ ] Oracle Always Free 解決後に GCP→Oracle 再移設（任意・`~/.hermes` rsync で簡単）
 
 > Mac 側 launchd（scoped 例外）: `com.hermes.applenotes`(捕捉) / `com.hermes.autorun`(自走実行)。Mac 起動時のみ稼働。
