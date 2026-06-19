@@ -8,6 +8,7 @@ import { Avatar } from "@/components/ui/Avatar";
 type NavKey =
   | "dashboard"
   | "requests"
+  | "reservations"
   | "properties"
   | "staff"
   | "owners"
@@ -24,6 +25,7 @@ type NavItem = {
 const NAV: NavItem[] = [
   { key: "dashboard", href: "/admin", label: "ダッシュボード", icon: "LayoutDashboard" },
   { key: "requests", href: "/admin/requests", label: "依頼管理", icon: "ClipboardList" },
+  { key: "reservations", href: "/admin/reservations", label: "予約", icon: "CalendarClock" },
   { key: "properties", href: "/admin/properties", label: "物件管理", icon: "Building2" },
   { key: "staff", href: "/admin/staff", label: "スタッフ管理", icon: "Users" },
   { key: "owners", href: "/admin/owners", label: "オーナー管理", icon: "IdCard" },
@@ -34,9 +36,9 @@ const NAV: NavItem[] = [
 const BOTTOM_TABS: { key: NavKey; href: string; label: string; icon: IconName }[] = [
   { key: "dashboard", href: "/admin", label: "ホーム", icon: "LayoutDashboard" },
   { key: "requests", href: "/admin/requests", label: "依頼", icon: "ClipboardList" },
+  { key: "reservations", href: "/admin/reservations", label: "予約", icon: "CalendarClock" },
   { key: "properties", href: "/admin/properties", label: "物件", icon: "Building2" },
   { key: "staff", href: "/admin/staff", label: "スタッフ", icon: "Users" },
-  { key: "owners", href: "/admin/owners", label: "その他", icon: "Ellipsis" },
 ];
 
 /**
@@ -48,6 +50,7 @@ function currentNavKey(pathname: string): NavKey {
   // 完全一致 or プレフィックスの長い順に判定する
   // /admin/requests/abc → "requests"
   if (pathname.startsWith("/admin/requests")) return "requests";
+  if (pathname.startsWith("/admin/reservations")) return "reservations";
   if (pathname.startsWith("/admin/properties")) return "properties";
   if (pathname.startsWith("/admin/staff")) return "staff";
   if (pathname.startsWith("/admin/owners")) return "owners";

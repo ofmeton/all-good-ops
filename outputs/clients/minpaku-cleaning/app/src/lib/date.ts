@@ -17,6 +17,24 @@ function ymdInJST(date: Date): string {
   }).format(date);
 }
 
+// 任意の Date を JST の YYYY-MM-DD に正規化する。
+// iCal の TZID 付き日時や UTC 実行環境の Date を、予約日の比較に使える
+// 日付文字列へ寄せるための境界 util。
+export function toJstDateString(date: Date): string {
+  return ymdInJST(date);
+}
+
+// YYYY-MM-DD の辞書順比較で日数差を求めるため、JST 00:00 の瞬間へ変換する。
+export function jstDateStringToUtcMs(value: string): number {
+  return new Date(`${value}T00:00:00+09:00`).getTime();
+}
+
+export function isValidDateString(value: string): boolean {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  const ms = jstDateStringToUtcMs(value);
+  return Number.isFinite(ms) && toJstDateString(new Date(ms)) === value;
+}
+
 // JST の当日 YYYY-MM-DD。
 export function todayInJST(): string {
   return ymdInJST(new Date());
