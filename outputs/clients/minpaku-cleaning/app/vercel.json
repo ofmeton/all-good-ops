@@ -12,14 +12,6 @@
     {
       "path": "/api/cron/cleanup-photos",
       "schedule": "0 18 * * *"
-    },
-    {
-      "path": "/api/cron/ical-sync",
-      "schedule": "*/30 * * * *"
-    },
-    {
-      "path": "/api/cron/finalize-offers",
-      "schedule": "*/10 * * * *"
     }
   ]
 }
