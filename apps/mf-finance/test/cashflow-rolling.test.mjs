@@ -5,6 +5,7 @@ import {
   buildBalanceMatrix,
   buildRolling,
   buildUpcomingWithdrawals,
+  cardBillingPeriod,
   effectiveDay,
   expandCardChargeSchedules,
   monthEndOffsetDays,
@@ -202,7 +203,12 @@ test("monthlyChargeDates: charge_day を期間内の月次日付へ展開し月�
   assert.deepEqual(monthlyChargeDates("2026-06-16", 45, 27), ["2026-06-27", "2026-07-27"]);
 });
 
-test("expandCardChargeSchedules: variable は引落日の前月利用額を月別に反映する", () => {
+test("cardBillingPeriod: 引落日・締め月 offset・締め日から請求期間を返す", () => {
+  assert.deepEqual(cardBillingPeriod("2026-06-26", 1, 31), { start: "2026-04-30", end: "2026-05-31" });
+  assert.deepEqual(cardBillingPeriod("2026-07-01", 1, 1), { start: "2026-05-01", end: "2026-06-01" });
+});
+
+test("expandCardChargeSchedules: variable は引落日の請求期間利用額を反映する", () => {
   const charges = expandCardChargeSchedules({
     today: "2026-06-16",
     days: 72,
@@ -214,9 +220,9 @@ test("expandCardChargeSchedules: variable は引落日の前月利用額を月�
         fixed_amount: null,
       },
     ],
-    variableByCardMonth: new Map([
-      ["三井住友カード|2026-05", 51000],
-      ["三井住友カード|2026-06", 108444],
+    variableByPeriod: new Map([
+      ["三井住友カード|2026-05-31", 51000],
+      ["三井住友カード|2026-06-30", 108444],
     ]),
   });
 
@@ -230,7 +236,44 @@ test("expandCardChargeSchedules: variable は引落日の前月利用額を月�
   );
 });
 
-test("expandCardChargeSchedules: billing_month_offset で引落対象月をカードごとにずらす", () => {
+test("expandCardChargeSchedules: closing_day で同じ引落月でも請求期間が変わる", () => {
+  const charges = expandCardChargeSchedules({
+    today: "2026-07-01",
+    days: 0,
+    schedules: [
+      {
+        card_account: "ポケットカード",
+        charge_day: 1,
+        amount_type: "variable",
+        fixed_amount: null,
+        billing_month_offset: 1,
+        closing_day: 1,
+      },
+      {
+        card_account: "三井住友カード",
+        charge_day: 1,
+        amount_type: "variable",
+        fixed_amount: null,
+        billing_month_offset: 1,
+        closing_day: 31,
+      },
+    ],
+    variableByPeriod: new Map([
+      ["ポケットカード|2026-06-01", 10945],
+      ["三井住友カード|2026-06-30", 111246],
+    ]),
+  });
+
+  assert.deepEqual(
+    charges.map((charge) => [charge.date, charge.account, charge.amount, charge.estimated]),
+    [
+      ["2026-07-01", "ポケットカード", 10945, true],
+      ["2026-07-01", "三井住友カード", 111246, true],
+    ],
+  );
+});
+
+test("expandCardChargeSchedules: billing_month_offset で締め月をカードごとにずらす", () => {
   const charges = expandCardChargeSchedules({
     today: "2026-06-16",
     days: 20,
@@ -250,11 +293,11 @@ test("expandCardChargeSchedules: billing_month_offset で引落対象月をカ�
         billing_month_offset: 2,
       },
     ],
-    variableByCardMonth: new Map([
-      ["三井住友カード|2026-06", 61000],
-      ["三井住友カード|2026-05", 51000],
-      ["ポケットカード|2026-06", 62000],
-      ["ポケットカード|2026-05", 52000],
+    variableByPeriod: new Map([
+      ["三井住友カード|2026-06-30", 61000],
+      ["三井住友カード|2026-05-31", 51000],
+      ["ポケットカード|2026-06-30", 62000],
+      ["ポケットカード|2026-05-31", 52000],
     ]),
   });
 
@@ -280,9 +323,9 @@ test("expandCardChargeSchedules: billing_month_offset は年跨ぎで対象月�
         billing_month_offset: 2,
       },
     ],
-    variableByCardMonth: new Map([
-      ["ポケットカード|2025-11", 112000],
-      ["ポケットカード|2025-12", 121000],
+    variableByPeriod: new Map([
+      ["ポケットカード|2025-11-30", 112000],
+      ["ポケットカード|2025-12-31", 121000],
     ]),
   });
 
@@ -304,7 +347,7 @@ test("expandCardChargeSchedules: variable は前月利用0でもイベントを�
         fixed_amount: null,
       },
     ],
-    variableByCardMonth: new Map(),
+    variableByPeriod: new Map(),
   });
 
   assert.equal(charges.length, 1);

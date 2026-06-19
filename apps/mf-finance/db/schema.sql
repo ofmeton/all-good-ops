@@ -239,6 +239,7 @@ CREATE TABLE IF NOT EXISTS card_charge_schedules (
   amount_type  TEXT NOT NULL DEFAULT 'variable' CHECK (amount_type IN ('fixed','variable')),
   fixed_amount INTEGER,
   billing_month_offset INTEGER NOT NULL DEFAULT 1 CHECK (billing_month_offset BETWEEN 1 AND 6),
+  closing_day  INTEGER NOT NULL DEFAULT 31 CHECK (closing_day BETWEEN 1 AND 31),
   note         TEXT,
   active       INTEGER NOT NULL DEFAULT 1,
   created_at   TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
