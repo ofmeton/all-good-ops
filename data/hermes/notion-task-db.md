@@ -79,6 +79,7 @@ PC を閉じても 24/7 で捕捉するため、hermes を Mac から **GCP 無�
 - [ ] Phase 2b: Google カレンダー捕捉（要準備を判別→準備タスク生成）。Google Calendar API OAuth 整備が要るため後回し。
 - [x] **Phase 4 完了**（2026-06-20）: 催促ループ（`data/hermes/nudge_loop.py`・**VM 24/7**・cron 毎時）。停滞カード(Blocked=要対応/NeedInfo=情報待ち/reminder×Ready,Inbox=リマインド/放置Inbox)を Telegram にダイジェスト送信。**静時間帯 22:00-08:00 JST 抑制**・LastNudge で 1カード1日1回スロットル。実証=2件送信。
 - [x] **モデル試験→Haiku 維持**（2026-06-20）: `openai/gpt-4o-mini`（約1/7コスト）を試したが**重度退行で不採用**＝post_page を呼ばず `skill_manage` を11回以上ループして api 上限(16/16)を使い切り捕捉失敗。弱いモデルは厳密 tool-calling＋不要ツール回避ができない。→ **Haiku に revert**。併せて `skills` ツールセットも `disabled_toolsets` に追加（skill_manage 迷い込み封じ・全モデルで安全側）。Haiku が現状の信頼下限。次に試すなら gemini-2.5-flash 等だが要慎重検証。
+- [~] **Phase 2b: Google カレンダー捕捉**（2026-06-20・実装済／認可待ち）: `data/hermes/calendar_capture.py`＝primary カレンダー直近N日を取得→event_id+更新時刻で dedup→Haiku で**準備要否**を判定→要準備のみ Notion 準備タスク作成（Source=Calendar・Due=予定日・辞退/ルーチンは skip）。**OAuth は新規作成不要＝既存 Sheets MCP の Desktop クライアント(`ai-radar-494017`)を流用**し Calendar API 有効化済み。`gcal_oauth_setup.py` で calendar.readonly の refresh token を一回取得→`.env` に3値(GOOGLE_OAUTH_CLIENT_ID/SECRET/CALENDAR_REFRESH_TOKEN)。Mac/VM 両対応。**残=ユーザー同意1回→検証→cron 配備**。
 - [ ] Oracle Always Free 解決後に GCP→Oracle 再移設（任意・`~/.hermes` rsync で簡単）
 
 > Mac 側 launchd（scoped 例外）: `com.hermes.applenotes`(捕捉) / `com.hermes.autorun`(自走実行)。Mac 起動時のみ稼働。
