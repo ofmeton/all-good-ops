@@ -73,7 +73,11 @@ PC を閉じても 24/7 で捕捉するため、hermes を Mac から **GCP 無�
 - [x] Phase 0 / Task 1: hermes 内部インテグレーション作成＋本 DB を共有（2026-06-17）
 - [x] **Phase 1 完了**（2026-06-17）: Telegram メモ→カード作成→逆質問→Details/Due/NextAction 充填→Autonomy 提案・確定→Ready 化→**§5-E 会話のカードコメント集約**まで full flow を実証（実例「つかさママに返信」でコメント2件＋Ready＋reminder 確認）
 - [x] **クラウド常駐化完了**（2026-06-19）: GCP e2-micro へ移設・systemd常駐・Telegram→Notion を VM から実証（カード「充電コード返品交換」）。Mac 閉じても 24/7 稼働。
-- [ ] Phase 2: Apple Notes(Mac NoteStore.sqlite・直近N日・**osascript で読取可確認済**) / Google カレンダー（要準備をhermes判別）捕捉 — Apple Notes は Mac 側 poller（hermes不要・Notion API 直書き）で実装予定
+- [x] **Phase 2a 完了**（2026-06-19）: Apple Notes 捕捉 poller（`data/hermes/applenotes_capture.py`）。osascript で直近N日更新メモ取得→note_id+更新時刻で dedup→Haiku で task/private 分類→タスクのみ Notion Inbox 作成（Source=AppleNotes・private/非taskはskip・本文非保存）。launchd `com.hermes.applenotes`（30分・--days 2）。**launchd でも TCC(Notes自動化) 通った**。実証=「複数プロジェクトのタスク一覧確認・実行」。
+- [x] **Phase 3 保守版 完了**（2026-06-19）: 自走実行ランナー（`data/hermes/autorun_executor.py`）。Notion Ready×**draft-only** を拾い headless `claude -p`（Claude サブスク内・Web可・scratch dir・秘密env非渡し）で成果テキスト生成→Notion コメント＋Status=Review＋Telegram 通知。**編集/コミット/merge/送信/金銭は一切しない**。キルスイッチ=`~/.hermes/autorun_enabled`（"0"で停止）。launchd `com.hermes.autorun`（30分・--max 2）。**claude は launchd でも認証OK**。実証=サンプル draft 生成→Review。
+- [ ] Phase 3 拡張（escalation・要人間判断）: cc-auto のコード実行（worktree隔離＋Codex＋硬ゲート＋低リスク自動merge）。挙動を見て信頼できたら draft-only から段階的に拡大。
+- [ ] Phase 2b: Google カレンダー捕捉（要準備を判別→準備タスク生成）。Google Calendar API OAuth 整備が要るため後回し。
+- [ ] Phase 4: 催促ループ（reminder/停滞カードを朝に Telegram・静時間帯22-8）＋Priority/Project 運用
 - [ ] Oracle Always Free 解決後に GCP→Oracle 再移設（任意・`~/.hermes` rsync で簡単）
-- [ ] Phase 3: launchd 自走実行ランナー（Ready×{cc-auto,draft-only} を 30分poll・worktree隔離・硬ゲート・低リスク自動merge）＋キルスイッチ
-- [ ] Phase 4: 催促ループ（reminder/停滞カードを朝にTelegram・静時間帯22-8）＋Priority/Project運用
+
+> Mac 側 launchd（scoped 例外）: `com.hermes.applenotes`(捕捉) / `com.hermes.autorun`(自走実行)。Mac 起動時のみ稼働。VM 側は Telegram 捕捉のみ常時。
