@@ -235,6 +235,7 @@ CREATE INDEX IF NOT EXISTS idx_manual_transfers_date_status ON manual_transfers 
 CREATE TABLE IF NOT EXISTS card_charge_schedules (
   id           INTEGER PRIMARY KEY AUTOINCREMENT,
   card_account TEXT NOT NULL,
+  debit_account TEXT,
   charge_day   INTEGER NOT NULL,
   amount_type  TEXT NOT NULL DEFAULT 'variable' CHECK (amount_type IN ('fixed','variable')),
   fixed_amount INTEGER,

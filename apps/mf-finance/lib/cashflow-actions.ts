@@ -46,6 +46,13 @@ function accountExists(account: string): boolean {
   return Boolean(row);
 }
 
+function accountKind(account: string): BalanceKind | null {
+  const row = db.prepare("SELECT kind FROM account_balances WHERE account = ?").get(account) as
+    | { kind: BalanceKind }
+    | undefined;
+  return row?.kind ?? null;
+}
+
 function validateChargeDay(value: unknown): number {
   const n = Number(value);
   if (!Number.isInteger(n) || n < 1 || n > 31) return 0;
@@ -77,6 +84,7 @@ export interface ScheduledInput {
 
 export interface CardChargeScheduleInput {
   card_account: string;
+  debit_account?: string | null;
   charge_day: number;
   amount_type: "fixed" | "variable";
   fixed_amount?: number | null;
@@ -92,6 +100,7 @@ type NormalizedCardChargeInput =
   ok: true;
   value: {
     cardAccount: string;
+    debitAccount: string | null;
     chargeDay: number;
     amountType: "fixed" | "variable";
     fixedAmount: number | null;
@@ -106,6 +115,12 @@ function normalizeCardChargeInput(input: CardChargeScheduleInput): NormalizedCar
   const cardAccount = trimOrNull(input.card_account);
   if (!cardAccount) return { ok: false, error: "カード口座を選択してください" };
   if (!isKnownCardAccount(cardAccount)) return { ok: false, error: `カード口座が見つかりません: ${cardAccount}` };
+  const debitAccount = trimOrNull(input.debit_account);
+  if (debitAccount) {
+    const kind = accountKind(debitAccount);
+    if (!kind) return { ok: false, error: `引落先口座が見つかりません: ${debitAccount}` };
+    if (kind === "card") return { ok: false, error: "引落先口座にはカード以外の口座を選択してください" };
+  }
   const chargeDay = validateChargeDay(input.charge_day);
   if (chargeDay === 0) return { ok: false, error: "引落日は1〜31で入力してください" };
   const billingMonthOffset = validateBillingMonthOffset(input.billing_month_offset);
@@ -119,7 +134,7 @@ function normalizeCardChargeInput(input: CardChargeScheduleInput): NormalizedCar
   }
   const note = trimOrNull(input.note);
   const active = input.active === false || input.active === 0 ? 0 : 1;
-  return { ok: true, value: { cardAccount, chargeDay, amountType, fixedAmount, billingMonthOffset, closingDay, note, active } };
+  return { ok: true, value: { cardAccount, debitAccount, chargeDay, amountType, fixedAmount, billingMonthOffset, closingDay, note, active } };
 }
 
 export async function addCardChargeSchedule(input: CardChargeScheduleInput): Promise<CashflowActionResult> {
@@ -129,9 +144,9 @@ export async function addCardChargeSchedule(input: CardChargeScheduleInput): Pro
     const v = normalized.value;
     db.prepare(
       `INSERT INTO card_charge_schedules
-         (card_account, charge_day, amount_type, fixed_amount, billing_month_offset, closing_day, note, active)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-    ).run(v.cardAccount, v.chargeDay, v.amountType, v.fixedAmount, v.billingMonthOffset, v.closingDay, v.note, v.active);
+         (card_account, debit_account, charge_day, amount_type, fixed_amount, billing_month_offset, closing_day, note, active)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    ).run(v.cardAccount, v.debitAccount, v.chargeDay, v.amountType, v.fixedAmount, v.billingMonthOffset, v.closingDay, v.note, v.active);
     revalidate();
     return { ok: true };
   } catch (e) {
@@ -152,10 +167,10 @@ export async function updateCardChargeSchedule(
     const info = db
       .prepare(
         `UPDATE card_charge_schedules
-            SET card_account = ?, charge_day = ?, amount_type = ?, fixed_amount = ?, billing_month_offset = ?, closing_day = ?, note = ?, active = ?
+            SET card_account = ?, debit_account = ?, charge_day = ?, amount_type = ?, fixed_amount = ?, billing_month_offset = ?, closing_day = ?, note = ?, active = ?
           WHERE id = ?`,
       )
-      .run(v.cardAccount, v.chargeDay, v.amountType, v.fixedAmount, v.billingMonthOffset, v.closingDay, v.note, v.active, n);
+      .run(v.cardAccount, v.debitAccount, v.chargeDay, v.amountType, v.fixedAmount, v.billingMonthOffset, v.closingDay, v.note, v.active, n);
     if (info.changes === 0) return { ok: false, error: "対象のカード引落予定が見つかりません" };
     revalidate();
     return { ok: true };

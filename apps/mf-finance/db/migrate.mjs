@@ -100,6 +100,7 @@ export function applyRecurringMigrations(db) {
     CREATE TABLE IF NOT EXISTS card_charge_schedules (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       card_account TEXT NOT NULL,
+      debit_account TEXT,
       charge_day INTEGER NOT NULL,
       amount_type TEXT NOT NULL DEFAULT 'variable' CHECK (amount_type IN ('fixed','variable')),
       fixed_amount INTEGER,
@@ -123,6 +124,9 @@ export function applyRecurringMigrations(db) {
     db.exec(
       "ALTER TABLE card_charge_schedules ADD COLUMN closing_day INTEGER NOT NULL DEFAULT 31 CHECK (closing_day BETWEEN 1 AND 31)",
     );
+  }
+  if (!cardChargeScheduleCols.includes("debit_account")) {
+    db.exec("ALTER TABLE card_charge_schedules ADD COLUMN debit_account TEXT");
   }
   db.exec("CREATE INDEX IF NOT EXISTS idx_card_charge_schedules_account ON card_charge_schedules (card_account, active)");
 }
