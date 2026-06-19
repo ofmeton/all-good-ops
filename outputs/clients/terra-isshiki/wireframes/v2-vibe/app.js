@@ -64,8 +64,8 @@
       scrollTrigger:{trigger:sec,start:'top top',end:()=>'+='+dist(),pin:true,scrub:0.5,invalidateOnRefresh:true,anticipatePin:1}});
   });
 
-  /* STAY：写真が縦にゆっくり流れる（控えめ視差） */
-  $$('.stay .exp[data-para]').forEach(el=>{
+  /* 縦に流れる控えめ視差（STAY / ROOMS ギャラリー共通：data-para を持つ要素） */
+  $$('[data-para]').forEach(el=>{
     const sp=parseFloat(el.dataset.para)||0.05;
     gsap.fromTo(el.querySelector('.fr'),{yPercent:sp*60},{yPercent:-sp*60,ease:'none',
       scrollTrigger:{trigger:el,start:'top bottom',end:'bottom top',scrub:true}});
