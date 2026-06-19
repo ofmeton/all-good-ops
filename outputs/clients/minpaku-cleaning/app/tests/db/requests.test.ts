@@ -5,15 +5,14 @@ import {
   createRequest,
   updateRequest,
   cancelRequest,
-  claimRequest,
   assignRequest,
   startRequest,
   confirmRequest,
   listRequestsForStaff,
   getRequestForStaff,
   assertStaffAssignedToRequest,
-  RequestAlreadyClaimedError,
 } from "@/lib/db/requests";
+import { submitResponse } from "@/lib/db/responses";
 import { createServiceClient } from "@/lib/supabase-server";
 import { resetDb } from "../helpers/reset-db";
 import type { Actor } from "@/lib/auth";
@@ -153,33 +152,48 @@ describe("cleaning_requests 割当・進行遷移", () => {
     return { staffId: st!.id as string, requestId: req.id };
   }
 
-  it("担当スタッフは未割当の依頼を承認できる（early claim）", async () => {
+  it("担当スタッフは回答で当日清掃を即時確定できる", async () => {
     const { staffId, requestId } = await seedAssignedStaffAndRequest();
     const staffActor: Actor = { role: "staff", staffId };
-    await claimRequest(staffActor, requestId);
+    const before = await getRequest(admin, requestId);
+    await submitResponse(staffActor, requestId, "available", before!.offer_date_start);
     const req = await getRequest(admin, requestId);
     expect(req?.status).toBe("assigned");
     expect(req?.assigned_staff_id).toBe(staffId);
   });
 
-  it("既に割当済みの依頼を承認すると RequestAlreadyClaimedError", async () => {
+  it("recipient ではないスタッフは回答できない", async () => {
     const { staffId, requestId } = await seedAssignedStaffAndRequest();
     const staffActor: Actor = { role: "staff", staffId };
-    await claimRequest(staffActor, requestId);
     // 別スタッフも同物件担当にして二重承認を試みる
     const { data: st2 } = await db.from("staff").insert({ name: "スタッフY" }).select().single();
     await db.from("staff_assignments").insert({ staff_id: st2!.id, property_id: propertyId });
+    const before = await getRequest(admin, requestId);
     await expect(
-      claimRequest({ role: "staff", staffId: st2!.id }, requestId),
-    ).rejects.toThrow(RequestAlreadyClaimedError);
+      submitResponse(
+        { role: "staff", staffId: st2!.id },
+        requestId,
+        "available",
+        before!.offer_date_start,
+      ),
+    ).rejects.toThrow("この依頼の回答対象ではありません");
+    await submitResponse(staffActor, requestId, "available", before!.offer_date_start);
+    const req = await getRequest(admin, requestId);
+    expect(req?.assigned_staff_id).toBe(staffId);
   });
 
-  it("担当外スタッフは承認できない", async () => {
+  it("担当外スタッフは回答できない", async () => {
     const { requestId } = await seedAssignedStaffAndRequest();
     const { data: outsider } = await db.from("staff").insert({ name: "担当外" }).select().single();
+    const before = await getRequest(admin, requestId);
     await expect(
-      claimRequest({ role: "staff", staffId: outsider!.id }, requestId),
-    ).rejects.toThrow("この物件の担当ではありません");
+      submitResponse(
+        { role: "staff", staffId: outsider!.id },
+        requestId,
+        "available",
+        before!.offer_date_start,
+      ),
+    ).rejects.toThrow("この依頼の回答対象ではありません");
   });
 
   it("管理者は手動でスタッフを割り当てられる", async () => {
@@ -193,7 +207,8 @@ describe("cleaning_requests 割当・進行遷移", () => {
   it("割当→開始→報告（startRequest）の遷移", async () => {
     const { staffId, requestId } = await seedAssignedStaffAndRequest();
     const staffActor: Actor = { role: "staff", staffId };
-    await claimRequest(staffActor, requestId);
+    const before = await getRequest(admin, requestId);
+    await submitResponse(staffActor, requestId, "available", before!.offer_date_start);
     await startRequest(staffActor, requestId);
     const req = await getRequest(admin, requestId);
     expect(req?.status).toBe("in_progress");
@@ -307,7 +322,8 @@ describe("cleaning_requests 競合制御（TOCTOU）", () => {
   it("startRequest を同時に二重実行しても開始は1回だけ", async () => {
     const { staffId, requestId } = await seedAssignedStaffAndRequest();
     const staffActor: Actor = { role: "staff", staffId };
-    await claimRequest(staffActor, requestId); // assigned
+    const before = await getRequest(admin, requestId);
+    await submitResponse(staffActor, requestId, "available", before!.offer_date_start);
 
     const results = await Promise.allSettled([
       startRequest(staffActor, requestId),
@@ -320,7 +336,8 @@ describe("cleaning_requests 競合制御（TOCTOU）", () => {
   it("assignRequest は開始済み依頼を割当で上書きしない（start と競合しても torn state にしない）", async () => {
     const { staffId, requestId } = await seedAssignedStaffAndRequest();
     const staffActor: Actor = { role: "staff", staffId };
-    await claimRequest(staffActor, requestId); // assigned to X
+    const before = await getRequest(admin, requestId);
+    await submitResponse(staffActor, requestId, "available", before!.offer_date_start);
     const { data: stY } = await db.from("staff").insert({ name: "競合Y" }).select().single();
     await db.from("staff_assignments").insert({ staff_id: stY!.id, property_id: propertyId });
 

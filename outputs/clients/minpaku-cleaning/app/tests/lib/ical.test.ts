@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest";
 import ical from "node-ical";
-import { normalizeEvents, parseIcsText } from "@/lib/ical";
+import {
+  assertPublicHttpUrl,
+  isBlockedAddress,
+  normalizeEvents,
+  parseIcsText,
+} from "@/lib/ical";
 
 const fixture = `BEGIN:VCALENDAR
 VERSION:2.0
@@ -76,5 +81,45 @@ describe("iCal 正規化", () => {
       },
     } as never);
     expect(events).toEqual([]);
+  });
+});
+
+describe("iCal SSRF ガード", () => {
+  it("内部・リンクローカル IP を拒否対象として判定する", () => {
+    expect(isBlockedAddress("127.0.0.1")).toBe(true);
+    expect(isBlockedAddress("10.0.0.5")).toBe(true);
+    expect(isBlockedAddress("172.16.0.1")).toBe(true);
+    expect(isBlockedAddress("192.168.1.20")).toBe(true);
+    expect(isBlockedAddress("169.254.169.254")).toBe(true);
+    expect(isBlockedAddress("::1")).toBe(true);
+    expect(isBlockedAddress("fe80::1")).toBe(true);
+    expect(isBlockedAddress("fc00::1")).toBe(true);
+  });
+
+  it("公開 IP は拒否対象にしない", () => {
+    expect(isBlockedAddress("8.8.8.8")).toBe(false);
+    expect(isBlockedAddress("2001:4860:4860::8888")).toBe(false);
+  });
+
+  it("http/https 以外、localhost、内部IP URLを拒否し、通常の公開ホスト名は許可する", () => {
+    const originalAllowlist = process.env.ICAL_FEED_ALLOWED_HOSTS;
+    delete process.env.ICAL_FEED_ALLOWED_HOSTS;
+    try {
+      expect(() => assertPublicHttpUrl("file:///tmp/feed.ics")).toThrow();
+      expect(() => assertPublicHttpUrl("http://localhost/feed.ics")).toThrow();
+      expect(() => assertPublicHttpUrl("http://127.0.0.1/feed.ics")).toThrow();
+      expect(() => assertPublicHttpUrl("http://10.0.0.1/feed.ics")).toThrow();
+      expect(() => assertPublicHttpUrl("http://169.254.169.254/latest")).toThrow();
+      expect(() => assertPublicHttpUrl("http://[::1]/feed.ics")).toThrow();
+      expect(assertPublicHttpUrl("https://calendar.example.com/feed.ics").hostname).toBe(
+        "calendar.example.com",
+      );
+    } finally {
+      if (originalAllowlist === undefined) {
+        delete process.env.ICAL_FEED_ALLOWED_HOSTS;
+      } else {
+        process.env.ICAL_FEED_ALLOWED_HOSTS = originalAllowlist;
+      }
+    }
   });
 });

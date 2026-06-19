@@ -155,12 +155,18 @@ test("StayClean デモ操作フロー", async ({ page }) => {
   await expect(page.getByRole("cell", { name: PROPERTY_NAME })).toBeVisible();
   await beat(1600);
 
-  // ============ シーン3: スタッフがトークンURLで承認 ============
+  // ============ シーン3: スタッフがトークンURLで都合を回答 ============
   await page.goto(`/staff/${staffToken}`);
   await page.waitForLoadState("networkidle");
   await beat(1200);
-  await rec(page.getByRole("button", { name: "承認する" }).first(), "approve");
-  await page.getByRole("button", { name: "承認する" }).first().click();
+  await rec(page.getByText("都合を回答").first(), "respond-link");
+  await page.getByText("都合を回答").first().click();
+  await page.waitForLoadState("networkidle");
+  await beat(600);
+  await rec(page.getByRole("button", { name: "回答を送信" }).first(), "respond-submit");
+  await page.getByRole("button", { name: "回答を送信" }).first().click();
+  await page.waitForLoadState("networkidle");
+  await page.goto(`/staff/${staffToken}`);
   await page.waitForLoadState("networkidle");
   await beat(1400);
 

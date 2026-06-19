@@ -2,7 +2,18 @@ import "server-only";
 import { createServiceClient } from "@/lib/supabase-server";
 import { assertAdmin } from "@/lib/db/scope";
 import type { Actor } from "@/lib/auth";
-import { fetchFeedEvents, type NormalizedEvent } from "@/lib/ical";
+import {
+  fetchFeedEvents,
+  IcalFetchError,
+  type IcalFetchErrorCode,
+  type NormalizedEvent,
+} from "@/lib/ical";
+import {
+  notify,
+  resolveAllAdmins,
+  resolveStaffRecipients,
+} from "@/lib/notify";
+import { buildNotificationMessage } from "@/lib/notify/templates";
 
 export type ReservationStatus = "active" | "cancelled";
 export type ReservationSource = "ical" | "manual";
@@ -47,6 +58,11 @@ export type SyncFeedResult = {
   updatedUids: string[];
   seenUids: string[];
 };
+
+export function syncFeedErrorStatus(error: unknown): `error: ${IcalFetchErrorCode}` {
+  if (error instanceof IcalFetchError) return `error: ${error.code}`;
+  return "error: fetch_failed";
+}
 
 function normalizeReservationRow(row: Record<string, unknown>): Reservation {
   const property = row.properties as { name?: string | null } | null | undefined;
@@ -185,7 +201,115 @@ async function upsertEventForFeed(
 
   const { error } = await db.from("reservations").insert(patch);
   if (error) throw error;
+  await notifyNewReservationBeforeScheduledClean(feed.property_id, event);
   return "created";
+}
+
+async function getPropertyName(propertyId: string): Promise<string | null> {
+  const db = createServiceClient();
+  const { data, error } = await db
+    .from("properties")
+    .select("name")
+    .eq("id", propertyId)
+    .maybeSingle();
+  if (error) throw error;
+  return data?.name ?? null;
+}
+
+function appUrl(): string {
+  return (process.env.NEXT_PUBLIC_APP_URL ?? "").replace(/\/$/, "");
+}
+
+async function notifyReservationCancelledRequests(
+  reservations: Reservation[],
+): Promise<void> {
+  if (reservations.length === 0) return;
+  const db = createServiceClient();
+  for (const reservation of reservations) {
+    const { data: requests, error } = await db
+      .from("cleaning_requests")
+      .select("id, property_id, checkin_date, checkout_date, guest_count, assigned_staff_id, properties(name)")
+      .eq("reservation_id", reservation.id)
+      .not("assigned_staff_id", "is", null)
+      .neq("status", "unassigned")
+      .neq("status", "cancelled");
+    if (error) throw error;
+    for (const req of (requests ?? []) as unknown as Array<{
+      id: string;
+      property_id: string;
+      checkin_date: string;
+      checkout_date: string;
+      guest_count: number;
+      assigned_staff_id: string;
+      properties: { name: string } | null;
+    }>) {
+      const staff = await resolveStaffRecipients([req.assigned_staff_id]);
+      await notify(
+        "request_cancelled",
+        staff,
+        buildNotificationMessage("request_cancelled", {
+          propertyName: req.properties?.name,
+          checkinDate: req.checkin_date,
+          checkoutDate: req.checkout_date,
+          guestCount: req.guest_count,
+        }),
+        {
+          request_id: req.id,
+          reservation_id: reservation.id,
+          property_id: req.property_id,
+        },
+      );
+    }
+  }
+}
+
+async function notifyNewReservationBeforeScheduledClean(
+  propertyId: string,
+  event: NormalizedEvent,
+): Promise<void> {
+  const db = createServiceClient();
+  const { data: targets, error } = await db
+    .from("cleaning_requests")
+    .select("id, property_id, checkin_date, checkout_date, guest_count, scheduled_clean_date, assigned_staff_id")
+    .eq("property_id", propertyId)
+    .not("scheduled_clean_date", "is", null)
+    .not("assigned_staff_id", "is", null)
+    .neq("status", "cancelled")
+    .gt("scheduled_clean_date", event.checkinDate);
+  if (error) throw error;
+  const list = (targets ?? []) as unknown as Array<{
+    id: string;
+    property_id: string;
+    checkin_date: string;
+    checkout_date: string;
+    guest_count: number;
+    scheduled_clean_date: string;
+    assigned_staff_id: string;
+  }>;
+  if (list.length === 0) return;
+
+  const admins = await resolveAllAdmins();
+  const propertyName = await getPropertyName(propertyId);
+  for (const target of list) {
+    const staff = await resolveStaffRecipients([target.assigned_staff_id]);
+    await notify(
+      "new_reservation_alert",
+      [...admins, ...staff],
+      buildNotificationMessage("new_reservation_alert", {
+        propertyName,
+        checkinDate: event.checkinDate,
+        checkoutDate: event.checkoutDate,
+        guestCount: null,
+        cleanDate: target.scheduled_clean_date,
+        adminUrl: appUrl() ? `${appUrl()}/admin/requests/${target.id}` : null,
+      }),
+      {
+        request_id: target.id,
+        property_id: propertyId,
+        reservation_checkin_date: event.checkinDate,
+      },
+    );
+  }
 }
 
 export async function syncFeed(actor: Actor, feed: IcalFeed): Promise<SyncFeedResult> {
@@ -244,8 +368,9 @@ export async function detectCancellations(
     )
     .select("*");
   if (error) throw error;
-  // TODO(P3): reservation↔cleaning_request リンク導入後、キャンセル通知を連携する。
-  return (data ?? []) as Reservation[];
+  const cancelled = (data ?? []) as Reservation[];
+  await notifyReservationCancelledRequests(cancelled);
+  return cancelled;
 }
 
 export async function setReservationGuestCount(
@@ -278,8 +403,9 @@ export async function cancelReservationManually(
     .select("*")
     .single();
   if (error) throw error;
-  // TODO(P3): reservation↔cleaning_request リンク導入後、管理者/スタッフ通知を連携する。
-  return data as Reservation;
+  const reservation = data as Reservation;
+  await notifyReservationCancelledRequests([reservation]);
+  return reservation;
 }
 
 export async function updateIcalFeedFetchStatus(

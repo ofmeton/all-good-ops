@@ -4,6 +4,7 @@ import { isCronAuthenticated } from "@/lib/cron-auth";
 import { serverErrorResponse } from "@/lib/api-error";
 import { notify, resolveStaffRecipients } from "@/lib/notify";
 import { tomorrowInJST } from "@/lib/date";
+import { buildNotificationMessage } from "@/lib/notify/templates";
 
 // 前日17:00 に Vercel Cron で呼ばれ、翌日チェックインの assigned 依頼の担当スタッフへ
 // リマインドを送る。dedupeToday=true で重複起動を防御する。
@@ -38,10 +39,11 @@ export async function GET(req: NextRequest) {
     await notify(
       "reminder",
       staff,
-      {
-        subject: "明日の清掃リマインド",
-        text: `明日 ${r.checkin_date} は ${r.properties?.name ?? "物件"} の清掃です（チェックアウト: ${r.checkout_date}）。`,
-      },
+      buildNotificationMessage("reminder", {
+        propertyName: r.properties?.name,
+        checkinDate: r.checkin_date,
+        checkoutDate: r.checkout_date,
+      }),
       { request_id: r.id, date: r.checkin_date },
       { dedupeToday: true },
     );

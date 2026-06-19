@@ -4,16 +4,12 @@ import type { Actor } from "@/lib/auth";
 import {
   detectCancellations,
   listAllIcalFeeds,
+  syncFeedErrorStatus,
   syncFeed,
   updateIcalFeedFetchStatus,
 } from "@/lib/db/reservations";
 
 const cronActor: Actor = { role: "admin", adminId: "cron", roleLevel: 1 };
-
-function errorStatus(error: unknown): string {
-  const message = error instanceof Error ? error.message : String(error);
-  return `error:${message}`.slice(0, 500);
-}
 
 export async function GET(req: NextRequest) {
   if (!isCronAuthenticated(req)) {
@@ -34,7 +30,8 @@ export async function GET(req: NextRequest) {
       cancelCount += cancelled.length;
     } catch (e) {
       errorCount += 1;
-      await updateIcalFeedFetchStatus(cronActor, feed.id, errorStatus(e));
+      console.error("ical-sync failed", { feedId: feed.id, error: e });
+      await updateIcalFeedFetchStatus(cronActor, feed.id, syncFeedErrorStatus(e));
     }
   }
 
