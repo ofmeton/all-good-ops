@@ -1,6 +1,6 @@
 ---
 name: codex-implement
-description: まとまった機能の実装・テストを Codex(gpt-5.5 high・定額サブスク) に委任し、Claude は設計(architect)とレビュー(pr-review/spec-validator)を握る半委任フロー。Claude サブスク枠のトークンを節約しつつ品質を保つ。ユーザーが「実装して」「この機能を作って」「Codex に実装させて」等、標準以上の実装を依頼した時に起動する。軽量タスク・単発調査は対象外（秘書直 / 通常実装で足りる）。
+description: まとまった機能の実装・テストに加え、バグ修正・デバッグループ・大規模コードベース調査/探索・ローカルデータ分析/集計を Codex(gpt-5.5・定額サブスク) に委任し、Claude は設計(architect)と最終レビュー(一次は Codex セルフレビュー)を握る半委任フロー。Claude サブスク枠のトークンを節約しつつ品質を保つ。ユーザーが「実装して」「この機能を作って」「このバグ直して」「Codex に実装させて」「このコードベース調べて」「この集計やって」等を依頼した時に起動する。軽量タスク・1行修正・Web リサーチ・ブラウザ操作・外部 MCP(freee/Asana/Gmail/Calendar)・発信の文章執筆/繊細な連絡は対象外（Codex の盲点 or Claude 中核価値）。
 ---
 
 # codex-implement — Codex を実装エンジンに据える半委任フロー
@@ -11,8 +11,14 @@ description: まとまった機能の実装・テストを Codex(gpt-5.5 high・
 → Codex は定額なので `external-api-cost-disclosure`（従量 API のコスト開示）の**対象外**。コスト提示は不要。
 
 ## いつ使う / 使わない
-- **使う**: 標準以上（CLAUDE.md コスト分類の標準/熟議）の機能実装・サブシステム・複数ファイル改修。
-- **使わない**: 軽量（事実確認・計算・テンプレ・リマインド）は秘書直。単発の調査・1 行修正は通常実装で足りる。
+- **使う**:
+  - 標準以上（CLAUDE.md コスト分類の標準/熟議）の機能実装・サブシステム・複数ファイル改修。
+  - **（A）バグ修正・デバッグループ**: バグ再現→修正→検証ループ（`superpowers:systematic-debugging` の調査・修正フェーズ）。最もトークンを食うので独立したバグ修正依頼も既定で Codex へ。Claude は再現条件の言語化と最終検証を握る。
+  - **（C）大規模調査・コードベース探索**: 監査・横断 grep・ログ解析・large-context 精読など read-heavy な探索。Codex に worktree 内で走らせ、Claude は**結論サマリだけ受領**（生ファイルを context に積まない）。
+  - **（D）ローカルデータ分析・集計・変換**: mf-finance 等の SQLite 分析クエリ・CSV/JSON 集計・大量ファイル変換スクリプト。ネット不要でリポジトリ内完結するものに限る。
+- **使わない**:
+  - 軽量（事実確認・計算・テンプレ・リマインド）は秘書直。単発の 1 行修正は通常実装で足りる。
+  - **Codex の構造的盲点（ネット不可・ブラウザ不可・Claude 側 MCP 不可）**: Web リサーチ（WebSearch/firecrawl/deep-research）/ ブラウザ操作（chrome-devtools/Playwright・フォーム代行・X 投稿）/ 外部 MCP（freee/Asana/Gmail/Calendar/Supabase 書込）/ 発信の文章執筆・繊細な連絡文面・伴走（文体・配慮・判断＝Claude の中核価値）。これらは Claude 専管。
 
 ## フロー
 1. **設計（Claude architect）**: `dev-automation/architect` で standards 準拠のブループリントを作る（ファイル一覧・データ契約・API 形・受け入れ基準・テスト要件・改善レバー）。最難関設計のみ Fable 5。← ここは省略しない（Codex の規約逸脱を防ぐ土台）。
@@ -25,9 +31,10 @@ description: まとまった機能の実装・テストを Codex(gpt-5.5 high・
    - `prompt` = ブループリント全文を埋め込む（Codex はリポジトリ規約を知らない。worktree root の `AGENTS.md` を自動で読むが、ブループリントにも要点を再掲する）
    - 完了後、Codex は**ビルダーサマリ**（追加/編集ファイル・契約差分・テスト結果・逸脱・人間ゲート該当）を返す。
    - **Codex がレート/使用量制限で落ちたら** → `## レート制限時の自動フォールバック`（Sonnet 4.6 へ自動切替）へ。
-4. **レビュー（Claude）**: Codex のサマリと `git diff` を受けて:
-   - `pr-review-toolkit:*`（必須 `code-reviewer` + `silent-failure-hunter`、案件で `type-design-analyzer`/`pr-test-analyzer`）
-   - feature-factory 文脈なら `dev-automation/spec-validator` で承認済み story/brief と照合
+4. **レビュー（Codex 一次パス → Claude 最終判断）**: トークン節約のためレビューも二段にする。
+   - **（B）一次レビュー = Codex**: `mcp__codex__codex-reply`（同 `threadId`）で「自分の diff を `code-reviewer` + `silent-failure-hunter` 観点で批判的にセルフレビューし、検出した問題と修正案を列挙せよ（自己弁護でなく粗探し）」と指示。別スレッド/別呼び出しで**第三者レビュー視点**を取らせてもよい（`feedback_codex_review_as_reviewer_option`＝別モデルの目）。Codex は明白なバグ・silent failure を自分で潰してから上げる。
+   - **最終判断 = Claude（必須・省略不可）**: Codex 一次レビュー後の diff を Claude が確認。**重要案件・本番影響大・人間ゲート該当**は `pr-review-toolkit:*`（`code-reviewer` + `silent-failure-hunter`、案件で `type-design-analyzer`/`pr-test-analyzer`）を Claude サブエージェントで回す。軽微な改修は Claude メインループの diff 確認＋Codex 一次レビューで足りる（Opus サブagent の二重起動を避ける）。
+   - feature-factory 文脈なら `dev-automation/spec-validator` で承認済み story/brief と照合（これは Claude が握る＝仕様の真実判定）。
    - 指摘は `mcp__codex__codex-reply`（`threadId` 指定）で同スレッドに差し戻し → 3〜4 を回す
 5. **デプロイ（Claude 自走）**: レビュー通過後、commit→push→PR→auto-merge→deploy まで自走（`feedback_deploy_no_confirm`）。**人間承認・PR 承認は不要**。
 6. **記録**: `data/usage-log.jsonl` に `implementer: "codex"` を含めて追記（Codex 分は定額枠＝Claude/API 月予算とは別管理）。
