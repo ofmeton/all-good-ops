@@ -59,6 +59,7 @@
   emerge(document.querySelector('.info__photo'), '.info', 'top 64%');
   $$('.gal__item img').forEach(img=>emerge(img, img.closest('.gal__item'), 'top 84%'));
   emerge(document.querySelector('.sleep__ph img'), '.sleep__ph', 'top 84%');
+  $$('.xp__ph img').forEach(img=>emerge(img, img.closest('.xp__ph'), 'top 84%'));
 
   /* ROOMS：横スクロールで巡る（pin） */
   document.body.classList.add('pinmode');
