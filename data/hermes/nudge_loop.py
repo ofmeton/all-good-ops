@@ -74,14 +74,37 @@ def telegram(env, text):
         f"https://api.telegram.org/bot{env['TELEGRAM_BOT_TOKEN']}/sendMessage", data=data), timeout=20)
 
 
+CAL_LEAD_DAYS = 7  # カレンダー準備タスクは予定の何日前から催促するか
+
+
+def _due_date(p):
+    s = (p.get("Due", {}).get("date") or {}).get("start")
+    if not s:
+        return None
+    try:
+        return datetime.fromisoformat(s.replace("Z", "+00:00")).astimezone(JST).date()
+    except Exception:
+        try:
+            return datetime.strptime(s[:10], "%Y-%m-%d").date()
+        except Exception:
+            return None
+
+
 def classify_card(p, created_jst, today):
     """催促理由を返す。対象外なら None。"""
     st = sel(p, "Status")
     au = sel(p, "Autonomy")
+    src = sel(p, "Source")
     if st == "Blocked":
         return "🚧 詰まってる(要対応)"
     if st == "NeedInfo":
         return "❓ 情報待ち(返事ほしい)"
+    # カレンダー由来の準備タスクは「放置」扱いせず、予定が近づいた時だけ催促(遠い未来を毎日鳴らさない)
+    if src == "Calendar":
+        due = _due_date(p)
+        if due is not None and today <= due <= today + timedelta(days=CAL_LEAD_DAYS):
+            return "📅 まもなく予定(要準備)"
+        return None
     if au == "reminder" and st in ("Ready", "Inbox"):
         return "⏰ リマインド"
     if st == "Inbox" and au != "reminder" and created_jst.date() < today:
