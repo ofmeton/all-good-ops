@@ -152,6 +152,27 @@ def classify(env, ev, human_time):
         return {"needs_prep": False}
 
 
+def notion(env, method, path, body=None):
+    data = json.dumps(body).encode("utf-8") if body is not None else None
+    req = urllib.request.Request(
+        f"https://api.notion.com/v1/{path}", data=data, method=method,
+        headers={"Authorization": f"Bearer {env['NOTION_TOKEN']}", "Notion-Version": NOTION_VER,
+                 "Content-Type": "application/json"})
+    with urllib.request.urlopen(req, timeout=40) as r:
+        return json.loads(r.read().decode("utf-8"))
+
+
+def card_exists(env, event_id):
+    """同じ RawSourceId のカードが既に Notion にあれば True(マシン跨ぎの重複防止)。"""
+    body = {"filter": {"property": "RawSourceId", "rich_text": {"equals": event_id}}, "page_size": 1}
+    try:
+        r = notion(env, "POST", f"databases/{NOTION_DB_ID}/query", body)
+        return len(r.get("results", [])) > 0
+    except Exception as e:
+        log(f"  dedup照会失敗(作成は続行) {event_id[:12]}: {e}")
+        return False
+
+
 def create_card(env, ev, verdict, date_str, human_time, dry):
     title = (verdict.get("title") or f"{ev.get('summary','予定')}の準備").strip()[:100]
     summary = (verdict.get("summary") or "").strip()
@@ -222,6 +243,10 @@ def main():
         state[eid] = updated  # 判定に関わらず処理済みに(再判定しない)
         if not verdict.get("needs_prep"):
             skipped += 1
+            continue
+        if not dry and card_exists(env, eid):
+            skipped += 1
+            log(f"  既存カードあり→skip ({(verdict.get('title') or ev.get('summary',''))[:24]})")
             continue
         if create_card(env, ev, verdict, date_str, human_time, dry):
             created += 1
