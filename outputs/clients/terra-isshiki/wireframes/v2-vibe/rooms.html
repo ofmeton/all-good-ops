@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ja"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TERRA — 部屋と空間 / Rooms</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%231A1410'/%3E%3Ctext x='16' y='23' font-family='serif' font-size='20' fill='%23F5F1EA' text-anchor='middle'%3ET%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@600;700;900&family=Zen+Old+Mincho:wght@400;500&family=EB+Garamond:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head><body>
+
+<input id="navt" class="nav__t" type="checkbox" aria-hidden="true">
+<nav class="nav">
+  <a class="nav__logo" href="index.html">TERRA HAYAMA</a>
+  <div class="nav__menu"><a href="rooms.html">Rooms</a><a href="stay.html">Stay</a><a href="access.html">Access</a><a href="owner.html">Owner</a></div>
+  <label class="nav__burger" for="navt" aria-label="メニューを開閉"><span></span><span></span><span></span></label>
+</nav>
+<aside class="nav__panel" aria-label="メニュー">
+  <a href="index.html">Home<span class="en">トップ</span></a>
+  <a href="rooms.html">Rooms<span class="en">部屋と空間</span></a>
+  <a href="stay.html">Stay<span class="en">過ごし方</span></a>
+  <a href="access.html">Access<span class="en">アクセス</span></a>
+  <a href="owner.html">Owner<span class="en">私たちのこと</span></a>
+</aside>
+<div class="topveil" aria-hidden="true"></div>
+
+<!-- ページヒーロー -->
+<header class="pghero">
+  <img class="pghero__bg" src="assets/img/rooms-hero.webp" alt="一棟貸しの内観">
+  <div class="pghero__scrim"></div>
+  <div class="pghero__in">
+    <p class="pghero__tag">Rooms</p>
+    <h1 class="pghero__k">部屋と空間</h1>
+    <p class="pghero__s">A villa for up to eight</p>
+  </div>
+  <p class="pgcrumb">TERRA HAYAMA ・ 部屋と空間</p>
+</header>
+
+<!-- 基本スペック（住まいの概要） -->
+<section class="info pad" id="spec">
+  <img class="info__photo" src="assets/img/ldk-01.webp" alt="リビングダイニング">
+  <div class="info__facts">
+    <p class="tag reveal">The house</p>
+    <h2 class="htitle reveal">住まいの概要<span class="en">Spec</span></h2>
+    <p class="info__lead reveal">一軒家の二階を、一棟まるごと。<br>家族や仲間と、まとまって。</p>
+    <div class="fact reveal"><span class="l">capacity</span><span class="n">最大 8 名</span><span class="d">快適に過ごす目安は 6 名</span></div>
+    <div class="fact reveal"><span class="l">size &amp; layout</span><span class="n">75㎡ ・ 2階一棟</span><span class="d">LDK＋寝室、ひのきのバス、フルキッチン</span></div>
+    <div class="fact reveal"><span class="l">parking</span><span class="n">2 台</span><span class="d">1階フロアに駐車スペース</span></div>
+  </div>
+</section>
+
+<div class="aze-wrap"><div class="aze-fill"></div><svg class="aze" viewBox="0 0 1400 34" preserveAspectRatio="none"><path class="shadow" d="M0 20 C 160 9 300 27 520 18 S 940 9 1120 20 S 1320 25 1400 15"/><path d="M0 18 C 160 7 300 25 520 16 S 940 7 1120 18 S 1320 23 1400 13"/></svg></div>
+
+<!-- 空間ギャラリー -->
+<section class="gal" id="gallery">
+  <article class="gal__item wide" data-para="0.05"><div class="fr"><img src="assets/img/ldk-01.webp" alt="リビングダイニング"></div><p class="gal__cap reveal">リビングダイニング<span class="en">Living</span></p><p class="reveal">木天井と土壁に包まれた、一棟の中心。窓の外には葉山の空が広がります。</p></article>
+  <article class="gal__item" data-para="0.07"><div class="fr"><img src="assets/img/kitchen-01.webp" alt="フルキッチン"></div><p class="gal__cap reveal">フルキッチン<span class="en">Kitchen</span></p><p class="reveal">自炊が楽しくなる広さと設え。地元の食材で、自分たちの食卓を。</p></article>
+  <article class="gal__item" data-para="0.05"><div class="fr"><img src="assets/img/hero-03-dining.webp" alt="ダイニング"></div><p class="gal__cap reveal">ダイニング<span class="en">Dining</span></p><p class="reveal">8人で囲める大きなテーブル。みんなで過ごす、長い夜に。</p></article>
+  <article class="gal__item" data-para="0.07"><div class="fr"><img src="assets/img/bath.webp" alt="ひのきのバス"></div><p class="gal__cap reveal">ひのきのバス<span class="en">Bath</span></p><p class="reveal">一日の終わりを、檜の香りとともに。</p></article>
+  <article class="gal__item" data-para="0.05"><div class="fr"><img src="assets/img/ldk-03.webp" alt="くつろぎの居間"></div><p class="gal__cap reveal">くつろぎの居間<span class="en">Lounge</span></p><p class="reveal">思い思いに過ごせる、ゆとりの余白。</p></article>
+  <article class="gal__item wide" data-para="0.04"><div class="fr"><img src="assets/img/ldk-05.webp" alt="もうひとつの居場所"></div><p class="gal__cap reveal">もうひとつの居場所<span class="en">Corner</span></p><p class="reveal">本を読む、まどろむ。ひとりの時間も、ここに。</p></article>
+</section>
+
+<div class="aze-wrap"><div class="aze-fill"></div><svg class="aze" viewBox="0 0 1400 34" preserveAspectRatio="none"><path class="shadow" d="M0 16 C 200 26 360 7 560 16 S 980 28 1180 14 S 1340 18 1400 20"/><path d="M0 14 C 200 24 360 5 560 14 S 980 26 1180 12 S 1340 16 1400 18"/></svg></div>
+
+<!-- 寝床 -->
+<section class="sleep" id="beds">
+  <div class="sleep__grid">
+  <figure class="sleep__ph" style="margin:0"><div class="fr"><img src="assets/img/hero-02-bedroom.webp" alt="寝室"></div></figure>
+  <div class="sleep__tx">
+    <p class="tag reveal">Sleeping</p>
+    <h2 class="htitle reveal">寝床のこと<span class="en">Beds</span></h2>
+    <p class="info__lead reveal">最大8名が、ゆったり休めるように。</p>
+    <dl class="sleep__kv reveal">
+      <div class="row"><dt>寝室</dt><dd>ベッド＋寝具一式<span class="prov">構成は確認中</span></dd></div>
+      <div class="row"><dt>2段ベッド</dt><dd>子どもにも人気の寝床<span class="prov">台数は確認中</span></dd></div>
+      <div class="row"><dt>補助</dt><dd>布団でプラス可（人数に応じて）</dd></div>
+    </dl>
+    <p class="reveal" style="color:var(--ink70);margin-top:18px">※ 寝具は1セット／人をご用意。寝間着はご持参ください。</p>
+  </div>
+  </div>
+</section>
+
+<div class="aze-wrap"><div class="aze-fill"></div><svg class="aze" viewBox="0 0 1400 34" preserveAspectRatio="none"><path class="shadow" d="M0 18 C 220 9 380 25 600 16 S 980 9 1180 20 S 1340 24 1400 14"/><path d="M0 16 C 220 7 380 23 600 14 S 980 7 1180 18 S 1340 22 1400 12"/></svg></div>
+
+<!-- 設備・アメニティ -->
+<section class="amen" id="amenities">
+  <div class="amen__grid">
+    <h2 class="htitle reveal" style="margin-bottom:6px">設備・アメニティ<span class="en">Amenities</span></h2>
+    <p class="reveal" style="color:var(--ink70);margin:0">暮らすように過ごすための、ひと通り。</p>
+    <div class="amen__list">
+      <div class="reveal"><span class="en">01</span>フルキッチン（調理器具・食器）</div>
+      <div class="reveal"><span class="en">02</span>ひのきのバス</div>
+      <div class="reveal"><span class="en">03</span>抹茶マシーン</div>
+      <div class="reveal"><span class="en">04</span>Wi-Fi（無料）</div>
+      <div class="reveal"><span class="en">05</span>洗濯機・乾燥機</div>
+      <div class="reveal"><span class="en">06</span>冷暖房 各室</div>
+      <div class="reveal"><span class="en">07</span>ドライヤー・基礎アメニティ</div>
+      <div class="reveal"><span class="en">08</span>駐車場 2台</div>
+    </div>
+  </div>
+</section>
+
+<div class="aze-wrap"><div class="aze-fill"></div><svg class="aze" viewBox="0 0 1400 34" preserveAspectRatio="none"><path class="shadow" d="M0 20 C 160 9 300 27 520 18 S 940 9 1120 20 S 1320 25 1400 15"/><path d="M0 18 C 160 7 300 25 520 16 S 940 7 1120 18 S 1320 23 1400 13"/></svg></div>
+
+<!-- ご利用にあたって -->
+<section class="faq" id="notes">
+  <div class="faq__grid">
+    <h2 class="htitle reveal" style="margin-bottom:clamp(24px,4vh,46px)">ご利用にあたって<span class="en">Notes</span></h2>
+    <dl>
+      <div class="faq__row reveal"><dt>チェックイン</dt><dd>IN 16:00 〜 ／ OUT 11:00</dd></div>
+      <div class="faq__row reveal"><dt>定員</dt><dd>最大 8 名（快適に過ごす目安は 6 名）</dd></div>
+      <div class="faq__row reveal"><dt>喫煙</dt><dd>全面禁煙（屋外は可）</dd></div>
+      <div class="faq__row reveal"><dt>ペット</dt><dd>応相談<span class="prov">条件は確認中</span></dd></div>
+    </dl>
+    <a class="lnk reveal" href="index.html">トップに戻る →</a>
+  </div>
+</section>
+
+<div class="aze-wrap"><div class="aze-fill"></div><svg class="aze" viewBox="0 0 1400 34" preserveAspectRatio="none"><path class="shadow" d="M0 16 C 200 26 360 7 560 16 S 980 28 1180 14 S 1340 18 1400 20"/><path d="M0 14 C 200 24 360 5 560 14 S 980 26 1180 12 S 1340 16 1400 18"/></svg></div>
+
+<!-- RESERVE -->
+<section class="reserve pad">
+  <p class="tag reveal" style="text-align:center">Reservation</p>
+  <h2 class="reserve__t reveal">ご予約</h2>
+  <p class="reserve__c reveal">空き状況の確認・ご予約は Airbnb から。</p>
+  <a class="btn reveal" href="https://www.airbnb.jp/" target="_blank" rel="noopener">Airbnbで予約する　→</a>
+</section>
+<footer class="foot">TERRA HAYAMA ・ 〒240-0111 神奈川県三浦郡葉山町一色 1759-1-5 ・ 運営 株式会社BEAT ICE ・ © 2026</footer>
+<a class="dock" href="https://www.airbnb.jp/" target="_blank" rel="noopener">Airbnbで予約する →</a>
+
+<script src="assets/vendor/gsap.min.js"></script>
+<script src="assets/vendor/ScrollTrigger.min.js"></script>
+<script src="app.js"></script>
+</body></html>
