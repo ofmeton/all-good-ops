@@ -1,16 +1,16 @@
 ---
 type: meta
 title: "Hot Cache"
-updated: 2026-06-19
+updated: 2026-06-21
 ---
 # Recent Context
 
 > セッション間で保持される ~500 words のコンテキストキャッシュ。セッション開始時に最優先で読む。詳細: [[SCHEMA]] §ホットキャッシュ。
 
 ## Last Updated
-2026-06-19 — **doda 求人応募代行**(軽量・非コーディング): chrome-devtoolsで工藤陸のReact/Next.js経験に合う2件選定(チームラボ webアプリエンジニア/セレス 自社開発上流)→未ログイン+必須空欄ブロッカーを本人提供の携帯/〒で越え→不可逆な書類応募を最終ゲート1回(AskUserQuestion)で送信完了。会社名/電話/前回選考状況をMacメモ記録。前回応募分=Gmail調査で自分発スレッド未確認。学び→`feedback_chrome_devtools_fill_limitations`に「充足判定はinnerTextでなくinput.valueで見る」追記・memory user_basic_profileに連絡先追加。retro [[../outputs/retrospectives/2026-06-19-0003-doda-job-apply-proxy]]。
-- 前(2026-06-18): **TERRA HAYAMA HP 改修第1-3弾**本番反映(PR#144/#148/#207 / https://site-eosin-one-44.vercel.app): TOP再設計・ハンバーガーバグ根治(isolate FVにfixedヘッダー閉込め→section外へ)・reveal演出(RevealRoot/reduced-motion)・ROOMSカルーセル。retro [[../outputs/retrospectives/2026-06-18-terra-hp-redesign-motion]]。
-- 前(2026-06-18): そうま高校選び調査→souma.md追記。クラウドワークスForm代理入力→本人送信(chrome fill制限=dropdown keyboard/date type/検証evaluate_script)。
+2026-06-21 — **思考パートナー(思考版ジャーナリング)MVP** PR#240 merge: 「考えなきゃと思いつつ考えられない」テーマを捕捉→着手→起動→完結まで運ぶループ。journalingの双子だが**対話で結論まで押し込むgrill-me寄り**。skill`thinking`(「考えたい」「思考タイム」等で起動・次セッションから自動)+`~/journal/think`(CARTE/inbox/entries・git管理外private)+毎朝08:00 routine`trig_01K7Amonz4rZHCcBXrkH753m`。Phase2(Telegram→Notion捕捉)は別計画。試運転E2E『何を生業とし何を武器とするか』で武器=子どもの主導権回復/金と意味は別エンジン/方針A→B/生活費26万まで本人決定。状況事実2件raw保存。学び→`feedback_branch_divergence_check_before_merge`に「bg isolation下はローカルマージ前にmain dirty/divergence点検・汚れてたらPR」追記。retro [[../outputs/retrospectives/2026-06-21-0400-thinking-partner]]。
+- 前(2026-06-19): doda求人応募代行(chrome-devtools・2社書類応募)。decision-prep skill新設(PR#236)。
+- 前(2026-06-18): TERRA HP改修第1-3弾(PR#144/#148/#207)・そうま高校調査・クラウドワークスForm代理入力。
 - 前(2026-06-15): mf-finance 資金繰りPR#214・web-ui-bridge(PR#208-213)・X発信刷新(PR#185-205)。
 
 ## Current Focus
