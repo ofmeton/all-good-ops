@@ -1,18 +1,18 @@
 ---
 type: meta
 title: "Hot Cache"
-updated: 2026-06-19
+updated: 2026-06-21
 ---
 # Recent Context
 
 > セッション間で保持される ~500 words のコンテキストキャッシュ。セッション開始時に最優先で読む。詳細: [[SCHEMA]] §ホットキャッシュ。
 
 ## Last Updated
-2026-06-19 — **mf-finance 大改修(PR#215〜231)**: DB を main repo へ移設し worktree 非依存化(resolver・#215)/見切れ修正(#216)/**web-ui-bridge(Cue)統合+pending永続化**(#217)/**UI/IA刷新 Phase①**(左サイドバー+全幅+5系統ナビ #218)/**カード引落 Phase②**(#220)とその連鎖修正→**締め日基準の請求期間集計**(closing_day/cardBillingPeriod #230)+**引落先口座**(debit_account・口座別列からカード除外 #231)/MFデータ再取得(#222・txn 4178→4297)/optimizerに分類ルール作成承認(#226)。学び=ドメイン数値ロジックは計算モデルを先に確定(カード請求が5回反復)→wiki engineering-principles・memory feedback_user_perception_vs_data_check 追記。retro [[../outputs/retrospectives/2026-06-19-0319-mf-finance-card-billing]]。
-- 前(2026-06-19): **doda 求人応募代行**で正社員2社に書類応募送信(チームラボ/セレス・訂正削除不可)。学び→`feedback_chrome_devtools_fill_limitations`(充足判定はinput.value)。retro [[../outputs/retrospectives/2026-06-19-0003-doda-job-apply-proxy]]。
-- 前(2026-06-18): **TERRA HAYAMA HP 改修第1-3弾**本番反映(PR#144/#148/#207 / https://site-eosin-one-44.vercel.app)。retro [[../outputs/retrospectives/2026-06-18-terra-hp-redesign-motion]]。
-- 前(2026-06-18): そうま高校選び調査→souma.md追記。クラウドワークスForm代理入力→本人送信(chrome fill制限=dropdown keyboard/date type/検証evaluate_script)。
-- 前(2026-06-15): mf-finance 資金繰りPR#214・web-ui-bridge(PR#208-213)・X発信刷新(PR#185-205)。
+2026-06-21 — **スキル資産の整理＋拡張**: 既存スキルを9ワークフロー別コンボに整理→化ける上位3(feature-factory×codex×pr-review / X発信ライン×optimizer / LP制作×portfolio実績化)を提示。新スキル `decision-prep`(意思決定前処理=grill-me→brainstorming→deliberation連鎖・判断の重さ別フォールバック・熟議前に人間承認ゲート)を新設→PR#236でmain反映。`demo-video-pipeline` 改修=演出リッチ化(Remotion実装前に`remotion-best-practices`起動必須/カーソル・テロップ作法を`create-onboarding-video`に統一/BGM・SFX・TTS・字幕・トランジション/3スキル棲み分け表で両取り編集)。push前 `git diff --stat main..HEAD` でterra/ibasho削除混入を検知→rebase是正、未push独自コミット(ibasho b75fc2f)は`pull --rebase`で保護。retro [[../outputs/retrospectives/2026-06-21-0318-skill-combo-decision-demo-video]]。
+- 前(2026-06-19): **mf-finance 大改修(PR#215〜231)**: DB を main repo へ移設し worktree 非依存化(resolver #215)/web-ui-bridge(Cue)統合+pending永続化(#217)/UI/IA刷新 Phase①(左サイドバー+全幅+5系統ナビ #218)/カード引落 Phase②(#220)→締め日基準の請求期間集計(closing_day/cardBillingPeriod #230)+引落先口座(debit_account・口座別列からカード除外 #231)/MFデータ再取得(#222)/optimizer分類ルール作成承認(#226)。学び=ドメイン数値ロジックは計算モデルを先に確定(カード請求が5回反復)→wiki engineering-principles 追記。retro [[../outputs/retrospectives/2026-06-19-0319-mf-finance-card-billing]]。
+- 前(2026-06-19): **doda 求人応募代行**(非コーディング): React/Next.js経験に合う2件選定→ブロッカー越え→不可逆応募を最終ゲート1回で送信。学び→`feedback_chrome_devtools_fill_limitations`(充足判定はinput.value)。retro [[../outputs/retrospectives/2026-06-19-0003-doda-job-apply-proxy]]。
+- 前(2026-06-18): TERRA HP改修第1-3弾(PR#144/#148/#207)・そうま高校選び・クラウドワークスForm代理入力。
+- 前(2026-06-15): mf-finance資金繰りPR#214・web-ui-bridge(PR#208-213)・X発信刷新(PR#185-205)。
 
 ## Current Focus
 - **X発信 新運用**: 自動収集OFF・**手動ブックマークURLを `scripts/ingest-bookmarks.ts`/`/admin/ingest-bookmarks` で投入**→curation→writer(知見+段取り+新ターゲット)→check→LINE承認。writer は MAv4(再焼成済)。テンプレ patch は runtime 注入(re-bake不要・deployのみ)。collector復活は `collector_enabled` 行削除/=1。
@@ -27,9 +27,8 @@ updated: 2026-06-19
 - 🔴 **はぐりん persona**: 名義境界の戦略再判断 未着手。
 
 ## Recently Touched
-- `apps/mf-finance/`: `lib/cashflow/rolling.mjs`(buildRolling/buildAccountRolling/buildBalanceMatrix/monthEndOffsetDays/週次・変動・override)・`lib/cashflow-queries.ts`・`lib/cashflow-actions.ts`・`lib/actions.ts`・`lib/optimizer/{types,actions}.ts`+`scripts/optimizer-{export,propose}.mjs`(suggest_transfer)・`db/{schema.sql,migrate.mjs}`(account/transfer_fees/manual_transfers)・`app/cashflow/{page,CashflowTimeline,TransferEditor,ScheduledEditor,OccurrenceActions}.tsx`+`PeriodToggle`・`app/components/{MoneyRadar,RecurringEditor}.tsx`・`app/settings/TransferFeeEditor.tsx`。data/*.json・data/mf-finance.db は gitignore。
-- `.claude/skills/codex-implement/SKILL.md`(Next+next/fontはCodexでbuild不可)・memory [[project-mf-finance-dashboard]]・[[feedback-browser-test-all-user-ops]](React制御inputはsetter+event/evaluate_script優先)
-- 前: web-ui-bridge(PR#208-213 overlay/daemon/smoke)・X発信(ingest/curation/pdca-eval)
+- `.claude/skills/decision-prep/SKILL.md`(新設・PR#236)・`~/.claude/skills/demo-video-pipeline/SKILL.md`(Phase3演出リッチ化＋`create-onboarding-video`/`remotion-best-practices`連携)・memory [[feedback-worktree-file-reread]](隔離後の書込先パスもworktree起点に追記)
+- 前: `apps/mf-finance/`(cashflow rolling/optimizer suggest_transfer・data/mf-finance.dbはgitignore)・`.claude/skills/codex-implement/SKILL.md`・web-ui-bridge(PR#208-213)・X発信(ingest/curation/pdca-eval)
 
 ## Open Questions / Frontiers
 - **enforce 自動flip 依存**: collect が回り続け shadow が7run貯まるか（brownout halt 注意）。基準到達で自動切替＋LINE通知。
