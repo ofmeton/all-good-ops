@@ -17,11 +17,26 @@ export type NotifyRecipient = {
 
 export type NotifyMessage = { subject: string; text: string };
 
-// LINE で送る kind を絞る（LINE 無料枠 200通/月 維持のため）。
-// request_created のみ LINE 対象（依頼作成 → 担当スタッフへの即時通知。
-// 納品先業務で「調整時間」がボトルネックのため即時性を投資する）。
-// 他は line_user_id があってもメールに直行する。
-const LINE_ENABLED_KINDS = new Set<NotificationKind>(["request_created"]);
+// LINE で送る kind を一箇所で制御する。運用通数を見て kind 単位で切り替える。
+const LINE_KIND_FLAGS: Record<NotificationKind, boolean> = {
+  request_created: true,
+  clean_confirmed: true,
+  clean_passed_over: true,
+  request_changed: true,
+  request_cancelled: true,
+  new_reservation_alert: false,
+  report_submitted: false,
+  request_confirmed: false,
+  supply_requested: false,
+  reminder: false,
+  unassigned_alert: false,
+};
+
+export const LINE_ENABLED_KINDS = new Set<NotificationKind>(
+  Object.entries(LINE_KIND_FLAGS)
+    .filter(([, enabled]) => enabled)
+    .map(([kind]) => kind as NotificationKind),
+);
 
 // 1名に LINE→Email の優先順で送信。LINE 失敗時はメールにフォールバックする。
 // kind が LINE 対象外 (LINE_ENABLED_KINDS 外) のときは LINE をスキップして即メール。

@@ -9,11 +9,17 @@ import { createServiceClient } from "@/lib/supabase-server";
  * 各削除でエラーが発生した場合は即 throw する（silent failure 防止）。
  *
  * 削除順（子→親）:
- *   access_tokens → staff_assignments → cleaning_requests
+ *   line_link_nonces → access_tokens → staff_assignments → cleaning_requests
  *   → properties → staff → owners
  */
 export async function resetDb(): Promise<void> {
   const db = createServiceClient();
+
+  const { error: e0 } = await db
+    .from("line_link_nonces")
+    .delete()
+    .not("nonce", "is", null);
+  if (e0) throw e0;
 
   const { error: e1 } = await db
     .from("access_tokens")

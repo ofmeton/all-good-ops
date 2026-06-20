@@ -72,4 +72,22 @@ describe("properties データアクセス", () => {
     const fetched = await getProperty(admin, created.id);
     expect(fetched?.owner_id).toBe(o2!.id);
   });
+
+  it("createProperty は物件作成時にオーナートークンを1件発行する", async () => {
+    const created = await createProperty(admin, { owner_id: ownerId, name: "トークン付き物件" });
+
+    const { data, error } = await db
+      .from("access_tokens")
+      .select("type, property_id, staff_id, revoked_at")
+      .eq("property_id", created.id);
+
+    expect(error).toBeNull();
+    expect(data).toHaveLength(1);
+    expect(data?.[0]).toMatchObject({
+      type: "owner",
+      property_id: created.id,
+      staff_id: null,
+      revoked_at: null,
+    });
+  });
 });
