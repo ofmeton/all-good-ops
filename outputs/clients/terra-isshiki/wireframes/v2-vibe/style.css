@@ -250,6 +250,24 @@ body.pinmode .tour__hint{display:none}
   .xp--rev .xp__ph{order:2}
 }
 
+/* OWNER：私たちの仕事（2×2カードグリッド） */
+.work{position:relative}
+.work__grid{max-width:1200px;margin:0 auto;padding:clamp(40px,7vh,90px) clamp(20px,5vw,90px);display:grid;grid-template-columns:1fr;gap:clamp(32px,4vw,56px)}
+.work__card{margin:0}
+.work__card .fr{overflow:hidden;border-radius:var(--r);box-shadow:0 40px 80px -55px rgba(26,20,16,.5)}
+.work__card img{width:100%;aspect-ratio:3/2;object-fit:cover}
+.work__card .ph-soon{aspect-ratio:3/2}
+.work__no{font-family:var(--eb);font-style:italic;color:var(--tsuchi);letter-spacing:.12em;margin:16px 0 4px}
+.work__t{font-family:var(--serif);font-weight:700;font-size:clamp(18px,2vw,25px);margin:0 0 8px}
+.work__card p{color:var(--ink70);margin:0;font-size:14px;max-width:38ch}
+@media(min-width:781px){.work__grid{grid-template-columns:1fr 1fr}}
+
+/* OWNER：SNS リンク行 */
+.sns{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:clamp(24px,4vh,40px)}
+.sns a{display:inline-flex;align-items:center;gap:10px;border:1px solid rgba(26,20,16,.16);border-radius:999px;padding:12px 24px;font-family:var(--eb);letter-spacing:.08em;transition:border-color .35s var(--ease),color .35s var(--ease)}
+.sns a:hover{border-color:var(--tsuchi);color:var(--tsuchi)}
+.sns a .ja{font-family:var(--mincho);font-size:13px;color:var(--ink70)}
+
 @media(prefers-reduced-motion:reduce){
   .reveal{opacity:1!important;transform:none!important;filter:none!important}
   .aze path{stroke-dashoffset:0!important}.aze-fill{transform:scaleY(1)!important}
