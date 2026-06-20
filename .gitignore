@@ -27,6 +27,9 @@ logs/*.log
 /*.jpg
 /*.jpeg
 
+# Root-level scratch data dumps (スクレイピング等の作業データ。raw/ 配下に置くべきもの)
+/organization.json
+
 # Tool generated
 .playwright-mcp/
 *.egg-info/

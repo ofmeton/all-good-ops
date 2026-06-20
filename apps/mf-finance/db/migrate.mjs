@@ -100,13 +100,33 @@ export function applyRecurringMigrations(db) {
     CREATE TABLE IF NOT EXISTS card_charge_schedules (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       card_account TEXT NOT NULL,
+      debit_account TEXT,
       charge_day INTEGER NOT NULL,
       amount_type TEXT NOT NULL DEFAULT 'variable' CHECK (amount_type IN ('fixed','variable')),
       fixed_amount INTEGER,
+      billing_month_offset INTEGER NOT NULL DEFAULT 1 CHECK (billing_month_offset BETWEEN 1 AND 6),
+      closing_day INTEGER NOT NULL DEFAULT 31 CHECK (closing_day BETWEEN 1 AND 31),
       note TEXT,
       active INTEGER NOT NULL DEFAULT 1,
       created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now'))
     )
   `);
+  const cardChargeScheduleCols = db
+    .prepare("PRAGMA table_info(card_charge_schedules)")
+    .all()
+    .map((c) => c.name);
+  if (!cardChargeScheduleCols.includes("billing_month_offset")) {
+    db.exec(
+      "ALTER TABLE card_charge_schedules ADD COLUMN billing_month_offset INTEGER NOT NULL DEFAULT 1 CHECK (billing_month_offset BETWEEN 1 AND 6)",
+    );
+  }
+  if (!cardChargeScheduleCols.includes("closing_day")) {
+    db.exec(
+      "ALTER TABLE card_charge_schedules ADD COLUMN closing_day INTEGER NOT NULL DEFAULT 31 CHECK (closing_day BETWEEN 1 AND 31)",
+    );
+  }
+  if (!cardChargeScheduleCols.includes("debit_account")) {
+    db.exec("ALTER TABLE card_charge_schedules ADD COLUMN debit_account TEXT");
+  }
   db.exec("CREATE INDEX IF NOT EXISTS idx_card_charge_schedules_account ON card_charge_schedules (card_account, active)");
 }

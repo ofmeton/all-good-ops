@@ -57,7 +57,7 @@ raw/ は immutable（上書き・削除禁止、古くなれば別ファイル�
 
 **モデル選定（ローカルセッション・サブスク内、既定 Opus 4.8）**: 最難関4局面のみ `/model` で `claude-fable-5`（Fable 5）= ①熟議 ②最難関設計（architect 大規模 BP / X optimizer autonomy 等） ③deep-research 統合フェーズ ④Opus で詰まる根本原因デバッグ。API 課金では使わない。詳細 memory `feedback_fable_for_hardest_tasks.md`
 
-**実装エンジン = Codex(gpt-5.5 high・定額サブスク)**: 標準以上の機能実装・テストは既定で Codex に半委任（`mcp__codex__codex`）。Claude は設計(architect)＋レビュー(pr-review/spec-validator)＋デプロイ自走を握る。Codex turn は Claude サブスク/API 課金の外＝トークン節約。配線は `skill:codex-implement`。人間承認/PR承認不要・デプロイまで自走（硬ゲート migration/送信/金銭のみ据え置き）。
+**実装エンジン = Codex(gpt-5.5・定額サブスク)**: 標準以上の機能実装・テストに加え**バグ修正/デバッグループ・大規模コードベース調査/探索（結論だけ受領）・ローカルデータ分析/集計**も既定で Codex に半委任（`mcp__codex__codex`）。レビューも**一次=Codex セルフレビュー → 最終判断=Claude**の二段。Claude は設計(architect)＋最終レビュー(spec-validator)＋デプロイ自走を握る。Codex turn は Claude サブスク/API 課金の外＝トークン節約。配線は `skill:codex-implement`。**Codex の盲点（ネット/ブラウザ/外部MCP不可）と発信の文章・繊細な連絡は Claude 専管**。人間承認/PR承認不要・デプロイまで自走（硬ゲート migration/送信/金銭のみ据え置き）。
 
 ### エージェント選定
 
@@ -67,6 +67,7 @@ raw/ は immutable（上書き・削除禁止、古くなれば別ファイル�
 **非自明なルーティング（一覧から読めないもの）**:
 - 税務 = tax-advisor、帳簿・経費 = finance/bookkeeper（混同しない）
 - 予定・メモ・人脈・整理・wiki ingest・振り返り = secretary 直処理（軽量）
+- 個人の思考テーマ = `thinking` skill（思考版ジャーナリング・対話で結論まで）。捕捉は「考えたい：〇〇」→ `~/journal/think/inbox.md` 追記。内省・感情は journaling（別物）
 - freelance-scout は**縮小**。発信は brand-publisher（ofmeton 名義）
 - PPTX 納品は生成後 **presentation-reviewer 必須**（C 評価は修正後再レビュー）
 - 開発オーケストレーション: 設計 = **architect**（読み取り専用・設計のみ）/ 実装 = **Codex(既定・`skill:codex-implement`)** or system-engineer / コードレビュー = **pr-review-toolkit:***。設計規約 SSOT = `wiki/dev/standards.md`、並列チーム運用 = `wiki/dev/agent-teams-playbook.md`
@@ -80,11 +81,14 @@ raw/ は immutable（上書き・削除禁止、古くなれば別ファイル�
 
 | タスク | プラグインスキル |
 |---|---|
-| 機能実装・設計 | 設計 architect → **実装は Codex 委任が既定（`codex-implement`）** → Claude レビュー(pr-review/spec-validator)。設計検討は `superpowers:brainstorming` → `writing-plans`。仕様照合・工程分離を重視する時は `feature-factory`（実装工程を Codex 化可） |
-| バグ・テスト失敗 | `superpowers:systematic-debugging` |
+| 機能実装・設計 | 設計 architect → **実装は Codex 委任が既定（`codex-implement`）** → Claude レビュー(pr-review/spec-validator)。設計検討は `superpowers:brainstorming` → `writing-plans`。仕様照合・工程分離を重視する時は `feature-factory`（実装工程を Codex 化可）。テストファースト = `superpowers:test-driven-development`（discipline）or `tdd`（vertical slice/integration-style の具体ガイド） |
+| バグ・テスト失敗 | `superpowers:systematic-debugging`。バグを対話的に整理して GitHub issue 化 = `qa` |
 | 完了 / PR 前検証 | `superpowers:verification-before-completion` |
 | 2+ 独立タスク並列 | `superpowers:dispatching-parallel-agents` |
-| Web / UI 実装 | `ui-ux-pro-max`（常時・設計/実装）＋ UI監査=`web-design-guidelines` / React最適化=`vercel-react-best-practices` / 構成設計=`vercel-composition-patterns` |
+| Web / UI 実装 | `ui-ux-pro-max`（常時・設計/実装）＋ UI監査=`web-design-guidelines` / React最適化=`vercel-react-best-practices` / 構成設計=`vercel-composition-patterns`。成果物(スライド/doc/HTML)への一貫テーマ適用=`theme-factory`（10プリセット）。参考デザイン仕様は `design-md-workflow.md`（Google Stitch DESIGN.md。カタログ=github VoltAgent/awesome-design-md） |
+| 画像生成 | gpt-image-2 = `visual-design-system.md`(Codex MCP・既定) / Gemini系 = `nano-banana`（要 `@google/genai`＋API キー・**従量課金**）。ポスター/静的アート(PNG/PDF) = `canvas-design` |
+| Google Workspace ヘッドレス自動化 | `gws-workspace-cli`（Docs/Slides 生成・Gmail/Sheets バッチ・--dry-run。会話内即時は MCP）。書込/送信は人間確認 |
+| 記事の編集・推敲 | `edit-article`（再構成/明瞭化/短縮）。執筆前構成=`scqa-writing-framework.md` / AI文体除去=`stop-slop` |
 | Supabase | `supabase:*` |
 | Web 多 source 調査 | `firecrawl:*` / `deep-research` |
 | 差分 / PR レビュー | `code-review` / `simplify` / `pr-review-toolkit:review-pr` |
@@ -141,6 +145,7 @@ SessionStart hook で cwd/branch/uncommitted 確認 → ブランチ判定を 1 
 - **エージェント管理**: 発見 → 取り込み（重複チェック・人間承認）→ 品質監視（6 軸 100 点）→ 使用追跡 → ランク → 自己改善（SAFE 即適用 / RISKY エスカレーション）→ Git 同期。月次中心
 - **自動化スケジュール**: 2026-06-03 全停止中（手動運用）。復活手順・根本原因は memory `project_cron_automation_disabled.md`
 - **振り返り**: `session-retrospective` スキル（「振り返って」で自動起動）
+- **mattpocock 工程スキル**（`to-prd`/`to-issues`/`triage` 等、手動起動）: issue tracker = **GitHub Issues**（`gh` CLI）/ triage ラベル = 既定5種 / domain = single-context。設定 SSOT は `docs/agents/{issue-tracker,triage-labels,domain}.md`。「publish to issue tracker」= `gh issue create`
 
 ---
 

@@ -16,6 +16,9 @@ const createSchema = z.object({
   checkout_date: dateStr,
   guest_count: z.number().int().positive(),
   option_memo: z.string().optional(),
+  reservation_id: z.string().uuid().optional(),
+  staff_candidate_ids: z.array(z.string().uuid()).optional(),
+  excluded_staff_ids: z.array(z.string().uuid()).optional(),
 });
 // 編集スキーマ: property_id は変更不可
 const updateSchema = z

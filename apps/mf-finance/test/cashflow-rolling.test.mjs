@@ -5,6 +5,7 @@ import {
   buildBalanceMatrix,
   buildRolling,
   buildUpcomingWithdrawals,
+  cardBillingPeriod,
   effectiveDay,
   expandCardChargeSchedules,
   monthEndOffsetDays,
@@ -202,7 +203,12 @@ test("monthlyChargeDates: charge_day を期間内の月次日付へ展開し月�
   assert.deepEqual(monthlyChargeDates("2026-06-16", 45, 27), ["2026-06-27", "2026-07-27"]);
 });
 
-test("expandCardChargeSchedules: variable は引落日の前月利用額を月別に反映する", () => {
+test("cardBillingPeriod: 引落日・締め月 offset・締め日から請求期間を返す", () => {
+  assert.deepEqual(cardBillingPeriod("2026-06-26", 1, 31), { start: "2026-04-30", end: "2026-05-31" });
+  assert.deepEqual(cardBillingPeriod("2026-07-01", 1, 1), { start: "2026-05-01", end: "2026-06-01" });
+});
+
+test("expandCardChargeSchedules: variable は引落日の請求期間利用額を反映する", () => {
   const charges = expandCardChargeSchedules({
     today: "2026-06-16",
     days: 72,
@@ -214,9 +220,9 @@ test("expandCardChargeSchedules: variable は引落日の前月利用額を月�
         fixed_amount: null,
       },
     ],
-    variableByCardMonth: new Map([
-      ["三井住友カード|2026-05", 51000],
-      ["三井住友カード|2026-06", 108444],
+    variableByPeriod: new Map([
+      ["三井住友カード|2026-05-31", 51000],
+      ["三井住友カード|2026-06-30", 108444],
     ]),
   });
 
@@ -227,6 +233,154 @@ test("expandCardChargeSchedules: variable は引落日の前月利用額を月�
       ["2026-07-26", 108444, true],
       ["2026-08-26", 0, true],
     ],
+  );
+});
+
+test("expandCardChargeSchedules: 引落先口座をイベント account にし利用集計はカード口座基準にする", () => {
+  const charges = expandCardChargeSchedules({
+    today: "2026-06-16",
+    days: 20,
+    schedules: [
+      {
+        card_account: "三井住友カード",
+        debit_account: "住信SBIネット銀行",
+        charge_day: 26,
+        amount_type: "variable",
+        fixed_amount: null,
+      },
+    ],
+    variableByPeriod: new Map([
+      ["住信SBIネット銀行|2026-05-31", 999999],
+      ["三井住友カード|2026-05-31", 51000],
+    ]),
+  });
+
+  assert.equal(charges.length, 1);
+  assert.equal(charges[0].account, "住信SBIネット銀行");
+  assert.equal(charges[0].amount, 51000);
+  assert.equal(charges[0].name, "三井住友カード カード引落");
+});
+
+test("expandCardChargeSchedules: 引落先口座未設定ならイベント account は null", () => {
+  const charges = expandCardChargeSchedules({
+    today: "2026-06-16",
+    days: 20,
+    schedules: [
+      {
+        card_account: "ポケットカード",
+        charge_day: 27,
+        amount_type: "variable",
+        fixed_amount: null,
+      },
+    ],
+    variableByPeriod: new Map([["ポケットカード|2026-05-31", 24000]]),
+  });
+
+  assert.equal(charges.length, 1);
+  assert.equal(charges[0].account, null);
+  assert.equal(charges[0].amount, 24000);
+});
+
+test("expandCardChargeSchedules: closing_day で同じ引落月でも請求期間が変わる", () => {
+  const charges = expandCardChargeSchedules({
+    today: "2026-07-01",
+    days: 0,
+    schedules: [
+      {
+        card_account: "ポケットカード",
+        charge_day: 1,
+        amount_type: "variable",
+        fixed_amount: null,
+        debit_account: "住信SBIネット銀行",
+        billing_month_offset: 1,
+        closing_day: 1,
+      },
+      {
+        card_account: "三井住友カード",
+        charge_day: 1,
+        amount_type: "variable",
+        fixed_amount: null,
+        debit_account: "三菱UFJ銀行",
+        billing_month_offset: 1,
+        closing_day: 31,
+      },
+    ],
+    variableByPeriod: new Map([
+      ["ポケットカード|2026-06-01", 10945],
+      ["三井住友カード|2026-06-30", 111246],
+    ]),
+  });
+
+  assert.deepEqual(
+    charges.map((charge) => [charge.date, charge.account, charge.amount, charge.estimated]),
+    [
+      ["2026-07-01", "三菱UFJ銀行", 111246, true],
+      ["2026-07-01", "住信SBIネット銀行", 10945, true],
+    ],
+  );
+});
+
+test("expandCardChargeSchedules: billing_month_offset で締め月をカードごとにずらす", () => {
+  const charges = expandCardChargeSchedules({
+    today: "2026-06-16",
+    days: 20,
+    schedules: [
+      {
+        card_account: "三井住友カード",
+        charge_day: 1,
+        amount_type: "variable",
+        fixed_amount: null,
+        debit_account: "三菱UFJ銀行",
+        billing_month_offset: 1,
+      },
+      {
+        card_account: "ポケットカード",
+        charge_day: 1,
+        amount_type: "variable",
+        fixed_amount: null,
+        debit_account: "住信SBIネット銀行",
+        billing_month_offset: 2,
+      },
+    ],
+    variableByPeriod: new Map([
+      ["三井住友カード|2026-06-30", 61000],
+      ["三井住友カード|2026-05-31", 51000],
+      ["ポケットカード|2026-06-30", 62000],
+      ["ポケットカード|2026-05-31", 52000],
+    ]),
+  });
+
+  assert.deepEqual(
+    charges.map((charge) => [charge.date, charge.account, charge.amount, charge.estimated]),
+    [
+      ["2026-07-01", "三菱UFJ銀行", 61000, true],
+      ["2026-07-01", "住信SBIネット銀行", 52000, true],
+    ],
+  );
+});
+
+test("expandCardChargeSchedules: billing_month_offset は年跨ぎで対象月を計算する", () => {
+  const charges = expandCardChargeSchedules({
+    today: "2026-01-01",
+    days: 5,
+    schedules: [
+      {
+        card_account: "ポケットカード",
+        charge_day: 1,
+        amount_type: "variable",
+        fixed_amount: null,
+        billing_month_offset: 2,
+      },
+    ],
+    variableByPeriod: new Map([
+      ["ポケットカード|2025-11-30", 112000],
+      ["ポケットカード|2025-12-31", 121000],
+    ]),
+  });
+
+  assert.deepEqual(
+    charges.map((charge) => [charge.date, charge.amount, charge.estimated]),
+    [["2026-01-01", 112000, true]],
   );
 });
 
@@ -242,12 +396,12 @@ test("expandCardChargeSchedules: variable は前月利用0でもイベントを�
         fixed_amount: null,
       },
     ],
-    variableByCardMonth: new Map(),
+    variableByPeriod: new Map(),
   });
 
   assert.equal(charges.length, 1);
   assert.equal(charges[0].date, "2026-06-27");
-  assert.equal(charges[0].account, "ポケットカード");
+  assert.equal(charges[0].account, null);
   assert.equal(charges[0].amount, 0);
   assert.equal(charges[0].estimated, true);
 

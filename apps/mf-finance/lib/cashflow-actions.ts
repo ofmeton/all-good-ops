@@ -46,7 +46,28 @@ function accountExists(account: string): boolean {
   return Boolean(row);
 }
 
+function accountKind(account: string): BalanceKind | null {
+  const row = db.prepare("SELECT kind FROM account_balances WHERE account = ?").get(account) as
+    | { kind: BalanceKind }
+    | undefined;
+  return row?.kind ?? null;
+}
+
 function validateChargeDay(value: unknown): number {
+  const n = Number(value);
+  if (!Number.isInteger(n) || n < 1 || n > 31) return 0;
+  return n;
+}
+
+function validateBillingMonthOffset(value: unknown): number {
+  if (value == null || value === "") return 1;
+  const n = Number(value);
+  if (!Number.isInteger(n) || n < 1 || n > 6) return 0;
+  return n;
+}
+
+function validateClosingDay(value: unknown): number {
+  if (value == null || value === "") return 31;
   const n = Number(value);
   if (!Number.isInteger(n) || n < 1 || n > 31) return 0;
   return n;
@@ -63,9 +84,12 @@ export interface ScheduledInput {
 
 export interface CardChargeScheduleInput {
   card_account: string;
+  debit_account?: string | null;
   charge_day: number;
   amount_type: "fixed" | "variable";
   fixed_amount?: number | null;
+  billing_month_offset?: number | null;
+  closing_day?: number | null;
   note?: string | null;
   active?: number | boolean;
 }
@@ -76,9 +100,12 @@ type NormalizedCardChargeInput =
   ok: true;
   value: {
     cardAccount: string;
+    debitAccount: string | null;
     chargeDay: number;
     amountType: "fixed" | "variable";
     fixedAmount: number | null;
+    billingMonthOffset: number;
+    closingDay: number;
     note: string | null;
     active: 0 | 1;
   };
@@ -88,8 +115,18 @@ function normalizeCardChargeInput(input: CardChargeScheduleInput): NormalizedCar
   const cardAccount = trimOrNull(input.card_account);
   if (!cardAccount) return { ok: false, error: "カード口座を選択してください" };
   if (!isKnownCardAccount(cardAccount)) return { ok: false, error: `カード口座が見つかりません: ${cardAccount}` };
+  const debitAccount = trimOrNull(input.debit_account);
+  if (debitAccount) {
+    const kind = accountKind(debitAccount);
+    if (!kind) return { ok: false, error: `引落先口座が見つかりません: ${debitAccount}` };
+    if (kind === "card") return { ok: false, error: "引落先口座にはカード以外の口座を選択してください" };
+  }
   const chargeDay = validateChargeDay(input.charge_day);
   if (chargeDay === 0) return { ok: false, error: "引落日は1〜31で入力してください" };
+  const billingMonthOffset = validateBillingMonthOffset(input.billing_month_offset);
+  if (billingMonthOffset === 0) return { ok: false, error: "引落対象は締め月から1〜6ヶ月後で選択してください" };
+  const closingDay = validateClosingDay(input.closing_day);
+  if (closingDay === 0) return { ok: false, error: "締め日は1〜31で選択してください" };
   const amountType = input.amount_type === "fixed" ? "fixed" : "variable";
   const fixedAmount = amountType === "fixed" ? toPositiveInt(input.fixed_amount) : null;
   if (amountType === "fixed" && (!fixedAmount || fixedAmount <= 0)) {
@@ -97,7 +134,7 @@ function normalizeCardChargeInput(input: CardChargeScheduleInput): NormalizedCar
   }
   const note = trimOrNull(input.note);
   const active = input.active === false || input.active === 0 ? 0 : 1;
-  return { ok: true, value: { cardAccount, chargeDay, amountType, fixedAmount, note, active } };
+  return { ok: true, value: { cardAccount, debitAccount, chargeDay, amountType, fixedAmount, billingMonthOffset, closingDay, note, active } };
 }
 
 export async function addCardChargeSchedule(input: CardChargeScheduleInput): Promise<CashflowActionResult> {
@@ -107,9 +144,9 @@ export async function addCardChargeSchedule(input: CardChargeScheduleInput): Pro
     const v = normalized.value;
     db.prepare(
       `INSERT INTO card_charge_schedules
-         (card_account, charge_day, amount_type, fixed_amount, note, active)
-       VALUES (?, ?, ?, ?, ?, ?)`,
-    ).run(v.cardAccount, v.chargeDay, v.amountType, v.fixedAmount, v.note, v.active);
+         (card_account, debit_account, charge_day, amount_type, fixed_amount, billing_month_offset, closing_day, note, active)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    ).run(v.cardAccount, v.debitAccount, v.chargeDay, v.amountType, v.fixedAmount, v.billingMonthOffset, v.closingDay, v.note, v.active);
     revalidate();
     return { ok: true };
   } catch (e) {
@@ -130,10 +167,10 @@ export async function updateCardChargeSchedule(
     const info = db
       .prepare(
         `UPDATE card_charge_schedules
-            SET card_account = ?, charge_day = ?, amount_type = ?, fixed_amount = ?, note = ?, active = ?
+            SET card_account = ?, debit_account = ?, charge_day = ?, amount_type = ?, fixed_amount = ?, billing_month_offset = ?, closing_day = ?, note = ?, active = ?
           WHERE id = ?`,
       )
-      .run(v.cardAccount, v.chargeDay, v.amountType, v.fixedAmount, v.note, v.active, n);
+      .run(v.cardAccount, v.debitAccount, v.chargeDay, v.amountType, v.fixedAmount, v.billingMonthOffset, v.closingDay, v.note, v.active, n);
     if (info.changes === 0) return { ok: false, error: "対象のカード引落予定が見つかりません" };
     revalidate();
     return { ok: true };

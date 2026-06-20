@@ -1,0 +1,13 @@
+{
+  "id": "googleworkspace-cli-gws-workspace-cli-skill-md",
+  "name": "gws-workspace-cli",
+  "author": "googleworkspace",
+  "authorAvatar": "https://avatars.githubusercontent.com/u/3708359?v=4",
+  "description": "Google Workspace(Drive/Docs/Sheets/Gmail/Calendar/Slides)をヘッドレスに一括操作する CLI「gws」の運用ガイド。Docs/Slides 生成やバッチ処理など MCP で埋まらない自動化に使う。出力は構造化 JSON、--dry-run / --page-all 対応。",
+  "githubUrl": "https://github.com/googleworkspace/cli",
+  "stars": 27144,
+  "hasMarketplace": false,
+  "path": "SKILL.md",
+  "branch": "main",
+  "note": "newly authored from README (not an upstream SKILL.md); upstream is an npm/cargo CLI tool"
+}

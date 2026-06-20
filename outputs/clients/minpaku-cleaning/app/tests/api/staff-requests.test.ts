@@ -21,7 +21,7 @@ function buildReq(body: unknown): NextRequest {
 
 describe("PATCH /api/staff/requests/[id]（id バリデーション）", () => {
   it("UUID でない id は専用の 400 を返す（DB へ渡さない）", async () => {
-    const res = await PATCH(buildReq({ token, action: "claim" }), {
+    const res = await PATCH(buildReq({ token, action: "start" }), {
       params: Promise.resolve({ id: "not-a-uuid" }),
     });
     expect(res.status).toBe(400);

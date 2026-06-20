@@ -1,5 +1,11 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { listOwners, createOwner, updateOwner } from "@/lib/db/owners";
+import {
+  OwnerDeleteBlockedError,
+  listOwners,
+  createOwner,
+  updateOwner,
+  deleteOwner,
+} from "@/lib/db/owners";
 import { createServiceClient } from "@/lib/supabase-server";
 import type { Actor } from "@/lib/auth";
 import { resetDb } from "../helpers/reset-db";
@@ -28,5 +34,21 @@ describe("owners データアクセス", () => {
     const created = await createOwner(admin, { name: "旧名" });
     await updateOwner(admin, created.id, { name: "新名" });
     expect((await listOwners(admin))[0].name).toBe("新名");
+  });
+
+  it("物件参照があるオーナーは削除できない", async () => {
+    const created = await createOwner(admin, { name: "削除不可" });
+    await db.from("properties").insert({ owner_id: created.id, name: "物件A" });
+
+    await expect(deleteOwner(admin, created.id)).rejects.toThrow(OwnerDeleteBlockedError);
+    expect(await listOwners(admin)).toHaveLength(1);
+  });
+
+  it("物件参照がないオーナーは削除できる", async () => {
+    const created = await createOwner(admin, { name: "削除可" });
+
+    await deleteOwner(admin, created.id);
+
+    expect(await listOwners(admin)).toHaveLength(0);
   });
 });

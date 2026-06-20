@@ -6,6 +6,7 @@ import { listProperties } from "@/lib/db/properties";
 import { listOwners } from "@/lib/db/owners";
 import { listStaff } from "@/lib/db/staff";
 import { listRequests } from "@/lib/db/requests";
+import { listIcalFeeds } from "@/lib/db/reservations";
 import { getActiveToken } from "@/lib/db/tokens";
 import { Card } from "@/components/ui/Card";
 import { Icon } from "@/components/ui/Icon";
@@ -15,6 +16,7 @@ import { Avatar } from "@/components/ui/Avatar";
 import { Badge } from "@/components/ui/Badge";
 import { TokenControls } from "../../TokenControls";
 import { EditPropertyForm } from "./EditPropertyForm";
+import { IcalFeeds } from "./IcalFeeds";
 
 const STATUS_MAP: Record<string, Status> = {
   unassigned: "unassigned",
@@ -35,12 +37,13 @@ export default async function PropertyDetailPage({
   const actor = await resolveAdminActor();
   if (!actor || actor.role !== "admin") redirect("/admin/login");
   const { id } = await params;
-  const [property, properties, owners, allStaff, requests] = await Promise.all([
+  const [property, properties, owners, allStaff, requests, icalFeeds] = await Promise.all([
     getProperty(actor, id),
     listProperties(actor),
     listOwners(actor),
     listStaff(actor),
     listRequests(actor),
+    listIcalFeeds(actor, id),
   ]);
   if (!property) notFound();
   const propIdx = properties.findIndex((p) => p.id === id);
@@ -220,6 +223,11 @@ export default async function PropertyDetailPage({
               activeToken={token ? { id: token.id, token: token.token } : null}
               basePath="property"
             />
+          </Card>
+
+          <Card className="p-5">
+            <h3 className="text-[14px] font-bold text-ink-900 mb-3">iCal 予約取込</h3>
+            <IcalFeeds propertyId={id} feeds={icalFeeds} />
           </Card>
 
           <Card className="p-5">

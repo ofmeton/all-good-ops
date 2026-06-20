@@ -7,6 +7,11 @@ export type NotificationStatus = "queued" | "sent" | "failed" | "skipped";
 
 export type NotificationKind =
   | "request_created"     // 依頼作成 → スタッフ
+  | "clean_confirmed"     // 回答から担当確定 → 確定スタッフ
+  | "clean_passed_over"   // 回答したが別スタッフへ確定 → スタッフ
+  | "request_changed"     // 依頼内容変更 → スタッフ
+  | "request_cancelled"   // 依頼キャンセル → スタッフ
+  | "new_reservation_alert" // 確定清掃日前の新規予約 → 管理者・担当スタッフ
   | "report_submitted"    // 完了報告 → 管理者
   | "request_confirmed"   // 確認完了 → オーナー
   | "supply_requested"    // 備品補充 → 管理者・オーナー

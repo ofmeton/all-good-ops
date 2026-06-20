@@ -1,11 +1,20 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { listStaff, getStaff, createStaff, updateStaff, archiveStaff, StaffArchiveBlockedError } from "@/lib/db/staff";
+import {
+  listStaff,
+  getStaff,
+  createStaff,
+  updateStaff,
+  updateStaffSelf,
+  archiveStaff,
+  StaffArchiveBlockedError,
+} from "@/lib/db/staff";
 import { createServiceClient } from "@/lib/supabase-server";
 import type { Actor } from "@/lib/auth";
 import { resetDb } from "../helpers/reset-db";
 
 const db = createServiceClient();
 const admin: Actor = { role: "admin", adminId: "a1", roleLevel: 1 };
+const ownerActor: Actor = { role: "owner", ownerId: "o1", propertyId: "p1" };
 
 let propertyId: string;
 
@@ -64,6 +73,52 @@ describe("staff データアクセス", () => {
     const fetched = await getStaff(admin, created.id);
     expect(fetched?.line_user_id).toBe("Uabc123");
     expect(fetched?.property_ids).toEqual([p2!.id]);
+  });
+
+  it("updateStaffSelf: staff 本人は自分のメールを更新できる", async () => {
+    const created = await createStaff(admin, { name: "本人" }, []);
+
+    await updateStaffSelf({ role: "staff", staffId: created.id }, { email: "me@example.com" });
+
+    const fetched = await getStaff(admin, created.id);
+    expect(fetched?.email).toBe("me@example.com");
+  });
+
+  it("updateStaffSelf: 他人の staff は更新されない", async () => {
+    const mine = await createStaff(admin, { name: "本人", email: "old@example.com" }, []);
+    const other = await createStaff(admin, { name: "他人", email: "other@example.com" }, []);
+
+    await updateStaffSelf({ role: "staff", staffId: mine.id }, { email: "new@example.com" });
+
+    expect((await getStaff(admin, mine.id))?.email).toBe("new@example.com");
+    expect((await getStaff(admin, other.id))?.email).toBe("other@example.com");
+  });
+
+  it("updateStaffSelf: staff 以外は拒否する", async () => {
+    await expect(updateStaffSelf(admin, { email: "admin@example.com" })).rejects.toThrow(
+      "スタッフ権限が必要です",
+    );
+    await expect(updateStaffSelf(ownerActor, { email: "owner@example.com" })).rejects.toThrow(
+      "スタッフ権限が必要です",
+    );
+  });
+
+  it("createStaff はスタッフ作成時にスタッフトークンを1件発行する", async () => {
+    const created = await createStaff(admin, { name: "トークン付きスタッフ" }, [propertyId]);
+
+    const { data, error } = await db
+      .from("access_tokens")
+      .select("type, property_id, staff_id, revoked_at")
+      .eq("staff_id", created.id);
+
+    expect(error).toBeNull();
+    expect(data).toHaveLength(1);
+    expect(data?.[0]).toMatchObject({
+      type: "staff",
+      property_id: null,
+      staff_id: created.id,
+      revoked_at: null,
+    });
   });
 
   it("稼働中の清掃依頼があるスタッフはアーカイブできない", async () => {

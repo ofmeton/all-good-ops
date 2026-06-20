@@ -9,7 +9,7 @@ import { Icon } from "@/components/ui/Icon";
 import { Avatar } from "@/components/ui/Avatar";
 import { PropertyPhoto } from "@/components/ui/PropertyPhoto";
 import { Badge } from "@/components/ui/Badge";
-import { OwnerForm } from "./OwnerForm";
+import { OwnerActions, OwnerForm } from "./OwnerForm";
 
 const TONES = ["a", "b", "c", "d", "e", "f"] as const;
 const toneOf = (idx: number) => TONES[((idx % TONES.length) + TONES.length) % TONES.length];
@@ -117,6 +117,7 @@ export default async function OwnersPage() {
                       今月清掃 <span className="num font-bold text-ink-800">{myReqs.length}</span> 件
                     </span>
                   </div>
+                  <OwnerActions owner={o} />
                 </div>
               </div>
             </Card>

@@ -1,6 +1,7 @@
 import "server-only";
 import { createServiceClient } from "@/lib/supabase-server";
-import { assertAdmin } from "@/lib/db/scope";
+import { issueToken } from "@/lib/db/tokens";
+import { assertAdmin, StaffOnlyError } from "@/lib/db/scope";
 import type { Actor } from "@/lib/auth";
 
 // 稼働中の清掃依頼があるスタッフをアーカイブしようとしたときに投げる。
@@ -18,6 +19,10 @@ export type Staff = {
   line_user_id: string | null;
   email: string | null;
   property_ids: string[];
+};
+
+export type StaffSelfPatch = {
+  email?: string | null;
 };
 
 export async function listStaff(actor: Actor): Promise<Staff[]> {
@@ -87,6 +92,13 @@ export async function createStaff(
   const { data, error } = await db.from("staff").insert(input).select().single();
   if (error) throw error;
   await syncAssignments(data.id, propertyIds);
+  try {
+    await issueToken(actor, { type: "staff", staffId: data.id });
+  } catch (e) {
+    await db.from("staff_assignments").delete().eq("staff_id", data.id);
+    await db.from("staff").delete().eq("id", data.id);
+    throw e;
+  }
   return { ...data, property_ids: propertyIds } as Staff;
 }
 
@@ -101,6 +113,22 @@ export async function updateStaff(
   const { error } = await db.from("staff").update(patch).eq("id", id);
   if (error) throw error;
   await syncAssignments(id, propertyIds);
+}
+
+export async function updateStaffSelf(
+  actor: Actor,
+  patch: StaffSelfPatch,
+): Promise<void> {
+  if (actor.role !== "staff") {
+    throw new StaffOnlyError("スタッフ権限が必要です");
+  }
+  const db = createServiceClient();
+  const { error } = await db
+    .from("staff")
+    .update(patch)
+    .eq("id", actor.staffId)
+    .is("archived_at", null);
+  if (error) throw error;
 }
 
 export async function archiveStaff(actor: Actor, id: string): Promise<void> {

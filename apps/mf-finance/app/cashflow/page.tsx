@@ -98,7 +98,7 @@ export default async function CashflowPage({
       <CashflowTimeline rolling={accountRolling} />
 
       <ScheduledEditor items={scheduled} accountOptions={accountOptions} />
-      <CardChargeScheduleEditor items={cardChargeSchedules} cardOptions={cardOptions} />
+      <CardChargeScheduleEditor items={cardChargeSchedules} cardOptions={cardOptions} accountOptions={accountOptions} />
       <TransferEditor items={transfers} accountOptions={accountOptions} />
 
       <section className="mt-6" aria-label="毎月の定期">

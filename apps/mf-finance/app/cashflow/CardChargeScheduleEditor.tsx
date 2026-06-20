@@ -16,6 +16,20 @@ type AmountType = "fixed" | "variable";
 
 const INPUT_CLS =
   "h-11 rounded-lg border border-border bg-surface px-2 text-sm text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary disabled:opacity-50";
+const BILLING_MONTH_OFFSET_OPTIONS = [
+  { value: 1, label: "締めの翌月" },
+  { value: 2, label: "締めの翌々月" },
+  { value: 3, label: "締めの3ヶ月後" },
+] as const;
+const CLOSING_DAY_OPTIONS = [
+  { value: 1, label: "1日" },
+  { value: 5, label: "5日" },
+  { value: 10, label: "10日" },
+  { value: 15, label: "15日" },
+  { value: 20, label: "20日" },
+  { value: 25, label: "25日" },
+  { value: 31, label: "末日" },
+] as const;
 
 function toAmountType(value: string): AmountType {
   return value === "fixed" ? "fixed" : "variable";
@@ -24,27 +38,39 @@ function toAmountType(value: string): AmountType {
 function CardChargeRowItem({
   item,
   cardOptions,
+  debitAccountOptions,
 }: {
   item: CardChargeScheduleRow;
   cardOptions: AccountOption[];
+  debitAccountOptions: AccountOption[];
 }) {
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const [cardAccount, setCardAccount] = useState(item.card_account);
+  const [debitAccount, setDebitAccount] = useState(item.debit_account ?? "");
   const [chargeDay, setChargeDay] = useState(String(item.charge_day));
   const [amountType, setAmountType] = useState<AmountType>(item.amount_type);
   const [fixedAmount, setFixedAmount] = useState(item.fixed_amount ? String(item.fixed_amount) : "");
+  const [billingMonthOffset, setBillingMonthOffset] = useState(String(item.billing_month_offset ?? 1));
+  const [closingDay, setClosingDay] = useState(String(item.closing_day ?? 31));
   const [note, setNote] = useState(item.note ?? "");
   const active = item.active === 1;
   const options = cardOptions.some((option) => option.account === item.card_account)
     ? cardOptions
     : [...cardOptions, { account: item.card_account, kind: "card" as const }];
+  const debitOptions =
+    item.debit_account && !debitAccountOptions.some((option) => option.account === item.debit_account)
+      ? [...debitAccountOptions, { account: item.debit_account, kind: "other" as const }]
+      : debitAccountOptions;
 
   const buildInput = () => ({
     card_account: cardAccount,
+    debit_account: debitAccount.trim() || null,
     charge_day: Number(chargeDay),
     amount_type: amountType,
     fixed_amount: amountType === "fixed" ? Number(fixedAmount) : null,
+    billing_month_offset: Number(billingMonthOffset),
+    closing_day: Number(closingDay),
     note: note.trim() || null,
     active: item.active,
   });
@@ -86,6 +112,22 @@ function CardChargeRowItem({
             className={INPUT_CLS}
           >
             {options.map((option) => (
+              <option key={option.account} value={option.account}>
+                {option.account}（{KIND_LABEL[option.kind]}）
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="flex flex-col gap-1">
+          <span className="text-[11px] text-muted">引落先口座</span>
+          <select
+            value={debitAccount}
+            onChange={(e) => setDebitAccount(e.target.value)}
+            disabled={pending}
+            className={INPUT_CLS}
+          >
+            <option value="">未指定</option>
+            {debitOptions.map((option) => (
               <option key={option.account} value={option.account}>
                 {option.account}（{KIND_LABEL[option.kind]}）
               </option>
@@ -148,6 +190,36 @@ function CardChargeRowItem({
             />
           </label>
         )}
+        <label className="flex flex-col gap-1">
+          <span className="text-[11px] text-muted">引落対象</span>
+          <select
+            value={billingMonthOffset}
+            onChange={(e) => setBillingMonthOffset(e.target.value)}
+            disabled={pending}
+            className={INPUT_CLS}
+          >
+            {BILLING_MONTH_OFFSET_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="flex flex-col gap-1">
+          <span className="text-[11px] text-muted">締め日</span>
+          <select
+            value={closingDay}
+            onChange={(e) => setClosingDay(e.target.value)}
+            disabled={pending}
+            className={INPUT_CLS}
+          >
+            {CLOSING_DAY_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </label>
         <label className="flex flex-1 flex-col gap-1">
           <span className="text-[11px] text-muted">メモ</span>
           <input
@@ -195,7 +267,7 @@ function CardChargeRowItem({
       </div>
       <p className="mt-2 text-[11px] text-muted">
         {amountType === "variable"
-          ? "変動: 各引落は前月利用額を見込みに反映。将来分でデータ無しなら¥0見込みで表示"
+          ? "変動: 各引落は締め日で区切った前サイクルの利用額を見込みに反映。将来分でデータ無しなら¥0見込みで表示"
           : `固定: ¥${yen(Number(fixedAmount) || 0)} を見込みに反映`}
       </p>
       {error && (
@@ -207,12 +279,21 @@ function CardChargeRowItem({
   );
 }
 
-function AddCardChargeScheduleForm({ cardOptions }: { cardOptions: AccountOption[] }) {
+function AddCardChargeScheduleForm({
+  cardOptions,
+  debitAccountOptions,
+}: {
+  cardOptions: AccountOption[];
+  debitAccountOptions: AccountOption[];
+}) {
   const [pending, startTransition] = useTransition();
   const [cardAccount, setCardAccount] = useState("");
+  const [debitAccount, setDebitAccount] = useState("");
   const [chargeDay, setChargeDay] = useState("27");
   const [amountType, setAmountType] = useState<AmountType>("variable");
   const [fixedAmount, setFixedAmount] = useState("");
+  const [billingMonthOffset, setBillingMonthOffset] = useState("1");
+  const [closingDay, setClosingDay] = useState("31");
   const [note, setNote] = useState("");
   const [error, setError] = useState<string | null>(null);
   const hasCards = cardOptions.length > 0;
@@ -227,9 +308,12 @@ function AddCardChargeScheduleForm({ cardOptions }: { cardOptions: AccountOption
     startTransition(async () => {
       const res = await addCardChargeSchedule({
         card_account: cardAccount,
+        debit_account: debitAccount.trim() || null,
         charge_day: Number(chargeDay),
         amount_type: amountType,
         fixed_amount: amountType === "fixed" ? Number(fixedAmount) : null,
+        billing_month_offset: Number(billingMonthOffset),
+        closing_day: Number(closingDay),
         note: note.trim() || null,
       });
       if (!res.ok) {
@@ -237,9 +321,12 @@ function AddCardChargeScheduleForm({ cardOptions }: { cardOptions: AccountOption
         return;
       }
       setCardAccount("");
+      setDebitAccount("");
       setChargeDay("27");
       setAmountType("variable");
       setFixedAmount("");
+      setBillingMonthOffset("1");
+      setClosingDay("31");
       setNote("");
     });
   };
@@ -259,6 +346,22 @@ function AddCardChargeScheduleForm({ cardOptions }: { cardOptions: AccountOption
           >
             <option value="">選択</option>
             {cardOptions.map((option) => (
+              <option key={option.account} value={option.account}>
+                {option.account}（{KIND_LABEL[option.kind]}）
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="flex flex-col gap-1">
+          <span className="text-[11px] text-muted">引落先口座</span>
+          <select
+            value={debitAccount}
+            onChange={(e) => setDebitAccount(e.target.value)}
+            disabled={pending}
+            className={INPUT_CLS}
+          >
+            <option value="">未指定</option>
+            {debitAccountOptions.map((option) => (
               <option key={option.account} value={option.account}>
                 {option.account}（{KIND_LABEL[option.kind]}）
               </option>
@@ -323,6 +426,36 @@ function AddCardChargeScheduleForm({ cardOptions }: { cardOptions: AccountOption
             />
           </label>
         )}
+        <label className="flex flex-col gap-1">
+          <span className="text-[11px] text-muted">引落対象</span>
+          <select
+            value={billingMonthOffset}
+            onChange={(e) => setBillingMonthOffset(e.target.value)}
+            disabled={pending}
+            className={INPUT_CLS}
+          >
+            {BILLING_MONTH_OFFSET_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="flex flex-col gap-1">
+          <span className="text-[11px] text-muted">締め日</span>
+          <select
+            value={closingDay}
+            onChange={(e) => setClosingDay(e.target.value)}
+            disabled={pending}
+            className={INPUT_CLS}
+          >
+            {CLOSING_DAY_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </label>
         <label className="flex flex-1 flex-col gap-1">
           <span className="text-[11px] text-muted">メモ</span>
           <input
@@ -357,10 +490,14 @@ function AddCardChargeScheduleForm({ cardOptions }: { cardOptions: AccountOption
 export function CardChargeScheduleEditor({
   items,
   cardOptions,
+  accountOptions,
 }: {
   items: CardChargeScheduleRow[];
   cardOptions: AccountOption[];
+  accountOptions: AccountOption[];
 }) {
+  const debitAccountOptions = accountOptions.filter((option) => option.kind !== "card");
+
   return (
     <section className="mt-6" aria-label="カード引落予定">
       <h2 className="mb-1 text-sm font-semibold text-foreground">
@@ -368,7 +505,7 @@ export function CardChargeScheduleEditor({
         <span className="ml-2 tabular text-xs font-normal text-muted">{items.length}件</span>
       </h2>
       <p className="mb-2 text-[11px] text-muted">
-        カードごとの引落日を登録すると、変動額は各引落月の前月利用額を見込み残高に反映します。
+        カードごとの引落日と締め日を登録すると、変動額は各引落＝締め日で区切った前サイクルの利用額を見込み残高に反映します。
         単発予定で同じカード引落を登録済みの場合は二重計上になります。どちらかに統一してください。
       </p>
       {items.length === 0 ? (
@@ -378,11 +515,16 @@ export function CardChargeScheduleEditor({
       ) : (
         <ul className="space-y-2">
           {items.map((item) => (
-            <CardChargeRowItem key={item.id} item={item} cardOptions={cardOptions} />
+            <CardChargeRowItem
+              key={item.id}
+              item={item}
+              cardOptions={cardOptions}
+              debitAccountOptions={debitAccountOptions}
+            />
           ))}
         </ul>
       )}
-      <AddCardChargeScheduleForm cardOptions={cardOptions} />
+      <AddCardChargeScheduleForm cardOptions={cardOptions} debitAccountOptions={debitAccountOptions} />
     </section>
   );
 }
