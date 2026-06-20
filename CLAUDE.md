@@ -67,6 +67,7 @@ raw/ は immutable（上書き・削除禁止、古くなれば別ファイル�
 **非自明なルーティング（一覧から読めないもの）**:
 - 税務 = tax-advisor、帳簿・経費 = finance/bookkeeper（混同しない）
 - 予定・メモ・人脈・整理・wiki ingest・振り返り = secretary 直処理（軽量）
+- 個人の思考テーマ = `thinking` skill（思考版ジャーナリング・対話で結論まで）。捕捉は「考えたい：〇〇」→ `~/journal/think/inbox.md` 追記。内省・感情は journaling（別物）
 - freelance-scout は**縮小**。発信は brand-publisher（ofmeton 名義）
 - PPTX 納品は生成後 **presentation-reviewer 必須**（C 評価は修正後再レビュー）
 - 開発オーケストレーション: 設計 = **architect**（読み取り専用・設計のみ）/ 実装 = **Codex(既定・`skill:codex-implement`)** or system-engineer / コードレビュー = **pr-review-toolkit:***。設計規約 SSOT = `wiki/dev/standards.md`、並列チーム運用 = `wiki/dev/agent-teams-playbook.md`
