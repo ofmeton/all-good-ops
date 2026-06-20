@@ -96,16 +96,20 @@ test("依頼作成→承認→開始→完了報告→確認の主要フロー",
   await page.waitForLoadState("networkidle");
   await expect(page.locator("li", { hasText: "E2E物件" })).toBeVisible();
 
-  // ---- スタッフがトークンURLで承認 ----
+  // ---- スタッフがトークンURLで都合を回答 ----
   await page.goto(`/staff/${staffToken}`);
   await page.waitForLoadState("networkidle");
   await expect(page.locator("h1", { hasText: "担当の清掃依頼" })).toBeVisible();
-  await page.click('button:has-text("この依頼を承認する")');
+  await page.click('text=都合を回答');
+  await page.waitForLoadState("networkidle");
+  await page.click('button:has-text("回答を送信")');
+  await page.waitForLoadState("networkidle");
+  await page.goto(`/staff/${staffToken}`);
   await page.waitForLoadState("networkidle");
   await expect(page.locator("span", { hasText: "割当済み" })).toBeVisible();
 
   // ---- スタッフが詳細を開いて開始→完了報告 ----
-  await page.click('a:has-text("E2E物件")');
+  await page.click('a[href*="/requests/"]');
   await page.waitForLoadState("networkidle");
   await page.click('button:has-text("清掃を開始する")');
   await page.waitForLoadState("networkidle");

@@ -4,6 +4,7 @@ import { assertAdmin, StaffOnlyError } from "@/lib/db/scope";
 import type { Actor } from "@/lib/auth";
 import { assertTransition, type CleaningStatus } from "@/lib/status-machine";
 import { notify, resolveAllAdmins } from "@/lib/notify";
+import { buildNotificationMessage } from "@/lib/notify/templates";
 
 // チェックリスト1項目の提出結果。label は properties.checklist_template から、
 // checked/note はスタッフが記入する。
@@ -76,10 +77,7 @@ export async function submitReport(
   await notify(
     "report_submitted",
     admins,
-    {
-      subject: "完了報告が提出されました",
-      text: "スタッフから清掃の完了報告が提出されました。管理画面で内容をご確認ください。",
-    },
+    buildNotificationMessage("report_submitted"),
     { request_id: requestId, report_id: reportId as string },
   );
 

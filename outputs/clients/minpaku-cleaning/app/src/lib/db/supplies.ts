@@ -3,6 +3,7 @@ import { createServiceClient } from "@/lib/supabase-server";
 import { assertAdmin, StaffOnlyError } from "@/lib/db/scope";
 import type { Actor } from "@/lib/auth";
 import { notify, resolveAllAdmins, resolveOwnerForProperty } from "@/lib/notify";
+import { buildNotificationMessage } from "@/lib/notify/templates";
 
 export type SupplyRequestInput = {
   property_id: string;
@@ -63,10 +64,7 @@ export async function createSupplyRequest(
   await notify(
     "supply_requested",
     recipients,
-    {
-      subject: "備品補充の依頼があります",
-      text: `スタッフから備品補充の依頼がありました: ${input.items}`,
-    },
+    buildNotificationMessage("supply_requested", { items: input.items }),
     { supply_request_id: data.id, property_id: input.property_id },
   );
   return data as SupplyRequest;

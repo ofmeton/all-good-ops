@@ -1,6 +1,7 @@
 import "server-only";
 import { createServiceClient } from "@/lib/supabase-server";
 import { assertAdmin } from "@/lib/db/scope";
+import { issueToken } from "@/lib/db/tokens";
 import type { Actor } from "@/lib/auth";
 
 export type PropertyInput = {
@@ -51,6 +52,12 @@ export async function createProperty(actor: Actor, input: PropertyInput): Promis
   const db = createServiceClient();
   const { data, error } = await db.from("properties").insert(input).select().single();
   if (error) throw error;
+  try {
+    await issueToken(actor, { type: "owner", propertyId: data.id });
+  } catch (e) {
+    await db.from("properties").delete().eq("id", data.id);
+    throw e;
+  }
   return data as Property;
 }
 

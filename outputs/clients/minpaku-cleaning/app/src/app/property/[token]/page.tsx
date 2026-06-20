@@ -7,6 +7,7 @@ import { Icon } from "@/components/ui/Icon";
 import { StatusBadge, type Status } from "@/components/ui/StatusBadge";
 import { PropertyPhoto } from "@/components/ui/PropertyPhoto";
 import { Badge } from "@/components/ui/Badge";
+import Link from "next/link";
 
 const STATUS_MAP: Record<string, Status> = {
   unassigned: "unassigned",
@@ -19,10 +20,13 @@ const STATUS_MAP: Record<string, Status> = {
 
 export default async function OwnerPropertyPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ token: string }>;
+  searchParams?: Promise<{ line_link?: string }>;
 }) {
   const { token: _token } = await params;
+  const sp = await searchParams;
   const actor = await resolveActorByToken(_token);
   if (!actor || actor.role !== "owner") return null;
 
@@ -35,6 +39,14 @@ export default async function OwnerPropertyPage({
     .eq("id", propertyId)
     .maybeSingle();
   if (!property) notFound();
+
+  const { data: owner } = await db
+    .from("owners")
+    .select("line_user_id")
+    .eq("id", actor.ownerId)
+    .maybeSingle();
+  const lineLinkStatus =
+    sp?.line_link === "success" || sp?.line_link === "error" ? sp.line_link : undefined;
 
   const { data: requests } = await db
     .from("cleaning_requests")
@@ -125,6 +137,42 @@ export default async function OwnerPropertyPage({
             </p>
           </Card>
         )}
+
+        <Card className="p-4 space-y-3">
+          <div className="flex items-center gap-2">
+            <div className="h-8 w-8 rounded-lg bg-brand-50 text-brand-600 flex items-center justify-center">
+              <Icon name="MessageCircle" size={16} />
+            </div>
+            <div>
+              <div className="text-[13px] font-bold text-ink-900">LINE連携</div>
+              <div className="text-[11.5px] text-ink-500">確認待ち通知の受信先</div>
+            </div>
+          </div>
+          {lineLinkStatus === "success" && (
+            <p className="text-[12px] text-st-confirmed-text bg-st-confirmed-bg px-3 py-2 rounded-lg">
+              LINE連携が完了しました。
+            </p>
+          )}
+          {lineLinkStatus === "error" && (
+            <p className="text-[12px] text-st-cancelled-text bg-st-cancelled-bg px-3 py-2 rounded-lg">
+              LINE連携に失敗しました。時間をおいて再度お試しください。
+            </p>
+          )}
+          {owner?.line_user_id ? (
+            <div className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-st-confirmed-bg px-3.5 text-[13px] font-medium text-st-confirmed-text">
+              <Icon name="CircleCheckBig" size={14} />
+              連携済み
+            </div>
+          ) : (
+            <Link
+              href={`/api/line/link/start?token=${encodeURIComponent(_token)}`}
+              className="inline-flex h-9 items-center justify-center gap-1.5 rounded-lg bg-white px-3.5 text-[13px] font-medium text-ink-800 ring-1 ring-ink-200 transition-[background-color,color,box-shadow,transform,opacity] duration-150 ease-out hover:bg-ink-50 hover:ring-ink-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40 focus-visible:ring-offset-1 focus-visible:ring-offset-white active:scale-[0.98]"
+            >
+              <Icon name="MessageCircle" size={14} />
+              LINE連携
+            </Link>
+          )}
+        </Card>
 
         <div className="grid grid-cols-2 gap-3">
           {[

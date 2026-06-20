@@ -60,7 +60,7 @@ export default async function RequestsPage() {
             </div>
             <h3 className="text-[14px] font-bold text-ink-900">新規依頼を作成</h3>
           </div>
-          <RequestForm properties={properties} />
+          <RequestForm properties={properties} staff={staff} />
         </Card>
       )}
       {properties.length === 0 && (

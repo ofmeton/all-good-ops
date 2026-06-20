@@ -7,6 +7,7 @@ import {
   resolveAllAdmins,
   resolveOwnerForProperty,
 } from "@/lib/notify";
+import { buildNotificationMessage } from "@/lib/notify/templates";
 
 // 1時間ごとに走り、assignment_deadline（送信+24h）を過ぎてもまだ status='unassigned'
 // の依頼を管理者＋オーナーにアラート通知する。dedupeToday=true で1日1回に絞る。
@@ -40,10 +41,12 @@ export async function GET(req: NextRequest) {
     await notify(
       "unassigned_alert",
       recipients,
-      {
-        subject: "未割当の清掃依頼があります",
-        text: `${r.properties?.name ?? "物件"} の依頼（${r.checkin_date}〜${r.checkout_date}）が24時間を経過しても未割当です。手動割当を検討してください。`,
-      },
+      buildNotificationMessage("unassigned_alert", {
+        propertyName: r.properties?.name,
+        checkinDate: r.checkin_date,
+        checkoutDate: r.checkout_date,
+        reason: "24h未確定",
+      }),
       { request_id: r.id, property_id: r.property_id },
       { dedupeToday: true },
     );

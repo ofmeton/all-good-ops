@@ -4,11 +4,17 @@ import { assertAdmin, StaffOnlyError } from "@/lib/db/scope";
 import { assertTransition, type CleaningStatus } from "@/lib/status-machine";
 import type { Actor } from "@/lib/auth";
 import { todayInJST } from "@/lib/date";
+import { offerWindow } from "@/lib/offer-window";
 import {
   notify,
-  resolveStaffForProperty,
   resolveOwnerForProperty,
+  type NotifyRecipient,
 } from "@/lib/notify";
+import { buildNotificationMessage } from "@/lib/notify/templates";
+import {
+  buildScheduleBlock,
+  type ScheduleMarker,
+} from "@/lib/notify/templates/schedule-block";
 
 export type CleaningRequestInput = {
   property_id: string;
@@ -16,6 +22,9 @@ export type CleaningRequestInput = {
   checkout_date: string; // YYYY-MM-DD
   guest_count: number;
   option_memo?: string;
+  reservation_id?: string;
+  staff_candidate_ids?: string[];
+  excluded_staff_ids?: string[];
 };
 
 export type CleaningRequest = {
@@ -28,10 +37,164 @@ export type CleaningRequest = {
   status: CleaningStatus;
   assigned_staff_id: string | null;
   assignment_deadline: string | null;
+  reservation_id: string | null;
+  offer_date_start: string | null;
+  offer_date_end: string | null;
+  scheduled_clean_date: string | null;
+  provisional_decision_at: string | null;
+  confirmed_at: string | null;
   created_by: string | null;
   created_at: string;
   updated_at: string;
 };
+
+type StaffContact = {
+  id: string;
+  name: string;
+  line_user_id: string | null;
+  email: string | null;
+  token: string | null;
+};
+
+function appUrl(): string {
+  return (process.env.NEXT_PUBLIC_APP_URL ?? "").replace(/\/$/, "");
+}
+
+function staffUrl(token: string | null, path = ""): string | null {
+  const base = appUrl();
+  if (!base || !token) return null;
+  return `${base}/staff/${token}${path}`;
+}
+
+function recipientFromStaff(staff: StaffContact): NotifyRecipient {
+  return {
+    line_user_id: staff.line_user_id,
+    email: staff.email,
+    key: `staff:${staff.id}`,
+  };
+}
+
+async function getStaffContacts(staffIds: string[]): Promise<StaffContact[]> {
+  if (staffIds.length === 0) return [];
+  const db = createServiceClient();
+  const { data, error } = await db
+    .from("staff")
+    .select("id, name, line_user_id, email")
+    .in("id", staffIds)
+    .is("archived_at", null);
+  if (error) throw error;
+
+  const { data: tokens, error: tokenError } = await db
+    .from("access_tokens")
+    .select("staff_id, token")
+    .eq("type", "staff")
+    .is("revoked_at", null)
+    .in("staff_id", staffIds);
+  if (tokenError) throw tokenError;
+  const tokenByStaff = new Map(
+    ((tokens ?? []) as Array<{ staff_id: string; token: string }>).map((t) => [
+      t.staff_id,
+      t.token,
+    ]),
+  );
+
+  return ((data ?? []) as Array<Omit<StaffContact, "token">>).map((staff) => ({
+    ...staff,
+    token: tokenByStaff.get(staff.id) ?? null,
+  }));
+}
+
+async function propertyName(propertyId: string): Promise<string | null> {
+  const db = createServiceClient();
+  const { data, error } = await db
+    .from("properties")
+    .select("name")
+    .eq("id", propertyId)
+    .maybeSingle();
+  if (error) throw error;
+  return data?.name ?? null;
+}
+
+async function defaultStaffCandidateIds(propertyId: string): Promise<string[]> {
+  const db = createServiceClient();
+  const { data, error } = await db
+    .from("staff_assignments")
+    .select("staff_id, staff:staff_id(archived_at)")
+    .eq("property_id", propertyId);
+  if (error) throw error;
+  return ((data ?? []) as unknown as Array<{
+    staff_id: string;
+    staff: { archived_at: string | null } | null;
+  }>)
+    .filter((row) => row.staff && row.staff.archived_at === null)
+    .map((row) => row.staff_id);
+}
+
+async function nextCheckinAfterCheckout(
+  propertyId: string,
+  checkoutDate: string,
+): Promise<string | null> {
+  const db = createServiceClient();
+  const { data, error } = await db
+    .from("reservations")
+    .select("checkin_date")
+    .eq("property_id", propertyId)
+    .eq("status", "active")
+    .gt("checkin_date", checkoutDate)
+    .order("checkin_date", { ascending: true })
+    .limit(1)
+    .maybeSingle();
+  if (error) throw error;
+  return data?.checkin_date ?? null;
+}
+
+async function activeRecipientStaffIds(requestId: string): Promise<string[]> {
+  const db = createServiceClient();
+  const { data, error } = await db
+    .from("cleaning_request_recipients")
+    .select("staff_id")
+    .eq("request_id", requestId)
+    .eq("excluded", false);
+  if (error) throw error;
+  return (data ?? []).map((row) => row.staff_id as string);
+}
+
+async function notifyRequestRecipients(
+  kind: "request_created" | "request_changed" | "request_cancelled",
+  req: CleaningRequest,
+  staffIds: string[],
+  marker?: ScheduleMarker,
+  previousGuestCount?: number,
+): Promise<void> {
+  const contacts = await getStaffContacts(staffIds);
+  if (contacts.length === 0) return;
+  const scheduleBlock = await buildScheduleBlock(req.property_id, {
+    markers: marker ? { [req.id]: marker } : undefined,
+  });
+  const name = await propertyName(req.property_id);
+  await Promise.all(
+    contacts.map((staff) =>
+      notify(
+        kind,
+        [recipientFromStaff(staff)],
+        buildNotificationMessage(kind, {
+          propertyName: name,
+          checkinDate: req.checkin_date,
+          checkoutDate: req.checkout_date,
+          guestCount: req.guest_count,
+          previousGuestCount,
+          responseUrl:
+            kind === "request_cancelled"
+              ? null
+              : staffUrl(staff.token, `/respond/${req.id}`),
+          shiftUrl: staffUrl(staff.token),
+          scheduleBlock,
+        }),
+        { request_id: req.id, property_id: req.property_id, staff_id: staff.id },
+      ),
+    ),
+  );
+}
 
 // 当日割り当て不可: checkin は翌日以降。checkout > checkin。guest_count > 0。
 // current_date を使う CHECK 制約は immutable でないため不可 → アプリ層で検証する。
@@ -86,6 +249,13 @@ export async function createRequest(
   assertAdmin(actor);
   validateRequestFields(input);
   const db = createServiceClient();
+  const candidateIds =
+    input.staff_candidate_ids && input.staff_candidate_ids.length > 0
+      ? [...new Set(input.staff_candidate_ids)]
+      : await defaultStaffCandidateIds(input.property_id);
+  const excluded = new Set(input.excluded_staff_ids ?? []);
+  const nextCheckin = await nextCheckinAfterCheckout(input.property_id, input.checkout_date);
+  const window = offerWindow(input.checkout_date, nextCheckin);
   // 24h 有効期限（設計書 6章: assignment_deadline = 送信 + 24h）
   const deadline = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
   const { data, error } = await db
@@ -98,23 +268,39 @@ export async function createRequest(
       option_memo: input.option_memo ?? null,
       status: "unassigned",
       assignment_deadline: deadline,
+      reservation_id: input.reservation_id ?? null,
+      offer_date_start: window.start,
+      offer_date_end: window.end,
       created_by: actor.adminId,
     })
     .select()
     .single();
   if (error) throw error;
-  // 担当スタッフ全員に依頼作成を通知
-  const staffRecipients = await resolveStaffForProperty(input.property_id);
-  await notify(
-    "request_created",
-    staffRecipients,
-    {
-      subject: "新しい清掃依頼があります",
-      text: `${input.checkin_date}〜${input.checkout_date}（${input.guest_count}名）の清掃依頼が登録されました。`,
-    },
-    { request_id: data.id, property_id: input.property_id },
-  );
-  return data as CleaningRequest;
+  if (candidateIds.length > 0) {
+    const { error: recipientError } = await db
+      .from("cleaning_request_recipients")
+      .insert(
+        candidateIds.map((staffId) => ({
+          request_id: data.id,
+          staff_id: staffId,
+          excluded: excluded.has(staffId),
+        })),
+      );
+    if (recipientError) throw recipientError;
+  }
+
+  const request = data as CleaningRequest;
+  const activeIds = candidateIds.filter((staffId) => !excluded.has(staffId));
+  await notifyRequestRecipients("request_created", request, activeIds, { kind: "new" });
+  if (activeIds.length > 0) {
+    const { error: notifiedError } = await db
+      .from("cleaning_request_recipients")
+      .update({ notified_at: new Date().toISOString() })
+      .eq("request_id", request.id)
+      .eq("excluded", false);
+    if (notifiedError) throw notifiedError;
+  }
+  return request;
 }
 
 // 編集可能フィールド: checkin/checkout/guest_count/option_memo。property_id は変更不可。
@@ -128,14 +314,14 @@ export async function updateRequest(
   patch: CleaningRequestPatch,
 ): Promise<void> {
   assertAdmin(actor);
+  const current = await getRequest(actor, id);
+  if (!current) throw new Error("依頼が見つかりません");
   // 日付/人数を触る場合は現行値とマージして検証する
   if (
     patch.checkin_date !== undefined ||
     patch.checkout_date !== undefined ||
     patch.guest_count !== undefined
   ) {
-    const current = await getRequest(actor, id);
-    if (!current) throw new Error("依頼が見つかりません");
     validateRequestFields({
       checkin_date: patch.checkin_date ?? current.checkin_date,
       checkout_date: patch.checkout_date ?? current.checkout_date,
@@ -148,6 +334,34 @@ export async function updateRequest(
     .update({ ...patch, updated_at: new Date().toISOString() })
     .eq("id", id);
   if (error) throw error;
+
+  if (
+    patch.guest_count !== undefined &&
+    patch.guest_count !== current.guest_count
+  ) {
+    const updated = {
+      ...current,
+      ...patch,
+      updated_at: new Date().toISOString(),
+    } as CleaningRequest;
+    const staffIds =
+      current.status === "unassigned"
+        ? await activeRecipientStaffIds(id)
+        : current.assigned_staff_id
+          ? [current.assigned_staff_id]
+          : [];
+    await notifyRequestRecipients(
+      "request_changed",
+      updated,
+      staffIds,
+      {
+        kind: "changed",
+        previousGuestCount: current.guest_count,
+        currentGuestCount: patch.guest_count,
+      },
+      current.guest_count,
+    );
+  }
 }
 
 // 管理者による依頼キャンセル（cancelled へ遷移。物理削除しない）。
@@ -156,7 +370,7 @@ export async function cancelRequest(actor: Actor, id: string): Promise<void> {
   const db = createServiceClient();
   const { data: req, error: readError } = await db
     .from("cleaning_requests")
-    .select("status")
+    .select("*")
     .eq("id", id)
     .maybeSingle();
   if (readError) throw readError;
@@ -173,6 +387,22 @@ export async function cancelRequest(actor: Actor, id: string): Promise<void> {
   if (!data || data.length === 0) {
     throw new Error("依頼の状態が変更されたため取り消しできませんでした");
   }
+  const request = {
+    ...(req as CleaningRequest),
+    status: "cancelled" as CleaningStatus,
+  };
+  const staffIds =
+    req.status === "unassigned"
+      ? await activeRecipientStaffIds(id)
+      : req.assigned_staff_id
+        ? [req.assigned_staff_id]
+        : [];
+  await notifyRequestRecipients(
+    "request_cancelled",
+    request,
+    staffIds,
+    { kind: "cancelled" },
+  );
 }
 
 // ---- 割当・進行遷移 ----
@@ -211,31 +441,22 @@ export async function assertStaffAssignedToRequest(
   await assertStaffAssignedToRequestProperty(db, actor.staffId, requestId);
 }
 
-// 早い者勝ち承認: status='unassigned' の条件付きUPDATEで排他する。
-// 影響行数1 → 承認確定 / 0 → 既に他スタッフが取得済み。
+// 旧 claim 互換口。即時割当は廃止し、回答フローへ委譲する。
 export async function claimRequest(
   actor: Actor,
   requestId: string,
 ): Promise<void> {
   if (actor.role !== "staff") throw new StaffOnlyError("スタッフ専用の操作です");
+  const { submitResponse } = await import("@/lib/db/responses");
   const db = createServiceClient();
-  // NOTE: 担当チェックは条件付きUPDATEとは別クエリ。staff_assignments の
-  // 変更は管理者のみ・低頻度のため TOCTOU は許容（将来 join 化を検討）。
-  await assertStaffAssignedToRequestProperty(db, actor.staffId, requestId);
-  const { data, error } = await db
+  const { data: req, error } = await db
     .from("cleaning_requests")
-    .update({
-      status: "assigned",
-      assigned_staff_id: actor.staffId,
-      updated_at: new Date().toISOString(),
-    })
+    .select("offer_date_start")
     .eq("id", requestId)
-    .eq("status", "unassigned")
-    .select("id");
+    .maybeSingle();
   if (error) throw error;
-  if (!data || data.length === 0) {
-    throw new RequestAlreadyClaimedError("この依頼は既に他のスタッフが承認しました");
-  }
+  if (!req?.offer_date_start) throw new Error("回答可能期間が設定されていません");
+  await submitResponse(actor, requestId, "available", req.offer_date_start);
 }
 
 // 管理者による手動割当（unassigned / assigned のどちらからも可・再割当含む）。
@@ -334,10 +555,7 @@ export async function confirmRequest(
     await notify(
       "request_confirmed",
       [owner],
-      {
-        subject: "清掃が完了しました",
-        text: "管理者により清掃の確認が完了しました。詳細はオーナーURLからご覧ください。",
-      },
+      buildNotificationMessage("request_confirmed"),
       { request_id: requestId, property_id: req.property_id },
     );
   }
@@ -347,7 +565,7 @@ export async function confirmRequest(
 
 export type StaffRequestListItem = CleaningRequest & { property_name: string };
 
-// スタッフの担当物件の「未割当（承認可能）」依頼 + 「自分に割当済み」依頼。
+// スタッフの「回答対象の未確定依頼」+「自分に割当済み」依頼。
 // 一覧表示用に物件名を同梱する。
 export async function listRequestsForStaff(
   actor: Actor,
@@ -355,20 +573,43 @@ export async function listRequestsForStaff(
   // staffId は検証済みのサーバ側トークン由来。未検証入力ではこの補間を使わないこと。
   if (actor.role !== "staff") throw new StaffOnlyError("スタッフ専用の操作です");
   const db = createServiceClient();
-  const { data: assignments } = await db
-    .from("staff_assignments")
-    .select("property_id")
-    .eq("staff_id", actor.staffId);
-  const propertyIds = (assignments ?? []).map((a) => a.property_id);
-  if (propertyIds.length === 0) return [];
-  const { data, error } = await db
+  const { data: recipientRows, error: recipientError } = await db
+    .from("cleaning_request_recipients")
+    .select("request_id")
+    .eq("staff_id", actor.staffId)
+    .eq("excluded", false);
+  if (recipientError) throw recipientError;
+  const recipientRequestIds = (recipientRows ?? []).map((row) => row.request_id as string);
+
+  const byId = new Map<string, StaffRequestListItem>();
+  if (recipientRequestIds.length > 0) {
+    const { data, error } = await db
+      .from("cleaning_requests")
+      .select("*, properties(name)")
+      .in("id", recipientRequestIds)
+      .eq("status", "unassigned")
+      .order("checkin_date", { ascending: true });
+    if (error) throw error;
+    for (const item of normalizeStaffRequestRows(data ?? [])) byId.set(item.id, item);
+  }
+
+  const { data: assignedRows, error: assignedError } = await db
     .from("cleaning_requests")
     .select("*, properties(name)")
-    .in("property_id", propertyIds)
-    .or(`status.eq.unassigned,assigned_staff_id.eq.${actor.staffId}`)
+    .eq("assigned_staff_id", actor.staffId)
     .order("checkin_date", { ascending: true });
-  if (error) throw error;
-  return (data ?? []).map((row: Record<string, unknown>) => {
+  if (assignedError) throw assignedError;
+  for (const item of normalizeStaffRequestRows(assignedRows ?? [])) byId.set(item.id, item);
+
+  return [...byId.values()].sort((a, b) =>
+    a.checkin_date === b.checkin_date
+      ? a.checkout_date.localeCompare(b.checkout_date)
+      : a.checkin_date.localeCompare(b.checkin_date),
+  );
+}
+
+function normalizeStaffRequestRows(rows: unknown[]): StaffRequestListItem[] {
+  return rows.map((row) => {
     const { properties, ...request } = row as Record<string, unknown> & {
       properties: { name: string } | null;
     };
@@ -402,13 +643,19 @@ export async function getRequestForStaff(
     .maybeSingle();
   if (error) throw error;
   if (!data) return null;
-  const { data: assignment } = await db
-    .from("staff_assignments")
-    .select("property_id")
-    .eq("staff_id", actor.staffId)
-    .eq("property_id", data.property_id)
-    .maybeSingle();
-  if (!assignment) return null;
+  if (data.status === "unassigned") {
+    const { data: recipient, error: recipientError } = await db
+      .from("cleaning_request_recipients")
+      .select("staff_id")
+      .eq("request_id", requestId)
+      .eq("staff_id", actor.staffId)
+      .eq("excluded", false)
+      .maybeSingle();
+    if (recipientError) throw recipientError;
+    if (!recipient) return null;
+  } else if (data.assigned_staff_id !== actor.staffId) {
+    return null;
+  }
   const { properties, ...request } = data as Record<string, unknown> & {
     properties: {
       name: string;

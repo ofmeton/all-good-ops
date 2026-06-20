@@ -1,19 +1,15 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
 import { resolveActorByToken } from "@/lib/auth";
-import {
-  claimRequest,
-  startRequest,
-  RequestAlreadyClaimedError,
-} from "@/lib/db/requests";
+import { startRequest } from "@/lib/db/requests";
 import { submitReport } from "@/lib/db/reports";
 import { InvalidTransitionError } from "@/lib/status-machine";
 import { StaffOnlyError } from "@/lib/db/scope";
 
-// PATCH: ステータス操作（claim / start）
+// PATCH: ステータス操作（start のみ。回答は /api/staff/responses）
 const patchSchema = z.object({
   token: z.string().min(1),
-  action: z.enum(["claim", "start"]),
+  action: z.literal("start"),
 });
 
 // POST: 完了報告の提出
@@ -43,18 +39,11 @@ export async function PATCH(
   if (!actor || actor.role !== "staff")
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   try {
-    if (parsed.data.action === "claim") {
-      await claimRequest(actor, id);
-    } else {
-      await startRequest(actor, id);
-    }
+    await startRequest(actor, id);
     return NextResponse.json({ ok: true });
   } catch (e) {
-    // 早い者勝ち負け・状態機械違反は 409（競合）
-    if (
-      e instanceof RequestAlreadyClaimedError ||
-      e instanceof InvalidTransitionError
-    )
+    // 状態機械違反は 409（競合）
+    if (e instanceof InvalidTransitionError)
       return NextResponse.json({ error: e.message }, { status: 409 });
     if (e instanceof StaffOnlyError)
       return NextResponse.json({ error: e.message }, { status: 403 });
