@@ -3,7 +3,7 @@
 from pathlib import Path
 
 from _deck_lib import new_presentation
-from _school_slide_helpers import add_feature_slide, add_full_bleed_hero
+from _school_slide_helpers import add_full_bleed_hero, add_rich_feature_slide
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -23,17 +23,20 @@ def add_part(prs):
         prs,
         IMAGE_ROOT / "大船" / "processed" / "wiki_campus_hero.jpg",
         "大船高校",
-        "駅から近くて、行事が盛り上がる学校",
+        "和の施設がそろう、大船の大きな学校。",
     )
-    add_feature_slide(
+    add_rich_feature_slide(
         prs,
-        IMAGE_ROOT,
-        "大船",
         "大船高校",
         [
-            "大船駅から徒歩。藤沢・鎌倉どちらからも通いやすい近さ",
-            "自習室・図書館など施設が充実、落ち着いて過ごせる",
-            "文化祭「白帆祭」・体育祭「六国祭」は応援団やチアまで本気",
+            (IMAGE_ROOT / "大船" / "processed" / "wiki_sportsday_card.jpg", "体育祭（六国祭）"),
+            (IMAGE_ROOT / "大船" / "processed" / "wiki_kannon_card.jpg", "大船のシンボル・大船観音"),
+        ],
+        [
+            "能舞台付きの視聴覚室・純和風庭園・弓道場など、ちょっと珍しい和の施設がそろう",
+            "文化祭「白帆祭」・体育祭「六国祭」は大規模校ならではの活気。応援団やチアも盛り上がる",
+            "部活・同好会が三十近く、加入率も高い（演劇部は全国大会の常連）",
+            "大船駅から徒歩。藤沢・鎌倉どちらからも通いやすい",
         ],
         "大船駅から徒歩",
         "出典: 神奈川県立大船高等学校 公式サイト / Wikimedia Commons",

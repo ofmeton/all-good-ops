@@ -80,8 +80,8 @@ def add_cover(prs):
 
 def add_shichiri_hero(prs):
     s = blank(prs)
-    path = IMAGE_ROOT / "七里ヶ浜" / "processed" / "wiki_campus_hero.jpg"
-    hero(s, path, "七里ヶ浜高校", "海と江の島が見える、坂の上の学校")
+    path = IMAGE_ROOT / "七里ヶ浜" / "processed" / "wiki_beach_hero.jpg"
+    hero(s, path, "七里ヶ浜高校", "教室の窓の外が、海。")
 
 
 def bullet_item(slide, text, top):
@@ -98,6 +98,24 @@ def bullet_item(slide, text, top):
         bold=True,
         color=TEXT,
         line_spacing=1.18,
+    )
+
+
+def rich_hook(slide, text, top):
+    add_rect(slide, Inches(0.72), top, Inches(11.88), Inches(0.56), fill=WHITE, line=LIGHT_GRAY, radius=True)
+    add_shape(slide, MSO_SHAPE.OVAL, Inches(0.98), top + Inches(0.19), Inches(0.16), Inches(0.16), fill=TEAL, line=TEAL)
+    add_text(
+        slide,
+        text,
+        Inches(1.32),
+        top + Inches(0.09),
+        Inches(10.9),
+        Inches(0.40),
+        size=11.4,
+        bold=True,
+        color=TEXT,
+        line_spacing=1.02,
+        anchor=MSO_ANCHOR.MIDDLE,
     )
 
 
@@ -127,38 +145,62 @@ def add_shichiri_features(prs):
         color=MID_GRAY,
     )
 
-    bullet_item(s, "教室から相模湾と江の島が一望できる、海沿いの立地", Inches(1.72))
-    bullet_item(s, "校訓は「自学自習・自主自律」。自分で考えて動く自由な空気", Inches(2.72))
-    bullet_item(s, "文化祭「七高祭」・体育祭「七里ンピック」は生徒が主役。野外ステージで盛り上がる行事も", Inches(3.72))
+    card_top = Inches(1.28)
+    card_w = Inches(3.78)
+    card_h = Inches(1.58)
+    gap = Inches(0.24)
+    photo_card(
+        s,
+        IMAGE_ROOT / "七里ヶ浜" / "processed" / "wiki_campus_hero.jpg",
+        Inches(0.72),
+        card_top,
+        card_w,
+        card_h,
+        caption="校舎",
+    )
+    photo_card(
+        s,
+        IMAGE_ROOT / "七里ヶ浜" / "processed" / "wiki_enoden_card.jpg",
+        Inches(0.72) + card_w + gap,
+        card_top,
+        card_w,
+        card_h,
+        caption="江ノ電で通学",
+    )
+    photo_card(
+        s,
+        IMAGE_ROOT / "七里ヶ浜" / "processed" / "shichirinpic_card.jpg",
+        Inches(0.72) + (card_w + gap) * 2,
+        card_top,
+        card_w,
+        card_h,
+        caption="体育祭（七里ンピック）",
+    )
 
-    add_rect(s, Inches(0.72), Inches(5.15), Inches(6.8), Inches(0.62), fill=WHITE, line=LIGHT_GRAY, radius=True)
+    rich_hook(s, "教室や校庭から相模湾と江の島を一望。晴れた日は遠くに伊豆大島も見える、海沿いの坂の上の学校", Inches(3.20))
+    rich_hook(s, "体育祭「七里ンピック」はペアダンスが名物。海風の中、全校が一体になって盛り上がる", Inches(3.86))
+    rich_hook(s, "校訓は「自学自習・自主自律」。自分で考えて動く、のびのびした自由な空気", Inches(4.52))
+    rich_hook(s, "江ノ電の駅から徒歩すぐ、目の前は七里ヶ浜の海岸。通学路がもう湘南", Inches(5.18))
+
+    add_rect(s, Inches(0.72), Inches(6.08), Inches(6.8), Inches(0.46), fill=WHITE, line=LIGHT_GRAY, radius=True)
     add_text(
         s,
         "江ノ電「七里ヶ浜」駅から徒歩すぐ",
         Inches(1.02),
-        Inches(5.34),
+        Inches(6.22),
         Inches(6.2),
-        Inches(0.24),
-        size=15,
+        Inches(0.20),
+        size=13,
         bold=True,
         color=TEAL_DARK,
         anchor=MSO_ANCHOR.MIDDLE,
     )
 
-    photo_card(
-        s,
-        IMAGE_ROOT / "七里ヶ浜" / "processed" / "shichirinpic_card.jpg",
-        Inches(8.05),
-        Inches(1.52),
-        Inches(4.62),
-        Inches(2.72),
-        caption="体育祭（七里ンピック）",
-    )
     add_text(
         s,
         "出典: 神奈川県立七里ヶ浜高等学校 公式サイト / Wikimedia Commons",
         Inches(0.72),
-        Inches(6.82),
+        Inches(6.92),
         Inches(10.8),
         Inches(0.22),
         size=8,

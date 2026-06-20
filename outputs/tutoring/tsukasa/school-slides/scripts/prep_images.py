@@ -9,10 +9,16 @@ ROOT = Path(__file__).resolve().parents[1]
 IMAGE_ROOT = ROOT.parent / "school-images"
 
 APPROVED = [
+    ("七里ヶ浜", "wiki_beach.jpg", "hero", 1600, None),
     ("七里ヶ浜", "wiki_campus.jpg", "hero", 1600, None),
+    ("七里ヶ浜", "wiki_enoden.jpg", "card", 1000, (3.7, 1.45)),
     ("七里ヶ浜", "shichirinpic.jpg", "card", 1000, (5.15, 2.45)),
+    ("鎌倉", "wiki_fumikiri.jpg", "hero", 1600, None),
     ("鎌倉", "wiki_campus.jpg", "hero", 1600, None),
+    ("大船", "wiki_sportsday.jpg", "card", 1000, (5.8, 1.86)),
+    ("大船", "wiki_kannon.jpg", "card", 1000, (5.8, 1.86)),
     ("大船", "wiki_campus.jpg", "hero", 1600, None),
+    ("柏陽", "wiki_hongodai.jpg", "card", 1000, (8.0, 2.02)),
     ("柏陽", "wiki_campus.jpg", "hero", 600, None),
 ]
 

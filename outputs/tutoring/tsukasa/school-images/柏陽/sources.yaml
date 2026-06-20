@@ -5,3 +5,9 @@ images:
     type: "校舎"
     license_note: "CC BY-SA (Wikimedia Commons)"
     usage: "家庭教師つかさ本人向けの私的教材。1対1の対面提示のみ。印刷配布・Web公開・SNS掲載・第三者共有はしない"
+  - file: raw/wiki_hongodai.jpg
+    source_url: "Wikimedia Commons"
+    fetched_date: "2026-06"
+    type: "景色"
+    license_note: "CC (Wikimedia Commons)"
+    usage: "家庭教師つかさ本人向けの私的教材。1対1の対面提示のみ。印刷配布・Web公開・SNS掲載・第三者共有はしない"
