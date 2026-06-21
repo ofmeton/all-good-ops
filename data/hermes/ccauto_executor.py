@@ -92,6 +92,13 @@ ENV_PATH = HOME / ".hermes" / ".env"
 NOTION_DB_ID = "2159405e11a84e7f90a8b6252bb43d38"
 NOTION_VER = "2022-06-28"
 ALLOWED_GIT_EMAILS = ["off.me.ton@gmail.com"]  # 既定 author
+DIFF_LIMIT = 400
+BINARY_DIFF_LINES = DIFF_LIMIT + 1
+CODE_EXTENSIONS = {
+    ".py", ".ts", ".tsx", ".js", ".jsx", ".go", ".rs", ".rb", ".java",
+    ".kt", ".kts", ".swift", ".c", ".cc", ".cpp", ".h", ".hpp", ".cs",
+    ".php", ".sh", ".bash", ".zsh", ".sql",
+}
 
 
 def load_env():
@@ -157,13 +164,29 @@ def default_branch(repo_path):
     return "main"
 
 
+def _git_checked(args, cwd=None, timeout=None, text=True):
+    r = subprocess.run(args, cwd=cwd, capture_output=True, text=text, timeout=timeout)
+    if r.returncode != 0:
+        err = (r.stderr or r.stdout or "").strip()
+        raise RuntimeError(f"git command failed: {' '.join(args)} {err[:300]}")
+    return r
+
+
 def make_worktree(repo_path, slug):
     base = default_branch(repo_path)
-    subprocess.run(["git", "-C", repo_path, "fetch", "origin", base], capture_output=True, text=True, timeout=120)
     branch = f"ccauto/{slug}"
+    _git_checked(["git", "-C", repo_path, "fetch", "origin", base], timeout=120)
+    subprocess.run(["git", "-C", repo_path, "worktree", "prune"], capture_output=True, text=True, timeout=60)
+    existing = subprocess.run(["git", "-C", repo_path, "branch", "--list", branch],
+                              capture_output=True, text=True, timeout=30)
+    if existing.returncode == 0 and existing.stdout.strip():
+        _git_checked(["git", "-C", repo_path, "branch", "-D", branch], timeout=60)
     wt = tempfile.mkdtemp(prefix="ccauto_wt_")
-    subprocess.run(["git", "-C", repo_path, "worktree", "add", "-b", branch, wt, f"origin/{base}"],
-                   capture_output=True, text=True, timeout=120, check=True)
+    try:
+        _git_checked(["git", "-C", repo_path, "worktree", "add", "-b", branch, wt, f"origin/{base}"], timeout=120)
+    except Exception:
+        shutil.rmtree(wt, ignore_errors=True)
+        raise
     return wt, branch
 
 
@@ -190,23 +213,38 @@ def run_codex(worktree, task_text):
 
 
 def git_diff_stat(worktree):
-    subprocess.run(["git", "-C", worktree, "add", "-A"], capture_output=True, text=True)
-    files = subprocess.run(["git", "-C", worktree, "diff", "--cached", "--name-only"],
-                           capture_output=True, text=True).stdout.split()
-    numstat = subprocess.run(["git", "-C", worktree, "diff", "--cached", "--numstat"],
-                             capture_output=True, text=True).stdout.strip().splitlines()
+    _git_checked(["git", "-C", worktree, "add", "-A"])
+    names = _git_checked(["git", "-c", "core.quotepath=false", "-C", worktree,
+                          "diff", "--cached", "-z", "--name-only"]).stdout
+    files = [x for x in names.split("\0") if x]
+    numstat = _git_checked(["git", "-c", "core.quotepath=false", "-C", worktree,
+                            "diff", "--cached", "--numstat"]).stdout.strip().splitlines()
     lines = 0
     for ln in numstat:
         parts = ln.split("\t")
+        if len(parts) >= 2 and (parts[0] == "-" or parts[1] == "-"):
+            return files, BINARY_DIFF_LINES
         for n in parts[:2]:
             if n.isdigit():
                 lines += int(n)
     return files, lines
 
 
-def verify(worktree):
+def code_changes_present(changed_files):
+    for f in changed_files or []:
+        p = Path(f)
+        if str(p).startswith("docs/") or p.suffix.lower() in (".md", ".txt"):
+            continue
+        if p.suffix.lower() in CODE_EXTENSIONS:
+            return True
+    return False
+
+
+def verify(worktree, changed_files=None):
     cmd = detect_verify_cmd(worktree)
     if not cmd:
+        if code_changes_present(changed_files):
+            return False, "(検証コマンド未検出かつコード変更あり→merge不可)"
         return True, "(検証コマンド検出なし→skip)"  # テスト無しは緑扱い（docs等）
     try:
         res = subprocess.run(cmd, cwd=worktree, capture_output=True, text=True, timeout=900)
@@ -216,19 +254,27 @@ def verify(worktree):
 
 
 def codex_review(worktree, diff_text):
-    """別 Codex パスで diff の安全性/正しさを判定。'SAFE' 行があれば safe。"""
+    """別 Codex パスで diff の安全性/正しさを判定。先頭 verdict の SAFE のみ safe。"""
     prompt = (
         "次の git diff をレビューし、安全に main へ自動マージしてよいか判定。\n"
         "破壊的変更・秘密混入・意図不明な広範囲変更・送信/課金/migration があれば不可。\n"
-        "可なら最初の行に 'VERDICT: SAFE'、不可なら 'VERDICT: UNSAFE: <理由>' を出力。\n\n"
+        "判定は出力の先頭行に 'VERDICT: SAFE' または 'VERDICT: UNSAFE: <理由>' のみを書くこと。\n\n"
         + diff_text[:12000]
     )
     try:
         res = subprocess.run([CODEX, "exec", "--sandbox", "read-only", "--ask-for-approval", "never", prompt],
                              cwd=worktree, capture_output=True, text=True, timeout=600)
         out = res.stdout or ""
-        safe = "VERDICT: SAFE" in out
-        reason = "" if safe else out[-400:]
+        if res.returncode != 0:
+            return False, (res.stderr or out or "codex review failed")[-400:]
+        first = ""
+        for line in out.splitlines():
+            if line.strip():
+                first = line.strip()
+                break
+        m = re.match(r"^VERDICT:\s*(SAFE|UNSAFE)\b(?::\s*(.*))?$", first)
+        safe = bool(m and m.group(1) == "SAFE")
+        reason = "" if safe else ((m.group(2) if m else out) or "codex review unsafe/ambiguous")[-400:]
         return safe, reason
     except subprocess.TimeoutExpired:
         return False, "codex review timeout"
@@ -244,9 +290,11 @@ def add_comment(env, page_id, text):
 
 
 def push_branch(worktree, branch):
-    subprocess.run(["git", "-C", worktree, "commit", "-m",
-                    f"feat(cc-auto): {branch}\n\nCo-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"],
-                   capture_output=True, text=True)
+    c = subprocess.run(["git", "-C", worktree, "commit", "-m",
+                        f"feat(cc-auto): {branch}\n\nCo-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"],
+                       capture_output=True, text=True)
+    if c.returncode != 0:
+        return False
     r = subprocess.run(["git", "-C", worktree, "push", "-u", "origin", branch], capture_output=True, text=True)
     return r.returncode == 0
 
@@ -262,6 +310,8 @@ def open_pr(repo_path, worktree, branch, title):
 
 def squash_merge(repo_path, worktree, branch, base):
     # PR 経由 squash merge（main 直 commit 保護を回避）
+    if not push_branch(worktree, branch):
+        return False
     pr = open_pr(repo_path, worktree, branch, f"cc-auto: {branch}")
     if not pr:
         return False
@@ -279,18 +329,31 @@ def finalize(env, card, decision, ctx):
             add_comment(env, pid, f"✅ cc-auto 完了→main反映\n\n{summary}")
             telegram(env, f"✅ 完了→main反映: {title}\n{summary[:400]}")
             return
-        decision = "pr"  # merge 失敗→PR にフォールバック
+        set_status(env, pid, "Blocked")
+        add_comment(env, pid, f"⚠️ cc-auto merge/PR作成失敗・要対応\n\n{summary}")
+        telegram(env, f"⚠️ merge/PR作成失敗・要対応: {title}")
+        return
     if decision == "pr":
-        push_branch(ctx["worktree"], ctx["branch"])
+        if not push_branch(ctx["worktree"], ctx["branch"]):
+            set_status(env, pid, "Blocked")
+            add_comment(env, pid, f"⚠️ cc-auto PR作成失敗・要対応（push失敗）\n\n{summary}")
+            telegram(env, f"⚠️ PR作成失敗・要対応: {title}")
+            return
         pr = open_pr(ctx["repo_path"], ctx["worktree"], ctx["branch"], f"cc-auto: {title}")
+        if not pr:
+            set_status(env, pid, "Blocked")
+            add_comment(env, pid, f"⚠️ cc-auto PR作成失敗・要対応\n\n{summary}")
+            telegram(env, f"⚠️ PR作成失敗・要対応: {title}")
+            return
         set_status(env, pid, "Review")
         add_comment(env, pid, f"📝 cc-auto PR作成（要レビュー）\n{pr or '(PR作成失敗)'}\n\n{summary}")
         telegram(env, f"📝 PR上げた→確認して: {title}\n{pr or ''}")
         return
     # blocked
-    push_branch(ctx["worktree"], ctx["branch"])
+    pushed = push_branch(ctx["worktree"], ctx["branch"])
     set_status(env, pid, "Blocked")
-    add_comment(env, pid, f"⚠️ cc-auto 中断: {ctx.get('reason','')}\n\n{summary}")
+    push_note = "" if pushed else "\n\nPR作成失敗・要対応（push失敗）"
+    add_comment(env, pid, f"⚠️ cc-auto 中断: {ctx.get('reason','')}{push_note}\n\n{summary}")
     telegram(env, f"⚠️ 止まった→Blocked: {title}\n{ctx.get('reason','')[:300]}")
 
 
@@ -305,6 +368,13 @@ def log(msg):
     print(line)
     with open(LOG_PATH, "a", encoding="utf-8") as f:
         f.write(line + "\n")
+
+
+def ccauto_enabled():
+    try:
+        return KILL_PATH.read_text(encoding="utf-8").strip() == "1"
+    except Exception:
+        return False
 
 
 def _title(card):
@@ -341,13 +411,14 @@ def process_card(env, card, projects_root, dry):
     if dry:
         log(f"    DRY: repo={repo} まで解決。Codex実行/merge はskip"); return True
     set_status(env, pid, "InProgress"); telegram(env, f"🤖 着手: {title}")
-    wt, branch = make_worktree(repo, _slug(title))
+    wt = None
     try:
+        wt, branch = make_worktree(repo, _slug(title))
         ok, clog = run_codex(wt, f"{title}\n\n{details}")
         files, lines = git_diff_stat(wt)
-        hit2, reason2 = hard_gate_hit("", files)
-        test_ok, vlog = verify(wt) if ok else (False, clog)
-        diff_text = subprocess.run(["git", "-C", wt, "diff", "--cached"], capture_output=True, text=True).stdout
+        diff_text = _git_checked(["git", "-c", "core.quotepath=false", "-C", wt, "diff", "--cached"]).stdout
+        hit2, reason2 = hard_gate_hit(diff_text, files)
+        test_ok, vlog = verify(wt, files) if ok else (False, clog)
         safe, sreason = codex_review(wt, diff_text) if ok and test_ok else (False, "実装/検証失敗")
         decision = decide_exit(safe, hit2, not diff_too_big(lines), test_ok, author_ok(repo))
         ctx = {"repo_path": repo, "worktree": wt, "branch": branch, "base": default_branch(repo),
@@ -355,8 +426,16 @@ def process_card(env, card, projects_root, dry):
         finalize(env, card, decision, ctx)
         log(f"    decision={decision} files={len(files)} lines={lines}")
         return decision != "blocked"
+    except Exception as e:
+        reason = f"cc-auto fail-closed: {e}"
+        log(f"    {reason}")
+        set_status(env, pid, "Blocked")
+        add_comment(env, pid, f"⚠️ cc-auto 中断: {reason}")
+        telegram(env, f"⚠️ cc-auto 中断: {title}\n{reason[:300]}")
+        return False
     finally:
-        cleanup_worktree(repo, wt)
+        if wt:
+            cleanup_worktree(repo, wt)
 
 
 def main():
@@ -364,8 +443,8 @@ def main():
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--projects-root", default=str(HOME / "Projects"))
     args = ap.parse_args()
-    if KILL_PATH.exists() and KILL_PATH.read_text().strip() == "0":
-        log("kill-switch ON → 何もしない"); return
+    if not ccauto_enabled():
+        log("kill-switch disabled → 何もしない"); return
     env = load_env()
     cards = query_ccauto(env)
     log(f"start dry={args.dry_run} Ready×cc-auto={len(cards)}件")
