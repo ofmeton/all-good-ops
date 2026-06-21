@@ -204,7 +204,7 @@ def run_codex(worktree, task_text):
     )
     try:
         res = subprocess.run(
-            [CODEX, "exec", "--sandbox", "workspace-write", "--ask-for-approval", "never", prompt],
+            [CODEX, "exec", "-s", "workspace-write", "-c", "approval_policy=never", prompt],
             cwd=worktree, capture_output=True, text=True, timeout=CODEX_TIMEOUT)
         ok = res.returncode == 0
         return ok, (res.stdout or "")[-2000:] + (("\nERR:" + res.stderr[-500:]) if res.stderr else "")
@@ -254,30 +254,45 @@ def verify(worktree, changed_files=None):
 
 
 def codex_review(worktree, diff_text):
-    """別 Codex パスで diff の安全性/正しさを判定。先頭 verdict の SAFE のみ safe。"""
+    """別 Codex パスで diff の安全性/正しさを判定。
+
+    詐称防止のため verdict は **最終メッセージのみ**を `-o <file>`(--output-last-message)
+    で取得して解析する（codex の stdout はバナー＋プロンプト echo＝diff 本文を含むため
+    stdout を parse すると diff 内の偽 VERDICT 行に騙される）。先頭行が VERDICT: SAFE の時のみ safe。
+    """
     prompt = (
         "次の git diff をレビューし、安全に main へ自動マージしてよいか判定。\n"
         "破壊的変更・秘密混入・意図不明な広範囲変更・送信/課金/migration があれば不可。\n"
-        "判定は出力の先頭行に 'VERDICT: SAFE' または 'VERDICT: UNSAFE: <理由>' のみを書くこと。\n\n"
+        "**最終メッセージの先頭行に 'VERDICT: SAFE' または 'VERDICT: UNSAFE: <理由>' のみ**を書くこと。\n\n"
         + diff_text[:12000]
     )
+    out_file = tempfile.mktemp(prefix="ccauto_verdict_")
     try:
-        res = subprocess.run([CODEX, "exec", "--sandbox", "read-only", "--ask-for-approval", "never", prompt],
-                             cwd=worktree, capture_output=True, text=True, timeout=600)
-        out = res.stdout or ""
+        res = subprocess.run(
+            [CODEX, "exec", "-s", "read-only", "-c", "approval_policy=never", "-o", out_file, prompt],
+            cwd=worktree, capture_output=True, text=True, timeout=600)
         if res.returncode != 0:
-            return False, (res.stderr or out or "codex review failed")[-400:]
+            return False, (res.stderr or res.stdout or "codex review failed")[-400:]
+        try:
+            last = Path(out_file).read_text(encoding="utf-8", errors="replace")
+        except Exception:
+            return False, "codex review: 最終メッセージ取得失敗"
         first = ""
-        for line in out.splitlines():
+        for line in last.splitlines():
             if line.strip():
                 first = line.strip()
                 break
         m = re.match(r"^VERDICT:\s*(SAFE|UNSAFE)\b(?::\s*(.*))?$", first)
         safe = bool(m and m.group(1) == "SAFE")
-        reason = "" if safe else ((m.group(2) if m else out) or "codex review unsafe/ambiguous")[-400:]
+        reason = "" if safe else ((m.group(2) if m else last) or "codex review unsafe/ambiguous")[-400:]
         return safe, reason
     except subprocess.TimeoutExpired:
         return False, "codex review timeout"
+    finally:
+        try:
+            os.remove(out_file)
+        except OSError:
+            pass
 
 
 def set_status(env, page_id, status):
@@ -438,6 +453,9 @@ def process_card(env, card, projects_root, dry):
             cleanup_worktree(repo, wt)
 
 
+LOCK_PATH = HOME / ".hermes" / "ccauto.lock"
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dry-run", action="store_true")
@@ -445,6 +463,23 @@ def main():
     args = ap.parse_args()
     if not ccauto_enabled():
         log("kill-switch disabled → 何もしない"); return
+    # 単一フライト: 別インスタンス(launchd の重なり/手動併走)が稼働中なら即終了
+    # (race で同一カードを二重 merge するのを防ぐ)
+    import fcntl
+    LOCK_PATH.parent.mkdir(parents=True, exist_ok=True)
+    lock_fp = open(LOCK_PATH, "w")
+    try:
+        fcntl.flock(lock_fp, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except OSError:
+        log("別インスタンス稼働中 → skip"); return
+    try:
+        _run(args)
+    finally:
+        fcntl.flock(lock_fp, fcntl.LOCK_UN)
+        lock_fp.close()
+
+
+def _run(args):
     env = load_env()
     cards = query_ccauto(env)
     log(f"start dry={args.dry_run} Ready×cc-auto={len(cards)}件")
