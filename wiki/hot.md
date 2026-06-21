@@ -1,13 +1,14 @@
 ---
 type: meta
 title: "Hot Cache"
-updated: 2026-06-21
+updated: 2026-06-22
 ---
 # Recent Context
 
 > セッション間で保持される ~500 words のコンテキストキャッシュ。セッション開始時に最優先で読む。詳細: [[SCHEMA]] §ホットキャッシュ。
 
 ## Last Updated
+2026-06-22 — **iPhone「後でやる」19件をNotion看板へ移行**: 後でやるアプリのスクショ2枚から19件抽出→Notion「あとでやるタスク」看板(hermes共有・db `21594…`/ds `782773d8…`)のInbox列へcreate-pages一括投入(Source=manual・時間指定2件はDue/Details・既存と重複なし)。続くトリアージ未済Telegram通知依頼はdry-runでInbox計36件判明→範囲をAskUserQuestion→「自分でやる」で実送信せず終了。学び=query系(query-data-sources/query-database-view)は本プラン両方400→最初からsearch・select演算子equals・日本語は生文字渡し([[../memory/reference_notion_mcp_id_and_sharing]]追記)。retro [[../outputs/retrospectives/2026-06-22-iphone-todo-notion-migration]]。
 2026-06-21 — **思考パートナー Phase2＋Notion配線修正＋失業手当再計算**: 思考テーマ見出しをNotion「思考インボックス」(db `b7660e02…`/ds `1497ea25…`)に一本化、Telegram=hermes柔軟分類(タスク/思考/雑談)・Claude捕捉の両経路合流(PR#244)。**Notion 2連続404を会話ログ(state.db messages)から根因特定**→学び `reference_notion_mcp_id_and_sharing` 新設(post/patch=database_id・**query_data_source=data_source_id**・新規DBは連携アプリへ手動共有必須・404をアクセス拒否と誤読しない・読みはsearch+fetch)。VM gateway hint編集はbackup→pyyaml round-trip→クリーン再起動。**失業手当満了再計算**=次回認定日7/16起点→最終支給認定日**2026-08-13**(元7/16から4週後ろ倒し)。mf-finance入金予定=7/24:183,596/8/21:104,912(skip反映後ろ倒し・二重計上回避)。Notionに開業届タスク(Due8/14)追加。retro [[../outputs/retrospectives/2026-06-21-thinking-phase2-notion-wiring]]。
 - 前(2026-06-21): **hermes「あとでやる」Phase2b(カレンダー)＋Phase3拡張(cc-auto 自走コード実行)完成・本番稼働**: `calendar_capture.py`(Haiku準備要否判定→Notion)＋Sheets MCP OAuth流用で全1892件移行(200件チャンク)/催促ノイズ抑制＋RawSourceId dedup/cc-auto は design→plan→Codex委任→Claude二重レビュー(fail-open10件→fail-closed)→**PR#248 を main へ自動merge実証**→launchd `com.hermes.ccauto`(15分)本番投入・flock単一フライトでrace解消。retro [[../outputs/retrospectives/2026-06-21-hermes-calendar-ccauto]]。
 - 前(2026-06-21): **思考パートナーMVP** PR#240: 捕捉→着手→起動→完結ループ。skill`thinking`+`~/journal/think`(private)+毎朝08:00 routine`trig_01K7Amonz4rZHCcBXrkH753m`。E2E『生業×武器』で武器=子どもの主導権回復/方針A→B/生活費26万。retro [[../outputs/retrospectives/2026-06-21-0400-thinking-partner]]。
@@ -15,7 +16,6 @@ updated: 2026-06-21
 - 前(2026-06-19): **mf-finance 大改修(PR#215〜231)**: DB を main repo へ移設し worktree 非依存化(resolver #215)/web-ui-bridge(Cue)統合+pending永続化(#217)/UI/IA刷新 Phase①(左サイドバー+全幅+5系統ナビ #218)/カード引落 Phase②(#220)→締め日基準の請求期間集計(closing_day/cardBillingPeriod #230)+引落先口座(debit_account・口座別列からカード除外 #231)/MFデータ再取得(#222)/optimizer分類ルール作成承認(#226)。学び=ドメイン数値ロジックは計算モデルを先に確定(カード請求が5回反復)→wiki engineering-principles 追記。retro [[../outputs/retrospectives/2026-06-19-0319-mf-finance-card-billing]]。
 - 前(2026-06-19): **doda 求人応募代行**(非コーディング): React/Next.js経験に合う2件選定→ブロッカー越え→不可逆応募を最終ゲート1回で送信。学び→`feedback_chrome_devtools_fill_limitations`(充足判定はinput.value)。retro [[../outputs/retrospectives/2026-06-19-0003-doda-job-apply-proxy]]。
 - 前(2026-06-18): TERRA HP改修第1-3弾(PR#144/#148/#207)・そうま高校選び・クラウドワークスForm代理入力。
-- 前(2026-06-15): mf-finance資金繰りPR#214・web-ui-bridge(PR#208-213)・X発信刷新(PR#185-205)。
 
 ## Current Focus
 - **hermes「あとでやる」= 全Phase稼働中**: 捕捉(Telegram/Apple Notes/カレンダー)→Notion→催促→**cc-auto 自走コード実行**。VM(GCP) 24/7=gateway/nudge/calendar、Mac launchd=applenotes/autorun/**ccauto(15分)**。cc-auto 使い方=カードを Autonomy=cc-auto・Status=Ready・Details に `repo: <~/Projects相対パス>`(例 `private-agents/all-good-ops`)。緊急停止 `echo -n 0 > ~/.hermes/ccauto_enabled`。残=repo解決のglob化・autonomy提案UXのhermes側配線・(任意)Oracle再移設。控え=`data/hermes/notion-task-db.md`。
