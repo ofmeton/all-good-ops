@@ -12,5 +12,8 @@
   <key>StandardOutPath</key><string>/Users/rikukudo/.hermes/logs/intake_launchd.log</string>
   <key>StandardErrorPath</key><string>/Users/rikukudo/.hermes/logs/intake_launchd.err</string>
   <key>EnvironmentVariables</key>
-  <dict><key>PATH</key><string>/Users/rikukudo/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string></dict>
+  <dict>
+    <key>PATH</key><string>/Users/rikukudo/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+    <key>HERMES_REPO_ROOT</key><string>/Users/rikukudo/Projects/private-agents/all-good-ops</string>
+  </dict>
 </dict></plist>

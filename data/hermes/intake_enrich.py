@@ -22,7 +22,10 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 HOME = Path.home()
-REPO_ROOT = Path(__file__).resolve().parents[2]
+# 配備先(~/.hermes/)では __file__ の parents[2] が /Users になり repo を読めない。
+# env override → ハードコード fallback の順で実 repo を指す（dry-run は repo 内なので両者一致）。
+DEFAULT_REPO_ROOT = "/Users/rikukudo/Projects/private-agents/all-good-ops"
+REPO_ROOT = Path(os.environ.get("HERMES_REPO_ROOT") or DEFAULT_REPO_ROOT)
 ENV_PATH = HOME / ".hermes" / ".env"
 KILL_PATH = HOME / ".hermes" / "intake_enabled"
 LOCK_PATH = HOME / ".hermes" / "intake.lock"
