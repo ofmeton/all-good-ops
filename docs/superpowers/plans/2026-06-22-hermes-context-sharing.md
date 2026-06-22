@@ -411,6 +411,12 @@ git commit -m "feat(hermes): add USER_PROFILE generator (memory/wiki -> projecti
 
 ## Phase A — 書き戻しの半分（"育つ" 本体・B の上に載る）
 
+> **改訂 2026-06-22 / Option A 採用（捕捉経路の確定）**: A2 の「訂正捕捉」は、Telegram 訂正の本体が **OSS Telegram agent（我々の Python を実行できない）** であるため、**OSS agent 自身に Notion 学習インボックスを書かせる**方式を採用（ユーザー決定）。→ **`learn_queue.py`（Python enqueue）は不要**。代わりに VM の `~/.hermes/config.yaml` の `environment_hint` に「ユーザーが分類/Autonomy を訂正したら学習インボックス DB に `Status=pending` を作る」指示を足す。
+> - **学習インボックス DB（作成済）**: database_id `519dbba8d360481f91c981dda9ffa958` / data_source_id `56ef9df9-1dc3-48bc-bacb-f4ce42c8a448`。スキーマ=下記 A1 と同じ（Observation/Kind/Status/Evidence/ProposedEdit/Created）。
+> - **A3（同意ゲート）= 実装済**: `.claude/skills/hermes-learn-review/SKILL.md`。pending を読み SAFE/RISKY 判定→memory 昇華→`gen_user_profile.py` で投影再生成→配備→Notion を approved/rejected 更新。
+> - **残（活性化・要手動/承認）**: ①学習インボックス DB を **hermes 連携アプリ(hermes-todo-partner)へ手動共有**（Notion UI・新規DBは自動共有されない＝[[reference_notion_mcp_id_and_sharing]]）。②VM `config.yaml` の hint 編集＋`gateway restart`＋`/new`（live daily-driver bot 変更・backup→pyyaml round-trip→検証→再起動の型）。これらを経て初めてループが点火する。
+> - 下記 A1（learn_queue.py）/A2（Telegram agent コード改変）は **Option B（ハーベスタ）採用時の旧設計**として残置。Option A では不採用。
+
 ### Task A1: 学習インボックス（Notion DB）の用意と enqueue
 
 **Files:**
