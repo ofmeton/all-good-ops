@@ -34,10 +34,12 @@ CLAUDE = str(HOME / ".local" / "bin" / "claude")
 NOTION_DB_ID = "2159405e11a84e7f90a8b6252bb43d38"
 NOTION_DATA_SOURCE_ID = "782773d8-4cc4-445e-978d-42e48d892717"
 NOTION_VER = "2022-06-28"
+TRIAGE_MODEL = "anthropic/claude-haiku-4.5"
 MAX_PER_RUN = 5
 CLAUDE_TIMEOUT = 180
 BRIEF_FIELDS = ("Purpose", "Goal", "Constraints", "Discretion", "Resources", "Reporting")
 AUTONOMY_VALUES = {"cc-auto", "draft-only", "light-auto", "reminder", "ask-first"}
+TRIAGE_TIERS = {"light", "heavy"}
 JST = timezone(timedelta(hours=9))
 
 
@@ -169,6 +171,56 @@ def load_user_profile(max_chars: int = 5000) -> str:
         return ""
 
 
+def build_triage_prompt(title: str, details: str) -> str:
+    return (
+        "あなたはNotion Inboxカードの軽量/重量分類器。Title/Detailsだけを見て、"
+        "6要素フル調査が必要か分類してください。\n"
+        "JSONのみ出力: {\"tier\":\"light|heavy\",\"autonomy\":\"reminder|light-auto|draft-only|cc-auto|ask-first\","
+        "\"reason\":\"短い理由\"}\n"
+        "- light: 現実の用事/買い物/相談/イベント段取り/単純リマインダ等、repo/memory調査が過剰なもの。\n"
+        "- heavy: コード/調査/文面・構成作成/複数論点/スコープ広 等、文脈調査が効くもの。\n"
+        "迷う場合は heavy。\n\n"
+        f"Title: {title}\nDetails: {details[:1200]}\n"
+    )
+
+
+def _extract_json_dict(text: str) -> dict:
+    m = re.search(r"\{.*\}", text or "", re.S)
+    if not m:
+        raise ValueError("JSON object not found")
+    data = json.loads(m.group(0))
+    if not isinstance(data, dict):
+        raise ValueError("JSON is not an object")
+    return data
+
+
+def triage_card(env: dict, title: str, details: str) -> dict:
+    """Haikuで light/heavy を分類。失敗時は heavy にフォールバック。"""
+    if not env.get("OPENROUTER_API_KEY"):
+        log("    triage skip: OPENROUTER_API_KEY 不足 → heavy")
+        return {"tier": "heavy", "autonomy": None, "reason": "triage key missing"}
+    payload = {"model": TRIAGE_MODEL,
+               "messages": [{"role": "user", "content": build_triage_prompt(title, details)}],
+               "max_tokens": 180, "temperature": 0}
+    req = urllib.request.Request(
+        "https://openrouter.ai/api/v1/chat/completions",
+        data=json.dumps(payload).encode("utf-8"),
+        headers={"Authorization": f"Bearer {env['OPENROUTER_API_KEY']}", "Content-Type": "application/json"})
+    try:
+        with urllib.request.urlopen(req, timeout=40) as r:
+            content = json.loads(r.read().decode("utf-8"))["choices"][0]["message"]["content"]
+        data = _extract_json_dict(content)
+    except Exception as e:
+        log(f"    triage失敗→heavy: {e}")
+        return {"tier": "heavy", "autonomy": None, "reason": "triage failed"}
+    tier = data.get("tier") if data.get("tier") in TRIAGE_TIERS else "heavy"
+    autonomy = data.get("autonomy") if data.get("autonomy") in AUTONOMY_VALUES else None
+    reason = _clean_nullable(data.get("reason")) or "理由なし"
+    if tier == "light" and not autonomy:
+        autonomy = "ask-first"
+    return {"tier": tier, "autonomy": autonomy, "reason": reason}
+
+
 def build_prompt(title: str, details: str, profile: str) -> str:
     return (
         "Notion『あとでやる』Inboxカードを6要素ブリーフへエンリッチしてください。\n"
@@ -227,13 +279,7 @@ def run_claude(title: str, details: str, profile: str) -> tuple:
 
 
 def parse_json_object(text: str) -> dict:
-    m = re.search(r"\{.*\}", text or "", re.S)
-    if not m:
-        raise ValueError("JSON object not found")
-    data = json.loads(m.group(0))
-    if not isinstance(data, dict):
-        raise ValueError("JSON is not an object")
-    return normalize_brief(data)
+    return normalize_brief(_extract_json_dict(text))
 
 
 def _clean_nullable(v):
@@ -267,6 +313,14 @@ def normalize_brief(data: dict) -> dict:
     return normalized
 
 
+def recap_line(brief: dict) -> str:
+    if brief.get("Purpose"):
+        return f"ここまで把握: 目的={brief['Purpose'][:40]}。違ったら教えて。"
+    if brief.get("Goal"):
+        return f"ここまで把握: 目標={brief['Goal'][:40]}。違ったら教えて。"
+    return ""
+
+
 def build_actions(brief: dict) -> dict:
     brief_props = {}
     for field in BRIEF_FIELDS:
@@ -281,7 +335,9 @@ def build_actions(brief: dict) -> dict:
     if questions:
         status_props["Status"] = {"select": {"name": "NeedInfo"}}
         status_props["BriefStatus"] = {"select": {"name": "enriching"}}
-        comments.append("確認したいこと:\n" + "\n".join(f"{i + 1}. {q}" for i, q in enumerate(questions)))
+        recap = recap_line(brief)
+        question_text = "確認したいこと:\n" + "\n".join(f"{i + 1}. {q}" for i, q in enumerate(questions))
+        comments.append((recap + "\n" if recap else "") + question_text)
     elif brief.get("brief_ready"):
         status_props["BriefStatus"] = {"select": {"name": "ready"}}
     if breakdown:
@@ -293,6 +349,18 @@ def build_actions(brief: dict) -> dict:
         comments.append(f"Autonomy提案: {autonomy}(承認で確定)")
     return {"brief_properties": brief_props, "status_properties": status_props,
             "comments": comments, "telegrams": telegrams, "has_questions": bool(questions)}
+
+
+def build_light_actions(title: str, triage: dict) -> dict:
+    brief_props = {}
+    if title and title != "(無題)":
+        brief_props["Purpose"] = rich_text_prop(f"{title}を忘れずに処理する。")
+    status_props = {"BriefStatus": {"select": {"name": "ready"}}}
+    autonomy = triage.get("autonomy") or "ask-first"
+    reason = triage.get("reason") or "理由なし"
+    comment = f"triage=light: {reason[:300]} / Autonomy提案:{autonomy}(承認で確定)"
+    return {"brief_properties": brief_props, "status_properties": status_props,
+            "comments": [comment], "telegrams": [], "has_questions": False}
 
 
 def apply_actions(env: dict, page_id: str, title: str, actions: dict, dry: bool) -> bool:
@@ -307,7 +375,12 @@ def apply_actions(env: dict, page_id: str, title: str, actions: dict, dry: bool)
             patch_page(env, page_id, brief_props)
     if has_questions:
         q_comment = next((c for c in comments if c.startswith("確認したいこと:")), "")
-        telegrams.insert(0, f"{title}について確認:\n" + q_comment.replace("確認したいこと:\n", ""))
+        if not q_comment:
+            q_comment = next((c for c in comments if "確認したいこと:" in c), "")
+        if "\n確認したいこと:" in q_comment:
+            telegrams.insert(0, f"{title} — {q_comment}")
+        else:
+            telegrams.insert(0, f"{title}について確認:\n" + q_comment.replace("確認したいこと:\n", ""))
     for comment in comments:
         log(f"    {'DRY: ' if dry else ''}comment: {comment[:80]}")
         if not dry:
@@ -340,6 +413,23 @@ def process_card(env: dict, card: dict, state: dict, dry: bool) -> bool:
         log(f"  skip state={last.get('brief_status')}: {title[:40]}")
         return True
     log(f"  enrich: {title[:40]}")
+    triage = triage_card(env, title, details)
+    log(f"    triage={triage.get('tier')} autonomy={triage.get('autonomy')} reason={str(triage.get('reason',''))[:60]}")
+    if triage.get("tier") == "light":
+        actions = build_light_actions(title, triage)
+        try:
+            applied = apply_actions(env, pid, title, actions, dry)
+        except Exception as e:
+            log(f"    light反映失敗→skip: {e}")
+            return False
+        if not applied:
+            log("    light反映失敗→skip")
+            return False
+        state[pid] = {"last_enrich": now(), "brief_status": "ready"}
+        if not dry:
+            save_state(state)
+        log("    done light BriefStatus=ready fields=1 questions=0")
+        return True
     ok, out = run_claude(title, details, load_user_profile())
     if not ok:
         log(f"    claude失敗→skip: {out[:120]}")
