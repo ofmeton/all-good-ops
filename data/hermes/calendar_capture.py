@@ -22,6 +22,8 @@ import urllib.request
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
+from hermes_context import profile_block
+
 HOME = Path.home()
 ENV_PATH = HOME / ".hermes" / ".env"
 STATE_PATH = HOME / ".hermes" / "gcal_state.json"
@@ -120,18 +122,22 @@ def start_info(ev):
     return d, True, d
 
 
-def classify(env, ev, human_time):
-    """Haiku で {needs_prep, title, summary} を判定。失敗時 needs_prep=False。"""
+def build_prompt(ev, human_time):
     summary = ev.get("summary", "(無題)")
     loc = ev.get("location", "")
     desc = (ev.get("description", "") or "")[:800]
-    prompt = (
+    return profile_block() + (
         "あなたは予定の事前準備判定器。次のカレンダー予定に『事前準備の行動』が要るか判定する。\n"
         "JSONのみ出力: {\"needs_prep\": true/false, \"title\": \"準備タスク名(20字程度)\", \"summary\": \"何を準備すべきか1文\"}\n"
         "- needs_prep=true: 資料/アジェンダ作成、持ち物/書類準備、予約/手配、下調べ、発表スライド 等が要る予定。\n"
         "- needs_prep=false: 昼食/通勤/ジム/休憩/単なるリマインダ/記念日 等、準備不要のルーチン。\n"
         f"予定: {summary}\n日時: {human_time}\n場所: {loc}\n詳細: {desc}\n"
     )
+
+
+def classify(env, ev, human_time):
+    """Haiku で {needs_prep, title, summary} を判定。失敗時 needs_prep=False。"""
+    prompt = build_prompt(ev, human_time)
     payload = {"model": MODEL, "messages": [{"role": "user", "content": prompt}],
                "max_tokens": 150, "temperature": 0}
     req = urllib.request.Request(
