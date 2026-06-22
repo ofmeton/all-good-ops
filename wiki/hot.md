@@ -1,18 +1,19 @@
 ---
 type: meta
 title: "Hot Cache"
-updated: 2026-06-15
+updated: 2026-06-21
 ---
 # Recent Context
 
 > セッション間で保持される ~500 words のコンテキストキャッシュ。セッション開始時に最優先で読む。詳細: [[SCHEMA]] §ホットキャッシュ。
 
 ## Last Updated
-2026-06-15 — **mf-finance 資金繰り強化フルセットを PR #214(squash)で main 反映**: お金レーダーFV(各口座/現金/電子マネー残高・今月引落・来月カード引落・向こう1ヶ月CF)＋口座残高インライン編集＋「再取り込み」full refresh化＋MF再取得(chrome-devtools)＋定期収入の毎週/変動額/発生回スキップ・金額調整(固定費不変)＋期間選択(当月末/来月末/再来月末)＋資金場所別ローリング(タイムライン表に口座別残高カラム・開閉トグル・予定/定期/固定費に資金場所指定・未指定枠)＋資金移動(出金口座別手数料・単発振替[合計不変/口座間移動]・optimizer suggest_transfer提案・アプリ内の送金予定通知/メール無)。DBはランタイムmigration(db/migrate.mjs・pragmaガード/トランザクション)で既存DB後方互換適用。getRollingCashflow(days=30)不変=MoneyRadar回帰なし。test56→58緑。実装=Codex委任4回+Claude(plan mode/AskUserQuestion)設計+レビュー(code-reviewer/silent-failure-hunter)で毎回Critical検出修正+実機chrome-devtools E2E。retro [[../outputs/retrospectives/2026-06-15-0900-mf-finance-cashflow-fullset]]。
-- 学び: chrome-devtools `fill`はReact制御input(native date)のstateを更新しない→setter+dispatch input/change/検証はevaluate_script優先(snapshotはuid取得時のみ・token大)/Next+next/fontはCodex sandboxでbuild不可→tsc/testのみ報告・Claudeがbuild検証/worktreeにgitignore実DB(mf-finance.db=家計データ)→merge済でもworktree削除しない。
-- 前: web-ui-bridge 大幅拡張(PR#208-213)・X発信大刷新(PR#185-205)。
+2026-06-21 — **hermes「あとでやる」を Phase2b(カレンダー)＋Phase3拡張(cc-auto 自走コード実行)まで完成・本番稼働**(worktree `worktree-hermes-todo-partner-spec`)。①Phase2b: `calendar_capture.py`(Haiku準備要否判定→Notion起票)＋既存 Sheets MCP の Desktop OAuth クライアント(`ai-radar-494017`)流用で calendar.readonly 取得・VM cron 6h＋devtoolsで別アカ `offf.me.ton`→`off.me.ton` へ全1892件移行(一括停滞→**200件チャンク分割**)。②催促ノイズ抑制(Source=Calendar は7日前から)＋RawSourceId dedup でマシン跨ぎ冪等化。③Phase3拡張 cc-auto: design→plan→**Codex委任実装→Claude二重レビュー(code-reviewer/silent-failure-hunter)で fail-open 10件→全 fail-closed 化**→スモークで **PR#248 を all-good-ops main へ自動merge実証**→launchd `com.hermes.ccauto`(15分)本番投入・**flock 単一フライトで race 解消**。retro [[../outputs/retrospectives/2026-06-21-hermes-calendar-ccauto]]。
+- 学び: 外部CLI wrapper は実装前に `--help`/出力形式を実機確認(codex exec の `--ask-for-approval`不在・`-o`最終メッセージ解析)／半信頼入力×自動mergeは機械ガードfail-closed化に寄せる／launchd/cron は間隔超過し得るなら既定で flock 単一フライト／remote-control は doc を最初から GitHub URL。
+- 前: mf-finance 資金繰り(PR#214)・web-ui-bridge(PR#208-213)・X発信(PR#185-205)。
 
 ## Current Focus
+- **hermes「あとでやる」= 全Phase稼働中**: 捕捉(Telegram/Apple Notes/カレンダー)→Notion→催促→**cc-auto 自走コード実行**。VM(GCP) 24/7=gateway/nudge/calendar、Mac launchd=applenotes/autorun/**ccauto(15分)**。cc-auto 使い方=カードを Autonomy=cc-auto・Status=Ready・Details に `repo: <~/Projects相対パス>`(例 `private-agents/all-good-ops`)。緊急停止 `echo -n 0 > ~/.hermes/ccauto_enabled`。残=repo解決のglob化・autonomy提案UXのhermes側配線・(任意)Oracle再移設。控え=`data/hermes/notion-task-db.md`。
 - **X発信 新運用**: 自動収集OFF・**手動ブックマークURLを `scripts/ingest-bookmarks.ts`/`/admin/ingest-bookmarks` で投入**→curation→writer(知見+段取り+新ターゲット)→check→LINE承認。writer は MAv4(再焼成済)。テンプレ patch は runtime 注入(re-bake不要・deployのみ)。collector復活は `collector_enabled` 行削除/=1。
 - **X発信 残**: ①article compose軽量化(240sでも長文重い→入力trim/段取り簡略)未実装 ②Phase2画像 次スライス=publish側ブロック挿入(X Articleインライン/thread各ツイート)=**保留(手動画像gen運用)** ③writer品質~88 plateau・自己推敲2pass(compose費2倍)は要承認レバー。eval資産=`scripts/pdca-eval.ts`。
 - **web-ui-bridge**: 複数選択/連続射影/操作プローブまで出荷済(PR#195-213)。起動=`node apps/web-ui-bridge/daemon/server.mjs --target <site>`+対象`npm run dev`。回帰=`cd apps/web-ui-bridge/smoke && npm run probe`(daemon/terra稼働前提)。**server.mjs変更後はdaemon再起動**(overlay.jsはホット)。残=bug-hunt 2ラウンド目の中位候補(ユーザー保留)・STUDIO残パリティ。
