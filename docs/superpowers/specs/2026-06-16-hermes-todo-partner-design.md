@@ -177,3 +177,24 @@ Inbox → NeedInfo → Ready → InProgress → Blocked → Review → Done
 | 自動 merge による事故 | 低リスク種別に限定・硬ゲート維持・着手前後通知で可視化 |
 | hermes の成熟度（ネイティブ Windows/Termux 等は荒削り） | Mac 運用に限定・隔離インストール |
 | launchd 再開がなし崩しに自動化全体へ波及 | スコープ限定の 1 本のみ・env フラグで可逆停止・記録を残す |
+
+---
+
+## 追補 (2026-06-23): タスクフロー再設計 — 6要素ブリーフ自走パートナー
+
+Telegram登録→完了フローを「6要素の共通認識」軸に再設計。SSOT スキル = `.claude/skills/hermes-task-intake/SKILL.md`。
+
+**6要素 = Notion 構造化フィールド**: Purpose/Goal/Constraints/Discretion/Resources/Reporting ＋ `BriefStatus`(draft/enriching/ready) ＋ `Parent`/`Subtasks`(自己関連) ＋ `BreakdownProposal`(text)/`ApproveBreakdown`(checkbox)。
+
+**役割分担**: 捕捉=OSS Telegram agent(VM・最小起票)／エンリッチ・分解・催促=Claude側(repo/memory/USER_PROFILE文脈あり)。
+
+**フロー**:
+1. **intake** (`data/hermes/intake_enrich.py`・Mac launchd `com.hermes.intake`): Inbox×BriefStatus(draft/empty)を pickup → **triage**(Haiku 1回で light/heavy。light=用事/リマインダは高価調査せず最小処理) → heavy のみ read-only `claude -p` で USER_PROFILE/memory/repo/過去類似を自己調査し**確信ある6要素のみ充足** → 低確信は1〜3問を Telegram(冒頭にブリーフrecap「ここまで把握:…違ったら教えて」)＋コメント(Status=NeedInfo/BriefStatus=enriching、通知成功後のみ遷移) → 穴無しは BriefStatus=ready。**Status=Ready・Autonomy は自動確定せず提案のみ**。
+2. **breakdown** (`data/hermes/breakdown_apply.py`・`com.hermes.breakdown`): intake が粗いと判断したら `BreakdownProposal` に番号付き保存＋Telegram提案 → 人間が `ApproveBreakdown` をチェック(or OSS agent が Telegram承認を受けて立てる) → 各行を**子カード化(Parent関連・親Purpose継承)**。重複防止=canonical_title(NFKC+番号prefix除去+[:100])。
+3. **裁量→Autonomy**: Discretion基に Autonomy 提案 → 人間承認 → Status=Ready → 既存 executor(ccauto/autorun)が自走。硬ゲート(migration/送信/金銭)据え置き。
+4. **報告(既定)**: 既存 executor が着手/完了/詰まり(Blocked)を Telegram通知済＝充足。`Reporting` フィールド指定の honoring と長時間 cc-auto の中間通知は将来polish。
+5. **停滞催促+指標** (`nudge_loop.py` 拡張): 状態別しきい値(Inbox×未ready>0.5d / NeedInfo>1d / ready×Autonomy未設定>1d / 未承認分解>1d / Ready×未着手>1d)で具体アクション付き催促。`~/.hermes/task_metrics.jsonl` に approval_queue_depth 等を記録(承認キュー墓場化の観測)。
+
+**grill-me 反映**: triage で軽タスクのコスト/ノイズ削減・ブリーフrecapでサイレント駆動回避・承認キュー深さ計測。即逆質問は非同期(launchd 15分)で割り切り。
+
+**go-live 残**: 新スクリプト(intake_enrich/breakdown_apply)+plist を Mac/VM `~/.hermes/` へ配備＋launchdロード、kill switch(`intake_enabled`/`breakdown_enabled`)を 1、VM `config.yaml` の environment_hint を「最小捕捉＋Telegram分解承認で ApproveBreakdown を立てる」へ調整(backup→pyyaml→restart→/new)。学習インボックス(Phase A)の hint も併せて。
