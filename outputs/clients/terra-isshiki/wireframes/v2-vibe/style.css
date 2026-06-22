@@ -25,9 +25,11 @@ body::after{content:"";position:fixed;inset:0;z-index:80;pointer-events:none;opa
 .lnk::after{content:"";position:absolute;left:0;bottom:0;width:100%;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .45s var(--easo)}
 .lnk:hover::after{transform:scaleX(1)}
 
-/* k. オープニング */
-.opening{position:fixed;inset:0;z-index:100;background:var(--paper);display:grid;place-items:center}
-.opening__line{opacity:0;font-family:var(--serif);font-weight:600;font-size:clamp(20px,3vw,38px);letter-spacing:.08em;text-align:center}
+/* k. オープニング（写真→ロゴ→幕が晴れてヒーローコピー の溜め） */
+.opening{position:fixed;inset:0;z-index:100;display:grid;place-items:center;overflow:hidden}
+.opening__bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;animation:kenburns 12s ease-out both}
+.opening__scrim{position:absolute;inset:0;background:radial-gradient(120% 90% at 50% 50%,rgba(26,20,16,.4),rgba(26,20,16,.64))}
+.opening__logo{position:relative;width:clamp(180px,26vw,330px);height:auto;opacity:0;will-change:opacity,transform}
 @media(prefers-reduced-motion:reduce){.opening{display:none}}
 
 /* nav 上部ヴェイル（没入区間=Intro の間だけ。通過する本文を上端で沈めナビを際立たせる） */

@@ -24,12 +24,13 @@
   }), {threshold:0.16, rootMargin:'0px 0px -8% 0px'});
   $$('.reveal, .aze-wrap').forEach(el=>io.observe(el));
 
-  /* k. オープニング */
+  /* k. オープニング: 写真 → ロゴ → （幕が晴れて）ヒーローコピー（shuku式の溜め） */
   if (!reduce && window.gsap) {
+    gsap.set('.opening__logo',{autoAlpha:0,scale:.92});
     gsap.timeline()
-      .to('.opening__line',{autoAlpha:1,duration:1.1,ease:'power2.out'},.25)
-      .to('.opening__line',{autoAlpha:0,duration:.7},'+=.7')
-      .to('.opening',{yPercent:-100,duration:1.0,ease:'power3.inOut'},'-=.15')
+      .to('.opening__logo',{autoAlpha:1,scale:1,duration:1.2,ease:'power2.out'},.35)    /* 写真の上にロゴ浮上 */
+      .to('.opening__logo',{autoAlpha:0,scale:1.04,duration:.7,ease:'power2.in'},'+=.9') /* ロゴ退場 */
+      .to('.opening',{autoAlpha:0,duration:1.0,ease:'power2.inOut'},'-=.35')             /* 幕が晴れてFVへ */
       .set('.opening',{display:'none'});
   } else { const op=document.querySelector('.opening'); if(op) op.style.display='none'; }
 
