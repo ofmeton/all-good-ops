@@ -19,6 +19,8 @@ import urllib.request
 import urllib.error
 from pathlib import Path
 
+from hermes_context import profile_block
+
 HOME = Path.home()
 ENV_PATH = HOME / ".hermes" / ".env"
 STATE_PATH = HOME / ".hermes" / "applenotes_state.json"
@@ -106,16 +108,20 @@ def fetch_recent_notes(days: int) -> list[dict]:
     return notes
 
 
-def classify(env: dict, note: dict) -> dict:
-    """Haiku で {is_task, is_private, title} を判定。失敗時は skip 扱い。"""
+def build_prompt(note: dict) -> str:
     body = (note["body"] or "")[:1500]
-    prompt = (
+    return profile_block() + (
         "あなたはメモ分類器。次の Apple メモが『あとでやるタスク/依頼/要対応』か判定する。\n"
         "JSONのみ出力: {\"is_task\": true/false, \"is_private\": true/false, \"title\": \"タスクの短い要約(20字程度)\"}\n"
         "- is_private=true: 日記/感情の記録/パスワードや機密/個人的な内省。これらはタスクでもtask扱いしない。\n"
         "- is_task=true: 行動が要る(連絡/購入/手続き/調査/作成/予約 等)。単なる情報メモ/リンク集/完了済みは false。\n"
         f"メモタイトル: {note['name']}\nフォルダ: {note['folder']}\n本文:\n{body}\n"
     )
+
+
+def classify(env: dict, note: dict) -> dict:
+    """Haiku で {is_task, is_private, title} を判定。失敗時は skip 扱い。"""
+    prompt = build_prompt(note)
     payload = {
         "model": MODEL,
         "messages": [{"role": "user", "content": prompt}],
