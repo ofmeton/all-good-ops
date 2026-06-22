@@ -321,6 +321,10 @@ def recap_line(brief: dict) -> str:
     return ""
 
 
+def numbered_lines(items: list) -> str:
+    return "\n".join(f"{i + 1}. {x}" for i, x in enumerate(items or []) if x)
+
+
 def build_actions(brief: dict) -> dict:
     brief_props = {}
     for field in BRIEF_FIELDS:
@@ -341,8 +345,9 @@ def build_actions(brief: dict) -> dict:
     elif brief.get("brief_ready"):
         status_props["BriefStatus"] = {"select": {"name": "ready"}}
     if breakdown:
-        msg = "このタスクは粗いので分割提案:\n" + "\n".join(
-            f"{i + 1}. {x}" for i, x in enumerate(breakdown))
+        proposal = numbered_lines(breakdown)
+        brief_props["BreakdownProposal"] = rich_text_prop(proposal)
+        msg = "このタスクは粗いので分割提案:\n" + proposal
         comments.append(msg)
         telegrams.append(msg)
     if autonomy:
