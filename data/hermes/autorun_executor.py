@@ -116,6 +116,11 @@ def run_claude(title, details, nextaction):
     safe_env = {"HOME": os.environ.get("HOME", str(HOME)),
                 "PATH": f"{HOME}/.local/bin:/usr/local/bin:/usr/bin:/bin",
                 "LANG": os.environ.get("LANG", "en_US.UTF-8")}
+    # headless claude をサブスク OAuth にピン留め(API クレジット課金を回避)。.env/環境に
+    # CLAUDE_CODE_OAUTH_TOKEN があれば渡す。無ければ no-op。
+    _oauth = os.environ.get("CLAUDE_CODE_OAUTH_TOKEN") or load_env().get("CLAUDE_CODE_OAUTH_TOKEN")
+    if _oauth:
+        safe_env["CLAUDE_CODE_OAUTH_TOKEN"] = _oauth
     # タスク本文は半信頼(メモ/Telegram由来)。read-only ツールのみ許可し編集/実行/送信を不可能にする。
     # acceptEdits は使わない(インジェクションで破壊的編集が通るため)。
     safe_system = (
