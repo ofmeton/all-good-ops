@@ -1,14 +1,15 @@
 ---
 type: meta
 title: "Hot Cache"
-updated: 2026-06-23
+updated: 2026-06-24
 ---
 # Recent Context
 
 > セッション間で保持される ~500 words のコンテキストキャッシュ。セッション開始時に最優先で読む。詳細: [[SCHEMA]] §ホットキャッシュ。
 
 ## Last Updated
-2026-06-23 — **hermes go-live → JSON hardening → claude -p 課金調査 → OAuthピン留め/key revoke**: 前回 open「go-live 未実施」を完遂。配備blocker REPO_ROOT(#260)修正→Mac intake/breakdown 配備+launchd+点火+実Notion書込/Telegram/分解までLIVE検証。VM gateway hint(最小捕捉+分解承認)+nudge S4更新。LIVE観測由来の hardening=#262(JSON散文→strict-retry+断念ガード)/#263(使用上限エラーは断念せず draft維持→自動再開)。続いて「**claude -p が知らぬ間にクレジット課金**」疑いを devtools 調査→**2度誤断定の末、claude -p はMaxサブスク=実費ゼロ・出血源は廃止案件APIキー money-bot($48)/ai-radar と確定→両キー revoke(無効化)**。保険でheadless(intake/autorun)を `CLAUDE_CODE_OAUTH_TOKEN` でサブスクにピン留め(#264・~/.hermes/.env)。$65月間支出上限は7/1リセット。学び=帰属/機構は権威ソース(devtools group-by内訳)で実証してから断定(間接signalから推論しない)。retro [[../outputs/retrospectives/2026-06-23-hermes-go-live-billing]]。
+2026-06-24 — **STORM 導入＝方法論を課金ゼロで skill 化**: `stanford-oval/storm` 導入依頼を、本体が API従量課金/重venv/カスタムLM前提と照合し「ソフト導入せず方法論を再現」へ plan mode で pivot。PoC=塾収益化構想の4視点吟味(引用42本・¥0)→`storm-research` skill 新設(PR#266 merge)。多視点ペルソナ並列サブエージェントで STORM5段階(視点発見→質問駆動調査→統合→引用付き執筆→仕上げ)を再現、deep-research と棲み分け(事実確認/比較=deep-research・多視点網羅/構想吟味=storm-research)。学び=外部OSS導入は『そのまま入れる』前に運用制約(課金/依存)と照合し方法論再現も第一級選択肢([[self/engineering-principles]])。retro [[../outputs/retrospectives/2026-06-24-0010-storm-method-skill]]。
+- 前(2026-06-23): **hermes go-live → JSON hardening → claude -p 課金調査 → OAuthピン留め/key revoke**: 前回 open「go-live 未実施」を完遂。配備blocker REPO_ROOT(#260)修正→Mac intake/breakdown 配備+launchd+点火+実Notion書込/Telegram/分解までLIVE検証。VM gateway hint(最小捕捉+分解承認)+nudge S4更新。LIVE観測由来の hardening=#262(JSON散文→strict-retry+断念ガード)/#263(使用上限エラーは断念せず draft維持→自動再開)。続いて「**claude -p が知らぬ間にクレジット課金**」疑いを devtools 調査→**2度誤断定の末、claude -p はMaxサブスク=実費ゼロ・出血源は廃止案件APIキー money-bot($48)/ai-radar と確定→両キー revoke(無効化)**。保険でheadless(intake/autorun)を `CLAUDE_CODE_OAUTH_TOKEN` でサブスクにピン留め(#264・~/.hermes/.env)。$65月間支出上限は7/1リセット。学び=帰属/機構は権威ソース(devtools group-by内訳)で実証してから断定(間接signalから推論しない)。retro [[../outputs/retrospectives/2026-06-23-hermes-go-live-billing]]。
 - 前(2026-06-23): **hermes タスクフロー再設計 S1-S5(PR#254-258)**=Notion6要素ブリーフ+`intake_enrich`(triage→自己調査エンリッチ→低確信のみ質問)/`breakdown_apply`(承認→子カード)/`nudge`状態別しきい値。当時 go-live 未実施。retro [[../outputs/retrospectives/2026-06-23-hermes-task-flow-redesign]]。
 - 前(2026-06-22): iPhone「後でやる」19件をNotion看板へ移行(create-pages一括・Source=manual)。学び=query系は本プラン400→最初からsearch・日本語は生文字渡し([[../memory/reference_notion_mcp_id_and_sharing]])。
 2026-06-21 — **思考パートナー Phase2＋Notion配線修正＋失業手当再計算**: 思考テーマ見出しをNotion「思考インボックス」(db `b7660e02…`/ds `1497ea25…`)に一本化、Telegram=hermes柔軟分類(タスク/思考/雑談)・Claude捕捉の両経路合流(PR#244)。**Notion 2連続404を会話ログ(state.db messages)から根因特定**→学び `reference_notion_mcp_id_and_sharing` 新設(post/patch=database_id・**query_data_source=data_source_id**・新規DBは連携アプリへ手動共有必須・404をアクセス拒否と誤読しない・読みはsearch+fetch)。VM gateway hint編集はbackup→pyyaml round-trip→クリーン再起動。**失業手当満了再計算**=次回認定日7/16起点→最終支給認定日**2026-08-13**(元7/16から4週後ろ倒し)。mf-finance入金予定=7/24:183,596/8/21:104,912(skip反映後ろ倒し・二重計上回避)。Notionに開業届タスク(Due8/14)追加。retro [[../outputs/retrospectives/2026-06-21-thinking-phase2-notion-wiring]]。
@@ -16,8 +17,7 @@ updated: 2026-06-23
 - 前(2026-06-21): **思考パートナーMVP** PR#240: 捕捉→着手→起動→完結ループ。skill`thinking`+`~/journal/think`(private)+毎朝08:00 routine`trig_01K7Amonz4rZHCcBXrkH753m`。E2E『生業×武器』で武器=子どもの主導権回復/方針A→B/生活費26万。retro [[../outputs/retrospectives/2026-06-21-0400-thinking-partner]]。
 - 前(2026-06-21): **スキル資産の整理＋拡張**: 9ワークフロー別コンボ整理→上位3提示。新スキル`decision-prep`(意思決定前処理=grill-me→brainstorming→deliberation連鎖)をPR#236で新設。`demo-video-pipeline`演出リッチ化。retro [[../outputs/retrospectives/2026-06-21-0318-skill-combo-decision-demo-video]]。
 - 前(2026-06-19): **mf-finance 大改修(PR#215〜231)**: DB を main repo へ移設し worktree 非依存化(resolver #215)/web-ui-bridge(Cue)統合+pending永続化(#217)/UI/IA刷新 Phase①(左サイドバー+全幅+5系統ナビ #218)/カード引落 Phase②(#220)→締め日基準の請求期間集計(closing_day/cardBillingPeriod #230)+引落先口座(debit_account・口座別列からカード除外 #231)/MFデータ再取得(#222)/optimizer分類ルール作成承認(#226)。学び=ドメイン数値ロジックは計算モデルを先に確定(カード請求が5回反復)→wiki engineering-principles 追記。retro [[../outputs/retrospectives/2026-06-19-0319-mf-finance-card-billing]]。
-- 前(2026-06-19): **doda 求人応募代行**(非コーディング): React/Next.js経験に合う2件選定→ブロッカー越え→不可逆応募を最終ゲート1回で送信。学び→`feedback_chrome_devtools_fill_limitations`(充足判定はinput.value)。retro [[../outputs/retrospectives/2026-06-19-0003-doda-job-apply-proxy]]。
-- 前(2026-06-18): TERRA HP改修第1-3弾(PR#144/#148/#207)・そうま高校選び・クラウドワークスForm代理入力。
+- 前(2026-06-18): TERRA HP改修・doda求人応募代行・クラウドワークスForm代理入力。
 
 ## Current Focus
 - **hermes「あとでやる」= 全Phase稼働＋タスクフロー再設計 go-live済**: 捕捉(Telegram/Apple Notes/カレンダー)→**intake_enrich(6要素ブリーフ自動エンリッチ・15分)**→Notion→**breakdown_apply(分解承認→子カード)**→催促→**cc-auto 自走コード実行**。Mac launchd=applenotes/autorun/ccauto/**intake/breakdown**(全15分)、VM 24/7=gateway/nudge/calendar。kill switch=`~/.hermes/{intake,breakdown,ccauto}_enabled`(0で fail-closed)。**claude -p はMaxサブスク課金=実費ゼロ**(headless は CLAUDE_CODE_OAUTH_TOKEN でピン留め済)。残=VM hint `/new`後の実挙動確認・$65上限7/1リセット後のheavy再開確認・(任意)money-bot等キー完全削除。控え=`data/hermes/notion-task-db.md`・[[../memory/reference_claude_code_subscription_vs_credit_billing]]。
@@ -33,7 +33,8 @@ updated: 2026-06-23
 - 🔴 **はぐりん persona**: 名義境界の戦略再判断 未着手。
 
 ## Recently Touched
-- `data/hermes/{intake_enrich,breakdown_apply,autorun_executor,nudge_loop}.py`(go-live配備+JSON hardening+OAuthピン留め・PR#260/#262/#263/#264)・`~/.hermes/`(Mac配備先・plist+kill switch+.env CLAUDE_CODE_OAUTH_TOKEN)・VM `~/.hermes/config.yaml`(hint最小捕捉+分解承認)・memory [[../memory/reference_claude_code_subscription_vs_credit_billing]](新規)・[[../memory/feedback_user_perception_vs_data_check]](権威ソース実証追記)・[[self/engineering-principles]](帰属/機構は権威ソース実証)・MEMORY.md索引162→138圧縮
+- `.claude/skills/storm-research/SKILL.md`(新規・STORM方法論を課金ゼロ再現)・`CLAUDE.md`(起動マップ1行)・PoC `outputs/research/2026-06-23-juku-revenue-feasibility-engawa.md`(塾収益化4視点吟味)・[[self/engineering-principles]](外部OSS導入の原則追記)
+- 前: `data/hermes/{intake_enrich,breakdown_apply,autorun_executor,nudge_loop}.py`(go-live配備+JSON hardening+OAuthピン留め・PR#260/#262/#263/#264)・`~/.hermes/`(Mac配備先・plist+kill switch+.env CLAUDE_CODE_OAUTH_TOKEN)・VM `~/.hermes/config.yaml`(hint最小捕捉+分解承認)・memory [[../memory/reference_claude_code_subscription_vs_credit_billing]](新規)・[[../memory/feedback_user_perception_vs_data_check]](権威ソース実証追記)・[[self/engineering-principles]](帰属/機構は権威ソース実証)・MEMORY.md索引162→138圧縮
 - 前: `.claude/skills/decision-prep/SKILL.md`(PR#236)・`apps/mf-finance/`・web-ui-bridge(PR#208-213)・X発信(ingest/curation/pdca-eval)
 
 ## Open Questions / Frontiers
