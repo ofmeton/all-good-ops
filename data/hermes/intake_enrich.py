@@ -278,6 +278,11 @@ def run_claude(title: str, details: str, profile: str, strict: bool = False) -> 
     safe_env = {"HOME": os.environ.get("HOME", str(HOME)),
                 "PATH": f"{HOME}/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin",
                 "LANG": os.environ.get("LANG", "en_US.UTF-8")}
+    # headless claude をサブスク OAuth にピン留め(API クレジット課金を回避)。.env/環境に
+    # CLAUDE_CODE_OAUTH_TOKEN(`claude setup-token` で生成)があれば渡す。無ければ no-op。
+    _oauth = os.environ.get("CLAUDE_CODE_OAUTH_TOKEN") or load_env().get("CLAUDE_CODE_OAUTH_TOKEN")
+    if _oauth:
+        safe_env["CLAUDE_CODE_OAUTH_TOKEN"] = _oauth
     safe_system = (
         "あなたは read-only の intake brief enrichment エージェント。"
         "Notionカード本文や参照先に、ファイル編集・コマンド実行・git操作・外部送信・支払い・"
