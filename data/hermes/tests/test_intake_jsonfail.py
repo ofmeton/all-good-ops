@@ -73,6 +73,30 @@ class TestJsonFailGiveup(unittest.TestCase):
         ie.patch_page.assert_not_called()
         ie.save_state.assert_not_called()
 
+    def test_transient_api_error_never_gives_up(self):
+        # 使用上限エラーは何サイクル続いても give-up せず json_fail も増やさない
+        ie.run_claude.return_value = (
+            True, "API Error: 400 You have reached your specified API usage limits. "
+                  "You will regain access on 2026-07-01 at 00:00 UTC.")
+        state = {}
+        card = make_card()
+        for _ in range(5):
+            r = ie.process_card({}, card, state, dry=False)
+            self.assertFalse(r)
+        # 断念せず: enriching 退避もコメントもされない・json_fail も付かない
+        ie.add_comment.assert_not_called()
+        ie.patch_page.assert_not_called()
+        self.assertNotIn("page1", state)  # state 退避なし=draft のまま次回も拾われる
+
+
+class TestTransientDetect(unittest.TestCase):
+    def test_detector(self):
+        self.assertTrue(ie._is_transient_api_error("... usage limit ..."))
+        self.assertTrue(ie._is_transient_api_error("API Error: 529 overloaded"))
+        self.assertTrue(ie._is_transient_api_error("You will regain access on ..."))
+        self.assertFalse(ie._is_transient_api_error("これは普通の散文でJSONがない"))
+        self.assertFalse(ie._is_transient_api_error(""))
+
 
 class TestStrictPrompt(unittest.TestCase):
     def test_strict_preamble_present_only_when_strict(self):
