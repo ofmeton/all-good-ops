@@ -40,6 +40,7 @@ NOTION_VER = "2022-06-28"
 TRIAGE_MODEL = "anthropic/claude-haiku-4.5"
 MAX_PER_RUN = 5
 CLAUDE_TIMEOUT = 180
+JSON_FAIL_GIVEUP = 2  # heavy enrich の JSON 連続失敗がこの回数に達したら自動整理を断念し手動依頼へ
 BRIEF_FIELDS = ("Purpose", "Goal", "Constraints", "Discretion", "Resources", "Reporting")
 AUTONOMY_VALUES = {"cc-auto", "draft-only", "light-auto", "reminder", "ask-first"}
 TRIAGE_TIERS = {"light", "heavy"}
@@ -224,8 +225,14 @@ def triage_card(env: dict, title: str, details: str) -> dict:
     return {"tier": tier, "autonomy": autonomy, "reason": reason}
 
 
-def build_prompt(title: str, details: str, profile: str) -> str:
+def build_prompt(title: str, details: str, profile: str, strict: bool = False) -> str:
+    strict_preamble = (
+        "【厳守・最優先】出力は JSON オブジェクト1個のみ。前置き・あいさつ・説明文・"
+        "自然言語の要約・コードフェンス(```)は一切禁止。最初の文字は { 、最後の文字は } に"
+        "すること。直前の試行で散文を返したのでやり直し。\n\n"
+    ) if strict else ""
     return (
+        strict_preamble +
         "Notion『あとでやる』Inboxカードを6要素ブリーフへエンリッチしてください。\n"
         "JSONのみ出力してください。説明文、Markdown、コードフェンスは禁止。\n\n"
         "あなたが調べてよい場所:\n"
@@ -254,8 +261,8 @@ def build_prompt(title: str, details: str, profile: str) -> str:
     )
 
 
-def run_claude(title: str, details: str, profile: str) -> tuple:
-    prompt = build_prompt(title, details, profile)
+def run_claude(title: str, details: str, profile: str, strict: bool = False) -> tuple:
+    prompt = build_prompt(title, details, profile, strict=strict)
     safe_env = {"HOME": os.environ.get("HOME", str(HOME)),
                 "PATH": f"{HOME}/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin",
                 "LANG": os.environ.get("LANG", "en_US.UTF-8")}
@@ -438,14 +445,41 @@ def process_card(env: dict, card: dict, state: dict, dry: bool) -> bool:
             save_state(state)
         log("    done light BriefStatus=ready fields=1 questions=0")
         return True
-    ok, out = run_claude(title, details, load_user_profile())
-    if not ok:
-        log(f"    claude失敗→skip: {out[:120]}")
-        return False
-    try:
-        brief = parse_json_object(out)
-    except Exception as e:
-        log(f"    JSON不正→skip: {e} / out={out[:200]}")
+    profile = load_user_profile()
+    ok, out = run_claude(title, details, profile)
+    brief = None
+    if ok:
+        try:
+            brief = parse_json_object(out)
+        except Exception as e:
+            log(f"    JSON不正→厳格リトライ: {e}")
+    else:
+        log(f"    claude失敗→厳格リトライ: {out[:120]}")
+    if brief is None:
+        ok, out = run_claude(title, details, profile, strict=True)
+        if ok:
+            try:
+                brief = parse_json_object(out)
+            except Exception as e:
+                log(f"    JSON再不正: {e} / out={out[:160]}")
+        else:
+            log(f"    claude再失敗: {out[:120]}")
+    if brief is None:
+        fails = int(last.get("json_fail", 0)) + 1
+        if fails >= JSON_FAIL_GIVEUP:
+            log(f"    JSON連続失敗{fails}回→自動整理を断念・手動依頼へ切替")
+            if not dry:
+                try:
+                    add_comment(env, pid, "⚠️ 自動整理に複数回失敗しました（モデルがJSONを返さず）。お手数ですが手動で6要素ブリーフを埋めて、終わったら BriefStatus を ready にしてください。")
+                    patch_page(env, pid, {"BriefStatus": {"select": {"name": "enriching"}}})
+                except Exception as e:
+                    log(f"    断念通知失敗: {e}")
+            state[pid] = {"last_enrich": now(), "brief_status": "enriching", "json_fail": fails}
+        else:
+            log(f"    JSON失敗{fails}回目→次サイクルで再試行")
+            state[pid] = {**last, "last_enrich": now(), "json_fail": fails}
+        if not dry:
+            save_state(state)
         return False
     actions = build_actions(brief)
     try:
