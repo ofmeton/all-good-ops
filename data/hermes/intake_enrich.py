@@ -198,6 +198,18 @@ def _extract_json_dict(text: str) -> dict:
     return data
 
 
+def _is_transient_api_error(text: str) -> bool:
+    """claude CLI の一時的バックエンド障害(使用上限/レート/過負荷)か。
+    これらは散文出力と違い決定的でないので give-up せず次サイクルへ回す。"""
+    t = (text or "").lower()
+    needles = (
+        "usage limit", "rate limit", "regain access", "overloaded",
+        "too many requests", "api error: 429", "api error: 529",
+        "api error: 503", "api error: 500", "service unavailable",
+    )
+    return any(n in t for n in needles)
+
+
 def triage_card(env: dict, title: str, details: str) -> dict:
     """Haikuで light/heavy を分類。失敗時は heavy にフォールバック。"""
     if not env.get("OPENROUTER_API_KEY"):
@@ -465,6 +477,11 @@ def process_card(env: dict, card: dict, state: dict, dry: bool) -> bool:
         else:
             log(f"    claude再失敗: {out[:120]}")
     if brief is None:
+        if _is_transient_api_error(out):
+            # 使用上限/レート等の一時障害は断念しない(json_fail も増やさない)。
+            # quota 回復後に自動再試行されるよう draft のまま次サイクルへ。
+            log(f"    一時APIエラー→断念せず次サイクルへ: {out[:120]}")
+            return False
         fails = int(last.get("json_fail", 0)) + 1
         if fails >= JSON_FAIL_GIVEUP:
             log(f"    JSON連続失敗{fails}回→自動整理を断念・手動依頼へ切替")
