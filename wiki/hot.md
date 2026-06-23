@@ -1,15 +1,16 @@
 ---
 type: meta
 title: "Hot Cache"
-updated: 2026-06-22
+updated: 2026-06-23
 ---
 # Recent Context
 
 > セッション間で保持される ~500 words のコンテキストキャッシュ。セッション開始時に最優先で読む。詳細: [[SCHEMA]] §ホットキャッシュ。
 
 ## Last Updated
-2026-06-23 — **hermes 文脈共有→Phase A→整理→タスクフロー再設計(6要素ブリーフ自走パートナー S1-S5)**: hermesを「使うほど育つ・文脈を知るパートナー」へ。Phase B=memory/wiki→`USER_PROFILE.md`投影を分類プロンプトに注入(PR#251)・B4 VM配備。Phase A=学習インボックス(db`519dbba8…`)+同意ゲートskill`hermes-learn-review`(PR#253)・VM hint+gateway再起動で点火。沈殿整理=hermes-spec worktree(362ファイル)破棄・main同期。**タスクフロー再設計 S1-S5(PR#254-258)**: Notion6要素フィールド(Purpose/Goal/Constraints/Discretion/Resources/Reporting)+BriefStatus+Parent/Subtasks+BreakdownProposal/ApproveBreakdown / `intake_enrich.py`(triage→自己調査エンリッチ→低確信のみ質問+recap・Ready/Autonomy提案のみ) / `breakdown_apply.py`(承認→Parent子カード) / `nudge_loop`状態別しきい値+承認キュー指標 / 報告は既存executorで充足。grill-me反映(triageでコスト/通知減・recap・queue計測)。実装=Codex二段レビュー・実看板dry-run検証。**go-live配備は未実施(dry-runのみ)**=新script配備+launchd+VM hintが残。学び=Notion自己関連はADD COLUMN片側のみ・順次squash-mergeは reset+新ブランチ。retro [[../outputs/retrospectives/2026-06-23-hermes-task-flow-redesign]]。
-- 前(2026-06-22): **iPhone「後でやる」19件をNotion看板へ移行**: 後でやるアプリのスクショ2枚から19件抽出→Notion「あとでやるタスク」看板(hermes共有・db `21594…`/ds `782773d8…`)のInbox列へcreate-pages一括投入(Source=manual・時間指定2件はDue/Details・既存と重複なし)。続くトリアージ未済Telegram通知依頼はdry-runでInbox計36件判明→範囲をAskUserQuestion→「自分でやる」で実送信せず終了。学び=query系(query-data-sources/query-database-view)は本プラン両方400→最初からsearch・select演算子equals・日本語は生文字渡し([[../memory/reference_notion_mcp_id_and_sharing]]追記)。retro [[../outputs/retrospectives/2026-06-22-iphone-todo-notion-migration]]。
+2026-06-23 — **hermes go-live → JSON hardening → claude -p 課金調査 → OAuthピン留め/key revoke**: 前回 open「go-live 未実施」を完遂。配備blocker REPO_ROOT(#260)修正→Mac intake/breakdown 配備+launchd+点火+実Notion書込/Telegram/分解までLIVE検証。VM gateway hint(最小捕捉+分解承認)+nudge S4更新。LIVE観測由来の hardening=#262(JSON散文→strict-retry+断念ガード)/#263(使用上限エラーは断念せず draft維持→自動再開)。続いて「**claude -p が知らぬ間にクレジット課金**」疑いを devtools 調査→**2度誤断定の末、claude -p はMaxサブスク=実費ゼロ・出血源は廃止案件APIキー money-bot($48)/ai-radar と確定→両キー revoke(無効化)**。保険でheadless(intake/autorun)を `CLAUDE_CODE_OAUTH_TOKEN` でサブスクにピン留め(#264・~/.hermes/.env)。$65月間支出上限は7/1リセット。学び=帰属/機構は権威ソース(devtools group-by内訳)で実証してから断定(間接signalから推論しない)。retro [[../outputs/retrospectives/2026-06-23-hermes-go-live-billing]]。
+- 前(2026-06-23): **hermes タスクフロー再設計 S1-S5(PR#254-258)**=Notion6要素ブリーフ+`intake_enrich`(triage→自己調査エンリッチ→低確信のみ質問)/`breakdown_apply`(承認→子カード)/`nudge`状態別しきい値。当時 go-live 未実施。retro [[../outputs/retrospectives/2026-06-23-hermes-task-flow-redesign]]。
+- 前(2026-06-22): iPhone「後でやる」19件をNotion看板へ移行(create-pages一括・Source=manual)。学び=query系は本プラン400→最初からsearch・日本語は生文字渡し([[../memory/reference_notion_mcp_id_and_sharing]])。
 2026-06-21 — **思考パートナー Phase2＋Notion配線修正＋失業手当再計算**: 思考テーマ見出しをNotion「思考インボックス」(db `b7660e02…`/ds `1497ea25…`)に一本化、Telegram=hermes柔軟分類(タスク/思考/雑談)・Claude捕捉の両経路合流(PR#244)。**Notion 2連続404を会話ログ(state.db messages)から根因特定**→学び `reference_notion_mcp_id_and_sharing` 新設(post/patch=database_id・**query_data_source=data_source_id**・新規DBは連携アプリへ手動共有必須・404をアクセス拒否と誤読しない・読みはsearch+fetch)。VM gateway hint編集はbackup→pyyaml round-trip→クリーン再起動。**失業手当満了再計算**=次回認定日7/16起点→最終支給認定日**2026-08-13**(元7/16から4週後ろ倒し)。mf-finance入金予定=7/24:183,596/8/21:104,912(skip反映後ろ倒し・二重計上回避)。Notionに開業届タスク(Due8/14)追加。retro [[../outputs/retrospectives/2026-06-21-thinking-phase2-notion-wiring]]。
 - 前(2026-06-21): **hermes「あとでやる」Phase2b(カレンダー)＋Phase3拡張(cc-auto 自走コード実行)完成・本番稼働**: `calendar_capture.py`(Haiku準備要否判定→Notion)＋Sheets MCP OAuth流用で全1892件移行(200件チャンク)/催促ノイズ抑制＋RawSourceId dedup/cc-auto は design→plan→Codex委任→Claude二重レビュー(fail-open10件→fail-closed)→**PR#248 を main へ自動merge実証**→launchd `com.hermes.ccauto`(15分)本番投入・flock単一フライトでrace解消。retro [[../outputs/retrospectives/2026-06-21-hermes-calendar-ccauto]]。
 - 前(2026-06-21): **思考パートナーMVP** PR#240: 捕捉→着手→起動→完結ループ。skill`thinking`+`~/journal/think`(private)+毎朝08:00 routine`trig_01K7Amonz4rZHCcBXrkH753m`。E2E『生業×武器』で武器=子どもの主導権回復/方針A→B/生活費26万。retro [[../outputs/retrospectives/2026-06-21-0400-thinking-partner]]。
@@ -19,7 +20,7 @@ updated: 2026-06-22
 - 前(2026-06-18): TERRA HP改修第1-3弾(PR#144/#148/#207)・そうま高校選び・クラウドワークスForm代理入力。
 
 ## Current Focus
-- **hermes「あとでやる」= 全Phase稼働中**: 捕捉(Telegram/Apple Notes/カレンダー)→Notion→催促→**cc-auto 自走コード実行**。VM(GCP) 24/7=gateway/nudge/calendar、Mac launchd=applenotes/autorun/**ccauto(15分)**。cc-auto 使い方=カードを Autonomy=cc-auto・Status=Ready・Details に `repo: <~/Projects相対パス>`(例 `private-agents/all-good-ops`)。緊急停止 `echo -n 0 > ~/.hermes/ccauto_enabled`。残=repo解決のglob化・autonomy提案UXのhermes側配線・(任意)Oracle再移設。控え=`data/hermes/notion-task-db.md`。
+- **hermes「あとでやる」= 全Phase稼働＋タスクフロー再設計 go-live済**: 捕捉(Telegram/Apple Notes/カレンダー)→**intake_enrich(6要素ブリーフ自動エンリッチ・15分)**→Notion→**breakdown_apply(分解承認→子カード)**→催促→**cc-auto 自走コード実行**。Mac launchd=applenotes/autorun/ccauto/**intake/breakdown**(全15分)、VM 24/7=gateway/nudge/calendar。kill switch=`~/.hermes/{intake,breakdown,ccauto}_enabled`(0で fail-closed)。**claude -p はMaxサブスク課金=実費ゼロ**(headless は CLAUDE_CODE_OAUTH_TOKEN でピン留め済)。残=VM hint `/new`後の実挙動確認・$65上限7/1リセット後のheavy再開確認・(任意)money-bot等キー完全削除。控え=`data/hermes/notion-task-db.md`・[[../memory/reference_claude_code_subscription_vs_credit_billing]]。
 - **X発信 新運用**: 自動収集OFF・**手動ブックマークURLを `scripts/ingest-bookmarks.ts`/`/admin/ingest-bookmarks` で投入**→curation→writer(知見+段取り+新ターゲット)→check→LINE承認。writer は MAv4(再焼成済)。テンプレ patch は runtime 注入(re-bake不要・deployのみ)。collector復活は `collector_enabled` 行削除/=1。
 - **X発信 残**: ①article compose軽量化(240sでも長文重い→入力trim/段取り簡略)未実装 ②Phase2画像 次スライス=publish側ブロック挿入(X Articleインライン/thread各ツイート)=**保留(手動画像gen運用)** ③writer品質~88 plateau・自己推敲2pass(compose費2倍)は要承認レバー。eval資産=`scripts/pdca-eval.ts`。
 - **web-ui-bridge**: 複数選択/連続射影/操作プローブまで出荷済(PR#195-213)。起動=`node apps/web-ui-bridge/daemon/server.mjs --target <site>`+対象`npm run dev`。回帰=`cd apps/web-ui-bridge/smoke && npm run probe`(daemon/terra稼働前提)。**server.mjs変更後はdaemon再起動**(overlay.jsはホット)。残=bug-hunt 2ラウンド目の中位候補(ユーザー保留)・STUDIO残パリティ。
@@ -32,8 +33,8 @@ updated: 2026-06-22
 - 🔴 **はぐりん persona**: 名義境界の戦略再判断 未着手。
 
 ## Recently Touched
-- `.claude/skills/decision-prep/SKILL.md`(新設・PR#236)・`~/.claude/skills/demo-video-pipeline/SKILL.md`(Phase3演出リッチ化＋`create-onboarding-video`/`remotion-best-practices`連携)・memory [[feedback-worktree-file-reread]](隔離後の書込先パスもworktree起点に追記)
-- 前: `apps/mf-finance/`(cashflow rolling/optimizer suggest_transfer・data/mf-finance.dbはgitignore)・`.claude/skills/codex-implement/SKILL.md`・web-ui-bridge(PR#208-213)・X発信(ingest/curation/pdca-eval)
+- `data/hermes/{intake_enrich,breakdown_apply,autorun_executor,nudge_loop}.py`(go-live配備+JSON hardening+OAuthピン留め・PR#260/#262/#263/#264)・`~/.hermes/`(Mac配備先・plist+kill switch+.env CLAUDE_CODE_OAUTH_TOKEN)・VM `~/.hermes/config.yaml`(hint最小捕捉+分解承認)・memory [[../memory/reference_claude_code_subscription_vs_credit_billing]](新規)・[[../memory/feedback_user_perception_vs_data_check]](権威ソース実証追記)・[[self/engineering-principles]](帰属/機構は権威ソース実証)・MEMORY.md索引162→138圧縮
+- 前: `.claude/skills/decision-prep/SKILL.md`(PR#236)・`apps/mf-finance/`・web-ui-bridge(PR#208-213)・X発信(ingest/curation/pdca-eval)
 
 ## Open Questions / Frontiers
 - **enforce 自動flip 依存**: collect が回り続け shadow が7run貯まるか（brownout halt 注意）。基準到達で自動切替＋LINE通知。
@@ -41,6 +42,7 @@ updated: 2026-06-22
 - **MA prompt drift 検知なし**: merge+worker deploy ≠ MA反映（ma:bootstrap 必須）で PR#169 が3日 un-live だった。system_hash drift の CI 警告が欲しい。
 - **cwd-regression**: 全Bash `cd <abs> &&` 前置（[[bash-cwd-persistence]]）。
 - `listApprovedStock`相当フィルタ3箇所複製の SSOT 化（未着手）。
+- **hermes 課金監視**: claude -p はサブスク(実費ゼロ)確定だが、$65 API上限の7/1リセット後に heavy enrich が通常稼働へ戻るか・VM hint `/new`後に最小捕捉/分解承認が実挙動するかを次セッションで実地確認。money-bot/ai-radar は無効化済(完全削除はユーザー判断待ち)。
 
 ## Conventions
 - 500 words 以内 / declarative present tense / 全置換更新（古い項目は間引く）
