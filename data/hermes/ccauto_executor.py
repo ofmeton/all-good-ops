@@ -3,7 +3,8 @@
 
 Notion Ready×Autonomy=cc-auto を拾い、対象リポの worktree で Codex がコード実装→
 test/build→Codexレビュー→機械ガードを通れば squash merge、そうでなければ PR/Blocked。
-全停止点を Telegram 通知。read-only の draft-only(autorun_executor.py)とは別物。
+Telegram は重要停止点だけを短い Notion リンク付き即時通知にし、完了/PR は nudge digest に委ねる。
+read-only の draft-only(autorun_executor.py)とは別物。
 
 設計=docs/superpowers/specs/2026-06-21-hermes-ccauto-phase3-design.md
 手動: python3 ccauto_executor.py [--dry-run] [--projects-root PATH]
@@ -131,6 +132,29 @@ def telegram(env, text):
             f"https://api.telegram.org/bot{env['TELEGRAM_BOT_TOKEN']}/sendMessage", data=data), timeout=20)
     except Exception:
         pass
+
+
+def card_url(card):
+    return card.get("url") or ""
+
+
+def short_reason(text, limit=80):
+    one_line = " ".join((text or "").split())
+    return one_line[:limit] if one_line else "詳細はNotionコメント"
+
+
+def ccauto_notice(kind, title, url, reason=""):
+    if kind == "merge_pr_failed":
+        return f"⚠️ merge/PR失敗・要対応: {title}\n→ {url}"
+    if kind == "blocked":
+        return f"🚧止まった: {title} — {short_reason(reason)}\n→ {url}"
+    if kind == "hard_gate":
+        return f"⚠️硬ゲート停止: {title} — {short_reason(reason)}\n→ {url}"
+    if kind == "repo_unknown":
+        return f"❓リポ不明: {title} — 'repo: <name>' を教えて\n→ {url}"
+    if kind == "interrupted":
+        return f"🚧中断: {title} — {short_reason(reason)}\n→ {url}"
+    return f"⚠️要対応: {title}\n→ {url}"
 
 
 def query_ccauto(env):
@@ -276,7 +300,9 @@ def codex_review(worktree, diff_text):
         try:
             last = Path(out_file).read_text(encoding="utf-8", errors="replace")
         except Exception:
-            return False, "codex review: 最終メッセージ取得失敗"
+            last = res.stdout or ""
+            if not last:
+                return False, "codex review: 最終メッセージ取得失敗"
         first = ""
         for line in last.splitlines():
             if line.strip():
@@ -337,39 +363,38 @@ def squash_merge(repo_path, worktree, branch, base):
 
 def finalize(env, card, decision, ctx):
     pid = card["id"]; title = ctx["title"]; summary = ctx.get("summary", "")
+    url = ctx.get("url") or card_url(card)
     if decision == "merge":
         ok = squash_merge(env and ctx["repo_path"], ctx["worktree"], ctx["branch"], ctx["base"])
         if ok:
             set_status(env, pid, "Done")
             add_comment(env, pid, f"✅ cc-auto 完了→main反映\n\n{summary}")
-            telegram(env, f"✅ 完了→main反映: {title}\n{summary[:400]}")
             return
         set_status(env, pid, "Blocked")
         add_comment(env, pid, f"⚠️ cc-auto merge/PR作成失敗・要対応\n\n{summary}")
-        telegram(env, f"⚠️ merge/PR作成失敗・要対応: {title}")
+        telegram(env, ccauto_notice("merge_pr_failed", title, url))
         return
     if decision == "pr":
         if not push_branch(ctx["worktree"], ctx["branch"]):
             set_status(env, pid, "Blocked")
             add_comment(env, pid, f"⚠️ cc-auto PR作成失敗・要対応（push失敗）\n\n{summary}")
-            telegram(env, f"⚠️ PR作成失敗・要対応: {title}")
+            telegram(env, ccauto_notice("merge_pr_failed", title, url))
             return
         pr = open_pr(ctx["repo_path"], ctx["worktree"], ctx["branch"], f"cc-auto: {title}")
         if not pr:
             set_status(env, pid, "Blocked")
             add_comment(env, pid, f"⚠️ cc-auto PR作成失敗・要対応\n\n{summary}")
-            telegram(env, f"⚠️ PR作成失敗・要対応: {title}")
+            telegram(env, ccauto_notice("merge_pr_failed", title, url))
             return
         set_status(env, pid, "Review")
         add_comment(env, pid, f"📝 cc-auto PR作成（要レビュー）\n{pr or '(PR作成失敗)'}\n\n{summary}")
-        telegram(env, f"📝 PR上げた→確認して: {title}\n{pr or ''}")
         return
     # blocked
     pushed = push_branch(ctx["worktree"], ctx["branch"])
     set_status(env, pid, "Blocked")
     push_note = "" if pushed else "\n\nPR作成失敗・要対応（push失敗）"
     add_comment(env, pid, f"⚠️ cc-auto 中断: {ctx.get('reason','')}{push_note}\n\n{summary}")
-    telegram(env, f"⚠️ 止まった→Blocked: {title}\n{ctx.get('reason','')[:300]}")
+    telegram(env, ccauto_notice("blocked", title, url, ctx.get("reason", "")))
 
 
 KILL_PATH = HOME / ".hermes" / "ccauto_enabled"
@@ -407,6 +432,7 @@ def _slug(title):
 
 def process_card(env, card, projects_root, dry):
     pid = card["id"]; title = _title(card); details = _details(card)
+    url = card_url(card)
     log(f"  pickup: {title[:40]}")
     # pre-flight 硬ゲート（カード本文）
     hit, reason = hard_gate_hit(details + " " + title, [])
@@ -414,18 +440,18 @@ def process_card(env, card, projects_root, dry):
         log(f"    pre-flight 硬ゲート: {reason} → Blocked")
         if not dry:
             set_status(env, pid, "Blocked"); add_comment(env, pid, f"⚠️ 硬ゲート: {reason}")
-            telegram(env, f"⚠️ 硬ゲートで実行せず: {title}\n{reason}")
+            telegram(env, ccauto_notice("hard_gate", title, url, reason))
         return False
     repo = resolve_repo_from_text(details, projects_root)
     if not repo or not Path(repo, ".git").exists():
         log("    リポ解決不能 → NeedInfo")
         if not dry:
             set_status(env, pid, "NeedInfo")
-            telegram(env, f"❓ どのリポ？ 'repo: <name>' を教えて: {title}")
+            telegram(env, ccauto_notice("repo_unknown", title, url))
         return False
     if dry:
         log(f"    DRY: repo={repo} まで解決。Codex実行/merge はskip"); return True
-    set_status(env, pid, "InProgress"); telegram(env, f"🤖 着手: {title}")
+    set_status(env, pid, "InProgress"); log(f"    着手: {title[:60]}")
     wt = None
     try:
         wt, branch = make_worktree(repo, _slug(title))
@@ -437,7 +463,7 @@ def process_card(env, card, projects_root, dry):
         safe, sreason = codex_review(wt, diff_text) if ok and test_ok else (False, "実装/検証失敗")
         decision = decide_exit(safe, hit2, not diff_too_big(lines), test_ok, author_ok(repo))
         ctx = {"repo_path": repo, "worktree": wt, "branch": branch, "base": default_branch(repo),
-               "title": title, "summary": clog[-600:], "reason": reason2 or sreason or vlog[-300:]}
+               "title": title, "summary": clog[-600:], "reason": reason2 or sreason or vlog[-300:], "url": url}
         finalize(env, card, decision, ctx)
         log(f"    decision={decision} files={len(files)} lines={lines}")
         return decision != "blocked"
@@ -446,7 +472,7 @@ def process_card(env, card, projects_root, dry):
         log(f"    {reason}")
         set_status(env, pid, "Blocked")
         add_comment(env, pid, f"⚠️ cc-auto 中断: {reason}")
-        telegram(env, f"⚠️ cc-auto 中断: {title}\n{reason[:300]}")
+        telegram(env, ccauto_notice("interrupted", title, url, reason))
         return False
     finally:
         if wt:

@@ -107,5 +107,17 @@ class TestStrictPrompt(unittest.TestCase):
         self.assertTrue(strict.lstrip().startswith("【厳守"))
 
 
+class TestConversationReset(unittest.TestCase):
+    def test_notion_draft_overrides_stale_enriching_state(self):
+        card = make_card(brief_status="draft")
+        state = {"page1": {"brief_status": "enriching"}}
+        with mock.patch.object(ie, "triage_card", return_value={"tier": "light", "autonomy": "ask-first", "reason": "r"}), \
+             mock.patch.object(ie, "apply_actions", return_value=True) as apply_actions, \
+             mock.patch.object(ie, "save_state"), \
+             mock.patch.object(ie, "log"):
+            self.assertTrue(ie.process_card({}, card, state, dry=False))
+        apply_actions.assert_called_once()
+
+
 if __name__ == "__main__":
     unittest.main()

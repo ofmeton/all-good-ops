@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Phase 4 催促ループ（VM 24/7 / Telegram ダイジェスト）
+"""Phase 4 nudge/digest ループ（VM 24/7 / Telegram ダイジェスト）
 
-Notion「あとでやるタスク」の停滞カードを拾い、Telegram にまとめて催促する。
-静時間帯(22:00-08:00 JST)は送らない。同一カードは LastNudge により 1日1回まで。
+Notion「あとでやるタスク」の更新(Review/Done)と停滞カードを拾い、
+1日3回だけ Telegram にまとめる。同一要対応カードは LastNudge により 1日1回まで。
 
 催促対象:
 - Status=Blocked        … 詰まってる(要対応)
@@ -10,7 +10,7 @@ Notion「あとでやるタスク」の停滞カードを拾い、Telegram に�
 - Autonomy=reminder かつ Status in {Ready,Inbox} … リマインド(期日あれば表示)
 - Status=Inbox かつ reminder以外 かつ作成から1日以上 … 未整理(放置)
 
-cron(毎時)から実行。手動: python3 nudge_loop.py [--dry-run] [--force(静時間帯無視)]
+cron(毎時)から実行。手動: python3 nudge_loop.py [--dry-run] [--force(送信時間制限無視)]
 """
 import json
 import sys
@@ -23,9 +23,11 @@ HOME = Path.home()
 ENV_PATH = HOME / ".hermes" / ".env"
 LOG_PATH = HOME / ".hermes" / "logs" / "nudge_loop.log"
 METRICS_PATH = HOME / ".hermes" / "task_metrics.jsonl"
+DIGEST_STATE_PATH = HOME / ".hermes" / "nudge_digest_state.json"
 NOTION_DB_ID = "2159405e11a84e7f90a8b6252bb43d38"
 NOTION_VER = "2022-06-28"
 JST = timezone(timedelta(hours=9))
+DIGEST_HOURS = {9, 13, 19}
 
 
 def now_jst():
@@ -81,6 +83,10 @@ def checked(p, name):
     return bool(p.get(name, {}).get("checkbox"))
 
 
+def card_url(card):
+    return card.get("url") or ""
+
+
 def telegram(env, text):
     chat = env.get("TELEGRAM_HOME_CHANNEL") or env.get("TELEGRAM_ALLOWED_USERS", "").split(",")[0]
     data = urllib.parse.urlencode({"chat_id": chat, "text": text[:3800]}).encode()
@@ -119,10 +125,57 @@ def card_age_days(card):
     return (now_jst() - dt).total_seconds() / 86400
 
 
-def _line(title, action, p):
+def should_send_digest_hour(hour, force=False):
+    return bool(force or hour in DIGEST_HOURS)
+
+
+def load_digest_state():
+    if DIGEST_STATE_PATH.exists():
+        try:
+            return json.loads(DIGEST_STATE_PATH.read_text(encoding="utf-8"))
+        except Exception:
+            return {}
+    return {}
+
+
+def save_digest_state(state):
+    DIGEST_STATE_PATH.parent.mkdir(parents=True, exist_ok=True)
+    DIGEST_STATE_PATH.write_text(json.dumps(state, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+def digest_baseline_ts(state, now_iso):
+    """初回は過去のReview/Done全件を流さず、現在時刻をbaselineにする。"""
+    return (state or {}).get("last_digest_ts") or now_iso
+
+
+def _line(title, action, card):
+    p = card["properties"]
     due = (p.get("Due", {}).get("date") or {}).get("start")
     suffix = f"（期日 {due[:10]}）" if due else ""
-    return f"・{title}{suffix} — {action}"
+    return f"・{title}{suffix} — {action} → {card_url(card)}"
+
+
+def is_updated_since(card, last_digest_ts):
+    p = card["properties"]
+    if sel(p, "Status") not in ("Review", "Done"):
+        return False
+    if not last_digest_ts:
+        return True
+    edited = _parse_time(card.get("last_edited_time", ""))
+    last = _parse_time(last_digest_ts)
+    return edited > last
+
+
+def update_line_for_card(card):
+    p = card["properties"]
+    title = title_of(p) or "(無題)"
+    st = sel(p, "Status")
+    label = "main反映" if st == "Done" else "下書き確認"
+    return f"・{title} — {label} → {card_url(card)}"
+
+
+def updated_digest_lines(cards, last_digest_ts):
+    return [update_line_for_card(c) for c in cards if is_updated_since(c, last_digest_ts)]
 
 
 def stale_keys_for_card(card):
@@ -157,30 +210,30 @@ def classify_cards(card, today):
     items = []
     for key in stale_keys_for_card(card):
         if key == "inbox_not_ready":
-            items.append(("🧩 intake未完", _line(title, "intake未完。文脈を埋めにいくか、質問に答えて", p)))
+            items.append(("🧩 intake未完", _line(title, "intake未完。文脈を埋めにいくか、質問に答えて", card)))
         elif key == "needinfo":
-            items.append(("❓ 回答待ち", _line(title, f"回答待ち: {title}", p)))
+            items.append(("❓ 回答待ち", _line(title, f"回答待ち: {title}", card)))
         elif key == "ready_no_autonomy":
-            items.append(("✅ 承認待ち", _line(title, "Autonomy未承認。提案を確認して(承認で自走開始)", p)))
+            items.append(("✅ 承認待ち", _line(title, "Autonomy未承認。提案を確認して(承認で自走開始)", card)))
         elif key == "unapproved_breakdown":
-            items.append(("🪓 分解承認待ち", _line(title, "分解案あり。承認(ApproveBreakdownチェック)で子展開", p)))
+            items.append(("🪓 分解承認待ち", _line(title, "分解案あり。承認(ApproveBreakdownチェック)で子展開", card)))
         elif key == "ready_idle":
-            items.append(("▶️ 着手待ち", _line(title, "着手されてない。進める?", p)))
+            items.append(("▶️ 着手待ち", _line(title, "着手されてない。進める?", card)))
     if items:
         return items
     if st == "Blocked":
-        return [("🚧 詰まってる(要対応)", _line(title, "詰まりを確認して解除/方針決め", p))]
+        return [("🚧 詰まってる(要対応)", _line(title, "詰まりを確認して解除/方針決め", card))]
     # カレンダー由来の準備タスクは「放置」扱いせず、予定が近づいた時だけ催促(遠い未来を毎日鳴らさない)
     if src == "Calendar":
         due = _due_date(p)
         if due is not None and today <= due <= today + timedelta(days=CAL_LEAD_DAYS):
-            return [("📅 まもなく予定(要準備)", _line(title, "予定が近い。準備を確認", p))]
+            return [("📅 まもなく予定(要準備)", _line(title, "予定が近い。準備を確認", card))]
         return []
     if au == "reminder" and st in ("Ready", "Inbox"):
-        return [("⏰ リマインド", _line(title, "リマインド。やる/延期/Doneを決める", p))]
+        return [("⏰ リマインド", _line(title, "リマインド。やる/延期/Doneを決める", card))]
     created_jst = _parse_time(card.get("created_time", ""))
     if st == "Inbox" and au != "reminder" and created_jst.date() < today:
-        return [("🗂 未整理(Inboxに放置)", _line(title, "未整理。Inboxから進め方を決める", p))]
+        return [("🗂 未整理(Inboxに放置)", _line(title, "未整理。Inboxから進め方を決める", card))]
     return []
 
 
@@ -257,9 +310,12 @@ def main():
     except Exception as e:
         log(f"ERROR: Notion query失敗: {e}"); return
     write_metrics(cards, dry)
-    if not force and (h < 8 or h >= 22):
-        log(f"静時間帯(JST {h}時) -> 送らない"); return
+    if not should_send_digest_hour(h, force):
+        log(f"digest送信時間外(JST {h}時) -> 送らない"); return
 
+    digest_state = load_digest_state()
+    baseline_ts = digest_baseline_ts(digest_state, now_jst().isoformat())
+    update_lines = updated_digest_lines(cards, baseline_ts)
     buckets = {}
     to_stamp = []
     for c in cards:
@@ -276,27 +332,35 @@ def main():
             buckets.setdefault(reason, []).append(line)
         to_stamp.append(c["id"])
 
-    if not buckets:
-        log("催促対象なし"); return
+    if not buckets and not update_lines:
+        if not digest_state.get("last_digest_ts") and not dry:
+            save_digest_state({"last_digest_ts": baseline_ts})
+        log("digest対象なし"); return
 
-    parts = ["📋 あとでやる｜気になってるやつ\n"]
+    parts = ["📋 あとでやる｜更新と気になってるやつ\n"]
+    if update_lines:
+        parts.append("🔔 更新（確認はNotion）")
+        parts.extend(update_lines)
+        parts.append("")
     for reason, lines in buckets.items():
         parts.append(reason)
         parts.extend(lines)
         parts.append("")
     msg = "\n".join(parts).strip()
-    log(f"催促 {len(to_stamp)}件 / dry={dry}")
+    log(f"digest 更新={len(update_lines)} 要対応={len(to_stamp)}件 / dry={dry}")
     if dry:
         print("----\n" + msg + "\n----"); return
 
     telegram(env, msg)
+    digest_state["last_digest_ts"] = now_jst().isoformat()
+    save_digest_state(digest_state)
     for pid in to_stamp:
         try:
             notion(env, "PATCH", f"pages/{pid}",
                    {"properties": {"LastNudge": {"date": {"start": today_str}}}})
         except Exception as e:
             log(f"  LastNudge更新失敗 {pid[:8]}: {e}")
-    log(f"送信完了 {len(to_stamp)}件")
+    log(f"送信完了 更新={len(update_lines)} 要対応={len(to_stamp)}件")
 
 
 if __name__ == "__main__":

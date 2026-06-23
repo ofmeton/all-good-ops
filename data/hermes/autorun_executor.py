@@ -3,7 +3,8 @@
 
 Notion「あとでやるタスク」の Status=Ready かつ Autonomy=draft-only のカードを拾い、
 headless `claude -p`（Claude サブスク内・Web検索可・read-only 的）で成果物テキスト（調べもの結論/
-文面下書き）を生成 → カードのコメントに貼り、Status=Review に上げ、Telegram に通知する。
+文面下書き）を生成 → カードのコメントに貼り、Status=Review に上げる。
+Telegram は詰まりだけを短い Notion リンク付き即時通知にし、着手/完了は nudge digest に委ねる。
 
 保守ガード（初回）:
 - 対象は draft-only のみ（cc-auto のコード実行・自動 merge は v1 では対象外）
@@ -22,6 +23,7 @@ import sys
 import tempfile
 import shutil
 import urllib.request
+import urllib.parse
 import urllib.error
 from pathlib import Path
 
@@ -103,6 +105,19 @@ def telegram(env: dict, text: str) -> None:
         log(f"  telegram通知失敗: {e}")
 
 
+def card_url(card: dict) -> str:
+    return card.get("url") or ""
+
+
+def _short_reason(text: str, limit: int = 80) -> str:
+    one_line = " ".join((text or "").split())
+    return one_line[:limit] if one_line else "詳細はNotionコメント"
+
+
+def blocked_notice(title: str, reason: str, url: str) -> str:
+    return f"🚧詰まった: {title} — {_short_reason(reason)}\n→ {url}"
+
+
 def run_claude(title, details, nextaction):
     prompt = (
         "次の『あとでやる』タスクの成果物をテキストで出力してください。"
@@ -172,22 +187,20 @@ def main() -> None:
         if dry:
             log("    DRY: claude 実行はスキップ"); continue
         set_status(env, pid, "InProgress")
-        telegram(env, f"🤖 着手: {title}")
+        log(f"    着手: {title[:60]}")
         ok, out = run_claude(title, details, nextaction)
         if ok:
             add_comment(env, pid, f"🤖 自走実行(draft-only)の成果物:\n\n{out}")
             set_status(env, pid, "Review")
-            telegram(env, f"✅ 下書きできた→Review: {title}\n\n{out[:600]}")
             done += 1
             log(f"    → Review 完了")
         else:
             add_comment(env, pid, f"⚠️ 自走実行に失敗/中断: {out}")
             set_status(env, pid, "Blocked")
-            telegram(env, f"⚠️ 詰まった→Blocked: {title}\n{out[:300]}")
+            telegram(env, blocked_notice(title, out, card_url(card)))
             log(f"    → Blocked: {out[:80]}")
     log(f"done 実行={done}件")
 
 
 if __name__ == "__main__":
-    import urllib.parse  # telegram で使用
     main()
