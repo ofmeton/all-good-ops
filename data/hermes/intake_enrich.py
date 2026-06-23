@@ -5,6 +5,7 @@ Notion「あとでやるタスク」の Inbox かつ BriefStatus 未設定/draft
 read-only `claude -p` で Purpose/Goal/Constraints/Discretion/Resources/Reporting を
 自己調査して埋める。確信のない穴だけ Telegram/Notion コメントで質問し、再質問は
 BriefStatus=enriching/ready により防ぐ。
+Notion コメント由来の ConversationLog があれば、ユーザー追記として最優先でプロンプトへ入れる。
 
 設定/秘密は ~/.hermes/.env（NOTION_TOKEN / TELEGRAM_BOT_TOKEN / TELEGRAM_HOME_CHANNEL）。
 キルスイッチ: ~/.hermes/intake_enabled が "1" の時だけ稼働（fail-closed）。
@@ -55,8 +56,11 @@ def log(msg: str) -> None:
     LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
     line = f"{now()} {msg}"
     print(line)
-    with open(LOG_PATH, "a", encoding="utf-8") as f:
-        f.write(line + "\n")
+    try:
+        with open(LOG_PATH, "a", encoding="utf-8") as f:
+            f.write(line + "\n")
+    except OSError:
+        pass
 
 
 def load_env() -> dict:
@@ -237,12 +241,16 @@ def triage_card(env: dict, title: str, details: str) -> dict:
     return {"tier": tier, "autonomy": autonomy, "reason": reason}
 
 
-def build_prompt(title: str, details: str, profile: str, strict: bool = False) -> str:
+def build_prompt(title: str, details: str, profile: str, conversation: str = "", strict: bool = False) -> str:
     strict_preamble = (
         "【厳守・最優先】出力は JSON オブジェクト1個のみ。前置き・あいさつ・説明文・"
         "自然言語の要約・コードフェンス(```)は一切禁止。最初の文字は { 、最後の文字は } に"
         "すること。直前の試行で散文を返したのでやり直し。\n\n"
     ) if strict else ""
+    conversation_block = (
+        "## ユーザーからの追記/回答（最優先で反映）\n"
+        f"{conversation}\n\n"
+    ) if (conversation or "").strip() else ""
     return (
         strict_preamble +
         "Notion『あとでやる』Inboxカードを6要素ブリーフへエンリッチしてください。\n"
@@ -268,13 +276,14 @@ def build_prompt(title: str, details: str, profile: str, strict: bool = False) -
         "# ユーザー文脈\n"
         f"{profile or '(読めなかったため空)'}\n\n"
         "# Notionカード\n"
+        f"{conversation_block}"
         f"Title: {title}\n"
         f"Details: {details}\n"
     )
 
 
-def run_claude(title: str, details: str, profile: str, strict: bool = False) -> tuple:
-    prompt = build_prompt(title, details, profile, strict=strict)
+def run_claude(title: str, details: str, profile: str, conversation: str = "", strict: bool = False) -> tuple:
+    prompt = build_prompt(title, details, profile, conversation=conversation, strict=strict)
     safe_env = {"HOME": os.environ.get("HOME", str(HOME)),
                 "PATH": f"{HOME}/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin",
                 "LANG": os.environ.get("LANG", "en_US.UTF-8")}
@@ -436,12 +445,13 @@ def process_card(env: dict, card: dict, state: dict, dry: bool) -> bool:
     props = card["properties"]
     title = title_of(props) or "(無題)"
     details = rich_text_of(props, "Details")
+    conversation = rich_text_of(props, "ConversationLog")
     brief_status = select_of(props, "BriefStatus")
     if brief_status in ("enriching", "ready"):
         log(f"  skip BriefStatus={brief_status}: {title[:40]}")
         return True
     last = state.get(pid, {})
-    if last.get("brief_status") in ("enriching", "ready"):
+    if brief_status != "draft" and last.get("brief_status") in ("enriching", "ready"):
         log(f"  skip state={last.get('brief_status')}: {title[:40]}")
         return True
     log(f"  enrich: {title[:40]}")
@@ -463,7 +473,7 @@ def process_card(env: dict, card: dict, state: dict, dry: bool) -> bool:
         log("    done light BriefStatus=ready fields=1 questions=0")
         return True
     profile = load_user_profile()
-    ok, out = run_claude(title, details, profile)
+    ok, out = run_claude(title, details, profile, conversation=conversation)
     brief = None
     if ok:
         try:
@@ -473,7 +483,7 @@ def process_card(env: dict, card: dict, state: dict, dry: bool) -> bool:
     else:
         log(f"    claude失敗→厳格リトライ: {out[:120]}")
     if brief is None:
-        ok, out = run_claude(title, details, profile, strict=True)
+        ok, out = run_claude(title, details, profile, conversation=conversation, strict=True)
         if ok:
             try:
                 brief = parse_json_object(out)

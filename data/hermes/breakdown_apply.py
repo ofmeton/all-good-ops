@@ -3,6 +3,7 @@
 
 Notion「あとでやるタスク」で ApproveBreakdown=true かつ BreakdownProposal 非空の
 親カードを拾い、提案行を子カードとして作成する。親自身は実行しない。
+適用結果は Notion コメントに残し、Telegram への即時通知は送らない（nudge digest 対象）。
 
 設定/秘密は ~/.hermes/.env（NOTION_TOKEN）。
 キルスイッチ: ~/.hermes/breakdown_enabled が "1" の時だけ稼働（fail-closed）。
