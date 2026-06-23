@@ -90,7 +90,7 @@ raw/ は immutable（上書き・削除禁止、古くなれば別ファイル�
 | Google Workspace ヘッドレス自動化 | `gws-workspace-cli`（Docs/Slides 生成・Gmail/Sheets バッチ・--dry-run。会話内即時は MCP）。書込/送信は人間確認 |
 | 記事の編集・推敲 | `edit-article`（再構成/明瞭化/短縮）。執筆前構成=`scqa-writing-framework.md` / AI文体除去=`stop-slop` |
 | Supabase | `supabase:*` |
-| Web 多 source 調査 | `firecrawl:*` / `deep-research` |
+| Web 多 source 調査 | `firecrawl:*` / `deep-research`（事実確認・A/B比較・最新動向）。1トピックを多視点で網羅Wiki記事化・構想の多角的吟味=`storm-research`（課金ゼロ・サブスク内サブエージェント） |
 | 差分 / PR レビュー | `code-review` / `simplify` / `pr-review-toolkit:review-pr` |
 | E2E・ブラウザ | `playwright`（MCP） |
 | Shopify | `shopify-plugin:*` |
