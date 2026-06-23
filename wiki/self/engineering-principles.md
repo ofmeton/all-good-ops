@@ -105,5 +105,14 @@ optimizer apply-code runner（accepted 提案を nested `claude -p` に実装さ
 
 ---
 
+## 帰属・機構は権威ソースの内訳で実証してから断定する（2026-06-23）
+
+「どこが/何が原因か（帰属）」「どう課金/動作するか（機構）」を、**間接signal**（設定ファイルの有無・エラー文言・ダッシュボードの概観・コードからの推論）だけで結論すると、確信を持って誤り、しかも誤りを成果物（memory/レポート）に焼いてから再訂正する二重コストになる。原則5（エラー報告は発信元を最初に確認）の一般化。
+
+- **事例 (2026-06-23, claude -p 課金)**: 「`claude -p` はサブスク課金か API クレジットか」を、①ローカルに ANTHROPIC_API_KEY 無→サブスク と推論（誤）②ユーザーが「コンソールにコスト」と反証→今度はダッシュボード概観から「claude -p がクレジット課金・heavy は 7/1 まで不能」と逆断定（誤）③devtools で **コスト group-by-APIキー＋Claude Code 使用表** を見て初めて確定＝claude -p はサブスク、出血源は**廃止案件の API キー money-bot($48)**。2 回とも権威ソースの内訳を見る前に断定し、誤結論を memory に SAFE 反映→再訂正した。
+- **原則**: 帰属/機構を問われたら、推論やコード読みの前に**権威ソースの分解ビュー**（課金=コンソールの group-by 内訳 / 障害=実エラー本文・transcript / 使用量=実測ログ）を開いて実証する。確信が割れ得る機構説明は **verify するまで「未確認」で保留**し、memory/レポートへ SAFE 反映しない。[[feedback_user_perception_vs_data_check]] [[reference_claude_code_subscription_vs_credit_billing]]
+
+---
+
 ## メモ
 - これらは memory の atomic feedback（`feedback_llm_structured_output_validate` 等）からもリンクされる。**原子的リコールは memory、連結・高次化はこの wiki ノート**で役割分担する。
