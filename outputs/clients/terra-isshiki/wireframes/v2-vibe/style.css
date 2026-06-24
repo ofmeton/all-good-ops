@@ -25,12 +25,10 @@ body::after{content:"";position:fixed;inset:0;z-index:80;pointer-events:none;opa
 .lnk::after{content:"";position:absolute;left:0;bottom:0;width:100%;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .45s var(--easo)}
 .lnk:hover::after{transform:scaleX(1)}
 
-/* k. オープニング（写真→ロゴ→幕が晴れてヒーローコピー の溜め） */
-.opening{position:fixed;inset:0;z-index:100;display:grid;place-items:center;overflow:hidden}
-.opening__bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;animation:kenburns 12s ease-out both}
-.opening__scrim{position:absolute;inset:0;background:radial-gradient(120% 90% at 50% 50%,rgba(26,20,16,.4),rgba(26,20,16,.64))}
-.opening__logo{position:relative;width:clamp(180px,26vw,330px);height:auto;opacity:0;will-change:opacity,transform}
-@media(prefers-reduced-motion:reduce){.opening{display:none}}
+/* FV 背景スライドショー（複数写真を時間でクロスフェード／shuku風） */
+.intro__slides{position:absolute;inset:0;z-index:0}
+.intro__slide{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.8);opacity:0;transition:opacity 1.6s var(--ease);animation:kenburns 16s ease-out both}
+.intro__slide.is-on{opacity:1}
 
 /* nav 上部ヴェイル（没入区間=Intro の間だけ。通過する本文を上端で沈めナビを際立たせる） */
 .topveil{position:fixed;top:0;left:0;right:0;height:118px;z-index:59;pointer-events:none;
@@ -39,8 +37,9 @@ body.at-intro .topveil{opacity:1}
 
 /* nav */
 .nav{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;justify-content:space-between;align-items:center;padding:22px clamp(20px,4vw,56px);mix-blend-mode:difference;color:#fff}
-.nav__logo{display:flex;align-items:center}
-.nav__mark{display:block;height:clamp(26px,3vw,38px);width:auto}
+.nav__logo{display:flex;align-items:center;gap:10px}
+.nav__mark{display:block;height:clamp(24px,2.8vw,34px);width:auto}
+.nav__wordmark{font-family:var(--serif);font-weight:700;letter-spacing:.2em;font-size:14px}
 .nav__menu{display:flex;align-items:center;font-family:var(--eb);letter-spacing:.18em;font-size:12px;opacity:.9}
 .nav__menu a{position:relative;padding:4px 0}
 .nav__menu a::after{content:"";position:absolute;left:0;bottom:0;width:100%;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .4s var(--easo)}
@@ -70,8 +69,6 @@ body.at-intro .topveil{opacity:1}
 /* INTRO（Ken Burnsホールド→外観→内観クロスフェード→ピン内観の上を本文が画面外から上がる） */
 .intro{height:250vh;position:relative}
 .intro__sticky{position:sticky;top:0;height:100svh;overflow:hidden;z-index:1}
-.intro__bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.8);animation:kenburns 20s ease-out both}
-.intro__bg2{opacity:0}
 @keyframes kenburns{from{transform:scale(1.0)}to{transform:scale(1.12)}}
 .intro__scrim{position:absolute;inset:0;background:radial-gradient(120% 90% at 50% 55%,rgba(26,20,16,.18),rgba(26,20,16,.5) 100%),linear-gradient(180deg,rgba(26,20,16,.32),rgba(26,20,16,.2) 40%,rgba(26,20,16,.5))}
 .intro__dark{position:absolute;inset:0;background:#1A1410;opacity:0;pointer-events:none}
@@ -98,7 +95,7 @@ body.at-intro .topveil{opacity:1}
 .aze-wrap.in .aze-fill{transform:scaleY(1)}
 
 /* INFORMATION（滲み出る写真＋数字浮遊） */
-.info{min-height:150vh;padding-block:clamp(80px,14vh,180px);position:relative}
+.info{min-height:92vh;padding-block:clamp(70px,11vh,150px);position:relative}
 .info__photo{position:absolute;top:18vh;right:0;width:min(56vw,760px);height:62vh;object-fit:cover;border-radius:var(--r) 0 0 var(--r);box-shadow:0 50px 100px -60px rgba(26,20,16,.55);will-change:transform,filter}
 .info__facts{position:relative;z-index:2;max-width:46vw}
 .info__lead{font-family:var(--serif);font-weight:600;font-size:clamp(16px,1.6vw,20px);max-width:30ch;margin:18px 0 clamp(40px,7vh,84px)}
@@ -275,6 +272,7 @@ body.pinmode .tour__hint{display:none}
 @media(prefers-reduced-motion:reduce){
   .reveal{opacity:1!important;transform:none!important;filter:none!important}
   .aze path{stroke-dashoffset:0!important}.aze-fill{transform:scaleY(1)!important}
-  .intro__bg{animation:none}.intro__bg2{opacity:1}.intro__dark{opacity:.45}.intro__hero{opacity:0}
+  .intro__slide{animation:none}.intro__dark{opacity:.4}
+  .intro__logo,.intro__s{opacity:1!important;visibility:visible!important}
   .pghero__bg{animation:none}
 }

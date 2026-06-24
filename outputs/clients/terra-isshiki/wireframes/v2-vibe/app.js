@@ -24,15 +24,20 @@
   }), {threshold:0.16, rootMargin:'0px 0px -8% 0px'});
   $$('.reveal, .aze-wrap').forEach(el=>io.observe(el));
 
-  /* k. オープニング: 写真 → ロゴ → （幕が晴れて）ヒーローコピー（shuku式の溜め） */
+  /* k. FV: 写真の上にロゴが浮かび上がる溜め（ロゴは終始ひとつ・固定位置） */
   if (!reduce && window.gsap) {
-    gsap.set('.opening__logo',{autoAlpha:0,scale:.92});
+    gsap.set('.intro__logo, .intro__s',{autoAlpha:0});
     gsap.timeline()
-      .to('.opening__logo',{autoAlpha:1,scale:1,duration:1.2,ease:'power2.out'},.35)    /* 写真の上にロゴ浮上 */
-      .to('.opening__logo',{autoAlpha:0,scale:1.04,duration:.7,ease:'power2.in'},'+=.9') /* ロゴ退場 */
-      .to('.opening',{autoAlpha:0,duration:1.0,ease:'power2.inOut'},'-=.35')             /* 幕が晴れてFVへ */
-      .set('.opening',{display:'none'});
-  } else { const op=document.querySelector('.opening'); if(op) op.style.display='none'; }
+      .to('.intro__logo',{autoAlpha:1,duration:1.3,ease:'power2.out'},.5)
+      .to('.intro__s',{autoAlpha:1,duration:1.0,ease:'power2.out'},'-=.6');
+  }
+  /* FV背景スライドショー（複数写真を時間でクロスフェード。reduced時は1枚目固定） */
+  (function(){
+    const slides=$$('.intro__slide');
+    if(reduce || slides.length<2) return;
+    let i=0;
+    setInterval(()=>{ slides[i].classList.remove('is-on'); i=(i+1)%slides.length; slides[i].classList.add('is-on'); }, 5000);
+  })();
 
   if (reduce || !window.gsap) return;
   gsap.registerPlugin(ScrollTrigger);
@@ -42,8 +47,6 @@
   /* ピン留めはCSS sticky。外観を少しホールド→前景フェード→外観→内観クロスフェード→暗転。本文はその上を自然スクロールで上がってくる */
   gsap.to('.intro__hero',{autoAlpha:0,yPercent:-8,ease:'none',
     scrollTrigger:{trigger:'.intro',start:'top top',end:'+=70%',scrub:true}});
-  gsap.to('.intro__bg2',{autoAlpha:1,ease:'none',
-    scrollTrigger:{trigger:'.intro',start:'8% top',end:'+=70%',scrub:true}});
   gsap.to('.intro__dark',{opacity:.55,ease:'none',
     scrollTrigger:{trigger:'.intro',start:'top top',end:'+=88%',scrub:true}});
   gsap.to('.intro__scroll',{autoAlpha:0,ease:'none',
@@ -70,6 +73,7 @@
   $$('.tour__card img').forEach(img=>emergeF(img, '.tour', 'top 72%'));
   $$('.stay .exp img').forEach(img=>emergeF(img, img.closest('.exp'), 'top 84%'));
   emergeF(document.querySelector('.owner__ph img'), '.owner__ph', 'top 80%');
+  emergeF(document.querySelector('.access__map'), '.access', 'top 80%');
 
   /* ROOMS：横スクロールで巡る（pin） */
   document.body.classList.add('pinmode');

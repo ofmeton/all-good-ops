@@ -9,13 +9,8 @@
 </head><body>
 
 <input id="navt" class="nav__t" type="checkbox" aria-hidden="true">
-<div class="opening">
-  <img class="opening__bg" src="assets/img/hero-exterior-01.webp" alt="">
-  <div class="opening__scrim"></div>
-  <img class="opening__logo" src="assets/img/logo-white.png" alt="TERRA HAYAMA">
-</div>
 <nav class="nav">
-  <a class="nav__logo" href="#top" aria-label="TERRA HAYAMA"><img class="nav__mark" src="assets/img/logo-mark-white.png" alt="TERRA HAYAMA"></a>
+  <a class="nav__logo" href="#top" aria-label="TERRA HAYAMA"><img class="nav__mark" src="assets/img/logo-mark-white.png" alt=""><span class="nav__wordmark">TERRA HAYAMA</span></a>
   <div class="nav__menu"><a href="rooms.html">Rooms</a><a href="stay.html">Stay</a><a href="access.html">Access</a><a href="owner.html">Owner</a></div>
   <label class="nav__burger" for="navt" aria-label="メニューを開閉"><span></span><span></span><span></span></label>
 </nav>
@@ -30,8 +25,12 @@
 <!-- INTRO（shuku式: Ken Burnsホールド→外観→内観クロスフェード→内観ピン留めの上を本文が画面外から上がってくる） -->
 <section class="intro" id="top">
   <div class="intro__sticky">
-    <img class="intro__bg" src="assets/img/hero-exterior-01.webp" alt="葉山の佇まい（外観）">
-    <img class="intro__bg intro__bg2" src="assets/img/hero-04-arch.webp" alt="赤土壁と漆喰アーチ（内観）">
+    <div class="intro__slides">
+      <img class="intro__slide is-on" src="assets/img/hero-exterior-01.webp" alt="葉山の佇まい（外観）">
+      <img class="intro__slide" src="assets/img/hero-01-living.webp" alt="木天井のリビング">
+      <img class="intro__slide" src="assets/img/hero-04-arch.webp" alt="赤土壁と漆喰アーチ">
+      <img class="intro__slide" src="assets/img/hero-03-dining.webp" alt="ダイニング">
+    </div>
     <div class="intro__scrim"></div>
     <div class="intro__dark"></div>
     <div class="intro__hero"><img class="intro__logo" src="assets/img/logo-white.png" alt="TERRA HAYAMA"><p class="intro__s">A quiet villa in Hayama, Isshiki</p></div>
