@@ -31,9 +31,6 @@ body::after{content:"";position:fixed;inset:0;z-index:80;pointer-events:none;opa
 .intro__slide.is-on{opacity:1}
 
 /* nav 上部ヴェイル（没入区間=Intro の間だけ。通過する本文を上端で沈めナビを際立たせる） */
-.topveil{position:fixed;top:0;left:0;right:0;height:118px;z-index:59;pointer-events:none;
-  background:linear-gradient(180deg,rgba(26,20,16,.5),rgba(26,20,16,0));opacity:0;transition:opacity .6s var(--ease)}
-body.at-intro .topveil{opacity:1}
 
 /* nav */
 .nav{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;justify-content:space-between;align-items:center;padding:22px clamp(20px,4vw,56px);mix-blend-mode:difference;color:#fff}

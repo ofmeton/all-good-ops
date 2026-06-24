@@ -10,14 +10,6 @@
     addEventListener('keydown',e=>{ if(e.key==='Escape') navt.checked=false; });
   }
 
-  /* Intro が視界にある間だけ上部ヴェイルを出す（暗い没入区間限定） */
-  const introEl = document.querySelector('.intro');
-  if (introEl) {
-    new IntersectionObserver((es)=>{
-      document.body.classList.toggle('at-intro', es[0].isIntersecting);
-    }, {threshold:0}).observe(introEl);
-  }
-
   /* reveal / 畔 */
   const io = new IntersectionObserver((es)=>es.forEach(e=>{
     if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
