@@ -35,13 +35,12 @@
       .set('.intro__curtain',{display:'none'});
   } else { const c=document.querySelector('.intro__curtain'); if(c) c.style.display='none'; }
 
-  /* ナビは FV の間は完全に隠し、FV を抜けてから現れる（FVページ=.intro を持つ場合のみ。下層ページは常時表示） */
+  /* ナビ・ドックは FV の間は完全に隠し（openingとFV最初はロゴだけ）、FV を抜けてから現れる（FVページ=.intro を持つ場合のみ。下層ページは常時表示） */
   (function(){
-    const nav=document.querySelector('.nav'); if(!nav) return;
     if(!document.querySelector('.intro')) return;            /* 下層ページは has-fv を付けず常時表示 */
     document.body.classList.add('has-fv');
     const thr=()=>innerHeight*0.85;                          /* FV(ヒーロー約1画面)を過ぎたら出す */
-    const upd=()=>nav.classList.toggle('is-shown', scrollY>thr());
+    const upd=()=>document.body.classList.toggle('fv-passed', scrollY>thr());
     addEventListener('scroll',upd,{passive:true});
     addEventListener('resize',upd); upd();
   })();
@@ -105,14 +104,12 @@
       scrollTrigger:{trigger:el,start:'top bottom',end:'bottom top',scrub:true}});
   });
 
-  /* 画像内パン視差（object-position をスクロールで動かす＝枠内で画像が流れる・端の隙間なし）。
-     GSAPは object-position を直接tween不可のため、プロキシ値をonUpdateでinline反映 */
+  /* 画像内パン視差：画像を1.16倍に拡大して必ず縦の余白を作り、枠(overflow:hidden)内で translateY パン。
+     画像のアスペクトに依らず全画像で均一に動く（object-position方式は縦はみ出しが無い横長画像で効かなかった） */
   $$('[data-paraimg]').forEach(img=>{
-    const o={p:38};
-    img.style.objectPosition='50% 38%';
-    gsap.to(o,{p:62,ease:'none',
-      scrollTrigger:{trigger:img.closest('section')||img,start:'top bottom',end:'bottom top',scrub:true},
-      onUpdate:()=>{ img.style.objectPosition='50% '+o.p.toFixed(2)+'%'; }});
+    const frame=img.closest('.fr, .info__photo')||img;
+    gsap.fromTo(img,{yPercent:-8,scale:1.16},{yPercent:8,scale:1.16,ease:'none',
+      scrollTrigger:{trigger:frame,start:'top bottom',end:'bottom top',scrub:true}});
   });
 
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(()=>ScrollTrigger.refresh());

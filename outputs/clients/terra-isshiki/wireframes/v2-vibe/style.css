@@ -42,9 +42,9 @@ body.at-intro .topveil{opacity:1}
 .nav__right{display:flex;align-items:center;gap:clamp(14px,2vw,26px)}
 .nav__lang{appearance:none;-webkit-appearance:none;background:none;border:0;cursor:pointer;color:inherit;font-family:var(--eb);font-style:italic;letter-spacing:.14em;font-size:13px;line-height:1;padding:6px 2px;opacity:.92}
 .nav__lang span{opacity:.5;margin:0 .15em}
-/* FV ページは FV の間ナビ全体を隠し、FV を抜けたら現れる（下層ページは has-fv なし＝常時表示） */
-body.has-fv .nav{opacity:0;visibility:hidden;pointer-events:none;transition:opacity .7s var(--easo),visibility .7s}
-body.has-fv .nav.is-shown{opacity:1;visibility:visible;pointer-events:auto}
+/* FV ページは FV の間ナビ・ドックを隠し（＝openingとFV最初はロゴだけ）、FV を抜けたら現れる（下層ページは has-fv なし＝常時表示） */
+body.has-fv .nav,body.has-fv .dock{opacity:0;visibility:hidden;pointer-events:none;transition:opacity .7s var(--easo),visibility .7s}
+body.has-fv.fv-passed .nav,body.has-fv.fv-passed .dock{opacity:1;visibility:visible;pointer-events:auto}
 .nav__menu{display:none}/* インラインメニューは廃止し、全幅でハンバーガーに集約 */
 /* ハンバーガー（全幅・常時） */
 .nav__t{position:absolute;width:0;height:0;opacity:0;pointer-events:none}
@@ -95,7 +95,8 @@ body.has-fv .nav.is-shown{opacity:1;visibility:visible;pointer-events:auto}
 
 /* INFORMATION（滲み出る写真＋数字浮遊） */
 .info{min-height:92vh;padding-block:clamp(70px,11vh,150px);position:relative}
-.info__photo{position:absolute;top:18vh;right:0;width:min(56vw,760px);height:62vh;object-fit:cover;border-radius:var(--r) 0 0 var(--r);box-shadow:0 50px 100px -60px rgba(26,20,16,.55);will-change:transform,filter}
+.info__photo{position:absolute;top:18vh;right:0;width:min(56vw,760px);height:62vh;border-radius:var(--r) 0 0 var(--r);box-shadow:0 50px 100px -60px rgba(26,20,16,.55);overflow:hidden;will-change:transform,filter}
+.info__photo img{width:100%;height:100%;object-fit:cover;display:block}
 .info__facts{position:relative;z-index:2;max-width:46vw}
 .info__lead{font-family:var(--serif);font-weight:400;font-size:clamp(16px,1.6vw,20px);max-width:30ch;margin:18px 0 clamp(40px,7vh,84px)}
 .fact{margin:0 0 clamp(28px,5vh,56px)}
@@ -273,6 +274,6 @@ body.pinmode .tour__hint{display:none}
   .aze__line{stroke-dashoffset:0!important}.aze__smoke{stroke-dashoffset:0!important}
   .intro__slide{animation:none}.intro__dark{opacity:.4}.intro__curtain{display:none}
   .intro__logo,.intro__s{opacity:1!important;visibility:visible!important}
-  .intro__logo{filter:invert(1)}.nav{opacity:1!important;visibility:visible!important}
+  .intro__logo{filter:invert(1)}
   .pghero__bg{animation:none}
 }
