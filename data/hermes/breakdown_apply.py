@@ -2,7 +2,8 @@
 """Hermes Breakdown 自動分割適用ポーラ（Mac 専用）
 
 Notion「あとでやるタスク」で BreakdownProposal 非空の親カードを拾い、提案行を子カードとして
-作成する（**承認ゲート廃止＝全提案を承認済み前提で自動分割**）。親自身は実行しない。
+作成する（**承認ゲート廃止＝承認済み前提で自動分割**。ただし質問中=Status:NeedInfo/
+BriefStatus:enriching は brief 確定まで保留し、質問の枝分かれ増殖を防ぐ）。親自身は実行しない。
 適用結果は Notion コメントに残し、Telegram への即時通知は送らない（nudge digest 対象）。
 適用後は BreakdownProposal をクリアして再分割を防ぐ（冪等・既存子は canonical_title で重複排除）。
 
@@ -109,10 +110,14 @@ def canonical_title(s: str) -> str:
 
 
 def query_proposals(env: dict) -> list:
-    # 承認ゲート廃止: BreakdownProposal が非空なら全件を自動分割対象にする
-    # (適用後は BreakdownProposal をクリアするので再処理されない=冪等)
-    base_body = {"filter": {"property": "BreakdownProposal", "rich_text": {"is_not_empty": True}},
-                 "page_size": 100}
+    # 承認ゲート廃止: BreakdownProposal が非空なら自動分割。ただし「まだ質問中」
+    # (Status=NeedInfo / BriefStatus=enriching)は brief 未確定なので分割しない
+    # =回答→ready 後に分割し、質問の枝分かれ増殖を防ぐ。適用後 proposal クリアで冪等。
+    base_body = {"filter": {"and": [
+        {"property": "BreakdownProposal", "rich_text": {"is_not_empty": True}},
+        {"property": "Status", "select": {"does_not_equal": "NeedInfo"}},
+        {"property": "BriefStatus", "select": {"does_not_equal": "enriching"}},
+    ]}, "page_size": 100}
     results = []
     cursor = None
     while True:
