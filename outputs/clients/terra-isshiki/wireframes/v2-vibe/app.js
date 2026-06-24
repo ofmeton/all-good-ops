@@ -62,6 +62,15 @@
   emerge(document.querySelector('.sleep__ph img'), '.sleep__ph', 'top 84%');
   $$('.xp__ph img').forEach(img=>emerge(img, img.closest('.xp__ph'), 'top 84%'));
 
+  /* TOP の ROOMS横スクロール / STAY / OWNER の写真も「滲み出る」で統一（transform競合回避でフィルタのみ） */
+  const emergeF = (el, trig, start) => { if(!el) return;
+    gsap.set(el,{filter:'blur(22px) brightness(.55)'});
+    gsap.to(el,{filter:'blur(0px) brightness(1)',ease:'power2.out',duration:1.8,
+      scrollTrigger:{trigger:trig||el,start:start||'top 80%'}}); };
+  $$('.tour__card img').forEach(img=>emergeF(img, '.tour', 'top 72%'));
+  $$('.stay .exp img').forEach(img=>emergeF(img, img.closest('.exp'), 'top 84%'));
+  emergeF(document.querySelector('.owner__ph img'), '.owner__ph', 'top 80%');
+
   /* ROOMS：横スクロールで巡る（pin） */
   document.body.classList.add('pinmode');
   $$('.tour').forEach(sec=>{

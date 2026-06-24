@@ -39,7 +39,8 @@ body.at-intro .topveil{opacity:1}
 
 /* nav */
 .nav{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;justify-content:space-between;align-items:center;padding:22px clamp(20px,4vw,56px);mix-blend-mode:difference;color:#fff}
-.nav__logo{font-family:var(--serif);font-weight:700;letter-spacing:.2em;font-size:14px}
+.nav__logo{display:flex;align-items:center}
+.nav__mark{display:block;height:clamp(26px,3vw,38px);width:auto}
 .nav__menu{display:flex;align-items:center;font-family:var(--eb);letter-spacing:.18em;font-size:12px;opacity:.9}
 .nav__menu a{position:relative;padding:4px 0}
 .nav__menu a::after{content:"";position:absolute;left:0;bottom:0;width:100%;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .4s var(--easo)}
@@ -67,7 +68,7 @@ body.at-intro .topveil{opacity:1}
 }
 
 /* INTRO（Ken Burnsホールド→外観→内観クロスフェード→ピン内観の上を本文が画面外から上がる） */
-.intro{height:360vh;position:relative}
+.intro{height:250vh;position:relative}
 .intro__sticky{position:sticky;top:0;height:100svh;overflow:hidden;z-index:1}
 .intro__bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.8);animation:kenburns 20s ease-out both}
 .intro__bg2{opacity:0}
@@ -76,11 +77,12 @@ body.at-intro .topveil{opacity:1}
 .intro__dark{position:absolute;inset:0;background:#1A1410;opacity:0;pointer-events:none}
 .intro__hero{position:absolute;inset:0;display:grid;place-items:center;text-align:center;color:var(--paper);padding:0 6vw;will-change:transform,opacity}
 .intro__k{font-family:var(--serif);font-weight:700;font-size:clamp(32px,6.4vw,80px);line-height:1.12;margin:0;text-shadow:0 3px 28px rgba(0,0,0,.32)}
-.intro__s{font-family:var(--eb);font-style:italic;letter-spacing:.18em;margin:16px 0 0;opacity:.92}
+.intro__logo{width:clamp(180px,26vw,330px);height:auto;filter:drop-shadow(0 4px 26px rgba(0,0,0,.42))}
+.intro__s{font-family:var(--eb);font-style:italic;letter-spacing:.18em;margin:18px 0 0;opacity:.92;color:var(--paper)}
 .intro__scroll{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);color:var(--paper);font-family:var(--eb);font-style:italic;font-size:12px;letter-spacing:.2em;opacity:.85}
 /* 本文（ピン画像の上をスクロールで通り抜ける） */
-.intro__read{position:relative;z-index:2;color:var(--paper);padding:26vh clamp(20px,6vw,90px) 60vh}
-.intro__concept{max-width:760px}
+.intro__read{position:relative;z-index:2;color:var(--paper);padding:26vh clamp(20px,6vw,90px) 26vh}
+.intro__concept{max-width:760px;margin-inline:auto;text-align:center}
 .intro__concept .intro__tag{font-family:var(--eb);font-style:italic;letter-spacing:.22em;color:var(--suna);margin:0 0 18px}
 .intro__ch{font-family:var(--serif);font-weight:700;font-size:clamp(22px,3vw,40px);line-height:1.4;letter-spacing:.04em;margin:0 0 clamp(28px,4vh,52px);text-shadow:0 2px 22px rgba(0,0,0,.55)}
 .intro__concept p{font-family:var(--mincho);font-size:clamp(14px,1.3vw,18px);line-height:2.2;letter-spacing:.06em;margin:0 0 clamp(26px,4vh,44px);text-shadow:0 2px 20px rgba(0,0,0,.6)}
