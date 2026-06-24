@@ -447,7 +447,8 @@ def process_card(env, card, projects_root, dry):
         log("    リポ解決不能 → NeedInfo")
         if not dry:
             set_status(env, pid, "NeedInfo")
-            telegram(env, ccauto_notice("repo_unknown", title, url))
+            # 逆質問は Telegram に出さず Notion コメントに残す(nudge digest の「❓回答待ち」で surface)
+            add_comment(env, pid, "❓ どのリポジトリ？ Details に 'repo: <Projects相対パス>' を書いてください。")
         return False
     if dry:
         log(f"    DRY: repo={repo} まで解決。Codex実行/merge はskip"); return True
