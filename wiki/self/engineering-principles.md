@@ -72,6 +72,7 @@ optimizer apply-code runner（accepted 提案を nested `claude -p` に実装さ
 - **権限境界はコードで強制し agent に与えない**: implementer agent に push/gh/deploy ツールを渡さない＝merge 権限は決定的 runner だけ。allowlist 外の変更は 1 ファイルでも無条件 reject（部分 merge なし）。`bypassPermissions` でなく `acceptEdits`＋allowedTools の多層防御（bypass は prompt-injection で任意コード実行＝セキュリティ HIGH 指摘）。
 - **初回本番実走は安全弁**: throwaway 入力＋rollback で正味ゼロ化し初回で実バグを段階摘出（apply-code は plan-mode/空diff/secret漏れ/bypass の4実バグを初回実走で安全に摘出）。可逆性（git revert + 再deploy）を最初から配線。
 - **起動経路の事前 smoke**: dry-run が外部CLI（claude -p / gh / wrangler）を呼ばない設計だと、その経路は実走まで未検証で初発覚し再走コストが嵩む。外部CLI を含む経路は dry-run と別に単発 smoke を先に。← 原則2 の subprocess 版。
+- **operator(Claude 自身)が回す不可逆/増殖系の一括操作も同じ規律**: 事例 (2026-06-24, hermes) 分解の承認ゲートを撤去した直後、brief 未確定のカードまで `breakdown_apply --max 50` で**一括 recursive 分割**→「X品質改善」が32断片・Inbox に80子で盤面爆発。→①ガード条件（質問中=NeedInfo/enriching は分割しない）を**実行の前に**コードへ ②`--max` 小で1バッチ試し結果確認 ③問題なければ全量、の順。可逆性（キャンセルで復元）を先に確保。自動分割・一括生成・一括キャンセルなど**増やす/消す系 bulk op は全てこの型**＝「承認ゲートを外す＝無制限に走らせてよい」ではない。
 - 詳細手順: memory [[headless-claude-subprocess]]。
 
 ## 原則8: ユーザーが依存する状態は永続化する。模倣対象は実物を計測してから作る
