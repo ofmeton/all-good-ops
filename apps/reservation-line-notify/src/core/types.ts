@@ -14,19 +14,11 @@ export interface ParsedReservation {
   customer: Customer;
   stay: Stay;
   activity: Activity;
+  participants: string;   // 参加人数（例: 大人3名 / 小学生1名 (合計4名)）
+  approvalUrl: string;    // 承認/NG リンク（r= を含む）
   dashboardUrl: string;
   messageId: string;
   receivedAt: string;     // ISO8601
-}
-
-export interface Bucket {
-  reservationKey: string;
-  firstSeenAt: string;    // ISO8601
-  customer: Customer;
-  stay: Stay;
-  dashboardUrl: string;
-  activities: Activity[];
-  messageIds: string[];
 }
 
 export interface RawMail {

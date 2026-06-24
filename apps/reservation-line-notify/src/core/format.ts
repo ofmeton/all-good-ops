@@ -1,26 +1,24 @@
-import type { Bucket } from "./types";
+import type { ParsedReservation } from "./types";
 
 function yen(n: number | null): string {
   return n == null ? "¥-" : "¥" + n.toLocaleString("en-US");
 }
 
-export function formatSummary(b: Bucket): string {
+// アクティビティ1件 = LINE 1通。予約を集約せず単独で整形する。
+export function formatSingle(p: ParsedReservation): string {
+  const a = p.activity;
   const lines: string[] = [];
   lines.push("🏡 新しいアクティビティ予約（要承認）");
   lines.push("");
-  lines.push(`👤 ${b.customer.name} 様 / ${b.stay.headcount}（宿泊人数）`);
-  lines.push(`🏠 ${b.stay.facility}`);
-  lines.push(`🗓 宿泊 ${b.stay.period}`);
+  lines.push(`🎯 ${a.name}`);
+  lines.push(`🗓 ${a.date}${a.time ? " " + a.time : ""}`);
+  if (p.participants) lines.push(`👥 ${p.participants}`);
+  lines.push(`💴 ${yen(a.fee)}`);
+  if (p.stay.facility) lines.push(`🏠 ${p.stay.facility}`);
+  if (p.customer.name) lines.push(`👤 ${p.customer.name} 様`);
   lines.push("");
-  lines.push(`🎯 リクエストされた体験（${b.activities.length}件）`);
-  for (const a of b.activities) {
-    lines.push(` ・${a.name}  ${a.date} ${a.time}  ${yen(a.fee)}`);
-  }
-  const total = b.activities.reduce((s, a) => s + (a.fee ?? 0), 0);
-  lines.push(`💴 合計 ${yen(total)}（料金記載分のみ）`);
-  lines.push("");
-  lines.push("✅ 承認/NG・予約一覧:");
-  lines.push(b.dashboardUrl);
+  lines.push("✅ 承認/NG はこちら:");
+  lines.push(p.approvalUrl || p.dashboardUrl);
   return lines.join("\n");
 }
 

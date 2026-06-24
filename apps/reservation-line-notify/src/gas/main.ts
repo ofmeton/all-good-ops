@@ -1,70 +1,46 @@
 import { parseReservationMail } from "../core/parse";
-import { mergeIntoBucket } from "../core/aggregate";
-import { formatSummary, formatRawFallback } from "../core/format";
-import { loadBucket, saveBucket, listPending, markSent, markFailed, incrAttempt, markProcessed } from "./sheetStore";
+import { formatSingle, formatRawFallback } from "../core/format";
+import { markProcessed, isSent, markSent } from "./sheetStore";
 import { fetchUnprocessed } from "./gmail";
 import { pushLine } from "./line";
-
-const GRACE_MS = 2 * 60 * 1000;
-const MAX_ATTEMPTS = 10;
 
 export function pollInbox(): void {
   const lock = LockService.getScriptLock();
   if (!lock.tryLock(30 * 1000)) return; // 多重起動防止
   try {
-    try {
-      ingest();
-    } catch (e) {
-      console.error("ingest failed", e);
-    }
-    try {
-      flush();
-    } catch (e) {
-      console.error("flush failed", e);
-    }
+    ingest();
+  } catch (e) {
+    console.error("ingest failed", e);
   } finally {
     lock.releaseLock();
   }
 }
 
-function ingest(): void {
+// アクティビティ（メール）1件 = LINE 1通。検知次第その場で即送信し、集約・グレースは行わない。
+// 同一 r=（dedup_id）の重複メールは送信済み記録で1通に抑える。
+export function ingest(): void {
   for (const mail of fetchUnprocessed()) {
     try {
       const parsed = parseReservationMail(mail);
-      if (!parsed) {
-        // パース失敗: 生メールをそのままLINEへ。成功時のみ処理済み記録
-        const ok = pushLine(formatRawFallback(mail.subject, mail.body));
-        if (ok) markProcessed(mail.messageId);
+      if (parsed && isSent(parsed.activity.dedupId)) {
+        // 同一 r= の重複メール: 既に送信済みなので push せず取り込みのみ記録
+        markProcessed(mail.messageId);
         continue;
       }
-      const merged = mergeIntoBucket(loadBucket(parsed.reservationKey), parsed);
-      saveBucket(merged);
-      markProcessed(mail.messageId); // 取り込み済み（バケットに保全されたので記録OK）
-    } catch (e) {
-      console.error(`mail ingest failed: ${mail.messageId}`, e);
-    }
-  }
-}
-
-function flush(): void {
-  const now = Date.now();
-  for (const b of listPending()) {
-    if (now - new Date(b.firstSeenAt).getTime() < GRACE_MS) continue;
-    const ok = pushLine(formatSummary(b));
-    if (ok) {
-      markSent(b.reservationKey, new Date().toISOString());
-    } else {
-      const attempts = incrAttempt(b.reservationKey);
-      if (attempts >= MAX_ATTEMPTS) {
-        const escalated = pushLine(formatRawFallback("送信失敗が継続（要手動）", JSON.stringify(b, null, 2)));
-        if (escalated) markFailed(b.reservationKey);
+      const text = parsed ? formatSingle(parsed) : formatRawFallback(mail.subject, mail.body);
+      const ok = pushLine(text);
+      if (ok) {
+        if (parsed) markSent(parsed.activity.dedupId);
+        markProcessed(mail.messageId);
       }
+    } catch (e) {
+      console.error(`mail handle failed: ${mail.messageId}`, e);
     }
   }
 }
 
 export function setupTrigger(): void {
-  ScriptApp.getProjectTriggers().forEach(t => {
+  ScriptApp.getProjectTriggers().forEach((t) => {
     if (t.getHandlerFunction() === "pollInbox") ScriptApp.deleteTrigger(t);
   });
   ScriptApp.newTrigger("pollInbox").timeBased().everyMinutes(1).create();
