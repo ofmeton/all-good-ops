@@ -28,9 +28,9 @@
   if (!reduce && window.gsap) {
     gsap.set('.intro__logo, .intro__s',{autoAlpha:0});
     gsap.timeline()
-      .to('.intro__logo',{autoAlpha:1,duration:1.3,ease:'power2.out'},.5)   /* 暗幕の上にロゴ浮上 */
-      .to('.intro__s',{autoAlpha:1,duration:1.0,ease:'power2.out'},'-=.6')
-      .to('.intro__curtain',{yPercent:-100,duration:1.2,ease:'power3.inOut'},'+=.55') /* 幕が上がって晴れる */
+      .to('.intro__logo',{autoAlpha:1,duration:1.6,ease:'power2.out'},.6)   /* 白幕の上に黒ロゴがじんわり浮上 */
+      .to('.intro__s',{autoAlpha:1,duration:1.1,ease:'power2.out'},'-=.6')
+      .to('.intro__curtain',{autoAlpha:0,yPercent:-5,duration:2.4,ease:'sine.inOut'},'+=.9') /* 白幕がじんわり晴れていく */
       .set('.intro__curtain',{display:'none'});
   } else { const c=document.querySelector('.intro__curtain'); if(c) c.style.display='none'; }
   /* FV背景スライドショー（複数写真を時間でクロスフェード。reduced時は1枚目固定） */
