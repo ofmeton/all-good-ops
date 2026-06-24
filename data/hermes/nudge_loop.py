@@ -187,7 +187,7 @@ def stale_keys_for_card(card):
     keys = []
     if st == "Inbox" and brief != "ready" and age > 0.5:
         keys.append("inbox_not_ready")
-    if st == "NeedInfo" and age > 1:
+    if st == "NeedInfo":
         keys.append("needinfo")
     if brief == "ready" and not au and age > 1:
         keys.append("ready_no_autonomy")

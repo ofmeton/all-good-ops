@@ -414,14 +414,7 @@ def apply_actions(env: dict, page_id: str, title: str, actions: dict, dry: bool)
         log(f"    {'DRY: ' if dry else ''}patch brief properties={list(brief_props.keys())}")
         if not dry:
             patch_page(env, page_id, brief_props)
-    if has_questions:
-        q_comment = next((c for c in comments if c.startswith("確認したいこと:")), "")
-        if not q_comment:
-            q_comment = next((c for c in comments if "確認したいこと:" in c), "")
-        if "\n確認したいこと:" in q_comment:
-            telegrams.insert(0, f"{title} — {q_comment}")
-        else:
-            telegrams.insert(0, f"{title}について確認:\n" + q_comment.replace("確認したいこと:\n", ""))
+    # 逆質問は Telegram に出さない（Notion コメントに残し、nudge digest の「❓回答待ち」で surface）。
     for comment in comments:
         log(f"    {'DRY: ' if dry else ''}comment: {comment[:80]}")
         if not dry:
