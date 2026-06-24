@@ -383,9 +383,9 @@ def build_actions(brief: dict) -> dict:
     if breakdown:
         proposal = numbered_lines(breakdown)
         brief_props["BreakdownProposal"] = rich_text_prop(proposal)
-        msg = "このタスクは粗いので分割提案:\n" + proposal
-        comments.append(msg)
-        telegrams.append(msg)
+        # 承認制廃止: 提案でなく自動分割。即時 Telegram は出さず Notion コメントに記録のみ
+        # (breakdown_apply が次サイクルで子カード化)。
+        comments.append("粗いので自動で小分けします（承認不要）:\n" + proposal)
     if autonomy:
         comments.append(f"Autonomy提案: {autonomy}(承認で確定)")
     return {"brief_properties": brief_props, "status_properties": status_props,

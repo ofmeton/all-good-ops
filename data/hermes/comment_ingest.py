@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Hermes Notion コメント取り込みポーラ（Mac 専用）
 
-NeedInfo と分解承認待ちカードの Notion コメントを読み、本人返信を検知して
-ConversationLog / ApproveBreakdown へ橋渡しする。即時 Telegram は送らず、
-確認コメントと nudge digest に委ねる。
+回答待ち(NeedInfo)カードの Notion コメントを読み、本人返信を検知して
+ConversationLog へ橋渡しし intake 再エンリッチを促す。即時 Telegram は送らず、
+確認コメントと nudge digest に委ねる。（分解は承認制廃止＝breakdown_apply が自動分割）
 
 設定/秘密は ~/.hermes/.env（NOTION_TOKEN / OPENROUTER_API_KEY / HERMES_BOT_USER_ID）。
 キルスイッチ: ~/.hermes/comment_ingest_enabled が "1" の時だけ稼働（fail-closed）。
@@ -140,13 +140,8 @@ def add_comment(env: dict, page_id: str, text: str) -> None:
 
 
 def query_target_cards(env: dict) -> list:
-    body = {"filter": {"or": [
-        {"property": "Status", "select": {"equals": "NeedInfo"}},
-        {"and": [
-            {"property": "BreakdownProposal", "rich_text": {"is_not_empty": True}},
-            {"property": "ApproveBreakdown", "checkbox": {"equals": False}},
-        ]},
-    ]}, "page_size": 100}
+    # 分解は承認制廃止(breakdown_apply が自動分割)のため、回答待ち(NeedInfo)のみ取り込む
+    body = {"filter": {"property": "Status", "select": {"equals": "NeedInfo"}}, "page_size": 100}
     results = []
     cursor = None
     while True:
@@ -283,10 +278,7 @@ def latest_bot_comment_text(comments: list, bot_user_id: str) -> str:
 
 
 def card_kind(props: dict) -> str:
-    has_breakdown = bool(rich_text_of(props, "BreakdownProposal").strip())
-    needs_breakdown_approval = has_breakdown and not checked(props, "ApproveBreakdown")
-    if needs_breakdown_approval:
-        return "breakdown"
+    # 承認制廃止により分解承認待ちは対象外。取り込み対象は回答待ちのみ。
     return "needinfo"
 
 

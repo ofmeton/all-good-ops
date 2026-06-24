@@ -184,8 +184,6 @@ def stale_keys_for_card(card):
     au = sel(p, "Autonomy")
     brief = sel(p, "BriefStatus")
     age = card_age_days(card)
-    has_breakdown = bool(text_of(p, "BreakdownProposal").strip())
-    approve_breakdown = checked(p, "ApproveBreakdown")
     keys = []
     if st == "Inbox" and brief != "ready" and age > 0.5:
         keys.append("inbox_not_ready")
@@ -193,8 +191,6 @@ def stale_keys_for_card(card):
         keys.append("needinfo")
     if brief == "ready" and not au and age > 1:
         keys.append("ready_no_autonomy")
-    if has_breakdown and not approve_breakdown and age > 1:
-        keys.append("unapproved_breakdown")
     if st == "Ready" and au and age > 1:
         keys.append("ready_idle")
     return keys
@@ -215,8 +211,6 @@ def classify_cards(card, today):
             items.append(("❓ 回答待ち", _line(title, f"回答待ち: {title}", card)))
         elif key == "ready_no_autonomy":
             items.append(("✅ 承認待ち", _line(title, "Autonomy未承認。提案を確認して(承認で自走開始)", card)))
-        elif key == "unapproved_breakdown":
-            items.append(("🪓 分解承認待ち", _line(title, "分解案あり。承認(ApproveBreakdownチェック)で子展開", card)))
         elif key == "ready_idle":
             items.append(("▶️ 着手待ち", _line(title, "着手されてない。進める?", card)))
     if items:
@@ -255,7 +249,7 @@ def query_cards(env):
     return cards
 
 
-STALE_KEYS = ("inbox_not_ready", "needinfo", "ready_no_autonomy", "unapproved_breakdown", "ready_idle")
+STALE_KEYS = ("inbox_not_ready", "needinfo", "ready_no_autonomy", "ready_idle")
 
 
 def metric_snapshot(cards):
@@ -269,13 +263,9 @@ def metric_snapshot(cards):
         status_counts[st] = status_counts.get(st, 0) + 1
         brief = sel(p, "BriefStatus")
         au = sel(p, "Autonomy")
-        has_breakdown = bool(text_of(p, "BreakdownProposal").strip())
-        approve_breakdown = checked(p, "ApproveBreakdown")
         if st == "NeedInfo":
             approval_queue_depth += 1
         if brief == "ready" and not au:
-            approval_queue_depth += 1
-        if has_breakdown and not approve_breakdown:
             approval_queue_depth += 1
         for stale_key in stale_keys_for_card(c):
             stale_counts[stale_key] += 1
