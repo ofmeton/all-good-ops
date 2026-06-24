@@ -59,7 +59,7 @@ body.has-fv.fv-passed .nav,body.has-fv.fv-passed .dock{opacity:1;visibility:visi
 .nav__panel a .en{font-size:.4em}
 
 /* INTRO（Ken Burnsホールド→外観→内観クロスフェード→ピン内観の上を本文が画面外から上がる） */
-.intro{height:250vh;position:relative;background:var(--ink)}
+.intro{height:350svh;position:relative;background:var(--ink)}
 .intro__sticky{position:sticky;top:0;height:100svh;overflow:hidden;z-index:1}
 @keyframes kenburns{from{transform:scale(1.0)}to{transform:scale(1.12)}}
 .intro__scrim{position:absolute;inset:0;background:radial-gradient(120% 90% at 50% 55%,rgba(26,20,16,.18),rgba(26,20,16,.5) 100%),linear-gradient(180deg,rgba(26,20,16,.32),rgba(26,20,16,.2) 40%,rgba(26,20,16,.5))}
@@ -72,7 +72,10 @@ body.has-fv.fv-passed .nav,body.has-fv.fv-passed .dock{opacity:1;visibility:visi
 .intro__s{font-family:var(--eb);font-style:italic;letter-spacing:.18em;margin:18px 0 0;opacity:.92;color:#2a2018;text-shadow:0 1px 14px rgba(255,255,255,.7)}
 .intro__scroll{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);color:var(--paper);font-family:var(--eb);font-style:italic;font-size:12px;letter-spacing:.2em;opacity:.85}
 /* 暗い没入(コンセプト)の底をpaperの波で切り取り、info(paper)へ繋ぐ。負marginで暗い面の底へせり上げ重ねる */
-.fv-cut{display:block;width:100%;height:clamp(54px,7vw,96px);margin-top:clamp(-96px,-7vw,-54px);position:relative;z-index:3;pointer-events:none}
+/* 技法E: 固定ヒーロー写真を覆う「被せレイヤー」。透過のままz5で上に立ち、margin-topの負値で固定写真の上へせり上がる。波の谷(透過)からは固定写真が透ける */
+.fv-cover{position:relative;z-index:5;margin-top:-100svh}
+.fv-cover__pg{position:relative;background:var(--paper)}
+.fv-cut{display:block;width:100%;height:clamp(54px,7vw,96px);margin-bottom:-1px;pointer-events:none}
 .fv-cut .aze__line,.fv-cut .aze__smoke{stroke-dasharray:none;stroke-dashoffset:0}/* カット上の波線は常時表示 */
 /* 本文（ピン画像の上をスクロールで通り抜ける） */
 .intro__read{position:relative;z-index:2;color:var(--paper);padding:26vh clamp(20px,6vw,90px) 26vh}
