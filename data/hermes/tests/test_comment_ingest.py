@@ -129,5 +129,28 @@ class TestProcessCardState(unittest.TestCase):
         save.assert_called_once_with(state)
 
 
+class TestCardKindAlwaysNeedinfo(unittest.TestCase):
+    """承認制廃止: 分解承認待ちは取り込み対象外＝card_kind は常に needinfo。"""
+
+    def test_card_kind_needinfo_even_with_unapproved_breakdown(self):
+        props = {
+            "BreakdownProposal": {"rich_text": [{"plain_text": "1. a\n2. b"}]},
+            "ApproveBreakdown": {"checkbox": False},
+        }
+        self.assertEqual(ci.card_kind(props), "needinfo")
+
+    def test_query_target_filters_needinfo_only(self):
+        captured = {}
+
+        def fake_notion(env, method, path, body=None):
+            captured["body"] = body
+            return {"results": [], "has_more": False}
+
+        with mock.patch.object(ci, "notion", side_effect=fake_notion):
+            ci.query_target_cards({})
+        self.assertEqual(captured["body"]["filter"],
+                         {"property": "Status", "select": {"equals": "NeedInfo"}})
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Hermes Breakdown 承認済み分解適用ポーラ（Mac 専用）
+"""Hermes Breakdown 自動分割適用ポーラ（Mac 専用）
 
-Notion「あとでやるタスク」で ApproveBreakdown=true かつ BreakdownProposal 非空の
-親カードを拾い、提案行を子カードとして作成する。親自身は実行しない。
+Notion「あとでやるタスク」で BreakdownProposal 非空の親カードを拾い、提案行を子カードとして
+作成する（**承認ゲート廃止＝全提案を承認済み前提で自動分割**）。親自身は実行しない。
 適用結果は Notion コメントに残し、Telegram への即時通知は送らない（nudge digest 対象）。
+適用後は BreakdownProposal をクリアして再分割を防ぐ（冪等・既存子は canonical_title で重複排除）。
 
 設定/秘密は ~/.hermes/.env（NOTION_TOKEN）。
 キルスイッチ: ~/.hermes/breakdown_enabled が "1" の時だけ稼働（fail-closed）。
@@ -107,11 +108,11 @@ def canonical_title(s: str) -> str:
     return text[:100]
 
 
-def query_approved(env: dict) -> list:
-    base_body = {"filter": {"and": [
-        {"property": "ApproveBreakdown", "checkbox": {"equals": True}},
-        {"property": "BreakdownProposal", "rich_text": {"is_not_empty": True}},
-    ]}, "page_size": 100}
+def query_proposals(env: dict) -> list:
+    # 承認ゲート廃止: BreakdownProposal が非空なら全件を自動分割対象にする
+    # (適用後は BreakdownProposal をクリアするので再処理されない=冪等)
+    base_body = {"filter": {"property": "BreakdownProposal", "rich_text": {"is_not_empty": True}},
+                 "page_size": 100}
     results = []
     cursor = None
     while True:
@@ -248,11 +249,11 @@ def _run(args) -> None:
         log("ERROR: .env 必須キー不足: NOTION_TOKEN")
         return
     try:
-        parents = query_approved(env)
+        parents = query_proposals(env)
     except Exception as e:
         log(f"ERROR: Notion query失敗: {e}")
         return
-    log(f"start dry={args.dry_run} approved={len(parents)}件 max={args.max}")
+    log(f"start dry={args.dry_run} proposals={len(parents)}件 max={args.max}")
     done = 0
     attempts = 0
     for parent in parents:
