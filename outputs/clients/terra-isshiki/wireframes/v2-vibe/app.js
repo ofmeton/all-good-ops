@@ -10,6 +10,24 @@
     addEventListener('keydown',e=>{ if(e.key==='Escape') navt.checked=false; });
   }
 
+  /* ROOMS 画像クリック → フル表示モーダル（reduced-motion でも動作） */
+  (function(){
+    const lb = document.getElementById('lightbox');
+    if (!lb) return;
+    const lbImg = lb.querySelector('.lightbox__img');
+    const lbCap = lb.querySelector('.lightbox__cap');
+    const open = (src, cap) => { lbImg.src = src; lbImg.alt = cap||''; lbCap.textContent = cap||''; lb.classList.add('is-open'); lb.setAttribute('aria-hidden','false'); };
+    const close = () => { lb.classList.remove('is-open'); lb.setAttribute('aria-hidden','true'); lbImg.removeAttribute('src'); };
+    $$('.tour__card img').forEach(img=>{
+      img.addEventListener('click', ()=>{
+        const cap = (img.closest('.tour__card')?.querySelector('figcaption')?.childNodes[0]?.textContent || img.alt || '').trim();
+        open(img.currentSrc || img.src, cap);
+      });
+    });
+    lb.addEventListener('click', close);
+    addEventListener('keydown', e=>{ if(e.key==='Escape') close(); });
+  })();
+
   /* reveal / 畔 */
   const io = new IntersectionObserver((es)=>es.forEach(e=>{
     if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
