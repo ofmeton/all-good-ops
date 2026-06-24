@@ -86,15 +86,14 @@ body.at-intro .topveil{opacity:1}
 .intro__ch{font-family:var(--serif);font-weight:700;font-size:clamp(22px,3vw,40px);line-height:1.4;letter-spacing:.04em;margin:0 0 clamp(28px,4vh,52px);text-shadow:0 2px 22px rgba(0,0,0,.55)}
 .intro__concept p{font-family:var(--mincho);font-size:clamp(14px,1.3vw,18px);line-height:2.2;letter-spacing:.06em;margin:0 0 clamp(26px,4vh,44px);text-shadow:0 2px 20px rgba(0,0,0,.6)}
 
-/* g. 畔（線→水が張る） */
-.aze-wrap{position:relative;width:100%;padding-block:6px}
-.aze{display:block;width:100%;height:34px;overflow:visible}
-.aze path{fill:none;stroke:var(--tsuchi);stroke-width:1.6;stroke-dasharray:2600;stroke-dashoffset:2600;transition:stroke-dashoffset 3.4s var(--easo)}
-.aze path.shadow{stroke-opacity:.22;stroke-width:3.4}
-.aze-fill{position:absolute;left:0;right:0;bottom:6px;height:16px;transform-origin:bottom;transform:scaleY(0);
-  background:linear-gradient(180deg,rgba(107,116,132,0),rgba(107,116,132,.22));transition:transform 1.8s var(--easo) 1s}
-.aze-wrap.in .aze path{stroke-dashoffset:0}
-.aze-wrap.in .aze-fill{transform:scaleY(1)}
+/* g. 畔＝波打ち際×田んぼの畔（波線＋波形フィルが下から滲む。線もフィルも うねうね） */
+.aze-wrap{position:relative;width:100%;height:clamp(38px,4.6vw,60px);overflow:hidden}
+.aze{display:block;width:100%;height:100%}
+.aze__fill{fill:rgba(107,116,132,.16);opacity:0;transition:opacity 1.7s var(--easo) .3s}
+.aze-wrap.in .aze__fill{opacity:1}
+.aze__line{fill:none;stroke:var(--tsuchi);stroke-width:1.6;vector-effect:non-scaling-stroke;stroke-dasharray:2600;stroke-dashoffset:2600;transition:stroke-dashoffset 3.2s var(--easo)}
+.aze__line--sh{stroke-opacity:.22;stroke-width:3.4}
+.aze-wrap.in .aze__line{stroke-dashoffset:0}
 
 /* INFORMATION（滲み出る写真＋数字浮遊） */
 .info{min-height:92vh;padding-block:clamp(70px,11vh,150px);position:relative}
@@ -273,7 +272,7 @@ body.pinmode .tour__hint{display:none}
 
 @media(prefers-reduced-motion:reduce){
   .reveal{opacity:1!important;transform:none!important;filter:none!important}
-  .aze path{stroke-dashoffset:0!important}.aze-fill{transform:scaleY(1)!important}
+  .aze__line{stroke-dashoffset:0!important}.aze__fill{opacity:1!important}
   .intro__slide{animation:none}.intro__dark{opacity:.4}.intro__curtain{display:none}
   .intro__logo,.intro__s{opacity:1!important;visibility:visible!important}
   .pghero__bg{animation:none}
