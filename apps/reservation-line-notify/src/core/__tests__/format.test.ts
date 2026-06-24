@@ -1,25 +1,40 @@
 import { describe, it, expect } from "vitest";
-import { formatSummary } from "../format";
-import { mergeIntoBucket } from "../aggregate";
+import { formatSingle, formatRawFallback } from "../format";
 import { parseReservationMail } from "../parse";
-import { SAMPLE_ICE, SAMPLE_NOSAGYO, SAMPLE_SANSAKU } from "./fixtures";
+import { SAMPLE_ICE, SAMPLE_SANSAKU } from "./fixtures";
 
-let b = mergeIntoBucket(null, parseReservationMail(SAMPLE_ICE)!);
-b = mergeIntoBucket(b, parseReservationMail(SAMPLE_NOSAGYO)!);
-b = mergeIntoBucket(b, parseReservationMail(SAMPLE_SANSAKU)!);
+describe("formatSingle", () => {
+  const ice = formatSingle(parseReservationMail(SAMPLE_ICE)!);
 
-describe("formatSummary", () => {
-  const text = formatSummary(b);
-  it("件数とアクティビティ名を含む", () => {
-    expect(text).toContain("リクエストされた体験（3件）");
-    expect(text).toContain("棚田米アイスづくりと野草茶体験");
-    expect(text).toContain("棚田散策");
+  it("単一アクティビティ名を含む", () => {
+    expect(ice).toContain("棚田米アイスづくりと野草茶体験");
   });
-  it("欠損料金は ¥- 表示", () => expect(text).toContain("¥-"));
-  it("合計は記載分のみ", () => expect(text).toContain("合計 ¥25,000（料金記載分のみ）"));
-  it("顧客名・宿泊施設・ダッシュボードURLを含む", () => {
-    expect(text).toContain("Tanaka Asami");
-    expect(text).toContain("わたや Roopt葉山上山口");
-    expect(text).toContain("dashboard=1");
+  it("他のアクティビティは含まない（集約しない）", () => {
+    expect(ice).not.toContain("棚田散策");
+    expect(ice).not.toContain("リクエストされた体験");
+  });
+  it("参加人数・宿泊施設・顧客名を含む", () => {
+    expect(ice).toContain("大人3名");        // 参加人数
+    expect(ice).toContain("わたや Roopt葉山上山口");
+    expect(ice).toContain("Tanaka Asami 様");
+  });
+  it("承認/NG リンクは承認URL(r=)で、ダッシュボードURLではない", () => {
+    expect(ice).toContain("承認/NG はこちら");
+    expect(ice).toContain("r=");
+    expect(ice).not.toContain("dashboard=1");
+  });
+  it("料金を表示する", () => expect(ice).toContain("¥12,500"));
+  it("欠損料金は ¥- 表示", () => {
+    const sansaku = formatSingle(parseReservationMail(SAMPLE_SANSAKU)!);
+    expect(sansaku).toContain("¥-");
+  });
+});
+
+describe("formatRawFallback", () => {
+  it("件名と本文を含む警告文", () => {
+    const t = formatRawFallback("件名X", "本文Y");
+    expect(t).toContain("自動整形できませんでした");
+    expect(t).toContain("件名X");
+    expect(t).toContain("本文Y");
   });
 });

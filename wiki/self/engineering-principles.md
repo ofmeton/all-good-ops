@@ -124,5 +124,15 @@ optimizer apply-code runner（accepted 提案を nested `claude -p` に実装さ
 
 ---
 
+## デプロイ済み成果物は「repo＝本番」と仮定せず、動いている実体を先に観測する（2026-06-25）
+
+手で本番を直したまま repo に書き戻していない成果物は、**本番が repo より新しい**ことがある。デプロイ済み（GAS/Worker/Vercel 等）の挙動を問われたら、repo を読んで断定する前に**動いている実体**（`clasp pull` / 本番ログ / 実 fetch）を観測する。本番を上書きする前は **ビルド出力を本番 pull と diff** し、変更が意図分のみであることを実証してから push する。
+
+- **事例 (2026-06-25, reservation-notify)**: 「3メールなら3通来てる？」に repo の旧「2分集約」コードだけを見て「No（集約してる）」と即答。実際は本番GASが既に「1メール1通・即時」へ手編集で先行しており、repo が陳腐化していた＝回答が誤り。force-push 直前に本番を pull して乖離を発見し、デグレ（通知の承認URL差し替え等）を回避。本番を正に repo を再同期し、最小の重複排除のみ追加。ビルド出力 vs 本番 diff で「変更3点のみ」を確認後に反映。
+- **デプロイ前プリフライト（GAS/clasp 例・型化候補）**: ①`clasp login --status` で対象アカウント ②`.clasp.json` scriptId と本番識別子の照合（gitignore＝破棄PJを指す罠） ③Apps Script API 有効 ④`appsscript.json` がマニフェスト変更を起こさない ⑤ビルド出力 vs 本番 pull の diff。
+- **原則**: 原則2「実物で確認」「本番エラーは実体を先に見る」のデプロイ版。**repo は本番の写像とは限らない**。挙動の問いと本番上書きは、動く実体の観測（pull/diff）を前段に置く。[[feedback_tests_green_but_production_stub]] [[feedback_prod_lib_local_diag]]
+
+---
+
 ## メモ
 - これらは memory の atomic feedback（`feedback_llm_structured_output_validate` 等）からもリンクされる。**原子的リコールは memory、連結・高次化はこの wiki ノート**で役割分担する。

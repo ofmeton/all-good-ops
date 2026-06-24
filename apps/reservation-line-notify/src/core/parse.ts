@@ -36,6 +36,12 @@ function extractDashboardUrl(body: string): string {
   return m ? m[0] : "";
 }
 
+function extractApprovalUrl(body: string): string {
+  // 承認/NG リンク（r= を含む URL 全体）
+  const m = body.match(/https:\/\/\S*[?&]r=\S*/);
+  return m ? m[0] : "";
+}
+
 export function parseReservationMail(mail: RawMail): ParsedReservation | null {
   const body = mail.body;
   if (!body.includes(MARKER)) return null;
@@ -68,6 +74,8 @@ export function parseReservationMail(mail: RawMail): ParsedReservation | null {
       headcount: extractField(body, "宿泊人数"),
     },
     activity,
+    participants: extractField(body, "参加人数"),
+    approvalUrl: extractApprovalUrl(body),
     dashboardUrl: extractDashboardUrl(body),
     messageId: mail.messageId,
     receivedAt: mail.receivedAt,
