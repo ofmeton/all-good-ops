@@ -17,7 +17,7 @@ body::after{content:"";position:fixed;inset:0;z-index:80;pointer-events:none;opa
 .reveal{opacity:0;transform:translateY(26px);filter:blur(6px);transition:opacity 1.1s var(--ease),transform 1.1s var(--ease),filter 1.1s var(--ease)}
 .reveal.in{opacity:1;transform:none;filter:none}
 .tag{font-family:var(--eb);font-style:italic;letter-spacing:.2em;color:var(--tsuchi);font-size:13px;margin:0 0 20px}
-.htitle{font-family:var(--serif);font-weight:500;font-size:clamp(22px,3.2vw,40px);line-height:1.2;margin:0}
+.htitle{font-family:var(--serif);font-weight:500;font-size:clamp(20px,2.6vw,32px);line-height:1.24;margin:0}
 .htitle .en{display:inline-block;font-size:.32em;margin-left:.8em;vertical-align:middle}
 .pad{padding:clamp(90px,16vh,200px) clamp(20px,5vw,90px)}
 .wrap{max-width:1360px;margin:0 auto}
@@ -39,31 +39,27 @@ body.at-intro .topveil{opacity:1}
 .nav{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;justify-content:space-between;align-items:center;padding:22px clamp(20px,4vw,56px);mix-blend-mode:difference;color:#fff}
 .nav__logo{display:flex;align-items:center}
 .nav__logo-img{display:block;height:clamp(52px,6.4vw,74px);width:auto}
-.nav__menu{display:flex;align-items:center;font-family:var(--eb);letter-spacing:.18em;font-size:12px;opacity:.9}
-.nav__menu a{position:relative;padding:4px 0}
-.nav__menu a::after{content:"";position:absolute;left:0;bottom:0;width:100%;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .4s var(--easo)}
-.nav__menu a:hover::after{transform:scaleX(1)}
-.nav__menu a + a{margin-left:.9em}
-.nav__menu a + a::before{content:"・";margin:0 .9em 0 -.9em;opacity:.55}
-/* ハンバーガー（モバイル） */
+.nav__right{display:flex;align-items:center;gap:clamp(14px,2vw,26px)}
+.nav__lang{appearance:none;-webkit-appearance:none;background:none;border:0;cursor:pointer;color:inherit;font-family:var(--eb);font-style:italic;letter-spacing:.14em;font-size:13px;line-height:1;padding:6px 2px;opacity:.92}
+.nav__lang span{opacity:.5;margin:0 .15em}
+/* FV ページは FV の間ナビ全体を隠し、FV を抜けたら現れる（下層ページは has-fv なし＝常時表示） */
+body.has-fv .nav{opacity:0;visibility:hidden;pointer-events:none;transition:opacity .7s var(--easo),visibility .7s}
+body.has-fv .nav.is-shown{opacity:1;visibility:visible;pointer-events:auto}
+.nav__menu{display:none}/* インラインメニューは廃止し、全幅でハンバーガーに集約 */
+/* ハンバーガー（全幅・常時） */
 .nav__t{position:absolute;width:0;height:0;opacity:0;pointer-events:none}
-.nav__burger{display:none}
-.nav__panel{display:none}
-@media(max-width:780px){
-  .nav__menu{display:none}
-  .nav__burger{display:flex;flex-direction:column;justify-content:center;gap:6px;width:30px;height:30px;cursor:pointer;-webkit-tap-highlight-color:transparent}
-  .nav__burger span{display:block;width:24px;height:1.5px;background:#fff;transition:transform .42s var(--easo),opacity .25s var(--ease)}
-  .nav__t:checked ~ .nav .nav__burger span:nth-child(1){transform:translateY(7.5px) rotate(45deg)}
-  .nav__t:checked ~ .nav .nav__burger span:nth-child(2){opacity:0}
-  .nav__t:checked ~ .nav .nav__burger span:nth-child(3){transform:translateY(-7.5px) rotate(-45deg)}
-  .nav__panel{display:flex;position:fixed;inset:0;z-index:58;flex-direction:column;justify-content:center;gap:6px;padding:0 12vw;
-    background:var(--paper);opacity:0;visibility:hidden;transform:translateY(-10px);
-    transition:opacity .5s var(--easo),transform .55s var(--easo),visibility .55s}
-  .nav__t:checked ~ .nav__panel{opacity:1;visibility:visible;transform:none}
-  .nav__panel a{display:flex;align-items:baseline;gap:.7em;padding:16px 0;border-bottom:1px solid rgba(26,20,16,.08);
-    font-family:var(--serif);font-weight:500;font-size:clamp(26px,8vw,38px);color:var(--ink)}
-  .nav__panel a .en{font-size:.4em}
-}
+.nav__burger{display:flex;flex-direction:column;justify-content:center;gap:6px;width:30px;height:30px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.nav__burger span{display:block;width:24px;height:1.5px;background:#fff;transition:transform .42s var(--easo),opacity .25s var(--ease)}
+.nav__t:checked ~ .nav .nav__burger span:nth-child(1){transform:translateY(7.5px) rotate(45deg)}
+.nav__t:checked ~ .nav .nav__burger span:nth-child(2){opacity:0}
+.nav__t:checked ~ .nav .nav__burger span:nth-child(3){transform:translateY(-7.5px) rotate(-45deg)}
+.nav__panel{display:flex;position:fixed;inset:0;z-index:58;flex-direction:column;justify-content:center;gap:6px;padding:0 clamp(40px,12vw,160px);
+  background:var(--paper);opacity:0;visibility:hidden;transform:translateY(-10px);
+  transition:opacity .5s var(--easo),transform .55s var(--easo),visibility .55s}
+.nav__t:checked ~ .nav__panel{opacity:1;visibility:visible;transform:none}
+.nav__panel a{display:flex;align-items:baseline;gap:.7em;padding:16px 0;border-bottom:1px solid rgba(26,20,16,.08);
+  font-family:var(--serif);font-weight:500;font-size:clamp(26px,4.4vw,40px);color:var(--ink)}
+.nav__panel a .en{font-size:.4em}
 
 /* INTRO（Ken Burnsホールド→外観→内観クロスフェード→ピン内観の上を本文が画面外から上がる） */
 .intro{height:250vh;position:relative}
@@ -75,7 +71,7 @@ body.at-intro .topveil{opacity:1}
 .intro__curtain{position:absolute;inset:0;z-index:3;background:#fff;will-change:transform,opacity}
 .intro__hero{position:absolute;inset:0;z-index:4;display:grid;place-content:center;justify-items:center;text-align:center;color:var(--paper);padding:0 6vw;will-change:transform,opacity}
 .intro__k{font-family:var(--serif);font-weight:500;font-size:clamp(32px,6.4vw,80px);line-height:1.12;margin:0;text-shadow:0 3px 28px rgba(0,0,0,.32)}
-.intro__logo{width:clamp(180px,26vw,330px);height:auto;filter:drop-shadow(0 2px 22px rgba(255,255,255,.55))}
+.intro__logo{width:clamp(180px,26vw,330px);height:auto;filter:invert(0) drop-shadow(0 2px 22px rgba(255,255,255,.55))}
 .intro__s{font-family:var(--eb);font-style:italic;letter-spacing:.18em;margin:18px 0 0;opacity:.92;color:#2a2018;text-shadow:0 1px 14px rgba(255,255,255,.7)}
 .intro__scroll{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);color:var(--paper);font-family:var(--eb);font-style:italic;font-size:12px;letter-spacing:.2em;opacity:.85}
 /* 本文（ピン画像の上をスクロールで通り抜ける） */
@@ -100,7 +96,7 @@ body.at-intro .topveil{opacity:1}
 .info__facts{position:relative;z-index:2;max-width:46vw}
 .info__lead{font-family:var(--serif);font-weight:400;font-size:clamp(16px,1.6vw,20px);max-width:30ch;margin:18px 0 clamp(40px,7vh,84px)}
 .fact{margin:0 0 clamp(28px,5vh,56px)}
-.fact .n{font-family:var(--serif);font-weight:500;font-size:clamp(22px,3.4vw,42px);line-height:1;display:block}
+.fact .n{font-family:var(--serif);font-weight:500;font-size:clamp(19px,2.4vw,30px);line-height:1.1;display:block}
 .fact .l{font-family:var(--eb);font-style:italic;letter-spacing:.16em;color:var(--tsuchi);font-size:13px}
 .fact .d{color:var(--ink70);font-size:14px;margin-top:6px}
 
@@ -274,5 +270,6 @@ body.pinmode .tour__hint{display:none}
   .aze__line{stroke-dashoffset:0!important}.aze__fill{opacity:1!important}
   .intro__slide{animation:none}.intro__dark{opacity:.4}.intro__curtain{display:none}
   .intro__logo,.intro__s{opacity:1!important;visibility:visible!important}
+  .intro__logo{filter:invert(1) drop-shadow(0 2px 22px rgba(255,255,255,.55))}.intro__s{color:#F5F1EA}.nav{opacity:1!important;visibility:visible!important}
   .pghero__bg{animation:none}
 }
