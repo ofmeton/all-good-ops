@@ -24,13 +24,15 @@
   }), {threshold:0.16, rootMargin:'0px 0px -8% 0px'});
   $$('.reveal, .aze-wrap').forEach(el=>io.observe(el));
 
-  /* k. FV: 写真の上にロゴが浮かび上がる溜め（ロゴは終始ひとつ・固定位置） */
+  /* k. opening 幕: 暗幕の上にロゴが浮上 → 幕が上へ晴れてFVへ（ロゴは終始ひとつ・固定位置＝ズレなし） */
   if (!reduce && window.gsap) {
     gsap.set('.intro__logo, .intro__s',{autoAlpha:0});
     gsap.timeline()
-      .to('.intro__logo',{autoAlpha:1,duration:1.3,ease:'power2.out'},.5)
-      .to('.intro__s',{autoAlpha:1,duration:1.0,ease:'power2.out'},'-=.6');
-  }
+      .to('.intro__logo',{autoAlpha:1,duration:1.3,ease:'power2.out'},.5)   /* 暗幕の上にロゴ浮上 */
+      .to('.intro__s',{autoAlpha:1,duration:1.0,ease:'power2.out'},'-=.6')
+      .to('.intro__curtain',{yPercent:-100,duration:1.2,ease:'power3.inOut'},'+=.55') /* 幕が上がって晴れる */
+      .set('.intro__curtain',{display:'none'});
+  } else { const c=document.querySelector('.intro__curtain'); if(c) c.style.display='none'; }
   /* FV背景スライドショー（複数写真を時間でクロスフェード。reduced時は1枚目固定） */
   (function(){
     const slides=$$('.intro__slide');
