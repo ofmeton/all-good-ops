@@ -18,7 +18,7 @@ body::after{content:"";position:fixed;inset:0;z-index:80;pointer-events:none;opa
 .reveal.in{opacity:1;transform:none;filter:none}
 .tag{font-family:var(--eb);font-style:italic;letter-spacing:.2em;color:var(--tsuchi);font-size:13px;margin:0 0 20px}
 .htitle{font-family:var(--serif);font-weight:500;font-size:clamp(20px,2.6vw,32px);line-height:1.24;margin:0}
-.htitle .en{display:inline-block;font-size:.32em;margin-left:.8em;vertical-align:middle}
+.htitle .en{display:block;font-family:var(--eb);font-style:italic;letter-spacing:.2em;color:var(--tsuchi);font-size:13px;line-height:1;margin:0 0 .6em}
 .pad{padding:clamp(90px,16vh,200px) clamp(20px,5vw,90px)}
 .wrap{max-width:1360px;margin:0 auto}
 .lnk{position:relative;display:inline-flex;align-items:center;gap:8px;font-family:var(--eb);font-style:italic;letter-spacing:.1em;color:var(--tsuchi);padding-bottom:5px;margin-top:22px}
@@ -71,7 +71,7 @@ body.has-fv .nav.is-shown{opacity:1;visibility:visible;pointer-events:auto}
 .intro__curtain{position:absolute;inset:0;z-index:3;background:#fff;will-change:transform,opacity}
 .intro__hero{position:absolute;inset:0;z-index:4;display:grid;place-content:center;justify-items:center;text-align:center;color:var(--paper);padding:0 6vw;will-change:transform,opacity}
 .intro__k{font-family:var(--serif);font-weight:500;font-size:clamp(32px,6.4vw,80px);line-height:1.12;margin:0;text-shadow:0 3px 28px rgba(0,0,0,.32)}
-.intro__logo{width:clamp(180px,26vw,330px);height:auto;filter:invert(0) drop-shadow(0 2px 22px rgba(255,255,255,.55))}
+.intro__logo{width:clamp(180px,26vw,330px);height:auto;filter:invert(0)}
 .intro__s{font-family:var(--eb);font-style:italic;letter-spacing:.18em;margin:18px 0 0;opacity:.92;color:#2a2018;text-shadow:0 1px 14px rgba(255,255,255,.7)}
 .intro__scroll{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);color:var(--paper);font-family:var(--eb);font-style:italic;font-size:12px;letter-spacing:.2em;opacity:.85}
 /* 本文（ピン画像の上をスクロールで通り抜ける） */
@@ -84,8 +84,8 @@ body.has-fv .nav.is-shown{opacity:1;visibility:visible;pointer-events:auto}
 /* g. 畔＝波打ち際×田んぼの畔（波線＋波形フィルが下から滲む。線もフィルも うねうね） */
 .aze-wrap{position:relative;width:100%;height:clamp(38px,4.6vw,60px);overflow:hidden}
 .aze{display:block;width:100%;height:100%}
-.aze__fill{fill:rgba(107,116,132,.16);opacity:0;transition:opacity 1.7s var(--easo) .3s}
-.aze-wrap.in .aze__fill{opacity:1}
+.aze__smoke{fill:none;stroke:rgba(107,116,132,.32);stroke-width:9;stroke-linecap:round;vector-effect:non-scaling-stroke;stroke-dasharray:2600;stroke-dashoffset:2600;transition:stroke-dashoffset 3.4s var(--easo) .12s}
+.aze-wrap.in .aze__smoke{stroke-dashoffset:0}
 .aze__line{fill:none;stroke:var(--tsuchi);stroke-width:1.6;vector-effect:non-scaling-stroke;stroke-dasharray:2600;stroke-dashoffset:2600;transition:stroke-dashoffset 3.2s var(--easo)}
 .aze__line--sh{stroke-opacity:.22;stroke-width:3.4}
 .aze-wrap.in .aze__line{stroke-dashoffset:0}
@@ -267,9 +267,9 @@ body.pinmode .tour__hint{display:none}
 
 @media(prefers-reduced-motion:reduce){
   .reveal{opacity:1!important;transform:none!important;filter:none!important}
-  .aze__line{stroke-dashoffset:0!important}.aze__fill{opacity:1!important}
+  .aze__line{stroke-dashoffset:0!important}.aze__smoke{stroke-dashoffset:0!important}
   .intro__slide{animation:none}.intro__dark{opacity:.4}.intro__curtain{display:none}
   .intro__logo,.intro__s{opacity:1!important;visibility:visible!important}
-  .intro__logo{filter:invert(1) drop-shadow(0 2px 22px rgba(255,255,255,.55))}.intro__s{color:#F5F1EA}.nav{opacity:1!important;visibility:visible!important}
+  .intro__logo{filter:invert(1)}.nav{opacity:1!important;visibility:visible!important}
   .pghero__bg{animation:none}
 }

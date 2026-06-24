@@ -26,15 +26,12 @@
 
   /* k. opening 幕: 白幕の上に黒ロゴだけ浮上（ナビ非表示）→ 幕がじんわり晴れると同時にロゴが黒→白へ溶け、ナビが現れる（ロゴは終始ひとつ・固定位置＝ズレなし） */
   if (!reduce && window.gsap) {
-    const GLOW = 'drop-shadow(0 2px 22px rgba(255,255,255,.55))';
-    gsap.set('.intro__logo, .intro__s',{autoAlpha:0});
+    gsap.set('.intro__logo',{autoAlpha:0});
     gsap.timeline()
       .to('.intro__logo',{autoAlpha:1,duration:1.6,ease:'power2.out'},.6)   /* 白幕の上に黒ロゴだけがじんわり浮上（ナビは非表示） */
-      .to('.intro__s',{autoAlpha:1,duration:1.1,ease:'power2.out'},'-=.6')
       .addLabel('open','+=.9')
       .to('.intro__curtain',{autoAlpha:0,yPercent:-5,duration:2.4,ease:'sine.inOut'},'open') /* 白幕がじんわり晴れていく */
-      .to('.intro__logo',{filter:'invert(1) '+GLOW,duration:2.4,ease:'sine.inOut'},'open')   /* 同時にロゴが黒→白へ溶ける */
-      .to('.intro__s',{color:'#F5F1EA',duration:2.4,ease:'sine.inOut'},'open')                /* サブコピーも白へ */
+      .to('.intro__logo',{filter:'invert(1)',duration:2.4,ease:'sine.inOut'},'open')         /* 同時にロゴが黒→白へ溶ける（光なし） */
       .set('.intro__curtain',{display:'none'});
   } else { const c=document.querySelector('.intro__curtain'); if(c) c.style.display='none'; }
 
