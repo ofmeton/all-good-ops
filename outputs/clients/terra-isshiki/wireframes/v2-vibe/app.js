@@ -30,7 +30,7 @@
     gsap.timeline()
       .to('.intro__logo',{autoAlpha:1,duration:1.6,ease:'power2.out'},.6)   /* 白幕の上に黒ロゴだけがじんわり浮上（ナビは非表示） */
       .addLabel('open','+=.9')
-      .to('.intro__curtain',{autoAlpha:0,yPercent:-5,duration:2.4,ease:'sine.inOut'},'open') /* 白幕がじんわり晴れていく */
+      .to('.intro__curtain',{autoAlpha:0,duration:2.4,ease:'sine.inOut'},'open') /* 白幕がじんわり晴れる（溶暗のみ・せり上がりなし） */
       .to('.intro__logo',{filter:'invert(1)',duration:2.4,ease:'sine.inOut'},'open')         /* 同時にロゴが黒→白へ溶ける（光なし） */
       .set('.intro__curtain',{display:'none'});
   } else { const c=document.querySelector('.intro__curtain'); if(c) c.style.display='none'; }
