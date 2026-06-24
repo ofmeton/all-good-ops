@@ -105,6 +105,16 @@
       scrollTrigger:{trigger:el,start:'top bottom',end:'bottom top',scrub:true}});
   });
 
+  /* 画像内パン視差（object-position をスクロールで動かす＝枠内で画像が流れる・端の隙間なし）。
+     GSAPは object-position を直接tween不可のため、プロキシ値をonUpdateでinline反映 */
+  $$('[data-paraimg]').forEach(img=>{
+    const o={p:38};
+    img.style.objectPosition='50% 38%';
+    gsap.to(o,{p:62,ease:'none',
+      scrollTrigger:{trigger:img.closest('section')||img,start:'top bottom',end:'bottom top',scrub:true},
+      onUpdate:()=>{ img.style.objectPosition='50% '+o.p.toFixed(2)+'%'; }});
+  });
+
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(()=>ScrollTrigger.refresh());
   addEventListener('load',()=>ScrollTrigger.refresh());
 })();
