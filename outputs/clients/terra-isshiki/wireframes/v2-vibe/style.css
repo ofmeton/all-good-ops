@@ -62,7 +62,7 @@ body.has-fv .nav.is-shown{opacity:1;visibility:visible;pointer-events:auto}
 .nav__panel a .en{font-size:.4em}
 
 /* INTRO（Ken Burnsホールド→外観→内観クロスフェード→ピン内観の上を本文が画面外から上がる） */
-.intro{height:250vh;position:relative}
+.intro{height:250vh;position:relative;background:var(--ink)}
 .intro__sticky{position:sticky;top:0;height:100svh;overflow:hidden;z-index:1}
 @keyframes kenburns{from{transform:scale(1.0)}to{transform:scale(1.12)}}
 .intro__scrim{position:absolute;inset:0;background:radial-gradient(120% 90% at 50% 55%,rgba(26,20,16,.18),rgba(26,20,16,.5) 100%),linear-gradient(180deg,rgba(26,20,16,.32),rgba(26,20,16,.2) 40%,rgba(26,20,16,.5))}
@@ -76,8 +76,9 @@ body.has-fv .nav.is-shown{opacity:1;visibility:visible;pointer-events:auto}
 .intro__scroll{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);color:var(--paper);font-family:var(--eb);font-style:italic;font-size:12px;letter-spacing:.2em;opacity:.85}
 /* 暗い没入(コンセプト)の底をpaperの波で切り取り、info(paper)へ繋ぐ。負marginで暗い面の底へせり上げ重ねる */
 .fv-cut{display:block;width:100%;height:clamp(54px,7vw,96px);margin-top:clamp(-96px,-7vw,-54px);position:relative;z-index:3;pointer-events:none}
+.fv-cut .aze__line,.fv-cut .aze__smoke{stroke-dasharray:none;stroke-dashoffset:0}/* カット上の波線は常時表示 */
 /* 本文（ピン画像の上をスクロールで通り抜ける） */
-.intro__read{position:relative;z-index:2;color:var(--paper);padding:26vh clamp(20px,6vw,90px) 26vh;background:linear-gradient(180deg,rgba(26,20,16,0) 0,var(--ink) 18vh,var(--ink) 100%)}
+.intro__read{position:relative;z-index:2;color:var(--paper);padding:26vh clamp(20px,6vw,90px) 26vh}
 .intro__concept{max-width:760px;margin-inline:auto;text-align:center}
 .intro__concept .intro__tag{font-family:var(--eb);font-style:italic;letter-spacing:.22em;color:var(--suna);margin:0 0 18px}
 .intro__ch{font-family:var(--serif);font-weight:500;font-size:clamp(18px,2.4vw,30px);line-height:1.4;letter-spacing:.04em;margin:0 0 clamp(28px,4vh,52px);text-shadow:0 2px 22px rgba(0,0,0,.55)}
