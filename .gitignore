@@ -56,3 +56,6 @@ outputs/clients/minpaku-cleaning/app/demo-output/
 # responsive-snap / responsive-audit 生成物
 /tmp/
 scripts/.responsive-tools/node_modules/
+
+# スクショ受け皿（root散乱から退避したスクラッチ。整理後に削除）
+outputs/screenshots/_inbox/
