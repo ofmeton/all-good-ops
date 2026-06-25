@@ -10,9 +10,11 @@
 
 <input id="navt" class="nav__t" type="checkbox" aria-hidden="true">
 <nav class="nav">
-  <a class="nav__logo" href="index.html">TERRA HAYAMA</a>
-  <div class="nav__menu"><a href="rooms.html">Rooms</a><a href="stay.html">Stay</a><a href="access.html">Access</a><a href="owner.html">Owner</a></div>
-  <label class="nav__burger" for="navt" aria-label="メニューを開閉"><span></span><span></span><span></span></label>
+  <a class="nav__logo" href="index.html" aria-label="TERRA HAYAMA"><img class="nav__logo-img" src="assets/img/logo-white.png" alt="TERRA HAYAMA"></a>
+  <div class="nav__right">
+    <button class="nav__lang" type="button" aria-label="Language / 言語切替">JP <span>/</span> EN</button>
+    <label class="nav__burger" for="navt" aria-label="メニューを開閉"><span></span><span></span><span></span></label>
+  </div>
 </nav>
 <aside class="nav__panel" aria-label="メニュー">
   <a href="index.html">Home<span class="en">トップ</span></a>
@@ -25,7 +27,7 @@
 
 <!-- ページヒーロー -->
 <header class="pghero">
-  <img class="pghero__bg" src="assets/img/rooms-hero.webp" alt="一棟貸しの内観">
+  <img class="pghero__bg" src="assets/img/rooms-hero.webp" alt="二階フロアの内観">
   <div class="pghero__scrim"></div>
   <div class="pghero__in">
     <p class="pghero__tag">Rooms</p>
@@ -37,30 +39,30 @@
 
 <!-- 基本スペック（住まいの概要） -->
 <section class="info pad" id="spec">
-  <img class="info__photo" src="assets/img/ldk-01.webp" alt="リビングダイニング">
+  <div class="info__photo"><img src="assets/img/ldk-01.webp" alt="リビングダイニング"></div>
   <div class="info__facts">
     <p class="tag reveal">The house</p>
-    <h2 class="htitle reveal">住まいの概要<span class="en">Spec</span></h2>
-    <p class="info__lead reveal">一軒家の二階を、一棟まるごと。</p>
+    <h2 class="htitle reveal"><span class="en">Spec</span>住まいの概要</h2>
+    <p class="info__lead reveal">一軒家の二階を、まるごと貸し切り。</p>
     <div class="fact reveal"><span class="l">capacity</span><span class="n">最大 8 名</span><span class="d">快適に過ごす目安は 6 名</span></div>
-    <div class="fact reveal"><span class="l">size &amp; layout</span><span class="n">75㎡ ・ 2階一棟</span><span class="d">LDK＋寝室、ひのきのバス、フルキッチン</span></div>
+    <div class="fact reveal"><span class="l">size &amp; layout</span><span class="n">75㎡ ・ 2階ワンフロア</span><span class="d">LDK＋寝室、ひのきのバス、フルキッチン</span></div>
     <div class="fact reveal"><span class="l">parking</span><span class="n">2 台</span><span class="d">1階フロアに駐車スペース</span></div>
   </div>
 </section>
 
-<div class="aze-wrap"><div class="aze-fill"></div><svg class="aze" viewBox="0 0 1400 34" preserveAspectRatio="none"><path class="shadow" d="M0 20 C 160 9 300 27 520 18 S 940 9 1120 20 S 1320 25 1400 15"/><path d="M0 18 C 160 7 300 25 520 16 S 940 7 1120 18 S 1320 23 1400 13"/></svg></div>
+<div class="aze-wrap"><svg class="aze" viewBox="0 0 1400 60" preserveAspectRatio="none"><path class="aze__smoke" d="M0,42 C150,24 300,58 525,42 S890,24 1080,42 1270,58 1400,40"/><path class="aze__line aze__line--sh" d="M0,35 C150,17 300,51 525,35 S890,17 1080,35 1270,51 1400,33"/><path class="aze__line" d="M0,34 C150,16 300,50 525,34 S890,16 1080,34 1270,50 1400,32"/></svg></div>
 
 <!-- 空間ギャラリー -->
 <section class="gal" id="gallery">
   <article class="gal__item wide" data-para="0.05"><div class="fr"><img src="assets/img/ldk-01.webp" alt="リビングダイニング"></div><p class="gal__cap reveal">リビングダイニング<span class="en">Living</span></p></article>
   <article class="gal__item" data-para="0.07"><div class="fr"><img src="assets/img/kitchen-01.webp" alt="フルキッチン"></div><p class="gal__cap reveal">フルキッチン<span class="en">Kitchen</span></p></article>
   <article class="gal__item" data-para="0.05"><div class="fr"><img src="assets/img/hero-03-dining.webp" alt="ダイニング"></div><p class="gal__cap reveal">ダイニング<span class="en">Dining</span></p></article>
-  <article class="gal__item" data-para="0.07"><div class="fr"><img src="assets/img/bath.webp" alt="ひのきのバス"></div><p class="gal__cap reveal">ひのきのバス<span class="en">Bath</span></p></article>
-  <article class="gal__item" data-para="0.05"><div class="fr"><img src="assets/img/ldk-03.webp" alt="くつろぎの居間"></div><p class="gal__cap reveal">くつろぎの居間<span class="en">Lounge</span></p></article>
+  <article class="gal__item" data-para="0.07"><div class="fr"><img src="assets/img/bath.webp" alt="バスルーム"></div><p class="gal__cap reveal">バスルーム<span class="en">Bath</span></p></article>
+  <article class="gal__item" data-para="0.05"><div class="fr"><img src="assets/img/ldk-03.webp" alt="居間"></div><p class="gal__cap reveal">居間<span class="en">Lounge</span></p></article>
   <article class="gal__item wide" data-para="0.04"><div class="fr"><img src="assets/img/ldk-05.webp" alt="もうひとつの居場所"></div><p class="gal__cap reveal">もうひとつの居場所<span class="en">Corner</span></p></article>
 </section>
 
-<div class="aze-wrap"><div class="aze-fill"></div><svg class="aze" viewBox="0 0 1400 34" preserveAspectRatio="none"><path class="shadow" d="M0 16 C 200 26 360 7 560 16 S 980 28 1180 14 S 1340 18 1400 20"/><path d="M0 14 C 200 24 360 5 560 14 S 980 26 1180 12 S 1340 16 1400 18"/></svg></div>
+<div class="aze-wrap"><svg class="aze" viewBox="0 0 1400 60" preserveAspectRatio="none"><path class="aze__smoke" d="M0,42 C150,24 300,58 525,42 S890,24 1080,42 1270,58 1400,40"/><path class="aze__line aze__line--sh" d="M0,35 C150,17 300,51 525,35 S890,17 1080,35 1270,51 1400,33"/><path class="aze__line" d="M0,34 C150,16 300,50 525,34 S890,16 1080,34 1270,50 1400,32"/></svg></div>
 
 <!-- 寝床 -->
 <section class="sleep" id="beds">
@@ -68,7 +70,7 @@
   <figure class="sleep__ph" style="margin:0"><div class="fr"><img src="assets/img/hero-02-bedroom.webp" alt="寝室"></div></figure>
   <div class="sleep__tx">
     <p class="tag reveal">Sleeping</p>
-    <h2 class="htitle reveal">寝床のこと<span class="en">Beds</span></h2>
+    <h2 class="htitle reveal"><span class="en">Beds</span>寝床のこと</h2>
     <p class="info__lead reveal">最大8名が、ゆったり休めるように。</p>
     <dl class="sleep__kv reveal">
       <div class="row"><dt>寝室</dt><dd>ベッド＋寝具一式<span class="prov">構成は確認中</span></dd></div>
@@ -80,15 +82,15 @@
   </div>
 </section>
 
-<div class="aze-wrap"><div class="aze-fill"></div><svg class="aze" viewBox="0 0 1400 34" preserveAspectRatio="none"><path class="shadow" d="M0 18 C 220 9 380 25 600 16 S 980 9 1180 20 S 1340 24 1400 14"/><path d="M0 16 C 220 7 380 23 600 14 S 980 7 1180 18 S 1340 22 1400 12"/></svg></div>
+<div class="aze-wrap"><svg class="aze" viewBox="0 0 1400 60" preserveAspectRatio="none"><path class="aze__smoke" d="M0,42 C150,24 300,58 525,42 S890,24 1080,42 1270,58 1400,40"/><path class="aze__line aze__line--sh" d="M0,35 C150,17 300,51 525,35 S890,17 1080,35 1270,51 1400,33"/><path class="aze__line" d="M0,34 C150,16 300,50 525,34 S890,16 1080,34 1270,50 1400,32"/></svg></div>
 
 <!-- 設備・アメニティ -->
 <section class="amen" id="amenities">
   <div class="amen__grid">
-    <h2 class="htitle reveal">設備・アメニティ<span class="en">Amenities</span></h2>
+    <h2 class="htitle reveal"><span class="en">Amenities</span>設備・アメニティ</h2>
     <div class="amen__list">
       <div class="reveal"><span class="en">01</span>フルキッチン（調理器具・食器）</div>
-      <div class="reveal"><span class="en">02</span>ひのきのバス</div>
+      <div class="reveal"><span class="en">02</span>バスルーム</div>
       <div class="reveal"><span class="en">03</span>抹茶マシーン</div>
       <div class="reveal"><span class="en">04</span>Wi-Fi（無料）</div>
       <div class="reveal"><span class="en">05</span>洗濯機・乾燥機</div>
@@ -99,12 +101,12 @@
   </div>
 </section>
 
-<div class="aze-wrap"><div class="aze-fill"></div><svg class="aze" viewBox="0 0 1400 34" preserveAspectRatio="none"><path class="shadow" d="M0 20 C 160 9 300 27 520 18 S 940 9 1120 20 S 1320 25 1400 15"/><path d="M0 18 C 160 7 300 25 520 16 S 940 7 1120 18 S 1320 23 1400 13"/></svg></div>
+<div class="aze-wrap"><svg class="aze" viewBox="0 0 1400 60" preserveAspectRatio="none"><path class="aze__smoke" d="M0,42 C150,24 300,58 525,42 S890,24 1080,42 1270,58 1400,40"/><path class="aze__line aze__line--sh" d="M0,35 C150,17 300,51 525,35 S890,17 1080,35 1270,51 1400,33"/><path class="aze__line" d="M0,34 C150,16 300,50 525,34 S890,16 1080,34 1270,50 1400,32"/></svg></div>
 
 <!-- ご利用にあたって -->
 <section class="faq" id="notes">
   <div class="faq__grid">
-    <h2 class="htitle reveal" style="margin-bottom:clamp(24px,4vh,46px)">ご利用にあたって<span class="en">Notes</span></h2>
+    <h2 class="htitle reveal" style="margin-bottom:clamp(24px,4vh,46px)"><span class="en">Notes</span>ご利用にあたって</h2>
     <dl>
       <div class="faq__row reveal"><dt>チェックイン</dt><dd>IN 16:00 〜 ／ OUT 11:00</dd></div>
       <div class="faq__row reveal"><dt>定員</dt><dd>最大 8 名（快適に過ごす目安は 6 名）</dd></div>
@@ -115,7 +117,7 @@
   </div>
 </section>
 
-<div class="aze-wrap"><div class="aze-fill"></div><svg class="aze" viewBox="0 0 1400 34" preserveAspectRatio="none"><path class="shadow" d="M0 16 C 200 26 360 7 560 16 S 980 28 1180 14 S 1340 18 1400 20"/><path d="M0 14 C 200 24 360 5 560 14 S 980 26 1180 12 S 1340 16 1400 18"/></svg></div>
+<div class="aze-wrap"><svg class="aze" viewBox="0 0 1400 60" preserveAspectRatio="none"><path class="aze__smoke" d="M0,42 C150,24 300,58 525,42 S890,24 1080,42 1270,58 1400,40"/><path class="aze__line aze__line--sh" d="M0,35 C150,17 300,51 525,35 S890,17 1080,35 1270,51 1400,33"/><path class="aze__line" d="M0,34 C150,16 300,50 525,34 S890,16 1080,34 1270,50 1400,32"/></svg></div>
 
 <!-- RESERVE -->
 <section class="reserve pad">

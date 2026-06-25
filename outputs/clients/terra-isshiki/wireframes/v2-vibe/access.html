@@ -10,9 +10,11 @@
 
 <input id="navt" class="nav__t" type="checkbox" aria-hidden="true">
 <nav class="nav">
-  <a class="nav__logo" href="index.html">TERRA HAYAMA</a>
-  <div class="nav__menu"><a href="rooms.html">Rooms</a><a href="stay.html">Stay</a><a href="access.html">Access</a><a href="owner.html">Owner</a></div>
-  <label class="nav__burger" for="navt" aria-label="メニューを開閉"><span></span><span></span><span></span></label>
+  <a class="nav__logo" href="index.html" aria-label="TERRA HAYAMA"><img class="nav__logo-img" src="assets/img/logo-white.png" alt="TERRA HAYAMA"></a>
+  <div class="nav__right">
+    <button class="nav__lang" type="button" aria-label="Language / 言語切替">JP <span>/</span> EN</button>
+    <label class="nav__burger" for="navt" aria-label="メニューを開閉"><span></span><span></span><span></span></label>
+  </div>
 </nav>
 <aside class="nav__panel" aria-label="メニュー">
   <a href="index.html">Home<span class="en">トップ</span></a>
@@ -40,7 +42,7 @@
   <div class="access__grid">
     <iframe class="access__map reveal" title="周辺地図" loading="lazy" src="https://maps.google.com/maps?q=%E7%A5%9E%E5%A5%88%E5%B7%9D%E7%9C%8C%E4%B8%89%E6%B5%A6%E9%83%A1%E8%91%89%E5%B1%B1%E7%94%BA%E4%B8%80%E8%89%B2&z=15&output=embed"></iframe>
     <div>
-      <h2 class="htitle reveal">場所のこと<span class="en">Location</span></h2>
+      <h2 class="htitle reveal"><span class="en">Location</span>場所のこと</h2>
       <p class="info__lead reveal">海まで、徒歩8分。<br>静かな住宅地に。</p>
       <dl class="access__kv reveal">
         <div class="row"><dt>住所</dt><dd>〒240-0111<br>神奈川県三浦郡葉山町一色 1759-1-5</dd></div>
@@ -52,12 +54,12 @@
   </div>
 </section>
 
-<div class="aze-wrap"><div class="aze-fill"></div><svg class="aze" viewBox="0 0 1400 34" preserveAspectRatio="none"><path class="shadow" d="M0 20 C 160 9 300 27 520 18 S 940 9 1120 20 S 1320 25 1400 15"/><path d="M0 18 C 160 7 300 25 520 16 S 940 7 1120 18 S 1320 23 1400 13"/></svg></div>
+<div class="aze-wrap"><svg class="aze" viewBox="0 0 1400 60" preserveAspectRatio="none"><path class="aze__smoke" d="M0,42 C150,24 300,58 525,42 S890,24 1080,42 1270,58 1400,40"/><path class="aze__line aze__line--sh" d="M0,35 C150,17 300,51 525,35 S890,17 1080,35 1270,51 1400,33"/><path class="aze__line" d="M0,34 C150,16 300,50 525,34 S890,16 1080,34 1270,50 1400,32"/></svg></div>
 
 <!-- 周辺・POI -->
 <section class="faq" id="around">
   <div class="faq__grid">
-    <h2 class="htitle reveal" style="margin-bottom:clamp(28px,4vh,48px)">まわりのこと<span class="en">Around</span></h2>
+    <h2 class="htitle reveal" style="margin-bottom:clamp(28px,4vh,48px)"><span class="en">Around</span>まわりのこと</h2>
 
     <p class="tag reveal" style="margin-bottom:6px">海・自然</p>
     <dl>
@@ -82,12 +84,12 @@
   </div>
 </section>
 
-<div class="aze-wrap"><div class="aze-fill"></div><svg class="aze" viewBox="0 0 1400 34" preserveAspectRatio="none"><path class="shadow" d="M0 16 C 200 26 360 7 560 16 S 980 28 1180 14 S 1340 18 1400 20"/><path d="M0 14 C 200 24 360 5 560 14 S 980 26 1180 12 S 1340 16 1400 18"/></svg></div>
+<div class="aze-wrap"><svg class="aze" viewBox="0 0 1400 60" preserveAspectRatio="none"><path class="aze__smoke" d="M0,42 C150,24 300,58 525,42 S890,24 1080,42 1270,58 1400,40"/><path class="aze__line aze__line--sh" d="M0,35 C150,17 300,51 525,35 S890,17 1080,35 1270,51 1400,33"/><path class="aze__line" d="M0,34 C150,16 300,50 525,34 S890,16 1080,34 1270,50 1400,32"/></svg></div>
 
 <!-- アクセス手段 -->
 <section class="faq" id="how">
   <div class="faq__grid">
-    <h2 class="htitle reveal" style="margin-bottom:clamp(28px,4vh,48px)">行き方<span class="en">Getting here</span></h2>
+    <h2 class="htitle reveal" style="margin-bottom:clamp(28px,4vh,48px)"><span class="en">Getting here</span>行き方</h2>
     <dl>
       <div class="faq__row reveal"><dt>電車＋バス</dt><dd>JR 逗子駅／京急 逗子・葉山駅 よりバス約15分、「旧役場前」下車 徒歩 1 分</dd></div>
       <div class="faq__row reveal"><dt>お車</dt><dd>横浜横須賀道路 逗子IC より約 20 分／駐車場 2 台（無料）</dd></div>
@@ -98,7 +100,7 @@
   </div>
 </section>
 
-<div class="aze-wrap"><div class="aze-fill"></div><svg class="aze" viewBox="0 0 1400 34" preserveAspectRatio="none"><path class="shadow" d="M0 18 C 220 9 380 25 600 16 S 980 9 1180 20 S 1340 24 1400 14"/><path d="M0 16 C 220 7 380 23 600 14 S 980 7 1180 18 S 1340 22 1400 12"/></svg></div>
+<div class="aze-wrap"><svg class="aze" viewBox="0 0 1400 60" preserveAspectRatio="none"><path class="aze__smoke" d="M0,42 C150,24 300,58 525,42 S890,24 1080,42 1270,58 1400,40"/><path class="aze__line aze__line--sh" d="M0,35 C150,17 300,51 525,35 S890,17 1080,35 1270,51 1400,33"/><path class="aze__line" d="M0,34 C150,16 300,50 525,34 S890,16 1080,34 1270,50 1400,32"/></svg></div>
 
 <!-- 空室・予約 -->
 <section class="reserve pad">

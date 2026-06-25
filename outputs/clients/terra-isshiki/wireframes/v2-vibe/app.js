@@ -10,13 +10,23 @@
     addEventListener('keydown',e=>{ if(e.key==='Escape') navt.checked=false; });
   }
 
-  /* Intro が視界にある間だけ上部ヴェイルを出す（暗い没入区間限定） */
-  const introEl = document.querySelector('.intro');
-  if (introEl) {
-    new IntersectionObserver((es)=>{
-      document.body.classList.toggle('at-intro', es[0].isIntersecting);
-    }, {threshold:0}).observe(introEl);
-  }
+  /* ROOMS 画像クリック → フル表示モーダル（reduced-motion でも動作） */
+  (function(){
+    const lb = document.getElementById('lightbox');
+    if (!lb) return;
+    const lbImg = lb.querySelector('.lightbox__img');
+    const lbCap = lb.querySelector('.lightbox__cap');
+    const open = (src, cap) => { lbImg.src = src; lbImg.alt = cap||''; lbCap.textContent = cap||''; lb.classList.add('is-open'); lb.setAttribute('aria-hidden','false'); };
+    const close = () => { lb.classList.remove('is-open'); lb.setAttribute('aria-hidden','true'); lbImg.removeAttribute('src'); };
+    $$('.tour__card img').forEach(img=>{
+      img.addEventListener('click', ()=>{
+        const cap = (img.closest('.tour__card')?.querySelector('figcaption')?.childNodes[0]?.textContent || img.alt || '').trim();
+        open(img.currentSrc || img.src, cap);
+      });
+    });
+    lb.addEventListener('click', close);
+    addEventListener('keydown', e=>{ if(e.key==='Escape') close(); });
+  })();
 
   /* reveal / 畔 */
   const io = new IntersectionObserver((es)=>es.forEach(e=>{
@@ -24,15 +34,33 @@
   }), {threshold:0.16, rootMargin:'0px 0px -8% 0px'});
   $$('.reveal, .aze-wrap').forEach(el=>io.observe(el));
 
-  /* k. オープニング: 写真 → ロゴ → （幕が晴れて）ヒーローコピー（shuku式の溜め） */
+  /* k. opening 幕: 白幕の上に黒ロゴだけ浮上（ナビ非表示）→ 幕がじんわり晴れると同時にロゴが黒→白へ溶け、ナビが現れる（ロゴは終始ひとつ・固定位置＝ズレなし） */
   if (!reduce && window.gsap) {
-    gsap.set('.opening__logo',{autoAlpha:0,scale:.92});
+    gsap.set('.intro__logo',{autoAlpha:0});
     gsap.timeline()
-      .to('.opening__logo',{autoAlpha:1,scale:1,duration:1.2,ease:'power2.out'},.35)    /* 写真の上にロゴ浮上 */
-      .to('.opening__logo',{autoAlpha:0,scale:1.04,duration:.7,ease:'power2.in'},'+=.9') /* ロゴ退場 */
-      .to('.opening',{autoAlpha:0,duration:1.0,ease:'power2.inOut'},'-=.35')             /* 幕が晴れてFVへ */
-      .set('.opening',{display:'none'});
-  } else { const op=document.querySelector('.opening'); if(op) op.style.display='none'; }
+      .to('.intro__logo',{autoAlpha:1,duration:1.6,ease:'power2.out'},.6)   /* 白幕の上に黒ロゴだけがじんわり浮上（ナビは非表示） */
+      .addLabel('open','+=.9')
+      .to('.intro__curtain',{autoAlpha:0,duration:2.4,ease:'sine.inOut'},'open') /* 白幕がじんわり晴れる（溶暗のみ・せり上がりなし） */
+      .to('.intro__logo',{filter:'invert(1)',duration:2.4,ease:'sine.inOut'},'open')         /* 同時にロゴが黒→白へ溶ける（光なし） */
+      .set('.intro__curtain',{display:'none'});
+  } else { const c=document.querySelector('.intro__curtain'); if(c) c.style.display='none'; }
+
+  /* ナビ・ドックは FV の間は完全に隠し（openingとFV最初はロゴだけ）、FV を抜けてから現れる（FVページ=.intro を持つ場合のみ。下層ページは常時表示） */
+  (function(){
+    if(!document.querySelector('.intro')) return;            /* 下層ページは has-fv を付けず常時表示 */
+    document.body.classList.add('has-fv');
+    const thr=()=>innerHeight*0.85;                          /* FV(ヒーロー約1画面)を過ぎたら出す */
+    const upd=()=>document.body.classList.toggle('fv-passed', scrollY>thr());
+    addEventListener('scroll',upd,{passive:true});
+    addEventListener('resize',upd); upd();
+  })();
+  /* FV背景スライドショー（複数写真を時間でクロスフェード。reduced時は1枚目固定） */
+  (function(){
+    const slides=$$('.intro__slide');
+    if(reduce || slides.length<2) return;
+    let i=0;
+    setInterval(()=>{ slides[i].classList.remove('is-on'); i=(i+1)%slides.length; slides[i].classList.add('is-on'); }, 5000);
+  })();
 
   if (reduce || !window.gsap) return;
   gsap.registerPlugin(ScrollTrigger);
@@ -42,8 +70,6 @@
   /* ピン留めはCSS sticky。外観を少しホールド→前景フェード→外観→内観クロスフェード→暗転。本文はその上を自然スクロールで上がってくる */
   gsap.to('.intro__hero',{autoAlpha:0,yPercent:-8,ease:'none',
     scrollTrigger:{trigger:'.intro',start:'top top',end:'+=70%',scrub:true}});
-  gsap.to('.intro__bg2',{autoAlpha:1,ease:'none',
-    scrollTrigger:{trigger:'.intro',start:'8% top',end:'+=70%',scrub:true}});
   gsap.to('.intro__dark',{opacity:.55,ease:'none',
     scrollTrigger:{trigger:'.intro',start:'top top',end:'+=88%',scrub:true}});
   gsap.to('.intro__scroll',{autoAlpha:0,ease:'none',
@@ -62,6 +88,16 @@
   emerge(document.querySelector('.sleep__ph img'), '.sleep__ph', 'top 84%');
   $$('.xp__ph img').forEach(img=>emerge(img, img.closest('.xp__ph'), 'top 84%'));
 
+  /* TOP の ROOMS横スクロール / STAY / OWNER の写真も「滲み出る」で統一（transform競合回避でフィルタのみ） */
+  const emergeF = (el, trig, start) => { if(!el) return;
+    gsap.set(el,{filter:'blur(22px) brightness(.55)'});
+    gsap.to(el,{filter:'blur(0px) brightness(1)',ease:'power2.out',duration:1.8,
+      scrollTrigger:{trigger:trig||el,start:start||'top 80%'}}); };
+  $$('.tour__card img').forEach(img=>emergeF(img, '.tour', 'top 72%'));
+  $$('.stay .exp img').forEach(img=>emergeF(img, img.closest('.exp'), 'top 84%'));
+  emergeF(document.querySelector('.owner__ph img'), '.owner__ph', 'top 80%');
+  emergeF(document.querySelector('.access__map'), '.access', 'top 80%');
+
   /* ROOMS：横スクロールで巡る（pin） */
   document.body.classList.add('pinmode');
   $$('.tour').forEach(sec=>{
@@ -76,6 +112,14 @@
     const sp=parseFloat(el.dataset.para)||0.05;
     gsap.fromTo(el.querySelector('.fr'),{yPercent:sp*60},{yPercent:-sp*60,ease:'none',
       scrollTrigger:{trigger:el,start:'top bottom',end:'bottom top',scrub:true}});
+  });
+
+  /* 画像内パン視差：画像を1.16倍に拡大して必ず縦の余白を作り、枠(overflow:hidden)内で translateY パン。
+     画像のアスペクトに依らず全画像で均一に動く（object-position方式は縦はみ出しが無い横長画像で効かなかった） */
+  $$('[data-paraimg]').forEach(img=>{
+    const frame=img.closest('.fr, .info__photo')||img;
+    gsap.fromTo(img,{yPercent:-8,scale:1.16},{yPercent:8,scale:1.16,ease:'none',
+      scrollTrigger:{trigger:frame,start:'top bottom',end:'bottom top',scrub:true}});
   });
 
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(()=>ScrollTrigger.refresh());
