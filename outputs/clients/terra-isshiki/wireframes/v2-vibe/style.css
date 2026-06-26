@@ -8,7 +8,7 @@
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
-body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--mincho);line-height:2.0;letter-spacing:.04em;font-size:clamp(15px,1.05vw,17px);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--mincho);line-height:2.0;letter-spacing:.04em;font-size:clamp(14px,0.95vw,15.5px);overflow-x:hidden;-webkit-font-smoothing:antialiased}
 img{display:block;max-width:100%}
 a{color:inherit;text-decoration:none}
 body::after{content:"";position:fixed;inset:0;z-index:80;pointer-events:none;opacity:.045;mix-blend-mode:multiply;
@@ -17,9 +17,9 @@ body::after{content:"";position:fixed;inset:0;z-index:80;pointer-events:none;opa
 .reveal{opacity:0;transform:translateY(26px);filter:blur(6px);transition:opacity 1.1s var(--ease),transform 1.1s var(--ease),filter 1.1s var(--ease)}
 .reveal.in{opacity:1;transform:none;filter:none}
 .tag{font-family:var(--eb);font-style:italic;letter-spacing:.2em;color:var(--tsuchi);font-size:13px;margin:0 0 20px}
-.htitle{font-family:var(--serif);font-weight:500;font-size:clamp(20px,2.6vw,32px);line-height:1.24;margin:0}
+.htitle{font-family:var(--serif);font-weight:500;font-size:clamp(18px,1.8vw,24px);line-height:1.3;margin:0}
 .htitle .en{display:block;font-family:var(--eb);font-style:italic;letter-spacing:.2em;color:var(--tsuchi);font-size:13px;line-height:1;margin:0 0 .6em}
-.pad{padding:clamp(90px,16vh,200px) clamp(20px,5vw,90px)}
+.pad{padding:clamp(116px,19vh,236px) clamp(24px,5.5vw,100px)}
 .wrap{max-width:1360px;margin:0 auto}
 .lnk{position:relative;display:inline-flex;align-items:center;gap:8px;font-family:var(--eb);font-style:italic;letter-spacing:.1em;color:var(--tsuchi);padding-bottom:5px;margin-top:22px}
 .lnk::after{content:"";position:absolute;left:0;bottom:0;width:100%;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .45s var(--easo)}
@@ -55,11 +55,11 @@ body.has-fv.fv-passed .nav,body.has-fv.fv-passed .dock{opacity:1;visibility:visi
   transition:opacity .5s var(--easo),transform .55s var(--easo),visibility .55s}
 .nav__t:checked ~ .nav__panel{opacity:1;visibility:visible;transform:none}
 .nav__panel a{display:flex;align-items:baseline;gap:.7em;padding:16px 0;border-bottom:1px solid rgba(26,20,16,.08);
-  font-family:var(--serif);font-weight:500;font-size:clamp(26px,4.4vw,40px);color:var(--ink)}
+  font-family:var(--serif);font-weight:500;font-size:clamp(22px,3.2vw,30px);color:var(--ink)}
 .nav__panel a .en{font-size:.4em}
 
 /* INTRO（Ken Burnsホールド→外観→内観クロスフェード→ピン内観の上を本文が画面外から上がる） */
-.intro{height:350svh;position:relative;background:var(--ink)}
+.intro{height:325svh;position:relative;background:var(--ink)}
 .intro__sticky{position:sticky;top:0;height:100svh;overflow:hidden;z-index:1}
 @keyframes kenburns{from{transform:scale(1.0)}to{transform:scale(1.12)}}
 .intro__scrim{position:absolute;inset:0;background:radial-gradient(120% 90% at 50% 55%,rgba(26,20,16,.18),rgba(26,20,16,.5) 100%),linear-gradient(180deg,rgba(26,20,16,.32),rgba(26,20,16,.2) 40%,rgba(26,20,16,.5))}
@@ -82,10 +82,14 @@ body.has-fv.fv-passed .nav,body.has-fv.fv-passed .dock{opacity:1;visibility:visi
 .intro__concept{max-width:760px;margin-inline:auto;text-align:center}
 .intro__concept .intro__tag{font-family:var(--eb);font-style:italic;letter-spacing:.22em;color:var(--suna);margin:0 0 18px}
 .intro__ch{font-family:var(--serif);font-weight:500;font-size:clamp(18px,2.4vw,30px);line-height:1.4;letter-spacing:.04em;margin:0 0 clamp(28px,4vh,52px);text-shadow:0 2px 22px rgba(0,0,0,.55)}
-.intro__concept p{font-family:var(--mincho);font-size:clamp(14px,1.3vw,18px);line-height:2.2;letter-spacing:.06em;margin:0 0 clamp(26px,4vh,44px);text-shadow:0 2px 20px rgba(0,0,0,.6)}
+.intro__concept p{font-family:var(--mincho);font-size:clamp(13.5px,1.05vw,15.5px);line-height:2.25;letter-spacing:.06em;margin:0 0 clamp(26px,4vh,44px);text-shadow:0 2px 20px rgba(0,0,0,.6)}
 
 /* g. 畔＝波打ち際×田んぼの畔（波線＋波形フィルが下から滲む。線もフィルも うねうね） */
 .aze-wrap{position:relative;width:100%;height:clamp(38px,4.6vw,60px);overflow:hidden}
+/* セクション区切り：中央の細い一本罫（editorial hairline・kikka「—」の発展。中央から左右へ静かに引かれる） */
+.rule{position:relative;width:100%;height:clamp(100px,15vh,188px);display:grid;place-items:center}
+.rule::after{content:"";width:clamp(60px,8.5vw,116px);height:1px;background:var(--tsuchi);opacity:.42;transform:scaleX(0);transform-origin:center;transition:transform 1.3s var(--easo)}
+.rule.in::after{transform:scaleX(1)}
 .aze{display:block;width:100%;height:100%}
 .aze__smoke{fill:none;stroke:rgba(107,116,132,.32);stroke-width:9;stroke-linecap:round;vector-effect:non-scaling-stroke;stroke-dasharray:2600;stroke-dashoffset:2600;transition:stroke-dashoffset 3.4s var(--easo) .12s}
 .aze-wrap.in .aze__smoke{stroke-dashoffset:0}
@@ -94,19 +98,20 @@ body.has-fv.fv-passed .nav,body.has-fv.fv-passed .dock{opacity:1;visibility:visi
 .aze-wrap.in .aze__line{stroke-dashoffset:0}
 
 /* INFORMATION（滲み出る写真＋数字浮遊） */
-.info{min-height:92vh;padding-block:clamp(70px,11vh,150px);position:relative}
+.info{min-height:92vh;padding-block:clamp(96px,14vh,196px);position:relative}
 .info__photo{position:absolute;top:18vh;right:0;width:min(56vw,760px);height:62vh;border-radius:var(--r) 0 0 var(--r);box-shadow:0 50px 100px -60px rgba(26,20,16,.55);overflow:hidden;will-change:transform,filter}
 .info__photo img{width:100%;height:100%;object-fit:cover;display:block}
+.info__intro{position:relative;z-index:2;max-width:46vw}
 .info__facts{position:relative;z-index:2;max-width:46vw}
-.info__lead{font-family:var(--serif);font-weight:400;font-size:clamp(16px,1.6vw,20px);max-width:30ch;margin:18px 0 clamp(40px,7vh,84px)}
+.info__lead{font-family:var(--serif);font-weight:400;font-size:clamp(15px,1.3vw,17.5px);max-width:32ch;margin:18px 0 clamp(40px,7vh,84px)}
 .fact{margin:0 0 clamp(28px,5vh,56px)}
-.fact .n{font-family:var(--serif);font-weight:500;font-size:clamp(19px,2.4vw,30px);line-height:1.1;display:block}
+.fact .n{font-family:var(--serif);font-weight:500;font-size:clamp(17px,1.8vw,23px);line-height:1.15;display:block}
 .fact .l{font-family:var(--eb);font-style:italic;letter-spacing:.16em;color:var(--tsuchi);font-size:13px}
 .fact .d{color:var(--ink70);font-size:14px;margin-top:6px}
 
 /* ROOMS（横スクロール巡り＋ホバーズーム） */
 .tour{position:relative}
-.tour__head{padding:clamp(60px,10vh,120px) clamp(20px,5vw,90px) 0}
+.tour__head{padding:clamp(84px,13vh,160px) clamp(24px,5.5vw,100px) 0}
 .tour__head p{color:var(--ink70);margin:10px 0 0}
 .tour__view{height:74vh;display:flex;align-items:center;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin-top:clamp(24px,4vh,50px)}
 .tour__view::-webkit-scrollbar{display:none}
@@ -130,9 +135,9 @@ body.pinmode .tour__hint{display:none}
 
 /* STAY（セクション名 固定＋写真が縦に流れる） */
 .stay{position:relative}
-.stay__grid{display:grid;grid-template-columns:1fr;gap:clamp(40px,7vw,80px);max-width:1360px;margin:0 auto;padding:clamp(70px,12vh,150px) clamp(20px,5vw,90px)}
+.stay__grid{display:grid;grid-template-columns:1fr;gap:clamp(40px,7vw,80px);max-width:1360px;margin:0 auto;padding:clamp(96px,16vh,200px) clamp(24px,5.5vw,100px)}
 .stay__title{align-self:start}
-.stay__title h2{font-family:var(--serif);font-weight:500;font-size:clamp(21px,3vw,38px);margin:0}
+.stay__title h2{font-family:var(--serif);font-weight:500;font-size:clamp(19px,2vw,26px);margin:0}
 .stay__title .en{display:block;font-size:.34em;margin-top:.6em}
 .stay__title p{color:var(--ink70);margin:18px 0 0;max-width:26ch}
 .stay__feed{display:flex;flex-direction:column;gap:clamp(60px,12vh,150px)}
@@ -140,7 +145,7 @@ body.pinmode .tour__hint{display:none}
 .exp .fr{overflow:hidden;border-radius:var(--r);box-shadow:0 44px 90px -55px rgba(26,20,16,.5);will-change:transform}
 .exp img{width:100%;aspect-ratio:3/2;object-fit:cover}
 .exp__no{font-family:var(--eb);font-style:italic;color:var(--tsuchi);letter-spacing:.1em;margin:18px 0 4px}
-.exp h3{font-family:var(--serif);font-weight:500;font-size:clamp(19px,2.2vw,26px);margin:0 0 10px}
+.exp h3{font-family:var(--serif);font-weight:500;font-size:clamp(17px,1.8vw,22px);margin:0 0 10px}
 .exp p{color:var(--ink70);margin:0;max-width:40ch}
 .exp .wait{display:inline-block;margin-top:10px;padding:3px 11px;border:1px solid rgba(139,90,60,.34);border-radius:999px;
   color:var(--tsuchi);font-family:var(--eb);font-style:italic;font-size:11px;letter-spacing:.06em;opacity:.85}
@@ -151,7 +156,7 @@ body.pinmode .tour__hint{display:none}
 
 /* ACCESS */
 .access{position:relative}
-.access__grid{max-width:1360px;margin:0 auto;padding:clamp(70px,12vh,150px) clamp(20px,5vw,90px);display:grid;grid-template-columns:1fr;gap:clamp(34px,5vw,64px)}
+.access__grid{max-width:1360px;margin:0 auto;padding:clamp(96px,16vh,200px) clamp(24px,5.5vw,100px);display:grid;grid-template-columns:1fr;gap:clamp(34px,5vw,64px)}
 .access__map{width:100%;height:clamp(280px,42vh,460px);border:0;border-radius:var(--r);filter:grayscale(.3) contrast(.95)}
 .access__kv{display:flex;flex-direction:column;gap:2px}
 .access__kv .row{display:grid;grid-template-columns:7em 1fr;gap:14px;padding:14px 0;border-bottom:1px solid rgba(26,20,16,.1)}
@@ -161,16 +166,16 @@ body.pinmode .tour__hint{display:none}
 
 /* OWNER */
 .owner{position:relative}
-.owner__grid{max-width:1360px;margin:0 auto;padding:clamp(70px,12vh,150px) clamp(20px,5vw,90px);display:grid;grid-template-columns:1fr;gap:clamp(34px,5vw,70px);align-items:center}
+.owner__grid{max-width:1360px;margin:0 auto;padding:clamp(96px,16vh,200px) clamp(24px,5.5vw,100px);display:grid;grid-template-columns:1fr;gap:clamp(34px,5vw,70px);align-items:center}
 .owner__ph .fr{overflow:hidden;border-radius:var(--r);box-shadow:0 44px 90px -55px rgba(26,20,16,.5)}
 .owner__ph img{width:100%;aspect-ratio:5/6;object-fit:cover}
 .owner__tx p{margin:0 0 1.1em;color:var(--ink70)}
-.owner__tx .big{font-family:var(--serif);font-weight:400;color:var(--ink);font-size:clamp(18px,2vw,24px)}
+.owner__tx .big{font-family:var(--serif);font-weight:400;color:var(--ink);font-size:clamp(16px,1.6vw,20px)}
 @media(min-width:781px){.owner__grid{grid-template-columns:.85fr 1.15fr}}
 
 /* ご利用案内 / FAQ */
 .faq{position:relative}
-.faq__grid{max-width:1100px;margin:0 auto;padding:clamp(70px,12vh,150px) clamp(20px,5vw,90px)}
+.faq__grid{max-width:1100px;margin:0 auto;padding:clamp(96px,16vh,200px) clamp(24px,5.5vw,100px)}
 .faq__row{display:grid;grid-template-columns:12em 1fr;gap:18px;padding:20px 0;border-bottom:1px solid rgba(26,20,16,.1)}
 .faq__row dt{font-family:var(--serif);font-weight:400;font-size:14px;letter-spacing:.06em}
 .faq__row dd{margin:0;color:var(--ink70)}
@@ -178,7 +183,7 @@ body.pinmode .tour__hint{display:none}
 
 /* RESERVE */
 .reserve{min-height:72vh;display:grid;place-content:center;text-align:center;gap:8px}
-.reserve__t{font-family:var(--serif);font-weight:500;font-size:clamp(26px,4.4vw,48px);margin:0}
+.reserve__t{font-family:var(--serif);font-weight:500;font-size:clamp(22px,2.8vw,31px);margin:0}
 .reserve__c{color:var(--ink70);margin:6px 0 26px}
 .btn{display:inline-block;border:1px solid var(--tsuchi);color:var(--tsuchi);border-radius:999px;padding:15px 36px;font-family:var(--serif);letter-spacing:.1em;font-size:15px;transition:background .35s var(--ease),color .35s var(--ease)}
 .btn:hover{background:var(--tsuchi);color:var(--paper)}
@@ -187,9 +192,10 @@ body.pinmode .tour__hint{display:none}
 @media(max-width:780px){.dock{display:block}.foot{padding-bottom:80px}}
 
 @media(max-width:780px){
-  .info{min-height:auto}
-  .info__photo{position:static;width:100%;height:52vh;border-radius:var(--r);margin-top:36px;filter:none!important}
-  .info__facts{max-width:none}
+  .info{min-height:auto;display:flex;flex-direction:column}
+  .info__intro{order:1;max-width:none}
+  .info__photo{order:2;position:static;width:100%;height:52vh;border-radius:var(--r);margin-block:clamp(28px,6vw,40px);filter:none!important}
+  .info__facts{order:3;max-width:none}
 }
 /* ===== サブページ共通（ROOMS/STAY/ACCESS/OWNER） ===== */
 /* ページヒーロー（Ken Burns＋スクリム） */
@@ -198,12 +204,12 @@ body.pinmode .tour__hint{display:none}
 .pghero__scrim{position:absolute;inset:0;background:radial-gradient(120% 90% at 50% 55%,rgba(26,20,16,.16),rgba(26,20,16,.5)),linear-gradient(180deg,rgba(26,20,16,.34),rgba(26,20,16,.18) 42%,rgba(26,20,16,.52))}
 .pghero__in{position:relative;z-index:2;text-align:center;color:var(--paper);padding:0 6vw}
 .pghero__tag{font-family:var(--eb);font-style:italic;letter-spacing:.24em;color:var(--suna);margin:0 0 14px}
-.pghero__k{font-family:var(--serif);font-weight:500;font-size:clamp(26px,4.4vw,48px);line-height:1.14;margin:0;text-shadow:0 3px 26px rgba(0,0,0,.34)}
+.pghero__k{font-family:var(--serif);font-weight:500;font-size:clamp(22px,2.8vw,31px);line-height:1.14;margin:0;text-shadow:0 3px 26px rgba(0,0,0,.34)}
 .pghero__s{font-family:var(--eb);font-style:italic;letter-spacing:.18em;margin:14px 0 0;opacity:.92}
 .pgcrumb{position:absolute;left:0;right:0;bottom:24px;z-index:2;text-align:center;color:var(--paper);font-family:var(--eb);font-style:italic;font-size:12px;letter-spacing:.16em;opacity:.8}
 
 /* 空間ギャラリー（縦・キャプション付き・控えめ視差） */
-.gal{max-width:1360px;margin:0 auto;padding:clamp(70px,12vh,150px) clamp(20px,5vw,90px);display:flex;flex-direction:column;gap:clamp(56px,11vh,140px)}
+.gal{max-width:1360px;margin:0 auto;padding:clamp(96px,16vh,200px) clamp(24px,5.5vw,100px);display:flex;flex-direction:column;gap:clamp(56px,11vh,140px)}
 .gal__item{margin:0}
 .gal__item .fr{overflow:hidden;border-radius:var(--r);box-shadow:0 44px 90px -55px rgba(26,20,16,.5);will-change:transform}
 .gal__item img{width:100%;aspect-ratio:16/10;object-fit:cover}
@@ -251,7 +257,7 @@ body.pinmode .tour__hint{display:none}
 .ph-soon__mk{font-family:var(--eb);font-style:italic;letter-spacing:.22em;font-size:12px;color:var(--tsuchi);opacity:.85}
 .ph-soon__lb{font-family:var(--mincho);font-size:clamp(13px,1.3vw,15px);line-height:1.7;color:var(--ink70)}
 .xp__no{font-family:var(--eb);font-style:italic;color:var(--tsuchi);letter-spacing:.12em;margin:0 0 8px}
-.xp__t{font-family:var(--serif);font-weight:500;font-size:clamp(18px,2.4vw,30px);line-height:1.3;margin:0 0 16px}
+.xp__t{font-family:var(--serif);font-weight:500;font-size:clamp(17px,1.9vw,23px);line-height:1.34;margin:0 0 16px}
 .xp__tx p{color:var(--ink70);margin:0 0 1em;max-width:42ch}
 @media(min-width:781px){
   .xp__grid{grid-template-columns:1.05fr .95fr}
@@ -266,7 +272,7 @@ body.pinmode .tour__hint{display:none}
 .work__card img{width:100%;aspect-ratio:3/2;object-fit:cover}
 .work__card .ph-soon{aspect-ratio:3/2}
 .work__no{font-family:var(--eb);font-style:italic;color:var(--tsuchi);letter-spacing:.12em;margin:16px 0 4px}
-.work__t{font-family:var(--serif);font-weight:500;font-size:clamp(18px,2vw,25px);margin:0 0 8px}
+.work__t{font-family:var(--serif);font-weight:500;font-size:clamp(16px,1.7vw,21px);margin:0 0 8px}
 .work__card p{color:var(--ink70);margin:0;font-size:14px;max-width:38ch}
 @media(min-width:781px){.work__grid{grid-template-columns:1fr 1fr}}
 
@@ -279,8 +285,17 @@ body.pinmode .tour__hint{display:none}
 @media(prefers-reduced-motion:reduce){
   .reveal{opacity:1!important;transform:none!important;filter:none!important}
   .aze__line{stroke-dashoffset:0!important}.aze__smoke{stroke-dashoffset:0!important}
+  .rule::after{transform:scaleX(1)!important;transition:none}
   .intro__slide{animation:none}.intro__dark{opacity:.4}.intro__curtain{display:none}
   .intro__logo,.intro__s{opacity:1!important;visibility:visible!important}
   .intro__logo{filter:invert(1)}
   .pghero__bg{animation:none}
 }
+
+/* 補足の英字ラベルを撤去（気取り除去・和文主体に） */
+.tag,.htitle .en,.fact .l,.pghero__tag{display:none}
+
+/* 残す補足英字（More about / 番号 等）のアクセント色を普通の墨色に統一（気取り除去） */
+.lnk,.exp__no,.xp__no,.work__no,.gal__cap .en,.amen__list .en{color:var(--ink70)}
+/* Concept は暗い写真の上なので、墨ではなく本文と同じ白に */
+.intro__concept .intro__tag{color:var(--paper)}

@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="ja"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TERRA HAYAMA — vibe (standalone)</title>
+<!--
+  TERRA HAYAMA v2-vibe 自己完結版（CSS / JS インライン、GSAP は CDN）。
+  デザイン仕様は同階層の DESIGN.md を参照。
+  画像は assets/img/*.webp（実素材・相対パス）。claude design 等に投入して
+  プレビューする場合は、各 <img src> を任意のプレースホルダ URL に差し替えてください。
+-->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%231A1410'/%3E%3Ctext x='16' y='23' font-family='serif' font-size='20' fill='%23F5F1EA' text-anchor='middle'%3ET%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@600;700;900&family=Zen+Old+Mincho:wght@400;500&family=EB+Garamond:ital@0;1&display=swap" rel="stylesheet">
+<style>
+/* TERRA — TOP full vibe wireframe。ライト基調・余白・写真主導・没入モーション */
+:root{
+  --paper:#F5F1EA; --ink:#1A1410; --tsuchi:#8B5A3C; --mist:#6B7484; --matsu:#2F4538; --suna:#D4C4A8;
+  --ink70:rgba(26,20,16,.72); --ink45:rgba(26,20,16,.46);
+  --ease:cubic-bezier(.4,.12,.08,1); --easo:cubic-bezier(.16,1,.3,1);
+  --serif:"A1 Mincho","Zen Old Mincho",游明朝,"Hiragino Mincho ProN",serif; --mincho:"A1 Mincho","Zen Old Mincho",游明朝,"Hiragino Mincho ProN",serif; --eb:"EB Garamond",serif; --r:5px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--mincho);line-height:2.0;letter-spacing:.04em;font-size:clamp(14px,0.95vw,15.5px);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+body::after{content:"";position:fixed;inset:0;z-index:80;pointer-events:none;opacity:.045;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.en{font-family:var(--eb);font-style:italic;letter-spacing:.14em;color:var(--tsuchi)}
+.reveal{opacity:0;transform:translateY(26px);filter:blur(6px);transition:opacity 1.1s var(--ease),transform 1.1s var(--ease),filter 1.1s var(--ease)}
+.reveal.in{opacity:1;transform:none;filter:none}
+.tag{font-family:var(--eb);font-style:italic;letter-spacing:.2em;color:var(--tsuchi);font-size:13px;margin:0 0 20px}
+.htitle{font-family:var(--serif);font-weight:500;font-size:clamp(18px,1.8vw,24px);line-height:1.3;margin:0}
+.htitle .en{display:block;font-family:var(--eb);font-style:italic;letter-spacing:.2em;color:var(--tsuchi);font-size:13px;line-height:1;margin:0 0 .6em}
+.pad{padding:clamp(116px,19vh,236px) clamp(24px,5.5vw,100px)}
+.wrap{max-width:1360px;margin:0 auto}
+.lnk{position:relative;display:inline-flex;align-items:center;gap:8px;font-family:var(--eb);font-style:italic;letter-spacing:.1em;color:var(--tsuchi);padding-bottom:5px;margin-top:22px}
+.lnk::after{content:"";position:absolute;left:0;bottom:0;width:100%;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .45s var(--easo)}
+.lnk:hover::after{transform:scaleX(1)}
+
+/* FV 背景スライドショー */
+.intro__slides{position:absolute;inset:0;z-index:0}
+.intro__slide{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.8);opacity:0;transition:opacity 1.6s var(--ease);animation:kenburns 16s ease-out both}
+.intro__slide.is-on{opacity:1}
+
+/* nav */
+.nav{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;justify-content:space-between;align-items:center;padding:22px clamp(20px,4vw,56px);mix-blend-mode:difference;color:#fff}
+.nav__logo{display:flex;align-items:center}
+.nav__logo-img{display:block;height:clamp(52px,6.4vw,74px);width:auto}
+.nav__right{display:flex;align-items:center;gap:clamp(14px,2vw,26px)}
+.nav__lang{appearance:none;-webkit-appearance:none;background:none;border:0;cursor:pointer;color:inherit;font-family:var(--eb);font-style:italic;letter-spacing:.14em;font-size:13px;line-height:1;padding:6px 2px;opacity:.92}
+.nav__lang span{opacity:.5;margin:0 .15em}
+body.has-fv .nav,body.has-fv .dock{opacity:0;visibility:hidden;pointer-events:none;transition:opacity .7s var(--easo),visibility .7s}
+body.has-fv.fv-passed .nav,body.has-fv.fv-passed .dock{opacity:1;visibility:visible;pointer-events:auto}
+.nav__menu{display:none}
+.nav__t{position:absolute;width:0;height:0;opacity:0;pointer-events:none}
+.nav__burger{display:flex;flex-direction:column;justify-content:center;gap:6px;width:30px;height:30px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.nav__burger span{display:block;width:24px;height:1.5px;background:#fff;transition:transform .42s var(--easo),opacity .25s var(--ease)}
+.nav__t:checked ~ .nav .nav__burger span:nth-child(1){transform:translateY(7.5px) rotate(45deg)}
+.nav__t:checked ~ .nav .nav__burger span:nth-child(2){opacity:0}
+.nav__t:checked ~ .nav .nav__burger span:nth-child(3){transform:translateY(-7.5px) rotate(-45deg)}
+.nav__panel{display:flex;position:fixed;inset:0;z-index:58;flex-direction:column;justify-content:center;gap:6px;padding:0 clamp(40px,12vw,160px);
+  background:var(--paper);opacity:0;visibility:hidden;transform:translateY(-10px);
+  transition:opacity .5s var(--easo),transform .55s var(--easo),visibility .55s}
+.nav__t:checked ~ .nav__panel{opacity:1;visibility:visible;transform:none}
+.nav__panel a{display:flex;align-items:baseline;gap:.7em;padding:16px 0;border-bottom:1px solid rgba(26,20,16,.08);
+  font-family:var(--serif);font-weight:500;font-size:clamp(22px,3.2vw,30px);color:var(--ink)}
+.nav__panel a .en{font-size:.4em}
+
+/* INTRO（技法E: 固定写真の上を本文が通り、paper が被さる） */
+.intro{height:325svh;position:relative;background:var(--ink)}
+.intro__sticky{position:sticky;top:0;height:100svh;overflow:hidden;z-index:1}
+@keyframes kenburns{from{transform:scale(1.0)}to{transform:scale(1.12)}}
+.intro__scrim{position:absolute;inset:0;background:radial-gradient(120% 90% at 50% 55%,rgba(26,20,16,.18),rgba(26,20,16,.5) 100%),linear-gradient(180deg,rgba(26,20,16,.32),rgba(26,20,16,.2) 40%,rgba(26,20,16,.5))}
+.intro__dark{position:absolute;inset:0;background:#1A1410;opacity:0;pointer-events:none}
+.intro__curtain{position:absolute;inset:0;z-index:3;background:#fff;will-change:transform,opacity}
+.intro__hero{position:absolute;inset:0;z-index:4;display:grid;place-content:center;justify-items:center;text-align:center;color:var(--paper);padding:0 6vw;will-change:transform,opacity}
+.intro__k{font-family:var(--serif);font-weight:500;font-size:clamp(32px,6.4vw,80px);line-height:1.12;margin:0;text-shadow:0 3px 28px rgba(0,0,0,.32)}
+.intro__logo{width:clamp(180px,26vw,330px);height:auto;filter:invert(0)}
+.intro__s{font-family:var(--eb);font-style:italic;letter-spacing:.18em;margin:18px 0 0;opacity:.92;color:#2a2018;text-shadow:0 1px 14px rgba(255,255,255,.7)}
+.intro__scroll{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);color:var(--paper);font-family:var(--eb);font-style:italic;font-size:12px;letter-spacing:.2em;opacity:.85}
+/* 技法E: 固定写真を覆う被せレイヤー。境界は水平の直線（土色細線1本） */
+.fv-cover{position:relative;z-index:5;margin-top:-100svh}
+.fv-cover__pg{position:relative;background:var(--paper)}
+.fv-cut{display:block;width:100%;height:clamp(54px,7vw,96px);margin-bottom:-1px;pointer-events:none}
+.fv-cut .aze__line{stroke:var(--tsuchi);stroke-width:1.6;vector-effect:non-scaling-stroke;fill:none}
+.intro__read{position:relative;z-index:2;color:var(--paper);padding:26vh clamp(20px,6vw,90px) 26vh}
+.intro__concept{max-width:760px;margin-inline:auto;text-align:center}
+.intro__concept .intro__tag{font-family:var(--eb);font-style:italic;letter-spacing:.22em;color:var(--paper);margin:0 0 18px}
+.intro__concept p{font-family:var(--mincho);font-size:clamp(13.5px,1.05vw,15.5px);line-height:2.25;letter-spacing:.06em;margin:0 0 clamp(26px,4vh,44px);text-shadow:0 2px 20px rgba(0,0,0,.6)}
+
+/* セクション区切り：中央の細い一本罫（中央から左右へ静かに引かれる） */
+.rule{position:relative;width:100%;height:clamp(100px,15vh,188px);display:grid;place-items:center}
+.rule::after{content:"";width:clamp(60px,8.5vw,116px);height:1px;background:var(--tsuchi);opacity:.42;transform:scaleX(0);transform-origin:center;transition:transform 1.3s var(--easo)}
+.rule.in::after{transform:scaleX(1)}
+
+/* INFORMATION（The House） */
+.info{min-height:92vh;padding-block:clamp(96px,14vh,196px);position:relative}
+.info__photo{position:absolute;top:18vh;right:0;width:min(56vw,760px);height:62vh;border-radius:var(--r) 0 0 var(--r);box-shadow:0 50px 100px -60px rgba(26,20,16,.55);overflow:hidden;will-change:transform,filter}
+.info__photo img{width:100%;height:100%;object-fit:cover;display:block}
+.info__intro{position:relative;z-index:2;max-width:46vw}
+.info__facts{position:relative;z-index:2;max-width:46vw}
+.info__lead{font-family:var(--serif);font-weight:400;font-size:clamp(15px,1.3vw,17.5px);max-width:32ch;margin:18px 0 clamp(40px,7vh,84px)}
+.fact{margin:0 0 clamp(28px,5vh,56px)}
+.fact .n{font-family:var(--serif);font-weight:500;font-size:clamp(17px,1.8vw,23px);line-height:1.15;display:block}
+.fact .l{font-family:var(--eb);font-style:italic;letter-spacing:.16em;color:var(--tsuchi);font-size:13px}
+.fact .d{color:var(--ink70);font-size:14px;margin-top:6px}
+
+/* ROOMS（横スクロール巡り） */
+.tour{position:relative}
+.tour__head{padding:clamp(84px,13vh,160px) clamp(24px,5.5vw,100px) 0}
+.tour__head p{color:var(--ink70);margin:10px 0 0}
+.tour__view{height:74vh;display:flex;align-items:center;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin-top:clamp(24px,4vh,50px)}
+.tour__view::-webkit-scrollbar{display:none}
+.tour__track{display:flex;gap:clamp(18px,2.6vw,46px);padding-inline:clamp(20px,6vw,120px);will-change:transform}
+.tour__card{flex:0 0 auto;width:clamp(260px,36vw,500px);scroll-snap-align:center;margin:0}
+.tour__card .fr{overflow:hidden;border-radius:var(--r);box-shadow:0 44px 90px -55px rgba(26,20,16,.5)}
+.tour__card img{width:100%;aspect-ratio:4/5;object-fit:cover;transition:transform 1.1s var(--easo);cursor:zoom-in}
+.lightbox{position:fixed;inset:0;z-index:200;display:none;place-content:center;justify-items:center;gap:16px;background:rgba(26,20,16,.94);padding:clamp(18px,5vw,64px);cursor:zoom-out;opacity:0;transition:opacity .35s var(--ease)}
+.lightbox.is-open{display:grid;opacity:1}
+.lightbox__img{max-width:100%;max-height:86vh;object-fit:contain;border-radius:6px;box-shadow:0 40px 100px -30px rgba(0,0,0,.7)}
+.lightbox__cap{margin:0;color:var(--paper);font-family:var(--serif);font-weight:400;letter-spacing:.08em;font-size:14px;opacity:.85}
+.lightbox__close{position:absolute;top:clamp(12px,3vw,28px);right:clamp(12px,3vw,30px);width:46px;height:46px;border:0;background:none;color:var(--paper);font-size:32px;line-height:1;cursor:pointer;opacity:.85}
+.lightbox__close:hover{opacity:1}
+.tour__card:hover img{transform:scale(1.05)}
+.tour__card figcaption{font-family:var(--serif);font-weight:400;margin-top:14px;display:flex;gap:.7em;align-items:baseline}
+.tour__card figcaption .en{font-size:.8em}
+body.pinmode .tour__view{overflow:hidden;scroll-snap-type:none}
+.tour__hint{padding:6px clamp(20px,5vw,90px) clamp(50px,8vh,90px);font-family:var(--eb);font-style:italic;color:var(--ink45);letter-spacing:.1em}
+body.pinmode .tour__hint{display:none}
+
+/* STAY */
+.stay{position:relative}
+.stay__grid{display:grid;grid-template-columns:1fr;gap:clamp(40px,7vw,80px);max-width:1360px;margin:0 auto;padding:clamp(96px,16vh,200px) clamp(24px,5.5vw,100px)}
+.stay__title{align-self:start}
+.stay__title h2{font-family:var(--serif);font-weight:500;font-size:clamp(19px,2vw,26px);margin:0}
+.stay__title .en{display:block;font-size:.34em;margin-top:.6em}
+.stay__title p{color:var(--ink70);margin:18px 0 0;max-width:26ch}
+.stay__feed{display:flex;flex-direction:column;gap:clamp(60px,12vh,150px)}
+.exp{margin:0}
+.exp .fr{overflow:hidden;border-radius:var(--r);box-shadow:0 44px 90px -55px rgba(26,20,16,.5);will-change:transform}
+.exp img{width:100%;aspect-ratio:3/2;object-fit:cover}
+.exp__no{font-family:var(--eb);font-style:italic;color:var(--tsuchi);letter-spacing:.1em;margin:18px 0 4px}
+.exp h3{font-family:var(--serif);font-weight:500;font-size:clamp(17px,1.8vw,22px);margin:0 0 10px}
+.exp p{color:var(--ink70);margin:0;max-width:40ch}
+.exp .wait{display:inline-block;margin-top:10px;padding:3px 11px;border:1px solid rgba(139,90,60,.34);border-radius:999px;
+  color:var(--tsuchi);font-family:var(--eb);font-style:italic;font-size:11px;letter-spacing:.06em;opacity:.85}
+@media(min-width:781px){
+  .stay__grid{grid-template-columns:30% 1fr}
+  .stay__title{position:sticky;top:32vh;height:max-content}
+}
+
+/* ACCESS */
+.access{position:relative}
+.access__grid{max-width:1360px;margin:0 auto;padding:clamp(96px,16vh,200px) clamp(24px,5.5vw,100px);display:grid;grid-template-columns:1fr;gap:clamp(34px,5vw,64px)}
+.access__map{width:100%;height:clamp(280px,42vh,460px);border:0;border-radius:var(--r);filter:grayscale(.3) contrast(.95)}
+.access__kv{display:flex;flex-direction:column;gap:2px}
+.access__kv .row{display:grid;grid-template-columns:7em 1fr;gap:14px;padding:14px 0;border-bottom:1px solid rgba(26,20,16,.1)}
+.access__kv dt{font-family:var(--serif);font-weight:400;font-size:13px;color:var(--ink70)}
+.access__kv dd{margin:0}
+@media(min-width:781px){.access__grid{grid-template-columns:1.1fr .9fr;align-items:start}}
+
+/* OWNER */
+.owner{position:relative}
+.owner__grid{max-width:1360px;margin:0 auto;padding:clamp(96px,16vh,200px) clamp(24px,5.5vw,100px);display:grid;grid-template-columns:1fr;gap:clamp(34px,5vw,70px);align-items:center}
+.owner__ph .fr{overflow:hidden;border-radius:var(--r);box-shadow:0 44px 90px -55px rgba(26,20,16,.5)}
+.owner__ph img{width:100%;aspect-ratio:5/6;object-fit:cover}
+.owner__tx p{margin:0 0 1.1em;color:var(--ink70)}
+.owner__tx .big{font-family:var(--serif);font-weight:400;color:var(--ink);font-size:clamp(16px,1.6vw,20px)}
+@media(min-width:781px){.owner__grid{grid-template-columns:.85fr 1.15fr}}
+
+/* FAQ */
+.faq{position:relative}
+.faq__grid{max-width:1100px;margin:0 auto;padding:clamp(96px,16vh,200px) clamp(24px,5.5vw,100px)}
+.faq__row{display:grid;grid-template-columns:12em 1fr;gap:18px;padding:20px 0;border-bottom:1px solid rgba(26,20,16,.1)}
+.faq__row dt{font-family:var(--serif);font-weight:400;font-size:14px;letter-spacing:.06em}
+.faq__row dd{margin:0;color:var(--ink70)}
+@media(max-width:560px){.faq__row{grid-template-columns:1fr;gap:4px}}
+
+/* RESERVE */
+.reserve{min-height:72vh;display:grid;place-content:center;text-align:center;gap:8px}
+.reserve__t{font-family:var(--serif);font-weight:500;font-size:clamp(22px,2.8vw,31px);margin:0}
+.reserve__c{color:var(--ink70);margin:6px 0 26px}
+.btn{display:inline-block;border:1px solid var(--tsuchi);color:var(--tsuchi);border-radius:999px;padding:15px 36px;font-family:var(--serif);letter-spacing:.1em;font-size:15px;transition:background .35s var(--ease),color .35s var(--ease)}
+.btn:hover{background:var(--tsuchi);color:var(--paper)}
+.foot{padding:40px;text-align:center;color:var(--ink45);font-family:var(--eb);letter-spacing:.06em;font-size:13px}
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:55;display:none;text-align:center;background:var(--ink);color:var(--paper);font-family:var(--serif);letter-spacing:.12em;font-size:13px;padding:14px}
+@media(max-width:780px){.dock{display:block}.foot{padding-bottom:80px}}
+
+/* モバイル：The House は リード→写真→数値 の順 */
+@media(max-width:780px){
+  .info{min-height:auto;display:flex;flex-direction:column}
+  .info__intro{order:1;max-width:none}
+  .info__photo{order:2;position:static;width:100%;height:52vh;border-radius:var(--r);margin-block:clamp(28px,6vw,40px);filter:none!important}
+  .info__facts{order:3;max-width:none}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .reveal{opacity:1!important;transform:none!important;filter:none!important}
+  .rule::after{transform:scaleX(1)!important;transition:none}
+  .intro__slide{animation:none}.intro__dark{opacity:.4}.intro__curtain{display:none}
+  .intro__logo,.intro__s{opacity:1!important;visibility:visible!important}
+  .intro__logo{filter:invert(1)}
+}
+
+/* 補足の英字ラベルを撤去（気取り除去・和文主体に） */
+.tag,.htitle .en,.fact .l{display:none}
+/* 残す補足英字（More about / 番号 等）の色を墨に統一（暗背景の Concept は白） */
+.lnk,.exp__no{color:var(--ink70)}
+.intro__concept .intro__tag{color:var(--paper)}
+</style>
+</head><body>
+
+<input id="navt" class="nav__t" type="checkbox" aria-hidden="true">
+<nav class="nav">
+  <a class="nav__logo" href="#top" aria-label="TERRA HAYAMA"><img class="nav__logo-img" src="assets/img/logo-white.png" alt="TERRA HAYAMA"></a>
+  <div class="nav__right">
+    <button class="nav__lang" type="button" aria-label="Language / 言語切替">JP <span>/</span> EN</button>
+    <label class="nav__burger" for="navt" aria-label="メニューを開閉"><span></span><span></span><span></span></label>
+  </div>
+</nav>
+<aside class="nav__panel" aria-label="メニュー">
+  <a href="#rooms">Rooms<span class="en">部屋と空間</span></a>
+  <a href="#stay">Stay<span class="en">過ごし方</span></a>
+  <a href="#access">Access<span class="en">アクセス</span></a>
+  <a href="#owner">Owner<span class="en">私たちのこと</span></a>
+</aside>
+
+<!-- INTRO（FV → コンセプト → 技法E 被せ） -->
+<section class="intro" id="top">
+  <div class="intro__sticky">
+    <div class="intro__slides">
+      <img class="intro__slide is-on" src="assets/img/hero-exterior-01.webp" alt="葉山の佇まい（外観）">
+      <img class="intro__slide" src="assets/img/hero-01-living.webp" alt="木天井のリビング">
+      <img class="intro__slide" src="assets/img/hero-04-arch.webp" alt="赤土壁と漆喰アーチ">
+      <img class="intro__slide" src="assets/img/hero-03-dining.webp" alt="ダイニング">
+    </div>
+    <div class="intro__scrim"></div>
+    <div class="intro__dark"></div>
+    <div class="intro__curtain"></div>
+    <div class="intro__hero"><img class="intro__logo" src="assets/img/logo.png" alt="TERRA HAYAMA"></div>
+    <div class="intro__scroll">scroll</div>
+  </div>
+  <div class="intro__read">
+    <div class="intro__concept">
+      <p class="intro__tag">Concept</p>
+      <p>TERRAは、葉山への愛から生まれました。</p>
+      <p>海越しに望む富士山、<br>棚田が広がる里山。</p>
+      <p>この土地に暮らして十年、<br>私たちは今もなお、<br>この町の風景に魅了され続けています。</p>
+      <p>風景とはきっと、<br>人の営みと自然がゆっくりと重なり合い、<br>時間をかけて育まれてきたもの。</p>
+      <p>ここでは、訪れる人と葉山との距離が、<br>ゆっくりとほどけていきます。</p>
+      <p>海と山が織りなす自然のリズム、<br>ここに息づく人々の物語。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 技法E: paper の被せレイヤーが固定写真を覆う（境界は水平の直線） -->
+<div class="fv-cover">
+<svg class="fv-cut" viewBox="0 0 1400 90" preserveAspectRatio="none" aria-hidden="true"><path class="fv-cut__fill" d="M0,90 L0,46 L1400,46 L1400,90 Z" fill="#F5F1EA"/><path class="aze__line" d="M0,45 L1400,45"/></svg>
+<div class="fv-cover__pg">
+
+<!-- INFORMATION（The House） -->
+<section class="info pad">
+  <div class="info__intro">
+    <p class="tag reveal">The House</p>
+    <p class="info__lead reveal">一軒家の二階を、まるごと貸し切り。</p>
+  </div>
+  <div class="info__photo"><img data-paraimg src="assets/img/hero-01-living.webp" alt="木天井のリビングダイニング"></div>
+  <div class="info__facts">
+    <div class="fact reveal"><span class="l">capacity</span><span class="n">最大 8 名</span><span class="d">快適に過ごす目安は 6 名</span></div>
+    <div class="fact reveal"><span class="l">size / layout</span><span class="n">75㎡ ・ 2階ワンフロア</span></div>
+    <div class="fact reveal"><span class="l">parking</span><span class="n">2 台</span><span class="d">1階フロアに駐車スペース</span></div>
+  </div>
+</section>
+
+<div class="rule" aria-hidden="true"></div>
+
+<!-- ROOMS（横スクロール巡り） -->
+<section class="tour" id="rooms">
+  <div class="tour__head"><h2 class="htitle"><span class="en">Rooms</span>部屋と空間</h2></div>
+  <div class="tour__view"><div class="tour__track">
+    <figure class="tour__card"><div class="fr"><img src="assets/img/ldk-01.webp" alt="リビングダイニング"></div><figcaption>リビングダイニング<span class="en">01</span></figcaption></figure>
+    <figure class="tour__card"><div class="fr"><img src="assets/img/hero-02-bedroom.webp" alt="寝室"></div><figcaption>寝室<span class="en">02</span></figcaption></figure>
+    <figure class="tour__card"><div class="fr"><img src="assets/img/bath.webp" alt="バスルーム"></div><figcaption>バスルーム<span class="en">03</span></figcaption></figure>
+    <figure class="tour__card"><div class="fr"><img src="assets/img/hero-03-dining.webp" alt="ダイニング"></div><figcaption>ダイニング<span class="en">04</span></figcaption></figure>
+    <figure class="tour__card"><div class="fr"><img src="assets/img/ldk-03.webp" alt="居間"></div><figcaption>居間<span class="en">05</span></figcaption></figure>
+  </div></div>
+  <p class="tour__hint">← スクロールで巡る →</p>
+  <a class="lnk" href="#" style="margin-left:clamp(20px,5vw,90px)">More about rooms →</a>
+</section>
+
+<div class="rule" aria-hidden="true"></div>
+
+<!-- STAY -->
+<section class="stay" id="stay">
+  <div class="stay__grid">
+    <div class="stay__title">
+      <h2 class="htitle"><span class="en">Stay</span>葉山で過ごす一日</h2>
+      <a class="lnk" href="#">More about stay →</a>
+    </div>
+    <div class="stay__feed">
+      <article class="exp"><div class="fr"><img data-paraimg src="assets/img/stay-tanada.webp" alt="棚田"></div><p class="exp__no reveal">01</p><h3 class="reveal">棚田を見て、味わう</h3><p class="reveal">葉山の棚田で育てたお米が、葉山アイスのアイスクリームに変わる。風景を「食べる」体験を、滞在中に。</p></article>
+      <article class="exp"><div class="fr"><img data-paraimg src="assets/img/access-balcony.webp" alt="海と町並み（仮）"></div><p class="exp__no reveal">02</p><h3 class="reveal">海越しの富士山、夕陽</h3><p class="reveal">一色海岸まで徒歩8分。澄んだ空気の晴れた日は、海の向こうに富士山。<span class="wait">※写真は素材待ち（仮）</span></p></article>
+      <article class="exp"><div class="fr"><img data-paraimg src="assets/img/hero-03-dining.webp" alt="食卓（仮）"></div><p class="exp__no reveal">03</p><h3 class="reveal">葉山の海の幸、山の幸</h3><p class="reveal">漁港から朝の魚、畑から旬の野菜。地元の食材で、自分たちの食卓を整える喜び。<span class="wait">※写真は素材待ち（仮）</span></p></article>
+      <article class="exp"><div class="fr"><img data-paraimg src="assets/img/stay-matcha.webp" alt="抹茶マシーン"></div><p class="exp__no reveal">04</p><h3 class="reveal">抹茶マシーン</h3><p class="reveal">京都生まれの抹茶マシーンを、宿のキッチンに。挽きたての一服を、いつでも手元に。</p></article>
+    </div>
+  </div>
+</section>
+
+<div class="rule" aria-hidden="true"></div>
+
+<!-- ACCESS -->
+<section class="access" id="access">
+  <div class="access__grid">
+    <iframe class="access__map reveal" title="周辺地図" loading="lazy" src="https://maps.google.com/maps?q=%E7%A5%9E%E5%A5%88%E5%B7%9D%E7%9C%8C%E4%B8%89%E6%B5%A6%E9%83%A1%E8%91%89%E5%B1%B1%E7%94%BA%E4%B8%80%E8%89%B2&z=15&output=embed"></iframe>
+    <div>
+      <h2 class="htitle reveal"><span class="en">Access</span>アクセス</h2>
+      <p class="info__lead reveal">海まで、徒歩8分。</p>
+      <dl class="access__kv reveal">
+        <div class="row"><dt>一色海岸</dt><dd>徒歩 8 分</dd></div>
+        <div class="row"><dt>買い物</dt><dd>セブン 徒歩30秒 ／ スズキヤ 徒歩5分</dd></div>
+        <div class="row"><dt>交通</dt><dd>逗子駅 ／ 旧役場前バス停</dd></div>
+        <div class="row"><dt>駐車</dt><dd>1階に 2 台</dd></div>
+      </dl>
+      <a class="lnk reveal" href="#">More about access →</a>
+    </div>
+  </div>
+</section>
+
+<div class="rule" aria-hidden="true"></div>
+
+<!-- OWNER -->
+<section class="owner" id="owner">
+  <div class="owner__grid">
+    <figure class="owner__ph reveal" style="margin:0"><div class="fr"><img data-paraimg src="assets/img/about-hero-tanada.webp" alt="棚田の里山"></div></figure>
+    <div class="owner__tx">
+      <p class="tag reveal">Owner</p>
+      <h2 class="htitle reveal">私たちのこと</h2>
+      <p class="big reveal">棚田で育てたお米から、手づくりのアイスを。</p>
+      <p class="reveal">TERRA を営むのは、葉山に根を張る BEAT ICE。</p>
+      <p class="reveal">アイスづくり、地域の学校給食への提供、子どもたちと汗を流す田んぼでの米づくり。</p>
+      <a class="lnk reveal" href="#">More about us →</a>
+    </div>
+  </div>
+</section>
+
+<div class="rule" aria-hidden="true"></div>
+
+<!-- ご利用案内 / FAQ -->
+<section class="faq">
+  <div class="faq__grid">
+    <h2 class="htitle reveal" style="margin-bottom:clamp(24px,4vh,46px)"><span class="en">Information</span>ご利用案内</h2>
+    <dl>
+      <div class="faq__row reveal"><dt>チェックイン</dt><dd>IN 16:00 〜 ／ OUT 11:00</dd></div>
+      <div class="faq__row reveal"><dt>喫煙</dt><dd>全面禁煙（屋外は可）</dd></div>
+      <div class="faq__row reveal"><dt>タオル・寝具</dt><dd>1セット / 人（寝間着はご持参ください）</dd></div>
+      <div class="faq__row reveal"><dt>備え付け</dt><dd>フルキッチン ／ 食器 ／ 抹茶マシーン ／ Wi-Fi ／ ドライヤー 等</dd></div>
+    </dl>
+    <a class="lnk reveal" href="#">More information →</a>
+  </div>
+</section>
+
+<div class="rule" aria-hidden="true"></div>
+
+<!-- RESERVE -->
+<section class="reserve pad">
+  <p class="tag reveal" style="text-align:center">Reservation</p>
+  <h2 class="reserve__t reveal">ご予約</h2>
+  <p class="reserve__c reveal">空き状況の確認・ご予約は Airbnb から。</p>
+  <a class="btn reveal" href="https://www.airbnb.jp/" target="_blank" rel="noopener">Airbnbで予約する　→</a>
+</section>
+<footer class="foot">TERRA HAYAMA ・ 〒240-0111 神奈川県三浦郡葉山町一色 1759-1-5 ・ 運営 株式会社BEAT ICE ・ © 2026</footer>
+</div><!-- /.fv-cover__pg -->
+</div><!-- /.fv-cover -->
+<a class="dock" href="https://www.airbnb.jp/" target="_blank" rel="noopener">Airbnbで予約する →</a>
+
+<!-- ROOMS 画像のフル表示モーダル -->
+<div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-label="画像拡大">
+  <button class="lightbox__close" type="button" aria-label="閉じる">×</button>
+  <img class="lightbox__img" alt="">
+  <p class="lightbox__cap"></p>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+(() => {
+  'use strict';
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const $$ = (s,c=document)=>[...c.querySelectorAll(s)];
+
+  /* nav パネル：リンク選択 / Esc で閉じる */
+  const navt = document.getElementById('navt');
+  if (navt) {
+    $$('.nav__panel a').forEach(a=>a.addEventListener('click',()=>{navt.checked=false;}));
+    addEventListener('keydown',e=>{ if(e.key==='Escape') navt.checked=false; });
+  }
+
+  /* ROOMS 画像クリック → フル表示モーダル */
+  (function(){
+    const lb = document.getElementById('lightbox');
+    if (!lb) return;
+    const lbImg = lb.querySelector('.lightbox__img');
+    const lbCap = lb.querySelector('.lightbox__cap');
+    const open = (src, cap) => { lbImg.src = src; lbImg.alt = cap||''; lbCap.textContent = cap||''; lb.classList.add('is-open'); lb.setAttribute('aria-hidden','false'); };
+    const close = () => { lb.classList.remove('is-open'); lb.setAttribute('aria-hidden','true'); lbImg.removeAttribute('src'); };
+    $$('.tour__card img').forEach(img=>{
+      img.addEventListener('click', ()=>{
+        const cap = (img.closest('.tour__card')?.querySelector('figcaption')?.childNodes[0]?.textContent || img.alt || '').trim();
+        open(img.currentSrc || img.src, cap);
+      });
+    });
+    lb.addEventListener('click', close);
+    addEventListener('keydown', e=>{ if(e.key==='Escape') close(); });
+  })();
+
+  /* reveal / 区切り */
+  const io = new IntersectionObserver((es)=>es.forEach(e=>{
+    if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+  }), {threshold:0.16, rootMargin:'0px 0px -8% 0px'});
+  $$('.reveal, .rule').forEach(el=>io.observe(el));
+
+  /* opening 幕 */
+  if (!reduce && window.gsap) {
+    gsap.set('.intro__logo',{autoAlpha:0});
+    gsap.timeline()
+      .to('.intro__logo',{autoAlpha:1,duration:1.6,ease:'power2.out'},.6)
+      .addLabel('open','+=.9')
+      .to('.intro__curtain',{autoAlpha:0,duration:2.4,ease:'sine.inOut'},'open')
+      .to('.intro__logo',{filter:'invert(1)',duration:2.4,ease:'sine.inOut'},'open')
+      .set('.intro__curtain',{display:'none'});
+  } else { const c=document.querySelector('.intro__curtain'); if(c) c.style.display='none'; }
+
+  /* ナビ・ドックは FV 通過後に出現 */
+  (function(){
+    if(!document.querySelector('.intro')) return;
+    document.body.classList.add('has-fv');
+    const thr=()=>innerHeight*0.85;
+    const upd=()=>document.body.classList.toggle('fv-passed', scrollY>thr());
+    addEventListener('scroll',upd,{passive:true});
+    addEventListener('resize',upd); upd();
+  })();
+  /* FV背景スライドショー */
+  (function(){
+    const slides=$$('.intro__slide');
+    if(reduce || slides.length<2) return;
+    let i=0;
+    setInterval(()=>{ slides[i].classList.remove('is-on'); i=(i+1)%slides.length; slides[i].classList.add('is-on'); }, 5000);
+  })();
+
+  if (reduce || !window.gsap) return;
+  gsap.registerPlugin(ScrollTrigger);
+  const wide = matchMedia('(min-width:781px)').matches;
+
+  /* INTRO：背景固定で FV→Concept 入替 */
+  gsap.to('.intro__hero',{autoAlpha:0,yPercent:-8,ease:'none',
+    scrollTrigger:{trigger:'.intro',start:'top top',end:'+=70%',scrub:true}});
+  gsap.to('.intro__dark',{opacity:.55,ease:'none',
+    scrollTrigger:{trigger:'.intro',start:'top top',end:'+=88%',scrub:true}});
+  gsap.to('.intro__scroll',{autoAlpha:0,ease:'none',
+    scrollTrigger:{trigger:'.intro',start:'top top',end:'+=12%',scrub:true}});
+
+  if (!wide) return;
+
+  /* 写真の登場＝「滲み出る」 */
+  const emergeF = (el, trig, start) => { if(!el) return;
+    gsap.set(el,{filter:'blur(22px) brightness(.55)'});
+    gsap.to(el,{filter:'blur(0px) brightness(1)',ease:'power2.out',duration:1.8,
+      scrollTrigger:{trigger:trig||el,start:start||'top 80%'}}); };
+  gsap.set('.info__photo',{filter:'blur(22px) brightness(.55)',scale:1.05});
+  gsap.to('.info__photo',{filter:'blur(0px) brightness(1)',scale:1,ease:'power2.out',duration:1.8,
+    scrollTrigger:{trigger:'.info',start:'top 64%'}});
+  $$('.tour__card img').forEach(img=>emergeF(img, '.tour', 'top 72%'));
+  $$('.stay .exp img').forEach(img=>emergeF(img, img.closest('.exp'), 'top 84%'));
+  emergeF(document.querySelector('.owner__ph img'), '.owner__ph', 'top 80%');
+  emergeF(document.querySelector('.access__map'), '.access', 'top 80%');
+
+  /* ROOMS：横スクロールで巡る（pin） */
+  document.body.classList.add('pinmode');
+  $$('.tour').forEach(sec=>{
+    const track=sec.querySelector('.tour__track');
+    const dist=()=>Math.max(0, track.scrollWidth - innerWidth);
+    gsap.to(track,{x:()=>-dist(),ease:'none',
+      scrollTrigger:{trigger:sec,start:'top top',end:()=>'+='+dist(),pin:true,scrub:0.5,invalidateOnRefresh:true,anticipatePin:1}});
+  });
+
+  /* 画像内パン視差 */
+  $$('[data-paraimg]').forEach(img=>{
+    const frame=img.closest('.fr, .info__photo')||img;
+    gsap.fromTo(img,{yPercent:-8,scale:1.16},{yPercent:8,scale:1.16,ease:'none',
+      scrollTrigger:{trigger:frame,start:'top bottom',end:'bottom top',scrub:true}});
+  });
+
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(()=>ScrollTrigger.refresh());
+  addEventListener('load',()=>ScrollTrigger.refresh());
+})();
+</script>
+</body></html>

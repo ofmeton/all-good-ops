@@ -32,7 +32,7 @@
   const io = new IntersectionObserver((es)=>es.forEach(e=>{
     if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
   }), {threshold:0.16, rootMargin:'0px 0px -8% 0px'});
-  $$('.reveal, .aze-wrap').forEach(el=>io.observe(el));
+  $$('.reveal, .rule').forEach(el=>io.observe(el));
 
   /* k. opening 幕: 白幕の上に黒ロゴだけ浮上（ナビ非表示）→ 幕がじんわり晴れると同時にロゴが黒→白へ溶け、ナビが現れる（ロゴは終始ひとつ・固定位置＝ズレなし） */
   if (!reduce && window.gsap) {
