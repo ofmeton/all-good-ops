@@ -1,13 +1,13 @@
 ---
 name: remotion-best-practices
-description: Best practices for Remotion - Video creation in React
+description: Remotion（React 製動画）の実装ベストプラクティス＆ドメイン知識（フレーム/interpolate/spring・Sequence・字幕・音声・3D・FFmpeg・フォント・動的メタデータ・合成・パフォーマンス。rules/ に詳細ガイド多数）。Remotion のコードを書く・読む・デバッグする、React で動画コンポジションやアニメーションを実装する、@remotion/* や useCurrentFrame・interpolate・spring・Sequence・Composition を扱う、レンダリング/書き出しを設定する時は必ず最初に起動。Use whenever writing, reading, or debugging Remotion code, building video compositions or animations in React, or configuring Remotion rendering/export.
 metadata:
   tags: remotion, video, react, animation, composition
 ---
 
 ## When to use
 
-Use this skills whenever you are dealing with Remotion code to obtain the domain-specific knowledge.
+Use this skill whenever you are dealing with Remotion code (writing, reading, debugging, or configuring rendering/export) to obtain the domain-specific knowledge.
 
 ## New project setup
 
