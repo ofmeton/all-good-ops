@@ -1,13 +1,15 @@
 ---
 type: meta
 title: "Hot Cache"
-updated: 2026-06-25
+updated: 2026-06-26
 ---
 # Recent Context
 
 > セッション間で保持される ~500 words のコンテキストキャッシュ。セッション開始時に最優先で読む。詳細: [[SCHEMA]] §ホットキャッシュ。
 
 ## Last Updated
+2026-06-26（夜） — **remotion-best-practices を自動起動配線**: 「installed だが拾われにくい」を診断（description にトリガー文欠落＝起動条件が本文 When to use に埋没）→ description に JP/EN トリガー＋API名(useCurrentFrame/interpolate/spring/Sequence/Composition)を追加・本文 typo 修正・両 `CLAUDE.md` 起動マップに『動画/Remotion』行。hub(main)+hermes-integration(別clone)へ同期し commit(task→ff-merge)/push。原則6 に「いつ使うは description 自体に＋API名シグナル」をリファイン。retro [[../outputs/retrospectives/2026-06-26-2126-remotion-skill-wiring]]。
+2026-06-26 — **Hermes Secretary OS 初期化**: Telegram gateway/本人DM home channel/cron配送、Apple Reminders読み書き、Google Calendar/Gmail/Drive/Contacts読み取り、Google Docs/Sheets認可、Chrome DevTools MCP、Obsidian vault=`wiki/` を設定・検証。本人Telegram DMへの通知/cron配送は確認不要、本人以外への送信・メール送信・SNS投稿・課金/金銭・本番DB migration・削除/`raw/`上書きは確認対象。運用SSOTは [[self/hermes-secretary-os]]。
 2026-06-25 — **わたや予約通知GAS=同一r=重複を本番反映＋repo乖離を再同期**: 「3メールなら3通来てる？」に repo の旧「2分集約」コードだけ見て「No」と誤答→実際は本番GASが既に「1メール1通・即時」へ手編集で先行し repo が陳腐化。**force-push 直前に本番(beatice0923 / scriptId 1rDh20S…)を pull して乖離発見→デグレ回避**。本番を正に repo 再同期し、最小の `r=`(dedup_id)重複排除のみ追加(`sent`シート+ingestゲート)。ビルド出力 vs 本番 diff で「変更3点のみ」実証後 push→再pullで反映確認。指示によりテスト予約投入の直前で停止。罠=`.clasp.json`が破棄PJ(1OWxDR4)指す/clasp=beatice0923 login+Apps Script API有効化要/件名は「【Roopt】アクティビティ予約のご確認」。学び=デプロイ済み成果物は repo＝本番と仮定せず実体を先に観測([[self/engineering-principles]])・委任結果は汚染で幻のことがあり git status/test で一次検証。**未了=PR#279 で main へ取り込み(本番は反映済)**。retro [[../outputs/retrospectives/2026-06-25-reservation-notify-dedup-deploy]]。raw [[../raw/facts/situations/2026-06-25-reservation-notify-dedup-deploy]]。
 - 前(2026-06-24): **hermes Telegram縮小×Notion双方向＋Notion UI再設計＋分解自動化と過剰分割の収拾**: 通知2層化(即時terse+link＝詰まり系のみ／`nudge` digest 1日3回9/13/19)＋`comment_ingest.py`でNotionコメント本人返信を検知し対話前進(Phase5・PR#270/#271)。Notion UI再設計=目的別**7ビュー**+FORMULA『🎯今やること』+使い方ガイドpage。分解は**承認制廃止→自動分割**(PR#273)だが`breakdown_apply --max50`一括実走が brief未確定カードまでrecursive分割し盤面爆発→**質問中(NeedInfo/enriching)除外ガード**(PR#275)+Inbox子80リセット+NeedInfo滞留20→0。学び=不可逆/増殖系bulk opは承認の有無と独立に『ガード先行+小バッチ』([[self/engineering-principles]]原則7)・Notion構造化クエリはREST直叩き([[../memory/reference_notion_mcp_id_and_sharing]]§3)。retro [[../outputs/retrospectives/2026-06-24-hermes-notion-interaction-overplit]]。
 - 前(2026-06-24): **STORM=方法論を課金ゼロで skill 化**: 導入依頼を本体(API従量/重venv/カスタムLM)と照合し「方法論を既存スタックで再現」へ pivot→`storm-research` skill(PR#266)。学び=外部OSS導入は運用制約と照合し再現も第一級選択肢。retro [[../outputs/retrospectives/2026-06-24-0010-storm-method-skill]]。
@@ -18,8 +20,6 @@ updated: 2026-06-25
 - 前(2026-06-21): **hermes「あとでやる」Phase2b(カレンダー)＋Phase3拡張(cc-auto 自走コード実行)完成・本番稼働**: `calendar_capture.py`(Haiku準備要否判定→Notion)＋Sheets MCP OAuth流用で全1892件移行(200件チャンク)/催促ノイズ抑制＋RawSourceId dedup/cc-auto は design→plan→Codex委任→Claude二重レビュー(fail-open10件→fail-closed)→**PR#248 を main へ自動merge実証**→launchd `com.hermes.ccauto`(15分)本番投入・flock単一フライトでrace解消。retro [[../outputs/retrospectives/2026-06-21-hermes-calendar-ccauto]]。
 - 前(2026-06-21): **思考パートナーMVP** PR#240: 捕捉→着手→起動→完結ループ。skill`thinking`+`~/journal/think`(private)+毎朝08:00 routine`trig_01K7Amonz4rZHCcBXrkH753m`。E2E『生業×武器』で武器=子どもの主導権回復/方針A→B/生活費26万。retro [[../outputs/retrospectives/2026-06-21-0400-thinking-partner]]。
 - 前(2026-06-21): **スキル資産の整理＋拡張**: 9ワークフロー別コンボ整理→上位3提示。新スキル`decision-prep`(意思決定前処理=grill-me→brainstorming→deliberation連鎖)をPR#236で新設。`demo-video-pipeline`演出リッチ化。retro [[../outputs/retrospectives/2026-06-21-0318-skill-combo-decision-demo-video]]。
-- 前(2026-06-19): **mf-finance 大改修(PR#215〜231)**: DB を main repo へ移設し worktree 非依存化+UI/IA刷新+カード引落(締め日基準請求期間/引落先口座)。学び=ドメイン数値ロジックは計算モデルを先に確定→engineering-principles。retro [[../outputs/retrospectives/2026-06-19-0319-mf-finance-card-billing]]。
-
 ## Current Focus
 - **hermes「あとでやる」= 全Phase稼働＋通知2層化×Notion双方向＋Notion UI再設計済**: 捕捉(Telegram/Apple Notes/カレンダー)→**intake_enrich(6要素・15分)**→Notion→**breakdown_apply(承認制廃止＝自動分割。質問中NeedInfo/enrichingは保留#3)**→催促/digest→**cc-auto/autorun 自走**。通知=即時terse+link(詰まり系のみ)＋**nudge digest 1日3回(9/13/19 JST)**、返信は**Notionコメント→`comment_ingest`(15分)が検知**(Telegram返信も可)。Mac launchd=applenotes/autorun/ccauto/intake/breakdown/**comment-ingest**、VM 24/7=gateway/nudge/calendar。Notion=目的別**7ビュー+FORMULA『🎯今やること』+使い方ガイドpage**。kill switch=`~/.hermes/{intake,breakdown,ccauto,comment_ingest}_enabled`。claude -p=Maxサブスク実費ゼロ。残=回答済4カード(開業8/14/Ambassador/GWS/X品質改善)のbrief化→ready確認・$65上限7/1リセット後のheavy再開。控え=`data/hermes/notion-task-db.md`。
 - **X発信 新運用**: 自動収集OFF・**手動ブックマークURLを `scripts/ingest-bookmarks.ts`/`/admin/ingest-bookmarks` で投入**→curation→writer(知見+段取り+新ターゲット)→check→LINE承認。writer は MAv4(再焼成済)。テンプレ patch は runtime 注入(re-bake不要・deployのみ)。collector復活は `collector_enabled` 行削除/=1。
@@ -34,12 +34,12 @@ updated: 2026-06-25
 - 🔴 **はぐりん persona**: 名義境界の戦略再判断 未着手。
 
 ## Recently Touched
+- `.claude/skills/remotion-best-practices/SKILL.md`(hub+hermes 両clone・description トリガー文+API名)・両`CLAUDE.md`(起動マップ『動画/Remotion』)・[[self/engineering-principles]]原則6(description リファイン+事例2026-06-26)・retro [[../outputs/retrospectives/2026-06-26-2126-remotion-skill-wiring]]
+- [[self/hermes-secretary-os]] (2026-06-26 Hermes外部秘書OSの連携状態・通知確認境界・日次運用バックログをSSOT化)・`~/.hermes/`(Telegram/Google/Obsidian/Reminders設定)・Chrome DevTools MCP
 - `apps/reservation-line-notify/`(本番準拠に再同期+`r=`重複排除: src/{parse,format,gas/main,gas/sheetStore}.ts・`ui-wrappers.js`(esbuild footer)・`appsscript.json`本番一致・main.test.ts)・[[self/engineering-principles]](repo≠本番/デプロイ前プリフライト追記)・[[../memory/feedback_codex_interrupted_verify_artifacts]](委任結果ディスク検証追補)・raw [[../raw/facts/situations/2026-06-25-reservation-notify-dedup-deploy]]
 - 前: `data/hermes/{breakdown_apply,nudge_loop,comment_ingest,intake_enrich,autorun_executor,ccauto_executor}.py`(通知2層化+Notion双方向+分解自動化+#3ガード・PR#270/#271/#273/#275)・Notion『あとでやるタスク』DB(7ビュー+FORMULA+使い方ガイド)・[[self/engineering-principles]]原則7(増殖系bulk op)・[[../memory/reference_notion_mcp_id_and_sharing]]§3(REST直叩き)
 - 前: `.claude/skills/storm-research/SKILL.md`(新規・STORM方法論を課金ゼロ再現)・`CLAUDE.md`(起動マップ1行)・PoC `outputs/research/2026-06-23-juku-revenue-feasibility-engawa.md`(塾収益化4視点吟味)
 - 前: `data/hermes/{intake_enrich,breakdown_apply,autorun_executor,nudge_loop}.py`(go-live配備+JSON hardening+OAuthピン留め・PR#260/#262/#263/#264)・`~/.hermes/`(Mac配備先・plist+kill switch+.env CLAUDE_CODE_OAUTH_TOKEN)・VM `~/.hermes/config.yaml`(hint最小捕捉+分解承認)・memory [[../memory/reference_claude_code_subscription_vs_credit_billing]](新規)・[[../memory/feedback_user_perception_vs_data_check]](権威ソース実証追記)・[[self/engineering-principles]](帰属/機構は権威ソース実証)・MEMORY.md索引162→138圧縮
-- 前: `.claude/skills/decision-prep/SKILL.md`(PR#236)・`apps/mf-finance/`・web-ui-bridge(PR#208-213)・X発信(ingest/curation/pdca-eval)
-
 ## Open Questions / Frontiers
 - **enforce 自動flip 依存**: collect が回り続け shadow が7run貯まるか（brownout halt 注意）。基準到達で自動切替＋LINE通知。
 - **bootstrap-core `--tool` バグ残置**: 次回 MA update は `scripts/update-ma-agents-sdk.ts`(SDK直) 再利用 or 恒久修正。
