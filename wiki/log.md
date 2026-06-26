@@ -341,3 +341,20 @@ ai-radar プロジェクトを完全撤廃。Free tier 枠空け含む整理。
 - architect 新設（設計専任・読み取り専用・SSOT 必読・ユーザー/改善シナリオ網羅を設計ステップ化）
 - system-engineer を実装担当に拡張（陳腐化参照 mcp-architect/quality-auditor を修正・agent teams 振る舞い追加）
 - dev/agent-teams-playbook.md 新設（1案件=1worktree=1team・最大4人・reviewer レシピ・ガードレール・有効化手順）
+
+## [2026-06-26] phase | Hermes Secretary OS 初期化
+
+Hermesを外部秘書・司令塔として運用するためのSSOTを追加。
+
+新規作成:
+- `wiki/self/hermes-secretary-os.md` — 役割分担、接続状態、通知/確認境界、日次運用目標、次の整備バックログ
+
+設定・検証済み:
+- Telegram gateway + 本人DM home channel + cron配送
+- Apple Reminders 読み書き
+- Google Calendar/Gmail/Drive/Contacts 読み取り
+- Google Docs/Sheets 認可
+- Chrome DevTools MCP 登録・実動確認
+- Obsidian vault path: `wiki/`
+
+raw/ は変更なし。認証秘密・認可情報などの機密値はwikiに保存しない。
