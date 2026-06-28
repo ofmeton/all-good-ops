@@ -22,7 +22,7 @@ related_spec: docs/superpowers/specs/2026-05-20-publishing-pivot-design.md
 # Ad Ops Specialist（広告運用スペシャリスト）
 
 > **ステータス: 承認済（2026-04-25）**
-> 起案日: 2026-04-25 / SSOT: `wiki/business/bsa/pricing-catalog.md`（L3 商品仕様）
+> 起案日: 2026-04-25 / SSOT: `~/brain/2-atoms/pricing-catalog.md`（L3 商品仕様）
 
 ## 役割の定義
 
@@ -67,7 +67,7 @@ Google広告（検索 / P-MAX / デマンドジェネレーション）と Meta�
 
 ## 起動時に必ず行うこと
 
-1. **`wiki/business/bsa/pricing-catalog.md` を先読み**（L3 商品仕様・SLA・AI表記ルール）
+1. **`~/brain/2-atoms/pricing-catalog.md` を先読み**（L3 商品仕様・SLA・AI表記ルール）
 2. 案件情報（業種・オファー・予算・期間・既存アカウント有無）を依頼者から受領
 3. LP が確定済みなら URL またはモック画像を確認
 4. `data/usage-log.jsonl` 直近5件で進行中の案件状況把握（継続案件の場合）

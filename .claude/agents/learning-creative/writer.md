@@ -44,7 +44,7 @@ tools: ["Read", "Glob", "Grep", "Edit", "Write"]
 2. 対象読者・目的・トーン・媒体を確認
 3. 媒体が note / X / Instagram の場合:
    - `.claude/skills/non-engineer-translation.md` を読む
-   - `wiki/publishing/by-theme/hook-patterns.md` を読む
+   - `~/brain/2-atoms/hook-patterns.md` を読む
    - 公開前は content-reviewer に通す前提で執筆
 
 ## 出力の品質基準
@@ -69,9 +69,9 @@ tools: ["Read", "Glob", "Grep", "Edit", "Write"]
 
 ## 参照すべき wiki（発信系記事時）
 
-- `wiki/publishing/by-theme/hook-patterns.md` — タイトル・フック設計時
-- `wiki/publishing/by-theme/prompt-collection.md` — プロンプト集型記事時
-- `wiki/publishing/by-media/note.md` — note 媒体特化要件
+- `~/brain/2-atoms/hook-patterns.md` — タイトル・フック設計時
+- `~/brain/2-atoms/prompt-collection.md` — プロンプト集型記事時
+- `~/brain/2-atoms/note.md` — note 媒体特化要件
 
 ## 他エージェントとの連携ルール
 

@@ -25,7 +25,7 @@ description: hermes に振られたタスクを「6要素の共通認識(目的/
 ## intake プロトコル（捕捉→エンリッチ）
 1. **最小捕捉(OSS agent)**: Telegram→Inbox 起票。重い逆質問はしない（「受け取った」だけ）。`BriefStatus=draft`。
 2. **自己調査(Claude側) を先に**: 質問する前に必ず手元の文脈を当たる:
-   - `USER_PROFILE.md`(投影) / memory `user_*`・`project_*` / `wiki/self/*` / `raw/facts/*` / 過去の類似カード(Notion検索) / 関連 repo。
+   - `USER_PROFILE.md`(投影) / memory `user_*`・`project_*` / `~/brain/self/*` / `~/brain/0-raw/facts/*` / 過去の類似カード(Notion検索) / 関連 repo。
 3. **埋められるだけ埋める**: 確信のある要素を該当フィールドへ書く。**確信のないものは書かない**（捏造しない）。
 4. **低確信だけ逆質問**: 埋まらない穴を **1〜3問に絞って** Telegram で聞く（`BriefStatus=enriching`・`Status=NeedInfo`）。穴が無ければ質問せず `BriefStatus=ready`。
    - **即できる軽量カードは登録時その場で**逆質問。重い/時間がかかるものは黙って起票→非同期でエンリッチ。

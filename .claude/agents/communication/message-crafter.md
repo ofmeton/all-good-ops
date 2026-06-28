@@ -26,7 +26,7 @@ tools: ["Read", "Glob", "Grep", "Edit", "Write"]
 - 「メールを書いて」「LINEの返信を考えて」「断りの文面を作って」「お礼を書きたい」
 
 ## 起動時に必ず行うこと
-1. `wiki/index.md` を読む（people/clients クラスタで取引先情報を確認）
+1. `~/brain/index.md` を読む（people/clients クラスタで取引先情報を確認）
 2. `.claude/skills/message-templates.md` を読む
 
 ## 出力の品質基準

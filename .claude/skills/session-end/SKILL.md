@@ -1,6 +1,6 @@
 ---
 name: session-end
-description: セッション終わりの後片付けを標準化する。git 状態確認→副産物(raw/facts・outputs・wiki・振り返り・新スキル)のコミット完了→task ブランチの merge/PR/discard 決定と main 復帰→dev/build プロセス停止・一時ファイル/スクショ掃除→workspace 全リポの未コミット確認→「main・未コミット0・残プロセス0」を報告 までを行う。ユーザーが「セッション終了」「session end」「終わりにする」「店じまい」等と終了を宣言したとき起動する。session-retrospective の最終フェーズからも呼ばれる。
+description: セッション終わりの後片付けを標準化する。git 状態確認→副産物(~/brain/0-raw/facts・outputs・wiki・振り返り・新スキル)のコミット完了→task ブランチの merge/PR/discard 決定と main 復帰→dev/build プロセス停止・一時ファイル/スクショ掃除→workspace 全リポの未コミット確認→「main・未コミット0・残プロセス0」を報告 までを行う。ユーザーが「セッション終了」「session end」「終わりにする」「店じまい」等と終了を宣言したとき起動する。session-retrospective の最終フェーズからも呼ばれる。
 ---
 
 # セッション終了処理（Session End）
@@ -14,9 +14,9 @@ description: セッション終わりの後片付けを標準化する。git 状
 
 ## 中核原則
 
-1. **副産物はそのセッション内でコミットまで完了**: raw/facts・outputs・wiki・振り返り・新スキルは着地レールが無く沈殿しやすい。宙に浮かせない。
+1. **副産物はそのセッション内でコミットまで完了**: ~/brain/0-raw/facts・outputs・wiki・振り返り・新スキルは着地レールが無く沈殿しやすい。宙に浮かせない。
 2. **task ブランチに居座らない**: 完了したら必ず main に戻す。long-lived task ブランチ禁止。
-3. **人間確認ルールは終了処理でも不変**: 送信系・金銭・migration・raw/ 上書き削除は終了処理に紛れても確認必須。
+3. **人間確認ルールは終了処理でも不変**: 送信系・金銭・migration・~/brain/0-raw/ 上書き削除は終了処理に紛れても確認必須。
 
 ## フェーズ（順に実行）
 
@@ -27,9 +27,9 @@ pwd && git branch --show-current && git status --short -uall && git worktree lis
 - 今どこにいるか（main か task か worktree か）、未コミットは何か、worktree は何が残っているかを一望する。黙判定せず1行で現状を述べる。
 
 ### 2. 副産物コミット
-- 未コミットの副産物（raw/facts・outputs・wiki・retrospectives・新スキル・memory 索引など）を確認し、**そのセッション内で commit まで完了**する。
+- 未コミットの副産物（~/brain/0-raw/facts・outputs・wiki・retrospectives・新スキル・memory 索引など）を確認し、**そのセッション内で commit まで完了**する。
 - `main` 上なら `ALLOW_MAIN_COMMIT=1 git commit ...`（retro 副産物等の定番）。task ブランチなら通常 commit。
-- **据え置き（確認必須のまま）**: 送信系（メール/LINE/SNS）・金銭・DB migration を含む変更は、終了処理に紛れ込んでも人間確認を取る。`raw/` の上書き・削除はしない。
+- **据え置き（確認必須のまま）**: 送信系（メール/LINE/SNS）・金銭・DB migration を含む変更は、終了処理に紛れ込んでも人間確認を取る。`~/brain/0-raw/` の上書き・削除はしない。
 - staged 一覧を先出ししてから commit する（[[feedback_git_commit_diff_check]]）。
 
 ### 3. ブランチ後始末
@@ -58,7 +58,7 @@ for d in <workspace の各 git リポ>; do echo "== $d =="; git -C "$d" status -
 ## 絶対にやらないこと
 
 1. **確認なしで送信系/金銭/migration を含むコミットをしない** — 終了処理の流れに紛れても人間確認は不変。
-2. **`raw/` を上書き・削除しない** — immutable。
+2. **`~/brain/0-raw/` を上書き・削除しない** — immutable。
 3. **task ブランチに居座ったまま終わらない** — merge/PR/discard を決めて main に戻る。
 4. **起動したバックグラウンドプロセスの停止を忘れない** — dev サーバ等を残すと次セッションでポート衝突。
 5. **未コミットの副産物を「次回やる」で先送りしない** — 沈殿の温床。そのセッション内で着地させる。

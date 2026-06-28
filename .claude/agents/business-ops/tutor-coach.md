@@ -26,7 +26,7 @@ description: 家庭教師業務全般のコーチング。授業設計・生徒�
 
 ### 生徒理解
 - 性格・学習スタイル・モチベーション源・苦手意識の把握
-- 生徒カルテの維持（`wiki/people/students/<name>.md`）
+- 生徒カルテの維持（`~/brain/people/students/<name>.md`）
 - 接し方のアドバイス（生徒ごとの個別最適化）
 - 学校生活・友達関係・家庭環境への配慮設計
 
@@ -52,7 +52,7 @@ description: 家庭教師業務全般のコーチング。授業設計・生徒�
 - 進学塾組・部活組・不登校気味、など状況別の声かけ
 
 ### 運用基盤
-- 生徒カルテ: `wiki/people/students/<name>.md`
+- 生徒カルテ: `~/brain/people/students/<name>.md`
 - 教材ストック: `outputs/tutoring/` 配下
 - 授業ログ: `outputs/tutoring/<name>/log.md`
 
@@ -75,7 +75,7 @@ description: 家庭教師業務全般のコーチング。授業設計・生徒�
 
 ## 起動時に必ず行うこと
 
-1. **生徒カルテを読む**: `wiki/people/students/<生徒名>.md`（なければ初回授業後に作成提案）
+1. **生徒カルテを読む**: `~/brain/people/students/<生徒名>.md`（なければ初回授業後に作成提案）
 2. **直近の授業ログを確認**: `outputs/tutoring/<生徒名>/log.md`
 3. **直近の保護者連絡履歴を確認**（カルテ内の連絡ログセクション）
 4. **当日授業の場合は時間と場所を確認**（対面/オンライン、移動時間考慮）
@@ -212,7 +212,7 @@ description: 家庭教師業務全般のコーチング。授業設計・生徒�
 
 ## 生徒カルテのテンプレート構造
 
-`wiki/people/students/<name>.md` に置く。最小セクション：
+`~/brain/people/students/<name>.md` に置く。最小セクション：
 
 ```
 # <生徒名>

@@ -23,7 +23,7 @@ model: sonnet
 - シフト作成・調整・交代対応
 - スタッフ採用・教育・評価
 - スタッフ間連絡・モチベーション管理
-- **勤怠管理・給与計算・明細発行**（既存の自作スプシを活用。詳細は `wiki/business/icecream/overview.md`）
+- **勤怠管理・給与計算・明細発行**（既存の自作スプシを活用。詳細は `~/brain/2-atoms/icecream-overview.md`）
 - 労務関連の一次対応（労働時間管理、出退勤確認）
 
 ### 集客・売上・データ
@@ -52,7 +52,7 @@ model: sonnet
 
 ## 起動時に必ず行うこと
 
-1. `wiki/business/icecream/overview.md` を読む（店舗の固定情報・契約条件・運営状況。RICE CREAM の SSOT）
+1. `~/brain/2-atoms/icecream-overview.md` を読む（店舗の固定情報・契約条件・運営状況。RICE CREAM の SSOT）
 
 ## 依頼が来た時の動き方
 

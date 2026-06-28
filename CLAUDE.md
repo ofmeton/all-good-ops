@@ -25,7 +25,7 @@
 
 ## 事実情報の自動 raw 保存（強制）
 
-ユーザーが**自分・関係者・契約・状況に関する事実**を発話したら、即 `raw/facts/<カテゴリ>/YYYY-MM-DD-<slug>.md` に保存し 1 行通知（`📝 raw/facts/.../xxx.md に記録`）。フォーマットは `raw/facts/README.md`。
+ユーザーが**自分・関係者・契約・状況に関する事実**を発話したら、即 `~/brain/0-raw/facts/<カテゴリ>/YYYY-MM-DD-<slug>.md` に保存し 1 行通知（`📝 ~/brain/0-raw/facts/.../xxx.md に記録`）。フォーマットは `~/brain/0-raw/facts/README.md`。
 
 | カテゴリ | 対象 |
 |---|---|
@@ -35,8 +35,8 @@
 | `misc/` | 上記外の事実（退避先） |
 
 **保存しない**: 雑談 / 既存情報の再言及 / 質問・依頼そのもの / 仮説・推測。
-**私的領域の例外**: 本人が私的（journaling・内省・感情等）として扱う内容は raw/ に保存せず、git 管理外（`~/journal` 等）へ。詳細 memory `project_journaling_system.md`。
-raw/ は immutable（上書き・削除禁止、古くなれば別ファイル）。違反指摘時は遡って保存。
+**私的領域の例外**: 本人が私的（journaling・内省・感情等）として扱う内容は ~/brain/0-raw/ に保存せず、git 管理外（`~/journal` 等）へ。詳細 memory `project_journaling_system.md`。
+~/brain/0-raw/ は immutable（上書き・削除禁止、古くなれば別ファイル）。違反指摘時は遡って保存。
 
 ---
 
@@ -46,11 +46,11 @@ raw/ は immutable（上書き・削除禁止、古くなれば別ファイル�
 **Hermes連携**: Hermesは外部の秘書・司令塔。Hermesがこのrepoを読む場合は本ファイルを尊重し、Claude Codeへ渡す依頼を整理する。「Claudeに任せる」は、ClaudeがCodexへの委任量も含めて判断し、速度とトークン効率を両立してチームで進める意味。
 **例外**: 現セッションの続き議論・メタ判断・直前調査を踏まえた即決はメインセッション直接対話。
 
-セッション開始時の秘書: `wiki/hot.md` → `wiki/index.md` 関連クラスタのみ → `data/usage-log.jsonl` 直近5件 → 状況報告。
+セッション開始時の秘書: `~/brain/hot.md` → `~/brain/index.md` 関連クラスタのみ → `data/usage-log.jsonl` 直近5件 → 状況報告。
 
 ### Hermes Secretary OS 連携
 
-- Hermesの運用SSOTは `wiki/self/hermes-secretary-os.md`。設定変更・cron追加・外部連携変更はここへ短く追記する。
+- Hermesの運用SSOTは `~/brain/3-threads/hermes-secretary-os.md`。設定変更・cron追加・外部連携変更はここへ短く追記する。
 - 定期通知は本人Telegram DM宛なら確認不要。ただし本人以外への送信、SNS投稿、メール送信、金銭、本番DB migration、ファイル削除は確認必須。
 - 日次cronは「朝ブリーフィング」「夜ジャーナル」「repo/Claude作業監視」を基本レーンとし、スクリプトは `~/.hermes/scripts/`、秘密値は `~/.hermes/.env` に置く。秘密値をrepo/wikiへ書かない。
 - X/Twitter監視・投稿連携は初期設定対象外。必要になったら読み取り/下書きから再設計する。
@@ -78,7 +78,7 @@ raw/ は immutable（上書き・削除禁止、古くなれば別ファイル�
 - 個人の思考テーマ = `thinking` skill（思考版ジャーナリング・対話で結論まで）。捕捉は「考えたい：〇〇」→ `~/journal/think/inbox.md` 追記。内省・感情は journaling（別物）
 - freelance-scout は**縮小**。発信は brand-publisher（ofmeton 名義）
 - PPTX 納品は生成後 **presentation-reviewer 必須**（C 評価は修正後再レビュー）
-- 開発オーケストレーション: 設計 = **architect**（読み取り専用・設計のみ）/ 実装 = **Codex(既定・`skill:codex-implement`)** or system-engineer / コードレビュー = **pr-review-toolkit:***。設計規約 SSOT = `wiki/dev/standards.md`、並列チーム運用 = `wiki/dev/agent-teams-playbook.md`
+- 開発オーケストレーション: 設計 = **architect**（読み取り専用・設計のみ）/ 実装 = **Codex(既定・`skill:codex-implement`)** or system-engineer / コードレビュー = **pr-review-toolkit:***。設計規約 SSOT = `~/brain/2-atoms/standards.md`、並列チーム運用 = `~/brain/2-atoms/agent-teams-playbook.md`
 
 **外部スポーク**（秘書が persona 配下を直接呼ばない）:
 - **portfolio** (`/Users/rikukudo/Projects/portfolio/`): 既存制作物・進行中個人案件
@@ -112,9 +112,9 @@ raw/ は immutable（上書き・削除禁止、古くなれば別ファイル�
 
 ## 人間確認ルール
 
-**必ず確認**: 金銭（支払い・送金・契約）/ 外部送信（メール・LINE・SNS 投稿）/ 法務・税務の最終確定 / ファイル削除（特に `raw/` immutable）/ エージェントの追加・削除・統合 / 戦略変更（KGI・長期目標）/ 熟議開始 / 繊細な連絡（断り・調整・期待値）。
+**必ず確認**: 金銭（支払い・送金・契約）/ 外部送信（メール・LINE・SNS 投稿）/ 法務・税務の最終確定 / ファイル削除（特に `~/brain/0-raw/` immutable）/ エージェントの追加・削除・統合 / 戦略変更（KGI・長期目標）/ 熟議開始 / 繊細な連絡（断り・調整・期待値）。
 
-**確認不要**: `knowledge/context/`・`data/*.jsonl` 追記 / `outputs/` 新規作成 / 読み取り専用収集 / `wiki/` ingest / `raw/` 素材追加（上書き・削除はしない）。
+**確認不要**: `knowledge/context/`・`data/*.jsonl` 追記 / `outputs/` 新規作成 / 読み取り専用収集 / `~/brain/` ingest / `~/brain/0-raw/` 素材追加（上書き・削除はしない）。
 
 ---
 
@@ -135,7 +135,7 @@ SessionStart hook で cwd/branch/uncommitted 確認 → ブランチ判定を 1 
 `superpowers:finishing-a-development-branch` で merge / PR / discard を必ず決定。long-lived task ブランチ禁止。
 
 ### 運用ハイジーン（沈殿防止）
-秘書の運用副産物（raw/facts・outputs・wiki・振り返り・新スキル）はメイン本体に着地レールが無く沈殿しやすい。
+秘書の運用副産物（~/brain/0-raw/facts・outputs・wiki・振り返り・新スキル）はメイン本体に着地レールが無く沈殿しやすい。
 - **終了儀式は `session-end` スキル**（「セッション終了」「session end」「終わりにする」等で自動起動／`session-retrospective` の最終フェーズからも連続実行）。以下はその要点:
 - **終了儀式**: メイン repo は「`main` 上・未コミット 0」を目標。書いた副産物はそのセッション内でコミットまで完了
 - 作業後は `main` に戻す（古い task ブランチに居座らない）
@@ -149,7 +149,7 @@ SessionStart hook で cwd/branch/uncommitted 確認 → ブランチ判定を 1 
 ## 参照（必要時のみ展開）
 
 - **MCP 連携**: Asana / Gmail / Calendar / Slack / freee（`currentCompanyId=12426988`）/ Vercel / Supabase / Playwright / Firecrawl（**無料枠のみ**）/ Shopify。**送信系・書込系（DB 書込・invoice 送付・deploy・migration 等）は人間確認必須**。Supabase MCP 失効時は keychain → Management API 迂回可（memory `reference_supabase_mgmt_api_keychain.md`）
-- **wiki**: Karpathy LLM Wiki パターン。**触れる前に `wiki/SCHEMA.md` 必読**。`raw/` 不可侵、`wiki/` は ingest/query/lint で維持
+- **wiki**: Karpathy LLM Wiki パターン。**触れる前に `~/brain/SCHEMA.md` 必読**。`~/brain/0-raw/` 不可侵、`~/brain/` は ingest/query/lint で維持
 - **抽象課題**: 複数正解・将来影響大は `deliberation` スキルに従い最低 3 回会議（人間確認必須）
 - **エージェント管理**: 発見 → 取り込み（重複チェック・人間承認）→ 品質監視（6 軸 100 点）→ 使用追跡 → ランク → 自己改善（SAFE 即適用 / RISKY エスカレーション）→ Git 同期。月次中心
 - **自動化スケジュール**: 2026-06-03 全停止中（手動運用）。復活手順・根本原因は memory `project_cron_automation_disabled.md`

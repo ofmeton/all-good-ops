@@ -6,7 +6,7 @@
  * - raw/publishing/research/2026-06-13-chaen-article-study/{metadata,articles}.json
  * - outputs/research/2026-06-05-chaen-x-account-analysis.md
  * - outputs/research/2026-06-08-x-account-styles-template-catalog.md
- * - wiki/publishing/{buzz-patterns,by-media/x,by-theme/hook-patterns}.md
+ * - ~/brain/publishing/{buzz-patterns,by-media/x,by-theme/hook-patterns}.md
  *
  * Worker 実行時に filesystem を読めないため、研究メモの実用点だけを runtime const に蒸留する。
  */

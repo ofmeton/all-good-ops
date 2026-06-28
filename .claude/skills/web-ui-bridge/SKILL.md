@@ -27,7 +27,7 @@ description: 動いている自分のサイト上で要素をクリックして�
    - **② `textSnippets` / `text` を部分一致 grep**（テキストは複数 span に分割され合成されることがあるので**完全一致しない**。必ず substring/トークンで）。
    - **③ `route`(=ページ) と `domPath` で曖昧さを解消**。`route:"/"` は `app/page.tsx`、`/rooms` は `app/rooms/page.tsx`、共通要素は `app/_components/*.tsx` や `app/layout.tsx`。
    - `component` が非 null なら追加ヒント（ただし null が普通＝Server Component。依存しない）。
-3. `prompt` の意図どおり**最小編集**（Tailwind クラス調整・文言変更・構造の微修正）。`wiki/dev/standards.md` 準拠（Tailwind 直書き）。複数エントリは同一ファイルにまとまることが多いので、関連をまとめて編集してよい。
+3. `prompt` の意図どおり**最小編集**（Tailwind クラス調整・文言変更・構造の微修正）。`~/brain/2-atoms/standards.md` 準拠（Tailwind 直書き）。複数エントリは同一ファイルにまとまることが多いので、関連をまとめて編集してよい。
 4. 反映後、そのエントリの `status` を `"done"` に更新（ファイルを書き直す。`done` 行は残してログにする）。
 5. 完了を 1 行報告（id・対象ファイル:行・何をしたか）。HMR でブラウザに即反映されるので、ユーザーは見て確認→また触れる。
 

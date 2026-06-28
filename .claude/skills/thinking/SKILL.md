@@ -36,6 +36,6 @@ description: 陸さんが「考えなきゃ」と思いつつ考えられない�
 （Telegram からの「考えたい：〇〇」相当は hermes gateway が Haiku 判定で同じ DB に起票する＝同一インボックスに合流）
 
 ## プライバシー（厳守）
-- 思考の**中身**（対話・結論）は `~/journal/think/`（git管理外・リポジトリ外）のみ。Notion には見出しと一言メモだけ（低機微）。git push 対象（raw/facts・outputs・wiki）に中身を書かない
-- 完結内容が契約・案件の**事実決定**の時のみ「raw に記録する？」と確認して raw/facts へ昇格（自動ではしない）
+- 思考の**中身**（対話・結論）は `~/journal/think/`（git管理外・リポジトリ外）のみ。Notion には見出しと一言メモだけ（低機微）。git push 対象（~/brain/0-raw/facts・outputs・wiki）に中身を書かない
+- 完結内容が契約・案件の**事実決定**の時のみ「raw に記録する？」と確認して ~/brain/0-raw/facts へ昇格（自動ではしない）
 - 詳細は memory `project_thinking_partner` / `project_journaling_system` のプライバシー規約に準ずる

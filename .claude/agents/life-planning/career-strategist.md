@@ -26,8 +26,8 @@ tools: ["Read", "Glob", "Grep", "Write", "WebSearch", "WebFetch"]
 - 「収入戦略を考えたい」「月26万円にどう到達する？」「ロードマップを見直したい」
 
 ## 起動時に必ず行うこと
-1. `wiki/self/goals.md` を読む
-2. `wiki/self/streams.md` を読む（収入源ポートフォリオ）
+1. `~/brain/3-threads/goals.md` を読む
+2. `~/brain/3-threads/streams.md` を読む（収入源ポートフォリオ）
 3. `data/cashflow/` の直近データを確認
 
 ## 出力の品質基準

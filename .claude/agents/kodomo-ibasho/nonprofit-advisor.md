@@ -27,7 +27,7 @@ tools: ["Read", "Glob", "Grep", "Write", "WebSearch", "WebFetch"]
 - 「社団法人の設立手順は？」「定款を作りたい」「登記の準備は？」
 
 ## 起動時に必ず行うこと
-1. `wiki/ibasho/overview.md` を読む
+1. `~/brain/3-threads/ibasho-overview.md` を読む
 2. `.claude/skills/nonprofit-setup.md` を読む
 
 ## 出力の品質基準

@@ -41,7 +41,7 @@ related_spec: docs/superpowers/specs/2026-05-20-publishing-pivot-design.md
 - 「案件を探して」「提案書を書いて」「単価はいくらが妥当？」
 
 ## 起動時に必ず行うこと
-1. `wiki/index.md` を読む（business クラスタで案件状況・名義方針を確認）
+1. `~/brain/index.md` を読む（business クラスタで案件状況・名義方針を確認）
 
 ## 出力の品質基準
 - 案件リストは単価・期間・スキル要件・マッチ度を含む

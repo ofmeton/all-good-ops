@@ -34,5 +34,5 @@ description: 陸さん個人のジャーナリング（内省・感情の記録�
 
 ## プライバシー（厳守）
 
-- 保存先は `~/journal/`（**git 管理外・リポジトリ外**）のみ。`raw/facts/`・`outputs/`・wiki 等の **git push 対象に個人内容を書かない**
+- 保存先は `~/journal/`（**git 管理外・リポジトリ外**）のみ。`~/brain/0-raw/facts/`・`outputs/`・wiki 等の **git push 対象に個人内容を書かない**
 - 詳細は memory `project_journaling_system.md`

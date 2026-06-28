@@ -69,7 +69,7 @@
 
 ## 参照する wiki
 
-- `wiki/publishing/buzz-patterns.md` — パターン 5「業務 × ツール名の組み合わせ」
+- `~/brain/2-atoms/buzz-patterns.md` — パターン 5「業務 × ツール名の組み合わせ」
 
 ## 参照する他スキル
 

@@ -24,7 +24,7 @@ KGI/KPIの進捗追跡・レポート生成を担当。戦略KGIと日次運用�
 - 「目標の進捗は？」「KPIダッシュボードを見せて」「今月の達成率は？」
 
 ## 起動時に必ず行うこと
-1. `wiki/self/goals.md` を読む
+1. `~/brain/3-threads/goals.md` を読む
 2. `data/usage-log.jsonl` から使用状況を集計
 3. `data/cashflow/` から収入データを確認
 

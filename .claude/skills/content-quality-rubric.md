@@ -53,7 +53,7 @@ LLM / RAG / Embedding / API / LoRA / Fine-tuning 等の専門用語が**非注�
 - 【】記号
 - 問いかけ
 
-参照: `wiki/publishing/by-theme/hook-patterns.md`
+参照: `~/brain/2-atoms/hook-patterns.md`
 
 ### 6. ターゲット明示
 
@@ -95,9 +95,9 @@ AI を使った箇所と手修正した箇所が明示されているか:
 
 ## 参照する wiki
 
-- `wiki/publishing/buzz-patterns.md` — rubric の根拠
-- `wiki/publishing/by-media/*` — 媒体別の禁忌・KPI
-- `wiki/publishing/by-theme/hook-patterns.md` — フックパターン
+- `~/brain/2-atoms/buzz-patterns.md` — rubric の根拠
+- `~/brain/2-atoms/*` — 媒体別の禁忌・KPI
+- `~/brain/2-atoms/hook-patterns.md` — フックパターン
 
 ## rubric 更新ルール
 

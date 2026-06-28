@@ -53,6 +53,6 @@ Step5 照合    spec-validator  実装を story/brief と照合・ギャップ�
 
 ## 関連
 
-- 運用正本: `wiki/dev/agent-teams-playbook.md`
-- 設計 SSOT: `wiki/dev/standards.md`
+- 運用正本: `~/brain/2-atoms/agent-teams-playbook.md`
+- 設計 SSOT: `~/brain/2-atoms/standards.md`
 - 設計: `docs/superpowers/specs/2026-06-09-feature-factory-design.md`

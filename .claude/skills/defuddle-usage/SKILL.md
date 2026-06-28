@@ -45,7 +45,7 @@ ingest 対象が URL の時、`publishing-wiki-ingest.md` や標準 ingest プ�
 which defuddle 2>/dev/null
 
 # 2a. ある: 清書版を raw に保存
-defuddle <url> > raw/articles/<slug>-$(date +%Y-%m-%d).md
+defuddle <url> > ~/brain/0-raw/articles/<slug>-$(date +%Y-%m-%d).md
 
 # 2b. ない: WebFetch fallback（既存挙動）
 ```
@@ -72,13 +72,13 @@ cleaned_by: defuddle
 
 - 1 URL = 1 ファイル原則（複数 URL を 1 raw にまとめない）
 - raw 保存先は素材種別ごとに分ける:
-  - 記事: `raw/articles/`
-  - バズ投稿: `raw/publishing/inspirations/`
-  - 案件素材: `raw/deals/`
+  - 記事: `~/brain/0-raw/articles/`
+  - バズ投稿: `~/brain/0-raw/publishing/inspirations/`
+  - 案件素材: `~/brain/0-raw/deals/`
 - `cleaned_by: defuddle` を frontmatter に明記（後で品質差分を見たい時の手がかり）
 
 ## 参照
 
-- `wiki/SCHEMA.md` §ingest プロトコル §URL ingest の defuddle 前処理
+- `~/brain/SCHEMA.md` §ingest プロトコル §URL ingest の defuddle 前処理
 - `.claude/skills/publishing-wiki-ingest.md` （URL ingest の組込み箇所）
 - claude-obsidian 部分採用 spec: `docs/superpowers/specs/2026-05-22-llm-wiki-claude-obsidian-adoption-design.md` §1.4

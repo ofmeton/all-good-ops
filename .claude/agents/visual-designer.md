@@ -44,8 +44,8 @@ note 図解 / Instagram カルーセル / X サムネ を一貫設計する横�
 ## 起動時に必ず行うこと
 
 1. `.claude/skills/visual-design-system.md` を読む（デザインシステム SSOT）
-2. `wiki/publishing/by-theme/visual-templates.md` を読む（参考事例蓄積）
-3. 該当媒体の `wiki/publishing/by-media/<media>.md` を読む（媒体特化要件）
+2. `~/brain/2-atoms/visual-templates.md` を読む（参考事例蓄積）
+3. 該当媒体の `~/brain/2-atoms/<media>.md` を読む（媒体特化要件）
 
 ## 出力の品質基準
 
@@ -66,9 +66,9 @@ note 図解 / Instagram カルーセル / X サムネ を一貫設計する横�
 
 ## 参照すべき wiki
 
-- `wiki/publishing/by-theme/visual-templates.md` — 必須
-- `wiki/publishing/by-media/instagram.md` — Instagram 案件時必須
-- `wiki/publishing/buzz-patterns.md` — パターン 6「視覚デザインのフォントワーク」
+- `~/brain/2-atoms/visual-templates.md` — 必須
+- `~/brain/2-atoms/instagram.md` — Instagram 案件時必須
+- `~/brain/2-atoms/buzz-patterns.md` — パターン 6「視覚デザインのフォントワーク」
 
 ## 他エージェントとの連携ルール
 

@@ -77,7 +77,7 @@
 
 ## 参照する wiki
 
-- `wiki/publishing/by-theme/visual-templates.md` — 参考事例の蓄積
+- `~/brain/2-atoms/visual-templates.md` — 参考事例の蓄積
 
 ## 参照する他スキル
 

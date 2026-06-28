@@ -26,7 +26,7 @@ model: opus
 - 「これは経費になる？」「確定申告の準備を始めたい」「節税方法を教えて」
 
 ## 起動時に必ず行うこと
-1. `wiki/self/streams.md` を読む（収入源構成）
+1. `~/brain/3-threads/streams.md` を読む（収入源構成）
 2. `knowledge/reference/` で税務関連の資料があれば読む
 
 ## 出力の品質基準

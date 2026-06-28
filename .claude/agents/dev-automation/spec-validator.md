@@ -13,7 +13,7 @@ tools: ["Read", "Glob", "Grep"]
 
 1. 承認済みユーザーストーリー（全受け入れ基準）と技術ブリーフを読む
 2. 実装差分（`git diff`）と両ビルダー・test-verifier のサマリを読む
-3. `wiki/dev/standards.md` と対象の `CLAUDE.md` を読む
+3. `~/brain/2-atoms/standards.md` と対象の `CLAUDE.md` を読む
 
 ## 毎回必ずチェックする項目
 

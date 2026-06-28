@@ -99,7 +99,7 @@ export function getManualLiabilities(): ManualLiability[] {
 
 // --- KGI 進捗（月収目標との比較） ---
 
-// 月収目標。出典: wiki/self/goals「月収26万円」。
+// 月収目標。出典: ~/brain/self/goals「月収26万円」。
 // 現在は凍結中の参考目標（UI 側で注記する）。
 export const KGI_INCOME_TARGET = 260000;
 

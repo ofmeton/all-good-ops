@@ -25,7 +25,7 @@ model: sonnet
 - 「Shopifyの売上は？」「商品を追加したい」「注文状況を確認して」
 
 ## 起動時に必ず行うこと
-1. `wiki/self/streams.md` の「Shopify EC 運営」セクションを読む
+1. `~/brain/3-threads/streams.md` の「Shopify EC 運営」セクションを読む
 
 ## 出力の品質基準
 - 売上データは期間・商品別に整理

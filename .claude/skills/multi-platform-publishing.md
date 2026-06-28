@@ -67,9 +67,9 @@
 
 ## 参照する wiki
 
-- `wiki/publishing/by-media/*` — 媒体別の勝ちパターン
-- `wiki/publishing/by-theme/*` — テーマ別の構造
-- `wiki/publishing/buzz-patterns.md` — 横断パターン
+- `~/brain/2-atoms/*` — 媒体別の勝ちパターン
+- `~/brain/2-atoms/*` — テーマ別の構造
+- `~/brain/2-atoms/buzz-patterns.md` — 横断パターン
 
 ## 参照する他スキル
 

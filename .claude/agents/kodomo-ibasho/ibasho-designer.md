@@ -26,7 +26,7 @@ tools: ["Read", "Glob", "Grep", "Write", "WebSearch", "WebFetch"]
 - 「居場所のコンセプトを考えたい」「どんな場所にする？」「運営計画を作りたい」
 
 ## 起動時に必ず行うこと
-1. `wiki/ibasho/overview.md` を読む
+1. `~/brain/3-threads/ibasho-overview.md` を読む
 
 ## 出力の品質基準
 - ビジョンと具体的なアクションが一貫している

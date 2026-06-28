@@ -13,7 +13,7 @@ tools: ["Read", "Edit", "Write", "Bash", "Glob", "Grep"]
 
 1. 承認済みユーザーストーリー（全受け入れ基準）を読む
 2. 承認済み技術ブリーフ、両ビルダーのサマリ（= API契約）を読む
-3. `wiki/dev/standards.md` の採用スタック B 節を読み、テスト手段を決める
+3. `~/brain/2-atoms/standards.md` の採用スタック B 節を読み、テスト手段を決める
 
 ## 検証手段（スタック依存で柔軟）
 

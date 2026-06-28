@@ -13,7 +13,7 @@ related_spec: docs/superpowers/specs/2026-05-20-publishing-pivot-design.md
 # Rapid HP Operator（BSA事業オペレーター）
 
 > **ステータス: 承認済（2026-04-23）**
-> 起案日: 2026-04-22 / SSOT: `wiki/business/bsa/pricing-catalog.md`
+> 起案日: 2026-04-22 / SSOT: `~/brain/2-atoms/pricing-catalog.md`
 
 ## 役割の定義
 
@@ -53,7 +53,7 @@ BSA 事業（工藤陸名義 / HP・LP制作 × 超短納期 × 広告運用）�
 
 ## 起動時に必ず行うこと
 
-1. **`wiki/business/bsa/pricing-catalog.md` を先読み**（価格・納期・SLA・AI表記ルールの整合確認）
+1. **`~/brain/2-atoms/pricing-catalog.md` を先読み**（価格・納期・SLA・AI表記ルールの整合確認）
 2. `outputs/bsa/proposal-templates.md` を必要箇所のみ参照（テンプレ選定時）
 3. `outputs/bsa/wk1-action-plan.md` or `outputs/bsa/90day-action-plan.md` で現在の Week / Phase を確認
 4. `data/usage-log.jsonl` 直近5件で進行中案件の状態を把握
@@ -73,7 +73,7 @@ BSA 事業（工藤陸名義 / HP・LP制作 × 超短納期 × 広告運用）�
    - **数値KPIの見立てを1つ**（例: "想定CVR 2-3%、月問い合わせ30件目標が現実的"）
    - **広告運用への接続文を中盤**（L3 系でなくても言及）
 6. **提案投下前 2点チェック必須**（feedback_proposal_feasibility_check.md）
-   - **ファクトチェック**: 提案文に書く実績は `wiki/business/bsa/proven-track-record.md` SSOT の「一行表現例」のみ使用。それ以外の数字・実績は捏造扱いで削除。外部サービス仕様（Vercel / microCMS / Cloudflare 等の料金・上限）は WebFetch で公式ページを取得して確認
+   - **ファクトチェック**: 提案文に書く実績は `~/brain/2-atoms/proven-track-record.md` SSOT の「一行表現例」のみ使用。それ以外の数字・実績は捏造扱いで削除。外部サービス仕様（Vercel / microCMS / Cloudflare 等の料金・上限）は WebFetch で公式ページを取得して確認
    - **現実性チェック**: 案件が BSA 標準スタック（Next.js + microCMS + Cloudflare Pages or Vercel Pro）で実装可能か。WordPress + SWELL / 賢威 / 18禁 / WebGL 等の特殊要件は `proven-track-record.md` 第3節で対応可否を確認。対応不可なら「辞退推奨」をユーザーに提示
    - チェック結果を「ファクトチェック済み / 工数現実性チェック済み」と明示してから提案文を提示
 7. カスタム化した提案文をユーザーへレビュー依頼（**送信は人間確認必須**）
@@ -213,7 +213,7 @@ generator のプロンプト（`src/generator/prompts/proposal.txt`）には同�
 | `superpowers:writing-plans` | 受注後の要件定義書・制作計画書を書く時 |
 | `superpowers:verification-before-completion` | **必須** — 納品前のセルフチェック時（本当にチェックリスト全て実行したか） |
 | `ui-ux-pro-max:ui-ux-pro-max` | 制作方針検討時（system-engineer への引き継ぎ前のUI設計方向性確認） |
-| `wiki/domain/lp-hp-design/motion-techniques.md` | 商品ライン別の動き提案時 — 案件タイプ別早見表で L1/L2/L3 の必須・推奨・過剰技法を即決できる |
+| `~/brain/2-atoms/motion-techniques.md` | 商品ライン別の動き提案時 — 案件タイプ別早見表で L1/L2/L3 の必須・推奨・過剰技法を即決できる |
 | `lancers-proposal` | Lancers 案件の提案作成時（深掘りリサーチ→提案文→計画→価格設計） |
 
 ## 他エージェントとの連携ルール

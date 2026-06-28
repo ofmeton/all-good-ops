@@ -108,8 +108,8 @@
 
 ## 参照する wiki
 
-- `wiki/publishing/by-media/note.md` — note 媒体特化の学び
-- `wiki/publishing/by-theme/prompt-collection.md` — プロンプト集型構造
+- `~/brain/2-atoms/note.md` — note 媒体特化の学び
+- `~/brain/2-atoms/prompt-collection.md` — プロンプト集型構造
 
 ## 参照する他スキル
 

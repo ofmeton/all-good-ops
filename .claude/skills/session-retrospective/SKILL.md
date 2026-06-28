@@ -28,7 +28,7 @@ description: "セッションの作業・やり取りを振り返り、気づき
 CLAUDE.md §事実情報の自動 raw 保存ルールの遵守確認。**振り返り本体より先に**実施し、漏れはその場で保存。
 
 1. セッション内のユーザー発話を走査し、people / contracts / situations / misc の事実を列挙
-2. 対応する `raw/facts/<カテゴリ>/YYYY-MM-DD-<slug>.md` が当日作成済みか確認（`ls raw/facts/<cat>/ | grep <date>`）
+2. 対応する `~/brain/0-raw/facts/<カテゴリ>/YYYY-MM-DD-<slug>.md` が当日作成済みか確認（`ls ~/brain/0-raw/facts/<cat>/ | grep <date>`）
 3. 未保存はその場で保存・1行通知（人間確認不要）。漏れた理由を §2 表に必ず記録
 4. 対象外: 雑談 / 既存情報の再言及 / 質問・依頼そのもの / 仮説・推測
 
@@ -77,7 +77,7 @@ CLAUDE.md §事実情報の自動 raw 保存ルールの遵守確認。**振り�
 デフォルトは「既存に追記」or「保留」。新規作成は関門通過時のみ:
 
 - **memory**: 既存 `feedback_*` に1行追記で代替不可か？ recall されて判断が変わる新規事実か？ → No なら新規作成しない。最終関門=**MEMORY.md 索引を1行増やすに値するか**（索引は毎セッション全文ロード＝コスト中心）
-- **wiki 優先**: 一般化・連結できる原則は memory でなく `wiki/self/engineering-principles.md` へ（memory=atomic recall / wiki=連結・高次化）
+- **wiki 優先**: 一般化・連結できる原則は memory でなく `~/brain/2-atoms/engineering-principles.md` へ（memory=atomic recall / wiki=連結・高次化）
 - **スキル化**: 既存 skill/agent で代替不可か？ 今後30日で**2回以上発火する具体シーンを書ける**か？ → 書けなければ improvement-log に `status=open` で寝かせ、即スキル化しない
 
 #### 反映先カテゴリ
@@ -85,7 +85,7 @@ CLAUDE.md §事実情報の自動 raw 保存ルールの遵守確認。**振り�
 | カテゴリ | 反映先 | 何を書くか |
 |---|---|---|
 | memory (feedback) | `~/.claude/projects/.../memory/feedback_*.md` | ユーザーの好み・作業スタイルの発見（既存追記優先） |
-| wiki | `wiki/self/engineering-principles.md` 等 | 一般化・連結できる原則 |
+| wiki | `~/brain/2-atoms/engineering-principles.md` 等 | 一般化・連結できる原則 |
 | improvement-log | `data/improvement-log.jsonl` | プロセス失敗・保留中のスキル化候補・次回監視指標（`status` 付き） |
 | CLAUDE.md | `CLAUDE.md` | ルーティングの盲点・MCP/人間確認ルールの穴 |
 | エージェント定義 | `.claude/agents/**/*.md` | ツール権限不足・参照スキル漏れ・手順明示不足 |
@@ -106,12 +106,12 @@ CLAUDE.md のルーティング表大幅変更・戦略 KGI・人間確認ルー
 4. **§1-5 を対話内に表示**（中身がある節だけ。この段階では本体を書き込まない）
 5. **§6 反映先候補** → 保存関門を通してから SAFE/RISKY 分類。**SAFE は承認を取らず即反映**し、RISKY のみ 1 件ずつ提示・承認取得
 6. **反映** → SAFE は即反映済み・RISKY は承認後に反映。本体を `outputs/retrospectives/YYYY-MM-DD-HHmm[-topic].md` に保存（topic は lowercase-hyphen、冒頭に日時+対象サマリ）。反映した SAFE 項目を 1 行で事後報告
-7. **`wiki/hot.md` 更新（必須）** — Last Updated / Current Focus / Recently Touched(直近7件) / Open Questions。500 words 以内。詳細は `wiki/SCHEMA.md` §ホットキャッシュ
+7. **`~/brain/hot.md` 更新（必須）** — Last Updated / Current Focus / Recently Touched(直近7件) / Open Questions。500 words 以内。詳細は `~/brain/SCHEMA.md` §ホットキャッシュ
 8. **セッション終了処理（`session-end` スキル）** — 反映が済んだら続けて `session-end` の手順を実行し、「main クリーン・副産物コミット済み・後片付け済み」で終える。**「振り返り → SAFE 即反映 / RISKY 承諾 → セッション終了」は一連**。ユーザーが追加で「終了して」と言わなくても、振り返り反映の直後にそのまま終了処理へ進む。
 
 ## 絶対にやらないこと
 
-1. **RISKY 相当の変更を人間確認なしに行う**（CLAUDE.md ルーティング/人間確認ルール変更・permissions 変更・エージェント追加削除統合・新規スキル確定追加・複数ファイル横断の構造変更）。※ SAFE（memory/wiki/improvement-log 追記・1行調整）は承認不要・即反映
+1. **RISKY 相当の変更を人間確認なしに行う**（CLAUDE.md ルーティング/人間確認ルール変更・permissions 変更・エージェント追加削除統合・新規スキル確定追加・複数ファイル横断の構造変更）。※ SAFE（memory/~/brain/improvement-log 追記・1行調整）は承認不要・即反映
 2. **保存関門を通さず memory / 新規スキルを作る**（既存追記・保留を検討しない）
 3. **§0.5 前回フォローアップを飛ばす**（書きっぱなし＝儀式化を招く）
 4. **中身のない節を水増しする** / **迎合的な振り返り**を出す

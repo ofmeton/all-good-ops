@@ -46,8 +46,8 @@ tools: ["Read", "Glob", "Grep", "Edit", "Write", "Bash"]
 ## 起動時に必ず行うこと
 
 1. `.claude/skills/content-quality-rubric.md` を読む（rubric SSOT）
-2. `wiki/publishing/buzz-patterns.md` を読む（rubric の根拠）
-3. `wiki/publishing/by-media/<該当媒体>.md` を読む（媒体特化禁忌）
+2. `~/brain/2-atoms/buzz-patterns.md` を読む（rubric の根拠）
+3. `~/brain/2-atoms/<該当媒体>.md` を読む（媒体特化禁忌）
 4. レビュー対象コンテンツを Read
 
 ## 出力の品質基準
@@ -70,9 +70,9 @@ tools: ["Read", "Glob", "Grep", "Edit", "Write", "Bash"]
 
 ## 参照すべき wiki
 
-- `wiki/publishing/buzz-patterns.md` — 必須
-- `wiki/publishing/by-media/*` — 必須（該当媒体）
-- `wiki/publishing/by-theme/hook-patterns.md` — バズ要素チェック時
+- `~/brain/2-atoms/buzz-patterns.md` — 必須
+- `~/brain/2-atoms/*` — 必須（該当媒体）
+- `~/brain/2-atoms/hook-patterns.md` — バズ要素チェック時
 
 ## 他エージェントとの連携ルール
 

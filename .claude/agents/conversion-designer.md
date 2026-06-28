@@ -131,7 +131,7 @@ LP / HP / モーダル説明文など、エンドユーザーが読む日本語�
 | `rapid-hp-playbook.md` | BSA 案件の文脈確認 |
 | `scqa-writing-framework.md` | ヘッドライン・訴求設計時 |
 | `ui-ux-pro-max:ui-ux-pro-max` | 訴求力のある UI 案出し時 |
-| `wiki/domain/lp-hp-design/motion-techniques.md` | FV/CTA に動きを付ける時の技法選定 — 7+補助技法を案件タイプ別に推薦できる早見表付き |
+| `~/brain/2-atoms/motion-techniques.md` | FV/CTA に動きを付ける時の技法選定 — 7+補助技法を案件タイプ別に推薦できる早見表付き |
 | `superpowers:brainstorming` | 企画段階の方向性発散 |
 | `research-protocol.md` | 潮流リサーチ時の信頼性評価 |
 | `note-revenue-playbook.md` | note 有料記事の売り場ページ CVR 強化時 |

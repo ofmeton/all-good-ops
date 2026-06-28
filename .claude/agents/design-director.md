@@ -131,7 +131,7 @@ BSA 事業（LP / HP 制作）および portfolio 系プロジェクトの**デ�
 |---|---|
 | `design-md-workflow.md` | **必須**（標準手順） |
 | `ui-ux-pro-max:ui-ux-pro-max` | DESIGN.md 生成・UI品質判断時 |
-| `wiki/domain/lp-hp-design/motion-techniques.md` | DESIGN.md にモーション仕様を入れる時 — 「AIっぽくない動き」の標準語彙。技法 1–7 + 補助で構成宣言 |
+| `~/brain/2-atoms/motion-techniques.md` | DESIGN.md にモーション仕様を入れる時 — 「AIっぽくない動き」の標準語彙。技法 1–7 + 補助で構成宣言 |
 | `superpowers:brainstorming` | クライアント要望が曖昧な時の方向性発散 |
 | `superpowers:verification-before-completion` | 納品前の AIっぽさチェック時 |
 | `mcp-integration.md` | AIDesigner MCP 導入判断時 |
