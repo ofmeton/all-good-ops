@@ -59,9 +59,11 @@ fallback 経路（`IN_MEMORY_FALLBACK=true` 等）だけが緑でも、本番経
 
 - **CLAUDE.md は「消すと Claude がミスするか？」で各行を維持**。肥大すると指示が埋もれて無視される。ドメイン知識・領域手順は常時ロードの CLAUDE.md でなく skill へ逃がす。
 - **自動起動させたいローカルスキルは `<name>/SKILL.md` 形式 + 三人称 description（何をする＋いつ使う）**。flat `.md` は frontmatter があっても自動検出されない（progressive disclosure に乗らない）。`name` に予約語 `claude`/`anthropic` 不可。
+- **「いつ使う」は description 自体に書く（本文 `## When to use` では起動判断に効かない＝本文は起動後しか読まれない）**。さらに**ドメインの API/識別子名を description に入れる**（例: `useCurrentFrame`/`interpolate`/`<Sequence>`）と、ユーザーがツール名を明言しなくてもコード文脈で発火する。SKILL.md 形式でも description が「何をする」だけなら自動起動は弱い。
 - **context は有限資源**: サブエージェントで隔離、just-in-time 取得、永続メモリ（raw/wiki/memory）で working context を膨らませない。← 原則2 の end-to-end 実走とも整合。
 - **完了主張の前に検証 evidence**（verification-before-completion）。
 - **事例 (2026-06-05)**: ローカル 48 skill の大半が frontmatter 無し flat `.md` で自動検出されず、CLAUDE.md の手動誘導（起動マップ+ls+Read）に依存していた → 横断ツール系 22 個を SKILL.md 化し自動起動可能に。
+- **事例 (2026-06-26)**: `remotion-best-practices` は SKILL.md 形式・frontmatter ありなのに自動起動が弱かった。原因は description が「何をする」のみで「いつ使う」が本文 `When to use` に埋もれていた → description に JP/EN トリガー文＋Remotion API 名を追加し配線（CLAUDE.md 起動マップにも『動画/Remotion』行）。
 - 運用点検は `claude-md-health-check` スキル item 8（公式チェックリスト）に集約。出典: [Best practices for Claude Code](https://code.claude.com/docs/en/best-practices) / [Skill authoring best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices) / [Effective context engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)。
 
 ## 原則7（自律実行）: agent がコードを書いて自己改善する系は「最小権限 × 初回安全弁 × 起動経路の事前 smoke」

@@ -42,10 +42,18 @@ raw/ は immutable（上書き・削除禁止、古くなれば別ファイル�
 
 ## 秘書が唯一の一次窓口 + ルーティング
 
-全依頼は秘書（secretary）を通す。他エージェント直接依頼は禁止。
+全依頼はClaude内の秘書（secretary）を通す。他エージェント直接依頼は禁止。
+**Hermes連携**: Hermesは外部の秘書・司令塔。Hermesがこのrepoを読む場合は本ファイルを尊重し、Claude Codeへ渡す依頼を整理する。「Claudeに任せる」は、ClaudeがCodexへの委任量も含めて判断し、速度とトークン効率を両立してチームで進める意味。
 **例外**: 現セッションの続き議論・メタ判断・直前調査を踏まえた即決はメインセッション直接対話。
 
 セッション開始時の秘書: `wiki/hot.md` → `wiki/index.md` 関連クラスタのみ → `data/usage-log.jsonl` 直近5件 → 状況報告。
+
+### Hermes Secretary OS 連携
+
+- Hermesの運用SSOTは `wiki/self/hermes-secretary-os.md`。設定変更・cron追加・外部連携変更はここへ短く追記する。
+- 定期通知は本人Telegram DM宛なら確認不要。ただし本人以外への送信、SNS投稿、メール送信、金銭、本番DB migration、ファイル削除は確認必須。
+- 日次cronは「朝ブリーフィング」「夜ジャーナル」「repo/Claude作業監視」を基本レーンとし、スクリプトは `~/.hermes/scripts/`、秘密値は `~/.hermes/.env` に置く。秘密値をrepo/wikiへ書かない。
+- X/Twitter監視・投稿連携は初期設定対象外。必要になったら読み取り/下書きから再設計する。
 
 ### コスト分類（毎依頼）
 
@@ -87,6 +95,7 @@ raw/ は immutable（上書き・削除禁止、古くなれば別ファイル�
 | 2+ 独立タスク並列 | `superpowers:dispatching-parallel-agents` |
 | Web / UI 実装 | `ui-ux-pro-max`（常時・設計/実装）＋ UI監査=`web-design-guidelines` / React最適化=`vercel-react-best-practices` / 構成設計=`vercel-composition-patterns`。成果物(スライド/doc/HTML)への一貫テーマ適用=`theme-factory`（10プリセット）。参考デザイン仕様は `design-md-workflow.md`（Google Stitch DESIGN.md。カタログ=github VoltAgent/awesome-design-md） |
 | 画像生成 | gpt-image-2 = `visual-design-system.md`(Codex MCP・既定) / Gemini系 = `nano-banana`（要 `@google/genai`＋API キー・**従量課金**）。ポスター/静的アート(PNG/PDF) = `canvas-design` |
+| 動画 / Remotion | Remotion で React 動画を作る・アニメーション/字幕/音声/3D 実装・レンダリング設定 = `remotion-best-practices`（**必ず最初に起動**）。iOS のオンボーディング/機能紹介動画 = `create-onboarding-video`。Web アプリ操作デモ動画 = `demo-video-pipeline` |
 | Google Workspace ヘッドレス自動化 | `gws-workspace-cli`（Docs/Slides 生成・Gmail/Sheets バッチ・--dry-run。会話内即時は MCP）。書込/送信は人間確認 |
 | 記事の編集・推敲 | `edit-article`（再構成/明瞭化/短縮）。執筆前構成=`scqa-writing-framework.md` / AI文体除去=`stop-slop` |
 | Supabase | `supabase:*` |
