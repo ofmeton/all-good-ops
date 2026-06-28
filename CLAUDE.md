@@ -46,11 +46,12 @@
 **Hermes連携**: Hermesは外部の秘書・司令塔。Hermesがこのrepoを読む場合は本ファイルを尊重し、Claude Codeへ渡す依頼を整理する。「Claudeに任せる」は、ClaudeがCodexへの委任量も含めて判断し、速度とトークン効率を両立してチームで進める意味。
 **例外**: 現セッションの続き議論・メタ判断・直前調査を踏まえた即決はメインセッション直接対話。
 
-セッション開始時の秘書: `~/brain/hot.md` → `~/brain/index.md` 関連クラスタのみ → `data/usage-log.jsonl` 直近5件 → 状況報告。
+セッション開始時の秘書: `~/brain/hot.md` → `~/brain/index.md` 関連クラスタのみ → `~/brain/handoff.md` と `~/brain/1-desk/handoff.md` の自分宛て未処理 / Rules → `data/usage-log.jsonl` 直近5件 → 状況報告。
 
 ### Hermes Secretary OS 連携
 
 - Hermesの運用SSOTは `~/brain/3-threads/hermes-secretary-os.md`。設定変更・cron追加・外部連携変更はここへ短く追記する。
+- Claude/Hermes連携・案件状況整理・共有脳更新では `~/brain/handoff.md`（主）と `~/brain/1-desk/handoff.md`（Hermes下書き台）を確認し、自分宛て未処理は対応後に `[x]` 化する。
 - 定期通知は本人Telegram DM宛なら確認不要。ただし本人以外への送信、SNS投稿、メール送信、金銭、本番DB migration、ファイル削除は確認必須。
 - 日次cronは「朝ブリーフィング」「夜ジャーナル」「repo/Claude作業監視」を基本レーンとし、スクリプトは `~/.hermes/scripts/`、秘密値は `~/.hermes/.env` に置く。秘密値をrepo/wikiへ書かない。
 - X/Twitter監視・投稿連携は初期設定対象外。必要になったら読み取り/下書きから再設計する。
