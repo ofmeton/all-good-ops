@@ -129,4 +129,16 @@ export function applyRecurringMigrations(db) {
     db.exec("ALTER TABLE card_charge_schedules ADD COLUMN debit_account TEXT");
   }
   db.exec("CREATE INDEX IF NOT EXISTS idx_card_charge_schedules_account ON card_charge_schedules (card_account, active)");
+
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS card_charge_overrides (
+      id           INTEGER PRIMARY KEY AUTOINCREMENT,
+      schedule_id  INTEGER NOT NULL REFERENCES card_charge_schedules(id) ON DELETE CASCADE,
+      occurrence_date TEXT NOT NULL,
+      amount       INTEGER NOT NULL,
+      created_at   TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')),
+      UNIQUE (schedule_id, occurrence_date)
+    )
+  `);
+  db.exec("CREATE INDEX IF NOT EXISTS idx_card_charge_overrides_sid ON card_charge_overrides (schedule_id)");
 }
