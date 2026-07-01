@@ -8,6 +8,7 @@ import {
   cardBillingPeriod,
   effectiveDay,
   expandCardChargeSchedules,
+  indexCardChargeOverrides,
   monthEndOffsetDays,
   monthlyChargeDates,
   monthlyOccurrences,
@@ -702,4 +703,106 @@ test("monthlyRecurringContribution: skip除外・variable overrideのみ・fixed
     ),
     0,
   );
+});
+
+test("indexCardChargeOverrides: schedule_id|occurrence_date キーの Map を作る", () => {
+  const map = indexCardChargeOverrides([
+    { schedule_id: 3, occurrence_date: "2026-07-01", amount: 5000 },
+  ]);
+  assert.equal(map.get("3|2026-07-01").amount, 5000);
+  assert.equal(map.size, 1);
+});
+
+test("expandCardChargeSchedules: overrides で variable の見込みを実額に置き換える(estimated:false)", () => {
+  const charges = expandCardChargeSchedules({
+    today: "2026-06-16",
+    days: 20,
+    schedules: [
+      {
+        id: 7,
+        card_account: "三井住友カード",
+        charge_day: 27,
+        amount_type: "variable",
+        fixed_amount: null,
+      },
+    ],
+    variableByPeriod: new Map([["三井住友カード|2026-05-31", 51000]]),
+    overrides: new Map([["7|2026-06-27", { schedule_id: 7, occurrence_date: "2026-06-27", amount: 63500 }]]),
+  });
+
+  assert.equal(charges.length, 1);
+  assert.equal(charges[0].amount, 63500);
+  assert.equal(charges[0].estimated, false);
+  assert.equal(charges[0].scheduleId, 7);
+  assert.equal(charges[0].amountType, "variable");
+});
+
+test("expandCardChargeSchedules: overrides に対象occurrenceが無ければ従来通り自動推定のまま", () => {
+  const charges = expandCardChargeSchedules({
+    today: "2026-06-16",
+    days: 20,
+    schedules: [
+      {
+        id: 7,
+        card_account: "三井住友カード",
+        charge_day: 27,
+        amount_type: "variable",
+        fixed_amount: null,
+      },
+    ],
+    variableByPeriod: new Map([["三井住友カード|2026-05-31", 51000]]),
+    overrides: new Map(),
+  });
+
+  assert.equal(charges.length, 1);
+  assert.equal(charges[0].amount, 51000);
+  assert.equal(charges[0].estimated, true);
+  assert.equal(charges[0].scheduleId, 7);
+});
+
+test("expandCardChargeSchedules: fixed 型は overrides があっても無視する", () => {
+  const charges = expandCardChargeSchedules({
+    today: "2026-06-16",
+    days: 20,
+    schedules: [
+      {
+        id: 9,
+        card_account: "ポケットカード",
+        charge_day: 27,
+        amount_type: "fixed",
+        fixed_amount: 3000,
+      },
+    ],
+    variableByPeriod: new Map(),
+    overrides: new Map([["9|2026-06-27", { schedule_id: 9, occurrence_date: "2026-06-27", amount: 99999 }]]),
+  });
+
+  assert.equal(charges.length, 1);
+  assert.equal(charges[0].amount, 3000);
+  assert.equal(charges[0].estimated, false);
+  assert.equal(charges[0].amountType, "fixed");
+});
+
+test("buildRolling: cardCharges の scheduleId/amountType をイベントへ伝播する", () => {
+  const r = buildRolling({
+    today: "2026-06-01",
+    days: 30,
+    startBalance: 100000,
+    recurring: [],
+    scheduled: [],
+    cardCharges: [
+      {
+        date: "2026-06-27",
+        amount: 42000,
+        account: "VISAカード",
+        name: "VISAカード カード引落",
+        amountType: "variable",
+        estimated: false,
+        scheduleId: 5,
+      },
+    ],
+  });
+
+  assert.equal(r.events[0].scheduleId, 5);
+  assert.equal(r.events[0].amountType, "variable");
 });

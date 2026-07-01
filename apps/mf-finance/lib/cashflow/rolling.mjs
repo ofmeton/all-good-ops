@@ -78,11 +78,18 @@ export function cardBillingPeriod(chargeDateIso, offsetMonths, closingDay) {
   };
 }
 
-export function expandCardChargeSchedules({ schedules = [], today, days, variableByPeriod = new Map() }) {
+export function expandCardChargeSchedules({
+  schedules = [],
+  today,
+  days,
+  variableByPeriod = new Map(),
+  overrides = new Map(),
+}) {
   const variableMap =
     variableByPeriod instanceof Map
       ? variableByPeriod
       : new Map(Object.entries(variableByPeriod ?? {}));
+  const overrideMap = overrides instanceof Map ? overrides : indexCardChargeOverrides(overrides);
   const out = [];
 
   for (const schedule of schedules) {
@@ -90,16 +97,22 @@ export function expandCardChargeSchedules({ schedules = [], today, days, variabl
     const cardAccount = schedule.card_account ?? schedule.account;
     if (!cardAccount) continue;
     const debitAccount = schedule.debit_account ?? schedule.debitAccount ?? null;
+    const scheduleId = schedule.id ?? null;
     for (const date of monthlyChargeDates(today, days, schedule.charge_day ?? schedule.chargeDay)) {
       const period = cardBillingPeriod(
         date,
         schedule.billing_month_offset ?? schedule.billingMonthOffset,
         schedule.closing_day ?? schedule.closingDay,
       );
+      const override =
+        amountType === "variable" && scheduleId != null ? overrideMap.get(`${scheduleId}|${date}`) : undefined;
+      const estimated = amountType === "variable" && override == null;
       const amount =
         amountType === "fixed"
           ? Math.abs(Math.round(Number(schedule.fixed_amount ?? schedule.fixedAmount) || 0))
-          : Math.abs(Math.round(Number(variableMap.get(`${cardAccount}|${period.end}`)) || 0));
+          : override != null
+            ? Math.abs(Math.round(Number(override.amount) || 0))
+            : Math.abs(Math.round(Number(variableMap.get(`${cardAccount}|${period.end}`)) || 0));
       if (amountType === "fixed" && amount <= 0) continue;
       out.push({
         date,
@@ -107,7 +120,8 @@ export function expandCardChargeSchedules({ schedules = [], today, days, variabl
         account: debitAccount,
         name: schedule.name ?? `${cardAccount} カード引落`,
         amountType,
-        estimated: amountType === "variable",
+        estimated,
+        scheduleId,
       });
     }
   }
@@ -120,6 +134,15 @@ export function indexOverrides(arr) {
   const map = new Map();
   for (const ov of arr ?? []) {
     map.set(`${ov.recurring_id}|${ov.occurrence_date}`, ov);
+  }
+  return map;
+}
+
+export function indexCardChargeOverrides(arr) {
+  if (arr instanceof Map) return arr;
+  const map = new Map();
+  for (const ov of arr ?? []) {
+    map.set(`${ov.schedule_id}|${ov.occurrence_date}`, ov);
   }
   return map;
 }
@@ -230,6 +253,8 @@ export function buildRolling(opts) {
           source: "card_charge",
           status: "normal",
           estimated: !!c.estimated,
+          scheduleId: c.scheduleId ?? null,
+          amountType: c.amountType ?? null,
         });
       }
     }
