@@ -120,6 +120,18 @@ export function getRecurringOverrides(): RecurringOverrideRow[] {
     .all() as RecurringOverrideRow[];
 }
 
+export interface CardChargeOverrideRow {
+  schedule_id: number;
+  occurrence_date: string;
+  amount: number;
+}
+
+export function getCardChargeOverrides(): CardChargeOverrideRow[] {
+  return db
+    .prepare("SELECT schedule_id, occurrence_date, amount FROM card_charge_overrides")
+    .all() as CardChargeOverrideRow[];
+}
+
 function scheduledRows(): { kind: "income" | "expense"; name: string; amount: number; date: string; account: string | null }[] {
   return db
     .prepare("SELECT kind, name, amount, scheduled_date AS date, account FROM scheduled_cashflow ORDER BY scheduled_date")
@@ -353,6 +365,8 @@ export interface RollingEvent {
   balanceAfter: number;
   affectsTotal?: boolean;
   estimated?: boolean;
+  scheduleId?: number;
+  amountType?: "fixed" | "variable";
 }
 export interface RollingCashflow {
   start: number;
@@ -396,6 +410,7 @@ type ExpandedCardCharge = {
   name: string;
   amountType: "fixed" | "variable";
   estimated: boolean;
+  scheduleId: number | null;
 };
 
 function formatRollingResult(
@@ -445,13 +460,17 @@ function expandCardCharges(
   }
 
   const variableByPeriod = getCardUsageByPeriod(periods);
+  const overrides = new Map(
+    getCardChargeOverrides().map((ov) => [`${ov.schedule_id}|${ov.occurrence_date}`, ov] as const),
+  );
   const expand = expandCardChargeSchedules as (input: {
     schedules: CardChargeScheduleRow[];
     today: string;
     days: number;
     variableByPeriod: Map<string, number>;
+    overrides: Map<string, CardChargeOverrideRow>;
   }) => ExpandedCardCharge[];
-  return expand({ schedules, today, days, variableByPeriod });
+  return expand({ schedules, today, days, variableByPeriod, overrides });
 }
 
 // 向こう days 日のローリング資金繰り（recurring + scheduled + transfer + cardCharges）。
