@@ -5,6 +5,7 @@ import type { AccountRollingCashflow, RollingEvent, RollingLocation } from "@/li
 import { KIND_LABEL } from "@/lib/cashflow/kinds";
 import { yen, shortDate } from "@/lib/format";
 import { OccurrenceActions } from "@/app/cashflow/OccurrenceActions";
+import { CardChargeOccurrenceActions } from "@/app/cashflow/CardChargeOccurrenceActions";
 
 function money(value: number): string {
   return `${value < 0 ? "−¥" : "¥"}${yen(Math.abs(value))}`;
@@ -163,6 +164,10 @@ export function CashflowTimeline({ rolling }: { rolling: AccountRollingCashflow 
                     event.source === "recurring" &&
                     event.recurringId != null &&
                     event.occurrenceDate != null;
+                  const isCardChargeVariable =
+                    event.source === "card_charge" &&
+                    event.amountType === "variable" &&
+                    event.scheduleId != null;
                   return (
                     <tr key={`${event.date}-${event.source}-${i}`} className="border-b border-border/60 align-top last:border-b-0">
                       <th scope="row" className="whitespace-nowrap py-2 pr-3 text-left text-xs font-normal text-muted">
@@ -181,6 +186,13 @@ export function CashflowTimeline({ rolling }: { rolling: AccountRollingCashflow 
                               recurringId={event.recurringId!}
                               occurrenceDate={event.occurrenceDate!}
                               status={event.status}
+                            />
+                          )}
+                          {isCardChargeVariable && (
+                            <CardChargeOccurrenceActions
+                              scheduleId={event.scheduleId!}
+                              occurrenceDate={event.date}
+                              estimated={event.estimated ?? false}
                             />
                           )}
                         </div>
