@@ -223,6 +223,46 @@ export async function clearOccurrenceOverride(
   revalidatePath("/cashflow");
 }
 
+export async function setCardChargeOverride(
+  scheduleId: number,
+  date: string,
+  amount: number,
+): Promise<void> {
+  const _id = ensureId(scheduleId);
+  const occurrenceDate = ensureIsoDate(date);
+  const schedule = db
+    .prepare("SELECT amount_type FROM card_charge_schedules WHERE id = ?")
+    .get(_id) as { amount_type: "fixed" | "variable" } | undefined;
+  if (!schedule) throw new Error("カード引落予定が見つかりません");
+  if (schedule.amount_type !== "variable") {
+    throw new Error("実額の上書きは変動額のカード引落のみ対応しています");
+  }
+  const overrideAmount = positiveOverrideAmount(amount);
+
+  db.prepare(
+    `INSERT INTO card_charge_overrides (schedule_id, occurrence_date, amount)
+     VALUES (?, ?, ?)
+     ON CONFLICT(schedule_id, occurrence_date) DO UPDATE SET
+       amount = excluded.amount`,
+  ).run(_id, occurrenceDate, overrideAmount);
+  revalidatePath("/");
+  revalidatePath("/cashflow");
+}
+
+export async function clearCardChargeOverride(
+  scheduleId: number,
+  date: string,
+): Promise<void> {
+  const _id = ensureId(scheduleId);
+  const occurrenceDate = ensureIsoDate(date);
+  db.prepare("DELETE FROM card_charge_overrides WHERE schedule_id = ? AND occurrence_date = ?").run(
+    _id,
+    occurrenceDate,
+  );
+  revalidatePath("/");
+  revalidatePath("/cashflow");
+}
+
 // --- manual_liabilities ---
 
 export interface AddManualLiabilityInput {
