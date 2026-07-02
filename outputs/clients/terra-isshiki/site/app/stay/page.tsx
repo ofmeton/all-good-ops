@@ -23,10 +23,10 @@ const EXPERIENCES = [
   {
     no: "02",
     label: "海越しの富士山",
-    sub: "Mt. Fuji photo slot",
+    sub: "Mt. Fuji from the coast",
     body:
-      "空気が澄んだ日は、海の向こうに富士山が見えることも。高画質写真を選定し、必要に応じてノイズ除去したうえで差し替える写真枠を確保しました。",
-    image: "/images/stay/stay-fuji-slot.svg",
+      "空気が澄んだ日は、一色海岸の向こうに富士山が見えることも。鳥居越しに望む、その静かな稜線。",
+    image: "/images/stay/stay-fuji.jpg",
     accent: "mist",
   },
   {

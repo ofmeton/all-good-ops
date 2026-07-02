@@ -9,28 +9,30 @@ export const metadata = {
     "TERRA HAYAMA を営む BEAT ICE。葉山の棚田で育てたお米から手づくりのアイスを生み、学校給食や田畑の営みと行き来する暮らしを紹介します。",
 };
 
-// TODO(写真差替): アイス / 学校給食 / 田んぼで子供たちと / 夫婦
-// 夫婦写真は 6/30 MTG 提供分をレビューし不採用、さきに別写真を再依頼中。
 const ACTIVITIES: { en: string; jp: string; body: string; image?: string }[] = [
   {
     en: "Ice Cream",
     jp: "棚田米のアイスクリーム",
     body: "自分たちで育てたお米を使い、葉山の素材と合わせて一つひとつ手づくり。",
+    image: "/images/owner/owner-icecream.webp",
   },
   {
     en: "School Lunch",
     jp: "学校給食の提供",
     body: "地域の子どもたちへ。食を通じて葉山の恵みを次の世代へつないでいます。",
+    image: "/images/owner/owner-school-lunch.jpg",
   },
   {
     en: "Rice Field",
     jp: "田んぼでの営み",
-    body: "棚田で子どもたちと土にふれ、季節とともに米を育てる暮らし。",
+    body: "棚田で土にふれ、季節とともに米を育てる暮らし。",
+    image: "/images/owner/owner-tanada-work.jpg",
   },
   {
     en: "Our Family",
     jp: "夫婦のものづくり",
     body: "葉山に暮らして十年。海と山に寄り添いながら、二人で営みを続けています。",
+    image: "/images/owner/owner-family.jpg",
   },
 ];
 
