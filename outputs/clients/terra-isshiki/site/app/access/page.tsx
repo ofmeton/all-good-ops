@@ -23,8 +23,8 @@ const MAPS_LINK = `https://www.google.com/maps/search/?api=1&query=${encodeURICo
 const POINTS = [
   { name: "一色海岸", time: "徒歩 8 分", note: "CNN 世界の厳選ビーチ 100 選" },
   { name: "セブンイレブン 葉山一色店", time: "徒歩 30 秒", note: "日用品・夜食のちょっとした買い出しに" },
-  { name: "スズキヤ 葉山店", time: "徒歩 5 分", note: "地元の食材が揃い、土地の人にも信頼される地域のスーパー。滞在中の自炊に" },
-  { name: "森戸海岸", time: "車 8 分", note: "葉山きっての海水浴と日没スポット" },
+  { name: "スズキヤ 葉山店", time: "徒歩 5 分", note: "地元の食材が揃う地域のスーパー。滞在中の自炊に" },
+  { name: "森戸海岸", time: "車 8 分", note: "海水浴と夕陽のスポット" },
   { name: "上山口の棚田", time: "車 12 分", note: "葉山アイスのお米を育てる棚田" },
   { name: "旧役場前 バス停", time: "徒歩 1 分", note: "葉山〜JR 逗子駅を結ぶ路線バスの最寄り停留所" },
   { name: "JR 逗子駅", time: "車 15 分 / バス 25 分", note: "横須賀線・湘南新宿ライン" },
