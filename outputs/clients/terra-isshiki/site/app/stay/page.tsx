@@ -6,7 +6,7 @@ import { ReservationCTA } from "../_components/ReservationCTA";
 export const metadata = {
   title: "過ごし方",
   description:
-    "TERRA HAYAMA での過ごし方。一色海岸を第一に、海越しの富士山、置いてある抹茶、棚田と BEAT ICE の営みを軽やかに紹介します。",
+    "TERRA HAYAMA での過ごし方。歩いて 8 分の一色海岸、海越しの富士山、キッチンの抹茶、棚田と BEAT ICE の営み。",
 };
 
 const EXPERIENCES = [
@@ -15,7 +15,7 @@ const EXPERIENCES = [
     label: "まずは、一色海岸へ",
     sub: "Isshiki Beach first",
     body:
-      "宿から海までは徒歩 8 分。朝の散歩、夕方の寄り道、何もしない時間。TERRA の過ごし方は、まず一色海岸から始まります。",
+      "宿から海までは徒歩 8 分。朝の散歩に、夕方の寄り道に。TERRA の過ごし方は、一色海岸から始まります。",
     image: null,
     icon: "wave",
     accent: "mist",
@@ -25,7 +25,7 @@ const EXPERIENCES = [
     label: "海越しの富士山",
     sub: "Mt. Fuji from the coast",
     body:
-      "空気が澄んだ日は、一色海岸の向こうに富士山が見えることも。鳥居越しに望む、その静かな稜線。",
+      "空気が澄んだ日は、一色海岸の向こうに富士山が見えることも。海越しに望む、静かな稜線です。",
     image: "/images/stay/stay-fuji.jpg",
     accent: "mist",
   },
@@ -34,7 +34,7 @@ const EXPERIENCES = [
     label: "置いてある抹茶を、気軽に",
     sub: "Matcha in the kitchen",
     body:
-      "宿のキッチンに抹茶マシーンを置いてあります。特別な体験として構えすぎず、滞在中のひと息に、気軽にお楽しみください。",
+      "キッチンに、抹茶マシーンを置いてあります。滞在中のひと息に、気軽にどうぞ。",
     image: "/images/stay/stay-matcha.jpg",
     accent: "pine",
   },
@@ -43,7 +43,7 @@ const EXPERIENCES = [
     label: "棚田と BEAT ICE の営み",
     sub: "Tanada × BEAT ICE",
     body:
-      "葉山の棚田で育てたお米が、BEAT ICE のアイスクリームに変わる。土地の営みを、宿の背景としてそっと感じられます。",
+      "葉山の棚田で育てたお米が、BEAT ICE のアイスクリームになる。そんな土地の営みが、この宿の背景にあります。",
     image: "/images/stay/stay-tanada-tools.jpg",
     accent: "soil",
   },
@@ -106,15 +106,14 @@ export default function StayPage() {
             className="fade-up font-serif font-medium text-[clamp(15.37px,3.57vw,22.2px)] leading-[1.22] md:text-[clamp(15.4px,1.47vw,36.4px)] md:leading-[1.16] tracking-[0.02em]"
             style={{ animationDelay: "0.55s" }}
           >
-            <span className="block">葉山らしさを、</span>
-            <span className="block">軽やかな過ごし方で。</span>
+            <span className="block">葉山の一日を、</span>
+            <span className="block">軽やかに。</span>
           </h1>
           <p
             className="fade-up mt-5 md:mt-8 font-mincho text-[11.96px] md:text-[clamp(11.2px,0.71vw,18.2px)] leading-[1.85] tracking-[0.16em] text-(--color-base-light)/85"
             style={{ animationDelay: "0.85s" }}
           >
-            一色海岸、海越しの富士山、抹茶、棚田。<br />
-            同じテンションで並べる、葉山らしい過ごし方。
+            一色海岸、海越しの富士山、抹茶、棚田。
           </p>
         </div>
       </section>

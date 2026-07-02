@@ -6,20 +6,20 @@ import { ReservationCTA } from "../_components/ReservationCTA";
 export const metadata = {
   title: "Owner",
   description:
-    "TERRA HAYAMA を営む BEAT ICE。葉山の棚田で育てたお米から手づくりのアイスを生み、学校給食や田畑の営みと行き来する暮らしを紹介します。",
+    "TERRA HAYAMA を営む BEAT ICE のこと。棚田で育てたお米からつくる植物性アイスクリーム、学校給食への提供、田んぼでの米づくりを紹介します。",
 };
 
 const ACTIVITIES: { en: string; jp: string; body: string; image?: string }[] = [
   {
     en: "Ice Cream",
     jp: "棚田米のアイスクリーム",
-    body: "自分たちで育てたお米を使い、葉山の素材と合わせて一つひとつ手づくり。",
+    body: "自分たちで育てたお米からつくる、植物性のアイスクリーム。米麹由来の、やさしい甘み。",
     image: "/images/owner/owner-icecream.webp",
   },
   {
     en: "School Lunch",
     jp: "学校給食の提供",
-    body: "地域の子どもたちへ。食を通じて葉山の恵みを次の世代へつないでいます。",
+    body: "つくったアイスクリームを、地域の学校の給食に。招かれて、教室で授業をすることもあります。",
     image: "/images/owner/owner-school-lunch.jpg",
   },
   {
@@ -31,7 +31,7 @@ const ACTIVITIES: { en: string; jp: string; body: string; image?: string }[] = [
   {
     en: "Our Family",
     jp: "夫婦のものづくり",
-    body: "葉山に暮らして十年。海と山に寄り添いながら、二人で営みを続けています。",
+    body: "2015 年に葉山へ移り住みました。暮らしも、ものづくりも、ふたりで続けています。",
     image: "/images/owner/owner-family.jpg",
   },
 ];
@@ -71,7 +71,7 @@ export default function OwnerPage() {
             className="fade-up font-serif font-medium text-[clamp(17px,4.6vw,24px)] leading-[1.22] md:text-[clamp(14px,1.22vw,30.8px)] md:leading-[1.14] tracking-[0.02em]"
             style={{ animationDelay: "0.55s" }}
           >
-            <span className="block whitespace-nowrap">葉山アイスを営む、</span>
+            <span className="block whitespace-nowrap">お米のアイスをつくる、</span>
             <span className="block whitespace-nowrap">私たちのこと。</span>
           </h1>
         </div>
@@ -90,20 +90,19 @@ export default function OwnerPage() {
           </div>
           <div className="space-y-8 font-mincho text-[13.5px] md:text-[clamp(10.5px,0.84vw,16.8px)] leading-[2.05] tracking-[0.06em] text-(--color-base-dark)/90">
             <p>
-              TERRA HAYAMA を営むのは、葉山町に根を張る BEAT ICE です。
-              棚田で育てたお米から手づくりのアイスクリームを生み出し、
-              海と里山の風景を行き来する暮らしを続けています。
+              TERRA HAYAMA を営むのは、葉山の BEAT ICE です。
+              棚田で育てたお米から植物性のアイスクリームをつくり、
+              海と里山を行き来しながら暮らしています。
             </p>
             <p>
-              アイスづくりだけでなく、地域の学校給食への提供、
-              子どもたちと汗を流す田んぼでの米づくり。
-              葉山の食と風景に寄り添う日々の営みそのものが、
-              この宿のかたちを支えています。
+              田んぼでの米づくりから、学校給食への提供、
+              料理教室やマルシェの主催まで。
+              その日々の延長に、この宿があります。
             </p>
             <p className="text-(--color-base-dark)/75">
-              葉山に暮らして十年。私たちが惹かれ続けるこの町の物語を、
-              訪れる人にも体感してもらえたら——
-              そんな想いで TERRA HAYAMA を営んでいます。
+              葉山に移り住んで、十年あまり。
+              この町で私たちが好きになったものを、訪れる人にも見つけてもらえたら。
+              そんな気持ちで TERRA HAYAMA を営んでいます。
             </p>
           </div>
         </div>
