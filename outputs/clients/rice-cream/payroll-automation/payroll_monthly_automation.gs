@@ -28,8 +28,8 @@ const CONFIG = {
   PAYSLIP_TEMPLATE_ID: '1uqGLSzkFwjXzDfaaz0-vIuD8JKvUdVurrkSL5RthKHo',
   // 給与明細フォルダ
   PAYSLIP_FOLDER_ID: '1BGhUOgM8L8pj19Dlr_Af7XXjVsJ1G7cE',
-  // 賃金台帳スプシ（2025年度）※年度替わりで差し替え
-  WAGE_LEDGER_SS_ID: '177vHq3h2HW3fRPMKdS57xnTe7RtUhPWGqIk9OvP6hTs',
+  // 賃金台帳スプシ（2026年度）※年度替わりで差し替え
+  WAGE_LEDGER_SS_ID: '1VPV_BMcy_A8pw9mYUhfsTxxLi06NZaMp_6z-8hPwCJs',
   // PDF出力先フォルダ（給与明細フォルダ配下に YYYYMM サブフォルダを自動作成）
   PDF_PARENT_FOLDER_ID: '1BGhUOgM8L8pj19Dlr_Af7XXjVsJ1G7cE',
   // 賃金台帳の対象シート（労働者のみ。業務委託は含めない）
@@ -280,11 +280,11 @@ function appendToWageLedger(month, attendance) {
   });
 }
 
-// 賃金台帳の合計列（N列=14）を 9月〜3月（G〜M列=7〜13）の合計で再計算
+// 賃金台帳の合計列（N列=14）を 4月〜3月（B〜M列=2〜13）通年の合計で再計算
 function recalcLedgerTotal(sheet) {
   Object.values(LEDGER_ROWS).forEach(row => {
     let sum = 0;
-    for (let c = 7; c <= 13; c++) {  // G(7)〜M(13)
+    for (let c = 2; c <= 13; c++) {  // B(2)〜M(13)
       const v = sheet.getRange(row, c).getValue();
       sum += (typeof v === 'number') ? v : 0;
     }

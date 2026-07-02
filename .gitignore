@@ -29,6 +29,10 @@ logs/*.log
 
 # Root-level scratch data dumps (スクレイピング等の作業データ。raw/ 配下に置くべきもの)
 /organization.json
+/raw/
+
+# Worktree remnants (orphan .worktrees/ dirs)
+.worktrees/
 
 # Tool generated
 .playwright-mcp/
