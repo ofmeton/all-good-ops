@@ -33,7 +33,7 @@ const BANDS = [
     num: "02",
     en: "Ways",
     jp: "過ごし方",
-    body: "まずは一色海岸へ。晴れた日は海越しの富士山を眺め、宿に戻ったら置いてある抹茶を気軽に楽しむ。葉山の時間を、軽やかに並べます。",
+    body: "まずは一色海岸へ。晴れた日は海越しの富士山を眺めて、宿に戻ったら、置いてある抹茶を一服。",
     img: "/images/access/access-balcony.jpg",
     cta: "View Ways",
   },
@@ -42,7 +42,7 @@ const BANDS = [
     num: "03",
     en: "Owner",
     jp: "営むのは、BEAT ICE",
-    body: "葉山の棚田で育てたお米から、手づくりのアイスを生み出す BEAT ICE。学校給食や田畑の営みを行き来する暮らしが、この宿のかたちを支えています。",
+    body: "葉山の棚田で育てたお米から、アイスクリームをつくる BEAT ICE。田んぼも、学校給食も、この宿も、夫婦の暮らしの続きにあります。",
     img: "/images/about-hero-tanada.jpg",
     cta: "About BEAT ICE",
   },
@@ -51,7 +51,7 @@ const BANDS = [
     num: "04",
     en: "Neighborhood",
     jp: "周辺とアクセス",
-    body: "一色海岸まで歩いて 8 分。スーパー、バス停、森戸海岸、上山口の棚田まで、葉山の暮らしをめぐる距離感をまとめています。",
+    body: "一色海岸まで歩いて 8 分。スーパー、バス停、森戸海岸、上山口の棚田まで、どれくらいで行けるかをまとめています。",
     img: "/images/access/access-balcony.jpg",
     cta: "View Access",
   },
@@ -60,7 +60,7 @@ const BANDS = [
     num: "05",
     en: "Amenities",
     jp: "設備と備品",
-    body: "キッチン、調理器具、洗濯、アメニティ、注意事項まで。確認前に知りたい実用情報を、詳しめに整理しました。",
+    body: "キッチン、調理器具、洗濯、アメニティ、注意事項まで。予約の前に知りたい実用情報を、詳しめにまとめました。",
     img: "/images/rooms/kitchen-01.jpg",
     cta: "View Amenities",
   },
@@ -69,7 +69,7 @@ const BANDS = [
     num: "06",
     en: "Reservation",
     jp: "予約と空き状況",
-    body: "予約導線は Airbnb へ。空き状況の確認、住所、地図、到着前の基本情報まで一か所で確認できます。",
+    body: "予約は Airbnb から。空き状況、住所、地図、到着前の基本情報まで、一か所で確認できます。",
     img: "/images/access/access-entrance.jpg",
     cta: "Check Availability",
   },
@@ -84,8 +84,7 @@ export default function Home() {
           ヘッダーを覆い、ハンバーガーが押せなくなるため。 */}
       <SiteHeader variant="hero" current="Home" />
 
-      <OpeningHero slides={HERO_SLIDES} />
-
+      <OpeningHero slides={HERO_SLIDES}>
       {/* Section bands — 6 chapters: Rooms / Ways / Owner / Neighborhood / Amenities / Reservation */}
       <section className="relative bg-(--color-base-light)">
         {BANDS.map((band, i) => {
@@ -178,6 +177,7 @@ export default function Home() {
           © 2026 TERRA HAYAMA. All rights reserved.
         </p>
       </footer>
+      </OpeningHero>
 
       <RevealRoot />
     </main>

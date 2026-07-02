@@ -1,86 +1,90 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { HeroSlideshow } from "./HeroSlideshow";
+
+gsap.registerPlugin(ScrollTrigger);
 
 type Slide = { src: string; alt: string };
 
 const CONCEPT_STANZAS = [
-  "TERRAは、葉山への愛から生まれました。",
+  "TERRAは、葉山に暮らす私たちが営む宿です。",
   "海越しに望む富士山、\n棚田が広がる里山。",
-  "この土地に暮らして十年、\n私たちは今もなお、\nこの町の風景に魅了され続けています。",
-  "風景とはきっと、\n人の営みと自然がゆっくりと重なり合い、\n時間をかけて育まれてきたもの。",
+  "この土地に暮らして十年あまり、\n私たちは今も、\nこの町の風景に魅了され続けています。",
+  "風景とはきっと、\n人の営みと自然が少しずつ重なり合い、\n時間をかけて育まれてきたもの。",
   "ここでは、訪れる人と葉山との距離が、\nゆっくりとほどけていきます。",
-  "海と山が織りなす自然のリズム、\nここに息づく人々の物語。",
+  "波の音と、田んぼをわたる風。\nこの町の時間を、どうぞ。",
 ];
 
-export function OpeningHero({ slides }: { slides: Slide[] }) {
-  const heroRef = useRef<HTMLDivElement | null>(null);
-  const [curtainDone, setCurtainDone] = useState(false);
+export function OpeningHero({
+  slides,
+  children,
+}: {
+  slides: Slide[];
+  children?: React.ReactNode;
+}) {
+  const rootRef = useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => {
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduce) {
-      setCurtainDone(true);
-      return;
-    }
+  // vibe-v2 (wireframes/v2-vibe/app.js) の opening 幕 + ScrollTrigger 連動を
+  // GSAP でそのまま再現する。素の CSS animation / scroll ハンドラで再実装すると
+  // ここのタイミングがズレやすいため、参照実装のロジックを踏襲する。
+  useGSAP(
+    () => {
+      document.body.classList.add("has-fv");
+      const threshold = () => window.innerHeight * 0.85;
+      const updateFvPassed = () =>
+        document.body.classList.toggle("fv-passed", window.scrollY > threshold());
+      window.addEventListener("scroll", updateFvPassed, { passive: true });
+      window.addEventListener("resize", updateFvPassed);
+      updateFvPassed();
 
-    const timer = window.setTimeout(() => setCurtainDone(true), 5200);
-    return () => window.clearTimeout(timer);
-  }, []);
-
-  useEffect(() => {
-    const hero = heroRef.current;
-    if (!hero) return;
-
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    let frameId: number | null = null;
-
-    const apply = () => {
-      frameId = null;
-
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       if (reduce) {
-        const hidden = window.scrollY > 1 || curtainDone;
-        hero.style.opacity = hidden ? "0" : "1";
-        hero.style.transform = hidden ? "translateY(-8%)" : "translateY(0)";
-        hero.style.pointerEvents = hidden ? "none" : "";
-        return;
+        const curtain = document.querySelector(".intro__curtain") as HTMLElement | null;
+        if (curtain) curtain.style.display = "none";
+      } else {
+        gsap.set(".intro__logo", { autoAlpha: 0 });
+        gsap
+          .timeline()
+          .to(".intro__logo", { autoAlpha: 1, duration: 1.6, ease: "power2.out" }, 0.6)
+          .addLabel("open", "+=.9")
+          .to(".intro__curtain", { autoAlpha: 0, duration: 2.4, ease: "sine.inOut" }, "open")
+          .to(".intro__logo", { filter: "invert(1)", duration: 2.4, ease: "sine.inOut" }, "open")
+          .set(".intro__curtain", { display: "none" });
+
+        gsap.to(".intro__hero", {
+          autoAlpha: 0,
+          yPercent: -8,
+          ease: "none",
+          scrollTrigger: { trigger: ".intro", start: "top top", end: "+=70%", scrub: true },
+        });
+        gsap.to(".intro__dark", {
+          opacity: 0.55,
+          ease: "none",
+          scrollTrigger: { trigger: ".intro", start: "top top", end: "+=88%", scrub: true },
+        });
+        gsap.to(".intro__scroll", {
+          autoAlpha: 0,
+          ease: "none",
+          scrollTrigger: { trigger: ".intro", start: "top top", end: "+=12%", scrub: true },
+        });
       }
 
-      if (!curtainDone) {
-        hero.style.opacity = "1";
-        hero.style.transform = "translateY(0)";
-        hero.style.pointerEvents = "";
-        return;
-      }
-
-      const fadeDistance = window.innerHeight * 1.6;
-      const progress = Math.min(Math.max(window.scrollY / fadeDistance, 0), 1);
-      const opacity = 1 - progress;
-      hero.style.opacity = String(opacity);
-      hero.style.transform = `translateY(${-8 * progress}%)`;
-      hero.style.pointerEvents = opacity <= 0.02 ? "none" : "";
-    };
-
-    const schedule = () => {
-      if (frameId !== null) return;
-      frameId = window.requestAnimationFrame(apply);
-    };
-
-    apply();
-    window.addEventListener("scroll", schedule, { passive: true });
-    window.addEventListener("resize", schedule);
-
-    return () => {
-      if (frameId !== null) window.cancelAnimationFrame(frameId);
-      window.removeEventListener("scroll", schedule);
-      window.removeEventListener("resize", schedule);
-    };
-  }, [curtainDone]);
+      return () => {
+        window.removeEventListener("scroll", updateFvPassed);
+        window.removeEventListener("resize", updateFvPassed);
+        document.body.classList.remove("has-fv", "fv-passed");
+      };
+    },
+    { scope: rootRef }
+  );
 
   return (
-    <>
+    <div ref={rootRef}>
       <section className="intro" id="top">
         <div className="intro__sticky">
           <div className="intro__slides">
@@ -88,11 +92,8 @@ export function OpeningHero({ slides }: { slides: Slide[] }) {
           </div>
           <div className="intro__scrim" aria-hidden />
           <div className="intro__dark" aria-hidden />
-          <div
-            className={`intro__curtain${curtainDone ? " intro__curtain--done" : ""}`}
-            aria-hidden
-          />
-          <div ref={heroRef} className="intro__hero">
+          <div className="intro__curtain" aria-hidden />
+          <div className="intro__hero">
             <Image
               className="intro__logo"
               src="/images/logo.png"
@@ -124,13 +125,13 @@ export function OpeningHero({ slides }: { slides: Slide[] }) {
         </div>
       </section>
 
-      <div className="fv-cover" aria-hidden>
-        <svg className="fv-cut" viewBox="0 0 1400 90" preserveAspectRatio="none">
+      <div className="fv-cover">
+        <svg className="fv-cut" viewBox="0 0 1400 90" preserveAspectRatio="none" aria-hidden>
           <path className="fv-cut__fill" d="M0,90 L0,46 L1400,46 L1400,90 Z" />
           <path className="aze__line" d="M0,45 L1400,45" />
         </svg>
-        <div className="fv-cover__pg" />
+        <div className="fv-cover__pg">{children}</div>
       </div>
-    </>
+    </div>
   );
 }

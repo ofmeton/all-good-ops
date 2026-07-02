@@ -79,14 +79,11 @@ export function SiteHeader({
   const headerBg = showLight
     ? "bg-transparent"
     : "bg-(--color-base-light)/95 backdrop-blur-[6px] border-b border-(--color-base-dark)/8";
-  const hideDuringFv = heroBg === "dark" && !scrolled;
 
   return (
     <>
       <header
-        className={`fixed inset-x-0 top-0 z-40 flex items-start justify-between px-6 py-5 md:px-12 md:py-8 transition-[opacity,background-color,border-color,box-shadow] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${headerBg} ${
-          hideDuringFv ? "opacity-0 pointer-events-none" : "opacity-100 pointer-events-auto"
-        }`}
+        className={`site-header fixed inset-x-0 top-0 z-40 flex items-start justify-between px-6 py-5 md:px-12 md:py-8 transition-[opacity,background-color,border-color,box-shadow] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${headerBg}`}
       >
         <Link
           href="/"
