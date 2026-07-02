@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { SiteHeader } from "../_components/SiteHeader";
 import { ReservationCTA } from "../_components/ReservationCTA";
+import { ParallaxLayer } from "../_components/ParallaxLayer";
 
 export const metadata = {
   title: "Owner",
@@ -43,15 +44,17 @@ export default function OwnerPage() {
 
       {/* Hero */}
       <section className="relative h-[64svh] min-h-[420px] w-full overflow-hidden bg-(--color-base-dark) text-(--color-base-light)">
-        <Image
-          src="/images/about-hero-tanada.jpg"
-          alt="TERRA HAYAMA — BEAT ICE が育てる葉山の棚田、夕陽の風景"
-          fill
-          priority
-          sizes="100vw"
-          quality={88}
-          className="object-cover object-center"
-        />
+        <ParallaxLayer>
+          <Image
+            src="/images/about-hero-tanada.jpg"
+            alt="TERRA HAYAMA — BEAT ICE が育てる葉山の棚田、夕陽の風景"
+            fill
+            priority
+            sizes="100vw"
+            quality={88}
+            className="object-cover object-center"
+          />
+        </ParallaxLayer>
         <div
           aria-hidden
           className="absolute inset-0"
@@ -123,14 +126,16 @@ export default function OwnerPage() {
               <div key={a.en}>
                 {a.image ? (
                   <div className="relative aspect-[4/3] w-full overflow-hidden bg-(--color-base-dark)/8">
-                    <Image
-                      src={a.image}
-                      alt={`TERRA HAYAMA Owner — ${a.jp}`}
-                      fill
-                      sizes="(min-width: 640px) 50vw, 100vw"
-                      quality={88}
-                      className="object-cover object-center"
-                    />
+                    <ParallaxLayer>
+                      <Image
+                        src={a.image}
+                        alt={`TERRA HAYAMA Owner — ${a.jp}`}
+                        fill
+                        sizes="(min-width: 640px) 50vw, 100vw"
+                        quality={88}
+                        className="object-cover object-center"
+                      />
+                    </ParallaxLayer>
                   </div>
                 ) : (
                   <div className="relative aspect-[4/3] w-full overflow-hidden bg-(--color-base-dark)/8 flex items-center justify-center">

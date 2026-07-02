@@ -3,6 +3,7 @@ import Link from "next/link";
 import { SiteHeader } from "../_components/SiteHeader";
 import { RoomsGallery } from "../_components/RoomsGallery";
 import { ReservationCTA } from "../_components/ReservationCTA";
+import { ParallaxLayer } from "../_components/ParallaxLayer";
 
 export const metadata = {
   title: "Rooms",
@@ -100,15 +101,17 @@ export default function RoomsPage() {
 
       {/* Hero */}
       <section className="relative h-[64svh] min-h-[420px] w-full overflow-hidden bg-(--color-base-dark) text-(--color-base-light)">
-        <Image
-          src="/images/hero/hero-05-135.jpg"
-          alt="TERRA HAYAMA Rooms — 押し花と『Beat Ice Harmony』の詩"
-          fill
-          priority
-          sizes="100vw"
-          quality={88}
-          className="object-cover object-center"
-        />
+        <ParallaxLayer>
+          <Image
+            src="/images/hero/hero-05-135.jpg"
+            alt="TERRA HAYAMA Rooms — 押し花と『Beat Ice Harmony』の詩"
+            fill
+            priority
+            sizes="100vw"
+            quality={88}
+            className="object-cover object-center"
+          />
+        </ParallaxLayer>
         <div
           aria-hidden
           className="absolute inset-0"

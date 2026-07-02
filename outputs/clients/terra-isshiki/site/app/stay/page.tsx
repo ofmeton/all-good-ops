@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { SiteHeader } from "../_components/SiteHeader";
 import { ReservationCTA } from "../_components/ReservationCTA";
+import { ParallaxLayer } from "../_components/ParallaxLayer";
 
 export const metadata = {
   title: "過ごし方",
@@ -78,15 +79,17 @@ export default function StayPage() {
 
       {/* Hero — full image */}
       <section className="relative h-[64svh] min-h-[420px] w-full overflow-hidden bg-(--color-base-dark) text-(--color-base-light)">
-        <Image
-          src="/images/hero/hero-06-137.jpg"
-          alt="TERRA HAYAMA 過ごし方 — 床の間に飾られた棚田のアート"
-          fill
-          priority
-          sizes="100vw"
-          quality={88}
-          className="object-cover object-center"
-        />
+        <ParallaxLayer>
+          <Image
+            src="/images/hero/hero-06-137.jpg"
+            alt="TERRA HAYAMA 過ごし方 — 床の間に飾られた棚田のアート"
+            fill
+            priority
+            sizes="100vw"
+            quality={88}
+            className="object-cover object-center"
+          />
+        </ParallaxLayer>
         <div
           aria-hidden
           className="absolute inset-0"
@@ -149,14 +152,16 @@ export default function StayPage() {
                 {/* Visual — full bleed, large */}
                 {exp.image ? (
                   <div className="relative aspect-[16/10] md:aspect-[5/2] w-full overflow-hidden bg-(--color-base-dark)/5">
-                    <Image
-                      src={exp.image}
-                      alt={exp.label}
-                      fill
-                      sizes="100vw"
-                      quality={88}
-                      className="object-cover object-center"
-                    />
+                    <ParallaxLayer>
+                      <Image
+                        src={exp.image}
+                        alt={exp.label}
+                        fill
+                        sizes="100vw"
+                        quality={88}
+                        className="object-cover object-center"
+                      />
+                    </ParallaxLayer>
                   </div>
                 ) : (
                   <div className="relative aspect-[16/10] md:aspect-[5/2] w-full overflow-hidden bg-(--color-paper) flex items-center justify-center">

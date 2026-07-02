@@ -20,32 +20,14 @@ export function SiteHeader({
   variant = "page",
   current,
   delayBase = 0.2,
-  heroBg = "dark",
 }: {
-  // variant は現在 styling には未使用（scroll 位置で自動切替）。
-  // current の active 表示と互換性のため残置。
+  // variant は現在 styling には未使用。current の active 表示と互換性のため残置。
   variant?: SiteHeaderVariant;
   current?: string;
   delayBase?: number;
-  // ページ上端の Hero 背景。"dark" は画像系（透明ヘッダー→スクロールで不透明化）、
-  // "light" は paper 等の明色（最初から不透明）。
-  heroBg?: "dark" | "light";
 }) {
   void variant; // 互換性のため受け取るだけ
   const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const threshold = () => Math.max(80, window.innerHeight * 0.55);
-    const update = () => setScrolled(window.scrollY > threshold());
-    update();
-    window.addEventListener("scroll", update, { passive: true });
-    window.addEventListener("resize", update);
-    return () => {
-      window.removeEventListener("scroll", update);
-      window.removeEventListener("resize", update);
-    };
-  }, []);
 
   useEffect(() => {
     if (!open) return;
@@ -60,30 +42,13 @@ export function SiteHeader({
     };
   }, [open]);
 
-  // Hero 領域 (画面トップ + dark 背景) では透過 + 薄色テキスト、
-  // スクロール後 (light コンテンツ上) では不透明 + 濃色テキスト。
-  // ただし heroBg="light" のページは最初から不透明 + 濃色（下層ページ等）。
-  const showLight = !scrolled && heroBg === "dark";
-  const textColor = showLight
-    ? "text-(--color-base-light)"
-    : "text-(--color-base-dark)";
-  const subColor = showLight
-    ? "text-(--color-base-light)/85"
-    : "text-(--color-base-dark)/65";
-  const navUnderline = showLight
-    ? "bg-(--color-base-light)"
-    : "bg-(--color-base-dark)";
-  const burgerBar = showLight
-    ? "bg-(--color-base-light)"
-    : "bg-(--color-base-dark)";
-  const headerBg = showLight
-    ? "bg-transparent"
-    : "bg-(--color-base-light)/95 backdrop-blur-[6px] border-b border-(--color-base-dark)/8";
-
   return (
     <>
+      {/* 背景色は変えず mix-blend-mode:difference のみで反転させる（vibe-v2 踏襲）。
+          暗い写真の上では白、明るい紙背景の上では自動的に黒く見える。 */}
       <header
-        className={`site-header fixed inset-x-0 top-0 z-40 flex items-start justify-between px-6 py-5 md:px-12 md:py-8 transition-[opacity,background-color,border-color,box-shadow] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${headerBg}`}
+        className="site-header fixed inset-x-0 top-0 z-40 flex items-start justify-between px-6 py-5 md:px-12 md:py-8 text-(--color-base-light)"
+        style={{ mixBlendMode: "difference" }}
       >
         <Link
           href="/"
@@ -97,7 +62,6 @@ export function SiteHeader({
             width={148}
             height={148}
             className="h-[clamp(52px,6.4vw,74px)] w-auto"
-            style={{ mixBlendMode: "difference" }}
             priority
           />
         </Link>
@@ -109,15 +73,13 @@ export function SiteHeader({
           <button
             type="button"
             aria-label="Language / 言語切替"
-            className={`font-garamond italic text-[12px] md:text-[13px] tracking-[0.14em] transition-colors duration-500 ${textColor}`}
+            className="font-garamond italic text-[12px] md:text-[13px] tracking-[0.14em]"
           >
-            JP <span className={subColor}>/</span> EN
+            JP <span className="text-(--color-base-light)/85">/</span> EN
           </button>
 
           <nav className="hidden md:block">
-            <ul
-              className={`flex items-center gap-[clamp(22px,2.03vw,52px)] font-garamond text-[11.96px] md:text-[clamp(10.5px,0.71vw,18.2px)] tracking-[0.22em] uppercase transition-colors duration-500 ${textColor}`}
-            >
+            <ul className="flex items-center gap-[clamp(22px,2.03vw,52px)] font-garamond text-[11.96px] md:text-[clamp(10.5px,0.71vw,18.2px)] tracking-[0.22em] uppercase">
               {NAV.map((item) => {
                 const active = current === item.label;
                 return (
@@ -129,9 +91,9 @@ export function SiteHeader({
                     >
                       {item.label}
                       <span
-                        className={`pointer-events-none absolute bottom-0 left-0 h-px ${
+                        className={`pointer-events-none absolute bottom-0 left-0 h-px bg-(--color-base-light) ${
                           active ? "w-full" : "w-0"
-                        } ${navUnderline} transition-[width,background-color] duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:w-full`}
+                        } transition-[width] duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:w-full`}
                       />
                     </Link>
                   </li>
@@ -147,9 +109,9 @@ export function SiteHeader({
             onClick={() => setOpen(true)}
             className="md:hidden flex h-10 w-10 items-center justify-center"
           >
-            <span className={`block h-px w-7 ${burgerBar} relative transition-colors duration-500`}>
-              <span className={`absolute -top-2 left-0 block h-px w-7 ${burgerBar} transition-colors duration-500`} />
-              <span className={`absolute top-2 left-0 block h-px w-5 ${burgerBar} transition-colors duration-500`} />
+            <span className="block h-px w-7 bg-(--color-base-light) relative">
+              <span className="absolute -top-2 left-0 block h-px w-7 bg-(--color-base-light)" />
+              <span className="absolute top-2 left-0 block h-px w-5 bg-(--color-base-light)" />
             </span>
             <span className="sr-only">メニューを開く</span>
           </button>

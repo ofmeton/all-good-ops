@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { SiteHeader } from "../_components/SiteHeader";
 import { AvailabilityCalendar } from "../_components/AvailabilityCalendar";
+import { ParallaxLayer } from "../_components/ParallaxLayer";
 
 export const metadata = {
   title: "Access",
@@ -37,15 +38,17 @@ export default function AccessPage() {
 
       {/* Hero */}
       <section className="relative h-[64svh] min-h-[420px] w-full overflow-hidden bg-(--color-base-dark) text-(--color-base-light)">
-        <Image
-          src="/images/access/access-entrance.jpg"
-          alt="TERRA HAYAMA — 玄関の赤土壁と組子の引き戸"
-          fill
-          priority
-          sizes="100vw"
-          quality={88}
-          className="object-cover object-center"
-        />
+        <ParallaxLayer>
+          <Image
+            src="/images/access/access-entrance.jpg"
+            alt="TERRA HAYAMA — 玄関の赤土壁と組子の引き戸"
+            fill
+            priority
+            sizes="100vw"
+            quality={88}
+            className="object-cover object-center"
+          />
+        </ParallaxLayer>
         <div
           aria-hidden
           className="absolute inset-0"
@@ -129,14 +132,16 @@ export default function AccessPage() {
           </div>
 
           <div className="relative aspect-[4/3] md:aspect-auto md:min-h-[82svh] w-full overflow-hidden">
-            <Image
-              src="/images/access/access-balcony.jpg"
-              alt="TERRA HAYAMA バルコニーから望む葉山の町並み"
-              fill
-              sizes="(min-width: 768px) 50vw, 100vw"
-              quality={88}
-              className="object-cover object-center"
-            />
+            <ParallaxLayer>
+              <Image
+                src="/images/access/access-balcony.jpg"
+                alt="TERRA HAYAMA バルコニーから望む葉山の町並み"
+                fill
+                sizes="(min-width: 768px) 50vw, 100vw"
+                quality={88}
+                className="object-cover object-center"
+              />
+            </ParallaxLayer>
           </div>
         </div>
       </section>

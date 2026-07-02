@@ -3,6 +3,7 @@ import Link from "next/link";
 import { SiteHeader } from "./_components/SiteHeader";
 import { OpeningHero } from "./_components/OpeningHero";
 import { RevealRoot } from "./_components/RevealRoot";
+import { ParallaxLayer } from "./_components/ParallaxLayer";
 
 // FV は「建物の外観・内観が伝わる写真」のみ（世界観カットは不使用）。
 // 外観 → 内観を交互に並べ、第一印象で建物が伝わる構成。
@@ -102,14 +103,16 @@ export default function Home() {
                 data-reveal
                 className="reveal group relative aspect-[4/3] md:aspect-auto md:min-h-[68svh] w-full overflow-hidden bg-(--color-base-dark)/10"
               >
-                <Image
-                  src={band.img}
-                  alt={band.jp}
-                  fill
-                  sizes="(min-width: 768px) 50vw, 100vw"
-                  quality={84}
-                  className="object-cover object-center transition-transform duration-[1100ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-[1.05]"
-                />
+                <ParallaxLayer>
+                  <Image
+                    src={band.img}
+                    alt={band.jp}
+                    fill
+                    sizes="(min-width: 768px) 50vw, 100vw"
+                    quality={84}
+                    className="object-cover object-center"
+                  />
+                </ParallaxLayer>
                 <div
                   aria-hidden
                   className="absolute inset-0 opacity-0 md:group-hover:opacity-100 transition-opacity duration-500"
