@@ -9,10 +9,9 @@ export const metadata = {
     "TERRA HAYAMA を営む BEAT ICE。葉山の棚田で育てたお米から手づくりのアイスを生み、学校給食や田畑の営みと行き来する暮らしを紹介します。",
 };
 
-// 後日提供予定の活動写真の枠。写真到着後、各 placeholder を
-// <Image src=... /> に差し替える（src は public/images/owner/ 配下を想定）。
 // TODO(写真差替): アイス / 学校給食 / 田んぼで子供たちと / 夫婦
-const ACTIVITIES = [
+// 夫婦写真は 6/30 MTG 提供分をレビューし不採用、さきに別写真を再依頼中。
+const ACTIVITIES: { en: string; jp: string; body: string; image?: string }[] = [
   {
     en: "Ice Cream",
     jp: "棚田米のアイスクリーム",
@@ -121,12 +120,24 @@ export default function OwnerPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-12 md:gap-x-12 md:gap-y-16">
             {ACTIVITIES.map((a) => (
               <div key={a.en}>
-                {/* TODO(写真差替): public/images/owner/ に写真配置後、この div を <Image> へ */}
-                <div className="relative aspect-[4/3] w-full overflow-hidden bg-(--color-base-dark)/8 flex items-center justify-center">
-                  <span className="font-garamond italic text-[10px] md:text-[clamp(8.4px,0.49vw,12.6px)] tracking-[0.32em] uppercase text-(--color-base-dark)/35">
-                    Photo coming soon
-                  </span>
-                </div>
+                {a.image ? (
+                  <div className="relative aspect-[4/3] w-full overflow-hidden bg-(--color-base-dark)/8">
+                    <Image
+                      src={a.image}
+                      alt={`TERRA HAYAMA Owner — ${a.jp}`}
+                      fill
+                      sizes="(min-width: 640px) 50vw, 100vw"
+                      quality={88}
+                      className="object-cover object-center"
+                    />
+                  </div>
+                ) : (
+                  <div className="relative aspect-[4/3] w-full overflow-hidden bg-(--color-base-dark)/8 flex items-center justify-center">
+                    <span className="font-garamond italic text-[10px] md:text-[clamp(8.4px,0.49vw,12.6px)] tracking-[0.32em] uppercase text-(--color-base-dark)/35">
+                      Photo coming soon
+                    </span>
+                  </div>
+                )}
                 <div className="mt-5 flex items-baseline gap-4">
                   <p className="font-garamond italic text-[9px] md:text-[clamp(8.4px,0.43vw,11.2px)] tracking-[0.32em] uppercase text-(--color-base-dark)/45">
                     {a.en}

@@ -195,7 +195,10 @@ export default function AccessPage() {
       </section>
 
       {/* Reservation: Availability calendar */}
-      <section className="border-t border-(--color-base-dark)/10 px-6 py-[clamp(96px,8.34vw,128px)] md:px-12 bg-(--color-base-light)">
+      <section
+        id="reservation"
+        className="border-t border-(--color-base-dark)/10 px-6 py-[clamp(96px,8.34vw,128px)] md:px-12 bg-(--color-base-light)"
+      >
         <div className="mx-auto max-w-[1480px]">
           <p className="font-garamond italic text-[clamp(11.1px,0.6vw,18.79px)] tracking-[0.4em] uppercase text-(--color-soil) mb-4">
             Reservation

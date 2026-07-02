@@ -4,53 +4,59 @@ import { SiteHeader } from "../_components/SiteHeader";
 import { ReservationCTA } from "../_components/ReservationCTA";
 
 export const metadata = {
-  title: "Stay",
+  title: "過ごし方",
   description:
-    "葉山で過ごす一日のために。棚田・夕陽・葉山の食・抹茶。TERRA HAYAMA で出会える 4 つの体験。",
+    "TERRA HAYAMA での過ごし方。一色海岸を第一に、海越しの富士山、置いてある抹茶、棚田と BEAT ICE の営みを軽やかに紹介します。",
 };
 
 const EXPERIENCES = [
   {
     no: "01",
-    label: "棚田を見て、味わう",
-    sub: "Tanada × BEAT ICE",
+    label: "まずは、一色海岸へ",
+    sub: "Isshiki Beach first",
     body:
-      "葉山の棚田で育てたお米が、BEAT ICE のアイスクリームに変わる。風景を「食べる」体験を、滞在中に。",
-    image: "/images/stay/stay-tanada-tools.jpg",
-    accent: "soil",
+      "宿から海までは徒歩 8 分。朝の散歩、夕方の寄り道、何もしない時間。TERRA の過ごし方は、まず一色海岸から始まります。",
+    image: null,
+    icon: "wave",
+    accent: "mist",
   },
   {
     no: "02",
-    label: "海越しの富士山、夕陽",
-    sub: "Mt. Fuji from the coast",
+    label: "海越しの富士山",
+    sub: "Mt. Fuji photo slot",
     body:
-      "一色海岸まで徒歩 8 分。澄んだ空気の晴れた日は、海の向こうに富士山。沈む夕陽が、海と山を一筋に染める。",
-    image: null,
-    icon: "sun",
+      "空気が澄んだ日は、海の向こうに富士山が見えることも。高画質写真を選定し、必要に応じてノイズ除去したうえで差し替える写真枠を確保しました。",
+    image: "/images/stay/stay-fuji-slot.svg",
     accent: "mist",
   },
   {
     no: "03",
-    label: "葉山の海の幸、山の幸",
-    sub: "Local food, your kitchen",
+    label: "置いてある抹茶を、気軽に",
+    sub: "Matcha in the kitchen",
     body:
-      "葉山の漁港から朝の魚、山の畑から旬の野菜。地元の食材で、自分たちの食卓を整える喜び。",
-    image: null,
-    icon: "leaf",
+      "宿のキッチンに抹茶マシーンを置いてあります。特別な体験として構えすぎず、滞在中のひと息に、気軽にお楽しみください。",
+    image: "/images/stay/stay-matcha.jpg",
     accent: "pine",
   },
   {
     no: "04",
-    label: "抹茶マシーン",
-    sub: "Cuzen Matcha at home",
+    label: "棚田と BEAT ICE の営み",
+    sub: "Tanada × BEAT ICE",
     body:
-      "京都生まれ Cuzen Matcha の抹茶マシーンを、宿のキッチンに。挽きたての一服を、いつでも手元に。",
-    image: "/images/stay/stay-matcha.jpg",
-    accent: "pine",
+      "葉山の棚田で育てたお米が、BEAT ICE のアイスクリームに変わる。土地の営みを、宿の背景としてそっと感じられます。",
+    image: "/images/stay/stay-tanada-tools.jpg",
+    accent: "soil",
   },
 ];
 
 const ICONS: Record<string, React.ReactNode> = {
+  wave: (
+    <svg viewBox="0 0 64 64" className="w-12 h-12" fill="none" stroke="currentColor" strokeWidth="0.9">
+      <path d="M8 37 C 17 28, 25 28, 34 37 C 43 46, 51 46, 60 37" />
+      <path d="M8 46 C 17 38, 25 38, 34 46 C 43 54, 51 54, 60 46" />
+      <path d="M13 27 C 22 19, 31 19, 40 27" opacity="0.55" />
+    </svg>
+  ),
   sun: (
     <svg viewBox="0 0 64 64" className="w-12 h-12" fill="none" stroke="currentColor" strokeWidth="0.8">
       <circle cx="32" cy="32" r="13" />
@@ -68,13 +74,13 @@ const ICONS: Record<string, React.ReactNode> = {
 export default function StayPage() {
   return (
     <main className="bg-(--color-base-light)">
-      <SiteHeader variant="page" current="Stay" />
+      <SiteHeader variant="page" current="Ways" />
 
       {/* Hero — full image */}
       <section className="relative h-[64svh] min-h-[420px] w-full overflow-hidden bg-(--color-base-dark) text-(--color-base-light)">
         <Image
           src="/images/hero/hero-06-137.jpg"
-          alt="TERRA HAYAMA Stay — 床の間に飾られた棚田のアート"
+          alt="TERRA HAYAMA 過ごし方 — 床の間に飾られた棚田のアート"
           fill
           priority
           sizes="100vw"
@@ -94,21 +100,21 @@ export default function StayPage() {
             className="fade-up font-garamond italic text-[clamp(11.1px,0.6vw,18.79px)] tracking-[0.4em] text-(--color-base-light)/80 mb-5"
             style={{ animationDelay: "0.3s" }}
           >
-            Stay — Things to Experience
+            Ways — How to spend time
           </p>
           <h1
             className="fade-up font-serif font-medium text-[clamp(15.37px,3.57vw,22.2px)] leading-[1.22] md:text-[clamp(15.4px,1.47vw,36.4px)] md:leading-[1.16] tracking-[0.02em]"
             style={{ animationDelay: "0.55s" }}
           >
             <span className="block">葉山らしさを、</span>
-            <span className="block">四つの体験で。</span>
+            <span className="block">軽やかな過ごし方で。</span>
           </h1>
           <p
             className="fade-up mt-5 md:mt-8 font-mincho text-[11.96px] md:text-[clamp(11.2px,0.71vw,18.2px)] leading-[1.85] tracking-[0.16em] text-(--color-base-light)/85"
             style={{ animationDelay: "0.85s" }}
           >
-            棚田・海・地元の食材・抹茶。<br />
-            滞在中に出会える、葉山らしい四つの過ごし方。
+            一色海岸、海越しの富士山、抹茶、棚田。<br />
+            同じテンションで並べる、葉山らしい過ごし方。
           </p>
         </div>
       </section>

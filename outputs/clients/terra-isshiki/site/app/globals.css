@@ -8,6 +8,8 @@
   --color-pine: #2F4538;
   --color-sand: #D4C4A8;
   --color-paper: #ECE5D8;
+  --ease: cubic-bezier(.4,.12,.08,1);
+  --easo: cubic-bezier(.16,1,.3,1);
 }
 
 @theme inline {
@@ -103,4 +105,207 @@ html, body {
   opacity: 0.06;
   mix-blend-mode: multiply;
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+/* Opening FV: v2-vibe intro + technique E paper cover */
+.intro {
+  position: relative;
+  height: 325svh;
+  background: var(--color-base-dark);
+}
+
+.intro__sticky {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  height: 100svh;
+  overflow: hidden;
+}
+
+.intro__slides {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.intro__slides img {
+  filter: brightness(.8);
+  animation: kenburns 16s ease-out both;
+}
+
+@keyframes kenburns {
+  from { transform: scale(1); }
+  to { transform: scale(1.12); }
+}
+
+.intro__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    radial-gradient(120% 90% at 50% 55%, rgba(26,20,16,.18), rgba(26,20,16,.5) 100%),
+    linear-gradient(180deg, rgba(26,20,16,.32), rgba(26,20,16,.2) 40%, rgba(26,20,16,.5));
+}
+
+.intro__dark {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: var(--color-base-dark);
+  opacity: .18;
+}
+
+@keyframes introCurtainFade {
+  0%, 34% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes introLogoReveal {
+  0% { opacity: 0; filter: invert(0); }
+  26% { opacity: 1; filter: invert(0); }
+  100% { opacity: 1; filter: invert(1); }
+}
+
+.intro__curtain {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: #fff;
+  animation: introCurtainFade 4.8s ease-in-out forwards;
+  will-change: opacity;
+}
+
+.intro__curtain--done {
+  display: none;
+}
+
+.intro__hero {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  padding: 0 6vw;
+  pointer-events: none;
+}
+
+.intro__logo {
+  width: clamp(180px, 26vw, 330px);
+  height: auto;
+  filter: invert(0);
+  opacity: 0;
+  animation: introLogoReveal 4.8s ease-in-out forwards;
+}
+
+.intro__scroll {
+  position: absolute;
+  left: 50%;
+  bottom: 26px;
+  z-index: 4;
+  transform: translateX(-50%);
+  color: var(--color-base-light);
+  font-family: var(--font-eb-garamond), serif;
+  font-style: italic;
+  font-size: 12px;
+  letter-spacing: .2em;
+  opacity: .85;
+}
+
+.intro__read {
+  position: relative;
+  z-index: 2;
+  color: var(--color-base-light);
+  padding: 26vh clamp(20px, 6vw, 90px) 26vh;
+}
+
+.intro__concept {
+  max-width: 760px;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.intro__concept .intro__tag {
+  margin: 0 0 18px;
+  color: var(--color-base-light);
+  font-family: var(--font-eb-garamond), serif;
+  font-style: italic;
+  letter-spacing: .22em;
+}
+
+.intro__concept p {
+  margin: 0 0 clamp(26px, 4vh, 44px);
+  font-family: var(--font-zen-old-mincho), "Hiragino Mincho ProN", "YuMincho", serif;
+  font-size: clamp(13.5px, 1.05vw, 15.5px);
+  line-height: 2.25;
+  letter-spacing: .06em;
+  text-shadow: 0 2px 20px rgba(0,0,0,.6);
+}
+
+.fv-cover {
+  position: relative;
+  z-index: 5;
+  margin-top: -100svh;
+  pointer-events: none;
+}
+
+.fv-cover__pg {
+  position: relative;
+  height: 1px;
+  margin-top: -1px;
+  background: var(--color-base-light);
+}
+
+.fv-cut {
+  display: block;
+  width: 100%;
+  height: clamp(54px, 7vw, 96px);
+  margin-bottom: -1px;
+  pointer-events: none;
+}
+
+.fv-cut__fill {
+  fill: var(--color-base-light);
+}
+
+.fv-cut .aze__line {
+  fill: none;
+  stroke: var(--color-soil);
+  stroke-width: 1.6;
+  vector-effect: non-scaling-stroke;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intro {
+    height: auto;
+    min-height: 100svh;
+  }
+  .intro__sticky {
+    position: relative;
+  }
+  .intro__slides img,
+  .intro__curtain,
+  .intro__logo {
+    animation: none;
+  }
+  .intro__curtain {
+    display: none;
+  }
+  .intro__logo {
+    opacity: 1;
+    filter: invert(1);
+  }
+  .intro__dark {
+    opacity: .36;
+  }
+  .intro__read {
+    margin-top: -100svh;
+    padding-top: 62vh;
+    padding-bottom: 18vh;
+  }
+  .fv-cover {
+    margin-top: 0;
+  }
 }

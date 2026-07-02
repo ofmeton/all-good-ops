@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -8,7 +9,7 @@ export type SiteHeaderVariant = "hero" | "page";
 const NAV = [
   { label: "Home", href: "/" },
   { label: "Rooms", href: "/rooms" },
-  { label: "Stay", href: "/stay" },
+  { label: "Ways", href: "/stay" },
   { label: "Owner", href: "/owner" },
   { label: "Access", href: "/access" },
 ];
@@ -61,7 +62,7 @@ export function SiteHeader({
 
   // Hero 領域 (画面トップ + dark 背景) では透過 + 薄色テキスト、
   // スクロール後 (light コンテンツ上) では不透明 + 濃色テキスト。
-  // ただし heroBg="light" のページは最初から不透明 + 濃色（Stay 等）。
+  // ただし heroBg="light" のページは最初から不透明 + 濃色（下層ページ等）。
   const showLight = !scrolled && heroBg === "dark";
   const textColor = showLight
     ? "text-(--color-base-light)"
@@ -78,72 +79,84 @@ export function SiteHeader({
   const headerBg = showLight
     ? "bg-transparent"
     : "bg-(--color-base-light)/95 backdrop-blur-[6px] border-b border-(--color-base-dark)/8";
+  const hideDuringFv = heroBg === "dark" && !scrolled;
 
   return (
     <>
       <header
-        className={`fixed inset-x-0 top-0 z-40 flex items-start justify-between px-6 py-5 md:px-12 md:py-8 transition-[background-color,border-color,box-shadow] duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] ${headerBg}`}
+        className={`fixed inset-x-0 top-0 z-40 flex items-start justify-between px-6 py-5 md:px-12 md:py-8 transition-[opacity,background-color,border-color,box-shadow] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${headerBg} ${
+          hideDuringFv ? "opacity-0 pointer-events-none" : "opacity-100 pointer-events-auto"
+        }`}
       >
         <Link
           href="/"
           className="block leading-none fade-up"
           style={{ animationDelay: `${delayBase}s` }}
+          aria-label="TERRA HAYAMA"
         >
-          <span
-            className={`block font-serif text-[17.08px] md:text-[clamp(18.2px,1.36vw,36.4px)] font-medium tracking-[0.18em] transition-colors duration-500 ${textColor}`}
-          >
-            TERRA
-          </span>
-          <span
-            className={`block mt-1 font-garamond text-[7.69px] md:text-[clamp(7.7px,0.55vw,12.6px)] uppercase tracking-[0.42em] transition-colors duration-500 ${subColor}`}
-          >
-            Hayama, Isshiki
-          </span>
+          <Image
+            src="/images/logo-white.png"
+            alt="TERRA HAYAMA"
+            width={148}
+            height={148}
+            className="h-[clamp(52px,6.4vw,74px)] w-auto"
+            style={{ mixBlendMode: "difference" }}
+            priority
+          />
         </Link>
 
-        <nav
-          className="hidden md:block fade-up"
+        <div
+          className="flex items-center gap-[clamp(14px,2vw,26px)] fade-up"
           style={{ animationDelay: `${delayBase + 0.25}s` }}
         >
-          <ul
-            className={`flex items-center gap-[clamp(22px,2.03vw,52px)] font-garamond text-[11.96px] md:text-[clamp(10.5px,0.71vw,18.2px)] tracking-[0.22em] uppercase transition-colors duration-500 ${textColor}`}
+          <button
+            type="button"
+            aria-label="Language / 言語切替"
+            className={`font-garamond italic text-[12px] md:text-[13px] tracking-[0.14em] transition-colors duration-500 ${textColor}`}
           >
-            {NAV.map((item) => {
-              const active = current === item.label;
-              return (
-                <li key={item.label} className="group">
-                  <Link
-                    href={item.href}
-                    className="relative inline-block py-2"
-                    aria-current={active ? "page" : undefined}
-                  >
-                    {item.label}
-                    <span
-                      className={`pointer-events-none absolute bottom-0 left-0 h-px ${
-                        active ? "w-full" : "w-0"
-                      } ${navUnderline} transition-[width,background-color] duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:w-full`}
-                    />
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
+            JP <span className={subColor}>/</span> EN
+          </button>
 
-        <button
-          type="button"
-          aria-label="メニューを開く"
-          aria-expanded={open}
-          onClick={() => setOpen(true)}
-          className="md:hidden flex h-10 w-10 items-center justify-center fade-up"
-          style={{ animationDelay: `${delayBase + 0.25}s` }}
-        >
-          <span className={`block h-px w-7 ${burgerBar} relative transition-colors duration-500`}>
-            <span className={`absolute -top-2 left-0 block h-px w-7 ${burgerBar} transition-colors duration-500`} />
-            <span className={`absolute top-2 left-0 block h-px w-5 ${burgerBar} transition-colors duration-500`} />
-          </span>
-          <span className="sr-only">メニューを開く</span>
-        </button>
+          <nav className="hidden md:block">
+            <ul
+              className={`flex items-center gap-[clamp(22px,2.03vw,52px)] font-garamond text-[11.96px] md:text-[clamp(10.5px,0.71vw,18.2px)] tracking-[0.22em] uppercase transition-colors duration-500 ${textColor}`}
+            >
+              {NAV.map((item) => {
+                const active = current === item.label;
+                return (
+                  <li key={item.label} className="group">
+                    <Link
+                      href={item.href}
+                      className="relative inline-block py-2"
+                      aria-current={active ? "page" : undefined}
+                    >
+                      {item.label}
+                      <span
+                        className={`pointer-events-none absolute bottom-0 left-0 h-px ${
+                          active ? "w-full" : "w-0"
+                        } ${navUnderline} transition-[width,background-color] duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:w-full`}
+                      />
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
+
+          <button
+            type="button"
+            aria-label="メニューを開く"
+            aria-expanded={open}
+            onClick={() => setOpen(true)}
+            className="md:hidden flex h-10 w-10 items-center justify-center"
+          >
+            <span className={`block h-px w-7 ${burgerBar} relative transition-colors duration-500`}>
+              <span className={`absolute -top-2 left-0 block h-px w-7 ${burgerBar} transition-colors duration-500`} />
+              <span className={`absolute top-2 left-0 block h-px w-5 ${burgerBar} transition-colors duration-500`} />
+            </span>
+            <span className="sr-only">メニューを開く</span>
+          </button>
+        </div>
       </header>
 
       {/* Mobile drawer */}

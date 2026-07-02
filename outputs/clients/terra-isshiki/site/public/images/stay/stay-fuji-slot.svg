@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+  <title id="title">一色海岸から望む富士山の写真枠</title>
+  <desc id="desc">富士山写真の差し替え枠。高画質写真選定とノイズ除去後に実写真へ置き換える想定。</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#dfe6e5"/>
+      <stop offset="0.55" stop-color="#f3eee4"/>
+      <stop offset="1" stop-color="#d4c4a8"/>
+    </linearGradient>
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="2" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer>
+        <feFuncA type="table" tableValues="0 0.10"/>
+      </feComponentTransfer>
+    </filter>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#sky)"/>
+  <rect width="1600" height="1000" filter="url(#grain)" opacity="0.28"/>
+  <path d="M0 690 C 210 650 380 665 560 634 C 735 604 910 555 1110 590 C 1290 622 1430 682 1600 648 L1600 1000 L0 1000 Z" fill="#6b7484" opacity="0.24"/>
+  <path d="M720 622 L888 342 L1070 622 Z" fill="#f5f1ea" opacity="0.88"/>
+  <path d="M888 342 L1070 622 L928 579 L880 626 L828 578 L720 622 Z" fill="#6b7484" opacity="0.44"/>
+  <path d="M0 742 C 180 716 332 724 518 704 C 732 680 914 682 1116 710 C 1320 738 1468 740 1600 714" fill="none" stroke="#f5f1ea" stroke-width="5" opacity="0.7"/>
+  <path d="M0 790 C 220 760 374 780 600 756 C 820 732 1020 760 1228 782 C 1388 798 1492 792 1600 774" fill="none" stroke="#f5f1ea" stroke-width="3" opacity="0.55"/>
+  <text x="92" y="112" fill="#1a1410" opacity="0.48" font-family="Georgia, 'Times New Roman', serif" font-size="30" letter-spacing="10">MT. FUJI PHOTO SLOT</text>
+  <text x="92" y="158" fill="#1a1410" opacity="0.58" font-family="serif" font-size="28" letter-spacing="4">一色海岸から望む富士山の写真枠</text>
+  <text x="92" y="206" fill="#1a1410" opacity="0.40" font-family="serif" font-size="22" letter-spacing="3">高画質写真選定・ノイズ除去後に差し替え</text>
+</svg>

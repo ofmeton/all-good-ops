@@ -280,14 +280,14 @@ export default function RoomsPage() {
           Next
         </p>
         <h3 className="font-serif text-[22.2px] md:text-[clamp(23.8px,1.97vw,50.4px)] leading-[1.4] tracking-[0.04em] text-(--color-base-dark) mb-10">
-          葉山で過ごす一日。
+          葉山での過ごし方。
         </h3>
         <Link
           href="/stay"
           className="group inline-flex items-center gap-4 font-garamond text-[11.1px] md:text-[clamp(9.8px,0.6vw,15.4px)] tracking-[0.32em] uppercase text-(--color-base-dark)"
         >
           <span className="relative">
-            View Stay
+            View Ways
             <span className="absolute -bottom-1 left-0 h-px w-full bg-(--color-base-dark)/30 transition-colors duration-500 group-hover:bg-(--color-base-dark)" />
           </span>
           <span aria-hidden className="text-[11.96px]">→</span>

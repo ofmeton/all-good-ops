@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { SiteHeader } from "./_components/SiteHeader";
-import { HeroSlideshow } from "./_components/HeroSlideshow";
+import { OpeningHero } from "./_components/OpeningHero";
 import { RevealRoot } from "./_components/RevealRoot";
 
 // FV は「建物の外観・内観が伝わる写真」のみ（世界観カットは不使用）。
@@ -17,7 +17,7 @@ const HERO_SLIDES = [
 
 const AIRBNB_URL = "https://www.airbnb.jp/rooms/1399746059557999139";
 
-// TOP は「浅く広く網羅 → 詳細は各ページへ」。各セクションを概要 + 写真 + → で並べる。
+// TOP は「浅く広く網羅 → 詳細は各ページへ」。6章構成で C（多め）の情報量を受ける。
 const BANDS = [
   {
     href: "/rooms",
@@ -31,11 +31,11 @@ const BANDS = [
   {
     href: "/stay",
     num: "02",
-    en: "Stay",
-    jp: "葉山で過ごす一日",
-    body: "棚田で米にふれ、抹茶を点て、海辺を歩く。何もしない贅沢から土地の営みまで、葉山らしい時間の過ごし方を。",
-    img: "/images/stay/stay-matcha.jpg",
-    cta: "View Stay",
+    en: "Ways",
+    jp: "過ごし方",
+    body: "まずは一色海岸へ。晴れた日は海越しの富士山を眺め、宿に戻ったら置いてある抹茶を気軽に楽しむ。葉山の時間を、軽やかに並べます。",
+    img: "/images/access/access-balcony.jpg",
+    cta: "View Ways",
   },
   {
     href: "/owner",
@@ -49,11 +49,29 @@ const BANDS = [
   {
     href: "/access",
     num: "04",
-    en: "Access",
-    jp: "海まで徒歩 8 分",
-    body: "一色海岸まで歩いて 8 分。海と里山に抱かれた静かな住宅地に佇み、葉山の暮らしの中へ自然に溶け込んでいきます。",
+    en: "Neighborhood",
+    jp: "周辺とアクセス",
+    body: "一色海岸まで歩いて 8 分。スーパー、バス停、森戸海岸、上山口の棚田まで、葉山の暮らしをめぐる距離感をまとめています。",
     img: "/images/access/access-balcony.jpg",
     cta: "View Access",
+  },
+  {
+    href: "/rooms#overview",
+    num: "05",
+    en: "Amenities",
+    jp: "設備と備品",
+    body: "キッチン、調理器具、洗濯、アメニティ、注意事項まで。確認前に知りたい実用情報を、詳しめに整理しました。",
+    img: "/images/rooms/kitchen-01.jpg",
+    cta: "View Amenities",
+  },
+  {
+    href: "/access#reservation",
+    num: "06",
+    en: "Reservation",
+    jp: "予約と空き状況",
+    body: "予約導線は Airbnb へ。空き状況の確認、住所、地図、到着前の基本情報まで一か所で確認できます。",
+    img: "/images/access/access-entrance.jpg",
+    cta: "Check Availability",
   },
 ];
 
@@ -66,104 +84,9 @@ export default function Home() {
           ヘッダーを覆い、ハンバーガーが押せなくなるため。 */}
       <SiteHeader variant="hero" current="Home" />
 
-      <section className="relative isolate h-[100svh] w-full overflow-hidden bg-(--color-base-dark) text-(--color-base-light)">
-        {/* Slideshow */}
-        <HeroSlideshow slides={HERO_SLIDES} intervalMs={4500} fadeMs={1200} />
+      <OpeningHero slides={HERO_SLIDES} />
 
-        {/* Overlay: vertical vignette for top/bottom legibility, photo breathes in middle */}
-        <div
-          aria-hidden
-          className="absolute inset-0 z-[1]"
-          style={{
-            background:
-              "linear-gradient(180deg, rgba(26,20,16,0.32) 0%, rgba(26,20,16,0.06) 22%, rgba(26,20,16,0.06) 50%, rgba(26,20,16,0.62) 100%)",
-          }}
-        />
-
-        {/* Subtle paper noise */}
-        <div aria-hidden className="paper-noise absolute inset-0 z-[2]" />
-
-        {/* Local legibility scrim — 写真の明暗に依存せずコピーを必ず読めるように、
-            下端側を確実に暗くする（特にスマホ）。コピー(z-10)の背後 z-[3]。 */}
-        <div
-          aria-hidden
-          className="absolute inset-x-0 bottom-0 z-[3] h-[58%] md:h-[48%]"
-          style={{
-            background:
-              "linear-gradient(180deg, rgba(26,20,16,0) 0%, rgba(26,20,16,0.42) 55%, rgba(26,20,16,0.72) 100%)",
-          }}
-        />
-
-        {/* Main copy — anchored to bottom-left corner.
-            スマホは下部の予約バー(MobileStickyReserve)と重ならないよう余白を確保。 */}
-        <div className="absolute bottom-24 left-6 md:bottom-20 md:left-12 z-10 max-w-[calc(100%-32px)] md:max-w-[80vw]">
-          <p
-            className="fade-up font-garamond italic text-[11px] md:text-[clamp(10.5px,0.71vw,18.2px)] tracking-[0.4em] text-(--color-base-light)/85 mb-6"
-            style={{ animationDelay: "0.7s" }}
-          >
-            Hayama, Kanagawa
-          </p>
-          <h1
-            className="fade-up font-serif font-medium text-[clamp(21px,6vw,30px)] leading-[1.2] md:text-[clamp(19.6px,1.75vw,42px)] md:leading-[1.12] tracking-[0.02em] text-(--color-base-light)"
-            style={{ animationDelay: "0.95s" }}
-          >
-            <span className="block whitespace-nowrap">ゆっくり流れる、</span>
-            <span className="block whitespace-nowrap">葉山時間。</span>
-          </h1>
-          <p
-            className="fade-up mt-6 md:mt-8 font-mincho text-[14px] md:text-[clamp(10.5px,0.66vw,16.8px)] leading-[1.9] tracking-[0.08em] text-(--color-base-light)/90"
-            style={{ animationDelay: "1.25s" }}
-          >
-            一色海岸まで徒歩 8 分。<br />
-            BEAT ICE が手がける、葉山一色の一棟貸し。
-          </p>
-        </div>
-      </section>
-
-      {/* Concept — about から移設した本文 */}
-      <section className="relative bg-(--color-paper) px-6 py-[clamp(112px,11.5vw,176px)] md:px-12">
-        <div className="mx-auto max-w-[1280px] grid gap-12 md:grid-cols-[180px_1fr] md:gap-16">
-          <div className="md:pt-2">
-            <p className="font-garamond italic text-[clamp(11px,0.6vw,15.4px)] tracking-[0.4em] uppercase text-(--color-soil) mb-3">
-              Concept
-            </p>
-            <p className="vrl hidden md:inline-block font-mincho text-[12px] md:text-[clamp(10.5px,0.66vw,16.8px)] tracking-[0.5em] text-(--color-base-dark)/55">
-              風景に、息を整える。
-            </p>
-          </div>
-          <div data-reveal className="reveal min-w-0">
-            <h2 className="font-serif text-[18px] md:text-[clamp(19.04px,1.4vw,35.84px)] leading-[1.36] tracking-[0.04em] text-(--color-base-dark) mb-10">
-              <span className="block">葉山への愛から生まれた、</span>
-              <span className="block">一棟貸しの宿。</span>
-            </h2>
-            <div className="space-y-8 font-mincho text-[13.5px] md:text-[clamp(11.76px,0.69vw,17.64px)] leading-[2.0] tracking-[0.07em] text-(--color-base-dark)/85">
-              <p>
-                TERRA は、葉山への愛から生まれました。<br />
-                海越しに望む富士山、棚田が広がる里山。<br />
-                この土地に暮らして十年、私たちは今もなお、<br />
-                この町の風景に魅了され続けています。
-              </p>
-              <p>
-                風景とはきっと、人の営みと自然が<br />
-                ゆっくりと重なり合い、<br />
-                時間をかけて育まれてきたもの。
-              </p>
-              <p>
-                海と山が織りなす自然のリズム、<br />
-                ここに息づく人々の物語。<br />
-                それらに触れる中で、時の流れが少し緩み、<br />
-                呼吸が整っていく。
-              </p>
-              <p className="text-(--color-base-dark)/75">
-                ここでは、訪れる人と葉山との距離が、<br />
-                ゆっくりとほどけていきます。
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Section bands — Rooms / Stay / Owner / Access */}
+      {/* Section bands — 6 chapters: Rooms / Ways / Owner / Neighborhood / Amenities / Reservation */}
       <section className="relative bg-(--color-base-light)">
         {BANDS.map((band, i) => {
           const imageFirst = i % 2 === 1; // 交互レイアウト
