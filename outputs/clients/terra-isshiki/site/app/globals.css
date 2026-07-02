@@ -173,7 +173,7 @@ html, body {
   z-index: 3;
   pointer-events: none;
   background: #fff;
-  animation: introCurtainFade 4.8s ease-in-out forwards;
+  animation: introCurtainFade 5.2s ease-in-out forwards;
   will-change: opacity;
 }
 
@@ -197,7 +197,7 @@ html, body {
   height: auto;
   filter: invert(0);
   opacity: 0;
-  animation: introLogoReveal 4.8s ease-in-out forwards;
+  animation: introLogoReveal 5.2s ease-in-out forwards;
 }
 
 .intro__scroll {

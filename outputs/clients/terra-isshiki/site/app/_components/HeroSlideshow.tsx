@@ -65,7 +65,10 @@ export function HeroSlideshow({
               transition: `opacity ${fadeMs}ms cubic-bezier(0.4, 0, 0.2, 1)`,
             }}
           >
+            {/* key を active 化のたびに変えて再マウントし、CSS の kenburns アニメーションを
+                都度リスタートさせる（img 一枚で使い回すと 2 巡目以降ズームが動かなくなる） */}
             <Image
+              key={isActive ? `${s.src}-${active}` : s.src}
               src={s.src}
               alt={s.alt}
               fill
