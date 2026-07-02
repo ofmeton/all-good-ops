@@ -32,11 +32,11 @@ const BANDS = [
   {
     href: "/stay",
     num: "02",
-    en: "Ways",
+    en: "Stay",
     jp: "過ごし方",
     body: "まずは一色海岸へ。晴れた日は海越しの富士山を眺めて、宿に戻ったら、置いてある抹茶を一服。",
     img: "/images/access/access-balcony.jpg",
-    cta: "View Ways",
+    cta: "View Stay",
   },
   {
     href: "/owner",
@@ -86,7 +86,7 @@ export default function Home() {
       <SiteHeader variant="hero" current="Home" />
 
       <OpeningHero slides={HERO_SLIDES}>
-      {/* Section bands — 6 chapters: Rooms / Ways / Owner / Neighborhood / Amenities / Reservation */}
+      {/* Section bands — 6 chapters: Rooms / Stay / Owner / Neighborhood / Amenities / Reservation */}
       <section className="relative bg-(--color-base-light)">
         {BANDS.map((band, i) => {
           const imageFirst = i % 2 === 1; // 交互レイアウト

@@ -75,7 +75,7 @@ const ICONS: Record<string, React.ReactNode> = {
 export default function StayPage() {
   return (
     <main className="bg-(--color-base-light)">
-      <SiteHeader variant="page" current="Ways" />
+      <SiteHeader variant="page" current="Stay" />
 
       {/* Hero — full image */}
       <section className="relative h-[64svh] min-h-[420px] w-full overflow-hidden bg-(--color-base-dark) text-(--color-base-light)">
@@ -103,7 +103,7 @@ export default function StayPage() {
             className="fade-up font-garamond italic text-[clamp(11.1px,0.6vw,18.79px)] tracking-[0.4em] text-(--color-base-light)/80 mb-5"
             style={{ animationDelay: "0.3s" }}
           >
-            Ways — How to spend time
+            Stay — How to spend time
           </p>
           <h1
             className="fade-up font-serif font-medium text-[clamp(15.37px,3.57vw,22.2px)] leading-[1.22] md:text-[clamp(15.4px,1.47vw,36.4px)] md:leading-[1.16] tracking-[0.02em]"

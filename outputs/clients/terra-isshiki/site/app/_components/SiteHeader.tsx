@@ -9,7 +9,7 @@ export type SiteHeaderVariant = "hero" | "page";
 const NAV = [
   { label: "Home", href: "/" },
   { label: "Rooms", href: "/rooms" },
-  { label: "Ways", href: "/stay" },
+  { label: "Stay", href: "/stay" },
   { label: "Owner", href: "/owner" },
   { label: "Access", href: "/access" },
 ];

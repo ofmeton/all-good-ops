@@ -290,7 +290,7 @@ export default function RoomsPage() {
           className="group inline-flex items-center gap-4 font-garamond text-[11.1px] md:text-[clamp(9.8px,0.6vw,15.4px)] tracking-[0.32em] uppercase text-(--color-base-dark)"
         >
           <span className="relative">
-            View Ways
+            View Stay
             <span className="absolute -bottom-1 left-0 h-px w-full bg-(--color-base-dark)/30 transition-colors duration-500 group-hover:bg-(--color-base-dark)" />
           </span>
           <span aria-hidden className="text-[11.96px]">→</span>
