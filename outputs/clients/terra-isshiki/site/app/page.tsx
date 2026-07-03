@@ -4,6 +4,7 @@ import { SiteHeader } from "./_components/SiteHeader";
 import { OpeningHero } from "./_components/OpeningHero";
 import { RevealRoot } from "./_components/RevealRoot";
 import { ParallaxLayer } from "./_components/ParallaxLayer";
+import { PhotoMarquee } from "./_components/PhotoMarquee";
 
 // FV は「建物の外観・内観が伝わる写真」のみ（世界観カットは不使用）。
 // 外観 → 内観を交互に並べ、第一印象で建物が伝わる構成。
@@ -26,87 +27,75 @@ const MAPS_LINK = `https://www.google.com/maps/search/?api=1&query=${encodeURICo
  * 章ごとの要約データ。
  * 出典はすべて各下層ページ（/rooms /stay /owner /access）の記載事実。
  * TOP はその要約であり、値を変えるときは下層ページと揃えること。
+ * 表示は日本語のみ（英語ラベルは EN 版で別途用意する前提で JP からは省く）。
  * --------------------------------------------------------------- */
 
 // 01 Rooms — 宿の基本情報（/rooms「House Info」と同値）
-const HOUSE_SPECS: { label: string; en: string; value: string; note?: string }[] = [
-  { label: "チェックイン", en: "Check-in", value: "16:00 – 23:00" },
-  { label: "チェックアウト", en: "Check-out", value: "11:00" },
-  { label: "定員", en: "Capacity", value: "最大 8 名", note: "快適の目安は 6 名まで" },
-  { label: "広さ", en: "Room size", value: "75 ㎡", note: "居室 43 ㎡・寝室 32 ㎡" },
-  { label: "駐車場", en: "Parking", value: "2 台" },
+const HOUSE_SPECS: { label: string; value: string; note?: string }[] = [
+  { label: "チェックイン", value: "16:00 – 23:00" },
+  { label: "チェックアウト", value: "11:00" },
+  { label: "定員", value: "最大 8 名", note: "ゆったり過ごすなら 6 名まで" },
+  { label: "広さ", value: "75 ㎡", note: "居室 43 ㎡・寝室 32 ㎡" },
+  { label: "駐車場", value: "2 台" },
 ];
 
-// 01 Rooms — 3 つの空間（/rooms ギャラリーの要約）
-const ROOM_SPACES: { en: string; jp: string; body: string; img: string }[] = [
-  {
-    en: "LDK",
-    jp: "リビング・ダイニング・キッチン",
-    body: "木の天井と一面の窓。ソファと楕円のダイニングテーブルを囲んで。",
-    img: "/images/rooms/ldk-01.jpg",
-  },
-  {
-    en: "Bedroom",
-    jp: "最大 8 名の寝室",
-    body: "二段ベッド 2 台・セミダブル 1 台・布団 2 組。家族や友人グループでまとまって。",
-    img: "/images/rooms/bedroom-01.jpg",
-  },
-  {
-    en: "Bath & Laundry",
-    jp: "お風呂と水まわり",
-    body: "ひのきに包まれたバスルームと、真鍮の洗面ボウル。",
-    img: "/images/rooms/bath.jpg",
-  },
+// 01 Rooms — 部屋写真のマーキー（緩やかに横へ流す）
+const ROOM_MARQUEE: { src: string; alt: string }[] = [
+  { src: "/images/rooms/ldk-01.jpg", alt: "リビング・ダイニング" },
+  { src: "/images/rooms/bedroom-01.jpg", alt: "寝室" },
+  { src: "/images/rooms/kitchen-01.jpg", alt: "キッチン" },
+  { src: "/images/rooms/bath.jpg", alt: "ひのきのバスルーム" },
+  { src: "/images/rooms/ldk-03.jpg", alt: "リビングからの眺め" },
+  { src: "/images/rooms/laundry.jpg", alt: "ランドリー" },
+  { src: "/images/rooms/ldk-05.jpg", alt: "リビング" },
+  { src: "/images/rooms/bedroom-02.jpg", alt: "寝室" },
+  { src: "/images/rooms/kitchen-03.jpg", alt: "キッチン" },
 ];
 
 // 02 Stay — 過ごし方（/stay の 4 項目の要約）
 const STAY_MOMENTS: { no: string; jp: string; body: string }[] = [
   {
     no: "01",
-    jp: "まずは、一色海岸へ",
-    body: "宿から海まで徒歩 8 分。朝の散歩に、夕方の寄り道に。",
+    jp: "一色海岸へ",
+    body: "宿から海まで歩いて 8 分。朝の散歩や、夕方の寄り道にどうぞ。",
   },
   {
     no: "02",
     jp: "海越しの富士山",
-    body: "空気が澄んだ日は、一色海岸の向こうに富士山が見えることも。",
+    body: "空気が澄んだ日は、一色海岸の向こうに富士山が見えることもあります。",
   },
   {
     no: "03",
-    jp: "抹茶を、気軽に",
-    body: "キッチンに抹茶マシーンを置いてあります。滞在中のひと息に。",
+    jp: "お部屋で味わう抹茶",
+    body: "お部屋では、挽きたての抹茶を味わえます。滞在中のひと息を、ゆっくりお楽しみください。",
   },
   {
     no: "04",
-    jp: "棚田と BEAT ICE",
-    body: "棚田で育てたお米がアイスクリームになる。その営みが宿の背景にあります。",
+    jp: "お部屋で楽しむ葉山アイス",
+    body: "オーナーがつくる葉山アイスを、ウェルカムサービスとしてお部屋でお楽しみいただけます。",
   },
 ];
 
 // 03 Owner — BEAT ICE の営み（/owner「Our work」の要約）
-const OWNER_WORKS: { en: string; jp: string; body: string; img: string }[] = [
+const OWNER_WORKS: { jp: string; body: string; img: string }[] = [
   {
-    en: "Ice Cream",
     jp: "棚田米のアイスクリーム",
     body: "自分たちで育てたお米からつくる、米麹由来のやさしい甘み。",
     img: "/images/owner/owner-icecream.webp",
   },
   {
-    en: "School Lunch",
     jp: "学校給食の提供",
-    body: "つくったアイスを、地域の学校の給食に。教室で授業をすることも。",
+    body: "つくったアイスを地域の学校給食に届け、教室で授業をすることもあります。",
     img: "/images/owner/owner-school-lunch.jpg",
   },
   {
-    en: "Rice Field",
     jp: "田んぼでの営み",
     body: "棚田で土にふれ、季節とともに米を育てる暮らし。",
     img: "/images/owner/owner-tanada-work.jpg",
   },
   {
-    en: "Our Family",
     jp: "夫婦のものづくり",
-    body: "2015 年に葉山へ。暮らしも、ものづくりも、ふたりで。",
+    body: "2015 年に葉山へ移り住み、暮らしもものづくりも、ふたりで続けています。",
     img: "/images/owner/owner-family.jpg",
   },
 ];
@@ -123,45 +112,39 @@ const POINTS: { name: string; time: string; note: string }[] = [
 ];
 
 // 05 Amenities — 設備・備品の要約（完全なリストは /rooms#overview）
-const AMENITY_GROUPS: { jp: string; en: string; body: string }[] = [
+const AMENITY_GROUPS: { jp: string; body: string }[] = [
   {
     jp: "キッチン",
-    en: "Kitchen",
-    body: "2 口 IH・冷蔵庫・炊飯器・オーブンレンジ・電気ケトル。抹茶マシーンも置いてあります。",
+    body: "2 口 IH・冷蔵庫・炊飯器・オーブンレンジ・電気ケトル。抹茶マシーンもあります。",
   },
   {
     jp: "調理器具・食器",
-    en: "Cookware",
     body: "フライパン、鍋、包丁、ボウルなど調理器具は一式。食器とカトラリーは人数分。",
   },
   {
     jp: "洗濯",
-    en: "Laundry",
     body: "ドラム式洗濯機。洗剤と、室内干し用のハンガーラックを用意しています。",
   },
   {
     jp: "TV・音楽・Wi-Fi",
-    en: "Media",
     body: "TV（地上波 / YouTube / Netflix 等）、スピーカー、Wi-Fi 完備。",
   },
   {
     jp: "冷暖房",
-    en: "Climate",
     body: "LDK と寝室に、エアコンを 1 台ずつ。",
   },
   {
     jp: "アメニティ",
-    en: "Toiletries",
     body: "タオル、歯ブラシ、シャンプー・コンディショナー、化粧水・乳液、ドライヤーなど。",
   },
 ];
 
 // 06 Reservation — 予約の基本（/rooms・/access と同値）
-const RESERVE_INFO: { label: string; en: string; value: string }[] = [
-  { label: "ご予約", en: "Booking", value: "Airbnb の物件ページから" },
-  { label: "チェックイン", en: "Check-in", value: "16:00 – 23:00" },
-  { label: "チェックアウト", en: "Check-out", value: "11:00" },
-  { label: "空き状況", en: "Availability", value: "サイト内のカレンダーで確認できます" },
+const RESERVE_INFO: { label: string; value: string }[] = [
+  { label: "ご予約", value: "Airbnb の物件ページから" },
+  { label: "チェックイン", value: "16:00 – 23:00" },
+  { label: "チェックアウト", value: "11:00" },
+  { label: "空き状況", value: "サイト内のカレンダーで確認できます" },
 ];
 
 // 06 Reservation — 到着前に知っておきたいこと（/rooms「ご利用にあたって」の要点）
@@ -177,11 +160,9 @@ const RESERVE_NOTES: string[] = [
  * --------------------------------------------------------------- */
 
 function DetailShell({
-  eyebrow,
   title,
   children,
 }: {
-  eyebrow: string;
   title: string;
   children: React.ReactNode;
 }) {
@@ -189,9 +170,6 @@ function DetailShell({
     <div className="border-t border-(--color-base-dark)/8 bg-(--color-paper) px-6 py-[clamp(64px,6.3vw,104px)] md:px-12">
       <div className="mx-auto max-w-[1480px]">
         <div data-reveal className="reveal">
-          <p className="font-garamond italic text-[clamp(10.25px,0.55vw,17.08px)] tracking-[0.42em] uppercase text-(--color-base-dark)/55 mb-4">
-            {eyebrow}
-          </p>
           <h3 className="font-serif text-[17px] md:text-[clamp(16.8px,1.2vw,30.8px)] leading-[1.4] tracking-[0.04em] text-(--color-base-dark)">
             {title}
           </h3>
@@ -206,78 +184,67 @@ function DetailShell({
 
 function RoomsDetail() {
   return (
-    <DetailShell eyebrow="House Info" title="宿の基本情報。">
-      {/* Specs — nagare 型の一覧バー。詳細は /rooms#overview と同値 */}
-      <dl className="grid grid-cols-2 gap-x-6 gap-y-8 border-t border-(--color-base-dark)/15 pt-8 sm:grid-cols-3 md:grid-cols-5">
-        {HOUSE_SPECS.map((spec) => (
-          <div key={spec.label}>
-            <dt className="flex flex-col">
-              <span className="font-serif text-[12.8px] md:text-[clamp(11.9px,0.71vw,18.2px)] tracking-[0.08em] text-(--color-base-dark)">
+    <div className="border-t border-(--color-base-dark)/8 bg-(--color-paper) pt-[clamp(64px,6.3vw,104px)] pb-[clamp(64px,6.3vw,104px)]">
+      <div className="mx-auto max-w-[1480px] px-6 md:px-12">
+        <div data-reveal className="reveal">
+          <h3 className="font-serif text-[17px] md:text-[clamp(16.8px,1.2vw,30.8px)] leading-[1.4] tracking-[0.04em] text-(--color-base-dark)">
+            宿の基本情報。
+          </h3>
+        </div>
+        {/* Specs — nagare 型の一覧バー。詳細は /rooms#overview と同値 */}
+        <dl
+          data-reveal
+          className="reveal mt-10 grid grid-cols-2 gap-x-6 gap-y-8 border-t border-(--color-base-dark)/15 pt-8 sm:grid-cols-3 md:mt-14 md:grid-cols-5"
+          style={{ transitionDelay: "120ms" }}
+        >
+          {HOUSE_SPECS.map((spec) => (
+            <div key={spec.label}>
+              <dt className="font-serif text-[12.8px] md:text-[clamp(11.9px,0.71vw,18.2px)] tracking-[0.08em] text-(--color-base-dark)">
                 {spec.label}
-              </span>
-              <span className="mt-1 font-garamond italic text-[9.4px] md:text-[clamp(8.4px,0.43vw,11.2px)] tracking-[0.28em] uppercase text-(--color-base-dark)/45">
-                {spec.en}
-              </span>
-            </dt>
-            <dd className="mt-3 font-mincho text-[13.5px] md:text-[clamp(11.9px,0.71vw,18.2px)] tracking-[0.06em] text-(--color-base-dark)/90">
-              {spec.value}
-              {spec.note ? (
-                <span className="mt-1 block text-[10.7px] md:text-[clamp(9.1px,0.49vw,12.6px)] text-(--color-base-dark)/55">
-                  {spec.note}
-                </span>
-              ) : null}
-            </dd>
-          </div>
-        ))}
-      </dl>
-
-      {/* 3 つの空間 — /rooms ギャラリーの入口 */}
-      <div className="mt-14 grid gap-x-8 gap-y-12 sm:grid-cols-3 md:mt-20">
-        {ROOM_SPACES.map((space) => (
-          <Link
-            key={space.en}
-            href="/rooms"
-            aria-label={`${space.jp}の写真を Rooms ページで見る`}
-            className="group block"
-          >
-            <div className="relative aspect-[3/2] w-full overflow-hidden bg-(--color-base-dark)/8">
-              <ParallaxLayer>
-                <Image
-                  src={space.img}
-                  alt={`TERRA HAYAMA — ${space.jp}`}
-                  fill
-                  sizes="(min-width: 640px) 33vw, 100vw"
-                  quality={84}
-                  className="object-cover object-center"
-                />
-              </ParallaxLayer>
+              </dt>
+              <dd className="mt-3 font-mincho text-[13.5px] md:text-[clamp(11.9px,0.71vw,18.2px)] tracking-[0.06em] text-(--color-base-dark)/90">
+                {spec.value}
+                {spec.note ? (
+                  <span className="mt-1 block text-[10.7px] md:text-[clamp(9.1px,0.49vw,12.6px)] text-(--color-base-dark)/55">
+                    {spec.note}
+                  </span>
+                ) : null}
+              </dd>
             </div>
-            <p className="mt-5 font-garamond italic text-[9.4px] md:text-[clamp(8.4px,0.43vw,11.2px)] tracking-[0.32em] uppercase text-(--color-base-dark)/45">
-              {space.en}
-            </p>
-            <h4 className="mt-2 font-serif text-[14.5px] md:text-[clamp(14px,0.82vw,21px)] tracking-[0.04em] text-(--color-base-dark)">
-              {space.jp}
-            </h4>
-            <p className="mt-2 font-mincho text-[12px] md:text-[clamp(10.5px,0.6vw,15.4px)] leading-[1.95] tracking-[0.06em] text-(--color-base-dark)/80">
-              {space.body}
-            </p>
-          </Link>
-        ))}
+          ))}
+        </dl>
       </div>
-    </DetailShell>
+
+      {/* 部屋写真を緩やかに横へ流すマーキー（全幅） */}
+      <div data-reveal className="reveal mt-12 md:mt-16">
+        <PhotoMarquee images={ROOM_MARQUEE} />
+        <div className="mx-auto max-w-[1480px] px-6 md:px-12">
+          <Link
+            href="/rooms"
+            className="group mt-10 inline-flex items-center gap-4 font-serif text-[13.5px] md:text-[clamp(12.6px,0.71vw,17.5px)] tracking-[0.08em] text-(--color-base-dark)"
+          >
+            <span className="relative">
+              部屋の写真をもっと見る
+              <span className="absolute -bottom-1 left-0 h-px w-full bg-(--color-base-dark)/30 transition-colors duration-500 group-hover:bg-(--color-base-dark)" />
+            </span>
+            <span aria-hidden className="text-[13px]">→</span>
+          </Link>
+        </div>
+      </div>
+    </div>
   );
 }
 
 function StayDetail() {
   return (
-    <DetailShell eyebrow="How to Spend Time" title="過ごし方、四つ。">
+    <DetailShell title="過ごし方。">
       <div className="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
         {STAY_MOMENTS.map((m) => (
           <div key={m.no} className="border-t border-(--color-base-dark)/15 pt-5">
             <p className="font-garamond italic text-[10.7px] md:text-[clamp(9.1px,0.49vw,12.6px)] tracking-[0.28em] text-(--color-base-dark)/45">
               {m.no}
             </p>
-            <h4 className="mt-3 font-serif text-[14.5px] md:text-[clamp(14px,0.82vw,21px)] tracking-[0.04em] text-(--color-base-dark)">
+            <h4 className="mt-2 font-serif text-[14.5px] md:text-[clamp(14px,0.82vw,21px)] tracking-[0.04em] text-(--color-base-dark)">
               {m.jp}
             </h4>
             <p className="mt-3 font-mincho text-[12px] md:text-[clamp(10.5px,0.6vw,15.4px)] leading-[1.95] tracking-[0.06em] text-(--color-base-dark)/80">
@@ -292,22 +259,21 @@ function StayDetail() {
 
 function OwnerDetail() {
   return (
-    <DetailShell eyebrow="Our Work" title="アイスと田畑の日々。">
+    <DetailShell title="アイスをつくる、私たちのこと。">
       <p className="max-w-[820px] font-mincho text-[13px] md:text-[clamp(11.2px,0.71vw,18.2px)] leading-[2.05] tracking-[0.07em] text-(--color-base-dark)/85">
         田んぼでの米づくりから、学校給食への提供、料理教室やマルシェの主催まで。
         2015 年に葉山へ移り住んでから、暮らしとものづくりをふたりで続けてきました。
-        この町で好きになったものを、訪れる人にも見つけてもらえたら。
-        そんな気持ちで、この宿を営んでいます。
+        この町で好きになったものを、訪れる人にも見つけていただけたら嬉しくて、この宿を営んでいます。
       </p>
 
       <div className="mt-12 grid grid-cols-2 gap-x-6 gap-y-10 md:mt-16 md:gap-x-8 lg:grid-cols-4">
         {OWNER_WORKS.map((work) => (
-          <div key={work.en}>
+          <div key={work.jp}>
             <div className="relative aspect-[4/3] w-full overflow-hidden bg-(--color-base-dark)/8">
               <ParallaxLayer>
                 <Image
                   src={work.img}
-                  alt={`TERRA HAYAMA Owner — ${work.jp}`}
+                  alt={`TERRA HAYAMA — ${work.jp}`}
                   fill
                   sizes="(min-width: 1024px) 25vw, 50vw"
                   quality={84}
@@ -315,10 +281,7 @@ function OwnerDetail() {
                 />
               </ParallaxLayer>
             </div>
-            <p className="mt-4 font-garamond italic text-[9.4px] md:text-[clamp(8.4px,0.43vw,11.2px)] tracking-[0.32em] uppercase text-(--color-base-dark)/45">
-              {work.en}
-            </p>
-            <h4 className="mt-2 font-serif text-[13.5px] md:text-[clamp(13.3px,0.82vw,21px)] tracking-[0.04em] text-(--color-base-dark)">
+            <h4 className="mt-4 font-serif text-[13.5px] md:text-[clamp(13.3px,0.82vw,21px)] tracking-[0.04em] text-(--color-base-dark)">
               {work.jp}
             </h4>
             <p className="mt-2 font-mincho text-[11.5px] md:text-[clamp(10.5px,0.6vw,15.4px)] leading-[1.9] tracking-[0.06em] text-(--color-base-dark)/80">
@@ -333,11 +296,11 @@ function OwnerDetail() {
 
 function NeighborhoodDetail() {
   return (
-    <DetailShell eyebrow="Location" title="住所と、周辺への距離。">
+    <DetailShell title="住所と、周辺への距離。">
       <div className="border-t border-(--color-base-dark)/15">
-        <div className="grid grid-cols-[110px_1fr] gap-x-6 py-5 md:grid-cols-[140px_1fr]">
-          <p className="font-garamond uppercase text-[clamp(9.39px,0.43vw,13.66px)] tracking-[0.32em] text-(--color-base-dark)/55 pt-[3px]">
-            Address
+        <div className="grid grid-cols-[64px_1fr] gap-x-6 py-5 md:grid-cols-[96px_1fr]">
+          <p className="font-serif text-[12.8px] md:text-[clamp(11.9px,0.66vw,16.8px)] tracking-[0.08em] text-(--color-base-dark)/70 pt-[2px]">
+            住所
           </p>
           <div>
             <p className="font-mincho text-[12.8px] md:text-[clamp(11.2px,0.6vw,15.4px)] leading-[1.85] tracking-[0.06em] text-(--color-base-dark)/90">
@@ -347,10 +310,10 @@ function NeighborhoodDetail() {
               href={MAPS_LINK}
               target="_blank"
               rel="noopener noreferrer"
-              className="group mt-3 inline-flex items-center gap-3 font-garamond text-[9.8px] md:text-[clamp(8.4px,0.49vw,12.6px)] tracking-[0.32em] uppercase text-(--color-base-dark)/70"
+              className="group mt-3 inline-flex items-center gap-3 font-serif text-[12px] md:text-[clamp(11.2px,0.6vw,15.4px)] tracking-[0.06em] text-(--color-base-dark)/70"
             >
               <span className="relative">
-                View on Google Maps
+                Google マップで見る
                 <span className="absolute -bottom-1 left-0 h-px w-full bg-(--color-base-dark)/25 transition-colors duration-500 group-hover:bg-(--color-base-dark)" />
               </span>
               <span aria-hidden>→</span>
@@ -373,7 +336,7 @@ function NeighborhoodDetail() {
                 {p.note}
               </p>
             </div>
-            <p className="font-garamond text-[11px] md:text-[clamp(9.8px,0.49vw,12.6px)] tracking-[0.32em] uppercase text-(--color-base-dark)/70 whitespace-nowrap">
+            <p className="font-mincho text-[11px] md:text-[clamp(10.5px,0.55vw,14px)] tracking-[0.08em] text-(--color-base-dark)/70 whitespace-nowrap">
               {p.time}
             </p>
           </li>
@@ -385,17 +348,12 @@ function NeighborhoodDetail() {
 
 function AmenitiesDetail() {
   return (
-    <DetailShell eyebrow="Facility" title="主な設備と備品。">
+    <DetailShell title="主な設備と備品。">
       <dl className="grid gap-y-8 md:grid-cols-2 md:gap-x-16 md:gap-y-10">
         {AMENITY_GROUPS.map((group) => (
           <div key={group.jp} className="border-t border-(--color-base-dark)/15 pt-5">
-            <dt className="flex items-baseline gap-4 mb-3">
-              <span className="font-serif text-[14.5px] md:text-[clamp(14px,0.82vw,21px)] tracking-[0.06em] text-(--color-base-dark)">
-                {group.jp}
-              </span>
-              <span className="font-garamond italic text-[9.4px] md:text-[clamp(8.4px,0.43vw,11.2px)] tracking-[0.32em] uppercase text-(--color-base-dark)/45">
-                {group.en}
-              </span>
+            <dt className="mb-3 font-serif text-[14.5px] md:text-[clamp(14px,0.82vw,21px)] tracking-[0.06em] text-(--color-base-dark)">
+              {group.jp}
             </dt>
             <dd className="font-mincho text-[12px] md:text-[clamp(10.5px,0.6vw,15.4px)] leading-[1.95] tracking-[0.06em] text-(--color-base-dark)/85">
               {group.body}
@@ -412,7 +370,7 @@ function AmenitiesDetail() {
 
 function ReservationDetail() {
   return (
-    <DetailShell eyebrow="Booking Notes" title="ご予約の前に。">
+    <DetailShell title="ご予約の前に。">
       <div className="grid gap-12 md:grid-cols-2 md:gap-16">
         {/* 予約の基本 */}
         <dl className="border-t border-(--color-base-dark)/15 divide-y divide-(--color-base-dark)/10">
@@ -421,15 +379,10 @@ function ReservationDetail() {
               key={info.label}
               className="grid grid-cols-[112px_1fr] gap-x-6 py-5 md:grid-cols-[160px_1fr]"
             >
-              <dt className="flex flex-col">
-                <span className="font-serif text-[12.8px] md:text-[clamp(11.9px,0.71vw,18.2px)] tracking-[0.08em] text-(--color-base-dark)">
-                  {info.label}
-                </span>
-                <span className="mt-1 font-garamond italic text-[9.4px] md:text-[clamp(8.4px,0.43vw,11.2px)] tracking-[0.28em] uppercase text-(--color-base-dark)/45">
-                  {info.en}
-                </span>
+              <dt className="font-serif text-[12.8px] md:text-[clamp(11.9px,0.71vw,18.2px)] tracking-[0.08em] text-(--color-base-dark)">
+                {info.label}
               </dt>
-              <dd className="font-mincho text-[12.8px] md:text-[clamp(11.2px,0.66vw,16.8px)] leading-[1.85] tracking-[0.06em] text-(--color-base-dark)/90 pt-[3px]">
+              <dd className="font-mincho text-[12.8px] md:text-[clamp(11.2px,0.66vw,16.8px)] leading-[1.85] tracking-[0.06em] text-(--color-base-dark)/90 pt-[2px]">
                 {info.value}
               </dd>
             </div>
@@ -438,13 +391,8 @@ function ReservationDetail() {
 
         {/* 到着前に知っておきたいこと */}
         <div>
-          <p className="flex items-baseline gap-4 border-t border-(--color-base-dark)/15 pt-5 mb-2">
-            <span className="font-serif text-[14.5px] md:text-[clamp(14px,0.82vw,21px)] tracking-[0.06em] text-(--color-base-dark)">
-              ご利用にあたって
-            </span>
-            <span className="font-garamond italic text-[9.4px] md:text-[clamp(8.4px,0.43vw,11.2px)] tracking-[0.32em] uppercase text-(--color-base-dark)/45">
-              Notes
-            </span>
+          <p className="border-t border-(--color-base-dark)/15 pt-5 mb-2 font-serif text-[14.5px] md:text-[clamp(14px,0.82vw,21px)] tracking-[0.06em] text-(--color-base-dark)">
+            ご利用にあたって
           </p>
           <ol>
             {RESERVE_NOTES.map((text, i) => (
@@ -452,7 +400,7 @@ function ReservationDetail() {
                 key={text}
                 className="grid grid-cols-[32px_1fr] gap-x-4 border-b border-(--color-base-dark)/10 py-4"
               >
-                <span className="font-garamond italic text-[10.7px] md:text-[clamp(9.8px,0.49vw,12.6px)] tracking-[0.24em] text-(--color-base-dark)/40 pt-[2px]">
+                <span className="font-mincho text-[10.7px] md:text-[clamp(9.8px,0.49vw,12.6px)] tracking-[0.02em] text-(--color-base-dark)/40 pt-[2px]">
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <p className="font-mincho text-[12px] md:text-[clamp(10.5px,0.6vw,15.4px)] leading-[1.95] tracking-[0.06em] text-(--color-base-dark)/85">
@@ -463,10 +411,10 @@ function ReservationDetail() {
           </ol>
           <Link
             href="/rooms#overview"
-            className="group mt-6 inline-flex items-center gap-3 font-garamond text-[9.8px] md:text-[clamp(8.4px,0.49vw,12.6px)] tracking-[0.32em] uppercase text-(--color-base-dark)/70"
+            className="group mt-6 inline-flex items-center gap-3 font-serif text-[12px] md:text-[clamp(11.2px,0.6vw,15.4px)] tracking-[0.06em] text-(--color-base-dark)/70"
           >
             <span className="relative">
-              View All Notices
+              注意事項をすべて見る
               <span className="absolute -bottom-1 left-0 h-px w-full bg-(--color-base-dark)/25 transition-colors duration-500 group-hover:bg-(--color-base-dark)" />
             </span>
             <span aria-hidden>→</span>
@@ -479,17 +427,17 @@ function ReservationDetail() {
           href={AIRBNB_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="group inline-flex items-center gap-4 bg-(--color-base-dark) text-(--color-base-light) font-garamond text-[11.1px] md:text-[clamp(9.8px,0.6vw,15.4px)] tracking-[0.32em] uppercase px-8 py-4 hover:bg-(--color-base-dark)/85 transition-colors"
+          className="group inline-flex items-center gap-4 bg-(--color-base-dark) text-(--color-base-light) font-serif text-[13px] md:text-[clamp(12.6px,0.71vw,17.5px)] tracking-[0.1em] px-8 py-4 hover:bg-(--color-base-dark)/85 transition-colors"
         >
-          <span>Book on Airbnb</span>
+          <span>Airbnb で予約する</span>
           <span aria-hidden>→</span>
         </a>
         <Link
           href="/access#reservation"
-          className="group inline-flex items-center gap-4 font-garamond text-[11.1px] md:text-[clamp(9.8px,0.6vw,15.4px)] tracking-[0.32em] uppercase text-(--color-base-dark)"
+          className="group inline-flex items-center gap-4 font-serif text-[13px] md:text-[clamp(12.6px,0.71vw,17.5px)] tracking-[0.08em] text-(--color-base-dark)"
         >
           <span className="relative">
-            View Availability
+            空き状況を見る
             <span className="absolute -bottom-1 left-0 h-px w-full bg-(--color-base-dark)/30 transition-colors duration-500 group-hover:bg-(--color-base-dark)" />
           </span>
           <span aria-hidden>→</span>
@@ -502,63 +450,51 @@ function ReservationDetail() {
 /* ---------------------------------------------------------------
  * 6 章の帯 + 要約ストリップ。
  * TOP は「下までスクロールすれば主要な情報が揃う」構成。
- * 帯 = 章の入口（写真 + 導入文 + 詳細ページへのリンク）、
+ * 帯 = 章の入口（タイトル → 写真 → 導入文 → 詳細リンク）、
  * ストリップ = その章の実用情報の要約。深掘りは各ページへ。
  * --------------------------------------------------------------- */
 const BANDS = [
   {
     href: "/rooms",
-    num: "01",
-    en: "Rooms",
     jp: "部屋と空間",
-    body: "一軒家の二階を、一棟まるごと。木の天井の LDK、ひのきのバス、フルキッチンが揃う 75 ㎡ です。定員は最大 8 名、ゆったり過ごすなら 6 名までが目安。",
+    body: "一軒家の二階を、まるごと貸し切りで。LDK、ひのきのバス、フルキッチンが揃う 75 ㎡ です。定員は最大 8 名、ゆったり過ごすなら 6 名までが目安です。",
     img: "/images/rooms/rooms-hero.jpg",
-    cta: "View Rooms",
+    cta: "部屋を見る",
   },
   {
     href: "/stay",
-    num: "02",
-    en: "Stay",
     jp: "過ごし方",
-    body: "まずは、歩いて 8 分の一色海岸へ。空気が澄んだ日には、海の向こうに富士山が見えることもあります。宿に戻ったら、キッチンの抹茶マシーンで一服を。",
+    body: "歩いて 8 分の一色海岸へ。空気が澄んだ日には、海の向こうに富士山が見えることもあります。宿に戻ったら、お部屋で挽きたての抹茶を味わえます。",
     img: "/images/access/access-balcony.jpg",
-    cta: "View Stay",
+    cta: "過ごし方を見る",
   },
   {
     href: "/owner",
-    num: "03",
-    en: "Owner",
     jp: "営むのは、BEAT ICE",
-    body: "葉山の棚田で育てたお米から、植物性のアイスクリームをつくっています。地域の学校給食にアイスを届け、教室で授業をすることも。この宿も、そんな夫婦の暮らしの続きにあります。",
+    body: "葉山の棚田で育てたお米から、アイスクリームをつくっています。地域の学校給食にアイスを届け、教室で授業をすることもあります。この宿も、そんな夫婦の暮らしの続きにあります。",
     img: "/images/about-hero-tanada.jpg",
-    cta: "About BEAT ICE",
+    cta: "BEAT ICE について",
   },
   {
     href: "/access",
-    num: "04",
-    en: "Neighborhood",
     jp: "周辺とアクセス",
     body: "一色海岸まで徒歩 8 分、路線バスの停留所までは 1 分。歩いて 30 秒のコンビニと徒歩 5 分の地元スーパーで、滞在中の買い出しもすぐに済みます。海のそばの、静かな住宅地です。",
     img: "/images/access/access-balcony.jpg",
-    cta: "View Access",
+    cta: "アクセスを見る",
   },
   {
     href: "/rooms#overview",
-    num: "05",
-    en: "Amenities",
     jp: "設備と備品",
     body: "調理器具は一式、食器は人数分。ドラム式洗濯機は洗剤つきで、自宅と同じように洗濯ができます。タオルや歯ブラシ、シャンプーなどのアメニティも揃えました。",
     img: "/images/rooms/kitchen-01.jpg",
-    cta: "View Amenities",
+    cta: "設備を見る",
   },
   {
     href: "/access#reservation",
-    num: "06",
-    en: "Reservation",
     jp: "予約と空き状況",
     body: "ご予約は Airbnb から。チェックインは 16 時から 23 時、チェックアウトは 11 時です。空き状況のカレンダー、住所と地図も、サイト内でそのまま確認できます。",
     img: "/images/access/access-entrance.jpg",
-    cta: "Check Availability",
+    cta: "空き状況を見る",
   },
 ];
 
@@ -585,20 +521,31 @@ export default function Home() {
       {/* Section bands — 6 chapters: Rooms / Stay / Owner / Neighborhood / Amenities / Reservation */}
       <section className="relative bg-(--color-base-light)">
         {BANDS.map((band, i) => {
-          const imageFirst = i % 2 === 1; // 交互レイアウト
+          const imageFirst = i % 2 === 1; // PC で画像を左右交互に
           const Detail = DETAILS[i];
           return (
             <div key={band.href}>
-              <div
-                className={`grid items-stretch border-t border-(--color-base-dark)/8 md:grid-cols-2 ${
-                  imageFirst ? "" : "md:[&>a]:order-2"
-                }`}
-              >
+              {/* 帯 — モバイルは「タイトル → 写真 → 本文 → CTA」の縦積み。
+                  PC は 2 カラムで、タイトルと本文を片側、写真を反対側に置く。 */}
+              <div className="grid items-center border-t border-(--color-base-dark)/8 md:grid-cols-2 md:gap-x-12 lg:gap-x-20">
+                {/* タイトル */}
+                <h2
+                  data-reveal
+                  className={`reveal px-6 pt-[clamp(48px,6vw,88px)] md:px-12 lg:px-20 md:pt-0 md:self-end font-serif text-[21px] md:text-[clamp(20.16px,1.74vw,44.8px)] leading-[1.3] tracking-[0.04em] text-(--color-base-dark) md:row-start-1 ${
+                    imageFirst ? "md:col-start-2" : "md:col-start-1"
+                  }`}
+                >
+                  {band.jp}
+                </h2>
+
+                {/* 写真 — タイトルの下（モバイル）／反対カラムで 2 行ぶち抜き（PC） */}
                 <Link
                   href={band.href}
-                  aria-label={`${band.jp}（${band.en}）を見る`}
+                  aria-label={`${band.jp}を見る`}
                   data-reveal
-                  className="reveal group relative aspect-[4/3] md:aspect-auto md:min-h-[68svh] w-full overflow-hidden bg-(--color-base-dark)/10"
+                  className={`reveal group relative mt-8 aspect-[4/3] w-full overflow-hidden bg-(--color-base-dark)/10 md:mt-0 md:aspect-auto md:min-h-[68svh] md:row-span-2 md:row-start-1 ${
+                    imageFirst ? "md:col-start-1" : "md:col-start-2"
+                  }`}
                 >
                   <ParallaxLayer>
                     <Image
@@ -620,29 +567,26 @@ export default function Home() {
                   />
                 </Link>
 
+                {/* 本文 + CTA */}
                 <div
                   data-reveal
-                  className="reveal px-6 py-[clamp(56px,7vw,112px)] md:px-12 lg:px-20 flex flex-col justify-center"
+                  className={`reveal px-6 pt-8 pb-[clamp(48px,6vw,88px)] md:px-12 lg:px-20 md:pt-6 md:pb-0 md:self-start md:row-start-2 ${
+                    imageFirst ? "md:col-start-2" : "md:col-start-1"
+                  }`}
                   style={{ transitionDelay: "120ms" }}
                 >
-                  <p className="font-garamond italic text-[11px] md:text-[clamp(9.1px,0.6vw,15.4px)] tracking-[0.4em] uppercase text-(--color-soil) mb-5">
-                    {band.num} — {band.en}
-                  </p>
-                  <h2 className="font-serif text-[21px] md:text-[clamp(20.16px,1.74vw,44.8px)] leading-[1.3] tracking-[0.04em] text-(--color-base-dark) mb-7">
-                    {band.jp}
-                  </h2>
                   <p className="font-mincho text-[13.5px] md:text-[clamp(11.2px,0.71vw,18.2px)] leading-[2.0] tracking-[0.07em] text-(--color-base-dark)/85 md:max-w-[460px] mb-10">
                     {band.body}
                   </p>
                   <Link
                     href={band.href}
-                    className="group inline-flex items-center gap-4 font-garamond text-[11px] md:text-[clamp(9.8px,0.6vw,15.4px)] tracking-[0.32em] uppercase text-(--color-base-dark)"
+                    className="group inline-flex items-center gap-4 font-serif text-[13.5px] md:text-[clamp(12.6px,0.71vw,17.5px)] tracking-[0.08em] text-(--color-base-dark)"
                   >
                     <span className="relative">
                       {band.cta}
                       <span className="absolute -bottom-1 left-0 h-px w-full bg-(--color-base-dark)/30 transition-colors duration-500 group-hover:bg-(--color-base-dark)" />
                     </span>
-                    <span aria-hidden className="text-[12px]">→</span>
+                    <span aria-hidden className="text-[13px]">→</span>
                   </Link>
                 </div>
               </div>
@@ -671,9 +615,9 @@ export default function Home() {
             href={AIRBNB_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="group inline-flex items-center gap-3 font-garamond text-[10.5px] md:text-[clamp(9.1px,0.49vw,12.6px)] tracking-[0.32em] uppercase border border-(--color-base-light)/20 px-7 py-4 md:px-[clamp(28px,2.19vw,56px)] md:py-[clamp(16px,1.09vw,28px)] hover:bg-(--color-base-light)/8 transition-colors"
+            className="group inline-flex items-center gap-3 font-serif text-[12.5px] md:text-[clamp(11.2px,0.6vw,15.4px)] tracking-[0.1em] border border-(--color-base-light)/20 px-7 py-4 md:px-[clamp(28px,2.19vw,56px)] md:py-[clamp(16px,1.09vw,28px)] hover:bg-(--color-base-light)/8 transition-colors"
           >
-            <span>Reserve on Airbnb</span>
+            <span>Airbnb で予約する</span>
             <span aria-hidden className="cta-arrow group-hover:[animation-play-state:paused]">→</span>
           </a>
         </div>

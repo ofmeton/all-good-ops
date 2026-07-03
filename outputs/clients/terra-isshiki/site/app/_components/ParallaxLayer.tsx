@@ -23,6 +23,9 @@ export function ParallaxLayer({ children }: { children: React.ReactNode }) {
       const img = frame?.querySelector("img");
       if (reduce || !frame || !img) return;
 
+      // will-change + force3D で GPU 合成レイヤーに乗せ、拡大した画像の
+      // パンでフレーム落ちが出ないようにする。
+      gsap.set(img, { willChange: "transform", force3D: true });
       gsap.fromTo(
         img,
         { yPercent: -8, scale: 1.16 },
@@ -34,7 +37,9 @@ export function ParallaxLayer({ children }: { children: React.ReactNode }) {
             trigger: frame,
             start: "top bottom",
             end: "bottom top",
-            scrub: true,
+            // true（即追従）だとホイールの粗いステップでカクつくため、
+            // 数値でスムージング（1 = 約1秒かけて目標位置へ追いつく）。
+            scrub: 1,
           },
         }
       );

@@ -4,7 +4,7 @@ import { AvailabilityCalendar } from "../_components/AvailabilityCalendar";
 import { ParallaxLayer } from "../_components/ParallaxLayer";
 
 export const metadata = {
-  title: "Access",
+  title: "アクセス",
   description:
     "TERRA HAYAMA のアクセスと立地。葉山一色海岸まで徒歩 8 分。神奈川県三浦郡葉山町一色 1759-1-5。",
 };
@@ -58,21 +58,15 @@ export default function AccessPage() {
           }}
         />
         <div className="absolute bottom-12 left-6 md:bottom-20 md:left-12 z-10 max-w-[88%] md:max-w-[760px]">
-          <p
-            className="fade-up font-garamond italic text-[clamp(11.1px,0.6vw,18.79px)] tracking-[0.4em] text-(--color-base-light)/80 mb-5"
-            style={{ animationDelay: "0.3s" }}
-          >
-            Access
-          </p>
           <h1
             className="fade-up font-serif font-medium text-[clamp(13.66px,3.36vw,20.5px)] leading-[1.2] md:text-[clamp(14px,1.22vw,30.8px)] md:leading-[1.14] tracking-[0.02em]"
-            style={{ animationDelay: "0.55s" }}
+            style={{ animationDelay: "0.4s" }}
           >
             <span className="block whitespace-nowrap">海まで、徒歩 8 分。</span>
           </h1>
           <p
             className="fade-up mt-5 md:mt-8 font-mincho text-[11.96px] md:text-[clamp(11.2px,0.71vw,18.2px)] leading-[1.85] tracking-[0.16em] text-(--color-base-light)/85"
-            style={{ animationDelay: "0.85s" }}
+            style={{ animationDelay: "0.7s" }}
           >
             住宅地に流れる、<br />
             葉山らしい時間の中に佇む。
@@ -84,32 +78,29 @@ export default function AccessPage() {
       <section className="relative pt-[clamp(40px,4vw,72px)] md:pb-[clamp(40px,4vw,72px)]">
         <div className="grid md:grid-cols-2 items-stretch">
           <div className="px-6 py-[clamp(80px,7.3vw,112px)] md:px-16 lg:px-24 flex flex-col justify-center">
-            <p className="font-garamond italic text-[clamp(11.1px,0.6vw,18.79px)] tracking-[0.4em] uppercase text-(--color-soil) mb-4">
-              Location
-            </p>
             <h2 className="font-serif text-[19.13px] md:text-[clamp(19.04px,1.58vw,40.32px)] leading-[1.4] tracking-[0.04em] text-(--color-base-dark) mb-8">
               <span className="block">葉山町、一色。</span>
             </h2>
             <dl className="border-t border-(--color-base-dark)/15 divide-y divide-(--color-base-dark)/10 mb-10">
-              <div className="grid grid-cols-[110px_1fr] md:grid-cols-[140px_1fr] py-5">
-                <dt className="font-garamond uppercase text-[clamp(9.39px,0.43vw,13.66px)] tracking-[0.32em] text-(--color-base-dark)/55 pt-[3px]">
-                  Address
+              <div className="grid grid-cols-[88px_1fr] md:grid-cols-[120px_1fr] py-5">
+                <dt className="font-serif text-[12.81px] md:text-[clamp(11.9px,0.66vw,16.8px)] tracking-[0.08em] text-(--color-base-dark)/70 pt-[2px]">
+                  住所
                 </dt>
                 <dd className="font-mincho text-[12.81px] md:text-[clamp(11.2px,0.6vw,15.4px)] leading-[1.85] tracking-[0.06em] text-(--color-base-dark)/90">
                   {ADDRESS}
                 </dd>
               </div>
-              <div className="grid grid-cols-[110px_1fr] md:grid-cols-[140px_1fr] py-5">
-                <dt className="font-garamond uppercase text-[clamp(9.39px,0.43vw,13.66px)] tracking-[0.32em] text-(--color-base-dark)/55 pt-[3px]">
-                  Type
+              <div className="grid grid-cols-[88px_1fr] md:grid-cols-[120px_1fr] py-5">
+                <dt className="font-serif text-[12.81px] md:text-[clamp(11.9px,0.66vw,16.8px)] tracking-[0.08em] text-(--color-base-dark)/70 pt-[2px]">
+                  タイプ
                 </dt>
                 <dd className="font-mincho text-[12.81px] md:text-[clamp(11.2px,0.6vw,15.4px)] leading-[1.85] tracking-[0.06em] text-(--color-base-dark)/90">
                   一棟貸し（一軒家の 2 階フロア）／最大 8 名
                 </dd>
               </div>
-              <div className="grid grid-cols-[110px_1fr] md:grid-cols-[140px_1fr] py-5">
-                <dt className="font-garamond uppercase text-[clamp(9.39px,0.43vw,13.66px)] tracking-[0.32em] text-(--color-base-dark)/55 pt-[3px]">
-                  Parking
+              <div className="grid grid-cols-[88px_1fr] md:grid-cols-[120px_1fr] py-5">
+                <dt className="font-serif text-[12.81px] md:text-[clamp(11.9px,0.66vw,16.8px)] tracking-[0.08em] text-(--color-base-dark)/70 pt-[2px]">
+                  駐車場
                 </dt>
                 <dd className="font-mincho text-[12.81px] md:text-[clamp(11.2px,0.6vw,15.4px)] leading-[1.85] tracking-[0.06em] text-(--color-base-dark)/90">
                   1 階に駐車スペースあり
@@ -121,10 +112,10 @@ export default function AccessPage() {
               href={AIRBNB_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex items-center gap-4 font-garamond text-[11.1px] md:text-[clamp(9.8px,0.6vw,15.4px)] tracking-[0.32em] uppercase text-(--color-base-dark)"
+              className="group inline-flex items-center gap-4 font-serif text-[13.5px] md:text-[clamp(12.6px,0.71vw,17.5px)] tracking-[0.08em] text-(--color-base-dark)"
             >
               <span className="relative">
-                Reserve on Airbnb
+                Airbnb で予約する
                 <span className="absolute -bottom-1 left-0 h-px w-full bg-(--color-base-dark)/30 transition-colors duration-500 group-hover:bg-(--color-base-dark)" />
               </span>
               <span aria-hidden>→</span>
@@ -149,9 +140,6 @@ export default function AccessPage() {
       {/* Map */}
       <section className="bg-(--color-paper) px-6 py-[clamp(96px,8.34vw,128px)] md:px-12">
         <div className="mx-auto max-w-[1480px]">
-          <p className="font-garamond italic text-[clamp(11.1px,0.6vw,18.79px)] tracking-[0.4em] uppercase text-(--color-soil) mb-4">
-            Map
-          </p>
           <h2 className="font-serif text-[17.76px] md:text-[clamp(17.92px,1.4vw,35.84px)] leading-[1.4] tracking-[0.04em] text-(--color-base-dark) mb-10">
             <span className="block">一色海岸からほど近い、</span>
             <span className="block">静かな住宅地に。</span>
@@ -169,9 +157,9 @@ export default function AccessPage() {
               href={MAPS_LINK}
               target="_blank"
               rel="noopener noreferrer"
-              className="absolute right-2 bottom-2 md:right-3 md:bottom-3 inline-flex items-center gap-1.5 md:gap-2 bg-(--color-base-light)/95 backdrop-blur px-2.5 py-1.5 md:px-4 md:py-2 text-(--color-base-dark) font-garamond text-[7.69px] md:text-[7.7px] tracking-[0.24em] md:tracking-[0.32em] uppercase border border-(--color-base-dark)/15 hover:bg-(--color-base-light)"
+              className="absolute right-2 bottom-2 md:right-3 md:bottom-3 inline-flex items-center gap-1.5 md:gap-2 bg-(--color-base-light)/95 backdrop-blur px-3 py-1.5 md:px-4 md:py-2 text-(--color-base-dark) font-serif text-[10px] md:text-[clamp(9.8px,0.55vw,13px)] tracking-[0.08em] border border-(--color-base-dark)/15 hover:bg-(--color-base-light)"
             >
-              View on Google Maps
+              Google マップで見る
               <span aria-hidden>→</span>
             </a>
           </div>
@@ -190,7 +178,7 @@ export default function AccessPage() {
                     {p.note}
                   </p>
                 </div>
-                <p className="font-garamond text-[11.1px] md:text-[clamp(9.8px,0.49vw,12.6px)] tracking-[0.32em] uppercase text-(--color-base-dark)/70 whitespace-nowrap">
+                <p className="font-mincho text-[11.1px] md:text-[clamp(9.8px,0.55vw,13px)] tracking-[0.08em] text-(--color-base-dark)/70 whitespace-nowrap">
                   {p.time}
                 </p>
               </li>
@@ -205,9 +193,6 @@ export default function AccessPage() {
         className="border-t border-(--color-base-dark)/10 px-6 py-[clamp(96px,8.34vw,128px)] md:px-12 bg-(--color-base-light)"
       >
         <div className="mx-auto max-w-[1480px]">
-          <p className="font-garamond italic text-[clamp(11.1px,0.6vw,18.79px)] tracking-[0.4em] uppercase text-(--color-soil) mb-4">
-            Reservation
-          </p>
           <h2 className="font-serif text-[19.13px] md:text-[clamp(20.16px,1.74vw,44.8px)] leading-[1.36] tracking-[0.04em] text-(--color-base-dark) mb-12 md:mb-16">
             <span className="block">予約は Airbnb から。</span>
             <span className="block">空き状況はこちらで確認できます。</span>
@@ -220,9 +205,9 @@ export default function AccessPage() {
               href={AIRBNB_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex items-center gap-4 bg-(--color-base-dark) text-(--color-base-light) font-garamond text-[11.1px] md:text-[clamp(9.8px,0.6vw,15.4px)] tracking-[0.32em] uppercase px-8 py-4 hover:bg-(--color-base-dark)/85 transition-colors"
+              className="group inline-flex items-center gap-4 bg-(--color-base-dark) text-(--color-base-light) font-serif text-[13px] md:text-[clamp(12.6px,0.71vw,17.5px)] tracking-[0.1em] px-8 py-4 hover:bg-(--color-base-dark)/85 transition-colors"
             >
-              <span>Book on Airbnb</span>
+              <span>Airbnb で予約する</span>
               <span aria-hidden>→</span>
             </a>
           </div>

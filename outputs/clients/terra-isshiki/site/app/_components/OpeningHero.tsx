@@ -36,8 +36,13 @@ export function OpeningHero({
     () => {
       document.body.classList.add("has-fv");
       const threshold = () => window.innerHeight * 0.85;
-      const updateFvPassed = () =>
+      // dock（予約ボタン）はヘッダーより深くスクロールしてから出す。
+      // コンセプト文を読み終えて実コンテンツに入る頃合いでじわっと現れる。
+      const deepThreshold = () => window.innerHeight * 1.7;
+      const updateFvPassed = () => {
         document.body.classList.toggle("fv-passed", window.scrollY > threshold());
+        document.body.classList.toggle("fv-deep", window.scrollY > deepThreshold());
+      };
       window.addEventListener("scroll", updateFvPassed, { passive: true });
       window.addEventListener("resize", updateFvPassed);
       updateFvPassed();
@@ -77,7 +82,7 @@ export function OpeningHero({
       return () => {
         window.removeEventListener("scroll", updateFvPassed);
         window.removeEventListener("resize", updateFvPassed);
-        document.body.classList.remove("has-fv", "fv-passed");
+        document.body.classList.remove("has-fv", "fv-passed", "fv-deep");
       };
     },
     { scope: rootRef }

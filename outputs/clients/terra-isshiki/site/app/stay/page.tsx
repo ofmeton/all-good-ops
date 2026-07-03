@@ -7,16 +7,15 @@ import { ParallaxLayer } from "../_components/ParallaxLayer";
 export const metadata = {
   title: "過ごし方",
   description:
-    "TERRA HAYAMA での過ごし方。歩いて 8 分の一色海岸、海越しの富士山、キッチンの抹茶、棚田と BEAT ICE の営み。",
+    "TERRA HAYAMA での過ごし方。歩いて 8 分の一色海岸、海越しの富士山、お部屋の抹茶、ウェルカムの葉山アイス。",
 };
 
 const EXPERIENCES = [
   {
     no: "01",
-    label: "まずは、一色海岸へ",
-    sub: "Isshiki Beach first",
+    label: "一色海岸へ",
     body:
-      "宿から海までは徒歩 8 分。朝の散歩に、夕方の寄り道に。TERRA の過ごし方は、一色海岸から始まります。",
+      "宿から海までは歩いて 8 分。朝の散歩や、夕方の寄り道にどうぞ。TERRA の過ごし方は、この海から始まります。",
     image: null,
     icon: "wave",
     accent: "mist",
@@ -24,28 +23,25 @@ const EXPERIENCES = [
   {
     no: "02",
     label: "海越しの富士山",
-    sub: "Mt. Fuji from the coast",
     body:
-      "空気が澄んだ日は、一色海岸の向こうに富士山が見えることも。海越しに望む、静かな稜線です。",
+      "空気が澄んだ日は、一色海岸の向こうに富士山が見えることもあります。海越しに望む、静かな稜線です。",
     image: "/images/stay/stay-fuji.jpg",
     accent: "mist",
   },
   {
     no: "03",
-    label: "置いてある抹茶を、気軽に",
-    sub: "Matcha in the kitchen",
+    label: "お部屋で味わう抹茶",
     body:
-      "キッチンに、抹茶マシーンを置いてあります。滞在中のひと息に、気軽にどうぞ。",
+      "お部屋では、挽きたての抹茶を味わえます。滞在中のひと息を、ゆっくりお楽しみください。",
     image: "/images/stay/stay-matcha.jpg",
     accent: "pine",
   },
   {
     no: "04",
-    label: "棚田と BEAT ICE の営み",
-    sub: "Tanada × BEAT ICE",
+    label: "お部屋で楽しむ葉山アイス",
     body:
-      "葉山の棚田で育てたお米が、BEAT ICE のアイスクリームになる。そんな土地の営みが、この宿の背景にあります。",
-    image: "/images/stay/stay-tanada-tools.jpg",
+      "オーナーがつくる葉山アイスを、ウェルカムサービスとしてお部屋でお楽しみいただけます。",
+    image: "/images/owner/owner-icecream.webp",
     accent: "soil",
   },
 ];
@@ -99,24 +95,18 @@ export default function StayPage() {
           }}
         />
         <div className="absolute bottom-12 left-6 md:bottom-20 md:left-12 z-10 max-w-[88%] md:max-w-[760px]">
-          <p
-            className="fade-up font-garamond italic text-[clamp(11.1px,0.6vw,18.79px)] tracking-[0.4em] text-(--color-base-light)/80 mb-5"
-            style={{ animationDelay: "0.3s" }}
-          >
-            Stay — How to spend time
-          </p>
           <h1
             className="fade-up font-serif font-medium text-[clamp(15.37px,3.57vw,22.2px)] leading-[1.22] md:text-[clamp(15.4px,1.47vw,36.4px)] md:leading-[1.16] tracking-[0.02em]"
-            style={{ animationDelay: "0.55s" }}
+            style={{ animationDelay: "0.4s" }}
           >
             <span className="block">葉山の一日を、</span>
             <span className="block">軽やかに。</span>
           </h1>
           <p
             className="fade-up mt-5 md:mt-8 font-mincho text-[11.96px] md:text-[clamp(11.2px,0.71vw,18.2px)] leading-[1.85] tracking-[0.16em] text-(--color-base-light)/85"
-            style={{ animationDelay: "0.85s" }}
+            style={{ animationDelay: "0.7s" }}
           >
-            一色海岸、海越しの富士山、抹茶、棚田。
+            一色海岸、海越しの富士山、抹茶、葉山アイス。
           </p>
         </div>
       </section>
@@ -137,9 +127,9 @@ export default function StayPage() {
                 {/* Text — readable width, padded — comes FIRST */}
                 <div className="mx-auto max-w-[1480px] px-6 md:px-12 mb-8 md:mb-14">
                   <p
-                    className={`font-garamond italic text-[clamp(11.1px,0.55vw,17.08px)] tracking-[0.42em] uppercase mb-3 ${accentColor}`}
+                    className={`font-garamond italic text-[clamp(11.1px,0.55vw,17.08px)] tracking-[0.42em] mb-3 ${accentColor}`}
                   >
-                    {exp.no}・{exp.sub}
+                    {exp.no}
                   </p>
                   <h2 className="font-serif text-[17.76px] md:text-[clamp(17.92px,1.4vw,35.84px)] leading-[1.36] tracking-[0.04em] text-(--color-base-dark) mb-6 md:mb-8">
                     {exp.label}
@@ -189,21 +179,18 @@ export default function StayPage() {
 
       {/* Next link */}
       <section className="border-t border-(--color-base-dark)/10 px-6 py-[clamp(80px,7.3vw,112px)] md:px-12 text-center">
-        <p className="font-garamond italic text-[clamp(11.1px,0.6vw,18.79px)] tracking-[0.4em] uppercase text-(--color-soil) mb-6">
-          Next
-        </p>
         <h3 className="font-serif text-[22.2px] md:text-[clamp(23.8px,1.97vw,50.4px)] leading-[1.4] tracking-[0.04em] text-(--color-base-dark) mb-10">
           海まで、徒歩 8 分。
         </h3>
         <Link
           href="/access"
-          className="group inline-flex items-center gap-4 font-garamond text-[11.1px] md:text-[clamp(9.8px,0.6vw,15.4px)] tracking-[0.32em] uppercase text-(--color-base-dark)"
+          className="group inline-flex items-center gap-4 font-serif text-[13.5px] md:text-[clamp(12.6px,0.71vw,17.5px)] tracking-[0.08em] text-(--color-base-dark)"
         >
           <span className="relative">
-            View Access
+            アクセスを見る
             <span className="absolute -bottom-1 left-0 h-px w-full bg-(--color-base-dark)/30 transition-colors duration-500 group-hover:bg-(--color-base-dark)" />
           </span>
-          <span aria-hidden className="text-[11.96px]">→</span>
+          <span aria-hidden className="text-[13px]">→</span>
         </Link>
       </section>
     </main>

@@ -125,14 +125,14 @@ function SectionCarousel({
           <button
             type="button"
             key={it.src}
-            onClick={() => onZoom(it.src, `${section.label} ${i + 1}`)}
+            onClick={() => onZoom(it.src, `${section.caption} ${i + 1}`)}
             className="relative shrink-0 basis-full snap-start cursor-zoom-in bg-(--color-base-dark)/5"
             style={{ aspectRatio: "3/2" }}
-            aria-label={`${section.label} の写真 ${i + 1} を拡大表示`}
+            aria-label={`${section.caption} の写真 ${i + 1} を拡大表示`}
           >
             <Image
               src={it.src}
-              alt={`${section.label} ${i + 1}`}
+              alt={`${section.caption} ${i + 1}`}
               fill
               sizes="100vw"
               quality={88}
@@ -215,18 +215,15 @@ export function RoomsGallery() {
     <>
       {SECTIONS.map((section, sIdx) => (
         <section
-          key={section.label}
+          key={section.caption}
           className={`relative ${
             sIdx % 2 === 1 ? "bg-(--color-paper)" : "bg-(--color-base-light)"
           }`}
         >
           {/* Section header */}
           <div className="mx-auto max-w-[1480px] px-6 md:px-12 mb-10 md:mb-16 pt-12 md:pt-16">
-            <p className="font-garamond italic text-[clamp(11.1px,0.55vw,17.08px)] tracking-[0.42em] uppercase text-(--color-soil) mb-3">
+            <h2 className="font-serif text-[21.86px] md:text-[clamp(22.4px,1.84vw,47.04px)] leading-[1.3] tracking-[0.04em] text-(--color-base-dark) mb-6 md:mb-8">
               {section.caption}
-            </p>
-            <h2 className="font-serif text-[21.86px] md:text-[clamp(22.4px,1.84vw,47.04px)] leading-[1.2] tracking-[0.04em] text-(--color-base-dark) whitespace-nowrap mb-6 md:mb-8">
-              {section.label}
             </h2>
             <p className="font-mincho text-[12.81px] md:text-[clamp(11.2px,0.71vw,18.2px)] leading-[2.0] tracking-[0.08em] text-(--color-base-dark)/80 md:max-w-[760px]">
               {section.description}
