@@ -6,19 +6,14 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { HeroSlideshow } from "./HeroSlideshow";
+import { OPENING } from "../copy";
 
 gsap.registerPlugin(ScrollTrigger);
 
 type Slide = { src: string; alt: string };
 
-const CONCEPT_STANZAS = [
-  "TERRAは、葉山への愛から生まれました。",
-  "海越しに望む富士山、\n棚田が広がる里山。",
-  "この土地に暮らして十年、\n私たちは今もなお、\nこの町の風景に魅了され続けています。",
-  "風景とはきっと、\n人の営みと自然がゆっくりと重なり合い、\n時間をかけて育まれてきたもの。",
-  "ここでは、訪れる人と葉山との距離が、\nゆっくりとほどけていきます。",
-  "海と山が織りなす自然のリズム、\nここに息づく人々の物語。",
-];
+/* コンセプト文は app/copy.ts（OPENING.stanzas）で編集できます。 */
+const CONCEPT_STANZAS = OPENING.stanzas;
 
 export function OpeningHero({
   slides,
@@ -36,9 +31,14 @@ export function OpeningHero({
     () => {
       document.body.classList.add("has-fv");
       const threshold = () => window.innerHeight * 0.85;
-      // dock（予約ボタン）はヘッダーより深くスクロールしてから出す。
-      // コンセプト文を読み終えて実コンテンツに入る頃合いでじわっと現れる。
-      const deepThreshold = () => window.innerHeight * 1.7;
+      // dock（予約ボタン）は FV 演出（.intro = コンセプト文まで）を完全に
+      // 抜けてから出す。intro の高さ − 1 画面分 = 帯コンテンツが画面を
+      // 占めるスクロール位置。コンセプト文とは重ならない。
+      const introEl = rootRef.current?.querySelector<HTMLElement>(".intro") ?? null;
+      const deepThreshold = () =>
+        introEl
+          ? Math.max(introEl.offsetHeight - window.innerHeight, window.innerHeight * 2)
+          : window.innerHeight * 2.4;
       const updateFvPassed = () => {
         document.body.classList.toggle("fv-passed", window.scrollY > threshold());
         document.body.classList.toggle("fv-deep", window.scrollY > deepThreshold());
@@ -109,13 +109,13 @@ export function OpeningHero({
             />
           </div>
           <div className="intro__scroll" aria-hidden>
-            scroll
+            {OPENING.scrollLabel}
           </div>
         </div>
 
         <div className="intro__read">
           <div className="intro__concept">
-            <p className="intro__tag">Concept</p>
+            <p className="intro__tag">{OPENING.tag}</p>
             {CONCEPT_STANZAS.map((stanza) => (
               <p key={stanza}>
                 {stanza.split("\n").map((line, i, arr) => (

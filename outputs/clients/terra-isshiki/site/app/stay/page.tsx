@@ -3,48 +3,14 @@ import Link from "next/link";
 import { SiteHeader } from "../_components/SiteHeader";
 import { ReservationCTA } from "../_components/ReservationCTA";
 import { ParallaxLayer } from "../_components/ParallaxLayer";
+import { STAY_PAGE } from "../copy";
+
+/* 文言・写真パスは app/copy.ts（STAY_PAGE）で編集できます。 */
 
 export const metadata = {
-  title: "過ごし方",
-  description:
-    "TERRA HAYAMA での過ごし方。歩いて 8 分の一色海岸、海越しの富士山、お部屋の抹茶、ウェルカムの葉山アイス。",
+  title: STAY_PAGE.metaTitle,
+  description: STAY_PAGE.metaDescription,
 };
-
-const EXPERIENCES = [
-  {
-    no: "01",
-    label: "一色海岸へ",
-    body:
-      "宿から海までは歩いて 8 分。朝の散歩や、夕方の寄り道にどうぞ。TERRA の過ごし方は、この海から始まります。",
-    image: null,
-    icon: "wave",
-    accent: "mist",
-  },
-  {
-    no: "02",
-    label: "海越しの富士山",
-    body:
-      "空気が澄んだ日は、一色海岸の向こうに富士山が見えることもあります。海越しに望む、静かな稜線です。",
-    image: "/images/stay/stay-fuji.jpg",
-    accent: "mist",
-  },
-  {
-    no: "03",
-    label: "お部屋で味わう抹茶",
-    body:
-      "お部屋では、挽きたての抹茶を味わえます。滞在中のひと息を、ゆっくりお楽しみください。",
-    image: "/images/stay/stay-matcha.jpg",
-    accent: "pine",
-  },
-  {
-    no: "04",
-    label: "お部屋で楽しむ葉山アイス",
-    body:
-      "オーナーがつくる葉山アイスを、ウェルカムサービスとしてお部屋でお楽しみいただけます。",
-    image: "/images/owner/owner-icecream.webp",
-    accent: "soil",
-  },
-];
 
 const ICONS: Record<string, React.ReactNode> = {
   wave: (
@@ -69,6 +35,7 @@ const ICONS: Record<string, React.ReactNode> = {
 };
 
 export default function StayPage() {
+  const c = STAY_PAGE;
   return (
     <main className="bg-(--color-base-light)">
       <SiteHeader variant="page" current="Stay" />
@@ -77,8 +44,8 @@ export default function StayPage() {
       <section className="relative h-[64svh] min-h-[420px] w-full overflow-hidden bg-(--color-base-dark) text-(--color-base-light)">
         <ParallaxLayer>
           <Image
-            src="/images/hero/hero-06-137.jpg"
-            alt="TERRA HAYAMA 過ごし方 — 床の間に飾られた棚田のアート"
+            src={c.hero.img}
+            alt={c.hero.alt}
             fill
             priority
             sizes="100vw"
@@ -99,14 +66,17 @@ export default function StayPage() {
             className="fade-up font-serif font-medium text-[clamp(15.37px,3.57vw,22.2px)] leading-[1.22] md:text-[clamp(15.4px,1.47vw,36.4px)] md:leading-[1.16] tracking-[0.02em]"
             style={{ animationDelay: "0.4s" }}
           >
-            <span className="block">葉山の一日を、</span>
-            <span className="block">軽やかに。</span>
+            {c.hero.titleLines.map((line) => (
+              <span key={line} className="block">
+                {line}
+              </span>
+            ))}
           </h1>
           <p
             className="fade-up mt-5 md:mt-8 font-mincho text-[11.96px] md:text-[clamp(11.2px,0.71vw,18.2px)] leading-[1.85] tracking-[0.16em] text-(--color-base-light)/85"
             style={{ animationDelay: "0.7s" }}
           >
-            一色海岸、海越しの富士山、抹茶、葉山アイス。
+            {c.hero.lead}
           </p>
         </div>
       </section>
@@ -114,7 +84,7 @@ export default function StayPage() {
       {/* Experiences */}
       <section className="relative py-[clamp(80px,7.3vw,112px)] bg-(--color-base-light)">
         <div className="grid gap-20 md:gap-32">
-          {EXPERIENCES.map((exp) => {
+          {c.items.map((exp) => {
             const accentColor =
               exp.accent === "soil"
                 ? "text-(--color-soil)"
@@ -132,7 +102,7 @@ export default function StayPage() {
                     {exp.no}
                   </p>
                   <h2 className="font-serif text-[17.76px] md:text-[clamp(17.92px,1.4vw,35.84px)] leading-[1.36] tracking-[0.04em] text-(--color-base-dark) mb-6 md:mb-8">
-                    {exp.label}
+                    {exp.title}
                   </h2>
                   <p className="font-mincho text-[11.96px] md:text-[clamp(11.2px,0.71vw,18.2px)] leading-[2.0] tracking-[0.08em] text-(--color-base-dark)/85 md:max-w-[900px]">
                     {exp.body}
@@ -145,7 +115,7 @@ export default function StayPage() {
                     <ParallaxLayer>
                       <Image
                         src={exp.image}
-                        alt={exp.label}
+                        alt={exp.title}
                         fill
                         sizes="100vw"
                         quality={88}
@@ -165,7 +135,7 @@ export default function StayPage() {
                     <div
                       className={`relative z-10 ${accentColor}/70 opacity-85 [&_svg]:w-[clamp(88px,7vw,160px)] [&_svg]:h-[clamp(88px,7vw,160px)]`}
                     >
-                      {exp.icon ? ICONS[exp.icon] : null}
+                      {"icon" in exp && exp.icon ? ICONS[exp.icon] : null}
                     </div>
                   </div>
                 )}
@@ -180,14 +150,14 @@ export default function StayPage() {
       {/* Next link */}
       <section className="border-t border-(--color-base-dark)/10 px-6 py-[clamp(80px,7.3vw,112px)] md:px-12 text-center">
         <h3 className="font-serif text-[22.2px] md:text-[clamp(23.8px,1.97vw,50.4px)] leading-[1.4] tracking-[0.04em] text-(--color-base-dark) mb-10">
-          海まで、徒歩 8 分。
+          {c.next.title}
         </h3>
         <Link
-          href="/access"
+          href={c.next.href}
           className="group inline-flex items-center gap-4 font-serif text-[13.5px] md:text-[clamp(12.6px,0.71vw,17.5px)] tracking-[0.08em] text-(--color-base-dark)"
         >
           <span className="relative">
-            アクセスを見る
+            {c.next.cta}
             <span className="absolute -bottom-1 left-0 h-px w-full bg-(--color-base-dark)/30 transition-colors duration-500 group-hover:bg-(--color-base-dark)" />
           </span>
           <span aria-hidden className="text-[13px]">→</span>

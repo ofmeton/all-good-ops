@@ -290,7 +290,45 @@ body.has-fv.fv-deep .dock {
   vector-effect: non-scaling-stroke;
 }
 
+/* 部屋写真の緩やか横流れマーキー（TOP Rooms 章） */
+.marquee {
+  overflow: hidden;
+}
+
+.marquee__track {
+  display: flex;
+  width: max-content;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  animation: marqueeScroll 64s linear infinite;
+  will-change: transform;
+}
+
+.marquee__item {
+  position: relative;
+  flex: 0 0 auto;
+  width: clamp(240px, 32vw, 460px);
+  aspect-ratio: 3 / 2;
+  margin-right: clamp(10px, 1.2vw, 18px);
+  overflow: hidden;
+}
+
+/* 画像 2 セット + 各 item の margin-right で全幅が完全に 2 等分になるため、
+   -50% 移動でシームレスに無限ループする */
+@keyframes marqueeScroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.marquee:hover .marquee__track {
+  animation-play-state: paused;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .marquee__track {
+    animation: none;
+  }
   .intro {
     height: auto;
     min-height: 100svh;

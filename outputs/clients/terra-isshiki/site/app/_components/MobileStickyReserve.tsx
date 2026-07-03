@@ -1,16 +1,18 @@
-const AIRBNB_URL = "https://www.airbnb.jp/rooms/1399746059557999139";
+import { SITE } from "../copy";
+
+/* ボタン文言は app/copy.ts（SITE.reserveDock）で編集できます。 */
 
 export function MobileStickyReserve() {
   return (
     <a
-      href={AIRBNB_URL}
+      href={SITE.airbnbUrl}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label="ご予約はこちら（Airbnb）"
+      aria-label={`${SITE.reserveDock}（Airbnb）`}
       className="dock group xl:hidden fixed bottom-5 right-5 z-40 inline-flex items-center gap-3 rounded-full bg-(--color-base-dark) text-(--color-base-light) px-5 py-3.5 shadow-[0_8px_28px_-6px_rgba(26,20,16,0.55)] backdrop-blur-[2px] hover:bg-(--color-base-dark)/90 transition-colors duration-300"
     >
       <span className="font-mincho text-[11.1px] tracking-[0.18em] leading-none">
-        ご予約はこちら
+        {SITE.reserveDock}
       </span>
       {/* Thin custom arrow — 細い水平線 + 控えめなシェブロン */}
       <svg

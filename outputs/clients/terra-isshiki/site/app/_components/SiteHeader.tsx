@@ -3,18 +3,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { NAV, SITE } from "../copy";
+
+/* ナビ項目・住所・予約ボタン文言は app/copy.ts で編集できます。 */
 
 export type SiteHeaderVariant = "hero" | "page";
-
-const NAV = [
-  { label: "Home", href: "/" },
-  { label: "Rooms", href: "/rooms" },
-  { label: "Stay", href: "/stay" },
-  { label: "Owner", href: "/owner" },
-  { label: "Access", href: "/access" },
-];
-
-const AIRBNB_URL = "https://www.airbnb.jp/rooms/1399746059557999139";
 
 export function SiteHeader({
   variant = "page",
@@ -144,10 +137,10 @@ export function SiteHeader({
               className="block leading-none"
             >
               <span className="block font-serif text-[18.79px] font-medium tracking-[0.18em] text-(--color-base-light)">
-                TERRA
+                {SITE.footerBrand}
               </span>
               <span className="block mt-1 font-garamond text-[8.54px] uppercase tracking-[0.42em] text-(--color-base-light)/85">
-                Hayama, Isshiki
+                {SITE.footerArea}
               </span>
             </Link>
             <button
@@ -200,17 +193,18 @@ export function SiteHeader({
 
           <div className="pt-10">
             <a
-              href={AIRBNB_URL}
+              href={SITE.airbnbUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-3 font-garamond text-[10.25px] tracking-[0.32em] uppercase border border-(--color-base-light)/25 px-6 py-3.5 text-(--color-base-light)"
+              className="inline-flex items-center gap-3 font-mincho text-[11px] tracking-[0.22em] border border-(--color-base-light)/25 px-6 py-3.5 text-(--color-base-light)"
             >
-              ご予約はこちら
+              {SITE.reserveDock}
               <span aria-hidden>→</span>
             </a>
             <p className="mt-8 font-mincho text-[10.25px] leading-[1.85] tracking-[0.06em] text-(--color-base-light)/70">
-              〒240-0111 神奈川県三浦郡葉山町一色 1759-1-5<br />
-              運営: 株式会社 BEAT ICE
+              {SITE.postalAddress}
+              <br />
+              {SITE.operator}
             </p>
           </div>
         </div>

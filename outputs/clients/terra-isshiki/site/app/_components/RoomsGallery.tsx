@@ -2,49 +2,21 @@
 
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { ROOMS_PAGE } from "../copy";
 
-type Item = { src: string; aspect: string };
+/* 見出し・説明・写真は app/copy.ts（ROOMS_PAGE.gallery）で編集できます。 */
+
 type Section = {
-  label: string;
   caption: string;
   description: string;
-  items: Item[];
+  items: { src: string }[];
 };
 
-const SECTIONS: Section[] = [
-  {
-    label: "LDK",
-    caption: "リビング・ダイニング・キッチン",
-    description:
-      "木の天井と一面の窓。ソファ、楕円のダイニングテーブル、テレビが揃う、家族で集う空間。",
-    items: [
-      { src: "/images/rooms/ldk-01.jpg", aspect: "3/2" },
-      { src: "/images/rooms/ldk-02.jpg", aspect: "3/2" },
-      { src: "/images/rooms/ldk-03.jpg", aspect: "3/2" },
-      { src: "/images/rooms/ldk-04.jpg", aspect: "3/2" },
-    ],
-  },
-  {
-    label: "Bedroom",
-    caption: "最大 8 名の寝室",
-    description:
-      "二段ベッド 2 台 / セミダブル 1 台 / 布団 2 組。家族・友人グループでまとまって泊まれます。",
-    items: [
-      { src: "/images/rooms/bedroom-01.jpg", aspect: "3/2" },
-      { src: "/images/rooms/bedroom-02.jpg", aspect: "3/2" },
-    ],
-  },
-  {
-    label: "Bath & Laundry",
-    caption: "お風呂と水まわり",
-    description:
-      "ひのきに包まれたバスルーム。ドラム式洗濯機と真鍮の洗面ボウルが並ぶランドリー一体空間。",
-    items: [
-      { src: "/images/rooms/bath.jpg", aspect: "3/2" },
-      { src: "/images/rooms/laundry.jpg", aspect: "3/2" },
-    ],
-  },
-];
+const SECTIONS: Section[] = ROOMS_PAGE.gallery.map((section) => ({
+  caption: section.caption,
+  description: section.description,
+  items: section.items.map((src) => ({ src })),
+}));
 
 const AUTO_MS = 4500;
 

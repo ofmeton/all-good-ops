@@ -1,4 +1,6 @@
-const AIRBNB_URL = "https://www.airbnb.jp/rooms/1399746059557999139";
+import { SITE, CTA } from "../copy";
+
+/* 文言は app/copy.ts（CTA / SITE.reserveButton）で編集できます。 */
 
 export function ReservationCTA({
   tone = "dark",
@@ -21,20 +23,20 @@ export function ReservationCTA({
     >
       <div className="mx-auto max-w-[1280px] flex flex-col items-start md:items-center md:text-center gap-8 md:gap-10">
         <h2 className="font-serif text-[19.13px] md:text-[clamp(20.16px,1.74vw,44.8px)] leading-[1.32] tracking-[0.04em]">
-          <span className="block md:inline">予約は Airbnb から。</span>
+          <span className="block md:inline">{CTA.title}</span>
         </h2>
         <p
           className={`max-w-[680px] font-mincho text-[12.81px] md:text-[clamp(11.2px,0.66vw,16.8px)] leading-[2.0] tracking-[0.08em] ${subBody}`}
         >
-          空き状況のご確認・お問い合わせ・ご予約は、Airbnb の物件ページから直接ご利用いただけます。
+          {CTA.body}
         </p>
         <a
-          href={AIRBNB_URL}
+          href={SITE.airbnbUrl}
           target="_blank"
           rel="noopener noreferrer"
           className={`group inline-flex items-center gap-4 font-serif text-[13px] md:text-[clamp(12.6px,0.71vw,17.5px)] tracking-[0.1em] px-8 md:px-[clamp(28px,2.19vw,56px)] py-4 md:py-[clamp(16px,1.09vw,28px)] transition-colors ${buttonCls}`}
         >
-          <span>Airbnb で予約する</span>
+          <span>{SITE.reserveButton}</span>
           <span aria-hidden>→</span>
         </a>
       </div>

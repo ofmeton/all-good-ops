@@ -11,9 +11,11 @@ type Slide = { src: string; alt: string };
  * 「次」を最上層に opacity 0→1 で fade-in しつつ、「前」は opacity 1 のまま
  * 直下に保持する。fade 完了後に previous をクリアして次サイクルへ。
  *
- * これにより crossfade 中も常に「下のレイヤーが opacity 1」で背景の dark を
- * 隠し続けるため、midpoint で画像全体が暗くなる現象（CSS 単純 crossfade の
- * 罠）を回避する。
+ * kenburns ズーム（CSS animation）は「active になった瞬間」だけリスタート
+ * させたいので、activation 世代（gens）を key に含める。
+ * 逆に active → previous へ切り替わる瞬間に key が変わると img が再マウント
+ * され、フェード中のズームが scale(1) に巻き戻って「カクッ」と見える。
+ * そのため非 active 化では key を変えない（= 再マウントしない）。
  */
 export function HeroSlideshow({
   slides,
@@ -26,17 +28,23 @@ export function HeroSlideshow({
 }) {
   const [active, setActive] = useState(0);
   const [previous, setPrevious] = useState<number | null>(null);
+  const activeRef = useRef(0);
+  const gens = useRef<number[]>([]);
+  if (gens.current.length !== slides.length) {
+    gens.current = slides.map(() => 0);
+  }
   const fadeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      setActive((current) => {
-        const next = (current + 1) % slides.length;
-        setPrevious(current);
-        if (fadeTimer.current) clearTimeout(fadeTimer.current);
-        fadeTimer.current = setTimeout(() => setPrevious(null), fadeMs);
-        return next;
-      });
+      const current = activeRef.current;
+      const next = (current + 1) % slides.length;
+      gens.current[next] += 1; // 新しく active になるスライドだけズームをリスタート
+      activeRef.current = next;
+      setPrevious(current);
+      setActive(next);
+      if (fadeTimer.current) clearTimeout(fadeTimer.current);
+      fadeTimer.current = setTimeout(() => setPrevious(null), fadeMs);
     }, intervalMs);
 
     return () => {
@@ -65,10 +73,8 @@ export function HeroSlideshow({
               transition: `opacity ${fadeMs}ms cubic-bezier(0.4, 0, 0.2, 1)`,
             }}
           >
-            {/* key を active 化のたびに変えて再マウントし、CSS の kenburns アニメーションを
-                都度リスタートさせる（img 一枚で使い回すと 2 巡目以降ズームが動かなくなる） */}
             <Image
-              key={isActive ? `${s.src}-${active}` : s.src}
+              key={`${s.src}-${gens.current[i]}`}
               src={s.src}
               alt={s.alt}
               fill
