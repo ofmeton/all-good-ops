@@ -5,6 +5,7 @@ import { OpeningHero } from "./_components/OpeningHero";
 import { RevealRoot } from "./_components/RevealRoot";
 import { ParallaxLayer } from "./_components/ParallaxLayer";
 import { PhotoMarquee } from "./_components/PhotoMarquee";
+import { PeekSlideshow } from "./_components/PeekSlideshow";
 import { SITE, TOP, POINTS } from "./copy";
 
 /* 文言・写真パスはすべて app/copy.ts で編集できます。
@@ -26,7 +27,7 @@ function DetailShell({
   children: React.ReactNode;
 }) {
   return (
-    <div className="border-t border-(--color-base-dark)/8 bg-(--color-paper) px-6 py-[clamp(64px,6.3vw,104px)] md:px-12">
+    <div className="px-6 pt-[clamp(40px,4.5vw,72px)] pb-[clamp(64px,6.3vw,104px)] md:px-12">
       <div className="mx-auto max-w-[1480px]">
         <div data-reveal className="reveal">
           <h3 className="font-serif text-[17px] md:text-[clamp(16.8px,1.2vw,30.8px)] leading-[1.4] tracking-[0.04em] text-(--color-base-dark)">
@@ -44,7 +45,7 @@ function DetailShell({
 function RoomsDetail() {
   const d = TOP.roomsDetail;
   return (
-    <div className="border-t border-(--color-base-dark)/8 bg-(--color-paper) pt-[clamp(64px,6.3vw,104px)] pb-[clamp(64px,6.3vw,104px)]">
+    <div className="pt-[clamp(40px,4.5vw,72px)] pb-[clamp(64px,6.3vw,104px)]">
       <div className="mx-auto max-w-[1480px] px-6 md:px-12">
         <div data-reveal className="reveal">
           <h3 className="font-serif text-[17px] md:text-[clamp(16.8px,1.2vw,30.8px)] leading-[1.4] tracking-[0.04em] text-(--color-base-dark)">
@@ -98,23 +99,13 @@ function RoomsDetail() {
 function StayDetail() {
   const d = TOP.stayDetail;
   return (
-    <DetailShell title={d.title}>
-      <div className="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
-        {d.items.map((m) => (
-          <div key={m.no} className="border-t border-(--color-base-dark)/15 pt-5">
-            <p className="font-garamond italic text-[10.7px] md:text-[clamp(9.1px,0.49vw,12.6px)] tracking-[0.28em] text-(--color-base-dark)/45">
-              {m.no}
-            </p>
-            <h4 className="mt-2 font-serif text-[14.5px] md:text-[clamp(14px,0.82vw,21px)] tracking-[0.04em] text-(--color-base-dark)">
-              {m.title}
-            </h4>
-            <p className="mt-3 font-mincho text-[12px] md:text-[clamp(10.5px,0.6vw,15.4px)] leading-[1.95] tracking-[0.06em] text-(--color-base-dark)/80">
-              {m.body}
-            </p>
-          </div>
-        ))}
+    <div className="pt-[clamp(40px,4.5vw,72px)] pb-[clamp(64px,6.3vw,104px)]">
+      {/* 写真のちょい見せスライドショー（テキストは載せない）。
+          リンクは帯の「過ごし方を見る」に一本化（重複させない）。 */}
+      <div data-reveal className="reveal">
+        <PeekSlideshow images={d.slideshow} />
       </div>
-    </DetailShell>
+    </div>
   );
 }
 
@@ -129,7 +120,7 @@ function OwnerDetail() {
       <div className="mt-12 grid grid-cols-2 gap-x-6 gap-y-10 md:mt-16 md:gap-x-8 lg:grid-cols-4">
         {d.works.map((work) => (
           <div key={work.title}>
-            <div className="relative aspect-[4/3] w-full overflow-hidden bg-(--color-base-dark)/8">
+            <div className="photo-float relative aspect-[4/3] w-full overflow-hidden bg-(--color-base-dark)/8">
               <ParallaxLayer>
                 <Image
                   src={work.img}
@@ -338,12 +329,12 @@ export default function Home() {
 
       <OpeningHero slides={TOP.heroSlides}>
       {/* Section bands — 6 chapters */}
-      <section className="relative bg-(--color-base-light)">
+      <section className="relative">
         {TOP.bands.map((band, i) => {
           const imageFirst = i % 2 === 1; // PC で画像を左右交互に
           const Detail = DETAILS[i];
           return (
-            <div key={band.href}>
+            <div key={band.href} className={i % 2 === 1 ? "bg-(--color-paper)" : "bg-(--color-base-light)"}>
               {/* 帯 — モバイルは「タイトル → 写真 → 本文 → CTA」の縦積み。
                   PC は 2 カラムで、タイトルと本文を片側、写真を反対側に置く。
                   （コンテナに border-t を付けると FV 直下に薄い横線が出るため付けない） */}
@@ -351,7 +342,7 @@ export default function Home() {
                 {/* タイトル */}
                 <h2
                   data-reveal
-                  className={`reveal px-6 pt-[clamp(48px,6vw,88px)] md:px-12 lg:px-20 md:pt-0 md:self-end font-serif text-[21px] md:text-[clamp(20.16px,1.74vw,44.8px)] leading-[1.3] tracking-[0.04em] text-(--color-base-dark) md:row-start-1 ${
+                  className={`reveal sec-title px-6 pt-[clamp(48px,6vw,88px)] md:px-12 lg:px-20 md:pt-0 md:self-end font-serif font-medium text-[23px] md:text-[clamp(21px,1.8vw,47px)] leading-[1.3] tracking-[0.04em] text-(--color-base-dark) md:row-start-1 ${
                     imageFirst ? "md:col-start-2" : "md:col-start-1"
                   }`}
                 >
@@ -363,7 +354,7 @@ export default function Home() {
                   href={band.href}
                   aria-label={`${band.title}を見る`}
                   data-reveal
-                  className={`reveal group relative mt-8 aspect-[4/3] w-full overflow-hidden bg-(--color-base-dark)/10 md:mt-0 md:aspect-auto md:min-h-[68svh] md:row-span-2 md:row-start-1 ${
+                  className={`reveal group photo-float block relative mt-8 mx-5 aspect-[4/3] overflow-hidden bg-(--color-base-dark)/10 md:mt-0 md:mx-8 lg:mx-10 md:my-8 lg:my-10 md:aspect-auto md:min-h-[60svh] md:self-stretch md:row-span-2 md:row-start-1 ${
                     imageFirst ? "md:col-start-1" : "md:col-start-2"
                   }`}
                 >

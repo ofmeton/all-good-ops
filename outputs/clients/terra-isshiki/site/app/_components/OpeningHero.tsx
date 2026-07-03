@@ -135,7 +135,10 @@ export function OpeningHero({
           <path className="fv-cut__fill" d="M0,90 L0,46 L1400,46 L1400,90 Z" />
           <path className="aze__line" d="M0,45 L1400,45" />
         </svg>
-        <div className="fv-cover__pg">{children}</div>
+        <div className="fv-cover__pg">
+          <div className="fv-thread" aria-hidden />
+          {children}
+        </div>
       </div>
     </div>
   );

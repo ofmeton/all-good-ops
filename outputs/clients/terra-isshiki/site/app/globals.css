@@ -266,7 +266,7 @@ body.has-fv.fv-deep .dock {
 
 .fv-cover__pg {
   position: relative;
-  height: 1px;
+  pointer-events: auto;
   margin-top: -1px;
   background: var(--color-base-light);
 }
@@ -274,7 +274,7 @@ body.has-fv.fv-deep .dock {
 .fv-cut {
   display: block;
   width: 100%;
-  height: clamp(54px, 7vw, 96px);
+  height: clamp(64px, 8vw, 112px);
   margin-bottom: -1px;
   pointer-events: none;
 }
@@ -288,6 +288,35 @@ body.has-fv.fv-deep .dock {
   stroke: var(--color-soil);
   stroke-width: 1.6;
   vector-effect: non-scaling-stroke;
+}
+
+/* 写真を「置く」— 周囲に紙(背景)を見せて浮かせる。額装はしない */
+.photo-float {
+  box-shadow:
+    0 24px 48px -24px rgba(26, 20, 16, 0.38),
+    0 8px 20px -12px rgba(26, 20, 16, 0.22);
+}
+
+/* セクションタイトルの所作 — タイトル上に短い土色の畦マーク */
+.sec-title::before {
+  content: "";
+  display: block;
+  width: 26px;
+  height: 1px;
+  background: var(--color-soil);
+  opacity: 0.85;
+  margin-bottom: 14px;
+}
+
+/* FV→本文をつなぐ「畦の糸」— 継ぎ目の中央から明るい面へ垂れる縦線 */
+.fv-thread {
+  position: relative;
+  z-index: 6;
+  width: 1px;
+  height: clamp(56px, 8vh, 80px);
+  background: var(--color-soil);
+  opacity: 0.75;
+  margin: clamp(-44px, -6vh, -32px) auto 0;
 }
 
 /* 部屋写真の緩やか横流れマーキー（TOP Rooms 章） */
