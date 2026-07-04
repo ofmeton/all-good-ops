@@ -94,22 +94,6 @@ function RoomsDetail() {
   );
 }
 
-function StayDetail() {
-  const d = TOP.stayDetail;
-  return (
-    <div className="pt-[clamp(40px,4.5vw,72px)] pb-[clamp(64px,6.3vw,104px)]">
-      {/* 一枚の額。じわっとクロスフェードで切り替わる（写真上に文字は載せない） */}
-      <div data-reveal className="reveal">
-        <FadeSlideshow
-          images={d.slideshow}
-          className="photo-float mx-5 aspect-[3/2] bg-(--color-base-dark)/5 md:mx-auto md:max-w-[880px]"
-          sizes="(min-width: 768px) 880px, 100vw"
-        />
-      </div>
-    </div>
-  );
-}
-
 function AccessDetail() {
   const d = TOP.accessDetail;
   return (
@@ -252,7 +236,7 @@ function ReservationDetail() {
 const DETAILS = [
   RoomsDetail,
   AmenitiesDetail,
-  StayDetail,
+  null, // 過ごし方 — 帯ヘッドの slides スライドショーで見せる（章直下のストリップは無し）
   AccessDetail,
   null, // BEAT ICE — 帯だけ（章直下のストリップは無し）
   ReservationDetail,
@@ -291,7 +275,30 @@ export default function Home() {
 
                 {/* 写真 — タイトルの下（モバイル）／反対カラムで 2 行ぶち抜き（PC）。
                     アクセス章はヘッド写真の代わりに地図を「一枚の写真」として額装する */}
-                {"mapEmbed" in band && band.mapEmbed ? (
+                {"slides" in band && band.slides ? (
+                  <Link
+                    href={band.href}
+                    aria-label={`${band.title}を見る`}
+                    data-reveal
+                    className={`reveal group photo-float block relative mt-8 mx-5 aspect-[4/3] overflow-hidden bg-(--color-base-dark)/10 md:mt-0 md:mx-8 lg:mx-10 md:my-8 lg:my-10 md:aspect-auto md:min-h-[60svh] md:self-stretch md:row-span-2 md:row-start-1 ${
+                      imageFirst ? "md:col-start-1" : "md:col-start-2"
+                    }`}
+                  >
+                    <FadeSlideshow
+                      images={band.slides}
+                      className="h-full w-full"
+                      sizes="(min-width: 768px) 50vw, 100vw"
+                    />
+                    <div
+                      aria-hidden
+                      className="absolute inset-0 opacity-0 md:group-hover:opacity-100 transition-opacity duration-500"
+                      style={{
+                        background:
+                          "linear-gradient(180deg, rgba(26,20,16,0.04) 0%, rgba(26,20,16,0.18) 100%)",
+                      }}
+                    />
+                  </Link>
+                ) : "mapEmbed" in band && band.mapEmbed ? (
                   <div
                     data-reveal
                     className={`reveal photo-float relative mt-8 mx-5 aspect-[4/3] overflow-hidden bg-(--color-base-light) md:mt-0 md:mx-8 lg:mx-10 md:my-8 lg:my-10 md:aspect-auto md:min-h-[60svh] md:self-stretch md:row-span-2 md:row-start-1 ${

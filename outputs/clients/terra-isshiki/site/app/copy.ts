@@ -88,22 +88,27 @@ export const TOP = {
     {
       href: "/rooms",
       title: "お部屋について",
-      body: "一軒家の二階を、まるごと貸し切りで。LDK、ひのきのバス、フルキッチンが揃います。",
+      body: "ファミリーでもゆったり過ごせる75㎡の広さを、丸ごと貸し切りいただけます。",
       img: "/images/rooms/rooms-hero.jpg",
-      cta: "部屋を見る",
+      cta: "お部屋を見る",
     },
     {
       href: "/rooms#overview",
-      title: "設備と備品",
-      body: "調理器具は一式、食器は人数分。ドラム式洗濯機は洗剤つきで、自宅と同じように洗濯ができます。タオルや歯ブラシ、シャンプーなどのアメニティも揃えました。",
-      img: "/images/rooms/kitchen-01.jpg",
+      title: "設備・備品",
+      body: "調理器具・食器は一式ございます。ドラム式洗濯機と洗剤がございますので、自宅と同じように洗濯ができます。タオルや歯ブラシ、シャンプーなどのアメニティもございます。",
+      img: "/images/library/terra-122.jpg",
       cta: "設備を見る",
     },
     {
       href: "/stay",
       title: "過ごし方",
       body: "歩いて 8 分の一色海岸へ。空気が澄んだ日には、海の向こうに富士山が見えることもあります。お部屋では、挽きたての抹茶と、ウェルカムサービスの葉山アイスをお楽しみください。",
-      img: "/images/access/access-balcony.jpg",
+      slides: [
+        { src: "/images/stay/stay-fuji.jpg", alt: "一色海岸の向こうに望む富士山" },
+        { src: "/images/stay/stay-matcha.jpg", alt: "お部屋で味わう挽きたての抹茶" },
+        { src: "/images/owner/owner-icecream.webp", alt: "ウェルカムサービスの葉山アイス" },
+        { src: "/images/stay/stay-tanada-tools.jpg", alt: "棚田の営みの道具" },
+      ],
       cta: "過ごし方を見る",
     },
     // mapEmbed: true の帯はヘッド写真の代わりに Google マップを埋め込む（false にすると img の写真に戻る）
@@ -111,14 +116,14 @@ export const TOP = {
       href: "/access",
       title: "周辺とアクセス",
       mapEmbed: true,
-      body: "一色海岸まで徒歩 8 分、路線バスの停留所までは 1 分。歩いて 30 秒のコンビニと徒歩 5 分の地元スーパーで、滞在中の買い出しもすぐに済みます。海のそばの、静かな住宅地です。",
+      body: "一色海岸まで徒歩 8 分、路線バスの停留所までは 1 分。歩いて 30 秒のコンビニと徒歩 5 分の地元スーパーで、滞在中の買い出しには困りません。観光にも出かけやすい場所です。",
       img: "/images/access/access-balcony.jpg",
       cta: "アクセスを見る",
     },
     {
       href: "/owner",
-      title: "営むのは、BEAT ICE",
-      body: "葉山の棚田で育てたお米から、アイスクリームをつくっています。地域の学校給食にアイスを届け、教室で授業をすることもあります。この宿も、そんな夫婦の暮らしの続きにあります。",
+      title: "運営はBEAT ICE",
+      body: "私たちBEAT ICEは、葉山の棚田で育てたお米からアイスクリームをつくっています。地域の学校給食にアイスを届けたり、教室で授業をすることもあります。この宿も、そんな夫婦の暮らしの続きにあります。",
       img: "/images/owner/owner-couple.jpg",
       cta: "BEAT ICE について",
     },
@@ -151,16 +156,6 @@ export const TOP = {
     ],
     moreCta: "部屋の写真をもっと見る",
     moreHref: "/rooms",
-  },
-
-  // 03 過ごし方 — 章直下の写真スライドショー（ちょい見せ）。写真上に文字は載せない
-  stayDetail: {
-    slideshow: [
-      { src: "/images/stay/stay-fuji.jpg", alt: "一色海岸の向こうに望む富士山" },
-      { src: "/images/stay/stay-matcha.jpg", alt: "お部屋で味わう挽きたての抹茶" },
-      { src: "/images/owner/owner-icecream.webp", alt: "ウェルカムサービスの葉山アイス" },
-      { src: "/images/stay/stay-tanada-tools.jpg", alt: "棚田の営みの道具" },
-    ],
   },
 
   // 05 BEAT ICE — 章直下のストリップは無し。詳細は帯の「BEAT ICE について」→ /owner へ
