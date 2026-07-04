@@ -5,8 +5,8 @@ import { OpeningHero } from "./_components/OpeningHero";
 import { RevealRoot } from "./_components/RevealRoot";
 import { ParallaxLayer } from "./_components/ParallaxLayer";
 import { PhotoMarquee } from "./_components/PhotoMarquee";
-import { PeekSlideshow } from "./_components/PeekSlideshow";
-import { SITE, TOP, POINTS } from "./copy";
+import { FadeSlideshow } from "./_components/FadeSlideshow";
+import { SITE, TOP, NOTICES } from "./copy";
 
 /* 文言・写真パスはすべて app/copy.ts で編集できます。
    このファイルはレイアウト（見た目の構造）だけを持ちます。 */
@@ -14,6 +14,7 @@ import { SITE, TOP, POINTS } from "./copy";
 const MAPS_LINK = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
   SITE.mapQuery,
 )}`;
+const MAPS_EMBED = `https://maps.google.com/maps?q=${encodeURIComponent(SITE.mapQuery)}&z=16&output=embed`;
 
 /* ---------------------------------------------------------------
  * 章の要約ストリップ（帯の直下に置く paper 背景のまとまり）
@@ -23,18 +24,24 @@ function DetailShell({
   title,
   children,
 }: {
-  title: string;
+  title?: string;
   children: React.ReactNode;
 }) {
   return (
     <div className="px-6 pt-[clamp(40px,4.5vw,72px)] pb-[clamp(64px,6.3vw,104px)] md:px-12">
       <div className="mx-auto max-w-[1480px]">
-        <div data-reveal className="reveal">
-          <h3 className="font-serif text-[17px] md:text-[clamp(16.8px,1.2vw,30.8px)] leading-[1.4] tracking-[0.04em] text-(--color-base-dark)">
-            {title}
-          </h3>
-        </div>
-        <div data-reveal className="reveal mt-10 md:mt-14" style={{ transitionDelay: "120ms" }}>
+        {title ? (
+          <div data-reveal className="reveal">
+            <h3 className="font-serif text-[17px] md:text-[clamp(16.8px,1.2vw,30.8px)] leading-[1.4] tracking-[0.04em] text-(--color-base-dark)">
+              {title}
+            </h3>
+          </div>
+        ) : null}
+        <div
+          data-reveal
+          className={title ? "reveal mt-10 md:mt-14" : "reveal"}
+          style={title ? { transitionDelay: "120ms" } : undefined}
+        >
           {children}
         </div>
       </div>
@@ -47,16 +54,10 @@ function RoomsDetail() {
   return (
     <div className="pt-[clamp(40px,4.5vw,72px)] pb-[clamp(64px,6.3vw,104px)]">
       <div className="mx-auto max-w-[1480px] px-6 md:px-12">
-        <div data-reveal className="reveal">
-          <h3 className="font-serif text-[17px] md:text-[clamp(16.8px,1.2vw,30.8px)] leading-[1.4] tracking-[0.04em] text-(--color-base-dark)">
-            {d.title}
-          </h3>
-        </div>
         {/* Specs — nagare 型の一覧バー。詳細は /rooms#overview と同値 */}
         <dl
           data-reveal
-          className="reveal mt-10 grid grid-cols-2 gap-x-6 gap-y-8 border-t border-(--color-base-dark)/15 pt-8 sm:grid-cols-3 md:mt-14 md:grid-cols-5"
-          style={{ transitionDelay: "120ms" }}
+          className="reveal grid grid-cols-2 gap-x-6 gap-y-8 max-w-[560px] border-t border-(--color-base-dark)/15 pt-8"
         >
           {d.specs.map((spec) => (
             <div key={spec.label}>
@@ -100,10 +101,13 @@ function StayDetail() {
   const d = TOP.stayDetail;
   return (
     <div className="pt-[clamp(40px,4.5vw,72px)] pb-[clamp(64px,6.3vw,104px)]">
-      {/* 写真のちょい見せスライドショー（テキストは載せない）。
-          リンクは帯の「過ごし方を見る」に一本化（重複させない）。 */}
+      {/* 一枚の額。じわっとクロスフェードで切り替わる（写真上に文字は載せない） */}
       <div data-reveal className="reveal">
-        <PeekSlideshow images={d.slideshow} />
+        <FadeSlideshow
+          images={d.slideshow}
+          className="photo-float mx-5 aspect-[3/2] bg-(--color-base-dark)/5 md:mx-auto md:max-w-[880px]"
+          sizes="(min-width: 768px) 880px, 100vw"
+        />
       </div>
     </div>
   );
@@ -117,25 +121,19 @@ function OwnerDetail() {
         {d.intro}
       </p>
 
-      <div className="mt-12 grid grid-cols-2 gap-x-6 gap-y-10 md:mt-16 md:gap-x-8 lg:grid-cols-4">
-        {d.works.map((work) => (
+      <div className="mt-12 grid gap-y-12 md:mt-16 md:grid-cols-2 md:gap-x-10">
+        {d.works.map((work, i) => (
           <div key={work.title}>
-            <div className="photo-float relative aspect-[4/3] w-full overflow-hidden bg-(--color-base-dark)/8">
-              <ParallaxLayer>
-                <Image
-                  src={work.img}
-                  alt={`TERRA HAYAMA — ${work.title}`}
-                  fill
-                  sizes="(min-width: 1024px) 25vw, 50vw"
-                  quality={84}
-                  className="object-cover object-center"
-                />
-              </ParallaxLayer>
-            </div>
-            <h4 className="mt-4 font-serif text-[13.5px] md:text-[clamp(13.3px,0.82vw,21px)] tracking-[0.04em] text-(--color-base-dark)">
+            <FadeSlideshow
+              images={work.images}
+              intervalMs={i === 0 ? 5200 : 6100}
+              className="photo-float aspect-[4/3] bg-(--color-base-dark)/8"
+              sizes="(min-width: 768px) 50vw, 100vw"
+            />
+            <h4 className="mt-5 font-serif text-[15px] md:text-[clamp(14px,0.95vw,24px)] tracking-[0.04em] text-(--color-base-dark)">
               {work.title}
             </h4>
-            <p className="mt-2 font-mincho text-[11.5px] md:text-[clamp(10.5px,0.6vw,15.4px)] leading-[1.9] tracking-[0.06em] text-(--color-base-dark)/80">
+            <p className="mt-2 font-mincho text-[12px] md:text-[clamp(11.2px,0.66vw,16.8px)] leading-[1.95] tracking-[0.06em] text-(--color-base-dark)/80">
               {work.body}
             </p>
           </div>
@@ -145,55 +143,63 @@ function OwnerDetail() {
   );
 }
 
-function NeighborhoodDetail() {
-  const d = TOP.neighborhoodDetail;
+function AccessDetail() {
+  const d = TOP.accessDetail;
   return (
-    <DetailShell title={d.title}>
-      <div className="border-t border-(--color-base-dark)/15">
-        <div className="grid grid-cols-[64px_1fr] gap-x-6 py-5 md:grid-cols-[96px_1fr]">
-          <p className="font-serif text-[12.8px] md:text-[clamp(11.9px,0.66vw,16.8px)] tracking-[0.08em] text-(--color-base-dark)/70 pt-[2px]">
-            {d.addressLabel}
-          </p>
-          <div>
-            <p className="font-mincho text-[12.8px] md:text-[clamp(11.2px,0.6vw,15.4px)] leading-[1.85] tracking-[0.06em] text-(--color-base-dark)/90">
-              {SITE.postalAddress}
-            </p>
-            <a
-              href={MAPS_LINK}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group mt-3 inline-flex items-center gap-3 font-serif text-[12px] md:text-[clamp(11.2px,0.6vw,15.4px)] tracking-[0.06em] text-(--color-base-dark)/70"
-            >
-              <span className="relative">
-                {d.mapsCta}
-                <span className="absolute -bottom-1 left-0 h-px w-full bg-(--color-base-dark)/25 transition-colors duration-500 group-hover:bg-(--color-base-dark)" />
-              </span>
-              <span aria-hidden>→</span>
-            </a>
-          </div>
+    <DetailShell>
+      <div className="grid gap-10 md:grid-cols-2 md:gap-14 md:items-start">
+        {/* 所在地の要約 dl */}
+        <div>
+          <dl className="border-t border-(--color-base-dark)/15 divide-y divide-(--color-base-dark)/10">
+            {d.rows.map((row) => (
+              <div
+                key={row.label}
+                className="grid grid-cols-[104px_1fr] gap-x-6 py-5 md:grid-cols-[132px_1fr]"
+              >
+                <dt className="font-serif text-[12.8px] md:text-[clamp(11.9px,0.66vw,16.8px)] tracking-[0.08em] text-(--color-base-dark)/70 pt-[2px]">
+                  {row.label}
+                </dt>
+                <dd className="font-mincho text-[12.8px] md:text-[clamp(11.2px,0.6vw,15.4px)] leading-[1.85] tracking-[0.06em] text-(--color-base-dark)/90">
+                  {row.value}
+                </dd>
+              </div>
+            ))}
+          </dl>
+
+          <a
+            href={MAPS_LINK}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group mt-8 inline-flex items-center gap-3 font-serif text-[12px] md:text-[clamp(11.2px,0.6vw,15.4px)] tracking-[0.06em] text-(--color-base-dark)/70"
+          >
+            <span className="relative">
+              {d.mapsCta}
+              <span className="absolute -bottom-1 left-0 h-px w-full bg-(--color-base-dark)/25 transition-colors duration-500 group-hover:bg-(--color-base-dark)" />
+            </span>
+            <span aria-hidden>→</span>
+          </a>
+        </div>
+
+        {/* 地図の額 */}
+        <div className="photo-float relative aspect-[4/3] overflow-hidden bg-(--color-base-light)">
+          <iframe
+            src={MAPS_EMBED}
+            loading="lazy"
+            className="absolute inset-0 h-full w-full"
+            style={{ border: 0, filter: "grayscale(0.4) sepia(0.05)" }}
+            title={d.iframeTitle}
+          />
+          <a
+            href={MAPS_LINK}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="absolute right-2 bottom-2 md:right-3 md:bottom-3 inline-flex items-center gap-1.5 md:gap-2 bg-(--color-base-light)/95 backdrop-blur px-3 py-1.5 md:px-4 md:py-2 text-(--color-base-dark) font-serif text-[10px] md:text-[clamp(9.8px,0.55vw,13px)] tracking-[0.08em] border border-(--color-base-dark)/15 hover:bg-(--color-base-light)"
+          >
+            {d.mapsCta}
+            <span aria-hidden>→</span>
+          </a>
         </div>
       </div>
-
-      <ul className="mt-6 grid gap-y-3 md:grid-cols-2 md:gap-x-12 md:gap-y-4">
-        {POINTS.map((p) => (
-          <li
-            key={p.name}
-            className="grid grid-cols-[1fr_auto] items-baseline gap-x-4 border-b border-(--color-base-dark)/10 py-3"
-          >
-            <div>
-              <p className="font-serif text-[14px] md:text-[clamp(13.3px,0.82vw,21px)] tracking-[0.04em] text-(--color-base-dark)">
-                {p.name}
-              </p>
-              <p className="mt-1.5 font-mincho text-[11px] md:text-[clamp(9.8px,0.49vw,12.6px)] tracking-[0.06em] text-(--color-base-dark)/65">
-                {p.note}
-              </p>
-            </div>
-            <p className="font-mincho text-[11px] md:text-[clamp(10.5px,0.55vw,14px)] tracking-[0.08em] text-(--color-base-dark)/70 whitespace-nowrap">
-              {p.time}
-            </p>
-          </li>
-        ))}
-      </ul>
     </DetailShell>
   );
 }
@@ -201,20 +207,23 @@ function NeighborhoodDetail() {
 function AmenitiesDetail() {
   const d = TOP.amenitiesDetail;
   return (
-    <DetailShell title={d.title}>
-      <dl className="grid gap-y-8 md:grid-cols-2 md:gap-x-16 md:gap-y-10">
-        {d.groups.map((group) => (
-          <div key={group.title} className="border-t border-(--color-base-dark)/15 pt-5">
-            <dt className="mb-3 font-serif text-[14.5px] md:text-[clamp(14px,0.82vw,21px)] tracking-[0.06em] text-(--color-base-dark)">
-              {group.title}
+    <DetailShell>
+      <dl className="border-t border-(--color-base-dark)/15 divide-y divide-(--color-base-dark)/10 max-w-[880px]">
+        {d.rows.map((row) => (
+          <div
+            key={row.label}
+            className="grid grid-cols-[104px_1fr] gap-x-6 py-5 md:grid-cols-[132px_1fr]"
+          >
+            <dt className="font-serif text-[12.8px] md:text-[clamp(11.9px,0.66vw,16.8px)] tracking-[0.08em] text-(--color-base-dark)/70 pt-[2px]">
+              {row.label}
             </dt>
-            <dd className="font-mincho text-[12px] md:text-[clamp(10.5px,0.6vw,15.4px)] leading-[1.95] tracking-[0.06em] text-(--color-base-dark)/85">
-              {group.body}
+            <dd className="font-mincho text-[12.8px] md:text-[clamp(11.2px,0.6vw,15.4px)] leading-[1.85] tracking-[0.06em] text-(--color-base-dark)/90">
+              {row.value}
             </dd>
           </div>
         ))}
       </dl>
-      <p className="mt-10 font-mincho text-[11.5px] md:text-[clamp(10.5px,0.55vw,14px)] leading-[1.95] tracking-[0.06em] text-(--color-base-dark)/60 md:mt-12">
+      <p className="mt-8 font-mincho text-[11.5px] md:text-[clamp(10.5px,0.55vw,14px)] leading-[1.95] tracking-[0.06em] text-(--color-base-dark)/60 md:mt-10">
         {d.note}
       </p>
     </DetailShell>
@@ -224,7 +233,7 @@ function AmenitiesDetail() {
 function ReservationDetail() {
   const d = TOP.reservationDetail;
   return (
-    <DetailShell title={d.title}>
+    <DetailShell>
       <div className="grid gap-12 md:grid-cols-2 md:gap-16">
         {/* 予約の基本 */}
         <dl className="border-t border-(--color-base-dark)/15 divide-y divide-(--color-base-dark)/10">
@@ -243,15 +252,24 @@ function ReservationDetail() {
           ))}
         </dl>
 
-        {/* 到着前に知っておきたいこと */}
-        <div>
-          <p className="border-t border-(--color-base-dark)/15 pt-5 mb-2 font-serif text-[14.5px] md:text-[clamp(14px,0.82vw,21px)] tracking-[0.06em] text-(--color-base-dark)">
-            {d.notesTitle}
-          </p>
-          <ol>
-            {d.notes.map((text, i) => (
+        {/* ご利用にあたって — 注意事項の全文アコーディオン（初期閉、原文は copy.ts の NOTICES） */}
+        {/* md:pr-16: 右端固定の予約 dock と ＋ マークが中間幅(1280-1500px)で重ならないよう内側に寄せる */}
+        <details className="group border-t border-(--color-base-dark)/15 md:pr-16">
+          <summary className="list-none cursor-pointer flex items-center justify-between py-5 [&::-webkit-details-marker]:hidden">
+            <span className="font-serif text-[14.5px] md:text-[clamp(14px,0.82vw,21px)] tracking-[0.06em] text-(--color-base-dark)">
+              {d.notesTitle}
+            </span>
+            <span
+              aria-hidden
+              className="font-garamond text-[15px] text-(--color-base-dark)/60 transition-transform duration-300 group-open:rotate-45"
+            >
+              ＋
+            </span>
+          </summary>
+          <ol className="border-t border-(--color-base-dark)/15">
+            {NOTICES.map((text, i) => (
               <li
-                key={text}
+                key={i}
                 className="grid grid-cols-[32px_1fr] gap-x-4 border-b border-(--color-base-dark)/10 py-4"
               >
                 <span className="font-mincho text-[10.7px] md:text-[clamp(9.8px,0.49vw,12.6px)] tracking-[0.02em] text-(--color-base-dark)/40 pt-[2px]">
@@ -263,17 +281,7 @@ function ReservationDetail() {
               </li>
             ))}
           </ol>
-          <Link
-            href={d.allNotesHref}
-            className="group mt-6 inline-flex items-center gap-3 font-serif text-[12px] md:text-[clamp(11.2px,0.6vw,15.4px)] tracking-[0.06em] text-(--color-base-dark)/70"
-          >
-            <span className="relative">
-              {d.allNotesCta}
-              <span className="absolute -bottom-1 left-0 h-px w-full bg-(--color-base-dark)/25 transition-colors duration-500 group-hover:bg-(--color-base-dark)" />
-            </span>
-            <span aria-hidden>→</span>
-          </Link>
-        </div>
+        </details>
       </div>
 
       <div className="mt-12 flex flex-col items-start gap-6 sm:flex-row sm:items-center sm:gap-10 md:mt-16">
@@ -313,7 +321,7 @@ const DETAILS = [
   RoomsDetail,
   StayDetail,
   OwnerDetail,
-  NeighborhoodDetail,
+  AccessDetail,
   AmenitiesDetail,
   ReservationDetail,
 ];
