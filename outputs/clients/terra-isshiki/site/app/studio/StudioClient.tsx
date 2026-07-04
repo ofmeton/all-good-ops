@@ -1,12 +1,20 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import type { CopyField } from "./lib";
 import { ImagePicker } from "./ImagePicker";
+
+type Gallery = {
+  path: string;
+  elementKind: "object" | "string";
+  images: string[];
+};
 
 type Props = {
   fields: CopyField[];
   images: string[];
+  galleries: Gallery[];
 };
 
 /* ------------------------------------------------------------------
@@ -64,6 +72,8 @@ const LABELS: Record<string, string> = {
   gallery: "ギャラリー",
   marquee: "流れる写真",
   image: "写真",
+  heroSlides: "スライド写真",
+  slides: "スライド写真",
   intro: "導入文",
   no: "番号",
   icon: "アイコン種別",
@@ -95,6 +105,7 @@ type FieldSection = {
   id: string;
   title: string;
   fields: CopyField[];
+  galleries: Gallery[];
 };
 
 const STRIP_SECTIONS: { prefix: string; title: string }[] = [
@@ -114,26 +125,41 @@ const CHILD_PAGE_SECTIONS: { prefix: string; title: string }[] = [
 
 const COMMON_PREFIXES = ["SITE.", "NAV.", "META.", "CTA.", "POINTS."];
 
-function buildSections(fields: CopyField[]): FieldSection[] {
-  const consumed = new Set<CopyField>();
+/* gallery.path 配下（例 "TOP.heroSlides.0.src"）を指す field は、ギャラリー編集ブロックが
+ * 描画を引き受けるため、通常フィールド一覧から除外する。 */
+function isGalleryOwnedField(fieldPath: string, galleries: Gallery[]): boolean {
+  return galleries.some((g) => fieldPath.startsWith(`${g.path}.`));
+}
+
+function buildSections(allFields: CopyField[], galleries: Gallery[]): FieldSection[] {
+  const fields = allFields.filter((f) => !isGalleryOwnedField(f.path, galleries));
+
+  const consumedFields = new Set<CopyField>();
+  const consumedGalleries = new Set<Gallery>();
   const sections: FieldSection[] = [];
 
   const take = (predicate: (f: CopyField) => boolean) => {
-    const matched = fields.filter((f) => !consumed.has(f) && predicate(f));
-    matched.forEach((f) => consumed.add(f));
+    const matched = fields.filter((f) => !consumedFields.has(f) && predicate(f));
+    matched.forEach((f) => consumedFields.add(f));
+    return matched;
+  };
+
+  const takeGalleries = (predicate: (g: Gallery) => boolean) => {
+    const matched = galleries.filter((g) => !consumedGalleries.has(g) && predicate(g));
+    matched.forEach((g) => consumedGalleries.add(g));
     return matched;
   };
 
   // 1. コンセプト文（FV）
   const opening = take((f) => f.path.startsWith("OPENING."));
   if (opening.length > 0) {
-    sections.push({ id: "sec-opening", title: "コンセプト文（FV）", fields: opening });
+    sections.push({ id: "sec-opening", title: "コンセプト文（FV）", fields: opening, galleries: [] });
   }
 
-  // 2. FV スライド写真
-  const heroSlides = take((f) => f.path.startsWith("TOP.heroSlides."));
-  if (heroSlides.length > 0) {
-    sections.push({ id: "sec-hero-slides", title: "FV スライド写真", fields: heroSlides });
+  // 2. FV スライド写真（TOP.heroSlides は今やギャラリー1つ）
+  const heroGalleries = takeGalleries((g) => g.path.startsWith("TOP.heroSlides"));
+  if (heroGalleries.length > 0) {
+    sections.push({ id: "sec-hero-slides", title: "FV スライド写真", fields: [], galleries: heroGalleries });
   }
 
   // 3. 帯ごとに 1 セクション（見出しは TOP.bands.N.title の値を使う）
@@ -142,48 +168,71 @@ function buildSections(fields: CopyField[]): FieldSection[] {
     const m = f.path.match(/^TOP\.bands\.(\d+)\./);
     if (m) bandIndexes.add(Number(m[1]));
   }
+  for (const g of galleries) {
+    const m = g.path.match(/^TOP\.bands\.(\d+)\./);
+    if (m) bandIndexes.add(Number(m[1]));
+  }
   const sortedBandIndexes = Array.from(bandIndexes).sort((a, b) => a - b);
   for (const idx of sortedBandIndexes) {
     const bandFields = take((f) => f.path.startsWith(`TOP.bands.${idx}.`));
-    if (bandFields.length === 0) continue;
+    const bandGalleries = takeGalleries((g) => g.path.startsWith(`TOP.bands.${idx}.`));
+    if (bandFields.length === 0 && bandGalleries.length === 0) continue;
     const titleField = bandFields.find((f) => f.path === `TOP.bands.${idx}.title`);
     const bandTitle = titleField?.value ?? `帯 ${idx + 1}`;
     const num = String(idx + 1).padStart(2, "0");
-    sections.push({ id: `sec-band-${idx}`, title: `${num} ${bandTitle}`, fields: bandFields });
+    sections.push({
+      id: `sec-band-${idx}`,
+      title: `${num} ${bandTitle}`,
+      fields: bandFields,
+      galleries: bandGalleries,
+    });
   }
 
   // 4. 各ストリップ
   for (const strip of STRIP_SECTIONS) {
     const stripFields = take((f) => f.path.startsWith(strip.prefix));
-    if (stripFields.length > 0) {
-      sections.push({ id: `sec-strip-${strip.prefix}`, title: strip.title, fields: stripFields });
+    const stripGalleries = takeGalleries((g) => g.path.startsWith(strip.prefix));
+    if (stripFields.length > 0 || stripGalleries.length > 0) {
+      sections.push({
+        id: `sec-strip-${strip.prefix}`,
+        title: strip.title,
+        fields: stripFields,
+        galleries: stripGalleries,
+      });
     }
   }
 
   // 5. 子ページ
   for (const page of CHILD_PAGE_SECTIONS) {
     const pageFields = take((f) => f.path.startsWith(page.prefix));
-    if (pageFields.length > 0) {
-      sections.push({ id: `sec-page-${page.prefix}`, title: page.title, fields: pageFields });
+    const pageGalleries = takeGalleries((g) => g.path.startsWith(page.prefix));
+    if (pageFields.length > 0 || pageGalleries.length > 0) {
+      sections.push({
+        id: `sec-page-${page.prefix}`,
+        title: page.title,
+        fields: pageFields,
+        galleries: pageGalleries,
+      });
     }
   }
 
   // 6. ご利用にあたって（注意事項）
   const notices = take((f) => f.path.startsWith("NOTICES."));
   if (notices.length > 0) {
-    sections.push({ id: "sec-notices", title: "ご利用にあたって（注意事項）", fields: notices });
+    sections.push({ id: "sec-notices", title: "ご利用にあたって（注意事項）", fields: notices, galleries: [] });
   }
 
   // 7. サイト共通（まとめて）
   const common = take((f) => COMMON_PREFIXES.some((prefix) => f.path.startsWith(prefix)));
   if (common.length > 0) {
-    sections.push({ id: "sec-common", title: "サイト共通", fields: common });
+    sections.push({ id: "sec-common", title: "サイト共通", fields: common, galleries: [] });
   }
 
-  // どのグループにも入らないフィールドは最後に「その他」
-  const rest = fields.filter((f) => !consumed.has(f));
-  if (rest.length > 0) {
-    sections.push({ id: "sec-other", title: "その他", fields: rest });
+  // どのグループにも入らないフィールド・ギャラリーは最後に「その他」
+  const restFields = fields.filter((f) => !consumedFields.has(f));
+  const restGalleries = galleries.filter((g) => !consumedGalleries.has(g));
+  if (restFields.length > 0 || restGalleries.length > 0) {
+    sections.push({ id: "sec-other", title: "その他", fields: restFields, galleries: restGalleries });
   }
 
   return sections;
@@ -204,6 +253,46 @@ async function saveField(path: string, value: string): Promise<{ ok: true } | { 
     const data = await res.json().catch(() => ({}));
     if (!res.ok) {
       return { ok: false, error: data?.error ?? "保存に失敗しました" };
+    }
+    return { ok: true };
+  } catch {
+    return { ok: false, error: "通信に失敗しました。ネットワークをご確認ください。" };
+  }
+}
+
+async function appendGalleryImage(
+  arrayPath: string,
+  value: string,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  try {
+    const res = await fetch("/api/studio", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ op: "append", arrayPath, value }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      return { ok: false, error: data?.error ?? "追加に失敗しました" };
+    }
+    return { ok: true };
+  } catch {
+    return { ok: false, error: "通信に失敗しました。ネットワークをご確認ください。" };
+  }
+}
+
+async function removeGalleryImage(
+  arrayPath: string,
+  index: number,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  try {
+    const res = await fetch("/api/studio", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ op: "remove", arrayPath, index }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      return { ok: false, error: data?.error ?? "削除に失敗しました" };
     }
     return { ok: true };
   } catch {
@@ -338,24 +427,302 @@ function ImageFieldEditor({ field, images }: { field: CopyField; images: string[
 }
 
 /* ------------------------------------------------------------------
+ * ギャラリー（スライドショー）1 枚のカード
+ * object 要素は "<gallery.path>.<i>.src" / "<gallery.path>.<i>.alt" を、
+ * string 要素は "<gallery.path>.<i>" 自体を差し替え対象とする。
+ * ------------------------------------------------------------------ */
+function GallerySlideCard({
+  gallery,
+  index,
+  src,
+  altValue,
+  images,
+  canRemove,
+  onRefreshNeeded,
+}: {
+  gallery: Gallery;
+  index: number;
+  src: string;
+  altValue: string | null;
+  images: string[];
+  canRemove: boolean;
+  onRefreshNeeded: () => void;
+}) {
+  const elementSrcPath =
+    gallery.elementKind === "object" ? `${gallery.path}.${index}.src` : `${gallery.path}.${index}`;
+
+  const [value, setValue] = useState(src);
+  const [pickerOpen, setPickerOpen] = useState(false);
+  const [status, setStatus] = useState<SaveStatus>("idle");
+  const [errorMsg, setErrorMsg] = useState("");
+  const [removing, setRemoving] = useState(false);
+
+  async function handleSelect(path: string) {
+    setStatus("saving");
+    setErrorMsg("");
+    const result = await saveField(elementSrcPath, path);
+    if (result.ok) {
+      setValue(path);
+      setStatus("saved");
+      setPickerOpen(false);
+      setTimeout(() => setStatus("idle"), 2000);
+    } else {
+      setStatus("error");
+      setErrorMsg(result.error);
+    }
+  }
+
+  async function handleRemove() {
+    if (!canRemove || removing) return;
+    setRemoving(true);
+    setErrorMsg("");
+    const result = await removeGalleryImage(gallery.path, index);
+    if (result.ok) {
+      onRefreshNeeded();
+    } else {
+      setRemoving(false);
+      setStatus("error");
+      setErrorMsg(result.error);
+    }
+  }
+
+  return (
+    <div className="flex flex-col gap-1.5">
+      <div
+        className="photo-float relative w-full cursor-pointer overflow-hidden rounded-sm bg-white"
+        onClick={() => setPickerOpen(true)}
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={value} loading="lazy" className="aspect-[3/2] w-full object-cover" alt={altValue ?? ""} />
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            setPickerOpen(true);
+          }}
+          className="absolute right-2 top-2 rounded-sm bg-(--color-base-dark)/75 px-2.5 py-1 text-[11px] text-(--color-base-light) transition-opacity hover:opacity-90"
+        >
+          変更
+        </button>
+      </div>
+
+      {gallery.elementKind === "object" && altValue !== null && (
+        <AltTextEditor path={`${gallery.path}.${index}.alt`} initialValue={altValue} />
+      )}
+
+      <div className="flex min-h-[20px] items-center justify-between gap-2">
+        <p className="break-all font-mono text-[10px] text-(--color-mist)/70">{value}</p>
+        <div className="flex shrink-0 items-center gap-2">
+          {status === "error" && <span className="text-[12px] text-red-700">{errorMsg}</span>}
+          {status === "saving" && <span className="text-[12px] text-(--color-mist)">保存中…</span>}
+          {status === "saved" && <span className="text-[12px] text-(--color-pine)">✓ 保存しました</span>}
+          <button
+            type="button"
+            onClick={handleRemove}
+            disabled={!canRemove || removing}
+            title={canRemove ? "この写真を削除" : "最低1枚は必要です"}
+            className="rounded-sm border border-(--color-sand) px-2 py-1 text-[11px] text-(--color-mist) transition-colors hover:border-red-300 hover:text-red-700 disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            {removing ? "削除中…" : "削除"}
+          </button>
+        </div>
+      </div>
+
+      <ImagePicker
+        open={pickerOpen}
+        current={value}
+        images={images}
+        onSelect={handleSelect}
+        onClose={() => setPickerOpen(false)}
+      />
+    </div>
+  );
+}
+
+/* alt テキストは既存の text 保存フローと同じ replace を使う軽量エディタ */
+function AltTextEditor({ path, initialValue }: { path: string; initialValue: string }) {
+  const [initial, setInitial] = useState(initialValue);
+  const [value, setValue] = useState(initialValue);
+  const [status, setStatus] = useState<SaveStatus>("idle");
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const dirty = value !== initial;
+
+  async function handleSave() {
+    setStatus("saving");
+    setErrorMsg("");
+    const result = await saveField(path, value);
+    if (result.ok) {
+      setInitial(value);
+      setStatus("saved");
+      setTimeout(() => setStatus("idle"), 2000);
+    } else {
+      setStatus("error");
+      setErrorMsg(result.error);
+    }
+  }
+
+  return (
+    <div className="flex flex-col gap-1">
+      <input
+        type="text"
+        className="font-mincho w-full rounded-sm border border-(--color-sand) bg-white/70 px-2.5 py-1.5 text-[12.5px] text-(--color-base-dark) outline-none focus:border-(--color-soil)"
+        value={value}
+        placeholder="写真の説明"
+        onChange={(e) => setValue(e.target.value)}
+      />
+      <div className="flex min-h-[18px] items-center justify-between gap-2">
+        <span className="text-[10px] text-(--color-mist)/70">写真の説明</span>
+        <div className="flex shrink-0 items-center gap-2">
+          {status === "error" && <span className="text-[11px] text-red-700">{errorMsg}</span>}
+          {status === "saved" && <span className="text-[11px] text-(--color-pine)">✓ 保存しました</span>}
+          {dirty && status !== "saved" && (
+            <button
+              type="button"
+              onClick={handleSave}
+              disabled={status === "saving"}
+              className="rounded-sm bg-(--color-soil) px-2.5 py-0.5 text-[11px] text-(--color-base-light) transition-opacity hover:opacity-90 disabled:opacity-60"
+            >
+              {status === "saving" ? "保存中…" : "保存"}
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------
+ * ギャラリー（スライドショー）編集ブロック — 1 つの画像配列を増減付きで編集する
+ * ------------------------------------------------------------------ */
+function GalleryBlock({
+  gallery,
+  images,
+  altByPath,
+  onRefreshNeeded,
+}: {
+  gallery: Gallery;
+  images: string[];
+  altByPath: Map<string, string>;
+  onRefreshNeeded: () => void;
+}) {
+  const [pickerOpen, setPickerOpen] = useState(false);
+  const [status, setStatus] = useState<SaveStatus>("idle");
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const count = gallery.images.length;
+  const canRemove = count > 1;
+
+  async function handleAppend(path: string) {
+    setStatus("saving");
+    setErrorMsg("");
+    const result = await appendGalleryImage(gallery.path, path);
+    if (result.ok) {
+      setStatus("idle");
+      setPickerOpen(false);
+      onRefreshNeeded();
+    } else {
+      setStatus("error");
+      setErrorMsg(result.error);
+    }
+  }
+
+  return (
+    <div className="flex flex-col gap-4 rounded-sm border border-(--color-sand)/70 bg-white/40 p-4">
+      <div className="flex items-center justify-between gap-2">
+        <h3 className="font-mincho text-[13px] text-(--color-mist)">{labelForPath(gallery.path)}</h3>
+        <span className="text-[11px] text-(--color-mist)/70">写真 {count} 枚</span>
+      </div>
+
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+        {gallery.images.map((src, i) => {
+          const altPath = `${gallery.path}.${i}.alt`;
+          const altValue = gallery.elementKind === "object" ? (altByPath.get(altPath) ?? "") : null;
+          return (
+            <GallerySlideCard
+              key={`${gallery.path}.${i}`}
+              gallery={gallery}
+              index={i}
+              src={src}
+              altValue={altValue}
+              images={images}
+              canRemove={canRemove}
+              onRefreshNeeded={onRefreshNeeded}
+            />
+          );
+        })}
+      </div>
+
+      <div className="flex items-center justify-between gap-2">
+        <p className="break-all font-mono text-[10px] text-(--color-mist)/70">{gallery.path}</p>
+        <div className="flex shrink-0 items-center gap-2">
+          {status === "error" && <span className="text-[12px] text-red-700">{errorMsg}</span>}
+          <button
+            type="button"
+            onClick={() => setPickerOpen(true)}
+            disabled={status === "saving"}
+            className="rounded-sm border border-(--color-soil)/50 px-3 py-1.5 text-[12px] text-(--color-soil) transition-colors hover:bg-(--color-soil)/10 disabled:opacity-60"
+          >
+            {status === "saving" ? "追加中…" : "＋ 写真を追加"}
+          </button>
+        </div>
+      </div>
+
+      <ImagePicker
+        open={pickerOpen}
+        current={gallery.images[gallery.images.length - 1] ?? ""}
+        images={images}
+        onSelect={handleAppend}
+        onClose={() => setPickerOpen(false)}
+      />
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------
  * セクション表示
  * ------------------------------------------------------------------ */
-function SectionBlock({ section, images }: { section: FieldSection; images: string[] }) {
+function SectionBlock({
+  section,
+  images,
+  altByPath,
+  onRefreshNeeded,
+}: {
+  section: FieldSection;
+  images: string[];
+  altByPath: Map<string, string>;
+  onRefreshNeeded: () => void;
+}) {
   const imageFields = section.fields.filter((f) => f.kind === "image");
   const isImageHeavy = imageFields.length === section.fields.length && imageFields.length > 1;
 
   return (
     <section id={section.id} className="scroll-mt-28 py-10 first:pt-0">
       <h2 className="sec-title font-mincho text-[18px] text-(--color-base-dark)">{section.title}</h2>
-      <div className={isImageHeavy ? "mt-6 grid grid-cols-1 gap-8 md:grid-cols-2" : "mt-6 flex flex-col gap-8"}>
-        {section.fields.map((field) =>
-          field.kind === "image" ? (
-            <ImageFieldEditor key={field.path} field={field} images={images} />
-          ) : (
-            <TextFieldEditor key={field.path} field={field} />
-          ),
-        )}
-      </div>
+      {section.fields.length > 0 && (
+        <div className={isImageHeavy ? "mt-6 grid grid-cols-1 gap-8 md:grid-cols-2" : "mt-6 flex flex-col gap-8"}>
+          {section.fields.map((field) =>
+            field.kind === "image" ? (
+              <ImageFieldEditor key={field.path} field={field} images={images} />
+            ) : (
+              <TextFieldEditor key={field.path} field={field} />
+            ),
+          )}
+        </div>
+      )}
+      {section.galleries.length > 0 && (
+        <div className="mt-8 flex flex-col gap-6">
+          {section.galleries.map((gallery) => (
+            <GalleryBlock
+              key={gallery.path}
+              gallery={gallery}
+              images={images}
+              altByPath={altByPath}
+              onRefreshNeeded={onRefreshNeeded}
+            />
+          ))}
+        </div>
+      )}
     </section>
   );
 }
@@ -363,8 +730,21 @@ function SectionBlock({ section, images }: { section: FieldSection; images: stri
 /* ------------------------------------------------------------------
  * ルート
  * ------------------------------------------------------------------ */
-export function StudioClient({ fields, images }: Props) {
-  const sections = useMemo(() => buildSections(fields), [fields]);
+export function StudioClient({ fields, images, galleries }: Props) {
+  const router = useRouter();
+  const sections = useMemo(() => buildSections(fields, galleries), [fields, galleries]);
+  // alt テキストの現在値をギャラリー編集ブロックが引けるように path → value で索引化
+  const altByPath = useMemo(() => {
+    const map = new Map<string, string>();
+    for (const f of fields) map.set(f.path, f.value);
+    return map;
+  }, [fields]);
+
+  // 追加・削除は配列の index がずれるため、サーバーコンポーネントを再取得して最新の
+  // fields/galleries で再描画する。置換（replace）は index が変わらないため呼ばない。
+  function handleRefreshNeeded() {
+    router.refresh();
+  }
 
   return (
     <div className="studio-root min-h-screen bg-(--color-base-light) text-(--color-base-dark)">
@@ -387,7 +767,7 @@ export function StudioClient({ fields, images }: Props) {
             書き換えて保存すると app/copy.ts が更新され、開いているサイトに数秒で反映されます。このページはこの Mac の開発サーバー専用で、公開サイトには表示されません。
           </p>
           <p className="text-[12px] leading-relaxed text-(--color-mist)">
-            元に戻したいときは Claude に「さっきの変更を戻して」と伝えれば OK（すべて git で記録されています）。写真の新規追加や項目の増減も Claude へ。
+            スライドショーの写真は「＋ 写真を追加」「削除」でこの画面から増やせます（最低 1 枚は残ります）。元に戻したいときは Claude に「さっきの変更を戻して」と伝えれば OK（すべて git で記録されています）。新しい写真そのものの追加や、セクションの並べ替えは Claude へ。
           </p>
         </div>
         {/* モバイル: 横スクロールのセクションジャンプ chips */}
@@ -420,7 +800,13 @@ export function StudioClient({ fields, images }: Props) {
 
         <main className="w-full max-w-[880px] divide-y divide-(--color-sand)">
           {sections.map((section) => (
-            <SectionBlock key={section.id} section={section} images={images} />
+            <SectionBlock
+              key={section.id}
+              section={section}
+              images={images}
+              altByPath={altByPath}
+              onRefreshNeeded={handleRefreshNeeded}
+            />
           ))}
         </main>
       </div>

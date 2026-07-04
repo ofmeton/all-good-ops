@@ -5,7 +5,7 @@
 import { notFound } from "next/navigation";
 import fs from "node:fs";
 import path from "node:path";
-import { extractFields } from "./lib";
+import { extractFields, extractGalleries } from "./lib";
 import { StudioClient } from "./StudioClient";
 
 export const metadata = {
@@ -53,7 +53,8 @@ export default function StudioPage() {
 
   const copySource = fs.readFileSync(path.join(process.cwd(), "app", "copy.ts"), "utf8");
   const fields = extractFields(copySource);
+  const galleries = extractGalleries(copySource);
   const images = collectImages();
 
-  return <StudioClient fields={fields} images={images} />;
+  return <StudioClient fields={fields} images={images} galleries={galleries} />;
 }
