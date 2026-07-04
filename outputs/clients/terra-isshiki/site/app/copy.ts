@@ -87,7 +87,7 @@ export const TOP = {
   bands: [
     {
       href: "/rooms",
-      title: "部屋と空間",
+      title: "お部屋について",
       body: "一軒家の二階を、まるごと貸し切りで。LDK、ひのきのバス、フルキッチンが揃います。",
       img: "/images/rooms/rooms-hero.jpg",
       cta: "部屋を見る",
@@ -163,12 +163,7 @@ export const TOP = {
     ],
   },
 
-  // 05 BEAT ICE — 章直下はサマリ 1 文だけ（詳細は /owner ページへ）
-  ownerDetail: {
-    summary:
-      "2015 年に葉山へ移り住み、田んぼでの米づくりから料理教室やマルシェの主催まで、暮らしとものづくりをふたりで続けています。",
-  },
-
+  // 05 BEAT ICE — 章直下のストリップは無し。詳細は帯の「BEAT ICE について」→ /owner へ
   // 04 周辺とアクセス — 章直下の要約（たどり着くための情報 + 地図の埋め込み）
   accessDetail: {
     rows: [

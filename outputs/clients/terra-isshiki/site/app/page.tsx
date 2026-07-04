@@ -110,17 +110,6 @@ function StayDetail() {
   );
 }
 
-function OwnerDetail() {
-  const d = TOP.ownerDetail;
-  return (
-    <DetailShell>
-      <p className="max-w-[820px] font-mincho text-[13px] md:text-[clamp(11.2px,0.71vw,18.2px)] leading-[2.05] tracking-[0.07em] text-(--color-base-dark)/85">
-        {d.summary}
-      </p>
-    </DetailShell>
-  );
-}
-
 function AccessDetail() {
   const d = TOP.accessDetail;
   return (
@@ -265,7 +254,7 @@ const DETAILS = [
   AmenitiesDetail,
   StayDetail,
   AccessDetail,
-  OwnerDetail,
+  null, // BEAT ICE — 帯だけ（章直下のストリップは無し）
   ReservationDetail,
 ];
 

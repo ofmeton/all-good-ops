@@ -102,7 +102,6 @@ const STRIP_SECTIONS: { prefix: string; title: string }[] = [
   { prefix: "TOP.amenitiesDetail.", title: "設備と備品・詳細" },
   { prefix: "TOP.stayDetail.", title: "過ごし方・スライド写真" },
   { prefix: "TOP.accessDetail.", title: "アクセス・詳細" },
-  { prefix: "TOP.ownerDetail.", title: "BEAT ICE・紹介文" },
   { prefix: "TOP.reservationDetail.", title: "予約・詳細" },
 ];
 
