@@ -44,7 +44,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/images/hero/hero-01-living.jpg",
+        url: META.ogImage,
         width: 1440,
         height: 958,
         alt: META.ogImageAlt,
@@ -55,7 +55,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: META.siteTitle,
     description: META.twitterDescription,
-    images: ["/images/hero/hero-01-living.jpg"],
+    images: [META.ogImage],
   },
   icons: {
     icon: "/favicon.ico",

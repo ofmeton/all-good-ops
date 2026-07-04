@@ -11,9 +11,6 @@ import { SITE, TOP, NOTICES } from "./copy";
 /* 文言・写真パスはすべて app/copy.ts で編集できます。
    このファイルはレイアウト（見た目の構造）だけを持ちます。 */
 
-const MAPS_LINK = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-  SITE.mapQuery,
-)}`;
 const MAPS_EMBED = `https://maps.google.com/maps?q=${encodeURIComponent(SITE.mapQuery)}&z=16&output=embed`;
 
 /* ---------------------------------------------------------------
@@ -116,29 +113,10 @@ function StayDetail() {
 function OwnerDetail() {
   const d = TOP.ownerDetail;
   return (
-    <DetailShell title={d.title}>
+    <DetailShell>
       <p className="max-w-[820px] font-mincho text-[13px] md:text-[clamp(11.2px,0.71vw,18.2px)] leading-[2.05] tracking-[0.07em] text-(--color-base-dark)/85">
-        {d.intro}
+        {d.summary}
       </p>
-
-      <div className="mt-12 grid gap-y-12 md:mt-16 md:grid-cols-2 md:gap-x-10">
-        {d.works.map((work, i) => (
-          <div key={work.title}>
-            <FadeSlideshow
-              images={work.images}
-              intervalMs={i === 0 ? 5200 : 6100}
-              className="photo-float aspect-[4/3] bg-(--color-base-dark)/8"
-              sizes="(min-width: 768px) 50vw, 100vw"
-            />
-            <h4 className="mt-5 font-serif text-[15px] md:text-[clamp(14px,0.95vw,24px)] tracking-[0.04em] text-(--color-base-dark)">
-              {work.title}
-            </h4>
-            <p className="mt-2 font-mincho text-[12px] md:text-[clamp(11.2px,0.66vw,16.8px)] leading-[1.95] tracking-[0.06em] text-(--color-base-dark)/80">
-              {work.body}
-            </p>
-          </div>
-        ))}
-      </div>
     </DetailShell>
   );
 }
@@ -147,59 +125,22 @@ function AccessDetail() {
   const d = TOP.accessDetail;
   return (
     <DetailShell>
-      <div className="grid gap-10 md:grid-cols-2 md:gap-14 md:items-start">
-        {/* 所在地の要約 dl */}
-        <div>
-          <dl className="border-t border-(--color-base-dark)/15 divide-y divide-(--color-base-dark)/10">
-            {d.rows.map((row) => (
-              <div
-                key={row.label}
-                className="grid grid-cols-[104px_1fr] gap-x-6 py-5 md:grid-cols-[132px_1fr]"
-              >
-                <dt className="font-serif text-[12.8px] md:text-[clamp(11.9px,0.66vw,16.8px)] tracking-[0.08em] text-(--color-base-dark)/70 pt-[2px]">
-                  {row.label}
-                </dt>
-                <dd className="font-mincho text-[12.8px] md:text-[clamp(11.2px,0.6vw,15.4px)] leading-[1.85] tracking-[0.06em] text-(--color-base-dark)/90">
-                  {row.value}
-                </dd>
-              </div>
-            ))}
-          </dl>
-
-          <a
-            href={MAPS_LINK}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group mt-8 inline-flex items-center gap-3 font-serif text-[12px] md:text-[clamp(11.2px,0.6vw,15.4px)] tracking-[0.06em] text-(--color-base-dark)/70"
+      {/* 所在地の要約 dl。地図は帯側の写真枠に額装済みのためここでは持たない */}
+      <dl className="border-t border-(--color-base-dark)/15 divide-y divide-(--color-base-dark)/10 max-w-[720px]">
+        {d.rows.map((row) => (
+          <div
+            key={row.label}
+            className="grid grid-cols-[104px_1fr] gap-x-6 py-5 md:grid-cols-[132px_1fr]"
           >
-            <span className="relative">
-              {d.mapsCta}
-              <span className="absolute -bottom-1 left-0 h-px w-full bg-(--color-base-dark)/25 transition-colors duration-500 group-hover:bg-(--color-base-dark)" />
-            </span>
-            <span aria-hidden>→</span>
-          </a>
-        </div>
-
-        {/* 地図の額 */}
-        <div className="photo-float relative aspect-[4/3] overflow-hidden bg-(--color-base-light)">
-          <iframe
-            src={MAPS_EMBED}
-            loading="lazy"
-            className="absolute inset-0 h-full w-full"
-            style={{ border: 0, filter: "grayscale(0.4) sepia(0.05)" }}
-            title={d.iframeTitle}
-          />
-          <a
-            href={MAPS_LINK}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="absolute right-2 bottom-2 md:right-3 md:bottom-3 inline-flex items-center gap-1.5 md:gap-2 bg-(--color-base-light)/95 backdrop-blur px-3 py-1.5 md:px-4 md:py-2 text-(--color-base-dark) font-serif text-[10px] md:text-[clamp(9.8px,0.55vw,13px)] tracking-[0.08em] border border-(--color-base-dark)/15 hover:bg-(--color-base-light)"
-          >
-            {d.mapsCta}
-            <span aria-hidden>→</span>
-          </a>
-        </div>
-      </div>
+            <dt className="font-serif text-[12.8px] md:text-[clamp(11.9px,0.66vw,16.8px)] tracking-[0.08em] text-(--color-base-dark)/70 pt-[2px]">
+              {row.label}
+            </dt>
+            <dd className="font-mincho text-[12.8px] md:text-[clamp(11.2px,0.6vw,15.4px)] leading-[1.85] tracking-[0.06em] text-(--color-base-dark)/90">
+              {row.value}
+            </dd>
+          </div>
+        ))}
+      </dl>
     </DetailShell>
   );
 }
@@ -314,15 +255,17 @@ function ReservationDetail() {
  * TOP は「下までスクロールすれば主要な情報が揃う」構成。
  * 帯 = 章の入口（タイトル → 写真 → 導入文 → 詳細リンク）、
  * ストリップ = その章の実用情報の要約。深掘りは各ページへ。
+ * データ駆動: bands の要素に `mapEmbed: true` があれば、写真の代わりに
+ * Google マップ埋め込みを額装する（アクセス章のみ想定）。
  * --------------------------------------------------------------- */
 
 // 帯と同じ並び順で対応する要約ストリップ
 const DETAILS = [
   RoomsDetail,
-  StayDetail,
-  OwnerDetail,
-  AccessDetail,
   AmenitiesDetail,
+  StayDetail,
+  AccessDetail,
+  OwnerDetail,
   ReservationDetail,
 ];
 
@@ -357,34 +300,52 @@ export default function Home() {
                   {band.title}
                 </h2>
 
-                {/* 写真 — タイトルの下（モバイル）／反対カラムで 2 行ぶち抜き（PC） */}
-                <Link
-                  href={band.href}
-                  aria-label={`${band.title}を見る`}
-                  data-reveal
-                  className={`reveal group photo-float block relative mt-8 mx-5 aspect-[4/3] overflow-hidden bg-(--color-base-dark)/10 md:mt-0 md:mx-8 lg:mx-10 md:my-8 lg:my-10 md:aspect-auto md:min-h-[60svh] md:self-stretch md:row-span-2 md:row-start-1 ${
-                    imageFirst ? "md:col-start-1" : "md:col-start-2"
-                  }`}
-                >
-                  <ParallaxLayer>
-                    <Image
-                      src={band.img}
-                      alt={band.title}
-                      fill
-                      sizes="(min-width: 768px) 50vw, 100vw"
-                      quality={84}
-                      className="object-cover object-center"
-                    />
-                  </ParallaxLayer>
+                {/* 写真 — タイトルの下（モバイル）／反対カラムで 2 行ぶち抜き（PC）。
+                    アクセス章はヘッド写真の代わりに地図を「一枚の写真」として額装する */}
+                {"mapEmbed" in band && band.mapEmbed ? (
                   <div
-                    aria-hidden
-                    className="absolute inset-0 opacity-0 md:group-hover:opacity-100 transition-opacity duration-500"
-                    style={{
-                      background:
-                        "linear-gradient(180deg, rgba(26,20,16,0.04) 0%, rgba(26,20,16,0.18) 100%)",
-                    }}
-                  />
-                </Link>
+                    data-reveal
+                    className={`reveal photo-float relative mt-8 mx-5 aspect-[4/3] overflow-hidden bg-(--color-base-light) md:mt-0 md:mx-8 lg:mx-10 md:my-8 lg:my-10 md:aspect-auto md:min-h-[60svh] md:self-stretch md:row-span-2 md:row-start-1 ${
+                      imageFirst ? "md:col-start-1" : "md:col-start-2"
+                    }`}
+                  >
+                    <iframe
+                      src={MAPS_EMBED}
+                      loading="lazy"
+                      className="absolute inset-0 h-full w-full"
+                      style={{ border: 0, filter: "grayscale(0.4) sepia(0.05)" }}
+                      title={TOP.accessDetail.iframeTitle}
+                    />
+                  </div>
+                ) : (
+                  <Link
+                    href={band.href}
+                    aria-label={`${band.title}を見る`}
+                    data-reveal
+                    className={`reveal group photo-float block relative mt-8 mx-5 aspect-[4/3] overflow-hidden bg-(--color-base-dark)/10 md:mt-0 md:mx-8 lg:mx-10 md:my-8 lg:my-10 md:aspect-auto md:min-h-[60svh] md:self-stretch md:row-span-2 md:row-start-1 ${
+                      imageFirst ? "md:col-start-1" : "md:col-start-2"
+                    }`}
+                  >
+                    <ParallaxLayer>
+                      <Image
+                        src={band.img}
+                        alt={band.title}
+                        fill
+                        sizes="(min-width: 768px) 50vw, 100vw"
+                        quality={84}
+                        className="object-cover object-center"
+                      />
+                    </ParallaxLayer>
+                    <div
+                      aria-hidden
+                      className="absolute inset-0 opacity-0 md:group-hover:opacity-100 transition-opacity duration-500"
+                      style={{
+                        background:
+                          "linear-gradient(180deg, rgba(26,20,16,0.04) 0%, rgba(26,20,16,0.18) 100%)",
+                      }}
+                    />
+                  </Link>
+                )}
 
                 {/* 本文 + CTA */}
                 <div

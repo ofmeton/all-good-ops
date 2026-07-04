@@ -31,21 +31,39 @@ export function OpeningHero({
     () => {
       document.body.classList.add("has-fv");
       const threshold = () => window.innerHeight * 0.85;
-      // dock（予約ボタン）は FV 演出（.intro = コンセプト文まで）を完全に
-      // 抜けてから出す。intro の高さ − 1 画面分 = 帯コンテンツが画面を
-      // 占めるスクロール位置。コンセプト文とは重ならない。
+      // dock（予約ボタン）は最初の帯「部屋と空間」（.fv-cover__pg）が画面に
+      // 顔を出したタイミングで出す。帯タイトルが 80px ほど見えた頃を
+      // 「部屋と空間が現れた」とみなし、実測位置ベースで判定する。
+      // .fv-cover__pg が取れない場合のみ、intro の高さから概算する旧式にフォールバック。
       const introEl = rootRef.current?.querySelector<HTMLElement>(".intro") ?? null;
-      const deepThreshold = () =>
+      const pgEl = rootRef.current?.querySelector<HTMLElement>(".fv-cover__pg") ?? null;
+      let pgTop = Infinity;
+      const measurePg = () => {
+        if (pgEl) pgTop = pgEl.getBoundingClientRect().top + window.scrollY;
+      };
+      // フォールバック（.fv-cover__pg が取れない場合のみ使用）
+      const fallbackDeepThreshold = () =>
         introEl
           ? Math.max(introEl.offsetHeight - window.innerHeight, window.innerHeight * 2)
           : window.innerHeight * 2.4;
+      const isFvDeep = () =>
+        pgEl
+          ? window.scrollY + window.innerHeight > pgTop + 80
+          : window.scrollY > fallbackDeepThreshold();
       const updateFvPassed = () => {
         document.body.classList.toggle("fv-passed", window.scrollY > threshold());
-        document.body.classList.toggle("fv-deep", window.scrollY > deepThreshold());
+        document.body.classList.toggle("fv-deep", isFvDeep());
+      };
+      const handleResize = () => {
+        measurePg();
+        updateFvPassed();
       };
       window.addEventListener("scroll", updateFvPassed, { passive: true });
-      window.addEventListener("resize", updateFvPassed);
-      updateFvPassed();
+      window.addEventListener("resize", handleResize);
+      requestAnimationFrame(() => {
+        measurePg();
+        updateFvPassed();
+      });
 
       const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       if (reduce) {
@@ -81,7 +99,7 @@ export function OpeningHero({
 
       return () => {
         window.removeEventListener("scroll", updateFvPassed);
-        window.removeEventListener("resize", updateFvPassed);
+        window.removeEventListener("resize", handleResize);
         document.body.classList.remove("has-fv", "fv-passed", "fv-deep");
       };
     },

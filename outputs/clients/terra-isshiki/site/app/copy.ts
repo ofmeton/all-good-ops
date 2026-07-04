@@ -48,6 +48,7 @@ export const META = {
   twitterDescription:
     "葉山一色海岸まで徒歩 8 分。BEAT ICE が営む、海と山の風景に溶ける一棟貸し。",
   ogImageAlt: "TERRA HAYAMA — リビングダイニング",
+  ogImage: "/images/hero/hero-01-living.jpg", // SNS シェア時のサムネイル画像
 };
 
 /* ------------------------------------------------------------------
@@ -82,13 +83,21 @@ export const TOP = {
   ],
 
   // 6 章の帯（タイトル → 写真 → 本文 → リンク）
+  // 新順序: ①部屋と空間 ②設備と備品 ③過ごし方 ④周辺とアクセス ⑤営むのは、BEAT ICE ⑥予約と空き状況
   bands: [
     {
       href: "/rooms",
       title: "部屋と空間",
-      body: "一軒家の二階を、まるごと貸し切りで。LDK、ひのきのバス、フルキッチンが揃う 75 ㎡ です。定員は最大 8 名、ゆったり過ごすなら 6 名までが目安です。",
+      body: "一軒家の二階を、まるごと貸し切りで。LDK、ひのきのバス、フルキッチンが揃います。",
       img: "/images/rooms/rooms-hero.jpg",
       cta: "部屋を見る",
+    },
+    {
+      href: "/rooms#overview",
+      title: "設備と備品",
+      body: "調理器具は一式、食器は人数分。ドラム式洗濯機は洗剤つきで、自宅と同じように洗濯ができます。タオルや歯ブラシ、シャンプーなどのアメニティも揃えました。",
+      img: "/images/rooms/kitchen-01.jpg",
+      cta: "設備を見る",
     },
     {
       href: "/stay",
@@ -97,26 +106,21 @@ export const TOP = {
       img: "/images/access/access-balcony.jpg",
       cta: "過ごし方を見る",
     },
+    // mapEmbed: true の帯はヘッド写真の代わりに Google マップを埋め込む（false にすると img の写真に戻る）
+    {
+      href: "/access",
+      title: "周辺とアクセス",
+      mapEmbed: true,
+      body: "一色海岸まで徒歩 8 分、路線バスの停留所までは 1 分。歩いて 30 秒のコンビニと徒歩 5 分の地元スーパーで、滞在中の買い出しもすぐに済みます。海のそばの、静かな住宅地です。",
+      img: "/images/access/access-balcony.jpg",
+      cta: "アクセスを見る",
+    },
     {
       href: "/owner",
       title: "営むのは、BEAT ICE",
       body: "葉山の棚田で育てたお米から、アイスクリームをつくっています。地域の学校給食にアイスを届け、教室で授業をすることもあります。この宿も、そんな夫婦の暮らしの続きにあります。",
       img: "/images/owner/owner-couple.jpg",
       cta: "BEAT ICE について",
-    },
-    {
-      href: "/access",
-      title: "周辺とアクセス",
-      body: "一色海岸まで徒歩 8 分、路線バスの停留所までは 1 分。歩いて 30 秒のコンビニと徒歩 5 分の地元スーパーで、滞在中の買い出しもすぐに済みます。海のそばの、静かな住宅地です。",
-      img: "/images/access/access-balcony.jpg",
-      cta: "アクセスを見る",
-    },
-    {
-      href: "/rooms#overview",
-      title: "設備と備品",
-      body: "調理器具は一式、食器は人数分。ドラム式洗濯機は洗剤つきで、自宅と同じように洗濯ができます。タオルや歯ブラシ、シャンプーなどのアメニティも揃えました。",
-      img: "/images/rooms/kitchen-01.jpg",
-      cta: "設備を見る",
     },
     {
       href: "/access#reservation",
@@ -149,7 +153,7 @@ export const TOP = {
     moreHref: "/rooms",
   },
 
-  // 02 過ごし方 — 章直下の写真スライドショー（ちょい見せ）。写真上に文字は載せない
+  // 03 過ごし方 — 章直下の写真スライドショー（ちょい見せ）。写真上に文字は載せない
   stayDetail: {
     slideshow: [
       { src: "/images/stay/stay-fuji.jpg", alt: "一色海岸の向こうに望む富士山" },
@@ -159,30 +163,10 @@ export const TOP = {
     ],
   },
 
-  // 03 オーナー — 章直下の要約
+  // 05 BEAT ICE — 章直下はサマリ 1 文だけ（詳細は /owner ページへ）
   ownerDetail: {
-    title: "アイスをつくる、私たちのこと",
-    intro:
-      "田んぼでの米づくりから、学校給食への提供、料理教室やマルシェの主催まで。2015 年に葉山へ移り住んでから、暮らしとものづくりをふたりで続けてきました。この町で好きになったものを、訪れる人にも見つけていただけたら嬉しくて、この宿を営んでいます。",
-    // 各カードの写真は 1 枠でじわっと切り替わるスライドショー（images の順にローテーション）
-    works: [
-      {
-        title: "棚田米のアイスクリーム",
-        body: "自分たちで育てたお米からつくる、米麹由来のやさしい甘み。地域の学校給食に届け、教室で授業をすることもあります。",
-        images: [
-          { src: "/images/owner/owner-icecream.webp", alt: "棚田米のアイスクリーム" },
-          { src: "/images/owner/owner-school-lunch.jpg", alt: "学校給食に届ける葉山アイス" },
-        ],
-      },
-      {
-        title: "田んぼでの営み",
-        body: "棚田で土にふれ、季節とともに米を育てる暮らしを続けています。",
-        images: [
-          { src: "/images/owner/owner-tanada-work.jpg", alt: "棚田での米づくり" },
-          { src: "/images/about-hero-tanada.jpg", alt: "夕陽に染まる葉山の棚田" },
-        ],
-      },
-    ],
+    summary:
+      "2015 年に葉山へ移り住み、田んぼでの米づくりから料理教室やマルシェの主催まで、暮らしとものづくりをふたりで続けています。",
   },
 
   // 04 周辺とアクセス — 章直下の要約（たどり着くための情報 + 地図の埋め込み）
@@ -195,11 +179,11 @@ export const TOP = {
       { label: "チェックイン", value: "16:00 – 23:00" },
       { label: "チェックアウト", value: "11:00" },
     ],
-    mapsCta: "Google マップで見る",
+    // iframeTitle は帯の地図 iframe の title 属性として使われる
     iframeTitle: "TERRA HAYAMA — 葉山町一色の地図",
   },
 
-  // 05 設備と備品 — 章直下の要約（4 行の一覧）
+  // 02 設備と備品 — 章直下の要約（4 行の一覧）
   amenitiesDetail: {
     rows: [
       { label: "キッチン", value: "2 口 IH・冷蔵庫・炊飯器・オーブンレンジ。調理器具は一式、食器は人数分。" },
