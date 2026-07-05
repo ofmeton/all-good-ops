@@ -51,7 +51,7 @@ function collectImages(): string[] {
 export default function StudioPage() {
   if (process.env.NODE_ENV === "production") notFound();
 
-  const copySource = fs.readFileSync(path.join(process.cwd(), "app", "copy.ts"), "utf8");
+  const copySource = fs.readFileSync(path.join(process.cwd(), "app", "copy", "ja.ts"), "utf8");
   const fields = extractFields(copySource);
   const galleries = extractGalleries(copySource);
   const images = collectImages();

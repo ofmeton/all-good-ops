@@ -480,3 +480,25 @@ export const RESERVE_PAGE = {
   lead: "空き状況をカレンダーでご確認のうえ、Airbnb のページからご予約ください。",
   liveLabel: "Airbnb と連携中（最大15分前の情報です）", // カレンダー右上、Airbnb 連携できているときだけ表示
 };
+
+/* ==================================================================
+ * 集約 export — getCopy(locale) から言語オブジェクトとして参照する。
+ * 上の個別 export（SITE / NAV / …）は studio エディタ（AST 解析）と
+ * 既存 import（`import { TOP } from "../copy"`）の互換のため維持し、
+ * ここで 1 つのオブジェクトにまとめ直す。en.ts はこの形に一致させる。
+ * ================================================================== */
+export const ja = {
+  SITE,
+  NAV,
+  META,
+  OPENING,
+  TOP,
+  NOTICES,
+  POINTS,
+  CTA,
+  STAY_PAGE,
+  OWNER_PAGE,
+  ROOMS_PAGE,
+  ACCESS_PAGE,
+  RESERVE_PAGE,
+};

@@ -23,7 +23,7 @@ const MAX_IMAGE_PATH_LENGTH = 300;
 
 // 書き換え対象は copy.ts に固定する（リクエストからファイルパスは受け取らない）
 function getTargetPath(): string {
-  return path.join(process.cwd(), "app", "copy.ts");
+  return path.join(process.cwd(), "app", "copy", "ja.ts");
 }
 
 export async function POST(req: Request) {
