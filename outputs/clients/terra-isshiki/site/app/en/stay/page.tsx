@@ -13,6 +13,10 @@ export const metadata = {
     title: copy.STAY_PAGE.metaTitle,
     description: copy.STAY_PAGE.metaDescription,
   },
+  twitter: {
+    title: copy.STAY_PAGE.metaTitle,
+    description: copy.STAY_PAGE.metaDescription,
+  },
 };
 
 export default function StayPageEn() {

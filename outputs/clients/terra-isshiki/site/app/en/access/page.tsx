@@ -13,6 +13,10 @@ export const metadata = {
     title: copy.ACCESS_PAGE.metaTitle,
     description: copy.ACCESS_PAGE.metaDescription,
   },
+  twitter: {
+    title: copy.ACCESS_PAGE.metaTitle,
+    description: copy.ACCESS_PAGE.metaDescription,
+  },
 };
 
 export default function AccessPageEn() {

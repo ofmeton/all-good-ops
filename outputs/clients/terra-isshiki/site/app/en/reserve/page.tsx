@@ -11,6 +11,9 @@ export const metadata = {
     ...openGraphFor("en", "/reserve"),
     title: copy.RESERVE_PAGE.metaTitle,
   },
+  twitter: {
+    title: copy.RESERVE_PAGE.metaTitle,
+  },
 };
 
 export default function ReservePageEn() {

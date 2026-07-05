@@ -13,6 +13,10 @@ export const metadata = {
     title: copy.ROOMS_PAGE.metaTitle,
     description: copy.ROOMS_PAGE.metaDescription,
   },
+  twitter: {
+    title: copy.ROOMS_PAGE.metaTitle,
+    description: copy.ROOMS_PAGE.metaDescription,
+  },
 };
 
 export default function RoomsPageEn() {

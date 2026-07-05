@@ -13,6 +13,10 @@ export const metadata = {
     title: copy.OWNER_PAGE.metaTitle,
     description: copy.OWNER_PAGE.metaDescription,
   },
+  twitter: {
+    title: copy.OWNER_PAGE.metaTitle,
+    description: copy.OWNER_PAGE.metaDescription,
+  },
 };
 
 export default function OwnerPageEn() {
