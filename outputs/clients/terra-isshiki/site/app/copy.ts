@@ -77,11 +77,11 @@ export const TOP = {
   // FV 背景のスライドショー（建物の外観・内観が伝わる写真のみ）
   heroSlides: [
     { src: "/images/hero/hero-exterior-01.jpg", alt: "TERRA HAYAMA 外観 — 白漆喰と焼杉の蔵のような佇まい" },
-    { src: "/images/hero/hero-02-bedroom.jpg", alt: "TERRA HAYAMA 寝室" },
-    { src: "/images/library/terra-027.jpg", alt: "TERRA HAYAMA ダイニングとキッチン" },
-    { src: "/images/library/terra-034.jpg", alt: "TERRA HAYAMA 和モダンの空間" },
-    { src: "/images/library/terra-034.jpg", alt: "" },
-    { src: "/images/library/terra-034.jpg", alt: "" },
+    { src: "/images/library/terra-005.jpg", alt: "TERRA HAYAMA ダイニングとキッチン" },
+    { src: "/images/library/terra-027.jpg", alt: "" },
+    { src: "/images/library/terra-017.jpg", alt: "" },
+    { src: "/images/library/terra-044.jpg", alt: "" },
+    { src: "/images/library/terra-016.jpg", alt: "" },
   ],
 
   // 6 章の帯（タイトル → 写真 → 本文 → リンク）
@@ -291,8 +291,8 @@ export const OWNER_PAGE = {
   sideLabel: "葉山に暮らす", // PC で縦書き表示される添え書き
   intro: [
     "TERRA HAYAMA を営む私たち BEAT ICE は、棚田で育てたお米からアイスクリームをつくっています。",
-    "田んぼでの米づくりから、学校給食への提供、料理教室やマルシェの主催まで。さまざまな営みの延長に、この宿があります。",
-    "葉山に移り住んで、十年。この町で私たちが好きになったものを、訪れる人にも見つけてもらえたらと願いながら、TERRA HAYAMA を営んでいます。",
+    "田んぼでの米づくりから、学校給食への提供、料理教室やマルシェの主催まで。",
+    "葉山に移り住んで、十年。さまざまな営みの延長に、この宿があります。",
   ],
   // 公式サイトへの導線（導入文の下に表示）
   officialCta: { label: "BEAT ICE 公式サイト", href: "https://www.beatice.jp/pages/about-us" },
