@@ -3,6 +3,7 @@ import Link from "next/link";
 import { SiteHeader } from "../_components/SiteHeader";
 import { ReservationCTA } from "../_components/ReservationCTA";
 import { ParallaxLayer } from "../_components/ParallaxLayer";
+import { SiteFooter } from "../_components/SiteFooter";
 import { STAY_PAGE } from "../copy";
 
 /* 文言・写真パスは app/copy.ts（STAY_PAGE）で編集できます。 */
@@ -156,6 +157,8 @@ export default function StayPage() {
           <span aria-hidden className="text-[13px]">→</span>
         </Link>
       </section>
+
+      <SiteFooter />
     </main>
   );
 }

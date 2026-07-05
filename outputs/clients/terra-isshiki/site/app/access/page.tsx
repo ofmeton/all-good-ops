@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { SiteHeader } from "../_components/SiteHeader";
 import { ParallaxLayer } from "../_components/ParallaxLayer";
+import { SiteFooter } from "../_components/SiteFooter";
 import { SITE, ACCESS_PAGE, POINTS } from "../copy";
 
 /* 文言・写真パスは app/copy.ts（ACCESS_PAGE / POINTS / SITE）で編集できます。 */
@@ -91,19 +92,6 @@ export default function AccessPage() {
                 </div>
               ))}
             </dl>
-
-            <a
-              href={SITE.airbnbUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group inline-flex items-center gap-4 font-serif text-[13.5px] md:text-[clamp(12.6px,0.71vw,17.5px)] tracking-[0.08em] text-(--color-base-dark)"
-            >
-              <span className="relative">
-                {SITE.reserveButton}
-                <span className="absolute -bottom-1 left-0 h-px w-full bg-(--color-base-dark)/30 transition-colors duration-500 group-hover:bg-(--color-base-dark)" />
-              </span>
-              <span aria-hidden>→</span>
-            </a>
           </div>
 
           <div className="relative aspect-[4/3] md:aspect-auto md:min-h-[82svh] w-full overflow-hidden">
@@ -190,6 +178,8 @@ export default function AccessPage() {
           <span aria-hidden className="text-[13px]">→</span>
         </Link>
       </section>
+
+      <SiteFooter />
     </main>
   );
 }

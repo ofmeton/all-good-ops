@@ -4,6 +4,7 @@ import { SiteHeader } from "../_components/SiteHeader";
 import { ReservationCTA } from "../_components/ReservationCTA";
 import { ParallaxLayer } from "../_components/ParallaxLayer";
 import { StackedPhotos } from "../_components/StackedPhotos";
+import { SiteFooter } from "../_components/SiteFooter";
 import { OWNER_PAGE } from "../copy";
 
 /* 文言・写真パスは app/copy.ts（OWNER_PAGE）で編集できます。 */
@@ -82,7 +83,7 @@ export default function OwnerPage() {
                 {c.officialCta.label}
                 <span className="absolute -bottom-1 left-0 h-px w-full bg-(--color-base-dark)/30 transition-colors duration-500 group-hover:bg-(--color-base-dark)" />
               </span>
-              <span aria-hidden className="text-[13px]">↗</span>
+              <span aria-hidden className="text-[13px]">→</span>
             </a>
           </div>
         </div>
@@ -119,7 +120,7 @@ export default function OwnerPage() {
                     {a.linkLabel}
                     <span className="absolute -bottom-1 left-0 h-px w-full bg-(--color-base-dark)/30 transition-colors duration-500 group-hover:bg-(--color-base-dark)" />
                   </span>
-                  <span aria-hidden className="text-[12px]">↗</span>
+                  <span aria-hidden className="text-[12px]">→</span>
                 </a>
               </div>
             ))}
@@ -143,7 +144,7 @@ export default function OwnerPage() {
                     {link.label}
                     <span className="absolute -bottom-1 left-0 h-px w-full bg-(--color-base-dark)/30 transition-colors duration-500 group-hover:bg-(--color-base-dark)" />
                   </span>
-                  <span aria-hidden className="text-[12px]">↗</span>
+                  <span aria-hidden className="text-[12px]">→</span>
                 </a>
               ))}
             </div>
@@ -169,6 +170,8 @@ export default function OwnerPage() {
           <span aria-hidden className="text-[13px]">→</span>
         </Link>
       </section>
+
+      <SiteFooter />
     </main>
   );
 }

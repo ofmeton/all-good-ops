@@ -22,7 +22,7 @@ export const SITE = {
   footerBrand: "TERRA",
   footerArea: "Hayama, Isshiki",
   copyright: "© 2026 TERRA HAYAMA. All rights reserved.",
-  reserveDock: "ご予約はこちら", // 画面右下に浮いている予約ボタン
+  reserveDock: "空き状況を見る", // 画面右下に浮いている予約ボタン（/reserve へ）
   reserveButton: "Airbnb で予約する", // ページ内の予約ボタン
 };
 
@@ -188,9 +188,12 @@ export const TOP = {
     moreHref: "/rooms#overview",
   },
 
-  // 06 予約と空き状況 — 章直下の要約（info/Airbnbボタン/空き状況リンクは帯・/reserveと重複するため撤去。ご利用にあたってのみ）
+  // 06 予約と空き状況 — 章直下の要約（info/Airbnbボタンは帯・/reserveと重複するため撤去。
+  // ご利用にあたって + その下に /reserve への入口リンクを1つだけ残す）
   reservationDetail: {
     notesTitle: "ご利用にあたって", // アコーディオンの見出し（中身は NOTICES）
+    availabilityCta: "空き状況を見る",
+    availabilityHref: "/reserve",
   },
 };
 
@@ -287,17 +290,17 @@ export const OWNER_PAGE = {
   sideLabel: "葉山に暮らす", // PC で縦書き表示される添え書き
   intro: [
     "TERRA HAYAMA を営む私たち BEAT ICE は、棚田で育てたお米からアイスクリームをつくっています。",
-    "田んぼでの米づくりから、学校給食への提供、料理教室やマルシェの主催まで。さまざまな取り組みの延長に、この宿があります。",
+    "田んぼでの米づくりから、学校給食への提供、料理教室やマルシェの主催まで。さまざまな営みの延長に、この宿があります。",
     "葉山に移り住んで、十年。この町で私たちが好きになったものを、訪れる人にも見つけてもらえたらと願いながら、TERRA HAYAMA を営んでいます。",
   ],
   // 公式サイトへの導線（導入文の下に表示）
   officialCta: { label: "BEAT ICE 公式サイト", href: "https://www.beatice.jp/pages/about-us" },
-  worksTitle: "葉山での、私たちの営み",
+  worksTitle: "私たちの営み",
   // 各カード: images は 2 枚をずらして重ねる（1 枚目が手前）。href は BEAT ICE 公式の関連ページ
   activities: [
     {
       title: "棚田米のアイスクリーム",
-      body: "自分たちで育てたお米からつくる、米麹由来のやさしい甘みのアイスクリームです。",
+      body: "自分たちで育てたお米からつくる、甘酒由来のやさしい甘みのアイスクリームです。",
       images: [
         { src: "/images/owner/owner-icecream.webp", alt: "器に盛った葉山アイス" },
         { src: "/images/library/icecream-01.jpg", alt: "葉山アイスのパッケージ" },
@@ -307,7 +310,7 @@ export const OWNER_PAGE = {
     },
     {
       title: "学校給食の提供",
-      body: "つくったアイスクリームを地域の学校給食に届けています。招かれて、教室で授業をすることもあります。",
+      body: "つくったアイスクリームを地域の学校給食に届けています。教室で棚田について授業をさせていただくこともあります。",
       images: [
         { src: "/images/owner/owner-school-lunch.jpg", alt: "学校給食に届く葉山アイス" },
         { src: "/images/library/school-class.jpg", alt: "教室での授業のようす" },
@@ -317,7 +320,7 @@ export const OWNER_PAGE = {
     },
     {
       title: "田んぼでの営み",
-      body: "棚田で土にふれ、季節とともに米を育てています。",
+      body: "仲間たちと棚田で土にふれ、季節とともに米を育てています。",
       images: [
         { src: "/images/library/taue-02.jpg", alt: "田植えのようす" },
         { src: "/images/owner/owner-tanada-work.jpg", alt: "棚田での米づくり" },
@@ -474,5 +477,4 @@ export const RESERVE_PAGE = {
   metaTitle: "ご予約",
   title: "ご予約と空き状況",
   lead: "空き状況をカレンダーでご確認のうえ、Airbnb のページからご予約ください。",
-  notesTitle: "ご利用にあたって", // アコーディオンの見出し（中身は NOTICES）
 };

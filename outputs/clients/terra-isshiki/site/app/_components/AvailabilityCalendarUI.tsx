@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { SITE } from "../copy";
 
-const AIRBNB_URL = "https://www.airbnb.jp/rooms/1399746059557999139";
+const AIRBNB_URL = SITE.airbnbUrl;
 const WEEKDAYS_JP = ["日", "月", "火", "水", "木", "金", "土"];
 const MONTH_LABELS = [
   "January", "February", "March", "April", "May", "June",
@@ -27,11 +28,11 @@ export function AvailabilityCalendarUI({
         <p className="font-garamond italic text-[11.1px] md:text-[clamp(9.8px,0.6vw,15.4px)] tracking-[0.4em] uppercase text-(--color-soil)">
           Availability
         </p>
-        <p className="font-garamond text-[10.25px] md:text-[clamp(9.1px,0.49vw,12.6px)] tracking-[0.32em] uppercase text-(--color-base-dark)/55">
-          {isLive
-            ? "Live from Airbnb · 1h cache"
-            : "Coming soon — 当面は Airbnb で確認"}
-        </p>
+        {isLive ? (
+          <p className="font-garamond text-[10.25px] md:text-[clamp(9.1px,0.49vw,12.6px)] tracking-[0.32em] uppercase text-(--color-base-dark)/55">
+            Live from Airbnb · 1h cache
+          </p>
+        ) : null}
       </div>
 
       {/* Mobile tabs */}
