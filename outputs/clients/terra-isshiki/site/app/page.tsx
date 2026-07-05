@@ -100,7 +100,7 @@ function AccessDetail() {
   return (
     <DetailShell>
       {/* 所在地の要約 dl。地図は帯側の写真枠に額装済みのためここでは持たない */}
-      <dl className="border-t border-(--color-base-dark)/15 divide-y divide-(--color-base-dark)/10 max-w-[720px]">
+      <dl className="border-t border-(--color-base-dark)/15 divide-y divide-(--color-base-dark)/10 max-w-[720px] md:mx-auto">
         {d.rows.map((row) => (
           <div
             key={row.label}
@@ -117,7 +117,7 @@ function AccessDetail() {
       </dl>
       <Link
         href={d.moreHref}
-        className="group mt-10 inline-flex items-center gap-4 font-serif text-[13.5px] md:text-[clamp(12.6px,0.71vw,17.5px)] tracking-[0.08em] text-(--color-base-dark)"
+        className="group mt-10 inline-flex items-center gap-4 font-serif text-[13.5px] md:text-[clamp(12.6px,0.71vw,17.5px)] tracking-[0.08em] text-(--color-base-dark) md:flex md:w-fit md:ml-auto"
       >
         <span className="relative">
           {d.moreCta}

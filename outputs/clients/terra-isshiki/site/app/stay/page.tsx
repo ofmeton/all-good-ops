@@ -72,7 +72,8 @@ export default function StayPage() {
                 : "text-(--color-mist)";
 
             // 上山口は補足扱い（全員が行ける場所ではないため前面に出さない）:
-            // 写真幅を一回り絞り、番号・タイトルをワンサイズ小さくして温度感を落とす
+            // 番号・タイトルをワンサイズ小さくして温度感を落とす。
+            // 写真は全幅で見せ（本人希望で左右の余白を解消）、切り抜き中心のみ下端に寄せる
             const isSupplement = i === 2;
 
             return (
@@ -105,11 +106,7 @@ export default function StayPage() {
                 {/* Visual — full bleed, large. image が null の場合は従来どおり画像なしレイアウト
                     （紙のノイズ + 大きな通し番号のみ、icon は廃止済みのため表示しない） */}
                 {exp.image ? (
-                  <div
-                    className={`relative aspect-[16/10] md:aspect-[5/2] overflow-hidden bg-(--color-base-dark)/5 ${
-                      isSupplement ? "w-full md:max-w-[70%] md:mx-auto" : "w-full"
-                    }`}
-                  >
+                  <div className="relative aspect-[16/10] md:aspect-[5/2] w-full overflow-hidden bg-(--color-base-dark)/5">
                     <ParallaxLayer>
                       <Image
                         src={exp.image}
@@ -117,7 +114,9 @@ export default function StayPage() {
                         fill
                         sizes="100vw"
                         quality={88}
-                        className="object-cover object-center"
+                        className={`object-cover object-center ${
+                          isSupplement ? "md:object-bottom" : ""
+                        }`}
                       />
                     </ParallaxLayer>
                   </div>
