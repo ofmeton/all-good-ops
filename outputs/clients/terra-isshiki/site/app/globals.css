@@ -132,19 +132,6 @@ body.has-fv.fv-passed .site-header {
   pointer-events: auto;
 }
 
-/* ヘッダー背景グラデ(.header-scrim)も header 本体と同じ表示制御に連動させる
-   （FV の間は隠し、FV を抜けた fv-passed で現れる。下層ページは has-fv が無く常時表示）*/
-body.has-fv .header-scrim {
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity .7s cubic-bezier(0.16,1,0.3,1), visibility .7s;
-}
-
-body.has-fv.fv-passed .header-scrim {
-  opacity: 1;
-  visibility: visible;
-}
-
 /* 予約ボタン(dock)は FV の間は隠し、コンセプトを読み終える頃(fv-deep)に
    じわっとフェードイン。ヘッダー(fv-passed)より深い位置まで遅らせる。 */
 body.has-fv .dock {
