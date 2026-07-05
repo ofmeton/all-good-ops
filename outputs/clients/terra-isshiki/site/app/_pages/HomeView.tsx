@@ -360,7 +360,12 @@ export function HomeView({ copy, locale }: { copy: SiteCopy; locale: Locale }) {
                           band.cta ? "mb-10" : ""
                         }`}
                       >
-                        {band.body}
+                        {band.body.split("\n").map((line, li, arr) => (
+                          <span key={li}>
+                            {line}
+                            {li < arr.length - 1 ? <br /> : null}
+                          </span>
+                        ))}
                       </p>
                     ) : null}
                     {band.cta ? (

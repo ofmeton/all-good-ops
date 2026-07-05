@@ -150,7 +150,7 @@ body.has-fv.fv-deep .dock {
 /* Opening FV: v2-vibe intro + technique E paper cover */
 .intro {
   position: relative;
-  height: 325svh;
+  height: 360svh;
   background: var(--color-base-dark);
 }
 
@@ -232,7 +232,7 @@ body.has-fv.fv-deep .dock {
   color: var(--color-base-light);
   font-family: var(--font-eb-garamond), serif;
   font-style: italic;
-  font-size: 12px;
+  font-size: 14px;
   letter-spacing: .2em;
   opacity: .85;
 }
