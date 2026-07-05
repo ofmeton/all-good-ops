@@ -48,6 +48,17 @@ export function SiteHeader({
 
   return (
     <>
+      {/* 上→下フェードのグラデ背景。ヘッダー文字の可読性を底上げする。
+          header 本体の mix-blend-mode:difference の影響を受けないよう header の外・後ろ(z下)に敷き、
+          下端は境界が分からないよう base-dark を transparent へフェードさせる。 */}
+      <div
+        aria-hidden
+        className="header-scrim pointer-events-none fixed inset-x-0 top-0 z-30 h-[clamp(88px,13vh,150px)]"
+        style={{
+          background:
+            "linear-gradient(to bottom, rgba(26,20,16,0.42) 0%, rgba(26,20,16,0.16) 50%, rgba(26,20,16,0) 100%)",
+        }}
+      />
       {/* 背景色は変えず mix-blend-mode:difference のみで反転させる（vibe-v2 踏襲）。
           暗い写真の上では白、明るい紙背景の上では自動的に黒く見える。 */}
       <header
