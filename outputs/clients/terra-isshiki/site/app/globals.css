@@ -10,8 +10,7 @@
   --color-paper: #ECE5D8;
   --ease: cubic-bezier(.4,.12,.08,1);
   --easo: cubic-bezier(.16,1,.3,1);
-  /* デスクトップ文字サイズ4段クラスタの min 値。FontScalePanel（dev限定）が
-     見比べ用に動的上書きするための変数。本番は既定値(標準パターンB)のまま使う。 */
+  /* デスクトップ文字サイズ4段クラスタの min 値（FVコンセプト文13.5pxを最小基準に統一）。 */
   --fs-lv1: 13.5px;
   --fs-lv2: 14.5px;
   --fs-lv3: 15.5px;
