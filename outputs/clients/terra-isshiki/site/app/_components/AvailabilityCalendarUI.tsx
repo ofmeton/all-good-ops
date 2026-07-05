@@ -1,10 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { SITE, RESERVE_PAGE } from "../copy";
+import type { Locale } from "../i18n/config";
+import { getDict } from "../i18n/dictionary";
 
-const AIRBNB_URL = SITE.airbnbUrl;
-const WEEKDAYS_JP = ["日", "月", "火", "水", "木", "金", "土"];
 const MONTH_LABELS = [
   "January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December",
@@ -16,11 +15,18 @@ export type PlainMonth = { year: number; month: number; weeks: PlainCell[][] };
 export function AvailabilityCalendarUI({
   months,
   isLive,
+  locale,
+  airbnbUrl,
+  liveLabel,
 }: {
   months: PlainMonth[];
   isLive: boolean;
+  locale: Locale;
+  airbnbUrl: string;
+  liveLabel: string;
 }) {
   const [active, setActive] = useState(0);
+  const t = getDict(locale);
 
   return (
     <div>
@@ -30,7 +36,7 @@ export function AvailabilityCalendarUI({
         </p>
         {isLive && (
           <p className="font-mincho text-[10.5px] md:text-[clamp(9.5px,0.44vw,12.6px)] tracking-[0.06em] text-(--color-base-dark)/55">
-            {RESERVE_PAGE.liveLabel}
+            {liveLabel}
           </p>
         )}
       </div>
@@ -38,7 +44,7 @@ export function AvailabilityCalendarUI({
       {/* Mobile tabs */}
       <div
         role="tablist"
-        aria-label="表示する月"
+        aria-label={t.monthTablistAria}
         className="md:hidden grid grid-cols-3 mb-8 border-b border-(--color-base-dark)/15"
       >
         {months.map((m, i) => {
@@ -84,7 +90,7 @@ export function AvailabilityCalendarUI({
               </span>
             </div>
             <div className="grid grid-cols-7 gap-y-1 text-center">
-              {WEEKDAYS_JP.map((w, wi) => (
+              {t.weekdays.map((w, wi) => (
                 <div
                   key={w}
                   className={`font-garamond text-[9.39px] md:text-[clamp(8.4px,0.43vw,11.2px)] tracking-[0.32em] uppercase pb-2 border-b border-(--color-base-dark)/15 ${
@@ -104,8 +110,8 @@ export function AvailabilityCalendarUI({
                 ) : cell.blocked ? (
                   <div
                     key={ci}
-                    title="満室"
-                    aria-label={`${cell.day}日 満室`}
+                    title={t.bookedTitle}
+                    aria-label={t.bookedDayAria(cell.day)}
                     className="relative aspect-square flex items-center justify-center font-garamond text-[12.81px] md:text-[clamp(11.2px,0.6vw,15.4px)] tracking-[0.04em] text-(--color-base-dark)/30 bg-(--color-base-dark)/[0.04]"
                   >
                     <span className="line-through decoration-(--color-base-dark)/40 decoration-[1px]">
@@ -115,10 +121,10 @@ export function AvailabilityCalendarUI({
                 ) : (
                   <a
                     key={ci}
-                    href={AIRBNB_URL}
+                    href={airbnbUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label={`${cell.day}日 — Airbnb で予約`}
+                    aria-label={t.bookDayAria(cell.day)}
                     className={`relative aspect-square flex items-center justify-center font-garamond text-[12.81px] md:text-[clamp(11.2px,0.6vw,15.4px)] tracking-[0.04em] transition-colors duration-300 hover:bg-(--color-soil)/10 ${
                       cell.today
                         ? "text-(--color-soil) font-semibold"
@@ -140,13 +146,13 @@ export function AvailabilityCalendarUI({
       <div className="mt-10 md:mt-14 flex flex-wrap items-center gap-x-8 gap-y-3 font-mincho text-[11.1px] md:text-[clamp(9.8px,0.49vw,12.6px)] tracking-[0.06em] text-(--color-base-dark)/65">
         <span className="inline-flex items-center gap-2">
           <span className="inline-block h-3.5 w-3.5 bg-(--color-base-dark)/[0.04] line-through decoration-(--color-base-dark)/40" />
-          満室・チェックアウト前後
+          {t.legendBooked}
         </span>
         <span className="inline-flex items-center gap-2">
           <span className="inline-block h-3.5 w-3.5 border border-(--color-base-dark)/30" />
-          空き・クリックで Airbnb 予約画面へ
+          {t.legendOpen}
         </span>
-        <span className="hidden md:inline">※ Airbnb の予約状況と最大 1 時間のラグがあります。</span>
+        <span className="hidden md:inline">{t.lagNote}</span>
       </div>
     </div>
   );

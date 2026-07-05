@@ -1,57 +1,15 @@
-import { SiteHeader } from "../_components/SiteHeader";
-import { AvailabilityCalendar } from "../_components/AvailabilityCalendar";
-import { SiteFooter } from "../_components/SiteFooter";
-import { SITE, RESERVE_PAGE } from "../copy";
+import { ReserveView } from "../_pages/ReserveView";
+import { getCopy } from "../copy";
 
 /* 文言は app/copy.ts（RESERVE_PAGE / SITE / NOTICES）で編集できます。
-   このページは自分自身への予約導線になるため、右下の予約 dock は隠す
-  （studio ページの .studio-root と同じ body:has() パターン）。 */
+   このページは _pages/ReserveView.tsx へ薄く委譲するだけです。 */
+
+const copy = getCopy("ja");
 
 export const metadata = {
-  title: RESERVE_PAGE.metaTitle,
+  title: copy.RESERVE_PAGE.metaTitle,
 };
 
 export default function ReservePage() {
-  const c = RESERVE_PAGE;
-  return (
-    <main className="reserve-root bg-(--color-base-light)">
-      {/* 右下の予約 dock（Airbnb 外部リンク）は、このページ自身が予約導線のため非表示にする */}
-      <style>{`body:has(.reserve-root) .dock { display: none !important; }`}</style>
-
-      <SiteHeader variant="page" current="Reserve" />
-
-      {/* 写真なしの静かな導入 — ヘッダー分の余白を確保しつつ、下層ページの見出し級で始める */}
-      <section className="px-6 pt-[clamp(140px,16vw,220px)] pb-[clamp(64px,6vw,96px)] md:px-12">
-        <div className="mx-auto max-w-[1100px]">
-          <h1 className="font-serif text-[22px] md:text-[clamp(23.8px,1.97vw,50.4px)] leading-[1.36] tracking-[0.04em] text-(--color-base-dark)">
-            {c.title}
-          </h1>
-          <p className="mt-6 md:mt-8 max-w-[640px] font-mincho text-[13px] md:text-[clamp(11.2px,0.71vw,18.2px)] leading-[1.95] tracking-[0.07em] text-(--color-base-dark)/80">
-            {c.lead}
-          </p>
-        </div>
-      </section>
-
-      {/* Availability calendar + Airbnb 予約ボタン */}
-      <section className="px-6 pb-[clamp(96px,8.34vw,128px)] md:px-12">
-        <div className="mx-auto max-w-[1100px]">
-          <AvailabilityCalendar monthCount={3} />
-
-          <div className="mt-14 md:mt-20 text-center md:text-left">
-            <a
-              href={SITE.airbnbUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group inline-flex items-center gap-4 bg-(--color-base-dark) text-(--color-base-light) font-serif text-[13px] md:text-[clamp(12.6px,0.71vw,17.5px)] tracking-[0.1em] px-8 py-4 hover:bg-(--color-base-dark)/85 transition-colors"
-            >
-              <span>{SITE.reserveButton}</span>
-              <span aria-hidden>→</span>
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <SiteFooter ctaMode="airbnb" />
-    </main>
-  );
+  return <ReserveView copy={copy} locale="ja" />;
 }

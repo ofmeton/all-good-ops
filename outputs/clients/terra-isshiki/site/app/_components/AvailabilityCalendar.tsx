@@ -3,12 +3,18 @@ import {
   buildUpcomingMonths,
   fetchAvailability,
 } from "../_lib/availability";
+import type { SiteCopy } from "../copy/types";
+import type { Locale } from "../i18n/config";
 import { AvailabilityCalendarUI, type PlainMonth } from "./AvailabilityCalendarUI";
 
 export async function AvailabilityCalendar({
   monthCount = 3,
+  copy,
+  locale,
 }: {
   monthCount?: number;
+  copy: SiteCopy;
+  locale: Locale;
 }) {
   const ranges = await fetchAvailability();
   const blocked = buildBlockedSet(ranges);
@@ -28,5 +34,13 @@ export async function AvailabilityCalendar({
     ),
   }));
 
-  return <AvailabilityCalendarUI months={months} isLive={isLive} />;
+  return (
+    <AvailabilityCalendarUI
+      months={months}
+      isLive={isLive}
+      locale={locale}
+      airbnbUrl={copy.SITE.airbnbUrl}
+      liveLabel={copy.RESERVE_PAGE.liveLabel}
+    />
+  );
 }

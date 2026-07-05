@@ -6,22 +6,24 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { HeroSlideshow } from "./HeroSlideshow";
-import { OPENING } from "../copy";
+import type { SiteCopy } from "../copy/types";
 
 gsap.registerPlugin(ScrollTrigger);
 
 type Slide = { src: string; alt: string };
 
 /* コンセプト文は app/copy.ts（OPENING.stanzas）で編集できます。 */
-const CONCEPT_STANZAS = OPENING.stanzas;
 
 export function OpeningHero({
   slides,
+  opening,
   children,
 }: {
   slides: Slide[];
+  opening: SiteCopy["OPENING"];
   children?: React.ReactNode;
 }) {
+  const CONCEPT_STANZAS = opening.stanzas;
   const rootRef = useRef<HTMLDivElement | null>(null);
 
   // vibe-v2 (wireframes/v2-vibe/app.js) の opening 幕 + ScrollTrigger 連動を
@@ -127,13 +129,13 @@ export function OpeningHero({
             />
           </div>
           <div className="intro__scroll" aria-hidden>
-            {OPENING.scrollLabel}
+            {opening.scrollLabel}
           </div>
         </div>
 
         <div className="intro__read">
           <div className="intro__concept">
-            <p className="intro__tag">{OPENING.tag}</p>
+            <p className="intro__tag">{opening.tag}</p>
             {CONCEPT_STANZAS.map((stanza) => (
               <p key={stanza}>
                 {stanza.split("\n").map((line, i, arr) => (

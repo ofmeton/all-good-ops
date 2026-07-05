@@ -1,5 +1,7 @@
 import Link from "next/link";
-import { SITE } from "../copy";
+import type { SiteCopy } from "../copy/types";
+import type { Locale } from "../i18n/config";
+import { localizeHref } from "../i18n/routing";
 
 /* サイト共通フッター。ブランド・住所・運営表記・CTA・コピーライト。
    文言は app/copy.ts（SITE）で編集できます。
@@ -8,10 +10,15 @@ import { SITE } from "../copy";
   （自己ループを避けるため）。 */
 
 export function SiteFooter({
+  copy,
+  locale,
   ctaMode = "reserve",
 }: {
+  copy: SiteCopy;
+  locale: Locale;
   ctaMode?: "reserve" | "airbnb";
 }) {
+  const { SITE } = copy;
   const isAirbnb = ctaMode === "airbnb";
 
   return (
@@ -42,7 +49,7 @@ export function SiteFooter({
           </a>
         ) : (
           <Link
-            href="/reserve"
+            href={localizeHref("/reserve", locale)}
             className="group inline-flex items-center gap-3 font-serif text-[12.5px] md:text-[clamp(11.2px,0.6vw,15.4px)] tracking-[0.1em] border border-(--color-base-light)/20 px-7 py-4 md:px-[clamp(28px,2.19vw,56px)] md:py-[clamp(16px,1.09vw,28px)] hover:bg-(--color-base-light)/8 transition-colors"
           >
             <span>{SITE.footerReserveCta}</span>

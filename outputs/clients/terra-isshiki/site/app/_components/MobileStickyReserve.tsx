@@ -1,13 +1,22 @@
+"use client";
+
 import Link from "next/link";
-import { SITE } from "../copy";
+import { usePathname } from "next/navigation";
+import { getCopy } from "../copy";
+import { currentLocale, localizeHref } from "../i18n/routing";
 
 /* ボタン文言は app/copy.ts（SITE.reserveDock）で編集できます。
-   飛び先は空き状況・予約ページ（/reserve）— サイト内リンクなので Airbnb への外部遷移はしない。 */
+   飛び先は空き状況・予約ページ（/reserve）— サイト内リンクなので Airbnb への外部遷移はしない。
+   RootLayout 直下に置かれ locale を受け取れないため、usePathname() で自己判定する。 */
 
 export function MobileStickyReserve() {
+  const pathname = usePathname();
+  const locale = currentLocale(pathname);
+  const { SITE } = getCopy(locale);
+
   return (
     <Link
-      href="/reserve"
+      href={localizeHref("/reserve", locale)}
       aria-label={SITE.reserveDock}
       className="dock group xl:hidden fixed bottom-5 right-5 z-40 inline-flex items-center gap-3 rounded-full bg-(--color-base-dark) text-(--color-base-light) px-5 py-3.5 shadow-[0_8px_28px_-6px_rgba(26,20,16,0.55)] backdrop-blur-[2px] hover:bg-(--color-base-dark)/90 transition-colors duration-300"
     >

@@ -1,8 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { ROOMS_PAGE } from "../copy";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import type { SiteCopy } from "../copy/types";
+import type { Locale } from "../i18n/config";
+import { getDict, type Dict } from "../i18n/dictionary";
 
 /* 見出し・説明・写真は app/copy.ts（ROOMS_PAGE.gallery）で編集できます。 */
 
@@ -11,12 +13,6 @@ type Section = {
   description: string;
   items: { src: string }[];
 };
-
-const SECTIONS: Section[] = ROOMS_PAGE.gallery.map((section) => ({
-  caption: section.caption,
-  description: section.description,
-  items: section.items.map((src) => ({ src })),
-}));
 
 const AUTO_MS = 4500;
 
@@ -29,9 +25,11 @@ const AUTO_MS = 4500;
 function SectionCarousel({
   section,
   onZoom,
+  t,
 }: {
   section: Section;
   onZoom: (src: string, alt: string) => void;
+  t: Dict;
 }) {
   const trackRef = useRef<HTMLDivElement>(null);
   const [index, setIndex] = useState(0);
@@ -100,7 +98,7 @@ function SectionCarousel({
             onClick={() => onZoom(it.src, `${section.caption} ${i + 1}`)}
             className="relative shrink-0 basis-full snap-start cursor-zoom-in bg-(--color-base-dark)/5"
             style={{ aspectRatio: "3/2" }}
-            aria-label={`${section.caption} の写真 ${i + 1} を拡大表示`}
+            aria-label={t.galleryZoomAria(section.caption, i + 1)}
           >
             <Image
               src={it.src}
@@ -120,7 +118,7 @@ function SectionCarousel({
           <button
             type="button"
             onClick={() => goTo(index - 1)}
-            aria-label="前の写真"
+            aria-label={t.prevPhoto}
             className="hidden md:flex absolute top-1/2 left-4 -translate-y-1/2 h-11 w-11 items-center justify-center bg-(--color-base-light)/85 text-(--color-base-dark) backdrop-blur-[2px] hover:bg-(--color-base-light) transition-colors"
           >
             <span aria-hidden className="text-[18px] leading-none -mt-0.5">
@@ -130,7 +128,7 @@ function SectionCarousel({
           <button
             type="button"
             onClick={() => goTo(index + 1)}
-            aria-label="次の写真"
+            aria-label={t.nextPhoto}
             className="hidden md:flex absolute top-1/2 right-4 -translate-y-1/2 h-11 w-11 items-center justify-center bg-(--color-base-light)/85 text-(--color-base-dark) backdrop-blur-[2px] hover:bg-(--color-base-light) transition-colors"
           >
             <span aria-hidden className="text-[18px] leading-none -mt-0.5">
@@ -145,7 +143,7 @@ function SectionCarousel({
                 type="button"
                 key={i}
                 onClick={() => goTo(i)}
-                aria-label={`${i + 1} 枚目へ`}
+                aria-label={t.gotoPhotoAria(i + 1)}
                 aria-current={i === index ? "true" : undefined}
                 className={`h-1.5 rounded-full transition-all duration-300 ${
                   i === index
@@ -161,7 +159,23 @@ function SectionCarousel({
   );
 }
 
-export function RoomsGallery() {
+export function RoomsGallery({
+  gallery,
+  locale,
+}: {
+  gallery: SiteCopy["ROOMS_PAGE"]["gallery"];
+  locale: Locale;
+}) {
+  const t = getDict(locale);
+  const sections: Section[] = useMemo(
+    () =>
+      gallery.map((section) => ({
+        caption: section.caption,
+        description: section.description,
+        items: section.items.map((src) => ({ src })),
+      })),
+    [gallery],
+  );
   const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(
     null,
   );
@@ -185,7 +199,7 @@ export function RoomsGallery() {
 
   return (
     <>
-      {SECTIONS.map((section, sIdx) => (
+      {sections.map((section, sIdx) => (
         <section
           key={section.caption}
           className={`relative ${
@@ -203,7 +217,7 @@ export function RoomsGallery() {
           </div>
 
           {/* Auto-advancing carousel */}
-          <SectionCarousel section={section} onZoom={openZoom} />
+          <SectionCarousel section={section} onZoom={openZoom} t={t} />
         </section>
       ))}
 
@@ -220,7 +234,7 @@ export function RoomsGallery() {
       >
         <button
           type="button"
-          aria-label="閉じる"
+          aria-label={t.close}
           onClick={() => setLightbox(null)}
           className="absolute top-5 right-5 md:top-8 md:right-8 z-10 flex h-12 w-12 items-center justify-center text-(--color-base-light)"
         >

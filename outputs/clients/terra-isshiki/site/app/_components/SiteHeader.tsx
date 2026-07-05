@@ -2,8 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { NAV, SITE } from "../copy";
+import type { SiteCopy } from "../copy/types";
+import type { Locale } from "../i18n/config";
+import { localizeHref, switchLocalePath } from "../i18n/routing";
+import { getDict } from "../i18n/dictionary";
 
 /* ナビ項目・住所・予約ボタン文言は app/copy.ts で編集できます。 */
 
@@ -13,14 +17,21 @@ export function SiteHeader({
   variant = "page",
   current,
   delayBase = 0.2,
+  locale,
+  copy,
 }: {
   // variant は現在 styling には未使用。current の active 表示と互換性のため残置。
   variant?: SiteHeaderVariant;
   current?: string;
   delayBase?: number;
+  locale: Locale;
+  copy: SiteCopy;
 }) {
   void variant; // 互換性のため受け取るだけ
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+  const t = getDict(locale);
+  const { NAV, SITE } = copy;
 
   useEffect(() => {
     if (!open) return;
@@ -44,7 +55,7 @@ export function SiteHeader({
         style={{ mixBlendMode: "difference" }}
       >
         <Link
-          href="/"
+          href={localizeHref("/", locale)}
           className="block leading-none fade-up"
           style={{ animationDelay: `${delayBase}s` }}
           aria-label="TERRA HAYAMA"
@@ -63,13 +74,34 @@ export function SiteHeader({
           className="flex items-center gap-[clamp(14px,2vw,26px)] fade-up"
           style={{ animationDelay: `${delayBase + 0.25}s` }}
         >
-          <button
-            type="button"
-            aria-label="Language / 言語切替"
+          <div
+            aria-label={t.langSwitchAria}
             className="font-garamond italic text-[12px] md:text-[13px] tracking-[0.14em]"
           >
-            JP <span className="text-(--color-base-light)/85">/</span> EN
-          </button>
+            <Link
+              href={switchLocalePath(pathname, "ja")}
+              aria-current={locale === "ja" ? "true" : undefined}
+              className={
+                locale === "ja"
+                  ? "opacity-100"
+                  : "opacity-55 transition-opacity hover:opacity-100"
+              }
+            >
+              JP
+            </Link>
+            <span className="text-(--color-base-light)/85"> / </span>
+            <Link
+              href={switchLocalePath(pathname, "en")}
+              aria-current={locale === "en" ? "true" : undefined}
+              className={
+                locale === "en"
+                  ? "opacity-100"
+                  : "opacity-55 transition-opacity hover:opacity-100"
+              }
+            >
+              EN
+            </Link>
+          </div>
 
           <nav className="hidden md:block">
             <ul className="flex items-center gap-[clamp(22px,2.03vw,52px)] font-garamond text-[11.96px] md:text-[clamp(10.5px,0.71vw,18.2px)] tracking-[0.22em] uppercase">
@@ -78,7 +110,7 @@ export function SiteHeader({
                 return (
                   <li key={item.label} className="group">
                     <Link
-                      href={item.href}
+                      href={localizeHref(item.href, locale)}
                       className="relative inline-block py-2"
                       aria-current={active ? "page" : undefined}
                     >
@@ -97,7 +129,7 @@ export function SiteHeader({
 
           <button
             type="button"
-            aria-label="メニューを開く"
+            aria-label={t.openMenu}
             aria-expanded={open}
             onClick={() => setOpen(true)}
             className="md:hidden flex h-10 w-10 items-center justify-center"
@@ -106,7 +138,7 @@ export function SiteHeader({
               <span className="absolute -top-2 left-0 block h-px w-7 bg-(--color-base-light)" />
               <span className="absolute top-2 left-0 block h-px w-5 bg-(--color-base-light)" />
             </span>
-            <span className="sr-only">メニューを開く</span>
+            <span className="sr-only">{t.openMenu}</span>
           </button>
         </div>
       </header>
@@ -132,7 +164,7 @@ export function SiteHeader({
         >
           <div className="flex items-start justify-between">
             <Link
-              href="/"
+              href={localizeHref("/", locale)}
               onClick={() => setOpen(false)}
               className="block leading-none"
             >
@@ -145,7 +177,7 @@ export function SiteHeader({
             </Link>
             <button
               type="button"
-              aria-label="メニューを閉じる"
+              aria-label={t.closeMenu}
               onClick={() => setOpen(false)}
               className="h-10 w-10 flex items-center justify-center text-(--color-base-light)"
             >
@@ -163,7 +195,7 @@ export function SiteHeader({
                 return (
                   <li key={item.label}>
                     <Link
-                      href={item.href}
+                      href={localizeHref(item.href, locale)}
                       onClick={() => setOpen(false)}
                       className="group block py-3 border-b border-(--color-base-light)/15"
                       style={{
