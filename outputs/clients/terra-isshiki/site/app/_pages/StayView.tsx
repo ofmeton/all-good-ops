@@ -49,7 +49,7 @@ export function StayView({ copy, locale }: { copy: SiteCopy; locale: Locale }) {
             ))}
           </h1>
           <p
-            className="fade-up mt-5 md:mt-8 font-mincho text-[11.96px] md:text-[clamp(11.2px,0.71vw,18.2px)] leading-[1.85] tracking-[0.16em] text-(--color-base-light)/85"
+            className="fade-up mt-5 md:mt-8 font-mincho text-[11.96px] md:text-[clamp(var(--fs-lv3),0.71vw,18.2px)] leading-[1.85] tracking-[0.16em] text-(--color-base-light)/85"
             style={{ animationDelay: "0.7s" }}
           >
             {c.hero.lead}
@@ -95,7 +95,7 @@ export function StayView({ copy, locale }: { copy: SiteCopy; locale: Locale }) {
                   >
                     {exp.title}
                   </h2>
-                  <p className="font-mincho text-[11.96px] md:text-[clamp(11.2px,0.71vw,18.2px)] leading-[2.0] tracking-[0.08em] text-(--color-base-dark)/85 md:max-w-[900px]">
+                  <p className="font-mincho text-[11.96px] md:text-[clamp(var(--fs-lv3),0.71vw,18.2px)] leading-[2.0] tracking-[0.08em] text-(--color-base-dark)/85 md:max-w-[900px]">
                     {exp.body}
                   </p>
                 </div>
@@ -141,7 +141,7 @@ export function StayView({ copy, locale }: { copy: SiteCopy; locale: Locale }) {
         </h3>
         <Link
           href={localizeHref(c.next.href, locale)}
-          className="group inline-flex items-center gap-4 font-serif text-[13.5px] md:text-[clamp(12.6px,0.71vw,17.5px)] tracking-[0.08em] text-(--color-base-dark)"
+          className="group inline-flex items-center gap-4 font-serif text-[13.5px] md:text-[clamp(var(--fs-lv4),0.71vw,17.5px)] tracking-[0.08em] text-(--color-base-dark)"
         >
           <span className="relative">
             {c.next.cta}

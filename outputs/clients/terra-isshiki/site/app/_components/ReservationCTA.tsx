@@ -42,14 +42,14 @@ export function ReservationCTA({
             href={SITE.airbnbUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className={`group inline-flex items-center gap-4 font-serif text-[13px] md:text-[clamp(12.6px,0.71vw,17.5px)] tracking-[0.1em] px-8 md:px-[clamp(28px,2.19vw,56px)] py-4 md:py-[clamp(16px,1.09vw,28px)] transition-colors ${buttonCls}`}
+            className={`group inline-flex items-center gap-4 font-serif text-[13px] md:text-[clamp(var(--fs-lv4),0.71vw,17.5px)] tracking-[0.1em] px-8 md:px-[clamp(28px,2.19vw,56px)] py-4 md:py-[clamp(16px,1.09vw,28px)] transition-colors ${buttonCls}`}
           >
             <span>{SITE.reserveButton}</span>
             <span aria-hidden>→</span>
           </a>
           <Link
             href="/reserve"
-            className={`group inline-flex items-center gap-4 font-serif text-[13px] md:text-[clamp(12.6px,0.71vw,17.5px)] tracking-[0.08em] ${linkCls}`}
+            className={`group inline-flex items-center gap-4 font-serif text-[13px] md:text-[clamp(var(--fs-lv4),0.71vw,17.5px)] tracking-[0.08em] ${linkCls}`}
           >
             <span className="relative">
               空き状況を見る

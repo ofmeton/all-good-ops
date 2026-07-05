@@ -24,7 +24,7 @@ export function ReserveView({ copy, locale }: { copy: SiteCopy; locale: Locale }
           <h1 className="font-serif text-[22px] md:text-[clamp(23.8px,1.97vw,50.4px)] leading-[1.36] tracking-[0.04em] text-(--color-base-dark)">
             {c.title}
           </h1>
-          <p className="mt-6 md:mt-8 max-w-[640px] font-mincho text-[13px] md:text-[clamp(11.2px,0.71vw,18.2px)] leading-[1.95] tracking-[0.07em] text-(--color-base-dark)/80">
+          <p className="mt-6 md:mt-8 max-w-[640px] font-mincho text-[13px] md:text-[clamp(var(--fs-lv3),0.71vw,18.2px)] leading-[1.95] tracking-[0.07em] text-(--color-base-dark)/80">
             {c.lead}
           </p>
         </div>
@@ -40,7 +40,7 @@ export function ReserveView({ copy, locale }: { copy: SiteCopy; locale: Locale }
               href={SITE.airbnbUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex items-center gap-4 bg-(--color-base-dark) text-(--color-base-light) font-serif text-[13px] md:text-[clamp(12.6px,0.71vw,17.5px)] tracking-[0.1em] px-8 py-4 hover:bg-(--color-base-dark)/85 transition-colors"
+              className="group inline-flex items-center gap-4 bg-(--color-base-dark) text-(--color-base-light) font-serif text-[13px] md:text-[clamp(var(--fs-lv4),0.71vw,17.5px)] tracking-[0.1em] px-8 py-4 hover:bg-(--color-base-dark)/85 transition-colors"
             >
               <span>{SITE.reserveButton}</span>
               <span aria-hidden>→</span>

@@ -73,7 +73,7 @@ export function OwnerView({ copy, locale }: { copy: SiteCopy; locale: Locale }) 
               href={c.officialCta.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex items-center gap-4 font-serif text-[13.5px] md:text-[clamp(12.6px,0.71vw,17.5px)] tracking-[0.08em] text-(--color-base-dark)"
+              className="group inline-flex items-center gap-4 font-serif text-[13.5px] md:text-[clamp(var(--fs-lv4),0.71vw,17.5px)] tracking-[0.08em] text-(--color-base-dark)"
             >
               <span className="relative">
                 {c.officialCta.label}
@@ -164,7 +164,7 @@ export function OwnerView({ copy, locale }: { copy: SiteCopy; locale: Locale }) 
         </h3>
         <Link
           href={localizeHref(c.next.href, locale)}
-          className="group inline-flex items-center gap-4 font-serif text-[13.5px] md:text-[clamp(12.6px,0.71vw,17.5px)] tracking-[0.08em] text-(--color-base-dark)"
+          className="group inline-flex items-center gap-4 font-serif text-[13.5px] md:text-[clamp(var(--fs-lv4),0.71vw,17.5px)] tracking-[0.08em] text-(--color-base-dark)"
         >
           <span className="relative">
             {c.next.cta}

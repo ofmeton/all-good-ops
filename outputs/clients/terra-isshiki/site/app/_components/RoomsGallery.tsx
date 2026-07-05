@@ -211,7 +211,7 @@ export function RoomsGallery({
             <h2 className="font-serif text-[21.86px] md:text-[clamp(22.4px,1.84vw,47.04px)] leading-[1.3] tracking-[0.04em] text-(--color-base-dark) mb-6 md:mb-8">
               {section.caption}
             </h2>
-            <p className="font-mincho text-[12.81px] md:text-[clamp(11.2px,0.71vw,18.2px)] leading-[2.0] tracking-[0.08em] text-(--color-base-dark)/80 md:max-w-[760px]">
+            <p className="font-mincho text-[12.81px] md:text-[clamp(var(--fs-lv3),0.71vw,18.2px)] leading-[2.0] tracking-[0.08em] text-(--color-base-dark)/80 md:max-w-[760px]">
               {section.description}
             </p>
           </div>

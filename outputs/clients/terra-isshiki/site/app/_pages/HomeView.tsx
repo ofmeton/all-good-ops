@@ -82,7 +82,7 @@ function RoomsDetail({ copy, locale }: { copy: SiteCopy; locale: Locale }) {
         <div className="mx-auto max-w-[1480px] px-6 md:px-12">
           <Link
             href={localizeHref(d.moreHref, locale)}
-            className="group mt-10 inline-flex items-center gap-4 font-serif text-[13.5px] md:text-[clamp(12.6px,0.71vw,17.5px)] tracking-[0.08em] text-(--color-base-dark) md:flex md:w-fit md:ml-auto"
+            className="group mt-10 inline-flex items-center gap-4 font-serif text-[13.5px] md:text-[clamp(var(--fs-lv4),0.71vw,17.5px)] tracking-[0.08em] text-(--color-base-dark) md:flex md:w-fit md:ml-auto"
           >
             <span className="relative">
               {d.moreCta}
@@ -118,7 +118,7 @@ function AccessDetail({ copy, locale }: { copy: SiteCopy; locale: Locale }) {
       </dl>
       <Link
         href={localizeHref(d.moreHref, locale)}
-        className="group mt-10 inline-flex items-center gap-4 font-serif text-[13.5px] md:text-[clamp(12.6px,0.71vw,17.5px)] tracking-[0.08em] text-(--color-base-dark) md:flex md:w-fit md:ml-auto"
+        className="group mt-10 inline-flex items-center gap-4 font-serif text-[13.5px] md:text-[clamp(var(--fs-lv4),0.71vw,17.5px)] tracking-[0.08em] text-(--color-base-dark) md:flex md:w-fit md:ml-auto"
       >
         <span className="relative">
           {d.moreCta}
@@ -154,7 +154,7 @@ function AmenitiesDetail({ copy, locale }: { copy: SiteCopy; locale: Locale }) {
       </p>
       <Link
         href={localizeHref(d.moreHref, locale)}
-        className="group mt-10 inline-flex items-center gap-4 font-serif text-[13.5px] md:text-[clamp(12.6px,0.71vw,17.5px)] tracking-[0.08em] text-(--color-base-dark) md:flex md:w-fit md:ml-auto"
+        className="group mt-10 inline-flex items-center gap-4 font-serif text-[13.5px] md:text-[clamp(var(--fs-lv4),0.71vw,17.5px)] tracking-[0.08em] text-(--color-base-dark) md:flex md:w-fit md:ml-auto"
       >
         <span className="relative">
           {d.moreCta}
@@ -204,7 +204,7 @@ function ReservationDetail({ copy, locale }: { copy: SiteCopy; locale: Locale })
       </details>
       <Link
         href={localizeHref(d.availabilityHref, locale)}
-        className="group mt-8 inline-flex items-center gap-4 font-serif text-[13.5px] md:text-[clamp(12.6px,0.71vw,17.5px)] tracking-[0.08em] text-(--color-base-dark) md:flex md:w-fit md:ml-auto"
+        className="group mt-8 inline-flex items-center gap-4 font-serif text-[13.5px] md:text-[clamp(var(--fs-lv4),0.71vw,17.5px)] tracking-[0.08em] text-(--color-base-dark) md:flex md:w-fit md:ml-auto"
       >
         <span className="relative">
           {d.availabilityCta}
@@ -356,7 +356,7 @@ export function HomeView({ copy, locale }: { copy: SiteCopy; locale: Locale }) {
                   >
                     {band.body ? (
                       <p
-                        className={`font-mincho text-[13.5px] md:text-[clamp(11.2px,0.71vw,18.2px)] leading-[2.0] tracking-[0.07em] text-(--color-base-dark)/85 md:max-w-[460px] ${
+                        className={`font-mincho text-[13.5px] md:text-[clamp(var(--fs-lv3),0.71vw,18.2px)] leading-[2.0] tracking-[0.07em] text-(--color-base-dark)/85 md:max-w-[460px] ${
                           band.cta ? "mb-10" : ""
                         }`}
                       >
@@ -371,7 +371,7 @@ export function HomeView({ copy, locale }: { copy: SiteCopy; locale: Locale }) {
                     {band.cta ? (
                       <Link
                         href={localizeHref(band.href, locale)}
-                        className="group inline-flex items-center gap-4 font-serif text-[13.5px] md:text-[clamp(12.6px,0.71vw,17.5px)] tracking-[0.08em] text-(--color-base-dark)"
+                        className="group inline-flex items-center gap-4 font-serif text-[13.5px] md:text-[clamp(var(--fs-lv4),0.71vw,17.5px)] tracking-[0.08em] text-(--color-base-dark)"
                       >
                         <span className="relative">
                           {band.cta}
