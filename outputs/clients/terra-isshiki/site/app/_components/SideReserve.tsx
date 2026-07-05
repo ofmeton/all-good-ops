@@ -25,7 +25,7 @@ export function SideReserve() {
         aria-hidden
         className="absolute top-3 left-1/2 -translate-x-1/2 h-px w-5 bg-(--color-base-light)/35 group-hover:w-8 transition-[width] duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)]"
       />
-      <span className={`font-mincho text-[clamp(12.2px,0.66vw,21.11px)] ${locale === "ja" ? "tracking-[0.4em]" : "tracking-[0.12em]"}`}>
+      <span className={`font-mincho text-[clamp(var(--fs-lv4),0.66vw,21.11px)] ${locale === "ja" ? "tracking-[0.4em]" : "tracking-[0.12em]"}`}>
         {SITE.reserveDock}
       </span>
       <span
