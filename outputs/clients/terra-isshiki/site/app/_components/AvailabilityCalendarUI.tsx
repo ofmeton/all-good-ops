@@ -31,11 +31,11 @@ export function AvailabilityCalendarUI({
   return (
     <div>
       <div className="flex flex-wrap items-baseline justify-between gap-y-3 mb-8 md:mb-12">
-        <p className="font-garamond italic text-[11.1px] md:text-[clamp(9.8px,0.6vw,15.4px)] tracking-[0.4em] uppercase text-(--color-soil)">
+        <p className="font-garamond italic text-[11.1px] md:text-[clamp(var(--fs-lv1),0.6vw,15.4px)] tracking-[0.4em] uppercase text-(--color-soil)">
           Availability
         </p>
         {isLive && (
-          <p className="font-mincho text-[10.5px] md:text-[clamp(9.5px,0.44vw,12.6px)] tracking-[0.06em] text-(--color-base-dark)/55">
+          <p className="font-mincho text-[10.5px] md:text-[clamp(var(--fs-lv1),0.44vw,16.6px)] tracking-[0.06em] text-(--color-base-dark)/55">
             {liveLabel}
           </p>
         )}
@@ -85,7 +85,7 @@ export function AvailabilityCalendarUI({
               <h3 className="font-serif text-[20.5px] md:text-[clamp(18.2px,1.04vw,26.6px)] tracking-[0.04em] text-(--color-base-dark)">
                 {m.year}.{String(m.month + 1).padStart(2, "0")}
               </h3>
-              <span className="font-garamond italic text-[10.25px] md:text-[clamp(9.1px,0.49vw,12.6px)] tracking-[0.32em] uppercase text-(--color-base-dark)/55">
+              <span className="font-garamond italic text-[10.25px] md:text-[clamp(var(--fs-lv1),0.49vw,17px)] tracking-[0.32em] uppercase text-(--color-base-dark)/55">
                 {MONTH_LABELS[m.month]}
               </span>
             </div>
@@ -93,7 +93,7 @@ export function AvailabilityCalendarUI({
               {t.weekdays.map((w, wi) => (
                 <div
                   key={w}
-                  className={`font-garamond text-[9.39px] md:text-[clamp(8.4px,0.43vw,11.2px)] tracking-[0.32em] uppercase pb-2 border-b border-(--color-base-dark)/15 ${
+                  className={`font-garamond text-[9.39px] md:text-[clamp(var(--fs-lv1),0.43vw,16.3px)] tracking-[0.32em] uppercase pb-2 border-b border-(--color-base-dark)/15 ${
                     wi === 0
                       ? "text-(--color-soil)"
                       : wi === 6
@@ -112,7 +112,7 @@ export function AvailabilityCalendarUI({
                     key={ci}
                     title={t.bookedTitle}
                     aria-label={t.bookedDayAria(cell.day)}
-                    className="relative aspect-square flex items-center justify-center font-garamond text-[12.81px] md:text-[clamp(11.2px,0.6vw,15.4px)] tracking-[0.04em] text-(--color-base-dark)/30 bg-(--color-base-dark)/[0.04]"
+                    className="relative aspect-square flex items-center justify-center font-garamond text-[12.81px] md:text-[clamp(var(--fs-lv3),0.6vw,19.7px)] tracking-[0.04em] text-(--color-base-dark)/30 bg-(--color-base-dark)/[0.04]"
                   >
                     <span className="line-through decoration-(--color-base-dark)/40 decoration-[1px]">
                       {cell.day}
@@ -125,7 +125,7 @@ export function AvailabilityCalendarUI({
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={t.bookDayAria(cell.day)}
-                    className={`relative aspect-square flex items-center justify-center font-garamond text-[12.81px] md:text-[clamp(11.2px,0.6vw,15.4px)] tracking-[0.04em] transition-colors duration-300 hover:bg-(--color-soil)/10 ${
+                    className={`relative aspect-square flex items-center justify-center font-garamond text-[12.81px] md:text-[clamp(var(--fs-lv3),0.6vw,19.7px)] tracking-[0.04em] transition-colors duration-300 hover:bg-(--color-soil)/10 ${
                       cell.today
                         ? "text-(--color-soil) font-semibold"
                         : "text-(--color-base-dark)"
@@ -143,7 +143,7 @@ export function AvailabilityCalendarUI({
         ))}
       </div>
 
-      <div className="mt-10 md:mt-14 flex flex-wrap items-center gap-x-8 gap-y-3 font-mincho text-[11.1px] md:text-[clamp(9.8px,0.49vw,12.6px)] tracking-[0.06em] text-(--color-base-dark)/65">
+      <div className="mt-10 md:mt-14 flex flex-wrap items-center gap-x-8 gap-y-3 font-mincho text-[11.1px] md:text-[clamp(var(--fs-lv1),0.49vw,16.3px)] tracking-[0.06em] text-(--color-base-dark)/65">
         <span className="inline-flex items-center gap-2">
           <span className="inline-block h-3.5 w-3.5 bg-(--color-base-dark)/[0.04] line-through decoration-(--color-base-dark)/40" />
           {t.legendBooked}

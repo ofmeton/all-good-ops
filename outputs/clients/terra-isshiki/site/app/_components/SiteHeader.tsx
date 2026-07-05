@@ -104,7 +104,7 @@ export function SiteHeader({
           </div>
 
           <nav className="hidden md:block">
-            <ul className="flex items-center gap-[clamp(22px,2.03vw,52px)] font-garamond text-[11.96px] md:text-[clamp(10.5px,0.71vw,18.2px)] tracking-[0.22em] uppercase">
+            <ul className="flex items-center gap-[clamp(22px,2.03vw,52px)] font-garamond text-[11.96px] md:text-[clamp(var(--fs-lv2),0.71vw,18.2px)] tracking-[0.22em] uppercase">
               {NAV.map((item) => {
                 const active = current === item.label;
                 return (

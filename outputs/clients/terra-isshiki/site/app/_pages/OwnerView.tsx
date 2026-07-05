@@ -56,11 +56,11 @@ export function OwnerView({ copy, locale }: { copy: SiteCopy; locale: Locale }) 
       <section className="relative px-6 pt-[clamp(64px,7vw,112px)] pb-[clamp(96px,10vw,160px)] md:px-12">
         <div className="mx-auto max-w-[1280px] grid gap-12 md:grid-cols-[180px_1fr] md:gap-16">
           <div className="md:pt-2">
-            <p className={`hidden md:inline-block font-mincho text-[12px] md:text-[clamp(10.5px,0.66vw,16.8px)] text-(--color-base-dark)/55 ${locale === "ja" ? "vrl tracking-[0.5em]" : "tracking-[0.2em]"}`}>
+            <p className={`hidden md:inline-block font-mincho text-[12px] md:text-[clamp(var(--fs-lv2),0.66vw,16.8px)] text-(--color-base-dark)/55 ${locale === "ja" ? "vrl tracking-[0.5em]" : "tracking-[0.2em]"}`}>
               {c.sideLabel}
             </p>
           </div>
-          <div className="space-y-8 font-mincho text-[13.5px] md:text-[clamp(10.5px,0.84vw,16.8px)] leading-[2.05] tracking-[0.06em] text-(--color-base-dark)/90">
+          <div className="space-y-8 font-mincho text-[13.5px] md:text-[clamp(var(--fs-lv2),0.84vw,16.8px)] leading-[2.05] tracking-[0.06em] text-(--color-base-dark)/90">
             {c.intro.map((paragraph, i) => (
               <p
                 key={paragraph.slice(0, 12)}
@@ -110,14 +110,14 @@ export function OwnerView({ copy, locale }: { copy: SiteCopy; locale: Locale }) 
                     <h3 className="font-serif text-[16px] md:text-[clamp(16px,1.1vw,26px)] tracking-[0.04em] text-(--color-base-dark)">
                       {a.title}
                     </h3>
-                    <p className="mt-3 font-mincho text-[13px] md:text-[clamp(11.5px,0.7vw,17px)] leading-[1.95] tracking-[0.06em] text-(--color-base-dark)/80">
+                    <p className="mt-3 font-mincho text-[13px] md:text-[clamp(var(--fs-lv3),0.7vw,17px)] leading-[1.95] tracking-[0.06em] text-(--color-base-dark)/80">
                       {a.body}
                     </p>
                     <a
                       href={a.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group mt-5 inline-flex items-center gap-3 font-serif text-[12.5px] md:text-[clamp(11.9px,0.6vw,15.4px)] tracking-[0.06em] text-(--color-base-dark)"
+                      className="group mt-5 inline-flex items-center gap-3 font-serif text-[12.5px] md:text-[clamp(var(--fs-lv4),0.6vw,19.7px)] tracking-[0.06em] text-(--color-base-dark)"
                     >
                       <span className="relative">
                         {a.linkLabel}
@@ -133,7 +133,7 @@ export function OwnerView({ copy, locale }: { copy: SiteCopy; locale: Locale }) 
 
           {/* SNS */}
           <div className="mt-20 md:mt-28 border-t border-(--color-base-dark)/15 pt-10 md:pt-14 md:text-center">
-            <p className="font-mincho text-[12.5px] md:text-[clamp(10.5px,0.6vw,15.4px)] leading-[1.95] tracking-[0.06em] text-(--color-base-dark)/75">
+            <p className="font-mincho text-[12.5px] md:text-[clamp(var(--fs-lv2),0.6vw,15.4px)] leading-[1.95] tracking-[0.06em] text-(--color-base-dark)/75">
               {c.sns.body}
             </p>
             <div className="mt-6 flex flex-wrap items-center gap-8 md:justify-center">
@@ -143,7 +143,7 @@ export function OwnerView({ copy, locale }: { copy: SiteCopy; locale: Locale }) 
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group inline-flex items-center gap-3 font-serif text-[13px] md:text-[clamp(11.9px,0.66vw,16.8px)] tracking-[0.06em] text-(--color-base-dark)"
+                  className="group inline-flex items-center gap-3 font-serif text-[13px] md:text-[clamp(var(--fs-lv4),0.66vw,16.8px)] tracking-[0.06em] text-(--color-base-dark)"
                 >
                   <span className="relative">
                     {link.label}

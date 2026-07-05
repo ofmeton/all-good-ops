@@ -81,13 +81,13 @@ export function RoomsView({ copy, locale }: { copy: SiteCopy; locale: Locale }) 
                   key={spec.label}
                   className="grid grid-cols-[112px_1fr] md:grid-cols-[200px_1fr] gap-x-6 py-5 md:py-6"
                 >
-                  <dt className="font-serif text-[12.81px] md:text-[clamp(11.9px,0.71vw,18.2px)] tracking-[0.08em] text-(--color-base-dark)">
+                  <dt className="font-serif text-[12.81px] md:text-[clamp(var(--fs-lv4),0.71vw,18.2px)] tracking-[0.08em] text-(--color-base-dark)">
                     {spec.label}
                   </dt>
-                  <dd className="font-mincho text-[12.81px] md:text-[clamp(11.2px,0.66vw,16.8px)] leading-[1.85] tracking-[0.06em] text-(--color-base-dark)/90 pt-[3px]">
+                  <dd className="font-mincho text-[12.81px] md:text-[clamp(var(--fs-lv3),0.66vw,16.8px)] leading-[1.85] tracking-[0.06em] text-(--color-base-dark)/90 pt-[3px]">
                     {spec.value}
                     {"note" in spec && spec.note ? (
-                      <span className="block mt-1 text-[11.1px] md:text-[clamp(9.1px,0.49vw,12.6px)] text-(--color-base-dark)/55">
+                      <span className="block mt-1 text-[11.1px] md:text-[clamp(var(--fs-lv1),0.49vw,17px)] text-(--color-base-dark)/55">
                         {spec.note}
                       </span>
                     ) : null}
@@ -111,7 +111,7 @@ export function RoomsView({ copy, locale }: { copy: SiteCopy; locale: Locale }) 
                   <dt className="mb-3 font-serif text-[15.37px] md:text-[clamp(14px,0.82vw,21px)] tracking-[0.06em] text-(--color-base-dark)">
                     {group.title}
                   </dt>
-                  <dd className="font-mincho text-[11.96px] md:text-[clamp(10.5px,0.6vw,15.4px)] leading-[1.95] tracking-[0.06em] text-(--color-base-dark)/85">
+                  <dd className="font-mincho text-[11.96px] md:text-[clamp(var(--fs-lv2),0.6vw,15.4px)] leading-[1.95] tracking-[0.06em] text-(--color-base-dark)/85">
                     {group.body}
                   </dd>
                 </div>
@@ -162,10 +162,10 @@ export function RoomsView({ copy, locale }: { copy: SiteCopy; locale: Locale }) 
                   key={i}
                   className="grid grid-cols-[60px_1fr] gap-x-8 border-b border-(--color-base-dark)/10 py-6"
                 >
-                  <span className="font-mincho text-[clamp(11.96px,0.55vw,17.08px)] tracking-[0.06em] text-(--color-base-dark)/40 pt-[2px]">
+                  <span className="font-mincho text-[clamp(var(--fs-lv4),0.55vw,17.08px)] tracking-[0.06em] text-(--color-base-dark)/40 pt-[2px]">
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <p className="font-mincho text-[clamp(12.81px,0.6vw,18.79px)] leading-[1.95] tracking-[0.06em] text-(--color-base-dark)/85">
+                  <p className="font-mincho text-[clamp(var(--fs-lv4),0.6vw,18.79px)] leading-[1.95] tracking-[0.06em] text-(--color-base-dark)/85">
                     {text}
                   </p>
                 </li>

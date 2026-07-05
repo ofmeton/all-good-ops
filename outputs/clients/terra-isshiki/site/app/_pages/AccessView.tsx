@@ -80,10 +80,10 @@ export function AccessView({ copy, locale }: { copy: SiteCopy; locale: Locale })
                   key={row.label}
                   className="grid grid-cols-[88px_1fr] md:grid-cols-[120px_1fr] py-5"
                 >
-                  <dt className="font-serif text-[12.81px] md:text-[clamp(11.9px,0.66vw,16.8px)] tracking-[0.08em] text-(--color-base-dark)/70 pt-[2px]">
+                  <dt className="font-serif text-[12.81px] md:text-[clamp(var(--fs-lv4),0.66vw,16.8px)] tracking-[0.08em] text-(--color-base-dark)/70 pt-[2px]">
                     {row.label}
                   </dt>
-                  <dd className="font-mincho text-[12.81px] md:text-[clamp(11.2px,0.6vw,15.4px)] leading-[1.85] tracking-[0.06em] text-(--color-base-dark)/90">
+                  <dd className="font-mincho text-[12.81px] md:text-[clamp(var(--fs-lv3),0.6vw,19.7px)] leading-[1.85] tracking-[0.06em] text-(--color-base-dark)/90">
                     {row.value}
                   </dd>
                 </div>
@@ -129,7 +129,7 @@ export function AccessView({ copy, locale }: { copy: SiteCopy; locale: Locale })
               href={MAPS_LINK}
               target="_blank"
               rel="noopener noreferrer"
-              className="absolute right-2 bottom-2 md:right-3 md:bottom-3 inline-flex items-center gap-1.5 md:gap-2 bg-(--color-base-light)/95 backdrop-blur px-3 py-1.5 md:px-4 md:py-2 text-(--color-base-dark) font-serif text-[10px] md:text-[clamp(9.8px,0.55vw,13px)] tracking-[0.08em] border border-(--color-base-dark)/15 hover:bg-(--color-base-light)"
+              className="absolute right-2 bottom-2 md:right-3 md:bottom-3 inline-flex items-center gap-1.5 md:gap-2 bg-(--color-base-light)/95 backdrop-blur px-3 py-1.5 md:px-4 md:py-2 text-(--color-base-dark) font-serif text-[10px] md:text-[clamp(var(--fs-lv1),0.55vw,16.7px)] tracking-[0.08em] border border-(--color-base-dark)/15 hover:bg-(--color-base-light)"
             >
               {c.map.mapsCta}
               <span aria-hidden>→</span>
@@ -146,11 +146,11 @@ export function AccessView({ copy, locale }: { copy: SiteCopy; locale: Locale })
                   <p className="font-serif text-[14.52px] md:text-[clamp(14px,0.82vw,21px)] tracking-[0.04em] text-(--color-base-dark)">
                     {p.name}
                   </p>
-                  <p className="mt-1.5 font-mincho text-[11.1px] md:text-[clamp(9.8px,0.49vw,12.6px)] tracking-[0.06em] text-(--color-base-dark)/65">
+                  <p className="mt-1.5 font-mincho text-[11.1px] md:text-[clamp(var(--fs-lv1),0.49vw,16.3px)] tracking-[0.06em] text-(--color-base-dark)/65">
                     {p.note}
                   </p>
                 </div>
-                <p className="font-mincho text-[11.1px] md:text-[clamp(9.8px,0.55vw,13px)] tracking-[0.08em] text-(--color-base-dark)/70 whitespace-nowrap">
+                <p className="font-mincho text-[11.1px] md:text-[clamp(var(--fs-lv1),0.55vw,16.7px)] tracking-[0.08em] text-(--color-base-dark)/70 whitespace-nowrap">
                   {p.time}
                 </p>
               </li>

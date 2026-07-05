@@ -60,13 +60,13 @@ function RoomsDetail({ copy, locale }: { copy: SiteCopy; locale: Locale }) {
         >
           {d.specs.map((spec) => (
             <div key={spec.label}>
-              <dt className="font-serif text-[12.8px] md:text-[clamp(11.9px,0.71vw,18.2px)] tracking-[0.08em] text-(--color-base-dark)">
+              <dt className="font-serif text-[12.8px] md:text-[clamp(var(--fs-lv4),0.71vw,18.2px)] tracking-[0.08em] text-(--color-base-dark)">
                 {spec.label}
               </dt>
-              <dd className="mt-3 font-mincho text-[13.5px] md:text-[clamp(11.9px,0.71vw,18.2px)] tracking-[0.06em] text-(--color-base-dark)/90">
+              <dd className="mt-3 font-mincho text-[13.5px] md:text-[clamp(var(--fs-lv4),0.71vw,18.2px)] tracking-[0.06em] text-(--color-base-dark)/90">
                 {spec.value}
                 {"note" in spec && spec.note ? (
-                  <span className="mt-1 block text-[10.7px] md:text-[clamp(9.1px,0.49vw,12.6px)] text-(--color-base-dark)/55">
+                  <span className="mt-1 block text-[10.7px] md:text-[clamp(var(--fs-lv1),0.49vw,17px)] text-(--color-base-dark)/55">
                     {spec.note}
                   </span>
                 ) : null}
@@ -107,10 +107,10 @@ function AccessDetail({ copy, locale }: { copy: SiteCopy; locale: Locale }) {
             key={row.label}
             className="grid grid-cols-[104px_1fr] gap-x-6 py-5 md:grid-cols-[132px_1fr]"
           >
-            <dt className="font-serif text-[12.8px] md:text-[clamp(11.9px,0.66vw,16.8px)] tracking-[0.08em] text-(--color-base-dark)/70 pt-[2px]">
+            <dt className="font-serif text-[12.8px] md:text-[clamp(var(--fs-lv4),0.66vw,16.8px)] tracking-[0.08em] text-(--color-base-dark)/70 pt-[2px]">
               {row.label}
             </dt>
-            <dd className="font-mincho text-[12.8px] md:text-[clamp(11.2px,0.6vw,15.4px)] leading-[1.85] tracking-[0.06em] text-(--color-base-dark)/90">
+            <dd className="font-mincho text-[12.8px] md:text-[clamp(var(--fs-lv3),0.6vw,19.7px)] leading-[1.85] tracking-[0.06em] text-(--color-base-dark)/90">
               {row.value}
             </dd>
           </div>
@@ -140,16 +140,16 @@ function AmenitiesDetail({ copy, locale }: { copy: SiteCopy; locale: Locale }) {
             key={row.label}
             className="grid grid-cols-[104px_1fr] gap-x-6 py-5 md:grid-cols-[132px_1fr]"
           >
-            <dt className="font-serif text-[12.8px] md:text-[clamp(11.9px,0.66vw,16.8px)] tracking-[0.08em] text-(--color-base-dark)/70 pt-[2px]">
+            <dt className="font-serif text-[12.8px] md:text-[clamp(var(--fs-lv4),0.66vw,16.8px)] tracking-[0.08em] text-(--color-base-dark)/70 pt-[2px]">
               {row.label}
             </dt>
-            <dd className="font-mincho text-[12.8px] md:text-[clamp(11.2px,0.6vw,15.4px)] leading-[1.85] tracking-[0.06em] text-(--color-base-dark)/90">
+            <dd className="font-mincho text-[12.8px] md:text-[clamp(var(--fs-lv3),0.6vw,19.7px)] leading-[1.85] tracking-[0.06em] text-(--color-base-dark)/90">
               {row.value}
             </dd>
           </div>
         ))}
       </dl>
-      <p className="mt-8 font-mincho text-[11.5px] md:text-[clamp(10.5px,0.55vw,14px)] leading-[1.95] tracking-[0.06em] text-(--color-base-dark)/60 md:mt-10 md:max-w-[880px] md:mx-auto">
+      <p className="mt-8 font-mincho text-[11.5px] md:text-[clamp(var(--fs-lv2),0.55vw,18px)] leading-[1.95] tracking-[0.06em] text-(--color-base-dark)/60 md:mt-10 md:max-w-[880px] md:mx-auto">
         {d.note}
       </p>
       <Link
@@ -192,10 +192,10 @@ function ReservationDetail({ copy, locale }: { copy: SiteCopy; locale: Locale })
               key={i}
               className="grid grid-cols-[32px_1fr] gap-x-4 border-b border-(--color-base-dark)/10 py-4"
             >
-              <span className="font-mincho text-[10.7px] md:text-[clamp(9.8px,0.49vw,12.6px)] tracking-[0.02em] text-(--color-base-dark)/40 pt-[2px]">
+              <span className="font-mincho text-[10.7px] md:text-[clamp(var(--fs-lv1),0.49vw,16.3px)] tracking-[0.02em] text-(--color-base-dark)/40 pt-[2px]">
                 {String(i + 1).padStart(2, "0")}
               </span>
-              <p className="font-mincho text-[12px] md:text-[clamp(10.5px,0.6vw,15.4px)] leading-[1.95] tracking-[0.06em] text-(--color-base-dark)/85">
+              <p className="font-mincho text-[12px] md:text-[clamp(var(--fs-lv2),0.6vw,15.4px)] leading-[1.95] tracking-[0.06em] text-(--color-base-dark)/85">
                 {text}
               </p>
             </li>

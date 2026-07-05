@@ -33,7 +33,7 @@ export function ReservationCTA({
           <span className="block md:inline">{CTA.title}</span>
         </h2>
         <p
-          className={`max-w-[680px] font-mincho text-[12.81px] md:text-[clamp(11.2px,0.66vw,16.8px)] leading-[2.0] tracking-[0.08em] ${subBody}`}
+          className={`max-w-[680px] font-mincho text-[12.81px] md:text-[clamp(var(--fs-lv3),0.66vw,16.8px)] leading-[2.0] tracking-[0.08em] ${subBody}`}
         >
           {CTA.body}
         </p>

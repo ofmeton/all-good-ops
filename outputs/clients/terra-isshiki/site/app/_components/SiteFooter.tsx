@@ -28,10 +28,10 @@ export function SiteFooter({
           <p className="font-serif text-[20px] md:text-[clamp(21px,1.53vw,39.2px)] tracking-[0.18em] mb-3">
             {SITE.footerBrand}
           </p>
-          <p className="font-garamond text-[9.5px] md:text-[clamp(8.4px,0.55vw,14px)] tracking-[0.42em] uppercase opacity-75 mb-6 md:mb-10">
+          <p className="font-garamond text-[9.5px] md:text-[clamp(var(--fs-lv1),0.55vw,14px)] tracking-[0.42em] uppercase opacity-75 mb-6 md:mb-10">
             {SITE.footerArea}
           </p>
-          <p className="font-mincho text-[11.5px] md:text-[clamp(9.8px,0.6vw,15.4px)] leading-[1.85] tracking-[0.06em] opacity-80">
+          <p className="font-mincho text-[11.5px] md:text-[clamp(var(--fs-lv1),0.6vw,15.4px)] leading-[1.85] tracking-[0.06em] opacity-80">
             {SITE.postalAddress}
             <br />
             {SITE.operator}
@@ -42,7 +42,7 @@ export function SiteFooter({
             href={SITE.airbnbUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="group inline-flex items-center gap-3 font-serif text-[12.5px] md:text-[clamp(11.2px,0.6vw,15.4px)] tracking-[0.1em] border border-(--color-base-light)/20 px-7 py-4 md:px-[clamp(28px,2.19vw,56px)] md:py-[clamp(16px,1.09vw,28px)] hover:bg-(--color-base-light)/8 transition-colors"
+            className="group inline-flex items-center gap-3 font-serif text-[12.5px] md:text-[clamp(var(--fs-lv3),0.6vw,19.7px)] tracking-[0.1em] border border-(--color-base-light)/20 px-7 py-4 md:px-[clamp(28px,2.19vw,56px)] md:py-[clamp(16px,1.09vw,28px)] hover:bg-(--color-base-light)/8 transition-colors"
           >
             <span>{SITE.reserveButton}</span>
             <span aria-hidden className="cta-arrow group-hover:[animation-play-state:paused]">→</span>
@@ -50,7 +50,7 @@ export function SiteFooter({
         ) : (
           <Link
             href={localizeHref("/reserve", locale)}
-            className="group inline-flex items-center gap-3 font-serif text-[12.5px] md:text-[clamp(11.2px,0.6vw,15.4px)] tracking-[0.1em] border border-(--color-base-light)/20 px-7 py-4 md:px-[clamp(28px,2.19vw,56px)] md:py-[clamp(16px,1.09vw,28px)] hover:bg-(--color-base-light)/8 transition-colors"
+            className="group inline-flex items-center gap-3 font-serif text-[12.5px] md:text-[clamp(var(--fs-lv3),0.6vw,19.7px)] tracking-[0.1em] border border-(--color-base-light)/20 px-7 py-4 md:px-[clamp(28px,2.19vw,56px)] md:py-[clamp(16px,1.09vw,28px)] hover:bg-(--color-base-light)/8 transition-colors"
           >
             <span>{SITE.footerReserveCta}</span>
             <span aria-hidden className="cta-arrow group-hover:[animation-play-state:paused]">→</span>
