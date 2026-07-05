@@ -8,7 +8,11 @@ export const metadata = {
   title: copy.STAY_PAGE.metaTitle,
   description: copy.STAY_PAGE.metaDescription,
   alternates: alternatesFor("/stay", "en"),
-  openGraph: openGraphFor("en", "/stay"),
+  openGraph: {
+    ...openGraphFor("en", "/stay"),
+    title: copy.STAY_PAGE.metaTitle,
+    description: copy.STAY_PAGE.metaDescription,
+  },
 };
 
 export default function StayPageEn() {

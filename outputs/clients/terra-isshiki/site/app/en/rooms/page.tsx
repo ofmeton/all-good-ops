@@ -8,7 +8,11 @@ export const metadata = {
   title: copy.ROOMS_PAGE.metaTitle,
   description: copy.ROOMS_PAGE.metaDescription,
   alternates: alternatesFor("/rooms", "en"),
-  openGraph: openGraphFor("en", "/rooms"),
+  openGraph: {
+    ...openGraphFor("en", "/rooms"),
+    title: copy.ROOMS_PAGE.metaTitle,
+    description: copy.ROOMS_PAGE.metaDescription,
+  },
 };
 
 export default function RoomsPageEn() {

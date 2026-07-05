@@ -8,7 +8,11 @@ export const metadata = {
   title: copy.OWNER_PAGE.metaTitle,
   description: copy.OWNER_PAGE.metaDescription,
   alternates: alternatesFor("/owner", "en"),
-  openGraph: openGraphFor("en", "/owner"),
+  openGraph: {
+    ...openGraphFor("en", "/owner"),
+    title: copy.OWNER_PAGE.metaTitle,
+    description: copy.OWNER_PAGE.metaDescription,
+  },
 };
 
 export default function OwnerPageEn() {

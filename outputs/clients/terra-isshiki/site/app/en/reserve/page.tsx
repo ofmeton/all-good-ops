@@ -7,7 +7,10 @@ const copy = getCopy("en");
 export const metadata = {
   title: copy.RESERVE_PAGE.metaTitle,
   alternates: alternatesFor("/reserve", "en"),
-  openGraph: openGraphFor("en", "/reserve"),
+  openGraph: {
+    ...openGraphFor("en", "/reserve"),
+    title: copy.RESERVE_PAGE.metaTitle,
+  },
 };
 
 export default function ReservePageEn() {

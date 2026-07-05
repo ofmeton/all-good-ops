@@ -8,7 +8,11 @@ export const metadata = {
   title: copy.ACCESS_PAGE.metaTitle,
   description: copy.ACCESS_PAGE.metaDescription,
   alternates: alternatesFor("/access", "en"),
-  openGraph: openGraphFor("en", "/access"),
+  openGraph: {
+    ...openGraphFor("en", "/access"),
+    title: copy.ACCESS_PAGE.metaTitle,
+    description: copy.ACCESS_PAGE.metaDescription,
+  },
 };
 
 export default function AccessPageEn() {
