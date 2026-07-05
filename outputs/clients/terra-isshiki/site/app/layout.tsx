@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     template: META.titleTemplate,
   },
   description: META.description,
-  metadataBase: new URL("https://terra-hayama.example.com"),
+  metadataBase: new URL("https://site-eosin-one-44.vercel.app"),
   openGraph: {
     title: META.siteTitle,
     description: META.description,
