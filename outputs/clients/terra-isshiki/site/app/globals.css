@@ -167,7 +167,10 @@ body:has(.intro).fv-deep .dock {
   position: sticky;
   top: 0;
   z-index: 1;
-  height: 100svh;
+  /* iOS Safari 等のツールバー伸縮で実ビューポートが動くと、固定値の svh では
+     この要素と直後の .fv-cover(-100dvh 分せり上げ) の継ぎ目がズレて .intro
+     の暗い背景が下から覗くため、動的ビューポートに追従する dvh を使う。 */
+  height: 100dvh;
   overflow: hidden;
 }
 
@@ -279,7 +282,7 @@ body:has(.intro).fv-deep .dock {
 .fv-cover {
   position: relative;
   z-index: 5;
-  margin-top: -100svh;
+  margin-top: -100dvh;
   pointer-events: none;
 }
 
