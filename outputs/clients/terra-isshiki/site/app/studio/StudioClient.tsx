@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { CopyField } from "./lib";
 import { ImagePicker } from "./ImagePicker";
@@ -28,6 +28,7 @@ const LABELS: Record<string, string> = {
   moreCta: "リンク文言",
   img: "写真",
   src: "写真",
+  focal: "切り抜きの中心",
   alt: "写真の説明",
   label: "項目名",
   value: "内容",
@@ -427,6 +428,153 @@ function ImageFieldEditor({ field, images }: { field: CopyField; images: string[
 }
 
 /* ------------------------------------------------------------------
+ * focal（切り抜きの中心）フィールド編集
+ * ------------------------------------------------------------------
+ * hero.focal は常に同じオブジェクトの hero.img と対になっている想定。
+ * path 末尾の "focal" を "img" に置き換えて allValueByPath から画像パスを引く。
+ * 見つからなければ（呼び出し側の構造が想定と違う等）テキスト欄のみのフォールバックにする。
+ */
+function parsePercentPair(value: string): { x: number; y: number } | null {
+  const m = value.match(/^(-?\d+(?:\.\d+)?)%\s+(-?\d+(?:\.\d+)?)%$/);
+  if (!m) return null;
+  return { x: Number(m[1]), y: Number(m[2]) };
+}
+
+function siblingImgPath(focalPath: string): string | null {
+  if (!focalPath.endsWith(".focal")) return null;
+  return focalPath.slice(0, -".focal".length) + ".img";
+}
+
+function FocalPointEditor({
+  field,
+  allValueByPath,
+}: {
+  field: CopyField;
+  allValueByPath: Map<string, string>;
+}) {
+  const [initial, setInitial] = useState(field.value);
+  const [value, setValue] = useState(field.value);
+  const [status, setStatus] = useState<SaveStatus>("idle");
+  const [errorMsg, setErrorMsg] = useState("");
+  const imgRef = useRef<HTMLImageElement | null>(null);
+
+  const imgPath = siblingImgPath(field.path);
+  const imageSrc = imgPath ? allValueByPath.get(imgPath) : undefined;
+  const point = parsePercentPair(value);
+
+  async function commit(nextValue: string) {
+    setStatus("saving");
+    setErrorMsg("");
+    const result = await saveField(field.path, nextValue);
+    if (result.ok) {
+      setInitial(nextValue);
+      setValue(nextValue);
+      setStatus("saved");
+      setTimeout(() => setStatus("idle"), 2000);
+    } else {
+      setStatus("error");
+      setErrorMsg(result.error);
+    }
+  }
+
+  function handleImageClick(e: React.MouseEvent<HTMLImageElement>) {
+    const img = imgRef.current;
+    if (!img || !img.naturalWidth || !img.naturalHeight) return;
+
+    // object-contain のレターボックスを考慮し、コンテナ内で実際に画像が
+    // 描画されている矩形（displayRect）を求める。
+    const containerRect = img.getBoundingClientRect();
+    const containerRatio = containerRect.width / containerRect.height;
+    const imageRatio = img.naturalWidth / img.naturalHeight;
+
+    let displayWidth = containerRect.width;
+    let displayHeight = containerRect.height;
+    if (imageRatio > containerRatio) {
+      // 画像の方が横長 → 幅いっぱいに合わせ、上下に余白（レターボックス）
+      displayHeight = containerRect.width / imageRatio;
+    } else {
+      // 画像の方が縦長 → 高さいっぱいに合わせ、左右に余白（ピラーボックス）
+      displayWidth = containerRect.height * imageRatio;
+    }
+    const offsetX = (containerRect.width - displayWidth) / 2;
+    const offsetY = (containerRect.height - displayHeight) / 2;
+
+    const clickX = e.clientX - containerRect.left - offsetX;
+    const clickY = e.clientY - containerRect.top - offsetY;
+
+    // 余白（レターボックス）部分のクリックは無視する
+    if (clickX < 0 || clickY < 0 || clickX > displayWidth || clickY > displayHeight) return;
+
+    const pctX = Math.round((clickX / displayWidth) * 100);
+    const pctY = Math.round((clickY / displayHeight) * 100);
+    const clamped = { x: Math.min(100, Math.max(0, pctX)), y: Math.min(100, Math.max(0, pctY)) };
+
+    void commit(`${clamped.x}% ${clamped.y}%`);
+  }
+
+  const dirty = value !== initial;
+
+  return (
+    <div className="flex flex-col gap-1.5">
+      <label className="font-mincho text-[13px] text-(--color-mist)">{labelForPath(field.path)}</label>
+
+      {imageSrc ? (
+        <div className="relative w-full overflow-hidden rounded-sm bg-(--color-paper)">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            ref={imgRef}
+            src={imageSrc}
+            loading="lazy"
+            onClick={handleImageClick}
+            className="aspect-[3/2] w-full cursor-crosshair object-contain"
+            alt={labelForPath(field.path)}
+          />
+          {point && (
+            <div
+              className="pointer-events-none absolute h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white bg-(--color-soil) shadow-[0_1px_4px_rgba(26,20,16,0.5)]"
+              style={{ left: `${point.x}%`, top: `${point.y}%` }}
+            />
+          )}
+        </div>
+      ) : (
+        <p className="rounded-sm border border-(--color-sand) bg-white/50 px-3 py-2 text-[12px] text-(--color-mist)">
+          対応する写真が見つかりませんでした。下の欄に直接 &quot;X% Y%&quot; の形式で入力してください。
+        </p>
+      )}
+
+      <input
+        type="text"
+        className="font-mono w-full rounded-sm border border-(--color-sand) bg-white/70 px-2.5 py-1.5 text-[12.5px] text-(--color-base-dark) outline-none focus:border-(--color-soil)"
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+      />
+
+      <p className="text-[11px] leading-relaxed text-(--color-mist)">
+        画像をクリックした場所が、画面幅で切り抜かれるときの中心になります。
+      </p>
+
+      <div className="flex min-h-[20px] items-center justify-between gap-2">
+        <p className="break-all font-mono text-[10px] text-(--color-mist)/70">{field.path}</p>
+        <div className="flex shrink-0 items-center gap-2">
+          {status === "error" && <span className="text-[12px] text-red-700">{errorMsg}</span>}
+          {status === "saving" && <span className="text-[12px] text-(--color-mist)">保存中…</span>}
+          {status === "saved" && <span className="text-[12px] text-(--color-pine)">✓ 保存しました</span>}
+          {dirty && status !== "saved" && status !== "saving" && (
+            <button
+              type="button"
+              onClick={() => void commit(value)}
+              className="rounded-sm bg-(--color-soil) px-3 py-1 text-[12px] text-(--color-base-light) transition-opacity hover:opacity-90"
+            >
+              保存
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------
  * ギャラリー（スライドショー）1 枚のカード
  * object 要素は "<gallery.path>.<i>.src" / "<gallery.path>.<i>.alt" を、
  * string 要素は "<gallery.path>.<i>" 自体を差し替え対象とする。
@@ -701,13 +849,15 @@ function SectionBlock({
       <h2 className="sec-title font-mincho text-[18px] text-(--color-base-dark)">{section.title}</h2>
       {section.fields.length > 0 && (
         <div className={isImageHeavy ? "mt-6 grid grid-cols-1 gap-8 md:grid-cols-2" : "mt-6 flex flex-col gap-8"}>
-          {section.fields.map((field) =>
-            field.kind === "image" ? (
-              <ImageFieldEditor key={field.path} field={field} images={images} />
-            ) : (
-              <TextFieldEditor key={field.path} field={field} />
-            ),
-          )}
+          {section.fields.map((field) => {
+            if (field.kind === "image") {
+              return <ImageFieldEditor key={field.path} field={field} images={images} />;
+            }
+            if (field.kind === "focal") {
+              return <FocalPointEditor key={field.path} field={field} allValueByPath={altByPath} />;
+            }
+            return <TextFieldEditor key={field.path} field={field} />;
+          })}
         </div>
       )}
       {section.galleries.length > 0 && (

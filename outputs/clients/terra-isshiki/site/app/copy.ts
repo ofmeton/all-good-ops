@@ -35,6 +35,7 @@ export const NAV = [
   { label: "Stay", href: "/stay" },
   { label: "Owner", href: "/owner" },
   { label: "Access", href: "/access" },
+  { label: "Reserve", href: "/reserve" },
 ];
 
 /* ------------------------------------------------------------------
@@ -88,7 +89,7 @@ export const TOP = {
     {
       href: "/rooms",
       title: "お部屋について",
-      body: "ファミリーでもゆったり過ごせる75㎡の広さを、丸ごと貸し切りいただけます。",
+      body: "ファミリーでもゆったり過ごせる75 ㎡の広さを、まるごと貸し切りいただけます。",
       img: "/images/rooms/rooms-hero.jpg",
       cta: "", // 空 = 帯にリンクを出さない（ストリップ末尾の「部屋の詳細を見る」に一本化）
     },
@@ -128,7 +129,7 @@ export const TOP = {
       cta: "BEAT ICE について",
     },
     {
-      href: "/access#reservation",
+      href: "/reserve",
       title: "予約と空き状況",
       body: "ご予約は Airbnb から。空き状況のカレンダーはサイト内でそのまま確認できます。",
       img: "/images/access/access-entrance.jpg",
@@ -189,11 +190,11 @@ export const TOP = {
   reservationDetail: {
     info: [
       { label: "ご予約", value: "Airbnb の物件ページから" },
-      { label: "空き状況", value: "サイト内のカレンダーで確認できます" },
+      { label: "空き状況", value: "予約ページのカレンダーで確認できます" },
     ],
     notesTitle: "ご利用にあたって", // アコーディオンの見出し（中身は NOTICES）
     availabilityCta: "空き状況を見る",
-    availabilityHref: "/access#reservation",
+    availabilityHref: "/reserve",
   },
 };
 
@@ -215,11 +216,11 @@ export const NOTICES = [
  * 周辺スポット一覧（アクセスページで使用）
  * ------------------------------------------------------------------ */
 export const POINTS = [
-  { name: "一色海岸", time: "徒歩 8 分", note: "CNN 世界の厳選ビーチ 100 選" },
+  { name: "一色海岸", time: "徒歩 8 分", note: "静かな遠浅の浜。朝の散歩にも、夕暮れの海にもどうぞ。" },
   { name: "セブンイレブン 葉山一色店", time: "徒歩 30 秒", note: "日用品・夜食のちょっとした買い出しに" },
-  { name: "スズキヤ 葉山店", time: "徒歩 5 分", note: "地元の食材が揃う地域のスーパー。滞在中の自炊に" },
+  { name: "スズキヤ 葉山店", time: "徒歩 5 分", note: "1902 年創業、逗子・葉山の老舗スーパー。地元の鮮魚とお惣菜が評判です。" },
   { name: "森戸海岸", time: "車 8 分", note: "海水浴と夕陽のスポット" },
-  { name: "上山口の棚田", time: "車 12 分", note: "葉山アイスのお米を育てる棚田" },
+  { name: "上山口の棚田", time: "車 12 分", note: "オーナー夫妻が季節を通してお米を育てる棚田。葉山アイスは、ここのお米から生まれます。" },
   { name: "旧役場前 バス停", time: "徒歩 1 分", note: "葉山〜JR 逗子駅を結ぶ路線バスの最寄り停留所" },
   { name: "JR 逗子駅", time: "バス 25 分", note: "横須賀線・湘南新宿ライン" },
 ];
@@ -351,7 +352,7 @@ export const ROOMS_PAGE = {
     focal: "50% 50%", // 切り抜きの中心（画面幅で見切れるときにこの点へ寄る）
     alt: "TERRA HAYAMA お部屋 — 押し花と詩のしつらえ",
     title: "お部屋について",
-    lead: "一軒家の二階を、まるごと貸し切り。\n最大 8 名まで滞在できる、ゆとりの間取り。",
+    lead: "一軒家の二階を、まるごと貸し切りで。\n最大 8 名まで泊まれる、ゆとりの間取りです。",
   },
   // 写真ギャラリー（自動送りカルーセル）
   gallery: [
@@ -407,12 +408,6 @@ export const ROOMS_PAGE = {
       body: "各種調理器具を備えています。調味料は、塩こしょう・油をご用意。足りない分は徒歩圏内のコンビニ・スーパーで調達をお願いいたします。",
     },
     {
-      // フルキッチンの具体的な機材・スペックがオーナーから共有され次第、
-      // コンロ口数・オーブン・食洗機などの型番/仕様をここに記載する。
-      title: "キッチン設備（フルキッチン）",
-      body: "自炊に十分なフルキッチンを完備しています。具体的な設備・スペックは準備中です。",
-    },
-    {
       title: "調理器具",
       body: "フライパン／鍋／まな板／包丁／ボウル／ザル／菜箸／トング／フライ返し／お玉／穴あきお玉／ピーラー／計量スプーン／ラップ／アルミホイル",
     },
@@ -460,7 +455,7 @@ export const ACCESS_PAGE = {
     title: "基本情報",
     rows: [
       { label: "住所", value: SITE.postalAddress },
-      { label: "タイプ", value: "一棟貸し（一軒家の 2 階フロア）／最大 8 名" },
+      { label: "タイプ", value: "一軒家の 2 階フロアを貸し切り／最大 8 名" },
       { label: "駐車場", value: "1 階に駐車スペースあり" },
     ],
     sideImg: {
@@ -473,7 +468,15 @@ export const ACCESS_PAGE = {
     iframeTitle: "TERRA HAYAMA — 葉山町一色の地図",
     mapsCta: "Google マップで見る",
   },
-  reservation: {
-    titleLines: ["予約は Airbnb から", "空き状況はこちらで確認できます"],
-  },
+  next: { title: "お部屋について", cta: "お部屋を見る", href: "/rooms" },
+};
+
+/* ------------------------------------------------------------------
+ * ご予約ページ（/reserve）— 空き状況カレンダー + Airbnb への導線
+ * ------------------------------------------------------------------ */
+export const RESERVE_PAGE = {
+  metaTitle: "ご予約",
+  title: "ご予約と空き状況",
+  lead: "空き状況をカレンダーでご確認のうえ、Airbnb のページからご予約ください。",
+  notesTitle: "ご利用にあたって", // アコーディオンの見出し（中身は NOTICES）
 };

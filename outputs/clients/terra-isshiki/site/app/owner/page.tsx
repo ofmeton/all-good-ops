@@ -3,6 +3,7 @@ import Link from "next/link";
 import { SiteHeader } from "../_components/SiteHeader";
 import { ReservationCTA } from "../_components/ReservationCTA";
 import { ParallaxLayer } from "../_components/ParallaxLayer";
+import { StackedPhotos } from "../_components/StackedPhotos";
 import { OWNER_PAGE } from "../copy";
 
 /* 文言・写真パスは app/copy.ts（OWNER_PAGE）で編集できます。 */
@@ -28,7 +29,8 @@ export default function OwnerPage() {
             priority
             sizes="100vw"
             quality={88}
-            className="object-cover object-center"
+            className="object-cover"
+            style={{ objectPosition: c.hero.focal }}
           />
         </ParallaxLayer>
         <div
@@ -70,6 +72,18 @@ export default function OwnerPage() {
                 {paragraph}
               </p>
             ))}
+            <a
+              href={c.officialCta.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex items-center gap-4 font-serif text-[13.5px] md:text-[clamp(12.6px,0.71vw,17.5px)] tracking-[0.08em] text-(--color-base-dark)"
+            >
+              <span className="relative">
+                {c.officialCta.label}
+                <span className="absolute -bottom-1 left-0 h-px w-full bg-(--color-base-dark)/30 transition-colors duration-500 group-hover:bg-(--color-base-dark)" />
+              </span>
+              <span aria-hidden className="text-[13px]">↗</span>
+            </a>
           </div>
         </div>
       </section>
@@ -84,34 +98,55 @@ export default function OwnerPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-12 md:gap-x-12 md:gap-y-16">
             {c.activities.map((a) => (
               <div key={a.title}>
-                <div className="relative aspect-[4/3] w-full overflow-hidden bg-(--color-base-dark)/8">
-                  <ParallaxLayer>
-                    <Image
-                      src={a.image}
-                      alt={`TERRA HAYAMA — ${a.title}`}
-                      fill
-                      sizes="(min-width: 640px) 50vw, 100vw"
-                      quality={88}
-                      className="object-cover object-center"
-                    />
-                  </ParallaxLayer>
-                </div>
+                <StackedPhotos
+                  images={a.images}
+                  className="aspect-[4/3]"
+                  sizes="(min-width: 768px) 50vw, 100vw"
+                />
                 <h3 className="mt-5 font-serif text-[15px] md:text-[clamp(14px,0.9vw,23px)] tracking-[0.04em] text-(--color-base-dark)">
                   {a.title}
                 </h3>
                 <p className="mt-3 font-mincho text-[12.5px] md:text-[clamp(10.5px,0.6vw,15.4px)] leading-[1.95] tracking-[0.06em] text-(--color-base-dark)/80">
                   {a.body}
                 </p>
+                <a
+                  href={a.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group mt-4 inline-flex items-center gap-3 font-serif text-[12.5px] md:text-[clamp(11.2px,0.6vw,15.4px)] tracking-[0.06em] text-(--color-base-dark)"
+                >
+                  <span className="relative">
+                    {a.linkLabel}
+                    <span className="absolute -bottom-1 left-0 h-px w-full bg-(--color-base-dark)/30 transition-colors duration-500 group-hover:bg-(--color-base-dark)" />
+                  </span>
+                  <span aria-hidden className="text-[12px]">↗</span>
+                </a>
               </div>
             ))}
           </div>
 
-          {/* SNS — TODO(SNS URL): BEAT ICE 公式 Instagram(@beatice0923) を href に差し替える */}
+          {/* SNS */}
           <div className="mt-20 md:mt-28 border-t border-(--color-base-dark)/15 pt-10 md:pt-14">
             <p className="font-mincho text-[12.5px] md:text-[clamp(10.5px,0.6vw,15.4px)] leading-[1.95] tracking-[0.06em] text-(--color-base-dark)/75">
               {c.sns.body}
-              <span className="block mt-2 text-(--color-base-dark)/45">{c.sns.note}</span>
             </p>
+            <div className="mt-6 flex flex-wrap items-center gap-8">
+              {c.sns.links.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group inline-flex items-center gap-3 font-serif text-[13px] md:text-[clamp(11.9px,0.66vw,16.8px)] tracking-[0.06em] text-(--color-base-dark)"
+                >
+                  <span className="relative">
+                    {link.label}
+                    <span className="absolute -bottom-1 left-0 h-px w-full bg-(--color-base-dark)/30 transition-colors duration-500 group-hover:bg-(--color-base-dark)" />
+                  </span>
+                  <span aria-hidden className="text-[12px]">↗</span>
+                </a>
+              ))}
+            </div>
           </div>
         </div>
       </section>

@@ -10,7 +10,7 @@
 
 import ts from "typescript";
 
-export type CopyField = { path: string; value: string; kind: "text" | "image" };
+export type CopyField = { path: string; value: string; kind: "text" | "image" | "focal" };
 
 /**
  * ObjectLiteralExpression / ArrayLiteralExpression を再帰的に走査するための
@@ -113,7 +113,12 @@ function walkSource(sourceFile: ts.SourceFile, visitor: StringLiteralVisitor): v
 
 /**
  * copy.ts のソース文字列から、フィールド一覧を抽出する。
- * kind は value が "/images/" で始まる場合のみ "image"、それ以外は "text"。
+ * kind の判定順序:
+ *   1. path 末尾のキーが "focal" → "focal"（image 判定より優先。
+ *      focal の値は "50% 50%" のような CSS object-position で "/images/" 始まりではないため
+ *      放っておけば text 扱いになるところを、専用エディタに回すために先に拾う）
+ *   2. value が "/images/" で始まる → "image"
+ *   3. それ以外 → "text"
  */
 export function extractFields(source: string): CopyField[] {
   const sourceFile = ts.createSourceFile("copy.ts", source, ts.ScriptTarget.Latest, true);
@@ -121,7 +126,15 @@ export function extractFields(source: string): CopyField[] {
 
   walkSource(sourceFile, (node, fieldPath) => {
     const value = node.text;
-    const kind: CopyField["kind"] = value.startsWith("/images/") ? "image" : "text";
+    const lastKey = fieldPath.slice(fieldPath.lastIndexOf(".") + 1);
+    let kind: CopyField["kind"];
+    if (lastKey === "focal") {
+      kind = "focal";
+    } else if (value.startsWith("/images/")) {
+      kind = "image";
+    } else {
+      kind = "text";
+    }
     fields.push({ path: fieldPath, value, kind });
   });
 

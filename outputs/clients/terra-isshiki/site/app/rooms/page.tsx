@@ -29,7 +29,8 @@ export default function RoomsPage() {
             priority
             sizes="100vw"
             quality={88}
-            className="object-cover object-center"
+            className="object-cover"
+            style={{ objectPosition: c.hero.focal }}
           />
         </ParallaxLayer>
         <div
@@ -70,11 +71,7 @@ export default function RoomsPage() {
         className="relative bg-(--color-paper) px-6 py-[clamp(96px,8.34vw,128px)] md:px-12"
       >
         <div className="mx-auto max-w-[1480px]">
-          <h2 className="font-serif text-[17.76px] md:text-[clamp(17.92px,1.4vw,35.84px)] leading-[1.4] tracking-[0.04em] text-(--color-base-dark) mb-14 md:mb-20">
-            {c.overviewTitle}
-          </h2>
-
-          {/* Specs table */}
+          {/* Specs table — overviewTitle は削除済み。ここから直に始まる */}
           <div className="mb-20 md:mb-28">
             <h3 className="font-serif text-[15.37px] md:text-[clamp(14px,0.9vw,23px)] tracking-[0.06em] text-(--color-base-dark) mb-6">
               {c.specsTitle}

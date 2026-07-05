@@ -140,6 +140,16 @@ function AmenitiesDetail() {
       <p className="mt-8 font-mincho text-[11.5px] md:text-[clamp(10.5px,0.55vw,14px)] leading-[1.95] tracking-[0.06em] text-(--color-base-dark)/60 md:mt-10">
         {d.note}
       </p>
+      <Link
+        href={d.moreHref}
+        className="group mt-10 inline-flex items-center gap-4 font-serif text-[13.5px] md:text-[clamp(12.6px,0.71vw,17.5px)] tracking-[0.08em] text-(--color-base-dark)"
+      >
+        <span className="relative">
+          {d.moreCta}
+          <span className="absolute -bottom-1 left-0 h-px w-full bg-(--color-base-dark)/30 transition-colors duration-500 group-hover:bg-(--color-base-dark)" />
+        </span>
+        <span aria-hidden className="text-[13px]">→</span>
+      </Link>
     </DetailShell>
   );
 }
@@ -351,19 +361,27 @@ export default function Home() {
                   }`}
                   style={{ transitionDelay: "120ms" }}
                 >
-                  <p className="font-mincho text-[13.5px] md:text-[clamp(11.2px,0.71vw,18.2px)] leading-[2.0] tracking-[0.07em] text-(--color-base-dark)/85 md:max-w-[460px] mb-10">
-                    {band.body}
-                  </p>
-                  <Link
-                    href={band.href}
-                    className="group inline-flex items-center gap-4 font-serif text-[13.5px] md:text-[clamp(12.6px,0.71vw,17.5px)] tracking-[0.08em] text-(--color-base-dark)"
-                  >
-                    <span className="relative">
-                      {band.cta}
-                      <span className="absolute -bottom-1 left-0 h-px w-full bg-(--color-base-dark)/30 transition-colors duration-500 group-hover:bg-(--color-base-dark)" />
-                    </span>
-                    <span aria-hidden className="text-[13px]">→</span>
-                  </Link>
+                  {band.body ? (
+                    <p
+                      className={`font-mincho text-[13.5px] md:text-[clamp(11.2px,0.71vw,18.2px)] leading-[2.0] tracking-[0.07em] text-(--color-base-dark)/85 md:max-w-[460px] ${
+                        band.cta ? "mb-10" : ""
+                      }`}
+                    >
+                      {band.body}
+                    </p>
+                  ) : null}
+                  {band.cta ? (
+                    <Link
+                      href={band.href}
+                      className="group inline-flex items-center gap-4 font-serif text-[13.5px] md:text-[clamp(12.6px,0.71vw,17.5px)] tracking-[0.08em] text-(--color-base-dark)"
+                    >
+                      <span className="relative">
+                        {band.cta}
+                        <span className="absolute -bottom-1 left-0 h-px w-full bg-(--color-base-dark)/30 transition-colors duration-500 group-hover:bg-(--color-base-dark)" />
+                      </span>
+                      <span aria-hidden className="text-[13px]">→</span>
+                    </Link>
+                  ) : null}
                 </div>
               </div>
 

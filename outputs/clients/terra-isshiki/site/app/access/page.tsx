@@ -1,6 +1,6 @@
 import Image from "next/image";
+import Link from "next/link";
 import { SiteHeader } from "../_components/SiteHeader";
-import { AvailabilityCalendar } from "../_components/AvailabilityCalendar";
 import { ParallaxLayer } from "../_components/ParallaxLayer";
 import { SITE, ACCESS_PAGE, POINTS } from "../copy";
 
@@ -36,7 +36,8 @@ export default function AccessPage() {
             priority
             sizes="100vw"
             quality={88}
-            className="object-cover object-center"
+            className="object-cover"
+            style={{ objectPosition: c.hero.focal }}
           />
         </ParallaxLayer>
         <div
@@ -173,34 +174,21 @@ export default function AccessPage() {
         </div>
       </section>
 
-      {/* Reservation: Availability calendar */}
-      <section
-        id="reservation"
-        className="border-t border-(--color-base-dark)/10 px-6 py-[clamp(96px,8.34vw,128px)] md:px-12 bg-(--color-base-light)"
-      >
-        <div className="mx-auto max-w-[1480px]">
-          <h2 className="font-serif text-[19.13px] md:text-[clamp(20.16px,1.74vw,44.8px)] leading-[1.36] tracking-[0.04em] text-(--color-base-dark) mb-12 md:mb-16">
-            {c.reservation.titleLines.map((line) => (
-              <span key={line} className="block">
-                {line}
-              </span>
-            ))}
-          </h2>
-
-          <AvailabilityCalendar monthCount={3} />
-
-          <div className="mt-14 md:mt-20 text-center md:text-left">
-            <a
-              href={SITE.airbnbUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group inline-flex items-center gap-4 bg-(--color-base-dark) text-(--color-base-light) font-serif text-[13px] md:text-[clamp(12.6px,0.71vw,17.5px)] tracking-[0.1em] px-8 py-4 hover:bg-(--color-base-dark)/85 transition-colors"
-            >
-              <span>{SITE.reserveButton}</span>
-              <span aria-hidden>→</span>
-            </a>
-          </div>
-        </div>
+      {/* Next link */}
+      <section className="border-t border-(--color-base-dark)/10 px-6 py-[clamp(80px,7.3vw,112px)] md:px-12 text-center">
+        <h3 className="font-serif text-[22.2px] md:text-[clamp(23.8px,1.97vw,50.4px)] leading-[1.4] tracking-[0.04em] text-(--color-base-dark) mb-10">
+          {c.next.title}
+        </h3>
+        <Link
+          href={c.next.href}
+          className="group inline-flex items-center gap-4 font-serif text-[13.5px] md:text-[clamp(12.6px,0.71vw,17.5px)] tracking-[0.08em] text-(--color-base-dark)"
+        >
+          <span className="relative">
+            {c.next.cta}
+            <span className="absolute -bottom-1 left-0 h-px w-full bg-(--color-base-dark)/30 transition-colors duration-500 group-hover:bg-(--color-base-dark)" />
+          </span>
+          <span aria-hidden className="text-[13px]">→</span>
+        </Link>
       </section>
     </main>
   );

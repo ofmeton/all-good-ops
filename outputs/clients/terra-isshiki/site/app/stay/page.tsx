@@ -12,28 +12,6 @@ export const metadata = {
   description: STAY_PAGE.metaDescription,
 };
 
-const ICONS: Record<string, React.ReactNode> = {
-  wave: (
-    <svg viewBox="0 0 64 64" className="w-12 h-12" fill="none" stroke="currentColor" strokeWidth="0.9">
-      <path d="M8 37 C 17 28, 25 28, 34 37 C 43 46, 51 46, 60 37" />
-      <path d="M8 46 C 17 38, 25 38, 34 46 C 43 54, 51 54, 60 46" />
-      <path d="M13 27 C 22 19, 31 19, 40 27" opacity="0.55" />
-    </svg>
-  ),
-  sun: (
-    <svg viewBox="0 0 64 64" className="w-12 h-12" fill="none" stroke="currentColor" strokeWidth="0.8">
-      <circle cx="32" cy="32" r="13" />
-      <path d="M32 4 V14 M32 50 V60 M4 32 H14 M50 32 H60 M11.7 11.7 L18.7 18.7 M45.3 45.3 L52.3 52.3 M52.3 11.7 L45.3 18.7 M18.7 45.3 L11.7 52.3" />
-    </svg>
-  ),
-  leaf: (
-    <svg viewBox="0 0 64 64" className="w-12 h-12" fill="none" stroke="currentColor" strokeWidth="0.8">
-      <path d="M14 50 C 14 24, 38 14, 54 14 C 54 38, 38 50, 14 50 Z" />
-      <path d="M14 50 L 50 18" />
-    </svg>
-  ),
-};
-
 export default function StayPage() {
   const c = STAY_PAGE;
   return (
@@ -50,7 +28,8 @@ export default function StayPage() {
             priority
             sizes="100vw"
             quality={88}
-            className="object-cover object-center"
+            className="object-cover"
+            style={{ objectPosition: c.hero.focal }}
           />
         </ParallaxLayer>
         <div
@@ -84,7 +63,7 @@ export default function StayPage() {
       {/* Experiences */}
       <section className="relative py-[clamp(80px,7.3vw,112px)] bg-(--color-base-light)">
         <div className="grid gap-20 md:gap-32">
-          {c.items.map((exp) => {
+          {c.items.map((exp, i) => {
             const accentColor =
               exp.accent === "soil"
                 ? "text-(--color-soil)"
@@ -92,16 +71,30 @@ export default function StayPage() {
                 ? "text-(--color-pine)"
                 : "text-(--color-mist)";
 
+            // 上山口は補足扱い（全員が行ける場所ではないため前面に出さない）:
+            // 写真幅を一回り絞り、番号・タイトルをワンサイズ小さくして温度感を落とす
+            const isSupplement = i === 2;
+
             return (
               <article key={exp.no}>
                 {/* Text — readable width, padded — comes FIRST */}
                 <div className="mx-auto max-w-[1480px] px-6 md:px-12 mb-8 md:mb-14">
                   <p
-                    className={`font-garamond italic text-[clamp(11.1px,0.55vw,17.08px)] tracking-[0.42em] mb-3 ${accentColor}`}
+                    className={`font-garamond italic tracking-[0.42em] mb-3 ${accentColor} ${
+                      isSupplement
+                        ? "text-[clamp(10px,0.5vw,15.4px)]"
+                        : "text-[clamp(11.1px,0.55vw,17.08px)]"
+                    }`}
                   >
                     {exp.no}
                   </p>
-                  <h2 className="font-serif text-[17.76px] md:text-[clamp(17.92px,1.4vw,35.84px)] leading-[1.36] tracking-[0.04em] text-(--color-base-dark) mb-6 md:mb-8">
+                  <h2
+                    className={`font-serif leading-[1.36] tracking-[0.04em] text-(--color-base-dark) mb-6 md:mb-8 ${
+                      isSupplement
+                        ? "text-[16px] md:text-[clamp(16.13px,1.26vw,32.26px)]"
+                        : "text-[17.76px] md:text-[clamp(17.92px,1.4vw,35.84px)]"
+                    }`}
+                  >
                     {exp.title}
                   </h2>
                   <p className="font-mincho text-[11.96px] md:text-[clamp(11.2px,0.71vw,18.2px)] leading-[2.0] tracking-[0.08em] text-(--color-base-dark)/85 md:max-w-[900px]">
@@ -109,9 +102,14 @@ export default function StayPage() {
                   </p>
                 </div>
 
-                {/* Visual — full bleed, large */}
+                {/* Visual — full bleed, large. image が null の場合は従来どおり画像なしレイアウト
+                    （紙のノイズ + 大きな通し番号のみ、icon は廃止済みのため表示しない） */}
                 {exp.image ? (
-                  <div className="relative aspect-[16/10] md:aspect-[5/2] w-full overflow-hidden bg-(--color-base-dark)/5">
+                  <div
+                    className={`relative aspect-[16/10] md:aspect-[5/2] overflow-hidden bg-(--color-base-dark)/5 ${
+                      isSupplement ? "w-full md:max-w-[70%]" : "w-full"
+                    }`}
+                  >
                     <ParallaxLayer>
                       <Image
                         src={exp.image}
@@ -131,11 +129,6 @@ export default function StayPage() {
                       className="absolute right-[3vw] top-[-4%] md:right-[2vw] md:top-[-6%] font-garamond italic text-[clamp(170.8px,12.6vw,375.76px)] leading-none text-(--color-base-dark)/[0.07] select-none"
                     >
                       {exp.no}
-                    </div>
-                    <div
-                      className={`relative z-10 ${accentColor}/70 opacity-85 [&_svg]:w-[clamp(88px,7vw,160px)] [&_svg]:h-[clamp(88px,7vw,160px)]`}
-                    >
-                      {"icon" in exp && exp.icon ? ICONS[exp.icon] : null}
                     </div>
                   </div>
                 )}

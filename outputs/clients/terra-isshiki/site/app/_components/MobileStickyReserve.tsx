@@ -1,14 +1,14 @@
+import Link from "next/link";
 import { SITE } from "../copy";
 
-/* ボタン文言は app/copy.ts（SITE.reserveDock）で編集できます。 */
+/* ボタン文言は app/copy.ts（SITE.reserveDock）で編集できます。
+   飛び先は空き状況・予約ページ（/reserve）— サイト内リンクなので Airbnb への外部遷移はしない。 */
 
 export function MobileStickyReserve() {
   return (
-    <a
-      href={SITE.airbnbUrl}
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label={`${SITE.reserveDock}（Airbnb）`}
+    <Link
+      href="/reserve"
+      aria-label={SITE.reserveDock}
       className="dock group xl:hidden fixed bottom-5 right-5 z-40 inline-flex items-center gap-3 rounded-full bg-(--color-base-dark) text-(--color-base-light) px-5 py-3.5 shadow-[0_8px_28px_-6px_rgba(26,20,16,0.55)] backdrop-blur-[2px] hover:bg-(--color-base-dark)/90 transition-colors duration-300"
     >
       <span className="font-mincho text-[11.1px] tracking-[0.18em] leading-none">
@@ -28,6 +28,6 @@ export function MobileStickyReserve() {
         <line x1="0" y1="5" x2="25" y2="5" />
         <polyline points="20,1 26,5 20,9" />
       </svg>
-    </a>
+    </Link>
   );
 }

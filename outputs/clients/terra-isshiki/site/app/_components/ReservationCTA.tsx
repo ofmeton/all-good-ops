@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { SITE, CTA } from "../copy";
 
 /* 文言は app/copy.ts（CTA / SITE.reserveButton）で編集できます。 */
@@ -16,6 +17,12 @@ export function ReservationCTA({
   const buttonCls = isDark
     ? "bg-(--color-base-light) text-(--color-base-dark) hover:bg-(--color-base-light)/85"
     : "bg-(--color-base-dark) text-(--color-base-light) hover:bg-(--color-base-dark)/85";
+  const linkCls = isDark
+    ? "text-(--color-base-light)"
+    : "text-(--color-base-dark)";
+  const linkUnderlineCls = isDark
+    ? "bg-(--color-base-light)/30 group-hover:bg-(--color-base-light)"
+    : "bg-(--color-base-dark)/30 group-hover:bg-(--color-base-dark)";
 
   return (
     <section
@@ -30,15 +37,29 @@ export function ReservationCTA({
         >
           {CTA.body}
         </p>
-        <a
-          href={SITE.airbnbUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={`group inline-flex items-center gap-4 font-serif text-[13px] md:text-[clamp(12.6px,0.71vw,17.5px)] tracking-[0.1em] px-8 md:px-[clamp(28px,2.19vw,56px)] py-4 md:py-[clamp(16px,1.09vw,28px)] transition-colors ${buttonCls}`}
-        >
-          <span>{SITE.reserveButton}</span>
-          <span aria-hidden>→</span>
-        </a>
+        <div className="flex flex-col items-start md:items-center gap-6 md:gap-8">
+          <a
+            href={SITE.airbnbUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`group inline-flex items-center gap-4 font-serif text-[13px] md:text-[clamp(12.6px,0.71vw,17.5px)] tracking-[0.1em] px-8 md:px-[clamp(28px,2.19vw,56px)] py-4 md:py-[clamp(16px,1.09vw,28px)] transition-colors ${buttonCls}`}
+          >
+            <span>{SITE.reserveButton}</span>
+            <span aria-hidden>→</span>
+          </a>
+          <Link
+            href="/reserve"
+            className={`group inline-flex items-center gap-4 font-serif text-[13px] md:text-[clamp(12.6px,0.71vw,17.5px)] tracking-[0.08em] ${linkCls}`}
+          >
+            <span className="relative">
+              空き状況を見る
+              <span
+                className={`absolute -bottom-1 left-0 h-px w-full transition-colors duration-500 ${linkUnderlineCls}`}
+              />
+            </span>
+            <span aria-hidden className="text-[13px]">→</span>
+          </Link>
+        </div>
       </div>
     </section>
   );
