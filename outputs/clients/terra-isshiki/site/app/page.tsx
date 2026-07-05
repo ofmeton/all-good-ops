@@ -114,6 +114,16 @@ function AccessDetail() {
           </div>
         ))}
       </dl>
+      <Link
+        href={d.moreHref}
+        className="group mt-10 inline-flex items-center gap-4 font-serif text-[13.5px] md:text-[clamp(12.6px,0.71vw,17.5px)] tracking-[0.08em] text-(--color-base-dark)"
+      >
+        <span className="relative">
+          {d.moreCta}
+          <span className="absolute -bottom-1 left-0 h-px w-full bg-(--color-base-dark)/30 transition-colors duration-500 group-hover:bg-(--color-base-dark)" />
+        </span>
+        <span aria-hidden className="text-[13px]">→</span>
+      </Link>
     </DetailShell>
   );
 }
@@ -158,77 +168,38 @@ function ReservationDetail() {
   const d = TOP.reservationDetail;
   return (
     <DetailShell>
-      <div className="grid gap-12 md:grid-cols-2 md:gap-16">
-        {/* 予約の基本 */}
-        <dl className="border-t border-(--color-base-dark)/15 divide-y divide-(--color-base-dark)/10">
-          {d.info.map((info) => (
-            <div
-              key={info.label}
-              className="grid grid-cols-[112px_1fr] gap-x-6 py-5 md:grid-cols-[160px_1fr]"
-            >
-              <dt className="font-serif text-[12.8px] md:text-[clamp(11.9px,0.71vw,18.2px)] tracking-[0.08em] text-(--color-base-dark)">
-                {info.label}
-              </dt>
-              <dd className="font-mincho text-[12.8px] md:text-[clamp(11.2px,0.66vw,16.8px)] leading-[1.85] tracking-[0.06em] text-(--color-base-dark)/90 pt-[2px]">
-                {info.value}
-              </dd>
-            </div>
-          ))}
-        </dl>
-
-        {/* ご利用にあたって — 注意事項の全文アコーディオン（初期閉、原文は copy.ts の NOTICES） */}
-        {/* md:pr-16: 右端固定の予約 dock と ＋ マークが中間幅(1280-1500px)で重ならないよう内側に寄せる */}
-        <details className="group border-t border-(--color-base-dark)/15 md:pr-16">
-          <summary className="list-none cursor-pointer flex items-center justify-between py-5 [&::-webkit-details-marker]:hidden">
-            <span className="font-serif text-[14.5px] md:text-[clamp(14px,0.82vw,21px)] tracking-[0.06em] text-(--color-base-dark)">
-              {d.notesTitle}
-            </span>
-            <span
-              aria-hidden
-              className="font-garamond text-[15px] text-(--color-base-dark)/60 transition-transform duration-300 group-open:rotate-45"
-            >
-              ＋
-            </span>
-          </summary>
-          <ol className="border-t border-(--color-base-dark)/15">
-            {NOTICES.map((text, i) => (
-              <li
-                key={i}
-                className="grid grid-cols-[32px_1fr] gap-x-4 border-b border-(--color-base-dark)/10 py-4"
-              >
-                <span className="font-mincho text-[10.7px] md:text-[clamp(9.8px,0.49vw,12.6px)] tracking-[0.02em] text-(--color-base-dark)/40 pt-[2px]">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <p className="font-mincho text-[12px] md:text-[clamp(10.5px,0.6vw,15.4px)] leading-[1.95] tracking-[0.06em] text-(--color-base-dark)/85">
-                  {text}
-                </p>
-              </li>
-            ))}
-          </ol>
-        </details>
-      </div>
-
-      <div className="mt-12 flex flex-col items-start gap-6 sm:flex-row sm:items-center sm:gap-10 md:mt-16">
-        <a
-          href={SITE.airbnbUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group inline-flex items-center gap-4 bg-(--color-base-dark) text-(--color-base-light) font-serif text-[13px] md:text-[clamp(12.6px,0.71vw,17.5px)] tracking-[0.1em] px-8 py-4 hover:bg-(--color-base-dark)/85 transition-colors"
-        >
-          <span>{SITE.reserveButton}</span>
-          <span aria-hidden>→</span>
-        </a>
-        <Link
-          href={d.availabilityHref}
-          className="group inline-flex items-center gap-4 font-serif text-[13px] md:text-[clamp(12.6px,0.71vw,17.5px)] tracking-[0.08em] text-(--color-base-dark)"
-        >
-          <span className="relative">
-            {d.availabilityCta}
-            <span className="absolute -bottom-1 left-0 h-px w-full bg-(--color-base-dark)/30 transition-colors duration-500 group-hover:bg-(--color-base-dark)" />
+      {/* ご利用にあたって — 注意事項の全文アコーディオン（初期閉、原文は copy.ts の NOTICES）。
+          予約・空き状況の導線は帯自体（写真・タイトル）と /reserve ページに一本化したため、
+          ここには重複する info / Airbnb ボタン / 空き状況リンクは置かない。
+          md:pr-16: 右端固定の予約 dock と ＋ マークが中間幅(1280-1500px)で重ならないよう内側に寄せる */}
+      <details className="group max-w-[720px] border-t border-(--color-base-dark)/15 md:pr-16">
+        <summary className="list-none cursor-pointer flex items-center justify-between py-5 [&::-webkit-details-marker]:hidden">
+          <span className="font-serif text-[14.5px] md:text-[clamp(14px,0.82vw,21px)] tracking-[0.06em] text-(--color-base-dark)">
+            {d.notesTitle}
           </span>
-          <span aria-hidden>→</span>
-        </Link>
-      </div>
+          <span
+            aria-hidden
+            className="font-garamond text-[15px] text-(--color-base-dark)/60 transition-transform duration-300 group-open:rotate-45"
+          >
+            ＋
+          </span>
+        </summary>
+        <ol className="border-t border-(--color-base-dark)/15">
+          {NOTICES.map((text, i) => (
+            <li
+              key={i}
+              className="grid grid-cols-[32px_1fr] gap-x-4 border-b border-(--color-base-dark)/10 py-4"
+            >
+              <span className="font-mincho text-[10.7px] md:text-[clamp(9.8px,0.49vw,12.6px)] tracking-[0.02em] text-(--color-base-dark)/40 pt-[2px]">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <p className="font-mincho text-[12px] md:text-[clamp(10.5px,0.6vw,15.4px)] leading-[1.95] tracking-[0.06em] text-(--color-base-dark)/85">
+                {text}
+              </p>
+            </li>
+          ))}
+        </ol>
+      </details>
     </DetailShell>
   );
 }
@@ -353,36 +324,39 @@ export default function Home() {
                   </Link>
                 )}
 
-                {/* 本文 + CTA */}
-                <div
-                  data-reveal
-                  className={`reveal px-6 pt-8 pb-[clamp(48px,6vw,88px)] md:px-12 lg:px-20 md:pt-6 md:pb-0 md:self-start md:row-start-2 ${
-                    imageFirst ? "md:col-start-2" : "md:col-start-1"
-                  }`}
-                  style={{ transitionDelay: "120ms" }}
-                >
-                  {band.body ? (
-                    <p
-                      className={`font-mincho text-[13.5px] md:text-[clamp(11.2px,0.71vw,18.2px)] leading-[2.0] tracking-[0.07em] text-(--color-base-dark)/85 md:max-w-[460px] ${
-                        band.cta ? "mb-10" : ""
-                      }`}
-                    >
-                      {band.body}
-                    </p>
-                  ) : null}
-                  {band.cta ? (
-                    <Link
-                      href={band.href}
-                      className="group inline-flex items-center gap-4 font-serif text-[13.5px] md:text-[clamp(12.6px,0.71vw,17.5px)] tracking-[0.08em] text-(--color-base-dark)"
-                    >
-                      <span className="relative">
-                        {band.cta}
-                        <span className="absolute -bottom-1 left-0 h-px w-full bg-(--color-base-dark)/30 transition-colors duration-500 group-hover:bg-(--color-base-dark)" />
-                      </span>
-                      <span aria-hidden className="text-[13px]">→</span>
-                    </Link>
-                  ) : null}
-                </div>
+                {/* 本文 + CTA — 両方空の帯（例: 設備）は div ごと出さない。
+                    CTA が無い帯は次セクションまでの余白を詰める（CTA 用の広い pb を残さない） */}
+                {(band.body || band.cta) ? (
+                  <div
+                    data-reveal
+                    className={`reveal px-6 pt-8 md:px-12 lg:px-20 md:pt-6 md:pb-0 md:self-start md:row-start-2 ${
+                      band.cta ? "pb-[clamp(48px,6vw,88px)]" : "pb-[clamp(24px,3.2vw,44px)]"
+                    } ${imageFirst ? "md:col-start-2" : "md:col-start-1"}`}
+                    style={{ transitionDelay: "120ms" }}
+                  >
+                    {band.body ? (
+                      <p
+                        className={`font-mincho text-[13.5px] md:text-[clamp(11.2px,0.71vw,18.2px)] leading-[2.0] tracking-[0.07em] text-(--color-base-dark)/85 md:max-w-[460px] ${
+                          band.cta ? "mb-10" : ""
+                        }`}
+                      >
+                        {band.body}
+                      </p>
+                    ) : null}
+                    {band.cta ? (
+                      <Link
+                        href={band.href}
+                        className="group inline-flex items-center gap-4 font-serif text-[13.5px] md:text-[clamp(12.6px,0.71vw,17.5px)] tracking-[0.08em] text-(--color-base-dark)"
+                      >
+                        <span className="relative">
+                          {band.cta}
+                          <span className="absolute -bottom-1 left-0 h-px w-full bg-(--color-base-dark)/30 transition-colors duration-500 group-hover:bg-(--color-base-dark)" />
+                        </span>
+                        <span aria-hidden className="text-[13px]">→</span>
+                      </Link>
+                    ) : null}
+                  </div>
+                ) : null}
               </div>
 
               {/* 章の要約ストリップ — TOP だけで主要情報を追える密度に */}

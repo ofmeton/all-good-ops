@@ -119,7 +119,7 @@ export const TOP = {
       mapEmbed: true,
       body: "一色海岸まで徒歩 8 分、路線バスの停留所までは 1 分。歩いて 30 秒のコンビニと徒歩 5 分の地元スーパーで、滞在中の買い出しには困りません。観光にも出かけやすい場所です。",
       img: "/images/access/access-balcony.jpg",
-      cta: "アクセスを見る",
+      cta: "", // 空 = 帯にリンクを出さない（ストリップ末尾の「アクセスを見る」に一本化）
     },
     {
       href: "/owner",
@@ -130,10 +130,10 @@ export const TOP = {
     },
     {
       href: "/reserve",
-      title: "予約と空き状況",
-      body: "ご予約は Airbnb から。空き状況のカレンダーはサイト内でそのまま確認できます。",
+      title: "ご予約について",
+      body: "空き状況をご確認のうえ、Airbnb からご予約いただけます。",
       img: "/images/access/access-entrance.jpg",
-      cta: "空き状況を見る",
+      cta: "", // 空 = 帯自体（写真・タイトル）が /reserve へのリンク。ストリップの重複ボタンは撤去
     },
   ],
 
@@ -171,6 +171,8 @@ export const TOP = {
     ],
     // iframeTitle は帯の地図 iframe の title 属性として使われる
     iframeTitle: "TERRA HAYAMA — 葉山町一色の地図",
+    moreCta: "アクセスを見る",
+    moreHref: "/access",
   },
 
   // 02 設備と備品 — 章直下の要約（4 行の一覧）
@@ -186,15 +188,9 @@ export const TOP = {
     moreHref: "/rooms#overview",
   },
 
-  // 06 予約と空き状況 — 章直下の要約（チェックイン/アウトはアクセス章へ移動済み）
+  // 06 予約と空き状況 — 章直下の要約（info/Airbnbボタン/空き状況リンクは帯・/reserveと重複するため撤去。ご利用にあたってのみ）
   reservationDetail: {
-    info: [
-      { label: "ご予約", value: "Airbnb の物件ページから" },
-      { label: "空き状況", value: "予約ページのカレンダーで確認できます" },
-    ],
     notesTitle: "ご利用にあたって", // アコーディオンの見出し（中身は NOTICES）
-    availabilityCta: "空き状況を見る",
-    availabilityHref: "/reserve",
   },
 };
 
@@ -242,7 +238,7 @@ export const STAY_PAGE = {
     "TERRA HAYAMA での過ごし方。歩いて 8 分の一色海岸と海越しの富士山、お部屋で楽しむ抹茶と葉山アイス。",
   hero: {
     img: "/images/library/terra-135.jpg",
-    focal: "50% 50%", // 切り抜きの中心
+    focal: "59% 27%", // 切り抜きの中心
     alt: "TERRA HAYAMA 過ごし方 — 床の間に飾られた棚田のアート",
     titleLines: ["葉山の一日を", "軽やかに過ごす。"],
     lead: "海辺の散歩と、富士の景色と、お部屋で一息。",
@@ -266,9 +262,9 @@ export const STAY_PAGE = {
     },
     {
       no: "03",
-      title: "足を伸ばして、上山口の棚田",
+      title: "足を伸ばせば、上山口の棚田",
       body: "時間に余裕があれば、オーナーたちがお米を育てる上山口の棚田まで。海とはまた違う、葉山の里山の風景に出会えます。",
-      image: "/images/library/taue-01.jpg" as string | null,
+      image: "/images/stay/stay-tanada.jpg" as string | null,
       accent: "soil",
     },
   ],
@@ -284,14 +280,14 @@ export const OWNER_PAGE = {
     "TERRA HAYAMA を営む BEAT ICE のこと。棚田で育てたお米からつくるアイスクリーム、学校給食への提供、田んぼでの米づくりを紹介します。",
   hero: {
     img: "/images/owner/owner-family.jpg",
-    focal: "50% 50%", // 切り抜きの中心
+    focal: "30% 46%", // 切り抜きの中心
     alt: "TERRA HAYAMA — 宿を営む BEAT ICE のふたり",
     titleLines: ["お米のアイスをつくる、", "私たちのこと"],
   },
   sideLabel: "葉山に暮らす", // PC で縦書き表示される添え書き
   intro: [
-    "TERRA HAYAMA を営むのは、葉山の BEAT ICE です。棚田で育てたお米からアイスクリームをつくり、海と里山を行き来しながら暮らしています。",
-    "田んぼでの米づくりから、学校給食への提供、料理教室やマルシェの主催まで。そうした暮らしの延長に、この宿があります。",
+    "TERRA HAYAMA を営む私たち BEAT ICE は、棚田で育てたお米からアイスクリームをつくっています。",
+    "田んぼでの米づくりから、学校給食への提供、料理教室やマルシェの主催まで。さまざまな取り組みの延長に、この宿があります。",
     "葉山に移り住んで、十年。この町で私たちが好きになったものを、訪れる人にも見つけてもらえたらと願いながら、TERRA HAYAMA を営んでいます。",
   ],
   // 公式サイトへの導線（導入文の下に表示）
