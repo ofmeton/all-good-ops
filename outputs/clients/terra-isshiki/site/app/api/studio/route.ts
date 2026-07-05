@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import fs from "node:fs";
 import path from "node:path";
-import { appendImageToArray, extractGalleries, removeArrayElement, replaceField } from "../../studio/lib";
+import { appendImageToArray, extractGalleries, removeArrayElement, reorderArrayElement, replaceField } from "../../studio/lib";
 
 /**
  * studio（開発サーバー限定の編集 UI）専用の Route Handler。
@@ -12,6 +12,7 @@ import { appendImageToArray, extractGalleries, removeArrayElement, replaceField 
  *   - 省略 or "replace"（後方互換）: { path, value } で replaceField
  *   - "append": { op, arrayPath, value } で画像ギャラリー末尾に1枚追加
  *   - "remove": { op, arrayPath, index } で画像ギャラリーから1枚削除
+ *   - "reorder": { op, arrayPath, fromIndex, toIndex } で画像を別位置へ移動（枚数不変）
  */
 
 // リクエストボディの形（value.length の上限含めて検証する）
@@ -52,6 +53,10 @@ export async function POST(req: Request) {
 
   if (op === "remove") {
     return handleRemove(body as Record<string, unknown>);
+  }
+
+  if (op === "reorder") {
+    return handleReorder(body as Record<string, unknown>);
   }
 
   if (op !== undefined && op !== "replace") {
@@ -204,6 +209,72 @@ function handleRemove(body: Record<string, unknown>) {
       newSource = removeArrayElement(source, arrayPath, index);
     } catch (e) {
       const message = e instanceof Error ? e.message : "remove failed";
+      return NextResponse.json({ error: message }, { status: 400 });
+    }
+
+    fs.writeFileSync(targetPath, newSource, "utf-8");
+  } catch {
+    return NextResponse.json({ error: "failed to read or write copy.ts" }, { status: 500 });
+  }
+
+  return NextResponse.json({ ok: true });
+}
+
+// ------------------------------------------------------------------
+// op === "reorder": 画像ギャラリー内の1枚を別位置へ移動（枚数は変わらない）
+// ------------------------------------------------------------------
+function handleReorder(body: Record<string, unknown>) {
+  if (!("arrayPath" in body) || !("fromIndex" in body) || !("toIndex" in body)) {
+    return NextResponse.json(
+      { error: "body must have arrayPath, fromIndex, toIndex" },
+      { status: 400 },
+    );
+  }
+
+  const { arrayPath, fromIndex, toIndex } = body as {
+    arrayPath: unknown;
+    fromIndex: unknown;
+    toIndex: unknown;
+  };
+
+  if (typeof arrayPath !== "string" || !FIELD_PATH_PATTERN.test(arrayPath)) {
+    return NextResponse.json({ error: "invalid arrayPath" }, { status: 400 });
+  }
+
+  if (
+    typeof fromIndex !== "number" ||
+    !Number.isInteger(fromIndex) ||
+    fromIndex < 0 ||
+    typeof toIndex !== "number" ||
+    !Number.isInteger(toIndex) ||
+    toIndex < 0
+  ) {
+    return NextResponse.json({ error: "invalid indices" }, { status: 400 });
+  }
+
+  const targetPath = getTargetPath();
+
+  try {
+    const source = fs.readFileSync(targetPath, "utf-8");
+
+    // 対象が画像ギャラリーであること・両 index が範囲内であることを保証する
+    let galleries: ReturnType<typeof extractGalleries>;
+    try {
+      galleries = extractGalleries(source);
+    } catch {
+      return NextResponse.json({ error: "failed to inspect copy.ts" }, { status: 500 });
+    }
+
+    const gallery = galleries.find((g) => g.path === arrayPath);
+    if (!gallery || fromIndex >= gallery.images.length || toIndex >= gallery.images.length) {
+      return NextResponse.json({ error: "not an image array or index out of range" }, { status: 400 });
+    }
+
+    let newSource: string;
+    try {
+      newSource = reorderArrayElement(source, arrayPath, fromIndex, toIndex);
+    } catch (e) {
+      const message = e instanceof Error ? e.message : "reorder failed";
       return NextResponse.json({ error: message }, { status: 400 });
     }
 

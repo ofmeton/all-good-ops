@@ -442,3 +442,41 @@ export function removeArrayElement(source: string, arrayPath: string, index: num
   assertReparsable(newSource, arrayPath);
   return newSource;
 }
+
+/**
+ * 画像配列の fromIndex 番目の要素を toIndex 位置へ移動する（枚数は不変）。範囲外は throw。
+ * 要素の元テキスト（コメント・整形含む）をそのまま保ったまま配列を再構築する。
+ */
+export function reorderArrayElement(
+  source: string,
+  arrayPath: string,
+  fromIndex: number,
+  toIndex: number,
+): string {
+  const sourceFile = ts.createSourceFile("copy.ts", source, ts.ScriptTarget.Latest, true);
+  const arrayNode = findArrayNode(sourceFile, arrayPath);
+
+  const elements = arrayNode.elements;
+  if (
+    fromIndex < 0 ||
+    fromIndex >= elements.length ||
+    toIndex < 0 ||
+    toIndex >= elements.length
+  ) {
+    throw new Error("index out of range for array: " + arrayPath);
+  }
+
+  const existingTexts = elements.map((el) => source.slice(el.getStart(sourceFile), el.getEnd()));
+  const newTexts = [...existingTexts];
+  const [moved] = newTexts.splice(fromIndex, 1);
+  newTexts.splice(toIndex, 0, moved);
+
+  const baseIndent = getBaseIndent(source, arrayNode, sourceFile);
+  const rebuilt = rebuildArrayText(newTexts, baseIndent);
+
+  const newSource =
+    source.slice(0, arrayNode.getStart(sourceFile)) + rebuilt + source.slice(arrayNode.getEnd());
+
+  assertReparsable(newSource, arrayPath);
+  return newSource;
+}

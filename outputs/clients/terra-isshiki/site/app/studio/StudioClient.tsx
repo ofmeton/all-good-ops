@@ -301,6 +301,27 @@ async function removeGalleryImage(
   }
 }
 
+async function reorderGalleryImage(
+  arrayPath: string,
+  fromIndex: number,
+  toIndex: number,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  try {
+    const res = await fetch("/api/studio", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ op: "reorder", arrayPath, fromIndex, toIndex }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      return { ok: false, error: data?.error ?? "並び替えに失敗しました" };
+    }
+    return { ok: true };
+  } catch {
+    return { ok: false, error: "通信に失敗しました。ネットワークをご確認ください。" };
+  }
+}
+
 /* ------------------------------------------------------------------
  * text フィールド編集
  * ------------------------------------------------------------------ */
@@ -604,6 +625,7 @@ function GallerySlideCard({
   const [status, setStatus] = useState<SaveStatus>("idle");
   const [errorMsg, setErrorMsg] = useState("");
   const [removing, setRemoving] = useState(false);
+  const [moving, setMoving] = useState(false);
 
   async function handleSelect(path: string) {
     setStatus("saving");
@@ -629,6 +651,22 @@ function GallerySlideCard({
       onRefreshNeeded();
     } else {
       setRemoving(false);
+      setStatus("error");
+      setErrorMsg(result.error);
+    }
+  }
+
+  async function handleMove(dir: -1 | 1) {
+    if (moving) return;
+    const target = index + dir;
+    if (target < 0 || target >= gallery.images.length) return;
+    setMoving(true);
+    setErrorMsg("");
+    const result = await reorderGalleryImage(gallery.path, index, target);
+    if (result.ok) {
+      onRefreshNeeded(); // 成功時は親が再取得 → このカードは作り直されるので setMoving(false) 不要
+    } else {
+      setMoving(false);
       setStatus("error");
       setErrorMsg(result.error);
     }
@@ -664,6 +702,25 @@ function GallerySlideCard({
           {status === "error" && <span className="text-[12px] text-red-700">{errorMsg}</span>}
           {status === "saving" && <span className="text-[12px] text-(--color-mist)">保存中…</span>}
           {status === "saved" && <span className="text-[12px] text-(--color-pine)">✓ 保存しました</span>}
+          {moving && <span className="text-[12px] text-(--color-mist)">移動中…</span>}
+          <button
+            type="button"
+            onClick={() => handleMove(-1)}
+            disabled={index === 0 || moving}
+            title="順番を前へ（左/上に移動）"
+            className="rounded-sm border border-(--color-sand) px-2 py-1 text-[11px] leading-none text-(--color-mist) transition-colors hover:border-(--color-soil) hover:text-(--color-soil) disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            ↑
+          </button>
+          <button
+            type="button"
+            onClick={() => handleMove(1)}
+            disabled={index === gallery.images.length - 1 || moving}
+            title="順番を次へ（右/下に移動）"
+            className="rounded-sm border border-(--color-sand) px-2 py-1 text-[11px] leading-none text-(--color-mist) transition-colors hover:border-(--color-soil) hover:text-(--color-soil) disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            ↓
+          </button>
           <button
             type="button"
             onClick={handleRemove}
