@@ -17,8 +17,10 @@ export const metadata = {
     description: copy.META.description,
   },
   twitter: {
+    card: "summary_large_image",
     title: copy.META.siteTitle,
     description: copy.META.twitterDescription,
+    images: [copy.META.ogImage],
   },
 };
 

@@ -14,8 +14,10 @@ export const metadata = {
     description: copy.OWNER_PAGE.metaDescription,
   },
   twitter: {
+    card: "summary_large_image",
     title: copy.OWNER_PAGE.metaTitle,
     description: copy.OWNER_PAGE.metaDescription,
+    images: [copy.META.ogImage],
   },
 };
 

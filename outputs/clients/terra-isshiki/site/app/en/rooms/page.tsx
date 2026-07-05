@@ -14,8 +14,10 @@ export const metadata = {
     description: copy.ROOMS_PAGE.metaDescription,
   },
   twitter: {
+    card: "summary_large_image",
     title: copy.ROOMS_PAGE.metaTitle,
     description: copy.ROOMS_PAGE.metaDescription,
+    images: [copy.META.ogImage],
   },
 };
 
