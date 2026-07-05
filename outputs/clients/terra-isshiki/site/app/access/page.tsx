@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import { SiteHeader } from "../_components/SiteHeader";
 import { ParallaxLayer } from "../_components/ParallaxLayer";
 import { SiteFooter } from "../_components/SiteFooter";
@@ -160,23 +159,6 @@ export default function AccessPage() {
             ))}
           </ul>
         </div>
-      </section>
-
-      {/* Next link */}
-      <section className="border-t border-(--color-base-dark)/10 px-6 py-[clamp(80px,7.3vw,112px)] md:px-12 text-center">
-        <h3 className="font-serif text-[22.2px] md:text-[clamp(23.8px,1.97vw,50.4px)] leading-[1.4] tracking-[0.04em] text-(--color-base-dark) mb-10">
-          {c.next.title}
-        </h3>
-        <Link
-          href={c.next.href}
-          className="group inline-flex items-center gap-4 font-serif text-[13.5px] md:text-[clamp(12.6px,0.71vw,17.5px)] tracking-[0.08em] text-(--color-base-dark)"
-        >
-          <span className="relative">
-            {c.next.cta}
-            <span className="absolute -bottom-1 left-0 h-px w-full bg-(--color-base-dark)/30 transition-colors duration-500 group-hover:bg-(--color-base-dark)" />
-          </span>
-          <span aria-hidden className="text-[13px]">→</span>
-        </Link>
       </section>
 
       <SiteFooter />

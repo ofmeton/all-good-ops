@@ -1,9 +1,19 @@
+import Link from "next/link";
 import { SITE } from "../copy";
 
-/* サイト共通フッター。ブランド・住所・運営表記・Airbnb 予約ボタン・コピーライト。
-   文言は app/copy.ts（SITE）で編集できます。 */
+/* サイト共通フッター。ブランド・住所・運営表記・CTA・コピーライト。
+   文言は app/copy.ts（SITE）で編集できます。
+   CTA は既定で「空き状況を確認する」→ /reserve（サイト内一本化）。
+   /reserve ページ自身だけは ctaMode="airbnb" で Airbnb 直リンクにする
+  （自己ループを避けるため）。 */
 
-export function SiteFooter() {
+export function SiteFooter({
+  ctaMode = "reserve",
+}: {
+  ctaMode?: "reserve" | "airbnb";
+}) {
+  const isAirbnb = ctaMode === "airbnb";
+
   return (
     <footer className="bg-(--color-base-dark) text-(--color-base-light) px-6 py-[clamp(64px,7vw,112px)] md:px-12">
       <div className="mx-auto max-w-[1640px] grid gap-10 md:grid-cols-[1fr_auto] md:items-end">
@@ -20,15 +30,25 @@ export function SiteFooter() {
             {SITE.operator}
           </p>
         </div>
-        <a
-          href={SITE.airbnbUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group inline-flex items-center gap-3 font-serif text-[12.5px] md:text-[clamp(11.2px,0.6vw,15.4px)] tracking-[0.1em] border border-(--color-base-light)/20 px-7 py-4 md:px-[clamp(28px,2.19vw,56px)] md:py-[clamp(16px,1.09vw,28px)] hover:bg-(--color-base-light)/8 transition-colors"
-        >
-          <span>{SITE.reserveButton}</span>
-          <span aria-hidden className="cta-arrow group-hover:[animation-play-state:paused]">→</span>
-        </a>
+        {isAirbnb ? (
+          <a
+            href={SITE.airbnbUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group inline-flex items-center gap-3 font-serif text-[12.5px] md:text-[clamp(11.2px,0.6vw,15.4px)] tracking-[0.1em] border border-(--color-base-light)/20 px-7 py-4 md:px-[clamp(28px,2.19vw,56px)] md:py-[clamp(16px,1.09vw,28px)] hover:bg-(--color-base-light)/8 transition-colors"
+          >
+            <span>{SITE.reserveButton}</span>
+            <span aria-hidden className="cta-arrow group-hover:[animation-play-state:paused]">→</span>
+          </a>
+        ) : (
+          <Link
+            href="/reserve"
+            className="group inline-flex items-center gap-3 font-serif text-[12.5px] md:text-[clamp(11.2px,0.6vw,15.4px)] tracking-[0.1em] border border-(--color-base-light)/20 px-7 py-4 md:px-[clamp(28px,2.19vw,56px)] md:py-[clamp(16px,1.09vw,28px)] hover:bg-(--color-base-light)/8 transition-colors"
+          >
+            <span>{SITE.footerReserveCta}</span>
+            <span aria-hidden className="cta-arrow group-hover:[animation-play-state:paused]">→</span>
+          </Link>
+        )}
       </div>
       <p className="mt-12 md:mt-16 font-garamond text-[8.5px] md:text-[7.7px] lg:text-[8.4px] tracking-[0.32em] uppercase opacity-55 text-center md:text-left">
         {SITE.copyright}

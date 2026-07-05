@@ -28,11 +28,11 @@ export function AvailabilityCalendarUI({
         <p className="font-garamond italic text-[11.1px] md:text-[clamp(9.8px,0.6vw,15.4px)] tracking-[0.4em] uppercase text-(--color-soil)">
           Availability
         </p>
-        {isLive ? (
+        {isLive && (
           <p className="font-garamond text-[10.25px] md:text-[clamp(9.1px,0.49vw,12.6px)] tracking-[0.32em] uppercase text-(--color-base-dark)/55">
             Live from Airbnb · 1h cache
           </p>
-        ) : null}
+        )}
       </div>
 
       {/* Mobile tabs */}

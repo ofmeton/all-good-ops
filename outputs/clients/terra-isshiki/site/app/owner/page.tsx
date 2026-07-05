@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { SiteHeader } from "../_components/SiteHeader";
-import { ReservationCTA } from "../_components/ReservationCTA";
 import { ParallaxLayer } from "../_components/ParallaxLayer";
 import { StackedPhotos } from "../_components/StackedPhotos";
 import { SiteFooter } from "../_components/SiteFooter";
@@ -151,8 +150,6 @@ export default function OwnerPage() {
           </div>
         </div>
       </section>
-
-      <ReservationCTA tone="dark" />
 
       {/* Next link */}
       <section className="border-t border-(--color-base-dark)/10 px-6 py-[clamp(80px,7.3vw,112px)] md:px-12 text-center">

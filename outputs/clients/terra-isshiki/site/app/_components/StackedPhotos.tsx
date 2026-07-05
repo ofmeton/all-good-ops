@@ -30,15 +30,15 @@ export function StackedPhotos({
 
   return (
     // overflow は隠さない — 2 枚がずれてはみ出す「浮き」がこのコンポーネントの命。
-    // 70% サイズで左右に振り分け、背面がしっかり見える余白を残す。
+    // 55% サイズで四隅に振り分け、重なりはごくわずかに留める。
     <div className={`relative ${className}`}>
       {/* 背面: 右下寄り・わずかに右回転 */}
-      <div className="photo-float absolute right-0 bottom-0 h-[70%] w-[70%] rotate-[1.6deg] overflow-hidden rounded-sm bg-white">
+      <div className="photo-float absolute right-0 bottom-0 h-[55%] w-[55%] rotate-[1.6deg] overflow-hidden rounded-sm bg-white">
         <Image src={back.src} alt={back.alt} fill sizes={sizes} quality={84} className="object-cover" />
       </div>
 
       {/* 手前: 左上寄り・背面と逆方向にごく僅か回転 */}
-      <div className="photo-float absolute left-0 top-0 h-[70%] w-[70%] -rotate-[0.8deg] overflow-hidden rounded-sm bg-white">
+      <div className="photo-float absolute left-0 top-0 h-[55%] w-[55%] -rotate-[0.8deg] overflow-hidden rounded-sm bg-white">
         <Image src={front.src} alt={front.alt} fill sizes={sizes} quality={84} className="object-cover" />
       </div>
     </div>

@@ -51,7 +51,7 @@ export default function ReservePage() {
         </div>
       </section>
 
-      <SiteFooter />
+      <SiteFooter ctaMode="airbnb" />
     </main>
   );
 }

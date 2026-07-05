@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { SiteHeader } from "../_components/SiteHeader";
 import { RoomsGallery } from "../_components/RoomsGallery";
-import { ReservationCTA } from "../_components/ReservationCTA";
 import { ParallaxLayer } from "../_components/ParallaxLayer";
 import { SiteFooter } from "../_components/SiteFooter";
 import { ROOMS_PAGE } from "../copy";
@@ -176,8 +175,6 @@ export default function RoomsPage() {
           </div>
         </div>
       </section>
-
-      <ReservationCTA tone="dark" />
 
       {/* Next link */}
       <section className="border-t border-(--color-base-dark)/10 px-6 py-[clamp(80px,7.3vw,112px)] md:px-12 text-center">

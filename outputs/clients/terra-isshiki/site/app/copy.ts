@@ -23,7 +23,8 @@ export const SITE = {
   footerArea: "Hayama, Isshiki",
   copyright: "© 2026 TERRA HAYAMA. All rights reserved.",
   reserveDock: "空き状況を見る", // 画面右下に浮いている予約ボタン（/reserve へ）
-  reserveButton: "Airbnb で予約する", // ページ内の予約ボタン
+  reserveButton: "Airbnb で予約する", // ページ内の予約ボタン（/reserve ページのフッターのみ、Airbnb 直リンク）
+  footerReserveCta: "空き状況を確認する", // フッター共通CTA（/reserve ページ以外、/reserve へのリンク）
 };
 
 /* ------------------------------------------------------------------
@@ -76,11 +77,11 @@ export const TOP = {
   // FV 背景のスライドショー（建物の外観・内観が伝わる写真のみ）
   heroSlides: [
     { src: "/images/hero/hero-exterior-01.jpg", alt: "TERRA HAYAMA 外観 — 白漆喰と焼杉の蔵のような佇まい" },
-    { src: "/images/hero/hero-01-living.jpg", alt: "TERRA HAYAMA リビングダイニング" },
     { src: "/images/hero/hero-02-bedroom.jpg", alt: "TERRA HAYAMA 寝室" },
-    { src: "/images/hero/hero-exterior-02.jpg", alt: "TERRA HAYAMA 外観 — 葉山一色の住宅地に建つ一軒家" },
-    { src: "/images/hero/hero-03-dining.jpg", alt: "TERRA HAYAMA ダイニングとキッチン" },
-    { src: "/images/hero/hero-04-arch.jpg", alt: "TERRA HAYAMA 和モダンの空間" },
+    { src: "/images/library/terra-027.jpg", alt: "TERRA HAYAMA ダイニングとキッチン" },
+    { src: "/images/library/terra-034.jpg", alt: "TERRA HAYAMA 和モダンの空間" },
+    { src: "/images/library/terra-034.jpg", alt: "" },
+    { src: "/images/library/terra-034.jpg", alt: "" },
   ],
 
   // 6 章の帯（タイトル → 写真 → 本文 → リンク）
@@ -285,7 +286,7 @@ export const OWNER_PAGE = {
     img: "/images/owner/owner-family.jpg",
     focal: "30% 46%", // 切り抜きの中心
     alt: "TERRA HAYAMA — 宿を営む BEAT ICE のふたり",
-    titleLines: ["お米のアイスをつくる、", "私たちのこと"],
+    titleLines: ["", "BEAT ICE について"],
   },
   sideLabel: "葉山に暮らす", // PC で縦書き表示される添え書き
   intro: [
