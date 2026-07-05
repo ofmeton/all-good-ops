@@ -478,5 +478,5 @@ export const RESERVE_PAGE = {
   metaTitle: "ご予約",
   title: "ご予約と空き状況",
   lead: "空き状況をカレンダーでご確認のうえ、Airbnb のページからご予約ください。",
-  liveLabel: "Airbnb と連携中（最大1時間前の情報です）", // カレンダー右上、Airbnb 連携できているときだけ表示
+  liveLabel: "Airbnb と連携中（最大15分前の情報です）", // カレンダー右上、Airbnb 連携できているときだけ表示
 };

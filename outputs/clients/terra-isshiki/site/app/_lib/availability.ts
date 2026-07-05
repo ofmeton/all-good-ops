@@ -48,7 +48,7 @@ export async function fetchAvailability(): Promise<BlockedRange[]> {
   if (!url) return [];
   try {
     const res = await fetch(url, {
-      next: { revalidate: 3600 }, // 1時間キャッシュ
+      next: { revalidate: 900 }, // 15分キャッシュ（Airbnb 側の更新頻度に対し十分な速さ）
     });
     if (!res.ok) return [];
     const text = await res.text();
