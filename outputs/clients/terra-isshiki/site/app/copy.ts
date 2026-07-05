@@ -44,11 +44,11 @@ export const META = {
   siteTitle: "TERRA HAYAMA — 葉山一棟貸しの宿",
   titleTemplate: "%s · TERRA HAYAMA",
   description:
-    "葉山一色海岸まで徒歩 8 分。葉山アイス屋 BEAT ICE が営む、海と山の風景に溶ける一棟貸しの宿。",
+    "葉山一色海岸まで徒歩 8 分。葉山アイスの BEAT ICE が営む、海と山の風景に溶ける一棟貸しの宿。",
   twitterDescription:
     "葉山一色海岸まで徒歩 8 分。BEAT ICE が営む、海と山の風景に溶ける一棟貸し。",
   ogImageAlt: "TERRA HAYAMA — リビングダイニング",
-  ogImage: "/images/hero/hero-01-living.jpg", // SNS シェア時のサムネイル画像
+  ogImage: "/images/library/terra-005.jpg", // SNS シェア時のサムネイル画像
 };
 
 /* ------------------------------------------------------------------
@@ -95,9 +95,9 @@ export const TOP = {
     {
       href: "/rooms#overview",
       title: "設備・備品",
-      body: "調理器具・食器は一式ございます。ドラム式洗濯機と洗剤がございますので、自宅と同じように洗濯ができます。タオルや歯ブラシ、シャンプーなどのアメニティもございます。",
+      body: "",
       img: "/images/library/terra-122.jpg",
-      cta: "設備を見る",
+      cta: "設備の詳細を見る",
     },
     {
       href: "/stay",
@@ -122,15 +122,15 @@ export const TOP = {
     },
     {
       href: "/owner",
-      title: "運営はBEAT ICE",
-      body: "私たちBEAT ICEは、葉山の棚田で育てたお米からアイスクリームをつくっています。地域の学校給食にアイスを届けたり、教室で授業をすることもあります。この宿も、そんな夫婦の暮らしの続きにあります。",
+      title: "私たちについて",
+      body: "私たちBEAT ICEは、葉山の棚田で育てたお米からアイスクリームをつくっています。地域の学校給食にアイスを届けたり、教室で授業をすることもあります。この宿も、そんな夫婦の葉山愛から生まれました。",
       img: "/images/owner/owner-couple.jpg",
       cta: "BEAT ICE について",
     },
     {
       href: "/access#reservation",
       title: "予約と空き状況",
-      body: "ご予約は Airbnb から。空き状況のカレンダー、住所と地図も、サイト内でそのまま確認できます。",
+      body: "ご予約は Airbnb から。空き状況のカレンダーはサイト内でそのまま確認できます。",
       img: "/images/access/access-entrance.jpg",
       cta: "空き状況を見る",
     },
@@ -152,9 +152,8 @@ export const TOP = {
       { src: "/images/rooms/laundry.jpg", alt: "ランドリー" },
       { src: "/images/rooms/ldk-05.jpg", alt: "リビング" },
       { src: "/images/rooms/bedroom-02.jpg", alt: "寝室" },
-      { src: "/images/rooms/kitchen-03.jpg", alt: "キッチン" },
     ],
-    moreCta: "部屋の写真をもっと見る",
+    moreCta: "部屋の詳細を見る",
     moreHref: "/rooms",
   },
 
@@ -164,7 +163,7 @@ export const TOP = {
     rows: [
       { label: "住所", value: SITE.postalAddress },
       { label: "電車・バス", value: "JR 逗子駅から路線バスで約 25 分。「旧役場前」で下車、徒歩 1 分です。" },
-      { label: "お車", value: "JR 逗子駅から約 15 分。" },
+      { label: "お車", value: "横浜横須賀道路「逗子IC」から約20分（交通状況による）。" },
       { label: "駐車場", value: "2 台（1 階の駐車スペース）" },
       { label: "チェックイン", value: "16:00 – 23:00" },
       { label: "チェックアウト", value: "11:00" },
@@ -220,7 +219,7 @@ export const POINTS = [
   { name: "森戸海岸", time: "車 8 分", note: "海水浴と夕陽のスポット" },
   { name: "上山口の棚田", time: "車 12 分", note: "葉山アイスのお米を育てる棚田" },
   { name: "旧役場前 バス停", time: "徒歩 1 分", note: "葉山〜JR 逗子駅を結ぶ路線バスの最寄り停留所" },
-  { name: "JR 逗子駅", time: "車 15 分 / バス 25 分", note: "横須賀線・湘南新宿ライン" },
+  { name: "JR 逗子駅", time: "バス 25 分", note: "横須賀線・湘南新宿ライン" },
 ];
 
 /* ------------------------------------------------------------------
@@ -239,10 +238,10 @@ export const STAY_PAGE = {
   metaDescription:
     "TERRA HAYAMA での過ごし方。歩いて 8 分の一色海岸、海越しの富士山、お部屋の抹茶、ウェルカムの葉山アイス。",
   hero: {
-    img: "/images/hero/hero-06-137.jpg",
+    img: "/images/library/terra-135.jpg",
     alt: "TERRA HAYAMA 過ごし方 — 床の間に飾られた棚田のアート",
-    titleLines: ["葉山の一日を、", "軽やかに"],
-    lead: "一色海岸、海越しの富士山、抹茶、葉山アイス。",
+    titleLines: ["葉山の一日を", "軽やかに過ごす。"],
+    lead: "海辺の散歩と、富士の景色と、お部屋で一息。",
   },
   // icon: 写真が無い項目に表示する線画（wave / sun / leaf）
   // accent: 番号の色味（mist=青灰 / pine=松緑 / soil=土色）
@@ -250,7 +249,7 @@ export const STAY_PAGE = {
     {
       no: "01",
       title: "一色海岸へ",
-      body: "宿から海までは歩いて 8 分。朝の散歩や、夕方の寄り道にどうぞ。TERRA の過ごし方は、この海から始まります。",
+      body: "宿から海までは歩いて 8 分。朝の散歩や、夕方の寄り道にもちょうどいい。葉山時間は、この海から始まります。",
       image: null as string | null,
       icon: "wave",
       accent: "mist",
@@ -288,7 +287,7 @@ export const OWNER_PAGE = {
   metaDescription:
     "TERRA HAYAMA を営む BEAT ICE のこと。棚田で育てたお米からつくるアイスクリーム、学校給食への提供、田んぼでの米づくりを紹介します。",
   hero: {
-    img: "/images/about-hero-tanada.jpg",
+    img: "/images/owner/owner-family.jpg",
     alt: "TERRA HAYAMA — BEAT ICE が育てる葉山の棚田、夕陽の風景",
     titleLines: ["お米のアイスをつくる、", "私たちのこと"],
   },
@@ -332,39 +331,48 @@ export const OWNER_PAGE = {
  * 部屋と空間ページ（/rooms）
  * ------------------------------------------------------------------ */
 export const ROOMS_PAGE = {
-  metaTitle: "部屋と空間",
+  metaTitle: "お部屋について",
   metaDescription:
     "TERRA HAYAMA の部屋と空間。LDK・寝室・バスルーム・ランドリー・キッチン詳細をご紹介します。",
   hero: {
-    img: "/images/hero/hero-05-135.jpg",
+    img: "/images/library/terra-005.jpg",
     alt: "TERRA HAYAMA 部屋と空間 — 押し花と詩のしつらえ",
-    title: "部屋と空間",
+    title: "お部屋について",
     lead: "一軒家の二階を、まるごと貸し切り。\n最大 8 名まで滞在できる、ゆとりの間取り。",
   },
   // 写真ギャラリー（自動送りカルーセル）
   gallery: [
     {
-      caption: "リビング・ダイニング・キッチン",
+      caption: "居室",
       description:
-        "木の天井と一面の窓。ソファ、楕円のダイニングテーブル、テレビが揃う、家族で集う空間。",
+        "リビング・ダイニング・キッチンがつながる、広々とした空間。\n木の温かみと漆喰の手触りに包まれながらおくつろぎいただけます。",
       items: [
         "/images/rooms/ldk-01.jpg",
         "/images/rooms/ldk-02.jpg",
         "/images/rooms/ldk-03.jpg",
         "/images/rooms/ldk-04.jpg",
+        "/images/library/terra-016.jpg",
       ],
     },
     {
       caption: "最大 8 名の寝室",
       description:
-        "二段ベッド 2 台 / セミダブル 1 台 / 布団 2 組。家族・友人グループでまとまって泊まれます。",
-      items: ["/images/rooms/bedroom-01.jpg", "/images/rooms/bedroom-02.jpg"],
+        "二段ベッド 2 台 / セミダブル 1 台 / 布団 2 組。家族・友人グループでご利用いただけます。",
+      items: [
+        "/images/rooms/bedroom-01.jpg",
+        "/images/rooms/bedroom-02.jpg",
+        "/images/library/terra-048.jpg",
+      ],
     },
     {
       caption: "お風呂と水まわり",
       description:
-        "ひのきに包まれたバスルーム。ドラム式洗濯機と真鍮の洗面ボウルが並ぶランドリー一体空間。",
-      items: ["/images/rooms/bath.jpg", "/images/rooms/laundry.jpg"],
+        "木のぬくもりを感じる浴室。脱衣所には洗面台とドラム式洗濯機を備えています。",
+      items: [
+        "/images/rooms/bath.jpg",
+        "/images/rooms/laundry.jpg",
+        "/images/library/terra-068.jpg",
+      ],
     },
   ],
   overviewTitle: "宿のご利用について",
@@ -430,25 +438,25 @@ export const ACCESS_PAGE = {
   metaDescription:
     "TERRA HAYAMA のアクセスと立地。葉山一色海岸まで徒歩 8 分。神奈川県三浦郡葉山町一色 1759-1-5。",
   hero: {
-    img: "/images/access/access-entrance.jpg",
+    img: "/images/library/terra-070.jpg",
     alt: "TERRA HAYAMA — 玄関の赤土壁と組子の引き戸",
-    title: "海まで、徒歩 8 分",
-    lead: "住宅地に流れる、\n葉山らしい時間の中に佇む。",
+    title: "アクセスと周辺情報",
+    lead: "住宅地に流れる、\n葉山時間。",
   },
   location: {
-    title: "葉山町、一色",
+    title: "基本情報",
     rows: [
       { label: "住所", value: SITE.postalAddress },
       { label: "タイプ", value: "一棟貸し（一軒家の 2 階フロア）／最大 8 名" },
       { label: "駐車場", value: "1 階に駐車スペースあり" },
     ],
     sideImg: {
-      src: "/images/access/access-balcony.jpg",
+      src: "/images/library/terra-131.jpg",
       alt: "TERRA HAYAMA バルコニーから望む葉山の町並み",
     },
   },
   map: {
-    titleLines: ["一色海岸からほど近い、", "静かな住宅地に"],
+    titleLines: ["一色海岸からほど近い、", "静かな住宅地"],
     iframeTitle: "TERRA HAYAMA — 葉山町一色の地図",
     mapsCta: "Google マップで見る",
   },
