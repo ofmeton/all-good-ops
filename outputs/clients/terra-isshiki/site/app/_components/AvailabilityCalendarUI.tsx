@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { SITE } from "../copy";
+import { SITE, RESERVE_PAGE } from "../copy";
 
 const AIRBNB_URL = SITE.airbnbUrl;
 const WEEKDAYS_JP = ["日", "月", "火", "水", "木", "金", "土"];
@@ -29,8 +29,8 @@ export function AvailabilityCalendarUI({
           Availability
         </p>
         {isLive && (
-          <p className="font-garamond text-[10.25px] md:text-[clamp(9.1px,0.49vw,12.6px)] tracking-[0.32em] uppercase text-(--color-base-dark)/55">
-            Live from Airbnb · 1h cache
+          <p className="font-mincho text-[10.5px] md:text-[clamp(9.5px,0.44vw,12.6px)] tracking-[0.06em] text-(--color-base-dark)/55">
+            {RESERVE_PAGE.liveLabel}
           </p>
         )}
       </div>

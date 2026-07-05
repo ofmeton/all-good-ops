@@ -259,9 +259,9 @@ export const STAY_PAGE = {
     },
     {
       no: "02",
-      title: "お部屋で、抹茶と葉山アイス",
+      title: "お部屋で、葉山アイスと抹茶",
       body: "ウェルカムサービスの葉山アイスと、挽きたての抹茶をお部屋でお楽しみいただけます。散歩から戻って、ゆっくり一息どうぞ。",
-      image: "/images/stay/stay-matcha.jpg" as string | null,
+      image: "/images/library/icecream-02.jpg" as string | null,
       accent: "pine",
     },
     {
@@ -478,4 +478,5 @@ export const RESERVE_PAGE = {
   metaTitle: "ご予約",
   title: "ご予約と空き状況",
   lead: "空き状況をカレンダーでご確認のうえ、Airbnb のページからご予約ください。",
+  liveLabel: "Airbnb と連携中（最大1時間前の情報です）", // カレンダー右上、Airbnb 連携できているときだけ表示
 };

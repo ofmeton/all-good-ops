@@ -56,7 +56,7 @@ export default function OwnerPage() {
       </section>
 
       {/* Intro — BEAT ICE とは */}
-      <section className="relative px-6 py-[clamp(96px,10vw,160px)] md:px-12">
+      <section className="relative px-6 pt-[clamp(64px,7vw,112px)] pb-[clamp(96px,10vw,160px)] md:px-12">
         <div className="mx-auto max-w-[1280px] grid gap-12 md:grid-cols-[180px_1fr] md:gap-16">
           <div className="md:pt-2">
             <p className="vrl hidden md:inline-block font-mincho text-[12px] md:text-[clamp(10.5px,0.66vw,16.8px)] tracking-[0.5em] text-(--color-base-dark)/55">
@@ -95,34 +95,43 @@ export default function OwnerPage() {
             {c.worksTitle}
           </h2>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-12 md:gap-x-12 md:gap-y-16">
-            {c.activities.map((a) => (
-              <div key={a.title}>
-                <StackedPhotos
-                  images={a.images}
-                  className="aspect-[4/3]"
-                  sizes="(min-width: 768px) 50vw, 100vw"
-                />
-                <h3 className="mt-5 font-serif text-[15px] md:text-[clamp(14px,0.9vw,23px)] tracking-[0.04em] text-(--color-base-dark)">
-                  {a.title}
-                </h3>
-                <p className="mt-3 font-mincho text-[12.5px] md:text-[clamp(10.5px,0.6vw,15.4px)] leading-[1.95] tracking-[0.06em] text-(--color-base-dark)/80">
-                  {a.body}
-                </p>
-                <a
-                  href={a.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group mt-4 inline-flex items-center gap-3 font-serif text-[12.5px] md:text-[clamp(11.2px,0.6vw,15.4px)] tracking-[0.06em] text-(--color-base-dark)"
-                >
-                  <span className="relative">
-                    {a.linkLabel}
-                    <span className="absolute -bottom-1 left-0 h-px w-full bg-(--color-base-dark)/30 transition-colors duration-500 group-hover:bg-(--color-base-dark)" />
-                  </span>
-                  <span aria-hidden className="text-[12px]">→</span>
-                </a>
-              </div>
-            ))}
+          {/* 1 カラムで縦に積み、PC は写真とテキストを左右交互（ジグザグ）に配置。
+              写真を画面幅の半分近くまで大きく見せる。 */}
+          <div className="flex flex-col gap-16 md:gap-24">
+            {c.activities.map((a, i) => {
+              const imageFirst = i % 2 === 0;
+              return (
+                <div key={a.title} className="grid gap-8 md:grid-cols-2 md:items-center md:gap-16">
+                  <div className={imageFirst ? "" : "md:order-2"}>
+                    <StackedPhotos
+                      images={a.images}
+                      className="aspect-[4/3]"
+                      sizes="(min-width: 768px) 50vw, 100vw"
+                    />
+                  </div>
+                  <div className={imageFirst ? "" : "md:order-1"}>
+                    <h3 className="font-serif text-[16px] md:text-[clamp(16px,1.1vw,26px)] tracking-[0.04em] text-(--color-base-dark)">
+                      {a.title}
+                    </h3>
+                    <p className="mt-3 font-mincho text-[13px] md:text-[clamp(11.5px,0.7vw,17px)] leading-[1.95] tracking-[0.06em] text-(--color-base-dark)/80">
+                      {a.body}
+                    </p>
+                    <a
+                      href={a.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group mt-5 inline-flex items-center gap-3 font-serif text-[12.5px] md:text-[clamp(11.9px,0.6vw,15.4px)] tracking-[0.06em] text-(--color-base-dark)"
+                    >
+                      <span className="relative">
+                        {a.linkLabel}
+                        <span className="absolute -bottom-1 left-0 h-px w-full bg-(--color-base-dark)/30 transition-colors duration-500 group-hover:bg-(--color-base-dark)" />
+                      </span>
+                      <span aria-hidden className="text-[12px]">→</span>
+                    </a>
+                  </div>
+                </div>
+              );
+            })}
           </div>
 
           {/* SNS */}
