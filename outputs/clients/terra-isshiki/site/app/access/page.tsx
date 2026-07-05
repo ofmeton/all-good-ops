@@ -101,7 +101,7 @@ export default function AccessPage() {
                 fill
                 sizes="(min-width: 768px) 50vw, 100vw"
                 quality={88}
-                className="object-cover object-center"
+                className="object-cover object-center md:object-[50%_80%]"
               />
             </ParallaxLayer>
           </div>

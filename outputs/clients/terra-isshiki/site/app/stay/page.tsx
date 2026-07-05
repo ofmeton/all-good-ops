@@ -107,7 +107,7 @@ export default function StayPage() {
                 {exp.image ? (
                   <div
                     className={`relative aspect-[16/10] md:aspect-[5/2] overflow-hidden bg-(--color-base-dark)/5 ${
-                      isSupplement ? "w-full md:max-w-[70%]" : "w-full"
+                      isSupplement ? "w-full md:max-w-[70%] md:mx-auto" : "w-full"
                     }`}
                   >
                     <ParallaxLayer>

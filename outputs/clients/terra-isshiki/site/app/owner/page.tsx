@@ -135,11 +135,11 @@ export default function OwnerPage() {
           </div>
 
           {/* SNS */}
-          <div className="mt-20 md:mt-28 border-t border-(--color-base-dark)/15 pt-10 md:pt-14">
+          <div className="mt-20 md:mt-28 border-t border-(--color-base-dark)/15 pt-10 md:pt-14 md:text-center">
             <p className="font-mincho text-[12.5px] md:text-[clamp(10.5px,0.6vw,15.4px)] leading-[1.95] tracking-[0.06em] text-(--color-base-dark)/75">
               {c.sns.body}
             </p>
-            <div className="mt-6 flex flex-wrap items-center gap-8">
+            <div className="mt-6 flex flex-wrap items-center gap-8 md:justify-center">
               {c.sns.links.map((link) => (
                 <a
                   key={link.href}

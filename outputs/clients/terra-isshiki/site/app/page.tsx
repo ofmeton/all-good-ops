@@ -55,7 +55,7 @@ function RoomsDetail() {
         {/* Specs — nagare 型の一覧バー。詳細は /rooms#overview と同値 */}
         <dl
           data-reveal
-          className="reveal grid grid-cols-2 gap-x-6 gap-y-8 max-w-[560px] border-t border-(--color-base-dark)/15 pt-8"
+          className="reveal grid grid-cols-2 gap-x-6 gap-y-8 max-w-[560px] border-t border-(--color-base-dark)/15 pt-8 md:mx-auto"
         >
           {d.specs.map((spec) => (
             <div key={spec.label}>
@@ -81,7 +81,7 @@ function RoomsDetail() {
         <div className="mx-auto max-w-[1480px] px-6 md:px-12">
           <Link
             href={d.moreHref}
-            className="group mt-10 inline-flex items-center gap-4 font-serif text-[13.5px] md:text-[clamp(12.6px,0.71vw,17.5px)] tracking-[0.08em] text-(--color-base-dark)"
+            className="group mt-10 inline-flex items-center gap-4 font-serif text-[13.5px] md:text-[clamp(12.6px,0.71vw,17.5px)] tracking-[0.08em] text-(--color-base-dark) md:flex md:w-fit md:ml-auto"
           >
             <span className="relative">
               {d.moreCta}
@@ -133,7 +133,7 @@ function AmenitiesDetail() {
   const d = TOP.amenitiesDetail;
   return (
     <DetailShell>
-      <dl className="border-t border-(--color-base-dark)/15 divide-y divide-(--color-base-dark)/10 max-w-[880px]">
+      <dl className="border-t border-(--color-base-dark)/15 divide-y divide-(--color-base-dark)/10 max-w-[880px] md:mx-auto">
         {d.rows.map((row) => (
           <div
             key={row.label}
@@ -148,12 +148,12 @@ function AmenitiesDetail() {
           </div>
         ))}
       </dl>
-      <p className="mt-8 font-mincho text-[11.5px] md:text-[clamp(10.5px,0.55vw,14px)] leading-[1.95] tracking-[0.06em] text-(--color-base-dark)/60 md:mt-10">
+      <p className="mt-8 font-mincho text-[11.5px] md:text-[clamp(10.5px,0.55vw,14px)] leading-[1.95] tracking-[0.06em] text-(--color-base-dark)/60 md:mt-10 md:max-w-[880px] md:mx-auto">
         {d.note}
       </p>
       <Link
         href={d.moreHref}
-        className="group mt-10 inline-flex items-center gap-4 font-serif text-[13.5px] md:text-[clamp(12.6px,0.71vw,17.5px)] tracking-[0.08em] text-(--color-base-dark)"
+        className="group mt-10 inline-flex items-center gap-4 font-serif text-[13.5px] md:text-[clamp(12.6px,0.71vw,17.5px)] tracking-[0.08em] text-(--color-base-dark) md:flex md:w-fit md:ml-auto"
       >
         <span className="relative">
           {d.moreCta}
@@ -173,7 +173,7 @@ function ReservationDetail() {
           予約・空き状況の導線は帯自体（写真・タイトル）と /reserve ページに一本化したため、
           ここには重複する info / Airbnb ボタンは置かず、末尾に /reserve への入口リンクを1つだけ添える。
           md:pr-16: 右端固定の予約 dock と ＋ マークが中間幅(1280-1500px)で重ならないよう内側に寄せる */}
-      <details className="group max-w-[720px] border-t border-(--color-base-dark)/15 md:pr-16">
+      <details className="group max-w-[720px] border-t border-(--color-base-dark)/15 md:pr-16 md:mx-auto">
         <summary className="list-none cursor-pointer flex items-center justify-between py-5 [&::-webkit-details-marker]:hidden">
           <span className="font-serif text-[14.5px] md:text-[clamp(14px,0.82vw,21px)] tracking-[0.06em] text-(--color-base-dark)">
             {d.notesTitle}
@@ -203,7 +203,7 @@ function ReservationDetail() {
       </details>
       <Link
         href={d.availabilityHref}
-        className="group mt-8 inline-flex items-center gap-4 font-serif text-[13.5px] md:text-[clamp(12.6px,0.71vw,17.5px)] tracking-[0.08em] text-(--color-base-dark)"
+        className="group mt-8 inline-flex items-center gap-4 font-serif text-[13.5px] md:text-[clamp(12.6px,0.71vw,17.5px)] tracking-[0.08em] text-(--color-base-dark) md:flex md:w-fit md:ml-auto"
       >
         <span className="relative">
           {d.availabilityCta}
@@ -255,10 +255,14 @@ export default function Home() {
                   PC は 2 カラムで、タイトルと本文を片側、写真を反対側に置く。
                   （コンテナに border-t を付けると FV 直下に薄い横線が出るため付けない） */}
               <div className="grid items-center md:grid-cols-2 md:gap-x-12 lg:gap-x-20">
-                {/* タイトル */}
+                {/* タイトル — 本文/CTAが両方無い帯（例: 設備・備品）は縦の相方が居ないため、
+                    self-end(写真下端)ではなく、行を写真と同じ2行分(md:row-span-2)に広げた上で
+                    self-center(写真の高さ全体の中央)に自動で揃える */}
                 <h2
                   data-reveal
-                  className={`reveal sec-title px-6 pt-[clamp(48px,6vw,88px)] md:px-12 lg:px-20 md:pt-0 md:self-end font-serif font-medium text-[23px] md:text-[clamp(21px,1.8vw,47px)] leading-[1.3] tracking-[0.04em] text-(--color-base-dark) md:row-start-1 ${
+                  className={`reveal sec-title px-6 pt-[clamp(48px,6vw,88px)] md:px-12 lg:px-20 md:pt-0 ${
+                    band.body || band.cta ? "md:self-end" : "md:self-center md:row-span-2"
+                  } font-serif font-medium text-[23px] md:text-[clamp(21px,1.8vw,47px)] leading-[1.3] tracking-[0.04em] text-(--color-base-dark) md:row-start-1 ${
                     imageFirst ? "md:col-start-2" : "md:col-start-1"
                   }`}
                 >
