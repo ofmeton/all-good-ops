@@ -66,7 +66,7 @@ export const OPENING = {
     "この土地に暮らして十年、\n私たちは今もなお、\nこの町の風景に魅了され続けています。",
     "風景とはきっと、\n人の営みと自然がゆっくりと重なり合い、\n時間をかけて育まれてきたもの。",
     "ここでは、訪れる人と葉山との距離が、\nゆっくりとほどけていきます。",
-    "海と山が織りなす自然のリズム、\nここに息づく人々の物語。",
+    "海と山が織りなす自然のリズム、\nここに息づく人々の物語。\n\nそれらに触れる中で、\n時の流れが少し緩み、\n呼吸が整っていく。\n \nそんなひとときを、\nここで過ごしていただけたら嬉しいです。",
   ],
 };
 
@@ -76,12 +76,12 @@ export const OPENING = {
 export const TOP = {
   // FV 背景のスライドショー（建物の外観・内観が伝わる写真のみ）
   heroSlides: [
-    { src: "/images/hero/hero-exterior-01.jpg", alt: "TERRA HAYAMA 外観 — 白漆喰と焼杉の蔵のような佇まい" },
-    { src: "/images/library/terra-005.jpg", alt: "TERRA HAYAMA ダイニングとキッチン" },
-    { src: "/images/library/terra-027.jpg", alt: "" },
     { src: "/images/library/terra-017.jpg", alt: "" },
+    { src: "/images/library/terra-027.jpg", alt: "" },
+    { src: "/images/library/terra-005.jpg", alt: "TERRA HAYAMA ダイニングとキッチン" },
     { src: "/images/library/terra-044.jpg", alt: "" },
     { src: "/images/library/terra-016.jpg", alt: "" },
+    { src: "/images/library/terra-102.jpg", alt: "" },
   ],
 
   // 6 章の帯（タイトル → 写真 → 本文 → リンク）
@@ -104,7 +104,7 @@ export const TOP = {
     {
       href: "/stay",
       title: "過ごし方",
-      body: "歩いて 8 分の一色海岸へ。空気が澄んだ日には、海の向こうに富士山が見えることもあります。お部屋では、挽きたての抹茶と、ウェルカムサービスの葉山アイスをお楽しみください。",
+      body: "歩いて8分の一色海岸へ。空気が澄んだ日には、海の向こうに雄大な富士山を望めることもあります。\n\nお部屋では、ウェルカムサービスとして葉山アイスをご用意しています。棚田米から仕込んだ甘酒由来の、やさしい味わいをお楽しみください。",
       slides: [
         { src: "/images/stay/stay-fuji.jpg", alt: "一色海岸の向こうに望む富士山" },
         { src: "/images/stay/stay-matcha.jpg", alt: "お部屋で味わう挽きたての抹茶" },
