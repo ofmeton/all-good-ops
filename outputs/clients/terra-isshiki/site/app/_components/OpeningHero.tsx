@@ -31,7 +31,6 @@ export function OpeningHero({
   // ここのタイミングがズレやすいため、参照実装のロジックを踏襲する。
   useGSAP(
     () => {
-      document.body.classList.add("has-fv");
       const threshold = () => window.innerHeight * 0.85;
       // dock（予約ボタン）は最初の帯「部屋と空間」（.fv-cover__pg）が画面に
       // 顔を出したタイミングで出す。帯タイトルが 80px ほど見えた頃を
@@ -102,7 +101,7 @@ export function OpeningHero({
       return () => {
         window.removeEventListener("scroll", updateFvPassed);
         window.removeEventListener("resize", handleResize);
-        document.body.classList.remove("has-fv", "fv-passed", "fv-deep");
+        document.body.classList.remove("fv-passed", "fv-deep");
       };
     },
     { scope: rootRef }
