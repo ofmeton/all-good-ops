@@ -51,7 +51,7 @@ export function AccessView({ copy, locale }: { copy: SiteCopy; locale: Locale })
             className="fade-up font-serif font-medium text-[clamp(13.66px,3.36vw,20.5px)] leading-[1.2] md:text-[clamp(14px,1.22vw,30.8px)] md:leading-[1.14] tracking-[0.02em]"
             style={{ animationDelay: "0.4s" }}
           >
-            <span className="block whitespace-nowrap">{c.hero.title}</span>
+            <span className={`block ${locale === "ja" ? "whitespace-nowrap" : ""}`}>{c.hero.title}</span>
           </h1>
           <p
             className="fade-up mt-5 md:mt-8 font-mincho text-[11.96px] md:text-[clamp(11.2px,0.71vw,18.2px)] leading-[1.85] tracking-[0.16em] text-(--color-base-light)/85"

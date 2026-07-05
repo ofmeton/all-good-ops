@@ -44,7 +44,7 @@ export function OwnerView({ copy, locale }: { copy: SiteCopy; locale: Locale }) 
             style={{ animationDelay: "0.4s" }}
           >
             {c.hero.titleLines.map((line) => (
-              <span key={line} className="block whitespace-nowrap">
+              <span key={line} className={`block ${locale === "ja" ? "whitespace-nowrap" : ""}`}>
                 {line}
               </span>
             ))}
@@ -56,7 +56,7 @@ export function OwnerView({ copy, locale }: { copy: SiteCopy; locale: Locale }) 
       <section className="relative px-6 pt-[clamp(64px,7vw,112px)] pb-[clamp(96px,10vw,160px)] md:px-12">
         <div className="mx-auto max-w-[1280px] grid gap-12 md:grid-cols-[180px_1fr] md:gap-16">
           <div className="md:pt-2">
-            <p className="vrl hidden md:inline-block font-mincho text-[12px] md:text-[clamp(10.5px,0.66vw,16.8px)] tracking-[0.5em] text-(--color-base-dark)/55">
+            <p className={`hidden md:inline-block font-mincho text-[12px] md:text-[clamp(10.5px,0.66vw,16.8px)] text-(--color-base-dark)/55 ${locale === "ja" ? "vrl tracking-[0.5em]" : "tracking-[0.2em]"}`}>
               {c.sideLabel}
             </p>
           </div>

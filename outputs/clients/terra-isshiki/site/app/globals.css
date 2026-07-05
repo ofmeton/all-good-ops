@@ -34,6 +34,16 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* 英語ページ（<html lang="en">）は本文書体を欧文セリフ（EB Garamond）優先に。
+   見出しの font-serif（Noto Serif JP）は和欧対応なので据え置き、
+   和文本文向けの font-mincho（Zen Old Mincho）だけ欧文に寄せて間延びを防ぐ。 */
+html[lang="en"] body {
+  font-family: var(--font-eb-garamond), "Zen Old Mincho", "Hiragino Mincho ProN", serif;
+}
+html[lang="en"] .font-mincho {
+  font-family: var(--font-eb-garamond), serif;
+}
+
 /* heroSlide / .hero-slide は HeroSlideshow component (JS-based) に置換済み。
    旧 CSS animation は dark bg 抜けと cycle 境界の暗転問題があったため廃止。 */
 

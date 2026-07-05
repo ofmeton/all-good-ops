@@ -76,7 +76,9 @@ export default function RootLayout({
             no-JS では本文を常に表示（コンテンツが消えないように）。 */}
         <script
           dangerouslySetInnerHTML={{
-            __html: "document.documentElement.classList.add('js-reveal')",
+            __html:
+              "document.documentElement.classList.add('js-reveal');" +
+              "if(location.pathname==='/en'||location.pathname.indexOf('/en/')===0){document.documentElement.lang='en';}",
           }}
         />
         {children}
