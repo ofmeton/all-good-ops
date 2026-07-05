@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Noto_Serif_JP, Zen_Old_Mincho, EB_Garamond } from "next/font/google";
 import { MobileStickyReserve } from "./_components/MobileStickyReserve";
 import { SideReserve } from "./_components/SideReserve";
+import { FontScalePanel } from "./_components/FontScalePanel";
 import { META } from "./copy";
 import "./globals.css";
 
@@ -34,7 +35,7 @@ export const metadata: Metadata = {
     template: META.titleTemplate,
   },
   description: META.description,
-  metadataBase: new URL("https://site-eosin-one-44.vercel.app"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://terra-hayama.com"),
   openGraph: {
     title: META.siteTitle,
     description: META.description,
@@ -89,6 +90,9 @@ export default function RootLayout({
           // eslint-disable-next-line @next/next/no-sync-scripts
           <script src="http://localhost:7331/overlay.js" async />
         )}
+        {/* デスクトップ文字サイズ底上げの強弱を見比べるための一時パネル（dev限定）。
+            決定後は FontScalePanel.tsx ごと削除する。 */}
+        {process.env.NODE_ENV === "development" && <FontScalePanel />}
       </body>
     </html>
   );
