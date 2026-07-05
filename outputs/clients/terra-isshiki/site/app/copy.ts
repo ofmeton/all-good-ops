@@ -14,7 +14,7 @@
  * サイト全体で共通の文言・URL・住所
  * ------------------------------------------------------------------ */
 export const SITE = {
-  airbnbUrl: "https://www.airbnb.jp/rooms/1399746059557999139",
+  airbnbUrl: "https://www.airbnb.com/h/terrahayama",
   postalAddress: "〒240-0111 神奈川県三浦郡葉山町一色 1759-1-5",
   operator: "運営: 株式会社 BEAT ICE",
   // Google Maps の検索クエリ（埋め込み地図とリンク先の両方で使用）
@@ -41,12 +41,12 @@ export const NAV = [
  * メタ情報（ブラウザタブ・検索結果・SNS シェア時の表示）
  * ------------------------------------------------------------------ */
 export const META = {
-  siteTitle: "TERRA HAYAMA — 葉山一棟貸しの宿",
+  siteTitle: "TERRA HAYAMA — 葉山・一色の宿",
   titleTemplate: "%s · TERRA HAYAMA",
   description:
-    "葉山一色海岸まで徒歩 8 分。葉山アイスの BEAT ICE が営む、海と山の風景に溶ける一棟貸しの宿。",
+    "葉山一色海岸まで徒歩 8 分。葉山アイスの BEAT ICE が営む、一軒家の二階をまるごと貸し切る宿。",
   twitterDescription:
-    "葉山一色海岸まで徒歩 8 分。BEAT ICE が営む、海と山の風景に溶ける一棟貸し。",
+    "葉山一色海岸まで徒歩 8 分。BEAT ICE が営む、一軒家の二階をまるごと貸し切る宿。",
   ogImageAlt: "TERRA HAYAMA — リビングダイニング",
   ogImage: "/images/library/terra-005.jpg", // SNS シェア時のサムネイル画像
 };
@@ -90,14 +90,14 @@ export const TOP = {
       title: "お部屋について",
       body: "ファミリーでもゆったり過ごせる75㎡の広さを、丸ごと貸し切りいただけます。",
       img: "/images/rooms/rooms-hero.jpg",
-      cta: "お部屋を見る",
+      cta: "", // 空 = 帯にリンクを出さない（ストリップ末尾の「部屋の詳細を見る」に一本化）
     },
     {
       href: "/rooms#overview",
       title: "設備・備品",
       body: "",
       img: "/images/library/terra-122.jpg",
-      cta: "設備の詳細を見る",
+      cta: "", // 空 = 帯にリンクを出さない（セクション末尾の「設備の詳細を見る」に一本化）
     },
     {
       href: "/stay",
@@ -181,6 +181,8 @@ export const TOP = {
       { label: "アメニティ", value: "タオル、歯ブラシ、シャンプー・コンディショナー、化粧水・乳液、ドライヤーなど。" },
     ],
     note: "調味料は塩こしょう・油をご用意しています。足りない分は、徒歩圏内のスーパー・コンビニでどうぞ。",
+    moreCta: "設備の詳細を見る",
+    moreHref: "/rooms#overview",
   },
 
   // 06 予約と空き状況 — 章直下の要約（チェックイン/アウトはアクセス章へ移動済み）
@@ -236,9 +238,10 @@ export const CTA = {
 export const STAY_PAGE = {
   metaTitle: "過ごし方",
   metaDescription:
-    "TERRA HAYAMA での過ごし方。歩いて 8 分の一色海岸、海越しの富士山、お部屋の抹茶、ウェルカムの葉山アイス。",
+    "TERRA HAYAMA での過ごし方。歩いて 8 分の一色海岸と海越しの富士山、お部屋で楽しむ抹茶と葉山アイス。",
   hero: {
     img: "/images/library/terra-135.jpg",
+    focal: "50% 50%", // 切り抜きの中心
     alt: "TERRA HAYAMA 過ごし方 — 床の間に飾られた棚田のアート",
     titleLines: ["葉山の一日を", "軽やかに過ごす。"],
     lead: "海辺の散歩と、富士の景色と、お部屋で一息。",
@@ -248,35 +251,27 @@ export const STAY_PAGE = {
   items: [
     {
       no: "01",
-      title: "一色海岸へ",
-      body: "宿から海までは歩いて 8 分。朝の散歩や、夕方の寄り道にもちょうどいい。葉山時間は、この海から始まります。",
-      image: null as string | null,
-      icon: "wave",
-      accent: "mist",
-    },
-    {
-      no: "02",
-      title: "海越しの富士山",
-      body: "空気が澄んだ日は、一色海岸の向こうに富士山が見えることもあります。海越しに望む、静かな稜線です。",
+      title: "一色海岸と、海越しの富士山",
+      body: "宿から海までは歩いて 8 分。朝の散歩や、夕方の寄り道にもちょうどいい距離です。空気が澄んだ日には、海の向こうに富士山の稜線が浮かびます。",
       image: "/images/stay/stay-fuji.jpg" as string | null,
       accent: "mist",
     },
     {
-      no: "03",
-      title: "お部屋で味わう抹茶",
-      body: "お部屋では、挽きたての抹茶を味わえます。滞在中のひと息を、ゆっくりお楽しみください。",
+      no: "02",
+      title: "お部屋で、抹茶と葉山アイス",
+      body: "ウェルカムサービスの葉山アイスと、挽きたての抹茶をお部屋でお楽しみいただけます。散歩から戻って、ゆっくり一息どうぞ。",
       image: "/images/stay/stay-matcha.jpg" as string | null,
       accent: "pine",
     },
     {
-      no: "04",
-      title: "お部屋で楽しむ葉山アイス",
-      body: "オーナーがつくる葉山アイスを、ウェルカムサービスとしてお部屋でお楽しみいただけます。",
-      image: "/images/owner/owner-icecream.webp" as string | null,
+      no: "03",
+      title: "足を伸ばして、上山口の棚田",
+      body: "時間に余裕があれば、オーナーたちがお米を育てる上山口の棚田まで。海とはまた違う、葉山の里山の風景に出会えます。",
+      image: "/images/library/taue-01.jpg" as string | null,
       accent: "soil",
     },
   ],
-  next: { title: "海まで、徒歩 8 分", cta: "アクセスを見る", href: "/access" },
+  next: { title: "私たちについて", cta: "BEAT ICE について", href: "/owner" },
 };
 
 /* ------------------------------------------------------------------
@@ -288,7 +283,8 @@ export const OWNER_PAGE = {
     "TERRA HAYAMA を営む BEAT ICE のこと。棚田で育てたお米からつくるアイスクリーム、学校給食への提供、田んぼでの米づくりを紹介します。",
   hero: {
     img: "/images/owner/owner-family.jpg",
-    alt: "TERRA HAYAMA — BEAT ICE が育てる葉山の棚田、夕陽の風景",
+    focal: "50% 50%", // 切り抜きの中心
+    alt: "TERRA HAYAMA — 宿を営む BEAT ICE のふたり",
     titleLines: ["お米のアイスをつくる、", "私たちのこと"],
   },
   sideLabel: "葉山に暮らす", // PC で縦書き表示される添え書き
@@ -297,34 +293,50 @@ export const OWNER_PAGE = {
     "田んぼでの米づくりから、学校給食への提供、料理教室やマルシェの主催まで。そうした暮らしの延長に、この宿があります。",
     "葉山に移り住んで、十年。この町で私たちが好きになったものを、訪れる人にも見つけてもらえたらと願いながら、TERRA HAYAMA を営んでいます。",
   ],
+  // 公式サイトへの導線（導入文の下に表示）
+  officialCta: { label: "BEAT ICE 公式サイト", href: "https://www.beatice.jp/pages/about-us" },
   worksTitle: "葉山での、私たちの営み",
+  // 各カード: images は 2 枚をずらして重ねる（1 枚目が手前）。href は BEAT ICE 公式の関連ページ
   activities: [
     {
       title: "棚田米のアイスクリーム",
       body: "自分たちで育てたお米からつくる、米麹由来のやさしい甘みのアイスクリームです。",
-      image: "/images/owner/owner-icecream.webp",
+      images: [
+        { src: "/images/owner/owner-icecream.webp", alt: "器に盛った葉山アイス" },
+        { src: "/images/library/icecream-01.jpg", alt: "葉山アイスのパッケージ" },
+      ],
+      href: "https://www.beatice.jp/products/hayama-ice-12",
+      linkLabel: "葉山アイスを公式サイトで見る",
     },
     {
       title: "学校給食の提供",
       body: "つくったアイスクリームを地域の学校給食に届けています。招かれて、教室で授業をすることもあります。",
-      image: "/images/owner/owner-school-lunch.jpg",
+      images: [
+        { src: "/images/owner/owner-school-lunch.jpg", alt: "学校給食に届く葉山アイス" },
+        { src: "/images/library/school-class.jpg", alt: "教室での授業のようす" },
+      ],
+      href: "https://www.beatice.jp/pages/about-us",
+      linkLabel: "BEAT ICE の歩みを見る",
     },
     {
       title: "田んぼでの営み",
       body: "棚田で土にふれ、季節とともに米を育てています。",
-      image: "/images/owner/owner-tanada-work.jpg",
-    },
-    {
-      title: "夫婦のものづくり",
-      body: "2015 年に葉山へ移り住みました。暮らしも、ものづくりも、ふたりで続けています。",
-      image: "/images/owner/owner-family.jpg",
+      images: [
+        { src: "/images/library/taue-02.jpg", alt: "田植えのようす" },
+        { src: "/images/owner/owner-tanada-work.jpg", alt: "棚田での米づくり" },
+      ],
+      href: "https://www.beatice.jp/pages/terraced-rice-field",
+      linkLabel: "棚田のことを読む",
     },
   ],
   sns: {
-    body: "アイスづくりや棚田の様子は、SNS でも発信しています。",
-    note: "※ アカウントリンクは準備中です。",
+    body: "アイスづくりや棚田の様子は、Instagram でも発信しています。",
+    links: [
+      { label: "Instagram", href: "https://www.instagram.com/beatice0923/" },
+      { label: "BEAT ICE 公式サイト", href: "https://www.beatice.jp" },
+    ],
   },
-  next: { title: "部屋と空間", cta: "部屋を見る", href: "/rooms" },
+  next: { title: "周辺とアクセス", cta: "アクセスを見る", href: "/access" },
 };
 
 /* ------------------------------------------------------------------
@@ -333,10 +345,11 @@ export const OWNER_PAGE = {
 export const ROOMS_PAGE = {
   metaTitle: "お部屋について",
   metaDescription:
-    "TERRA HAYAMA の部屋と空間。LDK・寝室・バスルーム・ランドリー・キッチン詳細をご紹介します。",
+    "TERRA HAYAMA のお部屋。LDK・寝室・バスルーム・ランドリー・キッチンをご紹介します。",
   hero: {
     img: "/images/library/terra-005.jpg",
-    alt: "TERRA HAYAMA 部屋と空間 — 押し花と詩のしつらえ",
+    focal: "50% 50%", // 切り抜きの中心（画面幅で見切れるときにこの点へ寄る）
+    alt: "TERRA HAYAMA お部屋 — 押し花と詩のしつらえ",
     title: "お部屋について",
     lead: "一軒家の二階を、まるごと貸し切り。\n最大 8 名まで滞在できる、ゆとりの間取り。",
   },
@@ -375,7 +388,6 @@ export const ROOMS_PAGE = {
       ],
     },
   ],
-  overviewTitle: "宿のご利用について",
   specsTitle: "基本情報",
   specs: [
     { label: "チェックイン", value: "16:00 – 23:00" },
@@ -439,6 +451,7 @@ export const ACCESS_PAGE = {
     "TERRA HAYAMA のアクセスと立地。葉山一色海岸まで徒歩 8 分。神奈川県三浦郡葉山町一色 1759-1-5。",
   hero: {
     img: "/images/library/terra-070.jpg",
+    focal: "50% 50%", // 切り抜きの中心
     alt: "TERRA HAYAMA — 玄関の赤土壁と組子の引き戸",
     title: "アクセスと周辺情報",
     lead: "住宅地に流れる、\n葉山時間。",
