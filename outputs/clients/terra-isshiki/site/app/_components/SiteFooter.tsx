@@ -36,7 +36,7 @@ export function SiteFooter({
               alt="TERRA HAYAMA"
               width={148}
               height={148}
-              className="h-[clamp(144px,16.5vw,204px)] w-auto"
+              className="h-[clamp(96px,11vw,136px)] w-auto"
             />
           </Link>
           <p className="font-mincho text-[11.5px] md:text-[clamp(var(--fs-lv1),0.6vw,15.4px)] leading-[1.85] tracking-[0.06em] opacity-80">
