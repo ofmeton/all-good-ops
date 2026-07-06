@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Noto_Serif_JP, Zen_Old_Mincho, EB_Garamond } from "next/font/google";
 import { MobileStickyReserve } from "./_components/MobileStickyReserve";
 import { SideReserve } from "./_components/SideReserve";
+import { META } from "./copy";
 import "./globals.css";
 
 const notoSerifJP = Noto_Serif_JP({
@@ -26,37 +27,35 @@ const ebGaramond = EB_Garamond({
   display: "swap",
 });
 
+/* タイトル・説明文は app/copy.ts（META）で編集できます。 */
 export const metadata: Metadata = {
   title: {
-    default: "TERRA HAYAMA — 葉山一棟貸しの宿",
-    template: "%s · TERRA HAYAMA",
+    default: META.siteTitle,
+    template: META.titleTemplate,
   },
-  description:
-    "葉山一色海岸まで徒歩 8 分。葉山アイス屋 BEAT ICE が営む、海と山の風景に溶ける一棟貸しの宿。",
-  metadataBase: new URL("https://terra-hayama.example.com"),
+  description: META.description,
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://terra-hayama.com"),
   openGraph: {
-    title: "TERRA HAYAMA — 葉山一棟貸しの宿",
-    description:
-      "葉山一色海岸まで徒歩 8 分。葉山アイス屋 BEAT ICE が営む、海と山の風景に溶ける一棟貸しの宿。",
+    title: META.siteTitle,
+    description: META.description,
     url: "/",
     siteName: "TERRA HAYAMA",
     locale: "ja_JP",
     type: "website",
     images: [
       {
-        url: "/images/hero/hero-01-living.jpg",
+        url: META.ogImage,
         width: 1440,
         height: 958,
-        alt: "TERRA HAYAMA — リビングダイニング",
+        alt: META.ogImageAlt,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "TERRA HAYAMA — 葉山一棟貸しの宿",
-    description:
-      "葉山一色海岸まで徒歩 8 分。BEAT ICE が営む、海と山の風景に溶ける一棟貸し。",
-    images: ["/images/hero/hero-01-living.jpg"],
+    title: META.siteTitle,
+    description: META.twitterDescription,
+    images: [META.ogImage],
   },
   icons: {
     icon: "/favicon.ico",
@@ -77,7 +76,9 @@ export default function RootLayout({
             no-JS では本文を常に表示（コンテンツが消えないように）。 */}
         <script
           dangerouslySetInnerHTML={{
-            __html: "document.documentElement.classList.add('js-reveal')",
+            __html:
+              "document.documentElement.classList.add('js-reveal');" +
+              "if(location.pathname==='/en'||location.pathname.indexOf('/en/')===0){document.documentElement.lang='en';}",
           }}
         />
         {children}

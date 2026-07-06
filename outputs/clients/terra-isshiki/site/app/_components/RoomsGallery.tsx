@@ -1,50 +1,18 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import type { SiteCopy } from "../copy/types";
+import type { Locale } from "../i18n/config";
+import { getDict, type Dict } from "../i18n/dictionary";
 
-type Item = { src: string; aspect: string };
+/* 見出し・説明・写真は app/copy.ts（ROOMS_PAGE.gallery）で編集できます。 */
+
 type Section = {
-  label: string;
   caption: string;
   description: string;
-  items: Item[];
+  items: { src: string }[];
 };
-
-const SECTIONS: Section[] = [
-  {
-    label: "LDK",
-    caption: "リビング・ダイニング・キッチン",
-    description:
-      "木の天井と一面の窓。ソファ、楕円のダイニングテーブル、テレビが揃う、家族で集う空間。",
-    items: [
-      { src: "/images/rooms/ldk-01.jpg", aspect: "3/2" },
-      { src: "/images/rooms/ldk-02.jpg", aspect: "3/2" },
-      { src: "/images/rooms/ldk-03.jpg", aspect: "3/2" },
-      { src: "/images/rooms/ldk-04.jpg", aspect: "3/2" },
-    ],
-  },
-  {
-    label: "Bedroom",
-    caption: "最大 8 名の寝室",
-    description:
-      "二段ベッド 2 台 / セミダブル 1 台 / 布団 2 組。家族・友人グループでまとまって泊まれます。",
-    items: [
-      { src: "/images/rooms/bedroom-01.jpg", aspect: "3/2" },
-      { src: "/images/rooms/bedroom-02.jpg", aspect: "3/2" },
-    ],
-  },
-  {
-    label: "Bath & Laundry",
-    caption: "お風呂と水まわり",
-    description:
-      "ひのきに包まれたバスルーム。ドラム式洗濯機と真鍮の洗面ボウルが並ぶランドリー一体空間。",
-    items: [
-      { src: "/images/rooms/bath.jpg", aspect: "3/2" },
-      { src: "/images/rooms/laundry.jpg", aspect: "3/2" },
-    ],
-  },
-];
 
 const AUTO_MS = 4500;
 
@@ -57,9 +25,11 @@ const AUTO_MS = 4500;
 function SectionCarousel({
   section,
   onZoom,
+  t,
 }: {
   section: Section;
   onZoom: (src: string, alt: string) => void;
+  t: Dict;
 }) {
   const trackRef = useRef<HTMLDivElement>(null);
   const [index, setIndex] = useState(0);
@@ -125,14 +95,14 @@ function SectionCarousel({
           <button
             type="button"
             key={it.src}
-            onClick={() => onZoom(it.src, `${section.label} ${i + 1}`)}
+            onClick={() => onZoom(it.src, `${section.caption} ${i + 1}`)}
             className="relative shrink-0 basis-full snap-start cursor-zoom-in bg-(--color-base-dark)/5"
             style={{ aspectRatio: "3/2" }}
-            aria-label={`${section.label} の写真 ${i + 1} を拡大表示`}
+            aria-label={t.galleryZoomAria(section.caption, i + 1)}
           >
             <Image
               src={it.src}
-              alt={`${section.label} ${i + 1}`}
+              alt={`${section.caption} ${i + 1}`}
               fill
               sizes="100vw"
               quality={88}
@@ -148,7 +118,7 @@ function SectionCarousel({
           <button
             type="button"
             onClick={() => goTo(index - 1)}
-            aria-label="前の写真"
+            aria-label={t.prevPhoto}
             className="hidden md:flex absolute top-1/2 left-4 -translate-y-1/2 h-11 w-11 items-center justify-center bg-(--color-base-light)/85 text-(--color-base-dark) backdrop-blur-[2px] hover:bg-(--color-base-light) transition-colors"
           >
             <span aria-hidden className="text-[18px] leading-none -mt-0.5">
@@ -158,7 +128,7 @@ function SectionCarousel({
           <button
             type="button"
             onClick={() => goTo(index + 1)}
-            aria-label="次の写真"
+            aria-label={t.nextPhoto}
             className="hidden md:flex absolute top-1/2 right-4 -translate-y-1/2 h-11 w-11 items-center justify-center bg-(--color-base-light)/85 text-(--color-base-dark) backdrop-blur-[2px] hover:bg-(--color-base-light) transition-colors"
           >
             <span aria-hidden className="text-[18px] leading-none -mt-0.5">
@@ -173,7 +143,7 @@ function SectionCarousel({
                 type="button"
                 key={i}
                 onClick={() => goTo(i)}
-                aria-label={`${i + 1} 枚目へ`}
+                aria-label={t.gotoPhotoAria(i + 1)}
                 aria-current={i === index ? "true" : undefined}
                 className={`h-1.5 rounded-full transition-all duration-300 ${
                   i === index
@@ -189,7 +159,23 @@ function SectionCarousel({
   );
 }
 
-export function RoomsGallery() {
+export function RoomsGallery({
+  gallery,
+  locale,
+}: {
+  gallery: SiteCopy["ROOMS_PAGE"]["gallery"];
+  locale: Locale;
+}) {
+  const t = getDict(locale);
+  const sections: Section[] = useMemo(
+    () =>
+      gallery.map((section) => ({
+        caption: section.caption,
+        description: section.description,
+        items: section.items.map((src) => ({ src })),
+      })),
+    [gallery],
+  );
   const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(
     null,
   );
@@ -213,28 +199,25 @@ export function RoomsGallery() {
 
   return (
     <>
-      {SECTIONS.map((section, sIdx) => (
+      {sections.map((section, sIdx) => (
         <section
-          key={section.label}
+          key={section.caption}
           className={`relative ${
             sIdx % 2 === 1 ? "bg-(--color-paper)" : "bg-(--color-base-light)"
           }`}
         >
           {/* Section header */}
           <div className="mx-auto max-w-[1480px] px-6 md:px-12 mb-10 md:mb-16 pt-12 md:pt-16">
-            <p className="font-garamond italic text-[clamp(11.1px,0.55vw,17.08px)] tracking-[0.42em] uppercase text-(--color-soil) mb-3">
+            <h2 className="font-serif text-[21.86px] md:text-[clamp(22.4px,1.84vw,47.04px)] leading-[1.3] tracking-[0.04em] text-(--color-base-dark) mb-6 md:mb-8">
               {section.caption}
-            </p>
-            <h2 className="font-serif text-[21.86px] md:text-[clamp(22.4px,1.84vw,47.04px)] leading-[1.2] tracking-[0.04em] text-(--color-base-dark) whitespace-nowrap mb-6 md:mb-8">
-              {section.label}
             </h2>
-            <p className="font-mincho text-[12.81px] md:text-[clamp(11.2px,0.71vw,18.2px)] leading-[2.0] tracking-[0.08em] text-(--color-base-dark)/80 md:max-w-[760px]">
+            <p className="font-mincho text-[12.81px] md:text-[clamp(var(--fs-lv3),0.71vw,18.2px)] leading-[2.0] tracking-[0.08em] text-(--color-base-dark)/80 md:max-w-[760px]">
               {section.description}
             </p>
           </div>
 
           {/* Auto-advancing carousel */}
-          <SectionCarousel section={section} onZoom={openZoom} />
+          <SectionCarousel section={section} onZoom={openZoom} t={t} />
         </section>
       ))}
 
@@ -251,7 +234,7 @@ export function RoomsGallery() {
       >
         <button
           type="button"
-          aria-label="閉じる"
+          aria-label={t.close}
           onClick={() => setLightbox(null)}
           className="absolute top-5 right-5 md:top-8 md:right-8 z-10 flex h-12 w-12 items-center justify-center text-(--color-base-light)"
         >
