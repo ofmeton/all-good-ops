@@ -73,18 +73,18 @@ export const en: SiteCopy = {
       "Ten years since we made this town our home,\nand still,\nits scenery holds us.",
       "Scenery, perhaps, is what forms\nwhen human life and nature slowly overlap,\ntended over time.",
       "Here, the distance between you and Hayama\ngently comes undone.",
-      "The natural rhythm of sea and hills,\nthe stories of the people who live here.",
+      "The natural rhythm of sea and hills,\nthe stories of the people who live here.\n\nIn touching them, time seems to loosen its pace,\nand your breath settles.\n \nWe hope you'll spend such a moment here.",
     ],
   },
 
   TOP: {
     heroSlides: [
-      { src: "/images/hero/hero-exterior-01.jpg", alt: "TERRA HAYAMA exterior — a storehouse-like facade of white plaster and charred cedar" },
-      { src: "/images/library/terra-005.jpg", alt: "TERRA HAYAMA dining and kitchen" },
-      { src: "/images/library/terra-027.jpg", alt: "" },
       { src: "/images/library/terra-017.jpg", alt: "" },
+      { src: "/images/library/terra-027.jpg", alt: "" },
+      { src: "/images/library/terra-005.jpg", alt: "TERRA HAYAMA dining and kitchen" },
       { src: "/images/library/terra-044.jpg", alt: "" },
       { src: "/images/library/terra-016.jpg", alt: "" },
+      { src: "/images/library/terra-102.jpg", alt: "" },
     ],
 
     bands: [
@@ -126,7 +126,7 @@ export const en: SiteCopy = {
         href: "/owner",
         title: "About Us",
         body: "We are BEAT ICE, and we make ice cream from rice we grow in Hayama's TANADA (terraced rice fields). We deliver it to local school lunches and sometimes teach classes at school. This guesthouse, too, grew out of a couple's love for Hayama.",
-        img: "/images/owner/owner-couple.jpg",
+        img: "/images/library/couple-03.jpg",
         cta: "About BEAT ICE",
       },
       {
@@ -256,9 +256,9 @@ export const en: SiteCopy = {
     },
     sideLabel: "Living in Hayama",
     intro: [
-      "We are BEAT ICE, and we make ice cream from rice we grow in TANADA (terraced rice fields).",
-      "From growing rice in the paddies to delivering it to school lunches, and hosting cooking classes and markets.",
-      "Ten years since we moved to Hayama. This guesthouse is one more branch of all that we do.",
+      "We are BEAT ICE. We believe farming can bring the same joy as music (ongaku) — a philosophy we call Nogaku — and hope to spread that joy, smile by smile.",
+      "Alongside the days we, husband and wife, have carefully woven by hand in Hayama's TANADA (terraced rice fields).",
+      "Something both nostalgic and new. A flavour that lingers gently in the heart, like a piece of music.",
     ],
     officialCta: { label: "BEAT ICE official site", href: "https://www.beatice.jp/pages/about-us" },
     worksTitle: "What we do",
