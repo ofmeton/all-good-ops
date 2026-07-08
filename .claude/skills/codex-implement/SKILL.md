@@ -5,6 +5,8 @@ description: まとまった機能の実装・テストに加え、バグ修正�
 
 # codex-implement — Codex を実装エンジンに据える半委任フロー
 
+Fable セッション（skill `fable-architect`）からの実装委譲先としても使われる。
+
 ## なぜ
 実装・テスト・デバッグループは最もトークンを食う。これを **Codex(gpt-5.5 high)** に逃がすと、Codex は ChatGPT/Codex の**定額サブスク枠**（Claude サブスク／API 課金の外）で動くため、Claude 側のトークンが激減する。Claude は「ブループリント＋Codex サマリ＋diff」だけ摂取してレビューすればよく、設計とレビューという判断を握るので品質は落ちない。
 
