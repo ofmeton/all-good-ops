@@ -66,7 +66,7 @@
 
 **モデル選定（ローカルセッション・サブスク内、既定 Opus 4.8）**: 最難関4局面のみ `/model` で `claude-fable-5`（Fable 5）= ①熟議 ②最難関設計（architect 大規模 BP / X optimizer autonomy 等） ③deep-research 統合フェーズ ④Opus で詰まる根本原因デバッグ。API 課金では使わない。**Fable セッション中の配員は skill `fable-architect`、Opus 以下からの停滞時相談は skill `fable-advisor`**。詳細 memory `feedback_fable_for_hardest_tasks.md`
 
-**実装エンジン = Codex(gpt-5.6-terra・effort max・定額サブスク)**: 迷ったら Codex（積極委譲・2026-07-10）。標準以上の機能実装・テストに加え**バグ修正/デバッグループ・大規模コードベース調査/探索（結論だけ受領）・ローカルデータ分析/集計**も既定で Codex に半委任（`mcp__codex__codex`）。レビューも**一次=Codex セルフレビュー → 最終判断=Claude**の二段。Claude は設計(architect)＋最終レビュー(spec-validator)＋デプロイ自走を握る。Codex turn は Claude サブスク/API 課金の外＝トークン節約。配線は `skill:codex-implement`。**Codex の盲点（ネット/ブラウザ/外部MCP不可）と発信の文章・繊細な連絡は Claude 専管**。人間承認/PR承認不要・デプロイまで自走（硬ゲート migration/送信/金銭のみ据え置き）。
+**実装エンジン = Codex(gpt-5.6-terra・effort high・定額サブスク)**: 迷ったら Codex（積極委譲・2026-07-10）。標準以上の機能実装・テストに加え**バグ修正/デバッグループ・大規模コードベース調査/探索（結論だけ受領）・ローカルデータ分析/集計**も既定で Codex に半委任（`mcp__codex__codex`）。レビューも**一次=Codex セルフレビュー → 最終判断=Claude**の二段。Claude は設計(architect)＋最終レビュー(spec-validator)＋デプロイ自走を握る。Codex turn は Claude サブスク/API 課金の外＝トークン節約。配線は `skill:codex-implement`。**Codex の盲点（ネット/ブラウザ/外部MCP不可）と発信の文章・繊細な連絡は Claude 専管**。人間承認/PR承認不要・デプロイまで自走（硬ゲート migration/送信/金銭のみ据え置き）。
 
 ### エージェント選定
 

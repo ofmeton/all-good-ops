@@ -8,7 +8,7 @@ description: まとまった機能の実装・テストに加え、バグ修正�
 Fable セッション（skill `fable-architect`）からの実装委譲先としても使われる。
 
 ## なぜ
-実装・テスト・デバッグループは最もトークンを食う。これを **Codex(gpt-5.6-terra max)** に逃がすと、Codex は ChatGPT/Codex の**定額サブスク枠**（Claude サブスク／API 課金の外）で動くため、Claude 側のトークンが激減する。Claude は「ブループリント＋Codex サマリ＋diff」だけ摂取してレビューすればよく、設計とレビューという判断を握るので品質は落ちない。
+実装・テスト・デバッグループは最もトークンを食う。これを **Codex(gpt-5.6-terra high)** に逃がすと、Codex は ChatGPT/Codex の**定額サブスク枠**（Claude サブスク／API 課金の外）で動くため、Claude 側のトークンが激減する。Claude は「ブループリント＋Codex サマリ＋diff」だけ摂取してレビューすればよく、設計とレビューという判断を握るので品質は落ちない。
 
 → Codex は定額なので `external-api-cost-disclosure`（従量 API のコスト開示）の**対象外**。コスト提示は不要。
 
@@ -30,7 +30,7 @@ Fable セッション（skill `fable-architect`）からの実装委譲先とし
    - `cwd` = 2 の worktree 絶対パス
    - `sandbox` = `workspace-write`
    - `approval-policy` = `never`（自律）
-   - `model` = **`gpt-5.6-terra`** / effort = **`max`** を**毎回 config で明示**する（`config` に `model="gpt-5.6-terra"` + `model_reasoning_effort="max"`。`~/.codex/config.toml` の既定に依存しない）。medium/high への切り下げ判断は不要（2026-07-10 方針）。注意: max は reasoning 消費が大きい＝サブスク枠の減りが早い。枠切れ時は `## レート制限時の自動フォールバック` がそのまま受け皿。
+   - `model` = **`gpt-5.6-terra`** / effort = **`high`** を**毎回 config で明示**する（`config` に `model="gpt-5.6-terra"` + `model_reasoning_effort="high"`。`~/.codex/config.toml` の既定に依存しない）。medium への切り下げ判断は不要（2026-07-10 方針）。terra は xhigh/max/ultra もサポートするが既定は high（枠消費とのバランス）。枠切れ時は `## レート制限時の自動フォールバック` がそのまま受け皿。
    - `prompt` = ブループリント全文を埋め込む（Codex はリポジトリ規約を知らない。worktree root の `AGENTS.md` を自動で読むが、ブループリントにも要点を再掲する）
    - 完了後、Codex は**ビルダーサマリ**（追加/編集ファイル・契約差分・テスト結果・逸脱・人間ゲート該当）を返す。
    - **Codex がレート/使用量制限で落ちたら** → `## レート制限時の自動フォールバック`（Sonnet 4.6 へ自動切替）へ。
