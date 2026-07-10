@@ -1,6 +1,6 @@
 ---
 name: codex-implement
-description: まとまった機能の実装・テストに加え、バグ修正・デバッグループ・大規模コードベース調査/探索・ローカルデータ分析/集計を Codex(gpt-5.5・定額サブスク) に委任し、Claude は設計(architect)と最終レビュー(一次は Codex セルフレビュー)を握る半委任フロー。Claude サブスク枠のトークンを節約しつつ品質を保つ。ユーザーが「実装して」「この機能を作って」「このバグ直して」「Codex に実装させて」「このコードベース調べて」「この集計やって」等を依頼した時に起動する。軽量タスク・1行修正・Web リサーチ・ブラウザ操作・外部 MCP(freee/Asana/Gmail/Calendar)・発信の文章執筆/繊細な連絡は対象外（Codex の盲点 or Claude 中核価値）。
+description: まとまった機能の実装・テストに加え、バグ修正・デバッグループ・大規模コードベース調査/探索・ローカルデータ分析/集計を Codex(gpt-5.6-terra・定額サブスク) に委任し、Claude は設計(architect)と最終レビュー(一次は Codex セルフレビュー)を握る半委任フロー。Claude サブスク枠のトークンを節約しつつ品質を保つ。ユーザーが「実装して」「この機能を作って」「このバグ直して」「Codex に実装させて」「このコードベース調べて」「この集計やって」等を依頼した時に起動する。軽量タスク・1行修正・Web リサーチ・ブラウザ操作・外部 MCP(freee/Asana/Gmail/Calendar)・発信の文章執筆/繊細な連絡は対象外（Codex の盲点 or Claude 中核価値）。
 ---
 
 # codex-implement — Codex を実装エンジンに据える半委任フロー
@@ -8,11 +8,12 @@ description: まとまった機能の実装・テストに加え、バグ修正�
 Fable セッション（skill `fable-architect`）からの実装委譲先としても使われる。
 
 ## なぜ
-実装・テスト・デバッグループは最もトークンを食う。これを **Codex(gpt-5.5 high)** に逃がすと、Codex は ChatGPT/Codex の**定額サブスク枠**（Claude サブスク／API 課金の外）で動くため、Claude 側のトークンが激減する。Claude は「ブループリント＋Codex サマリ＋diff」だけ摂取してレビューすればよく、設計とレビューという判断を握るので品質は落ちない。
+実装・テスト・デバッグループは最もトークンを食う。これを **Codex(gpt-5.6-terra max)** に逃がすと、Codex は ChatGPT/Codex の**定額サブスク枠**（Claude サブスク／API 課金の外）で動くため、Claude 側のトークンが激減する。Claude は「ブループリント＋Codex サマリ＋diff」だけ摂取してレビューすればよく、設計とレビューという判断を握るので品質は落ちない。
 
 → Codex は定額なので `external-api-cost-disclosure`（従量 API のコスト開示）の**対象外**。コスト提示は不要。
 
 ## いつ使う / 使わない
+**迷ったら Codex に委譲（積極方針・2026-07-10）**: 複数ファイル・テスト付き・デバッグの気配があれば「標準未満」でも Codex へ。
 - **使う**:
   - 標準以上（CLAUDE.md コスト分類の標準/熟議）の機能実装・サブシステム・複数ファイル改修。
   - **（A）バグ修正・デバッグループ**: バグ再現→修正→検証ループ（`superpowers:systematic-debugging` の調査・修正フェーズ）。最もトークンを食うので独立したバグ修正依頼も既定で Codex へ。Claude は再現条件の言語化と最終検証を握る。
@@ -29,7 +30,7 @@ Fable セッション（skill `fable-architect`）からの実装委譲先とし
    - `cwd` = 2 の worktree 絶対パス
    - `sandbox` = `workspace-write`
    - `approval-policy` = `never`（自律）
-   - `model` 既定 gpt-5.5 / **medium**（`~/.codex/config.toml` の `model_reasoning_effort`）。設計は architect が固めて渡す＝Codex は実装担当なので medium で品質は落ちない（high は reasoning 消費が大きくサブスク枠を早く食う＝レート制限の主因）。**難所のみ high に上書き**: アルゴリズム的に難しい / 状態管理・並行処理が絡む / ブループリントに曖昧さが残る実装のみ、`mcp__codex__codex` の config で `model_reasoning_effort=high` を渡す。
+   - `model` = **`gpt-5.6-terra`** / effort = **`max`** を**毎回 config で明示**する（`config` に `model="gpt-5.6-terra"` + `model_reasoning_effort="max"`。`~/.codex/config.toml` の既定に依存しない）。medium/high への切り下げ判断は不要（2026-07-10 方針）。注意: max は reasoning 消費が大きい＝サブスク枠の減りが早い。枠切れ時は `## レート制限時の自動フォールバック` がそのまま受け皿。
    - `prompt` = ブループリント全文を埋め込む（Codex はリポジトリ規約を知らない。worktree root の `AGENTS.md` を自動で読むが、ブループリントにも要点を再掲する）
    - 完了後、Codex は**ビルダーサマリ**（追加/編集ファイル・契約差分・テスト結果・逸脱・人間ゲート該当）を返す。
    - **Codex がレート/使用量制限で落ちたら** → `## レート制限時の自動フォールバック`（Sonnet 4.6 へ自動切替）へ。
