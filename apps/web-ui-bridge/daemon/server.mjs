@@ -30,12 +30,13 @@ import { moveInSource, deleteInSource, duplicateInSource, moveGroupInSource } fr
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 function parseArgs(argv) {
-  const args = { target: process.cwd(), port: 7331 };
+  const args = { target: process.cwd(), port: 7331, allowOrigin: [] };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     if (a === "--target") args.target = path.resolve(argv[++i]);
     else if (a === "--port") args.port = Number(argv[++i]);
     else if (a === "--overlay") args.overlay = path.resolve(argv[++i]);
+    else if (a === "--allow-origin") args.allowOrigin.push(String(argv[++i]).replace(/\/$/, ""));
   }
   return args;
 }
@@ -80,7 +81,10 @@ function send(res, status, headers, body) {
 // リモート悪意サイトからの CSRF（localhost への自動 POST でソース改竄）を遮断する。
 function authorizeMutation(req) {
   const origin = req.headers.origin;
-  if (!origin || !/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) {
+  const originAllowed =
+    origin &&
+    (/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin) || args.allowOrigin.includes(origin));
+  if (!originAllowed) {
     return { ok: false, status: 403, error: "forbidden-origin" };
   }
   if (req.headers["x-bridge-token"] !== TOKEN) {
