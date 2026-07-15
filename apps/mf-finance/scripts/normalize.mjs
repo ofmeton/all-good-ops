@@ -2,6 +2,7 @@
 import { readFileSync, writeFileSync, mkdirSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { parseCsv } from './lib/csv.mjs';
+import { decodeMfCsv } from './lib/csv-encoding.mjs';
 import { dataDir } from './lib/paths.mjs';
 import { normalizeRows } from './lib/normalize.mjs';
 import { isInternalMove, deriveClassification, inferSourceType } from './lib/classify.mjs';
@@ -20,7 +21,7 @@ const sources = explicit
       .sort() // 名前順。refetch サフィックス付きが後ろ＝後勝ち
       .map(f => join(RAW_DIR, f));
 
-const rows = sources.flatMap(src => parseCsv(readFileSync(src, 'utf8')));
+const rows = sources.flatMap(src => parseCsv(decodeMfCsv(readFileSync(src))));
 const base = normalizeRows(rows);
 const records = base.map(r => ({
   ...r,
