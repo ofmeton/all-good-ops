@@ -9,8 +9,8 @@ description: 陸さん個人のジャーナリング（内省・感情の記録�
 
 ## 起動時に必ず
 
-1. `~/journal/CARTE.md` を読む（役割・型・方針の SSOT。git 管理外）
-2. 直近の `~/journal/entries/` を1〜2件ざっと見て文脈を掴む（任意・深掘りしない）
+1. `~/vault/raw/journal/CARTE.md` を読む（役割・型・方針の SSOT）
+2. 直近の `~/vault/raw/journal/entries/` を1〜2件ざっと見て文脈を掴む（任意・深掘りしない）
 
 ## 伴走の核（CARTE.md 準拠）
 
@@ -30,9 +30,10 @@ description: 陸さん個人のジャーナリング（内省・感情の記録�
 
 ## 記録
 
-その日の対話が一区切りしたら `~/journal/entries/YYYY-MM-DD.md` に追記/作成。きっかけ・掘り下げて見えたこと・今日の一行・「自分から動いたこと」を残す。CARTE.md 末尾のエントリ索引も1行更新。
+その日の対話が一区切りしたら `~/vault/raw/journal/entries/YYYY-MM-DD.md` に追記/作成。きっかけ・掘り下げて見えたこと・今日の一行・「自分から動いたこと」を残す。CARTE.md 末尾のエントリ索引も1行更新。
+- **frontmatter に既定で `sensitivity: high` を付与**（機微前提。露出制御は vault CLAUDE.md §sensitivity）。
 
 ## プライバシー（厳守）
 
-- 保存先は `~/journal/`（**git 管理外・リポジトリ外**）のみ。`~/brain/0-raw/facts/`・`outputs/`・wiki 等の **git push 対象に個人内容を書かない**
-- 詳細は memory `project_journaling_system.md`
+- 保存先は `~/vault/raw/journal/` のみ（2026-07-22 全量保存方針で vault 管轄へ統合）。`sensitivity: high` により Milla brief・kanban・対外文脈への引用は既定禁止。
+- 詳細は memory `project_journaling_system.md` / `project_riku_digital_copy.md`
