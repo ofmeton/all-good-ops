@@ -18,6 +18,18 @@
  * 注意:
  *   - 出退勤管理スプシに対象月のシート（YYYYMM形式）が存在することが前提
  *   - 「その他支給」（特別支給）が発生した月は、生成後に手動で各シートを調整すること
+ *   - 支給日は「実行日」。旧ルール「翌月20日」は2026年6月分・7月分とも使われず 2026-08-02 に廃止した
+ *
+ * ⚠️ 未修正の既知バグ（2026-08-02 発見・createPayslipSpreadsheet）:
+ *   給与明細テンプレは「マスタ」タブ1枚で全部を駆動しており、個別従業員シートは全て数式で
+ *   マスタを参照している。本スクリプトの createPayslipSpreadsheet は個別シートへ直接
+ *   setValue するため、実行するとその数式を破壊する。正しくはマスタの
+ *   D4(何月分)・D5(支給日)・D6(締日)・A9(出退勤シートの集計行範囲) の4セルだけを更新する。
+ *   ※ A9 は月ごとに変わる（202601=D82:Z88 / 202607=D107:Z113）。
+ *   2026年7月分は本スクリプトを使わず手動＋別スクリプトで処理した。
+ *
+ * 参考: 2026年7月分で作成した PDF 出力スクリプト（給与明細_202607 にバインド済み・
+ *   プロジェクト名「RICE CREAM 給与明細PDF出力」）は、各人の個人フォルダへ直接 PDF を保存する。
  */
 
 // ===== 設定 =====
@@ -178,8 +190,9 @@ function createPayslipSpreadsheet(year, month, attendance) {
   const newFile = template.makeCopy('給与明細_' + yyyymm, folder);
   const ss = SpreadsheetApp.openById(newFile.getId());
 
-  // 支給日 = 翌月20日、締日 = 当月末日
-  const payDate = nextMonth20(year, month);
+  // 支給日 = 実行日（＝振込日）、締日 = 当月末日
+  // 2026年6月分・7月分とも実行日を採用したため、2026-08-02 に既定を「翌月20日」から変更した。
+  const payDate = todayJp();
   const cutoffDate = lastDayOfMonth(year, month);
 
   CONFIG.PAYSLIP_EMPLOYEES.forEach(empName => {
@@ -299,10 +312,11 @@ function monthToColumn(month) {
   return (month >= 4) ? (month - 2) : (month + 10);
 }
 
-function nextMonth20(year, month) {
-  let y = year, m = month + 1;
-  if (m > 12) { m = 1; y += 1; }
-  return y + '年' + m + '月20日';
+// 支給日 = 実行日。旧ルール「翌月20日」は 2026年6月分・7月分とも使われなかったため廃止した。
+// 翌月20日に戻す場合は payDate の生成を y + '年' + m + '月20日'（m = month + 1、繰り上げ注意）に差し替える。
+function todayJp() {
+  const d = new Date();
+  return d.getFullYear() + '年' + (d.getMonth() + 1) + '月' + d.getDate() + '日';
 }
 
 function lastDayOfMonth(year, month) {
