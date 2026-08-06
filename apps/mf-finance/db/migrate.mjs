@@ -97,6 +97,36 @@ export function applyRecurringMigrations(db) {
   db.exec("CREATE INDEX IF NOT EXISTS idx_manual_transfers_date_status ON manual_transfers (scheduled_date, status)");
 
   db.exec(`
+    CREATE TABLE IF NOT EXISTS recurring_transfers (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      from_account TEXT NOT NULL,
+      to_account TEXT NOT NULL,
+      amount INTEGER NOT NULL,
+      day INTEGER NOT NULL CHECK (day BETWEEN 1 AND 31),
+      fee INTEGER NOT NULL DEFAULT 0,
+      name TEXT,
+      active INTEGER NOT NULL DEFAULT 1 CHECK (active IN (0,1)),
+      created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now'))
+    )
+  `);
+  db.exec("CREATE INDEX IF NOT EXISTS idx_recurring_transfers_active ON recurring_transfers (active)");
+
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS recurring_transfer_overrides (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      recurring_transfer_id INTEGER NOT NULL REFERENCES recurring_transfers(id) ON DELETE CASCADE,
+      occurrence_date TEXT NOT NULL,
+      skip INTEGER NOT NULL DEFAULT 0 CHECK (skip IN (0,1)),
+      amount INTEGER,
+      created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')),
+      UNIQUE (recurring_transfer_id, occurrence_date)
+    )
+  `);
+  db.exec(
+    "CREATE INDEX IF NOT EXISTS idx_recurring_transfer_overrides_rtid ON recurring_transfer_overrides (recurring_transfer_id)",
+  );
+
+  db.exec(`
     CREATE TABLE IF NOT EXISTS card_charge_schedules (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       card_account TEXT NOT NULL,

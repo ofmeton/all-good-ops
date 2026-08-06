@@ -9,6 +9,7 @@ import {
   buildUpcomingWithdrawals,
   cardBillingPeriod,
   expandCardChargeSchedules,
+  expandRecurringTransfers,
   monthEndOffsetDays,
   monthlyChargeDates,
   monthlyOccurrences,
@@ -151,6 +152,25 @@ export interface TransferRow {
   done_at: string | null;
 }
 
+export interface RecurringTransferRow {
+  id: number;
+  from_account: string;
+  to_account: string;
+  amount: number;
+  day: number;
+  fee: number;
+  name: string | null;
+  active: number;
+  created_at: string;
+}
+
+export interface RecurringTransferOverrideRow {
+  recurring_transfer_id: number;
+  occurrence_date: string;
+  skip: number;
+  amount: number | null;
+}
+
 export interface CardChargeScheduleRow {
   id: number;
   card_account: string;
@@ -174,6 +194,70 @@ function transferRows(): TransferRow[] {
         ORDER BY scheduled_date, id`,
     )
     .all(todayIso()) as TransferRow[];
+}
+
+function materializedTransferRows(today: string, days: number): Pick<TransferRow, "from_account" | "to_account" | "scheduled_date">[] {
+  const boundedDays = Number.isFinite(Number(days)) ? Math.max(0, Math.round(Number(days))) : 0;
+  const end = addDaysIso(today, boundedDays);
+  return db
+    .prepare(
+      `SELECT from_account, to_account, scheduled_date
+         FROM manual_transfers
+        WHERE scheduled_date >= ? AND scheduled_date <= ?`,
+    )
+    .all(`${today.slice(0, 7)}-01`, `${end.slice(0, 7)}-31`) as Pick<TransferRow, "from_account" | "to_account" | "scheduled_date">[];
+}
+
+export function getRecurringTransfers(): RecurringTransferRow[] {
+  return db
+    .prepare(
+      `SELECT id, from_account, to_account, amount, day, fee, name, active, created_at
+         FROM recurring_transfers
+        WHERE active = 1
+        ORDER BY from_account, to_account, day, id`,
+    )
+    .all() as RecurringTransferRow[];
+}
+
+export function getRecurringTransferList(): RecurringTransferRow[] {
+  return db
+    .prepare(
+      `SELECT id, from_account, to_account, amount, day, fee, name, active, created_at
+         FROM recurring_transfers
+        ORDER BY active DESC, from_account, to_account, day, id`,
+    )
+    .all() as RecurringTransferRow[];
+}
+
+export function getRecurringTransferOverrides(): RecurringTransferOverrideRow[] {
+  return db
+    .prepare("SELECT recurring_transfer_id, occurrence_date, skip, amount FROM recurring_transfer_overrides")
+    .all() as RecurringTransferOverrideRow[];
+}
+
+type ForecastTransfer = {
+  from_account: string;
+  to_account: string;
+  amount: number;
+  fee: number;
+  date: string;
+  name: string | null;
+  status?: "pending" | "done" | "cancelled";
+  source?: string;
+  recurring_transfer_id?: number;
+};
+
+function forecastTransfers(today: string, days: number): ForecastTransfer[] {
+  return [
+    ...transferRows(),
+    ...expandRecurringTransfers({
+      today,
+      days,
+      recurringTransfers: getRecurringTransfers(),
+      overrides: getRecurringTransferOverrides(),
+      materialized: materializedTransferRows(today, days),
+    }),
+  ];
 }
 
 export function getTransferList(): TransferRow[] {
@@ -360,6 +444,7 @@ export interface RollingEvent {
   account: string | null;
   source: "recurring" | "scheduled" | "transfer" | "card_charge" | string;
   recurringId?: number;
+  recurringTransferId?: number;
   occurrenceDate?: string;
   status: "normal" | "pending" | "skipped";
   balanceAfter: number;
@@ -486,7 +571,7 @@ export function getRollingCashflow(days = 30): RollingCashflow {
     recurring: activeRecurring(),
     scheduled: scheduledRows(),
     cardCharges: expandCardCharges(getCardChargeSchedules(), today, days),
-    transfers: transferRows(),
+    transfers: forecastTransfers(today, days),
     overrides,
   });
   return formatRollingResult(r, baseDate, days, cardChargeEstimate.total);
@@ -511,7 +596,7 @@ export function getAccountRollingCashflow(period: CashflowPeriod): AccountRollin
     recurring: activeRecurring(),
     scheduled: scheduledRows(),
     cardCharges: expandCardCharges(getCardChargeSchedules(), today, days),
-    transfers: transferRows(),
+    transfers: forecastTransfers(today, days),
     overrides: getRecurringOverrides(),
   });
   const locations = (r.locations as RollingLocation[]).sort((a, b) => {

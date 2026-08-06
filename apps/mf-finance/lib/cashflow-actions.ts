@@ -20,7 +20,10 @@ function toPositiveInt(v: unknown): number {
   return Number.isFinite(n) ? Math.abs(Math.round(n)) : 0;
 }
 function isYmd(v: unknown): v is string {
-  return typeof v === "string" && /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/.test(v);
+  if (typeof v !== "string" || !/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/.test(v)) return false;
+  const [year, month, day] = v.split("-").map(Number);
+  const date = new Date(Date.UTC(year, month - 1, day));
+  return date.getUTCFullYear() === year && date.getUTCMonth() === month - 1 && date.getUTCDate() === day;
 }
 
 function trimOrNull(v: unknown): string | null {
@@ -71,6 +74,12 @@ function validateClosingDay(value: unknown): number {
   const n = Number(value);
   if (!Number.isInteger(n) || n < 1 || n > 31) return 0;
   return n;
+}
+
+function isRecurringTransferOccurrence(day: number, occurrenceDate: string): boolean {
+  const [year, month, dateDay] = occurrenceDate.split("-").map(Number);
+  const expectedDay = Math.min(day, new Date(Date.UTC(year, month, 0)).getUTCDate());
+  return dateDay === expectedDay;
 }
 
 export interface ScheduledInput {
@@ -230,9 +239,68 @@ export async function deleteScheduled(id: number): Promise<CashflowActionResult>
   try {
     const n = Number(id);
     if (!Number.isInteger(n) || n <= 0) return { ok: false, error: "無効な id です" };
-    db.prepare("DELETE FROM scheduled_cashflow WHERE id = ?").run(n);
+    const info = db.prepare("DELETE FROM scheduled_cashflow WHERE id = ?").run(n);
+    if (info.changes === 0) return { ok: false, error: "対象の予定が見つかりません" };
     revalidate();
     return { ok: true };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : String(e) };
+  }
+}
+
+export interface DeletePastScheduledResult {
+  ok: true;
+  deleted: number;
+}
+
+// 単発予定を monthly の recurring_items へ移す。INSERT と DELETE は同一トランザクションで行い、
+// 変換途中に元予定だけ消える状態を作らない。
+export async function convertScheduledToRecurring(id: number): Promise<CashflowActionResult> {
+  try {
+    const n = Number(id);
+    if (!Number.isInteger(n) || n <= 0) return { ok: false, error: "無効な id です" };
+    const convert = db.transaction((scheduledId: number) => {
+      const row = db
+        .prepare(
+          "SELECT id, kind, name, amount, scheduled_date, account FROM scheduled_cashflow WHERE id = ?",
+        )
+        .get(scheduledId) as
+        | {
+            id: number;
+            kind: "income" | "expense";
+            name: string;
+            amount: number;
+            scheduled_date: string;
+            account: string | null;
+          }
+        | undefined;
+      if (!row) throw new Error("対象の予定が見つかりません");
+      if (!isYmd(row.scheduled_date)) throw new Error("予定日の形式が不正です");
+      const day = Number(row.scheduled_date.slice(8, 10));
+      if (!Number.isInteger(day) || day < 1 || day > 31) throw new Error("予定日が不正です");
+      db.prepare(
+        `INSERT INTO recurring_items
+           (kind, name, amount, day, frequency, amount_type, account, active, confirmed)
+         VALUES (?, ?, ?, ?, 'monthly', 'fixed', ?, 1, 'user')`,
+      ).run(row.kind, row.name, row.amount, day, row.account);
+      const removed = db.prepare("DELETE FROM scheduled_cashflow WHERE id = ?").run(scheduledId);
+      if (removed.changes !== 1) throw new Error("元の予定を削除できませんでした");
+    });
+    convert(n);
+    revalidate();
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : String(e) };
+  }
+}
+
+export async function deletePastScheduled(): Promise<DeletePastScheduledResult | { ok: false; error: string }> {
+  try {
+    const today = new Date();
+    const todayIso = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+    const info = db.prepare("DELETE FROM scheduled_cashflow WHERE scheduled_date < ?").run(todayIso);
+    revalidate();
+    return { ok: true, deleted: info.changes };
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.message : String(e) };
   }
@@ -298,6 +366,157 @@ export interface TransferInput {
   amount: number;
   scheduled_date: string;
   name?: string | null;
+}
+
+export interface RecurringTransferInput {
+  from_account: string;
+  to_account: string;
+  amount: number;
+  day: number;
+  name?: string | null;
+}
+
+type RecurringTransferRow = {
+  id: number;
+  from_account: string;
+  to_account: string;
+  amount: number;
+  day: number;
+  fee: number;
+  name: string | null;
+  active: number;
+};
+
+function normalizeRecurringTransfer(input: RecurringTransferInput):
+  | { ok: true; value: { from: string; to: string; amount: number; day: number; name: string | null } }
+  | { ok: false; error: string } {
+  const from = trimOrNull(input.from_account);
+  const to = trimOrNull(input.to_account);
+  const amount = toPositiveInt(input.amount);
+  const day = validateChargeDay(input.day);
+  if (!from) return { ok: false, error: "出金口座を選択してください" };
+  if (!to) return { ok: false, error: "入金口座を選択してください" };
+  if (from === to) return { ok: false, error: "出金口座と入金口座は別にしてください" };
+  if (!accountExists(from)) return { ok: false, error: `口座が見つかりません: ${from}` };
+  if (!accountExists(to)) return { ok: false, error: `口座が見つかりません: ${to}` };
+  if (amount <= 0) return { ok: false, error: "金額を入力してください" };
+  if (day === 0) return { ok: false, error: "日は1〜31で入力してください" };
+  return { ok: true, value: { from, to, amount, day, name: trimOrNull(input.name) } };
+}
+
+export async function createRecurringTransfer(input: RecurringTransferInput): Promise<CashflowActionResult> {
+  try {
+    const normalized = normalizeRecurringTransfer(input);
+    if (!normalized.ok) return normalized;
+    const v = normalized.value;
+    db.prepare(
+      `INSERT INTO recurring_transfers (from_account, to_account, amount, day, fee, name, active)
+       VALUES (?, ?, ?, ?, ?, ?, 1)`,
+    ).run(v.from, v.to, v.amount, v.day, resolveTransferFee(v.from), v.name);
+    revalidate();
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : String(e) };
+  }
+}
+
+export async function deleteRecurringTransfer(id: number): Promise<CashflowActionResult> {
+  try {
+    const n = Number(id);
+    if (!Number.isInteger(n) || n <= 0) return { ok: false, error: "無効な id です" };
+    const info = db.prepare("DELETE FROM recurring_transfers WHERE id = ?").run(n);
+    if (info.changes === 0) return { ok: false, error: "対象の毎月の資金移動が見つかりません" };
+    revalidate();
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : String(e) };
+  }
+}
+
+export async function toggleRecurringTransfer(id: number, active: boolean): Promise<CashflowActionResult> {
+  try {
+    const n = Number(id);
+    if (!Number.isInteger(n) || n <= 0) return { ok: false, error: "無効な id です" };
+    if (typeof active !== "boolean") return { ok: false, error: "有効状態が不正です" };
+    const info = db.prepare("UPDATE recurring_transfers SET active = ? WHERE id = ?").run(active ? 1 : 0, n);
+    if (info.changes === 0) return { ok: false, error: "対象の毎月の資金移動が見つかりません" };
+    revalidate();
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : String(e) };
+  }
+}
+
+export async function markRecurringTransferDone({
+  recurringTransferId,
+  occurrenceDate,
+}: {
+  recurringTransferId: number;
+  occurrenceDate: string;
+}): Promise<CashflowActionResult> {
+  try {
+    const n = Number(recurringTransferId);
+    if (!Number.isInteger(n) || n <= 0) return { ok: false, error: "無効な id です" };
+    if (!isYmd(occurrenceDate)) return { ok: false, error: "日付が不正です（YYYY-MM-DD）" };
+    const materialize = db.transaction((recurringId: number, date: string) => {
+      const transfer = db
+        .prepare(
+          "SELECT id, from_account, to_account, amount, day, fee, name, active FROM recurring_transfers WHERE id = ?",
+        )
+        .get(recurringId) as RecurringTransferRow | undefined;
+      if (!transfer) throw new Error("対象の毎月の資金移動が見つかりません");
+      if (transfer.active !== 1) throw new Error("停止中の毎月の資金移動は実行できません");
+      if (!isRecurringTransferOccurrence(transfer.day, date)) {
+        throw new Error("指定日はこの毎月の資金移動の発生日ではありません");
+      }
+      const existing = db
+        .prepare(
+          `SELECT 1 FROM manual_transfers
+            WHERE from_account = ? AND to_account = ? AND substr(scheduled_date, 1, 7) = substr(?, 1, 7)
+            LIMIT 1`,
+        )
+        .get(transfer.from_account, transfer.to_account, date);
+      if (existing) throw new Error("この月の振替は既に登録されています");
+      db.prepare(
+        `INSERT INTO manual_transfers
+           (from_account, to_account, amount, scheduled_date, name, fee, status, done_at)
+         VALUES (?, ?, ?, ?, ?, ?, 'done', strftime('%Y-%m-%dT%H:%M:%SZ','now'))`,
+      ).run(transfer.from_account, transfer.to_account, transfer.amount, date, transfer.name, transfer.fee);
+    });
+    materialize(n, occurrenceDate);
+    revalidate();
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : String(e) };
+  }
+}
+
+export async function skipRecurringTransferOccurrence({
+  recurringTransferId,
+  occurrenceDate,
+}: {
+  recurringTransferId: number;
+  occurrenceDate: string;
+}): Promise<CashflowActionResult> {
+  try {
+    const n = Number(recurringTransferId);
+    if (!Number.isInteger(n) || n <= 0) return { ok: false, error: "無効な id です" };
+    if (!isYmd(occurrenceDate)) return { ok: false, error: "日付が不正です（YYYY-MM-DD）" };
+    const transfer = db.prepare("SELECT day FROM recurring_transfers WHERE id = ?").get(n) as { day: number } | undefined;
+    if (!transfer) return { ok: false, error: "対象の毎月の資金移動が見つかりません" };
+    if (!isRecurringTransferOccurrence(transfer.day, occurrenceDate)) {
+      return { ok: false, error: "指定日はこの毎月の資金移動の発生日ではありません" };
+    }
+    db.prepare(
+      `INSERT INTO recurring_transfer_overrides (recurring_transfer_id, occurrence_date, skip)
+       VALUES (?, ?, 1)
+       ON CONFLICT(recurring_transfer_id, occurrence_date) DO UPDATE SET skip = 1`,
+    ).run(n, occurrenceDate);
+    revalidate();
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : String(e) };
+  }
 }
 
 export async function addTransfer(input: TransferInput): Promise<CashflowActionResult> {

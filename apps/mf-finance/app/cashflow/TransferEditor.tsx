@@ -1,8 +1,15 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import type { TransferRow } from "@/lib/cashflow-queries";
-import { addTransfer, completeTransfer, deleteTransfer } from "@/lib/cashflow-actions";
+import type { RecurringTransferRow, TransferRow } from "@/lib/cashflow-queries";
+import {
+  addTransfer,
+  completeTransfer,
+  createRecurringTransfer,
+  deleteRecurringTransfer,
+  deleteTransfer,
+  toggleRecurringTransfer,
+} from "@/lib/cashflow-actions";
 import { KIND_LABEL, type BalanceKind } from "@/lib/cashflow/kinds";
 import { yen, shortDate } from "@/lib/format";
 
@@ -88,6 +95,76 @@ function TransferRowItem({ item }: { item: TransferRow }) {
   );
 }
 
+function RecurringTransferRowItem({ item }: { item: RecurringTransferRow }) {
+  const [pending, startTransition] = useTransition();
+  const [error, setError] = useState<string | null>(null);
+  const inactive = item.active !== 1;
+
+  const onToggle = () => {
+    setError(null);
+    startTransition(async () => {
+      try {
+        const res = await toggleRecurringTransfer(item.id, inactive);
+        if (!res.ok) setError(res.error);
+      } catch (e) {
+        setError(e instanceof Error ? e.message : "毎月の資金移動の更新に失敗しました");
+      }
+    });
+  };
+
+  const onDelete = () => {
+    if (!window.confirm(`「${item.from_account} → ${item.to_account}」を削除します。よろしいですか？`)) return;
+    setError(null);
+    startTransition(async () => {
+      try {
+        const res = await deleteRecurringTransfer(item.id);
+        if (!res.ok) setError(res.error);
+      } catch (e) {
+        setError(e instanceof Error ? e.message : "毎月の資金移動の削除に失敗しました");
+      }
+    });
+  };
+
+  return (
+    <li className={`rounded-xl border border-border bg-surface p-3 shadow-sm ${pending || inactive ? "opacity-60" : ""}`}>
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <div className="min-w-0">
+          <div className="flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-1">
+            <span className={`text-sm font-medium ${inactive ? "text-muted line-through" : "text-foreground"}`}>
+              {item.from_account} → {item.to_account}
+            </span>
+            {item.name && <span className="text-[11px] text-muted">（{item.name}）</span>}
+            <span className="tabular text-[11px] text-muted">毎月{item.day}日</span>
+          </div>
+          <p className="mt-0.5 text-[11px] text-muted">
+            手数料 ¥{yen(item.fee)}{inactive ? " / 停止中" : ""}
+          </p>
+        </div>
+        <div className="flex flex-wrap items-center justify-end gap-2">
+          <span className="tabular text-sm font-semibold text-foreground">¥{yen(item.amount)}</span>
+          <button
+            type="button"
+            onClick={onToggle}
+            disabled={pending}
+            className="h-9 rounded-lg border border-border px-3 text-xs font-medium text-foreground hover:bg-border/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:opacity-40"
+          >
+            {inactive ? "再開" : "停止"}
+          </button>
+          <button
+            type="button"
+            onClick={onDelete}
+            disabled={pending}
+            className="h-9 rounded-lg border border-negative/40 px-3 text-xs font-medium text-negative hover:bg-negative/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-negative disabled:opacity-40"
+          >
+            削除
+          </button>
+        </div>
+      </div>
+      {error && <p className="mt-2 text-xs font-medium text-negative" role="alert">{error}</p>}
+    </li>
+  );
+}
+
 function AddTransferForm({ accountOptions }: { accountOptions: AccountOption[] }) {
   const [pending, startTransition] = useTransition();
   const [date, setDate] = useState("");
@@ -95,6 +172,7 @@ function AddTransferForm({ accountOptions }: { accountOptions: AccountOption[] }
   const [to, setTo] = useState("");
   const [amount, setAmount] = useState("");
   const [name, setName] = useState("");
+  const [recurring, setRecurring] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const onSubmit = (e: React.FormEvent) => {
@@ -110,22 +188,35 @@ function AddTransferForm({ accountOptions }: { accountOptions: AccountOption[] }
       return;
     }
     startTransition(async () => {
-      const res = await addTransfer({
-        from_account: from,
-        to_account: to,
-        amount: amt,
-        scheduled_date: date,
-        name: name.trim() || null,
-      });
-      if (!res.ok) {
-        setError(res.error);
-        return;
+      try {
+        const res = recurring
+          ? await createRecurringTransfer({
+              from_account: from,
+              to_account: to,
+              amount: amt,
+              day: Number(date.slice(8, 10)),
+              name: name.trim() || null,
+            })
+          : await addTransfer({
+              from_account: from,
+              to_account: to,
+              amount: amt,
+              scheduled_date: date,
+              name: name.trim() || null,
+            });
+        if (!res.ok) {
+          setError(res.error);
+          return;
+        }
+        setDate("");
+        setFrom("");
+        setTo("");
+        setAmount("");
+        setName("");
+        setRecurring(false);
+      } catch (e) {
+        setError(e instanceof Error ? e.message : "振替予定の追加に失敗しました");
       }
-      setDate("");
-      setFrom("");
-      setTo("");
-      setAmount("");
-      setName("");
     });
   };
 
@@ -167,6 +258,17 @@ function AddTransferForm({ accountOptions }: { accountOptions: AccountOption[] }
           <span className="text-[11px] text-muted">名称</span>
           <input type="text" value={name} onChange={(e) => setName(e.target.value)} disabled={pending} placeholder="任意" className={INPUT_CLS} />
         </label>
+        <label className="flex h-11 items-center gap-2 rounded-lg border border-border bg-surface px-3 text-sm text-foreground">
+          <input
+            type="checkbox"
+            name="recurring"
+            checked={recurring}
+            onChange={(e) => setRecurring(e.target.checked)}
+            disabled={pending}
+            className="h-4 w-4 accent-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+          />
+          毎月くり返す
+        </label>
         <button type="submit" disabled={pending} className="h-11 rounded-lg border border-primary bg-primary px-4 text-sm font-medium text-white hover:bg-primary/90 disabled:opacity-40">
           {pending ? "追加中…" : "追加"}
         </button>
@@ -178,9 +280,11 @@ function AddTransferForm({ accountOptions }: { accountOptions: AccountOption[] }
 
 export function TransferEditor({
   items,
+  recurringItems,
   accountOptions,
 }: {
   items: TransferRow[];
+  recurringItems: RecurringTransferRow[];
   accountOptions: AccountOption[];
 }) {
   return (
@@ -201,6 +305,24 @@ export function TransferEditor({
         </ul>
       )}
       <AddTransferForm accountOptions={accountOptions} />
+
+      <div className="mt-5">
+        <h3 className="mb-2 text-sm font-semibold text-foreground">
+          毎月の資金移動
+          <span className="ml-2 tabular text-xs font-normal text-muted">{recurringItems.length}件</span>
+        </h3>
+        {recurringItems.length === 0 ? (
+          <p className="rounded-xl border border-border bg-surface px-4 py-3 text-sm text-muted">
+            登録済みの毎月の資金移動はありません。
+          </p>
+        ) : (
+          <ul className="space-y-2">
+            {recurringItems.map((item) => (
+              <RecurringTransferRowItem key={item.id} item={item} />
+            ))}
+          </ul>
+        )}
+      </div>
     </section>
   );
 }

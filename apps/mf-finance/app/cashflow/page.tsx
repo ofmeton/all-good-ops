@@ -4,6 +4,7 @@ import {
   getCardChargeScheduleList,
   getDueTransfers,
   getNextMonthCardCharge,
+  getRecurringTransferList,
   getScheduledList,
   getAllAccountBalances,
   getTransferList,
@@ -32,10 +33,13 @@ export default async function CashflowPage({
 }) {
   const params = await searchParams;
   const period = parsePeriod(params.period);
+  const now = new Date();
+  const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
   const accountRolling = getAccountRollingCashflow(period);
   const scheduled = getScheduledList();
   const cardChargeSchedules = getCardChargeScheduleList();
   const transfers = getTransferList();
+  const recurringTransfers = getRecurringTransferList();
   const dueTransfers = getDueTransfers(3);
   const recurring = getRecurringItems();
   const occurrences = getUpcomingOccurrences(60);
@@ -97,9 +101,9 @@ export default async function CashflowPage({
 
       <CashflowTimeline rolling={accountRolling} />
 
-      <ScheduledEditor items={scheduled} accountOptions={accountOptions} />
+      <ScheduledEditor items={scheduled} accountOptions={accountOptions} today={today} />
       <CardChargeScheduleEditor items={cardChargeSchedules} cardOptions={cardOptions} accountOptions={accountOptions} />
-      <TransferEditor items={transfers} accountOptions={accountOptions} />
+      <TransferEditor items={transfers} recurringItems={recurringTransfers} accountOptions={accountOptions} />
 
       <section className="mt-6" aria-label="毎月の定期">
         <h2 className="mb-1 text-sm font-semibold text-foreground">

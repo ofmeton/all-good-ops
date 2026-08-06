@@ -30,6 +30,10 @@ function normalizedClosingDay(value) {
   const n = Number(value);
   return Number.isInteger(n) && n >= 1 && n <= 31 ? n : 31;
 }
+function normalizedDays(value) {
+  const n = Number(value);
+  return Number.isFinite(n) ? Math.max(0, Math.round(n)) : 0;
+}
 function diffDays(startIso, endIso) {
   const s = parse(startIso);
   const e = parse(endIso);
@@ -127,6 +131,75 @@ export function expandCardChargeSchedules({
   }
 
   return out.sort((a, b) => a.date.localeCompare(b.date) || String(a.account ?? "").localeCompare(String(b.account ?? ""), "ja"));
+}
+
+// 定期振替を today(含む)〜today+days に月次展開する。manual_transfers に同じ
+// 出金元/入金先/月の行がある場合は、実績または個別予定を優先して二重計上しない。
+/**
+ * @param {{
+ *   today: string,
+ *   days: number,
+ *   recurringTransfers?: Array<{ id: number, from_account: string, to_account: string, amount: number, day: number, fee?: number, name?: string | null, active?: number }>,
+ *   overrides?: Array<{ recurring_transfer_id: number, occurrence_date: string, skip?: number, amount?: number | null }> | Map<string, { recurring_transfer_id: number, occurrence_date: string, skip?: number, amount?: number | null }>,
+ *   materialized?: Array<{ from_account: string, to_account: string, scheduled_date: string }>
+ * }} input
+ */
+export function expandRecurringTransfers({
+  today,
+  days,
+  recurringTransfers = [],
+  overrides = [],
+  materialized = [],
+}) {
+  const end = addDays(today, normalizedDays(days));
+  const startMonth = parse(today);
+  const endMonth = parse(end);
+  const overrideMap = new Map();
+  const materializedMonths = new Set();
+
+  for (const override of overrides instanceof Map ? overrides.values() : overrides ?? []) {
+    overrideMap.set(`${override.recurring_transfer_id}|${override.occurrence_date}`, override);
+  }
+  for (const transfer of materialized ?? []) {
+    if (!transfer?.from_account || !transfer?.to_account || !transfer?.scheduled_date) continue;
+    materializedMonths.add(
+      `${transfer.from_account}|${transfer.to_account}|${String(transfer.scheduled_date).slice(0, 7)}`,
+    );
+  }
+
+  const out = [];
+  for (const transfer of recurringTransfers) {
+    if (Number(transfer.active) === 0) continue;
+    const day = Number(transfer.day);
+    if (!Number.isInteger(day) || day < 1 || day > 31) continue;
+
+    let target = { y: startMonth.y, m: startMonth.m };
+    while (target.y < endMonth.y || (target.y === endMonth.y && target.m <= endMonth.m)) {
+      const date = fmt(target.y, target.m, effectiveDay(day, target.y, target.m));
+      const monthKey = `${transfer.from_account}|${transfer.to_account}|${date.slice(0, 7)}`;
+      const override = overrideMap.get(`${transfer.id}|${date}`);
+      if (date >= today && date <= end && !override?.skip && !materializedMonths.has(monthKey)) {
+        out.push({
+          from_account: transfer.from_account,
+          to_account: transfer.to_account,
+          amount: Math.abs(Number(override?.amount ?? transfer.amount) || 0),
+          fee: Math.abs(Number(transfer.fee) || 0),
+          date,
+          name: transfer.name ?? null,
+          source: "recurring_transfer",
+          recurring_transfer_id: transfer.id,
+        });
+      }
+      target = addMonthsToYearMonth(target.y, target.m, 1);
+    }
+  }
+
+  return out.sort(
+    (a, b) =>
+      a.date.localeCompare(b.date) ||
+      String(a.from_account).localeCompare(String(b.from_account), "ja") ||
+      String(a.to_account).localeCompare(String(b.to_account), "ja"),
+  );
 }
 
 export function indexOverrides(arr) {
@@ -271,9 +344,11 @@ export function buildRolling(opts) {
             name: `${name}（振替出金）`,
             amount,
             account: t.from_account ?? null,
-            source: "transfer",
+            source: t.source === "recurring_transfer" ? "recurring_transfer" : "transfer",
             status: "normal",
             affectsTotal: false,
+            recurringTransferId: t.source === "recurring_transfer" ? t.recurring_transfer_id : undefined,
+            occurrenceDate: t.source === "recurring_transfer" ? t.date : undefined,
           });
           if (fee > 0) {
             events.push({

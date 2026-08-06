@@ -2,7 +2,13 @@
 
 import { useState, useTransition } from "react";
 import type { ScheduledListRow } from "@/lib/cashflow-queries";
-import { addScheduled, deleteScheduled, setScheduledAccount } from "@/lib/cashflow-actions";
+import {
+  addScheduled,
+  convertScheduledToRecurring,
+  deletePastScheduled,
+  deleteScheduled,
+  setScheduledAccount,
+} from "@/lib/cashflow-actions";
 import { KIND_LABEL, type BalanceKind } from "@/lib/cashflow/kinds";
 import { yen, shortDate } from "@/lib/format";
 
@@ -44,6 +50,19 @@ function ScheduledRowItem({ item, accountOptions }: { item: ScheduledListRow; ac
       if (!res.ok) {
         setAccount(item.account ?? "");
         setError(res.error);
+      }
+    });
+  };
+
+  const onConvertToRecurring = () => {
+    if (!window.confirm(`「${item.name}」を今後毎月の定期に変換します。元の単発予定は削除されます。よろしいですか？`)) return;
+    setError(null);
+    startTransition(async () => {
+      try {
+        const res = await convertScheduledToRecurring(item.id);
+        if (!res.ok) setError(res.error);
+      } catch (e) {
+        setError(e instanceof Error ? e.message : "毎月の定期への変換に失敗しました");
       }
     });
   };
@@ -95,6 +114,14 @@ function ScheduledRowItem({ item, accountOptions }: { item: ScheduledListRow; ac
           <span className="sr-only">{isIncome ? "入金 " : "引落 "}</span>
           ¥{yen(item.amount)}
         </span>
+        <button
+          type="button"
+          onClick={onConvertToRecurring}
+          disabled={pending}
+          className="flex h-11 cursor-pointer items-center justify-center rounded-lg border border-primary/40 px-3 text-sm font-medium text-primary transition-colors duration-150 hover:bg-primary/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-40"
+        >
+          毎月にする
+        </button>
         <button
           type="button"
           onClick={onDelete}
@@ -266,29 +293,74 @@ function AddScheduledForm({ accountOptions }: { accountOptions: AccountOption[] 
 export function ScheduledEditor({
   items,
   accountOptions,
+  today,
 }: {
   items: ScheduledListRow[];
   accountOptions: AccountOption[];
+  today: string;
 }) {
+  const [showPast, setShowPast] = useState(false);
+  const [deletingPast, startDeletePast] = useTransition();
+  const [pastError, setPastError] = useState<string | null>(null);
+  const pastItems = items.filter((item) => item.scheduled_date < today);
+  const visibleItems = showPast ? items : items.filter((item) => item.scheduled_date >= today);
+
+  const onDeletePast = () => {
+    if (!window.confirm(`過去の単発予定 ${pastItems.length}件を削除します。よろしいですか？`)) return;
+    setPastError(null);
+    startDeletePast(async () => {
+      try {
+        const res = await deletePastScheduled();
+        if (!res.ok) setPastError(res.error);
+      } catch (e) {
+        setPastError(e instanceof Error ? e.message : "過去分の削除に失敗しました");
+      }
+    });
+  };
+
   return (
     <section className="mt-6" aria-label="単発予定">
-      <h2 className="mb-2 text-sm font-semibold text-foreground">
-        単発予定（特定日の入金・引落）
-        <span className="ml-2 tabular text-xs font-normal text-muted">
-          {items.length}件
-        </span>
-      </h2>
-      {items.length === 0 ? (
+      <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+        <h2 className="text-sm font-semibold text-foreground">
+          単発予定（特定日の入金・引落）
+          <span className="ml-2 tabular text-xs font-normal text-muted">
+            {visibleItems.length}件
+          </span>
+        </h2>
+        <div className="flex flex-wrap items-center gap-2">
+          {pastItems.length > 0 && (
+            <>
+              <button
+                type="button"
+                onClick={() => setShowPast((value) => !value)}
+                className="h-9 rounded-lg border border-border px-3 text-xs font-medium text-foreground hover:bg-border/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+              >
+                {showPast ? "過去を隠す" : "過去も表示"}
+              </button>
+              <button
+                type="button"
+                onClick={onDeletePast}
+                disabled={deletingPast}
+                className="h-9 rounded-lg border border-negative/40 px-3 text-xs font-medium text-negative hover:bg-negative/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-negative disabled:opacity-40"
+              >
+                {deletingPast ? "削除中…" : `過去分を削除（${pastItems.length}件）`}
+              </button>
+            </>
+          )}
+        </div>
+      </div>
+      {visibleItems.length === 0 ? (
         <p className="rounded-xl border border-border bg-surface px-4 py-3 text-sm text-muted">
-          登録済みの単発予定はありません。
+          {pastItems.length > 0 && !showPast ? "今後の単発予定はありません。" : "登録済みの単発予定はありません。"}
         </p>
       ) : (
         <ul className="space-y-2">
-          {items.map((item) => (
+          {visibleItems.map((item) => (
             <ScheduledRowItem key={item.id} item={item} accountOptions={accountOptions} />
           ))}
         </ul>
       )}
+      {pastError && <p className="mt-2 text-xs font-medium text-negative" role="alert">{pastError}</p>}
       <AddScheduledForm accountOptions={accountOptions} />
     </section>
   );

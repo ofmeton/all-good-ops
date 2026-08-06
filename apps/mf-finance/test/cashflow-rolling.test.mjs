@@ -8,6 +8,7 @@ import {
   cardBillingPeriod,
   effectiveDay,
   expandCardChargeSchedules,
+  expandRecurringTransfers,
   indexCardChargeOverrides,
   monthEndOffsetDays,
   monthlyChargeDates,
@@ -20,6 +21,102 @@ test("effectiveDay は月末超過をクランプ", () => {
   assert.equal(effectiveDay(31, 2026, 2), 28); // 2026-02 は28日
   assert.equal(effectiveDay(15, 2026, 6), 15);
   assert.equal(effectiveDay(31, 2026, 4), 30); // 4月は30日
+});
+
+test("expandRecurringTransfers: 月末超過を各月末へクランプして展開する", () => {
+  const transfers = expandRecurringTransfers({
+    today: "2026-01-30",
+    days: 60,
+    recurringTransfers: [
+      { id: 1, from_account: "銀行A", to_account: "銀行B", amount: 10000, fee: 220, day: 31, active: 1 },
+    ],
+  });
+
+  assert.deepEqual(
+    transfers.map((transfer) => [transfer.date, transfer.amount, transfer.fee, transfer.source]),
+    [
+      ["2026-01-31", 10000, 220, "recurring_transfer"],
+      ["2026-02-28", 10000, 220, "recurring_transfer"],
+      ["2026-03-31", 10000, 220, "recurring_transfer"],
+    ],
+  );
+});
+
+test("expandRecurringTransfers: うるう年の2月末へ31日をクランプする", () => {
+  const transfers = expandRecurringTransfers({
+    today: "2028-02-01",
+    days: 29,
+    recurringTransfers: [
+      { id: 1, from_account: "銀行A", to_account: "銀行B", amount: 10000, day: 31, active: 1 },
+    ],
+  });
+
+  assert.deepEqual(transfers.map((transfer) => transfer.date), ["2028-02-29"]);
+});
+
+test("expandRecurringTransfers: 範囲外 days は0日として扱う", () => {
+  const transfers = expandRecurringTransfers({
+    today: "2026-01-05",
+    days: Infinity,
+    recurringTransfers: [
+      { id: 1, from_account: "銀行A", to_account: "銀行B", amount: 10000, day: 5, active: 1 },
+    ],
+  });
+
+  assert.deepEqual(transfers.map((transfer) => transfer.date), ["2026-01-05"]);
+});
+
+test("expandRecurringTransfers: skip と amount override を発生日へ適用する", () => {
+  const transfers = expandRecurringTransfers({
+    today: "2026-01-01",
+    days: 90,
+    recurringTransfers: [
+      { id: 4, from_account: "銀行A", to_account: "銀行B", amount: 10000, fee: 0, day: 10, active: 1 },
+    ],
+    overrides: [
+      { recurring_transfer_id: 4, occurrence_date: "2026-02-10", skip: 1 },
+      { recurring_transfer_id: 4, occurrence_date: "2026-03-10", skip: 0, amount: 25000 },
+    ],
+  });
+
+  assert.deepEqual(
+    transfers.map((transfer) => [transfer.date, transfer.amount]),
+    [
+      ["2026-01-10", 10000],
+      ["2026-03-10", 25000],
+    ],
+  );
+});
+
+test("expandRecurringTransfers: 同じ出金元・入金先・月の materialized を優先する", () => {
+  const transfers = expandRecurringTransfers({
+    today: "2026-01-01",
+    days: 65,
+    recurringTransfers: [
+      { id: 1, from_account: "銀行A", to_account: "銀行B", amount: 10000, fee: 0, day: 5, active: 1 },
+    ],
+    materialized: [
+      { from_account: "銀行A", to_account: "銀行B", scheduled_date: "2026-02-20", status: "done" },
+      { from_account: "銀行A", to_account: "別口座", scheduled_date: "2026-03-05", status: "pending" },
+    ],
+  });
+
+  assert.deepEqual(
+    transfers.map((transfer) => transfer.date),
+    ["2026-01-05", "2026-03-05"],
+  );
+});
+
+test("expandRecurringTransfers: active=0 は展開しない", () => {
+  const transfers = expandRecurringTransfers({
+    today: "2026-01-01",
+    days: 31,
+    recurringTransfers: [
+      { id: 1, from_account: "銀行A", to_account: "銀行B", amount: 10000, day: 5, active: 0 },
+    ],
+  });
+
+  assert.deepEqual(transfers, []);
 });
 
 test("monthEndOffsetDays: 当月/来月/再来月の月末までの日数を返す", () => {
