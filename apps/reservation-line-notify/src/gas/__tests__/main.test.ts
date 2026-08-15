@@ -6,7 +6,7 @@ vi.mock("../gmail");
 vi.mock("../line");
 vi.mock("../sheetStore");
 
-import { ingest } from "../main";
+import { ingest, doPost } from "../main";
 import * as gmail from "../gmail";
 import * as line from "../line";
 import * as store from "../sheetStore";
@@ -75,5 +75,46 @@ describe("ingest — アクティビティ1件=LINE1通・即時・同一r=は1�
     expect(sent.size).toBe(0);
     expect(processed.has("msg-ice-1")).toBe(false);
     expect(pushCalls.length).toBe(1);
+  });
+});
+
+describe("doPost — groupId の自動取り込み", () => {
+  function stubProps(initial: Record<string, string>) {
+    const store: Record<string, string> = { ...initial };
+    (globalThis as any).PropertiesService = {
+      getScriptProperties: () => ({
+        getProperty: (k: string) => store[k] ?? null,
+        setProperty: (k: string, v: string) => { store[k] = v; },
+      }),
+    };
+    return store;
+  }
+
+  function webhook(sourceType: string, groupId?: string) {
+    return { postData: { contents: JSON.stringify({ events: [{ source: { type: sourceType, groupId } }] }) } };
+  }
+
+  it("グループ発言から groupId を保存する", () => {
+    const store = stubProps({});
+    doPost(webhook("group", "Cabcdef0123456789"));
+    expect(store.LINE_GROUP_ID).toBe("Cabcdef0123456789");
+    expect(store.LINE_GROUP_ID_CAPTURED_AT).toBeTruthy();
+  });
+
+  it("既に設定済みなら上書きしない", () => {
+    const store = stubProps({ LINE_GROUP_ID: "Coriginal" });
+    doPost(webhook("group", "Cnew"));
+    expect(store.LINE_GROUP_ID).toBe("Coriginal");
+  });
+
+  it("1対1トークの発言は無視する", () => {
+    const store = stubProps({});
+    doPost(webhook("user"));
+    expect(store.LINE_GROUP_ID).toBeUndefined();
+  });
+
+  it("壊れた payload でも例外を投げない", () => {
+    stubProps({});
+    expect(() => doPost({ postData: { contents: "not json" } })).not.toThrow();
   });
 });

@@ -5,6 +5,33 @@
 function ui_setupTrigger() { setupTrigger(); }
 function ui_pollInbox() { pollInbox(); }
 
+// 検知クエリ。差出人に依存させず、件名か本文のどちらか一方の一致で拾う。
+// Roopt から直接 / Gmail 自動転送 / 手動転送 のいずれの届き方でも通る。
+var DEFAULT_GMAIL_QUERY =
+  '{subject:(アクティビティ予約) "アクティビティ予約が入りました"} newer_than:7d -in:sent -in:draft -in:trash';
+
+// 初回セットアップ: 履歴用スプレッドシートを作り、SHEET_ID と GMAIL_QUERY を入れる。
+// 何度実行しても既存値は壊さない。LINE_TOKEN だけは本人が手で入れる。
+function ui_bootstrap() {
+  var P = PropertiesService.getScriptProperties();
+  var out = {};
+  var sheetId = P.getProperty("SHEET_ID");
+  if (!sheetId) {
+    var ss = SpreadsheetApp.create("食体験 予約通知 履歴");
+    sheetId = ss.getId();
+    P.setProperty("SHEET_ID", sheetId);
+    out.createdSheet = true;
+  }
+  out.sheetUrl = "https://docs.google.com/spreadsheets/d/" + sheetId + "/edit";
+  if (!P.getProperty("GMAIL_QUERY")) P.setProperty("GMAIL_QUERY", DEFAULT_GMAIL_QUERY);
+  out.gmailQuery = P.getProperty("GMAIL_QUERY");
+  out.matchedMails = GmailApp.search(P.getProperty("GMAIL_QUERY"), 0, 50).length;
+  out.hasLineToken = !!P.getProperty("LINE_TOKEN");
+  out.hasGroupId = !!P.getProperty("LINE_GROUP_ID");
+  P.setProperty("BOOTSTRAP_RESULT", JSON.stringify(out));
+  console.log(JSON.stringify(out, null, 2));
+}
+
 // 再テスト用: 取り込み済み(message_id)と送信済み(dedup_id)の状態をクリアする。
 function ui_clearProcessed() {
   var id = PropertiesService.getScriptProperties().getProperty("SHEET_ID");
