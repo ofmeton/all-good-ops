@@ -11,9 +11,9 @@ from PIL import Image
 from ricecream_story.config import find_photo, load_photos, load_store
 from ricecream_story.photos import CANVAS_H, CANVAS_W, load_cover
 from ricecream_story.render import (
-    HEADLINE_WIDTH_RATIO,
+    HEADLINE_CAP_HEIGHT,
+    HEADLINE_MAX_WIDTH_RATIO,
     font_for_cap_height,
-    font_for_width,
     render,
 )
 from ricecream_story.schedule import resolve
@@ -105,21 +105,25 @@ class RenderTests(unittest.TestCase):
         self.assertGreater(without, 5000, "見出しの白画素が取れていない（測定範囲が外れている）")
         self.assertGreaterEqual(with_marker, without * 0.99)
 
-    def test_headline_width_within_target(self):
-        font = font_for_width(
-            __import__("ricecream_story.config", fromlist=["FONT_HEADLINE"]).FONT_HEADLINE,
-            self.store.headline_text,
-            CANVAS_W * HEADLINE_WIDTH_RATIO,
-        )
+    def test_headline_cap_height_hits_the_target(self):
+        from ricecream_story.config import FONT_DISPLAY
+
+        font = font_for_cap_height(FONT_DISPLAY, HEADLINE_CAP_HEIGHT)
+        _, top, _, bottom = font.getbbox("H")
+        self.assertLessEqual(abs((bottom - top) - HEADLINE_CAP_HEIGHT), 1)
+
+    def test_headline_stays_inside_the_canvas(self):
+        from ricecream_story.config import FONT_DISPLAY
+
+        font = font_for_cap_height(FONT_DISPLAY, HEADLINE_CAP_HEIGHT)
         left, _, right, _ = font.getbbox(self.store.headline_text)
-        target = CANVAS_W * HEADLINE_WIDTH_RATIO
-        self.assertLessEqual(abs((right - left) - target) / target, 0.03)
+        self.assertLessEqual(right - left, CANVAS_W * HEADLINE_MAX_WIDTH_RATIO)
 
     def test_font_search_is_monotonic_in_cap_height(self):
-        from ricecream_story.config import FONT_TEXT
+        from ricecream_story.config import FONT_DISPLAY
 
-        small = font_for_cap_height(FONT_TEXT, 33)
-        large = font_for_cap_height(FONT_TEXT, 40)
+        small = font_for_cap_height(FONT_DISPLAY, 42)
+        large = font_for_cap_height(FONT_DISPLAY, 46)
         self.assertLess(small.size, large.size)
 
 

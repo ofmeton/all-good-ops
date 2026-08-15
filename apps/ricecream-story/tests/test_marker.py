@@ -1,77 +1,64 @@
-"""マーカー帯の性質。乱数を使うので「決定論」と「形の性質」を押さえる。"""
+"""マーカー帯。2026-08-15 に手描き風から直線へ変更したので、矩形であることを押さえる。"""
 import unittest
 
 from PIL import Image
 
-from ricecream_story.marker import THICKNESS, _band_mask, draw_marker, seeded_rng
+from ricecream_story.marker import THICKNESS, draw_marker
+
+ACCENT = (176, 138, 51)
+WHITE = (255, 255, 255)
 
 
-class SeedTests(unittest.TestCase):
-    def test_same_parts_same_sequence(self):
-        a = seeded_rng("2026-08-15", "vanilla-cone-front", "headline")
-        b = seeded_rng("2026-08-15", "vanilla-cone-front", "headline")
-        self.assertEqual([a.random() for _ in range(5)], [b.random() for _ in range(5)])
-
-    def test_different_role_different_sequence(self):
-        a = seeded_rng("2026-08-15", "vanilla-cone-front", "headline")
-        b = seeded_rng("2026-08-15", "vanilla-cone-front", "date")
-        self.assertNotEqual([a.random() for _ in range(5)], [b.random() for _ in range(5)])
-
-    def test_seed_is_stable_across_processes(self):
-        # seed が hashlib 由来なので PYTHONHASHSEED に左右されず、別プロセス・別マシンでも
-        # この値になる。組み込み hash() に戻すとここが落ちる。
-        rng = seeded_rng("2026-08-15", "vanilla-cone-front", "headline")
-        self.assertEqual(round(rng.random(), 12), 0.084057032857)
+def _canvas() -> Image.Image:
+    return Image.new("RGB", (1080, 400), WHITE)
 
 
-class BandShapeTests(unittest.TestCase):
-    def test_band_is_about_the_requested_thickness_in_the_middle(self):
-        mask = _band_mask(600, THICKNESS, seeded_rng("t", 1))
-        column = [mask.getpixel((mask.width // 2, y)) for y in range(mask.height)]
-        painted = [y for y, value in enumerate(column) if value > 0]
-        height = painted[-1] - painted[0] + 1
-        self.assertLessEqual(abs(height - THICKNESS), THICKNESS * 0.25)
+def _paint(**overrides) -> Image.Image:
+    canvas = _canvas()
+    kwargs = {
+        "x_center": 540,
+        "center_y": 200,
+        "width": 500,
+        "color": ACCENT,
+    }
+    kwargs.update(overrides)
+    draw_marker(canvas, **kwargs)
+    return canvas
 
-    def test_band_tapers_towards_the_ends(self):
-        width = 600
-        mask = _band_mask(width, THICKNESS, seeded_rng("t", 2))
-        def painted_at(x):
-            return sum(1 for y in range(mask.height) if mask.getpixel((x, y)) > 0)
-        middle = painted_at(mask.width // 2)
-        near_end = painted_at(30 + 4)
-        self.assertLess(near_end, middle)
 
-    def test_draw_marker_paints_the_accent_colour(self):
-        canvas = Image.new("RGB", (1080, 400), (255, 255, 255))
-        draw_marker(
-            canvas,
-            x_center=540,
-            baseline=200,
-            text_width=540,
-            cap_height=120,
-            color=(176, 138, 51),
-            width_ratio=1.09,
-            rng=seeded_rng("2026-08-15", "photo", "headline"),
-        )
-        painted = sum(1 for pixel in canvas.getdata() if pixel != (255, 255, 255))
-        self.assertGreater(painted, 540 * THICKNESS * 0.5)
+class MarkerShapeTests(unittest.TestCase):
+    def test_band_is_a_rectangle(self):
+        canvas = _paint()
+        box = canvas.convert("RGB").point(lambda v: v).getbbox()  # 白背景なので bbox は帯そのもの
+        painted = sum(1 for pixel in canvas.getdata() if pixel == ACCENT)
+        # 矩形なら塗られた画素数は幅 x 太さにぴったり一致する（端の先細りが無い）。
+        self.assertEqual(painted, 501 * (THICKNESS + 1))
+        self.assertIsNotNone(box)
 
-    def test_draw_marker_is_deterministic(self):
-        def once():
-            canvas = Image.new("RGB", (1080, 400), (255, 255, 255))
-            draw_marker(
-                canvas,
-                x_center=540,
-                baseline=200,
-                text_width=540,
-                cap_height=120,
-                color=(176, 138, 51),
-                width_ratio=1.09,
-                rng=seeded_rng("2026-08-15", "photo", "headline"),
-            )
-            return list(canvas.getdata())
+    def test_every_painted_pixel_is_the_exact_accent(self):
+        # ぼかしやムラを入れていたら中間色が現れる。
+        colours = {pixel for pixel in _paint().getdata()}
+        self.assertEqual(colours, {WHITE, ACCENT})
 
-        self.assertEqual(once(), once())
+    def test_width_scales_the_band(self):
+        narrow = sum(1 for p in _paint(width=250).getdata() if p == ACCENT)
+        wide = sum(1 for p in _paint(width=500).getdata() if p == ACCENT)
+        self.assertLess(narrow, wide)
+
+    def test_band_is_centred_on_center_y(self):
+        canvas = _paint(center_y=200)
+        column = [canvas.getpixel((540, y)) for y in range(canvas.height)]
+        painted = [y for y, pixel in enumerate(column) if pixel == ACCENT]
+        self.assertAlmostEqual((painted[0] + painted[-1]) / 2, 200, delta=1)
+
+    def test_band_is_horizontally_centred(self):
+        canvas = _paint(x_center=300)
+        row = [canvas.getpixel((x, 200)) for x in range(canvas.width)]
+        painted = [x for x, pixel in enumerate(row) if pixel == ACCENT]
+        self.assertAlmostEqual((painted[0] + painted[-1]) / 2, 300, delta=1)
+
+    def test_is_deterministic(self):
+        self.assertEqual(list(_paint().getdata()), list(_paint().getdata()))
 
 
 if __name__ == "__main__":

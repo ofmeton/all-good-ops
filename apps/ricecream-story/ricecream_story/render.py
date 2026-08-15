@@ -13,14 +13,21 @@ from pathlib import Path
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 from . import RENDERER_VERSION
-from .config import FONT_HEADLINE, FONT_TEXT, PhotoConfig, StoreConfig
-from .marker import THICKNESS, draw_marker, seeded_rng
+from .config import FONT_DISPLAY, PhotoConfig, StoreConfig
+from .marker import THICKNESS, draw_marker
 from .photos import CANVAS_H, CANVAS_W, load_cover
 from .schedule import DayPlan
 
-HEADLINE_WIDTH_RATIO = 0.50
-DATE_CAP_HEIGHT = 33
-HOURS_CAP_HEIGHT = 40
+# 見出しは cap height で決める（実測 125）。字面幅で決めると、書体の 幅/cap 比の差が
+# そのまま線の太さの差になってしまう —— sample と自分の出力の食い違いは幅ではなく
+# 太さだったので、太さを規定する cap を基準にする。
+HEADLINE_CAP_HEIGHT = 120
+# 幅の上限。cap 基準にすると幅広な書体で canvas を突き抜けうるので頭を押さえる。
+HEADLINE_MAX_WIDTH_RATIO = 0.92
+# sample の2枚で日付 41/49・時間 38/49 とばらつくので上寄りの値を採る。帯の太さ 46 に
+# 対して文字が小さすぎると、帯が「文字を貫くハイライト」ではなく「下に置いた板」に見える。
+DATE_CAP_HEIGHT = 42
+HOURS_CAP_HEIGHT = 46
 GAP_HEADLINE_TO_DATE = 99
 GAP_DATE_TO_HOURS = 80
 TEXT_COLOR = (255, 255, 255)
@@ -30,6 +37,10 @@ SHADOW_BLUR = 12
 SHADOW_ALPHA = 210
 
 DEFAULT_MARKER_WIDTHS = {"headline": 1.09, "date": 0.80, "hours": 1.10}
+# 帯の中心を baseline から何 px ずらすか。sample の帯は3行とも文字の下 1/4〜2/5 を
+# 貫いており、下に置いた板には見えない。実測の +12/+13 をそのまま使うと自分の文字は
+# sample より小さいので帯が文字の外へ出てしまうため、重なり量で合わせている。
+MARKER_OFFSETS = {"headline": -4, "date": 6, "hours": 5}
 
 _FONT_SIZE_BOUNDS = (8, 480)
 
@@ -79,11 +90,12 @@ def _lines(store: StoreConfig, plan: DayPlan, photo: PhotoConfig) -> list[Line]:
     if plan.hours_label is None:
         raise ValueError(f"{plan.date}: 定休日なので画像は作らない")
 
-    headline_font = font_for_width(
-        FONT_HEADLINE, store.headline_text, CANVAS_W * HEADLINE_WIDTH_RATIO
-    )
-    date_font = font_for_cap_height(FONT_TEXT, DATE_CAP_HEIGHT)
-    hours_font = font_for_cap_height(FONT_TEXT, HOURS_CAP_HEIGHT)
+    headline_font = font_for_cap_height(FONT_DISPLAY, HEADLINE_CAP_HEIGHT)
+    limit = CANVAS_W * HEADLINE_MAX_WIDTH_RATIO
+    if _ink_width(headline_font, store.headline_text) > limit:
+        headline_font = font_for_width(FONT_DISPLAY, store.headline_text, limit)
+    date_font = font_for_cap_height(FONT_DISPLAY, DATE_CAP_HEIGHT)
+    hours_font = font_for_cap_height(FONT_DISPLAY, HOURS_CAP_HEIGHT)
 
     headline_baseline = photo.headline_baseline
     date_baseline = headline_baseline + GAP_HEADLINE_TO_DATE
@@ -147,12 +159,9 @@ def render(store: StoreConfig, plan: DayPlan, photo: PhotoConfig) -> Image.Image
             draw_marker(
                 canvas,
                 x_center=x_center,
-                baseline=line.baseline,
-                text_width=line.ink_width,
-                cap_height=line.cap_height,
+                center_y=line.baseline + MARKER_OFFSETS[line.role],
+                width=line.ink_width * widths[line.role],
                 color=accent,
-                width_ratio=widths[line.role],
-                rng=seeded_rng(plan.date.isoformat(), photo.id, line.role),
                 thickness=THICKNESS,
             )
 

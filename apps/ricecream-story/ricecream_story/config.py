@@ -18,8 +18,8 @@ PHOTO_DIR = ASSETS_DIR / "photos"
 SAMPLE_DIR = ASSETS_DIR / "samples"
 OUT_DIR = APP_DIR / "out"
 
-FONT_HEADLINE = FONT_DIR / "PlayfairDisplay-Black.ttf"
-FONT_TEXT = FONT_DIR / "PlayfairDisplay-Bold.ttf"
+# 見出しも日付も時間も同じ1本。sample の実物は3行とも同じ太さで組まれている。
+FONT_DISPLAY = FONT_DIR / "Merriweather-Black.ttf"
 
 HOURS_RE = re.compile(r"^([01]\d|2[0-3]):([0-5]\d)-([01]\d|2[0-3]):([0-5]\d)$")
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")

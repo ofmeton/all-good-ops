@@ -82,31 +82,39 @@ PATH に無く python3.11 の場所が両機で違うため。
 
 | 要素 | 実測（1080換算） | 実装 |
 |---|---|---|
-| `OPEN!` cap height | 125 | 120（字面幅から逆算した結果） |
-| `OPEN!` 字面幅 | 515〜551 | 541（canvas 幅の 0.50 を目標に二分探索） |
+| `OPEN!` cap height | 125 | 120 |
 | `OPEN!` baseline | 278 | 275 |
+| 日付 cap height | 41 / 49（2枚でばらつく） | 42 |
 | 日付 baseline | 379〜392 | 374 |
+| 時間 cap height | 38 / 49 | 46 |
 | 時間 baseline | 456〜460 | 454 |
-| 時間行の字面幅 | 335 | 333 |
 | マーカー帯の太さ | 約46（役割で変わらない） | 46 |
 
-フォントサイズは pt 直指定ではなく「目標の字面幅／cap height から二分探索」で決める。
-フォントを差し替えても構図が崩れず、日付の桁数が変わっても（`8/9` と `12/29`）収まる。
+**見出しのサイズは cap height 基準**で、字面幅基準ではない。当初は幅基準にしていたが、
+書体の 幅/cap 比の差がそのまま線の太さの差になり、sample との食い違い（幅ではなく太さ）を
+再現できなかった。幅は canvas の 0.92 を上限にクランプするだけ。
+
+**マーカー帯は直線の矩形**。当初は sample に寄せて手描き風（エッジの波打ち・端の先細り・
+傾き・インクのムラ）にしていたが、2026-08-15 に陸さんが「逆に変だから直線でOK」と判断。
+乱数が全部消えたので、両機で同じ画像が出ることは自明に成り立つようになった。
+
+帯の縦位置は「文字の下 1/4〜2/5 を貫く」重なり量で合わせている（`MARKER_OFFSETS`）。
+実測の baseline オフセットをそのまま使うと、自分の文字が sample より小さいぶん帯が
+文字の外へ出て「下に置いた板」に見えてしまう。
 
 ## 決定論（両機で同じバイト列を出す）
 
 画像は Air と mini のどちらで作っても同一になる必要がある（承認した画像と配布する
 画像が一致することの担保）。そのために:
 
-- `random` のグローバル関数と組み込み `hash()` を使わない。`hash()` は
-  `PYTHONHASHSEED` 依存で、プロセスごとに値が変わる。seed は
-  `sha256(f"{date}|{photo_id}|{role}")` の先頭8バイトから作る（`marker.seeded_rng`）
 - `Pillow==11.3.0` を厳密ピン（同梱 freetype も固定される）
-- フォントは static instance を同梱。可変フォントの実行時インスタンス化は Pillow の
-  `set_variation_by_axes` が FreeType のビルドに依存するので避ける
+- フォントは static instance を同梱し、可変軸は焼き込み時に全部固定する。可変フォントの
+  実行時インスタンス化は Pillow の `set_variation_by_axes` が FreeType のビルドに依存する
+- `random` のグローバル関数と組み込み `hash()` を使わない。`hash()` は `PYTHONHASHSEED`
+  依存でプロセスごとに値が変わる。現在の実装は乱数を一切使っていないが、`doctor` が AST で
+  検査し続けるので、あとから「ちょっと揺らぎを足す」で決定論を壊せない
 
-`doctor` が上2つを AST で検査する（文字列リテラルの絶対ホームパス、`random.` の
-グローバル呼び出し、`hash(` の呼び出し）。両機の parity は sha256 を突き合わせて確認する:
+両機の parity は sha256 を突き合わせて確認する:
 
 ```bash
 .venv/bin/python -m ricecream_story.cli render --date 2026-08-16 --photo vanilla-cone-front --out-dir /tmp/p
@@ -115,17 +123,24 @@ shasum -a 256 /tmp/p/*.png
 
 ## フォント
 
-Playfair Display（SIL Open Font License 1.1、`assets/fonts/OFL.txt`）。
-upstream は可変フォント1本だけなので、`scripts/build-fonts.sh` で static instance を
-切り出して commit している。一度走らせれば以後不要。
+Merriweather Black（SIL Open Font License 1.1、`assets/fonts/OFL.txt`）。見出しも日付も
+時間も同じ1本で組む（sample の実物も3行とも同じ太さ）。
+
+**なぜ Merriweather か**: sample の実物と候補8書体を並べて判定した（`out/font-candidates.png`
+を生成して目視）。sample は低コントラストで骨太のセリフ、数字は幅広の lining。当初使った
+Playfair Display は高コントラストの Didone で、`O` の上下がヘアラインまで細るため別物だった。
+Source Serif 4 Black も近かったが Merriweather の方が太い。Zilla Slab / Arvo / Bitter /
+Rokkitt は純粋なスラブでコントラストが無く、monoline に見えて外した。
+
+upstream は可変フォント1本だけなので、`scripts/build-fonts.sh` で opsz / wdth / wght を
+全部固定した static instance を切り出して commit している。一度走らせれば以後不要。
 
 | ファイル | sha256 |
 |---|---|
-| upstream `PlayfairDisplay[wght].ttf` | `c40f2293766a503bc70cce9e512ef844a4ccb7cbcde792fe2ea31d191917d8d6` |
-| `PlayfairDisplay-Black.ttf` (wght=900) | `14c4c9b95250301c04c960d79e1aba04874d0496cfa578d30165c50701fbf548` |
-| `PlayfairDisplay-Bold.ttf` (wght=700) | `93f49f025833ed86a38ca85e62359675288cfc21812b3ec18bcda0c74cdfb134` |
+| upstream `Merriweather[opsz,wdth,wght].ttf` | `d0ed0e359e396af7ad05e73dffd11a3a4c326ea0d0283c56bd9361cb2cc86a96` |
+| `Merriweather-Black.ttf` (opsz=144 wdth=100 wght=900) | `e731a9757c16518029fe85980d37a908a9f46e57d66ac9a7cc04e8e4bb08764d` |
 
-取得元: `https://github.com/google/fonts/tree/main/ofl/playfairdisplay`
+取得元: `https://github.com/google/fonts/tree/main/ofl/merriweather`
 
 `doctor` が sha256 を検証する。フォントの差し替えはレイアウト崩壊に直結するので、
 黙って変わっていないかを毎回見る。

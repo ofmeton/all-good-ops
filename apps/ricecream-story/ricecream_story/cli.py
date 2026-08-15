@@ -23,8 +23,7 @@ from PIL import Image, ImageDraw
 from . import RENDERER_VERSION
 from .config import (
     APP_DIR,
-    FONT_HEADLINE,
-    FONT_TEXT,
+    FONT_DISPLAY,
     OUT_DIR,
     SAMPLE_DIR,
     ConfigError,
@@ -39,8 +38,7 @@ from .schedule import hour_presets_for, resolve
 
 EXPECTED_PILLOW = "11.3.0"
 FONT_SHA256 = {
-    "PlayfairDisplay-Black.ttf": "14c4c9b95250301c04c960d79e1aba04874d0496cfa578d30165c50701fbf548",
-    "PlayfairDisplay-Bold.ttf": "93f49f025833ed86a38ca85e62359675288cfc21812b3ec18bcda0c74cdfb134",
+    "Merriweather-Black.ttf": "e731a9757c16518029fe85980d37a908a9f46e57d66ac9a7cc04e8e4bb08764d",
 }
 
 
@@ -183,7 +181,7 @@ def cmd_doctor(args: argparse.Namespace) -> int:
         ("pillow", Image.__version__ == EXPECTED_PILLOW, f"{Image.__version__} (want {EXPECTED_PILLOW})")
     )
 
-    for font_path in (FONT_HEADLINE, FONT_TEXT):
+    for font_path in (FONT_DISPLAY,):
         if not font_path.exists():
             checks.append((f"font {font_path.name}", False, "missing — run scripts/build-fonts.sh"))
             continue
