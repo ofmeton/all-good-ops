@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "timezone": "Asia/Tokyo",
+  "weekday_convention": "python-monday-0",
+  "business_weekdays": [3, 4, 5, 6],
+  "default_hours": {
+    "3": "14:00-20:30",
+    "4": "13:00-20:30",
+    "5": "13:00-20:30",
+    "6": "13:00-20:00"
+  },
+  "date_overrides": {},
+  "closed_dates": [],
+  "hour_presets": ["13:00-20:30", "13:00-18:00"],
+  "headline_text": "OPEN!",
+  "date_format": "{m}/{d} {wd}.",
+  "time_separator": " - ",
+  "maps_url": "https://maps.app.goo.gl/CAweuLAs7egQKxxQ6"
+}
