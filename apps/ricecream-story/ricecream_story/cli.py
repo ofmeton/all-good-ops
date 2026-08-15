@@ -229,7 +229,11 @@ def cmd_contact_sheet(args: argparse.Namespace) -> int:
     store = load_store()
     photos = load_photos()
     day = _parse_date(args.date)
-    plan = resolve(store, day, args.hours or store.hour_presets[0])
+    plan = resolve(store, day, args.hours)
+    if not plan.is_business_day:
+        # 定休日を渡された時だけ、絵を出すために営業時間を借りる。
+        plan = resolve(store, day, store.hour_presets[0])
+        _log(f"{plan.date_label} は定休日なので {plan.hours_label} を仮に当てて描画する")
 
     thumb_w, thumb_h = CANVAS_W // 4, CANVAS_H // 4
     tiles: list[tuple[str, Image.Image]] = []
