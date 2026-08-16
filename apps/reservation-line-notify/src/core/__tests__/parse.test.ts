@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { parseReservationMail, parseFee, extractReservationKey } from "../parse";
-import { SAMPLE_ICE, SAMPLE_SANSAKU } from "./fixtures";
+import { SAMPLE_ICE, SAMPLE_SANSAKU, SAMPLE_FWD_DINNER } from "./fixtures";
 
 describe("parseFee", () => {
   it("カンマ・円つきを数値化", () => expect(parseFee("12,500円")).toBe(12500));
@@ -34,6 +34,23 @@ describe("parseReservationMail", () => {
     const p = parseReservationMail(SAMPLE_SANSAKU)!;
     expect(p.activity.fee).toBeNull();
     expect(p.activity.time).toBe("15:00~15:30");
+  });
+
+  it("食体験の転送メール（転送ヘッダ・署名つき）もそのまま解析できる", () => {
+    const p = parseReservationMail(SAMPLE_FWD_DINNER)!;
+    expect(p).not.toBeNull();
+    expect(p.activity.name).toBe("三浦半島の魚介と棚田米のごちそう夕食");
+    expect(p.activity.date).toBe("2026-08-12");
+    expect(p.activity.time).toBe("18時迄に受渡し");
+    expect(p.activity.fee).toBe(24000);
+    expect(p.activity.dedupId).toBe("01f2bf14_dinner-wataya_20260812");
+    expect(p.reservationKey).toBe("01f2bf14");
+    expect(p.participants).toBe("大人4名 (合計4名)");
+    expect(p.customer.name).toBe("山田 太郎");
+    // 承認URLは転送ヘッダやダッシュボードURLではなく r= を含む方を拾う
+    expect(p.approvalUrl).toContain("r=01f2bf14_dinner-wataya_20260812");
+    expect(p.approvalUrl).not.toContain("dashboard=1");
+    expect(p.dashboardUrl).toContain("dashboard=1");
   });
 
   it("予約通知でない本文は null", () => {

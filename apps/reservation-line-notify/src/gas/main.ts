@@ -46,9 +46,24 @@ export function setupTrigger(): void {
   ScriptApp.newTrigger("pollInbox").timeBased().everyMinutes(1).create();
 }
 
-// LINEグループ招待後、Webhookで一度だけ groupId を確認するための補助
+// LINEグループ招待後、Webhookで一度だけ groupId を取り込むための補助。
+// 手で控えて貼り直すと写し間違いが起きるので、未設定のときだけ自動で保存する。
 export function doPost(e: any): void {
   console.log(JSON.stringify(e));
+  try {
+    const props = PropertiesService.getScriptProperties();
+    if (props.getProperty("LINE_GROUP_ID")) return; // 既に確定済みなら上書きしない
+    const events = JSON.parse(e?.postData?.contents ?? "{}").events ?? [];
+    for (const ev of events) {
+      const groupId = ev?.source?.type === "group" ? ev?.source?.groupId : null;
+      if (!groupId) continue;
+      props.setProperty("LINE_GROUP_ID", groupId);
+      props.setProperty("LINE_GROUP_ID_CAPTURED_AT", new Date().toISOString());
+      return;
+    }
+  } catch (err) {
+    console.warn("doPost: groupId 取り込みに失敗", err);
+  }
 }
 
 // esbuild バンドル後、GAS から呼べるよう globalThis に露出
