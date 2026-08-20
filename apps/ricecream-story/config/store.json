@@ -13,6 +13,7 @@
   "closed_dates": [],
   "hour_presets": ["13:00-20:30", "13:00-18:00"],
   "headline_text": "OPEN!",
+  "brand_text": "RICE CREAM",
   "date_format": "{m}/{d} {wd}.",
   "time_separator": " - ",
   "maps_url": "https://maps.app.goo.gl/CAweuLAs7egQKxxQ6"

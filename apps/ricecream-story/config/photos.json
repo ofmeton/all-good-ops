@@ -22,7 +22,6 @@
       "file": "matcha-cone-a.png",
       "accent": "#33480C",
       "headline_baseline": 275,
-      "headline_shadow": true,
       "crop_focus": [0.5, 0.5],
       "enabled": true
     },
@@ -31,7 +30,6 @@
       "file": "matcha-cone-b.jpg",
       "accent": "#33480C",
       "headline_baseline": 275,
-      "headline_shadow": true,
       "crop_focus": [0.5, 0.5],
       "enabled": true
     },
@@ -47,7 +45,6 @@
       "id": "kurogoma-float",
       "file": "IMG_7031.JPG",
       "accent": "#0A0A0A",
-      "marker": false,
       "headline_baseline": 275,
       "crop_focus": [0.5, 0.5],
       "enabled": true

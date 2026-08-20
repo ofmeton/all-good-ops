@@ -1,6 +1,6 @@
 """レンダリングの回帰。目視でしか判らない部分はコンタクトシートに任せ、ここでは
-「サイズ」「決定論」「マーカーが文字の背面」「cover であること」を機械で押さえる。"""
-import dataclasses
+「サイズ」「決定論」「cover であること」を機械で押さえる。装飾（スクリム／フレーム／
+店名ヘッダー）の画素検証は test_decoration.py が持つ。"""
 import hashlib
 import io
 import unittest
@@ -19,33 +19,12 @@ from ricecream_story.render import (
 from ricecream_story.schedule import resolve
 
 DAY = date(2026, 8, 15)
-NEAR_WHITE = 250
-ACCENT_TOLERANCE = 12
-MIN_ACCENT_PIXELS = 3000
 
 
 def _png_digest(image: Image.Image) -> str:
     buffer = io.BytesIO()
     image.save(buffer, "PNG")
     return hashlib.sha256(buffer.getvalue()).hexdigest()
-
-
-def _count_near_white(image: Image.Image, box) -> int:
-    region = image.crop(box)
-    return sum(
-        1 for r, g, b in region.getdata() if r > NEAR_WHITE and g > NEAR_WHITE and b > NEAR_WHITE
-    )
-
-
-def _count_accent(image: Image.Image, accent: str) -> int:
-    want = (int(accent[1:3], 16), int(accent[3:5], 16), int(accent[5:7], 16))
-    return sum(
-        1
-        for r, g, b in image.getdata()
-        if abs(r - want[0]) <= ACCENT_TOLERANCE
-        and abs(g - want[1]) <= ACCENT_TOLERANCE
-        and abs(b - want[2]) <= ACCENT_TOLERANCE
-    )
 
 
 class RenderTests(unittest.TestCase):
@@ -75,35 +54,6 @@ class RenderTests(unittest.TestCase):
             _png_digest(render(self.store, self.plan, photo)),
             _png_digest(render(self.store, other, photo)),
         )
-
-    def test_accent_is_actually_painted(self):
-        for photo in self.photos:
-            if not photo.marker:
-                continue
-            with self.subTest(photo=photo.id):
-                image = render(self.store, self.plan, photo)
-                self.assertGreater(_count_accent(image, photo.accent), MIN_ACCENT_PIXELS)
-
-    def test_marker_disabled_paints_no_accent_band(self):
-        photo = find_photo(self.photos, "kurogoma-float")
-        self.assertFalse(photo.marker)
-        with_marker = dataclasses.replace(photo, marker=True)
-        self.assertGreater(
-            _count_accent(render(self.store, self.plan, with_marker), photo.accent),
-            _count_accent(render(self.store, self.plan, photo), photo.accent),
-        )
-
-    def test_marker_is_behind_the_text(self):
-        # マーカーを消しても白文字の画素数がほぼ変わらないなら、帯は文字を潰していない。
-        # 帯を文字の前に描くと glyph が塗られて白画素が激減する。
-        photo = find_photo(self.photos, "vanilla-cone-front")
-        band = (0, photo.headline_baseline - 130, CANVAS_W, photo.headline_baseline + 10)
-        with_marker = _count_near_white(render(self.store, self.plan, photo), band)
-        without = _count_near_white(
-            render(self.store, self.plan, dataclasses.replace(photo, marker=False)), band
-        )
-        self.assertGreater(without, 5000, "見出しの白画素が取れていない（測定範囲が外れている）")
-        self.assertGreaterEqual(with_marker, without * 0.99)
 
     def test_headline_cap_height_hits_the_target(self):
         from ricecream_story.config import FONT_DISPLAY

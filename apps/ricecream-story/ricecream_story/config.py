@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import json
 import re
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
 
 APP_DIR = Path(__file__).resolve().parents[1]
@@ -45,6 +45,7 @@ class StoreConfig:
     closed_dates: frozenset[str]
     hour_presets: tuple[str, ...]
     headline_text: str
+    brand_text: str
     date_format: str
     time_separator: str
     maps_url: str
@@ -58,16 +59,17 @@ class PhotoConfig:
     商品名ブロック（sample の左下にある縦積みラベル）は 2026-08-15 に陸さんが
     「入れなくてOK」と判断したため実装していない。復活させるなら render 側に
     描画関数を足すところから。
+
+    帯装飾（marker）と headline_shadow は 2026-08-20 に廃止した。装飾は
+    D+C（スクリム＋店名ヘッダー＋額装フレーム）に一本化し、写真ごとの
+    出し分けを持たない（render.py 参照）。
     """
 
     id: str
     file: str
     accent: str
-    marker: bool = True
     headline_baseline: int = 275
-    headline_shadow: bool = False
     crop_focus: tuple[float, float] = (0.5, 0.5)
-    marker_widths: dict[str, float] = field(default_factory=dict)
     enabled: bool = True
 
     @property
@@ -153,6 +155,7 @@ def load_store(path: Path | None = None) -> StoreConfig:
         closed_dates=frozenset(closed_dates),
         hour_presets=tuple(presets),
         headline_text=raw.get("headline_text", "OPEN!"),
+        brand_text=raw.get("brand_text", "RICE CREAM"),
         date_format=raw.get("date_format", "{m}/{d} {wd}."),
         time_separator=raw.get("time_separator", " - "),
         maps_url=_require(raw, "maps_url", ctx),
@@ -178,23 +181,13 @@ def load_photos(path: Path | None = None) -> list[PhotoConfig]:
         if len(focus) != 2 or any(not 0.0 <= float(f) <= 1.0 for f in focus):
             raise ConfigError(f"{where}.crop_focus: two floats in 0..1 required")
 
-        widths = entry.get("marker_widths", {})
-        for role, value in widths.items():
-            if role not in ("headline", "date", "hours"):
-                raise ConfigError(f"{where}.marker_widths: unknown role {role!r}")
-            if not 0.1 <= float(value) <= 2.0:
-                raise ConfigError(f"{where}.marker_widths[{role}]: out of range")
-
         photos.append(
             PhotoConfig(
                 id=pid,
                 file=_require(entry, "file", where),
                 accent=_validate_hex(_require(entry, "accent", where), f"{where}.accent"),
-                marker=bool(entry.get("marker", True)),
                 headline_baseline=int(entry.get("headline_baseline", 275)),
-                headline_shadow=bool(entry.get("headline_shadow", False)),
                 crop_focus=(float(focus[0]), float(focus[1])),
-                marker_widths={k: float(v) for k, v in widths.items()},
                 enabled=bool(entry.get("enabled", True)),
             )
         )
