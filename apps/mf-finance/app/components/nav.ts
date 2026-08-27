@@ -43,6 +43,7 @@ export const navGroups: NavGroup[] = [
       { href: "/budget", label: "予算" },
       { href: "/subscriptions", label: "サブスク" },
       { href: "/rules", label: "ルール" },
+      { href: "/rules/triage", label: "仕分け" },
       { href: "/tax", label: "税・経費" },
     ],
   },
@@ -70,7 +71,7 @@ const expensePaths = new Set(
 );
 
 export function groupForPath(pathname: string): NavGroupKey {
-  if (expensePaths.has(pathname)) return "expense";
+  if (expensePaths.has(pathname) || pathname.startsWith("/rules/")) return "expense";
   if (pathname === "/settings" || pathname === "/optimizer") return "settings";
   if (pathname === "/cashflow") return "cashflow";
   if (pathname === "/assets") return "assets";

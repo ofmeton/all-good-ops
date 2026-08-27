@@ -16,7 +16,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { dataDir } from './lib/paths.mjs';
 import Database from 'better-sqlite3';
-import { applyRulesToRows } from './lib/rules.mjs';
+import { applyAllRules } from './lib/rules-apply.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const appRoot = join(__dirname, '..');
@@ -26,49 +26,11 @@ db.pragma('journal_mode = WAL');
 const unknownCount = () =>
   db.prepare(`SELECT COUNT(*) AS c FROM transactions WHERE classification = 'unknown'`).get().c;
 
-const rules = db
-  .prepare(
-    `SELECT id, pattern, match_type, classification, category_major, category_middle
-     FROM category_rules ORDER BY created_at, id`,
-  )
-  .all();
-
 const before = unknownCount();
-
-const run = db.transaction(() => {
-  // 1. リセット（llm_labeled 行のみ。手動分類・classify 由来の行には触れない）
-  const reset = db
-    .prepare(
-      `UPDATE transactions
-       SET classification = 'unknown', category_major = '未分類', category_middle = '未分類', llm_labeled = 0
-       WHERE llm_labeled = 1`,
-    )
-    .run().changes;
-
-  // 2. ルール適用（純関数で判定 → 機械的 UPDATE）
-  const rows = db
-    .prepare(`SELECT id, description FROM transactions WHERE classification = 'unknown'`)
-    .all();
-  const updates = applyRulesToRows(rules, rows);
-
-  const update = db.prepare(
-    `UPDATE transactions
-     SET classification = ?,
-         category_major = COALESCE(?, category_major),
-         category_middle = COALESCE(?, category_middle),
-         llm_labeled = 1
-     WHERE id = ?`,
-  );
-  for (const [id, u] of updates) {
-    update.run(u.classification, u.category_major, u.category_middle, id);
-  }
-  return { reset, scanned: rows.length, matched: updates.size };
-});
-
-const { reset, scanned, matched } = run();
+const { reset, scanned, matched, ruleCount } = applyAllRules(db);
 const after = unknownCount();
 
-console.log(`rules: ${rules.length}`);
+console.log(`rules: ${ruleCount}`);
 console.log(`reset (llm_labeled rows reverted): ${reset}`);
 console.log(`unknown rows scanned: ${scanned}, matched: ${matched}`);
 console.log(`unknown count: ${before} -> ${after}`);

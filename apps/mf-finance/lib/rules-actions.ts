@@ -2,7 +2,8 @@
 
 import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
-import { applyRulesToRows } from "@/scripts/lib/rules.mjs";
+import { applyAllRules } from "@/lib/rules-apply";
+import { applyOverrides } from "@/scripts/lib/overrides.mjs";
 
 // /rules ページ用の書込 server actions。全て prepared statement（インジェクション防止）。
 // 設計（SSOT=ルール）: 判断は category_rules に永続化し、transactions への反映は
@@ -20,7 +21,14 @@ export type Classification = (typeof CLASSIFICATIONS)[number];
 
 function revalidate(): void {
   revalidatePath("/rules");
+  revalidatePath("/rules/triage");
+  revalidatePath("/categories");
   revalidatePath("/");
+}
+
+function reapplyRulesAndOverrides(): void {
+  applyAllRules(db);
+  applyOverrides(db);
 }
 
 function trimOrNull(v: unknown): string | null {
@@ -29,63 +37,6 @@ function trimOrNull(v: unknown): string | null {
   return t.length > 0 ? t : null;
 }
 
-interface DbRule {
-  id: number;
-  pattern: string;
-  match_type: string;
-  classification: string | null;
-  category_major: string | null;
-  category_middle: string | null;
-}
-
-// scripts/apply-rules.mjs と同じリセット方式の冪等適用（短トランザクション）。
-// unknown になり得る行のカテゴリは必ず '未分類'/'未分類'（classify.mjs の導出仕様）なので、
-// llm_labeled=1 の行を unknown/未分類 へ戻してから全ルールを先勝ちで再適用すれば完全に再現できる。
-function applyAllRules(): { reset: number; matched: number } {
-  const rules = db
-    .prepare(
-      `SELECT id, pattern, match_type, classification, category_major, category_middle
-         FROM category_rules ORDER BY created_at, id`,
-    )
-    .all() as DbRule[];
-
-  const run = db.transaction(() => {
-    const reset = db
-      .prepare(
-        `UPDATE transactions
-            SET classification = 'unknown', category_major = '未分類',
-                category_middle = '未分類', llm_labeled = 0
-          WHERE llm_labeled = 1`,
-      )
-      .run().changes;
-
-    const rows = db
-      .prepare(
-        "SELECT id, description FROM transactions WHERE classification = 'unknown'",
-      )
-      .all() as { id: string; description: string | null }[];
-
-    const updates = applyRulesToRows(rules, rows);
-
-    const update = db.prepare(
-      `UPDATE transactions
-          SET classification = ?,
-              category_major = COALESCE(?, category_major),
-              category_middle = COALESCE(?, category_middle),
-              llm_labeled = 1
-        WHERE id = ?`,
-    );
-    let matched = 0;
-    for (const [id, u] of updates) {
-      // classification の無いルールは適用しない（unknown のまま残す）。
-      if (u.classification == null) continue;
-      update.run(u.classification, u.category_major, u.category_middle, id);
-      matched += 1;
-    }
-    return { reset, matched };
-  });
-  return run();
-}
 
 export interface AddRuleInput {
   pattern: string;
@@ -117,7 +68,7 @@ export async function addRule(input: AddRuleInput): Promise<void> {
      VALUES (?, ?, ?, ?, ?, 'manual')`,
   ).run(pattern, matchType, input.classification, major, middle);
 
-  applyAllRules();
+  reapplyRulesAndOverrides();
   revalidate();
 }
 
@@ -125,11 +76,11 @@ export async function deleteRule(id: number): Promise<void> {
   const n = Number(id);
   if (!Number.isInteger(n) || n <= 0) throw new Error("無効な id です");
   db.prepare("DELETE FROM category_rules WHERE id = ?").run(n);
-  applyAllRules();
+  reapplyRulesAndOverrides();
   revalidate();
 }
 
 export async function reapplyRules(): Promise<void> {
-  applyAllRules();
+  reapplyRulesAndOverrides();
   revalidate();
 }
