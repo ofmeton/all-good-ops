@@ -11,8 +11,10 @@ from PIL import Image
 from ricecream_story.config import find_photo, load_photos, load_store
 from ricecream_story.photos import CANVAS_H, CANVAS_W, load_cover
 from ricecream_story.render import (
+    FRAME_INNER_INSET,
     HEADLINE_CAP_HEIGHT,
-    HEADLINE_MAX_WIDTH_RATIO,
+    HEADLINE_SIDE_MARGIN,
+    _lines,
     font_for_cap_height,
     render,
 )
@@ -62,12 +64,14 @@ class RenderTests(unittest.TestCase):
         _, top, _, bottom = font.getbbox("H")
         self.assertLessEqual(abs((bottom - top) - HEADLINE_CAP_HEIGHT), 1)
 
-    def test_headline_stays_inside_the_canvas(self):
-        from ricecream_story.config import FONT_DISPLAY
-
-        font = font_for_cap_height(FONT_DISPLAY, HEADLINE_CAP_HEIGHT)
-        left, _, right, _ = font.getbbox(self.store.headline_text)
-        self.assertLessEqual(right - left, CANVAS_W * HEADLINE_MAX_WIDTH_RATIO)
+    def test_headline_stays_inside_the_frame(self):
+        """長い見出しは縮んで内枠に触れない（"OPEN TODAY" は素の cap 120 だと枠を跨ぐ）。"""
+        photos = load_photos()
+        photo = find_photo(photos, "vanilla-cone-front")
+        plan = resolve(self.store, DAY)
+        headline = next(line for line in _lines(self.store, plan, photo) if line.role == "headline")
+        limit = CANVAS_W - 2 * (FRAME_INNER_INSET + HEADLINE_SIDE_MARGIN)
+        self.assertLessEqual(headline.ink_width, limit)
 
     def test_font_search_is_monotonic_in_cap_height(self):
         from ricecream_story.config import FONT_DISPLAY

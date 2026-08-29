@@ -22,7 +22,12 @@ from .schedule import DayPlan
 # 太さだったので、太さを規定する cap を基準にする。
 HEADLINE_CAP_HEIGHT = 120
 # 幅の上限。cap 基準にすると幅広な書体で canvas を突き抜けうるので頭を押さえる。
-HEADLINE_MAX_WIDTH_RATIO = 0.92
+# 上限はフレーム内枠から更に内側に取る（旧 0.92 は内枠 50px を跨いで枠に触れていた）。
+# 収まらない見出しは縮める前に単語で折り返す —— 縮めるだけだと端まで文字が詰まって
+# 窮屈に見える（2026-08-29 本人指摘）。
+HEADLINE_SIDE_MARGIN = 60
+# 折り返した行どうしの間隔（前の行の baseline から次の行の baseline まで）。
+HEADLINE_LINE_STEP = 150
 # sample の2枚で日付 41/49・時間 38/49 とばらつくので上寄りの値を採る。
 DATE_CAP_HEIGHT = 42
 HOURS_CAP_HEIGHT = 46
@@ -33,7 +38,9 @@ TEXT_COLOR = (255, 255, 255)
 # --- D+C 装飾（2026-08-20 決定。経緯は README「デザインの根拠」参照） ---
 # D: 上端のスクリム（黒グラデ）＋店名ヘッダー。スクリムが影の役割を兼ねるため
 # per-photo の縁取りシャドウ（旧 headline_shadow / marker）機構は廃止した。
-SCRIM_HEIGHT = 620
+# 折り返しで日付・時間が下がったぶんスクリムも伸ばす。文字の乗る帯の外で 0 に落ちると、
+# 白文字が写真の明るい部分に埋もれる。
+SCRIM_HEIGHT = 860
 SCRIM_TOP_ALPHA = 110
 
 # C: 全周フレーム（白の外枠＋差し色の内枠）。
@@ -90,8 +97,16 @@ def _search_font(path: Path, measure, target: float) -> ImageFont.FreeTypeFont:
     return ImageFont.truetype(str(path), low)
 
 
-def font_for_width(path: Path, text: str, target_width: float) -> ImageFont.FreeTypeFont:
-    return _search_font(path, lambda font: _ink_width(font, text), target_width)
+def font_for_max_width(path: Path, text: str, limit: float) -> ImageFont.FreeTypeFont:
+    """字面幅が limit を超えない最大サイズ。
+
+    _search_font は「target 以上になる最小サイズ」を返す（cap height は下限として
+    使うので、それでよい）。幅は上限なので、超えていたら1段下げる。
+    """
+    font = _search_font(path, lambda candidate: _ink_width(candidate, text), limit)
+    if _ink_width(font, text) <= limit:
+        return font
+    return ImageFont.truetype(str(path), max(font.size - 1, _FONT_SIZE_BOUNDS[0]))
 
 
 def font_for_cap_height(path: Path, target_cap: float) -> ImageFont.FreeTypeFont:
@@ -99,14 +114,40 @@ def font_for_cap_height(path: Path, target_cap: float) -> ImageFont.FreeTypeFont
     return _search_font(path, lambda font: _ink_height(font, "H"), target_cap)
 
 
+def _wrap_headline(text: str, font: ImageFont.FreeTypeFont, limit: float) -> list[str]:
+    """見出しを、幅 limit に収まるところまで単語で折り返す。
+
+    折り返しても収まらない（1単語が長い）場合は、そのまま返して呼び出し側で縮める。
+    """
+    if _ink_width(font, text) <= limit:
+        return [text]
+    words = text.split()
+    if len(words) < 2:
+        return [text]
+    lines: list[str] = []
+    current = words[0]
+    for word in words[1:]:
+        candidate = f"{current} {word}"
+        if _ink_width(font, candidate) <= limit:
+            current = candidate
+        else:
+            lines.append(current)
+            current = word
+    lines.append(current)
+    return lines
+
+
 def _lines(store: StoreConfig, plan: DayPlan, photo: PhotoConfig) -> list[Line]:
     if plan.hours_label is None:
         raise ValueError(f"{plan.date}: 定休日なので画像は作らない")
 
+    limit = CANVAS_W - 2 * (FRAME_INNER_INSET + HEADLINE_SIDE_MARGIN)
     headline_font = font_for_cap_height(FONT_DISPLAY, HEADLINE_CAP_HEIGHT)
-    limit = CANVAS_W * HEADLINE_MAX_WIDTH_RATIO
-    if _ink_width(headline_font, store.headline_text) > limit:
-        headline_font = font_for_width(FONT_DISPLAY, store.headline_text, limit)
+    headline_texts = _wrap_headline(store.headline_text, headline_font, limit)
+    widest = max(_ink_width(headline_font, text) for text in headline_texts)
+    if widest > limit:
+        # 1単語で溢れる（"CLOSED-TODAY" のような長い語）ときだけ縮める。
+        headline_font = font_for_max_width(FONT_DISPLAY, max(headline_texts, key=len), limit)
     date_font = font_for_cap_height(FONT_DISPLAY, DATE_CAP_HEIGHT)
     hours_font = font_for_cap_height(FONT_DISPLAY, HOURS_CAP_HEIGHT)
 
@@ -116,18 +157,22 @@ def _lines(store: StoreConfig, plan: DayPlan, photo: PhotoConfig) -> list[Line]:
         TOP_SAFE_MARGIN + BRAND_CAP_HEIGHT + BRAND_GAP_ABOVE_HEADLINE + headline_cap
     )
     headline_baseline = max(photo.headline_baseline, lowest_headline_baseline)
-    date_baseline = headline_baseline + GAP_HEADLINE_TO_DATE
+    last_headline_baseline = headline_baseline + HEADLINE_LINE_STEP * (len(headline_texts) - 1)
+    date_baseline = last_headline_baseline + GAP_HEADLINE_TO_DATE
     hours_baseline = date_baseline + GAP_DATE_TO_HOURS
 
     return [
-        Line(
-            "headline",
-            store.headline_text,
-            headline_font,
-            headline_baseline,
-            _ink_width(headline_font, store.headline_text),
-            headline_cap,
-        ),
+        *[
+            Line(
+                "headline",
+                text,
+                headline_font,
+                headline_baseline + HEADLINE_LINE_STEP * index,
+                _ink_width(headline_font, text),
+                headline_cap,
+            )
+            for index, text in enumerate(headline_texts)
+        ],
         Line(
             "date",
             plan.date_label,
@@ -242,7 +287,7 @@ def render(store: StoreConfig, plan: DayPlan, photo: PhotoConfig) -> Image.Image
     _apply_top_scrim(canvas)
     _draw_frame(canvas, accent)
 
-    headline_line = next(line for line in lines if line.role == "headline")
+    headline_line = next(line for line in lines if line.role == "headline")  # 1行目
     _draw_brand_header(canvas, store, headline_line, x_center)
 
     draw = ImageDraw.Draw(canvas)
