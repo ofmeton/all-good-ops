@@ -14,9 +14,12 @@ from PIL import Image
 from ricecream_story.config import find_photo, load_photos, load_store
 from ricecream_story.photos import CANVAS_H, CANVAS_W
 from ricecream_story.render import (
+    BRAND_CAP_HEIGHT,
     FRAME_INNER_INSET,
     FRAME_OUTER_INSET,
+    FRAME_INNER_WIDTH,
     SCRIM_HEIGHT,
+    TOP_SAFE_MARGIN,
     _apply_top_scrim,
     _draw_frame,
     render,
@@ -111,11 +114,25 @@ class BrandHeaderTests(unittest.TestCase):
         photo = find_photo(photos, "vanilla-cone-front")
         image = render(store, plan, photo)
 
-        # 店名 baseline = 見出し baseline(275) - 見出し cap(120) - 40 = 115 付近。
-        # ヘッダーの字面が乗る帯だけを覗く。
-        band = image.crop((0, 90, CANVAS_W, 118))
+        # 店名 baseline = 見出し baseline - 見出し cap(120) - 40。見出し baseline は
+        # TOP_SAFE_MARGIN で押し下がるので、ヘッダーの字面は 250-272 の帯に乗る。
+        band = image.crop((0, TOP_SAFE_MARGIN, CANVAS_W, TOP_SAFE_MARGIN + BRAND_CAP_HEIGHT))
         whiteish = sum(1 for pixel in band.getdata() if _is_whiteish(pixel))
         self.assertGreater(whiteish, 50, "店名ヘッダーの白画素が見つからない")
+
+    def test_brand_header_clears_the_instagram_top_ui(self):
+        """Instagram のアカウント名と被らないこと（2026-08-29 本人指摘）。"""
+        store = load_store()
+        photos = load_photos()
+        plan = resolve(store, DAY)
+        photo = find_photo(photos, "vanilla-cone-front")
+        image = render(store, plan, photo)
+
+        # フレームの白線は除いて内側だけを見る（枠は意図した白なので数に入れない）。
+        inside = FRAME_INNER_INSET + FRAME_INNER_WIDTH
+        band = image.crop((inside, inside, CANVAS_W - inside, TOP_SAFE_MARGIN))
+        whiteish = sum(1 for pixel in band.getdata() if _is_whiteish(pixel))
+        self.assertLess(whiteish, 200, "セーフエリアに文字が入り込んでいる")
 
 
 class DeterminismTests(unittest.TestCase):

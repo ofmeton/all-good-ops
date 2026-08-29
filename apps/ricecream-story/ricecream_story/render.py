@@ -50,6 +50,10 @@ INNER_LINE_FALLBACK_ALPHA = 153  # 255 の 60%
 BRAND_CAP_HEIGHT = 22
 BRAND_TRACKING = 14
 BRAND_GAP_ABOVE_HEADLINE = 40
+# Instagram はストーリーの上端にアカウント名・アバター・時刻を重ねる。1080x1920 換算で
+# 上 250px はその UI に食われるので、店名ヘッダーの上端がそこへ入らないよう、文字ブロック
+# 全体を必要なぶんだけ押し下げる（2026-08-29 本人指摘「アカウント名と被る」）。
+TOP_SAFE_MARGIN = 250
 
 _FONT_SIZE_BOUNDS = (8, 480)
 
@@ -106,7 +110,12 @@ def _lines(store: StoreConfig, plan: DayPlan, photo: PhotoConfig) -> list[Line]:
     date_font = font_for_cap_height(FONT_DISPLAY, DATE_CAP_HEIGHT)
     hours_font = font_for_cap_height(FONT_DISPLAY, HOURS_CAP_HEIGHT)
 
-    headline_baseline = photo.headline_baseline
+    headline_cap = _ink_height(headline_font, "H")
+    # 店名ヘッダーは見出しから相対で置くので、上端の下限は見出し baseline 側で守る。
+    lowest_headline_baseline = (
+        TOP_SAFE_MARGIN + BRAND_CAP_HEIGHT + BRAND_GAP_ABOVE_HEADLINE + headline_cap
+    )
+    headline_baseline = max(photo.headline_baseline, lowest_headline_baseline)
     date_baseline = headline_baseline + GAP_HEADLINE_TO_DATE
     hours_baseline = date_baseline + GAP_DATE_TO_HOURS
 
@@ -117,7 +126,7 @@ def _lines(store: StoreConfig, plan: DayPlan, photo: PhotoConfig) -> list[Line]:
             headline_font,
             headline_baseline,
             _ink_width(headline_font, store.headline_text),
-            _ink_height(headline_font, "H"),
+            headline_cap,
         ),
         Line(
             "date",
