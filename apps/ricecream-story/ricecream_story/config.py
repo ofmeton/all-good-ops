@@ -71,6 +71,14 @@ class PhotoConfig:
     headline_baseline: int = 275
     crop_focus: tuple[float, float] = (0.5, 0.5)
     enabled: bool = True
+    # 見た目が近い写真のまとまり（例: matcha-cone-a と matcha-cone-b は同じ抹茶コーン）。
+    # id が違っても人には「昨日と同じ写真」に見えるので、選ぶ側は id ではなく group の
+    # 最終使用日で連投を避ける（gateway/ricecream_open.py:_order_photos）。既定は id 自身。
+    group: str = ""
+
+    @property
+    def group_key(self) -> str:
+        return self.group or self.id
 
     @property
     def path(self) -> Path:
@@ -189,6 +197,7 @@ def load_photos(path: Path | None = None) -> list[PhotoConfig]:
                 headline_baseline=int(entry.get("headline_baseline", 275)),
                 crop_focus=(float(focus[0]), float(focus[1])),
                 enabled=bool(entry.get("enabled", True)),
+                group=str(entry.get("group", "") or ""),
             )
         )
 

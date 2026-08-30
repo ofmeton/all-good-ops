@@ -75,7 +75,13 @@ def cmd_plan(args: argparse.Namespace) -> int:
         "maps_url": store.maps_url,
         "hour_presets": hour_presets_for(store, plan.hours),
         "photos": [
-            {"id": p.id, "file": p.file, "accent": p.accent, "enabled": p.enabled}
+            {
+                "id": p.id,
+                "file": p.file,
+                "accent": p.accent,
+                "enabled": p.enabled,
+                "group": p.group_key,
+            }
             for p in photos
         ],
         "renderer": RENDERER_VERSION,

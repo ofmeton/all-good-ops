@@ -6,48 +6,72 @@
       "file": "IMG_6776.JPG",
       "accent": "#B08A33",
       "headline_baseline": 275,
-      "crop_focus": [0.5, 0.5],
-      "enabled": true
+      "crop_focus": [
+        0.5,
+        0.5
+      ],
+      "enabled": true,
+      "group": "vanilla-cone"
     },
     {
       "id": "vanilla-cone-door",
       "file": "IMG_7152.JPG",
       "accent": "#B08A33",
       "headline_baseline": 275,
-      "crop_focus": [0.5, 0.5],
-      "enabled": true
+      "crop_focus": [
+        0.5,
+        0.5
+      ],
+      "enabled": true,
+      "group": "vanilla-cone"
     },
     {
       "id": "matcha-cone-a",
       "file": "matcha-cone-a.png",
       "accent": "#33480C",
       "headline_baseline": 275,
-      "crop_focus": [0.5, 0.5],
-      "enabled": true
+      "crop_focus": [
+        0.5,
+        0.5
+      ],
+      "enabled": true,
+      "group": "matcha-cone"
     },
     {
       "id": "matcha-cone-b",
       "file": "matcha-cone-b.jpg",
       "accent": "#33480C",
       "headline_baseline": 275,
-      "crop_focus": [0.5, 0.5],
-      "enabled": true
+      "crop_focus": [
+        0.5,
+        0.5
+      ],
+      "enabled": true,
+      "group": "matcha-cone"
     },
     {
       "id": "matcha-azuki-float",
       "file": "IMG_6917.JPG",
       "accent": "#8A0A8C",
       "headline_baseline": 275,
-      "crop_focus": [0.5, 0.5],
-      "enabled": true
+      "crop_focus": [
+        0.5,
+        0.5
+      ],
+      "enabled": true,
+      "group": "azuki-float"
     },
     {
       "id": "kurogoma-float",
       "file": "IMG_7031.JPG",
       "accent": "#0A0A0A",
       "headline_baseline": 275,
-      "crop_focus": [0.5, 0.5],
-      "enabled": true
+      "crop_focus": [
+        0.5,
+        0.5
+      ],
+      "enabled": true,
+      "group": "kurogoma-float"
     }
   ]
 }
