@@ -8,12 +8,13 @@ height から二分探索」で決める。フォントを差し替えても構�
 from __future__ import annotations
 
 from dataclasses import dataclass
+from datetime import date
 from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
 
 from . import RENDERER_VERSION
-from .config import FONT_DISPLAY, PhotoConfig, StoreConfig
+from .config import FONT_DISPLAY, FONT_DISPLAY_JP, ConfigError, PhotoConfig, StoreConfig
 from .photos import CANVAS_H, CANVAS_W, load_cover
 from .schedule import DayPlan
 
@@ -62,6 +63,20 @@ BRAND_GAP_ABOVE_HEADLINE = 40
 # 全体を必要なぶんだけ押し下げる（2026-08-29 本人指摘「アカウント名と被る」）。
 TOP_SAFE_MARGIN = 250
 
+# --- notice レーン ---
+NOTICE_HEADLINE_INK_HEIGHT = 108
+NOTICE_HEADLINE_LINE_STEP = 168
+NOTICE_SUB_CAP_HEIGHT = 34
+NOTICE_SUB_TRACKING = 10
+NOTICE_DETAIL_INK_HEIGHT = 40
+NOTICE_DETAIL_LINE_STEP = 68
+NOTICE_GAP_HEADLINE_TO_SUB = 88
+NOTICE_GAP_SUB_TO_DETAIL = 78
+NOTICE_SCRIM_TOP_ALPHA = 150
+NOTICE_SCRIM_TEXT_ALPHA = 95
+NOTICE_SCRIM_TAIL = 240
+NOTICE_SCRIM_TEXT_PAD = 46
+
 _FONT_SIZE_BOUNDS = (8, 480)
 
 
@@ -73,6 +88,13 @@ class Line:
     baseline: int
     ink_width: int
     cap_height: int
+
+
+@dataclass(frozen=True)
+class NoticeContent:
+    headline_lines: tuple[str, ...]
+    sub: str | None
+    detail_lines: tuple[str, ...]
 
 
 def _ink_width(font: ImageFont.FreeTypeFont, text: str) -> int:
@@ -111,7 +133,11 @@ def font_for_max_width(path: Path, text: str, limit: float) -> ImageFont.FreeTyp
 
 def font_for_cap_height(path: Path, target_cap: float) -> ImageFont.FreeTypeFont:
     # 大文字の H で測る。実際の行に小文字や記号が混ざっても基準がぶれない。
-    return _search_font(path, lambda font: _ink_height(font, "H"), target_cap)
+    return font_for_ink_height(path, "H", target_cap)
+
+
+def font_for_ink_height(path: Path, sample: str, target: float) -> ImageFont.FreeTypeFont:
+    return _search_font(path, lambda font: _ink_height(font, sample), target)
 
 
 def _wrap_headline(text: str, font: ImageFont.FreeTypeFont, limit: float) -> list[str]:
@@ -202,17 +228,37 @@ def _luminance(rgb: tuple[int, int, int]) -> float:
     return 0.299 * r + 0.587 * g + 0.114 * b
 
 
-def _apply_top_scrim(canvas: Image.Image) -> None:
+def _apply_top_scrim(canvas: Image.Image, height: int = SCRIM_HEIGHT) -> None:
     """上端から SCRIM_HEIGHT px、黒 alpha を SCRIM_TOP_ALPHA→0 の縦グラデで敷く。
 
     店名ヘッダーと見出しの可読性を確保する（旧 headline_shadow の代わり）。
     """
-    gradient = Image.new("L", (1, SCRIM_HEIGHT), 0)
-    for y in range(SCRIM_HEIGHT):
-        alpha = round(SCRIM_TOP_ALPHA * (1 - y / SCRIM_HEIGHT))
+    gradient = Image.new("L", (1, height), 0)
+    for y in range(height):
+        alpha = round(SCRIM_TOP_ALPHA * (1 - y / height))
         gradient.putpixel((0, y), alpha)
-    gradient = gradient.resize((CANVAS_W, SCRIM_HEIGHT))
-    black = Image.new("RGB", (CANVAS_W, SCRIM_HEIGHT), (0, 0, 0))
+    gradient = gradient.resize((CANVAS_W, height))
+    black = Image.new("RGB", (CANVAS_W, height), (0, 0, 0))
+    canvas.paste(black, (0, 0), gradient)
+
+
+def _apply_notice_scrim(canvas: Image.Image, plateau_end: int) -> None:
+    """notice の文字帯を最低 alpha で覆い、裾だけを写真へ溶かす。"""
+    height = min(CANVAS_H, plateau_end + NOTICE_SCRIM_TAIL)
+    gradient = Image.new("L", (1, height), 0)
+    for y in range(height):
+        if y <= plateau_end:
+            alpha = round(
+                NOTICE_SCRIM_TOP_ALPHA
+                + (NOTICE_SCRIM_TEXT_ALPHA - NOTICE_SCRIM_TOP_ALPHA) * y / plateau_end
+            )
+        else:
+            alpha = round(
+                NOTICE_SCRIM_TEXT_ALPHA * (1 - (y - plateau_end) / NOTICE_SCRIM_TAIL)
+            )
+        gradient.putpixel((0, y), alpha)
+    gradient = gradient.resize((CANVAS_W, height))
+    black = Image.new("RGB", (CANVAS_W, height), (0, 0, 0))
     canvas.paste(black, (0, 0), gradient)
 
 
@@ -277,6 +323,97 @@ def _draw_brand_header(
     )
 
 
+def _assert_glyph_coverage(font: ImageFont.FreeTypeFont, text: str, font_name: str) -> None:
+    """Pillow が .notdef で代替する文字を描画前に拒否する。"""
+    notdef_mask = bytes(font.getmask("\ue000"))
+    for character in text:
+        if character.isspace():
+            continue
+        if bytes(font.getmask(character)) == notdef_mask:
+            raise ConfigError(f"glyph missing: {character!r} in {font_name}")
+
+
+def _font_for_notice_group(
+    path: Path, texts: tuple[str, ...], font: ImageFont.FreeTypeFont, limit: int
+) -> ImageFont.FreeTypeFont:
+    if texts and max(_ink_width(font, text) for text in texts) > limit:
+        longest = max(texts, key=lambda text: _ink_width(font, text))
+        return font_for_max_width(path, longest, limit)
+    return font
+
+
+def _notice_lines(store: StoreConfig, content: NoticeContent, photo: PhotoConfig) -> list[Line]:
+    limit = CANVAS_W - 2 * (FRAME_INNER_INSET + HEADLINE_SIDE_MARGIN)
+    headline_font = _font_for_notice_group(
+        FONT_DISPLAY_JP,
+        content.headline_lines,
+        font_for_ink_height(FONT_DISPLAY_JP, "国", NOTICE_HEADLINE_INK_HEIGHT),
+        limit,
+    )
+    sub_texts = (content.sub,) if content.sub is not None else ()
+    sub_font = _font_for_notice_group(
+        FONT_DISPLAY,
+        sub_texts,
+        font_for_cap_height(FONT_DISPLAY, NOTICE_SUB_CAP_HEIGHT),
+        limit,
+    )
+    detail_font = _font_for_notice_group(
+        FONT_DISPLAY_JP,
+        content.detail_lines,
+        font_for_ink_height(FONT_DISPLAY_JP, "国", NOTICE_DETAIL_INK_HEIGHT),
+        limit,
+    )
+
+    headline_ink = _ink_height(headline_font, "国")
+    headline_baseline = max(
+        photo.headline_baseline,
+        TOP_SAFE_MARGIN + BRAND_CAP_HEIGHT + BRAND_GAP_ABOVE_HEADLINE + headline_ink,
+    )
+    headline_lines = [
+        Line(
+            "headline",
+            text,
+            headline_font,
+            headline_baseline + NOTICE_HEADLINE_LINE_STEP * index,
+            _ink_width(headline_font, text),
+            headline_ink,
+        )
+        for index, text in enumerate(content.headline_lines)
+    ]
+    last_headline_baseline = headline_lines[-1].baseline
+
+    lines = list(headline_lines)
+    if content.sub is not None:
+        sub_baseline = last_headline_baseline + NOTICE_GAP_HEADLINE_TO_SUB
+        lines.append(
+            Line(
+                "sub",
+                content.sub,
+                sub_font,
+                sub_baseline,
+                _ink_width(sub_font, content.sub),
+                _ink_height(sub_font, "H"),
+            )
+        )
+        detail_baseline = sub_baseline + NOTICE_GAP_SUB_TO_DETAIL
+    else:
+        detail_baseline = last_headline_baseline + NOTICE_GAP_HEADLINE_TO_SUB
+
+    detail_ink = _ink_height(detail_font, "国")
+    lines.extend(
+        Line(
+            "detail",
+            text,
+            detail_font,
+            detail_baseline + NOTICE_DETAIL_LINE_STEP * index,
+            _ink_width(detail_font, text),
+            detail_ink,
+        )
+        for index, text in enumerate(content.detail_lines)
+    )
+    return lines
+
+
 def render(store: StoreConfig, plan: DayPlan, photo: PhotoConfig) -> Image.Image:
     canvas = load_cover(photo.path, photo.crop_focus)
     lines = _lines(store, plan, photo)
@@ -296,6 +433,39 @@ def render(store: StoreConfig, plan: DayPlan, photo: PhotoConfig) -> Image.Image
             (x_center, line.baseline), line.text, font=line.font, fill=TEXT_COLOR, anchor="ms"
         )
 
+    return canvas
+
+
+def render_notice(store: StoreConfig, content: NoticeContent, photo: PhotoConfig) -> Image.Image:
+    canvas = load_cover(photo.path, photo.crop_focus)
+    lines = _notice_lines(store, content, photo)
+    x_center = CANVAS_W // 2
+    accent = _accent_rgb(photo.accent)
+    plateau_end = lines[-1].baseline + NOTICE_SCRIM_TEXT_PAD
+
+    _apply_notice_scrim(canvas, plateau_end)
+    _draw_frame(canvas, accent)
+    headline_line = next(line for line in lines if line.role == "headline")
+    _draw_brand_header(canvas, store, headline_line, x_center)
+
+    draw = ImageDraw.Draw(canvas)
+    for line in lines:
+        if line.role == "sub":
+            _assert_glyph_coverage(line.font, line.text, FONT_DISPLAY.name)
+            _draw_tracked_text(
+                draw,
+                line.text,
+                line.font,
+                x_center,
+                line.baseline,
+                NOTICE_SUB_TRACKING,
+                TEXT_COLOR,
+            )
+        else:
+            _assert_glyph_coverage(line.font, line.text, FONT_DISPLAY_JP.name)
+            draw.text(
+                (x_center, line.baseline), line.text, font=line.font, fill=TEXT_COLOR, anchor="ms"
+            )
     return canvas
 
 
@@ -323,6 +493,30 @@ def render_to_files(
         "date_label": plan.date_label,
         "hours": plan.hours,
         "hours_label": plan.hours_label,
+        "maps_url": store.maps_url,
+        "renderer": RENDERER_VERSION,
+        "size": list(image.size),
+    }
+
+
+def render_notice_to_files(
+    store: StoreConfig,
+    content: NoticeContent,
+    photo: PhotoConfig,
+    out_dir: Path,
+    date_key: date,
+) -> dict:
+    image = render_notice(store, content, photo)
+    stem = f"notice-{date_key.strftime('%Y%m%d')}-{photo.id}"
+    paths = save(image, out_dir, stem)
+    return {
+        **paths,
+        "photo_id": photo.id,
+        "accent": photo.accent,
+        "date": date_key.isoformat(),
+        "headline_lines": content.headline_lines,
+        "sub": content.sub,
+        "detail_lines": content.detail_lines,
         "maps_url": store.maps_url,
         "renderer": RENDERER_VERSION,
         "size": list(image.size),

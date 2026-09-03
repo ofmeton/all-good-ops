@@ -42,6 +42,30 @@ PATH に無く python3.11 の場所が両機で違うため。
 `--json` は stdout に1行だけ出る（ログは stderr）。gateway が subprocess で叩いて
 パースするので、機械可読を人間向けログと混ぜない。
 
+## notice レーン
+
+臨時休業・営業変更など、OPEN レーンの営業時間判定に載せない告知を1枚作るためのレーンである。
+告知では写真の意味も変わるため、`--photo` を必須にし、営業日判定は通さない。
+
+```bash
+.venv/bin/python -m ricecream_story.cli notice \
+  --photo vanilla-cone-door \
+  --headline "今週は" --headline "お休みします" \
+  --sub "CLOSED THIS WEEK" \
+  --detail "台風のため、" --detail "9/3(木)〜9/6(日) は休業します" \
+  --detail "次の営業は 9/10(木) からです" \
+  --date 2026-09-03 --json
+```
+
+和文には同梱の Noto Serif JP Black を使う。Merriweather には CJK グリフが無く、macOS
+側にも和文フォントを置かないため、システムフォントへのフォールバックは決定論を壊す。
+和文の級数は欧文の cap height ではなく漢字の `"国"` の墨面高さで決める。全角ベタ組を
+`"H"` 基準にすると和文だけが巨大に見えるためである。和文の禁則処理は持たず、自動折り返しも
+しない。改行は呼び出し側が明示し、幅を超える時だけ同じグループ全体を同じ級数で縮める。
+
+notice レーンは `store.json` をブランド名・地図URLの読み取りにだけ使い、営業日・営業時間を
+書き換えない。営業予定の単一ソースは既存の OPEN レーンに残す設計である。
+
 ## config
 
 `config/store.json`

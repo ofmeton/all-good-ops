@@ -4,7 +4,8 @@
 subprocess で叩いてパースするので、機械可読を人間向けログと混ぜない。
 
   plan          営業日判定・時間・ラベル・写真候補（画像は作らない = dry-run）
-  render        画像を1枚作る
+  render        OPEN 画像を1枚作る
+  notice        告知画像を1枚作る
   doctor        環境と config の健康診断
   contact-sheet 生成分と sample を並べた目視回帰用の1枚
 """
@@ -24,6 +25,7 @@ from . import RENDERER_VERSION
 from .config import (
     APP_DIR,
     FONT_DISPLAY,
+    FONT_DISPLAY_JP,
     OUT_DIR,
     SAMPLE_DIR,
     ConfigError,
@@ -33,12 +35,13 @@ from .config import (
     validate_hours,
 )
 from .photos import CANVAS_H, CANVAS_W
-from .render import render, render_to_files
+from .render import NoticeContent, render, render_notice_to_files, render_to_files
 from .schedule import hour_presets_for, resolve
 
 EXPECTED_PILLOW = "11.3.0"
 FONT_SHA256 = {
     "Merriweather-Black.ttf": "e731a9757c16518029fe85980d37a908a9f46e57d66ac9a7cc04e8e4bb08764d",
+    "NotoSerifJP-Black.ttf": "f835cf07778f1d868655e27b9c92112765ef64ae563351a61686c7316b6edf28",
 }
 
 
@@ -119,6 +122,28 @@ def cmd_render(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_notice(args: argparse.Namespace) -> int:
+    store = load_store()
+    photos = load_photos()
+    day = _parse_date(args.date)
+    photo = find_photo(photos, args.photo)
+    out_dir = Path(args.out_dir).expanduser() if args.out_dir else OUT_DIR
+    content = NoticeContent(
+        headline_lines=tuple(args.headline),
+        sub=args.sub[0] if args.sub else None,
+        detail_lines=tuple(args.detail or ()),
+    )
+    result = render_notice_to_files(store, content, photo, out_dir, day)
+    result["rendered"] = True
+    result["pillow"] = Image.__version__
+
+    if args.json:
+        _emit(result)
+    else:
+        _log(f"wrote {result['png']}")
+    return 0
+
+
 def _source_modules() -> list[tuple[Path, ast.Module]]:
     modules = []
     for path in sorted((APP_DIR / "ricecream_story").glob("*.py")):
@@ -187,7 +212,7 @@ def cmd_doctor(args: argparse.Namespace) -> int:
         ("pillow", Image.__version__ == EXPECTED_PILLOW, f"{Image.__version__} (want {EXPECTED_PILLOW})")
     )
 
-    for font_path in (FONT_DISPLAY,):
+    for font_path in (FONT_DISPLAY, FONT_DISPLAY_JP):
         if not font_path.exists():
             checks.append((f"font {font_path.name}", False, "missing — run scripts/build-fonts.sh"))
             continue
@@ -293,6 +318,16 @@ def build_parser() -> argparse.ArgumentParser:
     render_parser.add_argument("--out-dir")
     render_parser.set_defaults(func=cmd_render)
 
+    notice_parser = sub.add_parser("notice", help="render one notice story image")
+    add_json(notice_parser)
+    notice_parser.add_argument("--date", help="YYYY-MM-DD (default: today)")
+    notice_parser.add_argument("--photo", required=True, help="photo id")
+    notice_parser.add_argument("--headline", action="append", required=True, help="headline line (1..3)")
+    notice_parser.add_argument("--sub", action="append", help="optional subtitle line")
+    notice_parser.add_argument("--detail", action="append", help="detail line (0..4)")
+    notice_parser.add_argument("--out-dir")
+    notice_parser.set_defaults(func=cmd_notice)
+
     doctor_parser = sub.add_parser("doctor", help="check environment and config")
     add_json(doctor_parser)
     doctor_parser.set_defaults(func=cmd_doctor)
@@ -308,6 +343,13 @@ def build_parser() -> argparse.ArgumentParser:
 def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
+    if args.command == "notice":
+        if len(args.headline) > 3:
+            parser.error("notice: --headline may be given at most 3 times")
+        if len(args.sub or ()) > 1:
+            parser.error("notice: --sub may be given at most once")
+        if len(args.detail or ()) > 4:
+            parser.error("notice: --detail may be given at most 4 times")
     try:
         return args.func(args)
     except (ConfigError, ValueError, OSError) as error:
