@@ -1,0 +1,17 @@
+@田熊清太朗  @山口冴希
+🎉 新規注文が入りました！詳細をご確認ください。
+
+{% assign jst_hour = order.createdAt | date: "%-H" | plus: 9 %} {% assign day_adjust = 0 %} {% if jst_hour >= 24 %}
+{% assign jst_hour = jst_hour | minus: 24 %}
+{% assign day_adjust = 1 %}
+{% endif %} {% if day_adjust == 1 %}
+{% assign jst_date = order.createdAt | date: "%Y-%m-%d" | date: "%s" | plus: 86400 | date: "%Y-%m-%d" %}
+{% else %}
+{% assign jst_date = order.createdAt | date: "%Y-%m-%d" %}
+{% endif %} 【注文日時】{{ jst_date }} {{ jst_hour }}:{{ order.createdAt | date: "%M:%S" }} 【注文番号】{{order.name}}
+【氏名】{{order.customer.lastName}} {{order.customer.firstName}}
+【商品】
+{% for lineItems_item in order.lineItems %}
+・ {{lineItems_item.name}} {{lineItems_item.quantity}} 個
+{% endfor %}
+【合計金額】{{ order.totalPriceSet.shopMoney.amount | floor }}円
