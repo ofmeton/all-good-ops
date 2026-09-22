@@ -26,26 +26,25 @@ Fable セッション（skill `fable-architect`）からの実装委譲先とし
 ## フロー
 1. **設計（Claude architect）**: `dev-automation/architect` で standards 準拠のブループリントを作る（ファイル一覧・データ契約・API 形・受け入れ基準・テスト要件・改善レバー）。最難関設計のみ Fable 5。← ここは省略しない（Codex の規約逸脱を防ぐ土台）。
 2. **worktree 用意**: `scripts/wt-new.sh <topic>` で task ブランチ/worktree を切る（main 直 commit を hook で防ぐため必須）。
-3. **実装委任（Codex）**: `mcp__codex__codex` を以下で呼ぶ。
-   - `cwd` = 2 の worktree 絶対パス
-   - `sandbox` = `workspace-write`
-   - `approval-policy` = `never`（自律）
-   - `model` = **`gpt-5.6-terra`** / effort = **`high`** を**毎回 config で明示**する（`config` に `model="gpt-5.6-terra"` + `model_reasoning_effort="high"`。`~/.codex/config.toml` の既定に依存しない）。medium への切り下げ判断は不要（2026-07-10 方針）。terra は xhigh/max/ultra もサポートするが既定は high（枠消費とのバランス）。枠切れ時は `## レート制限時の自動フォールバック` がそのまま受け皿。
+3. **実装委任（Codex）**: `~/.claude/scripts/codex-run.sh` を **Bash の `run_in_background: true`** で呼ぶ（終わると通知が来る。2026-09-23 移行: `codex mcp-server` と `mcp__codex__codex` は Codex CLI 0.154.0 で廃止）。
+   - 手順: ブループリント全文をファイルに書く（例: worktree の `.codex-brief.md`。`.gitignore` 対象にする）→ `bash ~/.claude/scripts/codex-run.sh new <worktree 絶対パス> <brief のパス>`
+   - スクリプトが毎回明示する設定: `model = gpt-5.6-terra`、`model_reasoning_effort = high`（第4引数で変えられる）、`sandbox_mode = workspace-write`、`approval_policy = never`。`~/.codex/config.toml` の既定には頼らない。medium へ下げる判断はしない（2026-07-10 方針）。terra は xhigh/max/ultra も使えるが、既定は high（枠の消費とのバランス）。枠が切れた時は `## レート制限時の自動フォールバック` で受ける。
+   - 出力の末尾に `THREAD=<id>` `LAST=<最後の返事のファイル>` `EXIT=<終了コード>` が出る。**THREAD は差し戻しに使うので控える**。全イベントは `~/.cache/codex-runs/<ディレクトリ名>/` に残る。
    - `prompt` = ブループリント全文を埋め込む（Codex はリポジトリ規約を知らない。worktree root の `AGENTS.md` を自動で読むが、ブループリントにも要点を再掲する）
    - 完了後、Codex は**ビルダーサマリ**（追加/編集ファイル・契約差分・テスト結果・逸脱・人間ゲート該当）を返す。
    - **Codex がレート/使用量制限で落ちたら** → `## レート制限時の自動フォールバック`（Sonnet 4.6 へ自動切替）へ。
 4. **レビュー（Codex 一次パス → Claude 最終判断）**: トークン節約のためレビューも二段にする。
-   - **（B）一次レビュー = Codex**: `mcp__codex__codex-reply`（同 `threadId`）で「自分の diff を `code-reviewer` + `silent-failure-hunter` 観点で批判的にセルフレビューし、検出した問題と修正案を列挙せよ（自己弁護でなく粗探し）」と指示。別スレッド/別呼び出しで**第三者レビュー視点**を取らせてもよい（`feedback_codex_review_as_reviewer_option`＝別モデルの目）。Codex は明白なバグ・silent failure を自分で潰してから上げる。
+   - **（B）一次レビュー = Codex**: `codex-run.sh resume <THREAD> <worktree> <指示ファイル>` で同じスレッドに「自分の diff を `code-reviewer` + `silent-failure-hunter` 観点で批判的にセルフレビューし、検出した問題と修正案を列挙せよ（自己弁護でなく粗探し）」と指示。別スレッド/別呼び出しで**第三者レビュー視点**を取らせてもよい（`feedback_codex_review_as_reviewer_option`＝別モデルの目）。Codex は明白なバグ・silent failure を自分で潰してから上げる。
    - **最終判断 = Claude（必須・省略不可）**: Codex 一次レビュー後の diff を Claude が確認。**重要案件・本番影響大・人間ゲート該当**は `pr-review-toolkit:*`（`code-reviewer` + `silent-failure-hunter`、案件で `type-design-analyzer`/`pr-test-analyzer`）を Claude サブエージェントで回す。軽微な改修は Claude メインループの diff 確認＋Codex 一次レビューで足りる（Opus サブagent の二重起動を避ける）。
    - feature-factory 文脈なら `dev-automation/spec-validator` で承認済み story/brief と照合（これは Claude が握る＝仕様の真実判定）。
-   - 指摘は `mcp__codex__codex-reply`（`threadId` 指定）で同スレッドに差し戻し → 3〜4 を回す
+   - 指摘は `codex-run.sh resume <THREAD> ...` で同じスレッドに差し戻し → 3〜4 を回す
 5. **デプロイ（Claude 自走）**: レビュー通過後、commit→push→PR→auto-merge→deploy まで自走（`feedback_deploy_no_confirm`）。**人間承認・PR 承認は不要**。
 6. **記録**: `data/usage-log.jsonl` に `implementer: "codex"` を含めて追記（Codex 分は定額枠＝Claude/API 月予算とは別管理）。
 
 ## レート制限時の自動フォールバック（Codex → Sonnet 4.6）
 Codex が使えない時は**実装を止めず**、品質を落とさないフォールバック先 **Sonnet 4.6** に自動で切り替える。Haiku は使わない（実装には力不足＝品質要件を満たさない）。
 
-**発火条件**: `mcp__codex__codex`（または `codex-reply`）が以下いずれかで失敗:
+**発火条件**: `codex-run.sh`（new / resume）が `EXIT` ≠ 0 で終わり、stderr かイベントに以下のどれかが出た時:
 - レート/使用量制限系: `rate limit` / `usage limit` / `quota` / `429` / `too many requests` / Codex サブスク枠の上限到達メッセージ。
 - 上記が曖昧でも「Codex 側起因で実装が前に進められない」と判断したら同様に切替。
 （ネットワーク一時失敗・引数ミス等の**非レート起因**は 1 回だけ再試行 → それでも駄目なら切替。）
