@@ -1,6 +1,6 @@
 ---
 name: codex-implement
-description: まとまった機能の実装・テストに加え、バグ修正・デバッグループ・大規模コードベース調査/探索・ローカルデータ分析/集計を Codex(gpt-5.6-terra・定額サブスク) に委任し、Claude は設計(architect)と最終レビュー(一次は Codex セルフレビュー)を握る半委任フロー。Claude サブスク枠のトークンを節約しつつ品質を保つ。ユーザーが「実装して」「この機能を作って」「このバグ直して」「Codex に実装させて」「このコードベース調べて」「この集計やって」等を依頼した時に起動する。軽量タスク・1行修正・Web リサーチ・ブラウザ操作・外部 MCP(freee/Asana/Gmail/Calendar)・発信の文章執筆/繊細な連絡は対象外（Codex の盲点 or Claude 中核価値）。
+description: まとまった機能の実装・テストに加え、バグ修正・デバッグループ・大規模コードベース調査/探索・ローカルデータ分析/集計を Codex(gpt-6-sol・定額サブスク) に委任し、Claude は設計(architect)と最終レビュー(一次は Codex セルフレビュー)を握る半委任フロー。Claude サブスク枠のトークンを節約しつつ品質を保つ。ユーザーが「実装して」「この機能を作って」「このバグ直して」「Codex に実装させて」「このコードベース調べて」「この集計やって」等を依頼した時に起動する。軽量タスク・1行修正・Web リサーチ・ブラウザ操作・外部 MCP(freee/Asana/Gmail/Calendar)・発信の文章執筆/繊細な連絡は対象外（Codex の盲点 or Claude 中核価値）。
 ---
 
 # codex-implement — Codex を実装エンジンに据える半委任フロー
@@ -8,7 +8,7 @@ description: まとまった機能の実装・テストに加え、バグ修正�
 Fable セッション（skill `fable-architect`）からの実装委譲先としても使われる。
 
 ## なぜ
-実装・テスト・デバッグループは最もトークンを食う。これを **Codex(gpt-5.6-terra high)** に逃がすと、Codex は ChatGPT/Codex の**定額サブスク枠**（Claude サブスク／API 課金の外）で動くため、Claude 側のトークンが激減する。Claude は「ブループリント＋Codex サマリ＋diff」だけ摂取してレビューすればよく、設計とレビューという判断を握るので品質は落ちない。
+実装・テスト・デバッグループは最もトークンを食う。これを **Codex(gpt-6-sol high)** に逃がすと、Codex は ChatGPT/Codex の**定額サブスク枠**（Claude サブスク／API 課金の外）で動くため、Claude 側のトークンが激減する。Claude は「ブループリント＋Codex サマリ＋diff」だけ摂取してレビューすればよく、設計とレビューという判断を握るので品質は落ちない。
 
 → Codex は定額なので `external-api-cost-disclosure`（従量 API のコスト開示）の**対象外**。コスト提示は不要。
 
@@ -28,7 +28,7 @@ Fable セッション（skill `fable-architect`）からの実装委譲先とし
 2. **worktree 用意**: `scripts/wt-new.sh <topic>` で task ブランチ/worktree を切る（main 直 commit を hook で防ぐため必須）。
 3. **実装委任（Codex）**: `~/.claude/scripts/codex-run.sh` を **Bash の `run_in_background: true`** で呼ぶ（終わると通知が来る。2026-09-23 移行: `codex mcp-server` と `mcp__codex__codex` は Codex CLI 0.154.0 で廃止）。
    - 手順: ブループリント全文をファイルに書く（例: worktree の `.codex-brief.md`。`.gitignore` 対象にする）→ `bash ~/.claude/scripts/codex-run.sh new <worktree 絶対パス> <brief のパス>`
-   - スクリプトが毎回明示する設定: `model = gpt-5.6-terra`、`model_reasoning_effort = high`（第4引数で変えられる）、`sandbox_mode = workspace-write`、`approval_policy = never`。`~/.codex/config.toml` の既定には頼らない。medium へ下げる判断はしない（2026-07-10 方針）。terra は xhigh/max/ultra も使えるが、既定は high（枠の消費とのバランス）。枠が切れた時は `## レート制限時の自動フォールバック` で受ける。
+   - スクリプトが毎回明示する設定: `model = gpt-6-sol`（環境変数 `CODEX_MODEL` で変えられる。定型抽出・集計の luna 帯は `CODEX_MODEL=gpt-6-luna` と effort `medium`）、`model_reasoning_effort = high`（第4引数で変えられる）、`sandbox_mode = workspace-write`、`approval_policy = never`。`~/.codex/config.toml` の既定には頼らない。medium へ下げる判断はしない。2026-09-23 に gpt-5.6-terra から gpt-6-sol へ乗り換えた（単価は旧 terra 並みで、性能は 5.6 sol の上位設定に近い）。**Codex CLI 0.155 未満だと「ChatGPT アカウントでは非対応」の 400 になる**。枠が切れた時は `## レート制限時の自動フォールバック` で受ける。
    - 出力の末尾に `THREAD=<id>` `LAST=<最後の返事のファイル>` `EXIT=<終了コード>` が出る。**THREAD は差し戻しに使うので控える**。全イベントは `~/.cache/codex-runs/<ディレクトリ名>/` に残る。
    - `prompt` = ブループリント全文を埋め込む（Codex はリポジトリ規約を知らない。worktree root の `AGENTS.md` を自動で読むが、ブループリントにも要点を再掲する）
    - 完了後、Codex は**ビルダーサマリ**（追加/編集ファイル・契約差分・テスト結果・逸脱・人間ゲート該当）を返す。
