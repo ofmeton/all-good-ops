@@ -98,6 +98,22 @@ class NoticeRenderTests(unittest.TestCase):
         self.assertTrue(all(line.ink_width <= limit for line in headlines))
 
 
+    def test_body_only_notice_orders_japanese_then_english_below_safe_area(self):
+        """見出しなし版は和文→英文の順で、店名ヘッダーの下から組む（2026-09-29 本人指示）。"""
+        content = NoticeContent(
+            (),
+            None,
+            ("10/2(金)は15:00開店です。", "閉店は通常どおり20:30です。"),
+            ("We open at 3pm on Friday, Oct 2.", "Closing time is 8:30pm as usual."),
+        )
+        lines = _notice_lines(self.store, content, self.photo)
+        self.assertEqual([line.role for line in lines], ["detail"] * 2 + ["english"] * 2)
+        baselines = [line.baseline for line in lines]
+        self.assertEqual(baselines, sorted(baselines))
+        self.assertGreater(lines[0].baseline - lines[0].cap_height, TOP_SAFE_MARGIN)
+        image = render_notice(self.store, content, self.photo)
+        self.assertEqual(image.size, (CANVAS_W, CANVAS_H))
+
 class NoticeScrimTests(unittest.TestCase):
     def test_notice_scrim_stays_dark_through_the_last_text_baseline_then_fades_out(self):
         """詳細行まで薄い既存スクリムを伸ばすと白文字が明るい写真に埋もれる。"""

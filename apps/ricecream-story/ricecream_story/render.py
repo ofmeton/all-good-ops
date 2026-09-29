@@ -72,6 +72,12 @@ NOTICE_DETAIL_INK_HEIGHT = 40
 NOTICE_DETAIL_LINE_STEP = 68
 NOTICE_GAP_HEADLINE_TO_SUB = 88
 NOTICE_GAP_SUB_TO_DETAIL = 78
+# 見出しなし（本文だけ）の版。和文→英文の2段。
+NOTICE_BODY_JP_INK_HEIGHT = 46
+NOTICE_BODY_JP_LINE_STEP = 78
+NOTICE_BODY_EN_CAP_HEIGHT = 32
+NOTICE_BODY_EN_LINE_STEP = 62
+NOTICE_GAP_JP_TO_EN = 104
 NOTICE_SCRIM_TOP_ALPHA = 150
 NOTICE_SCRIM_TEXT_ALPHA = 95
 NOTICE_SCRIM_TAIL = 240
@@ -95,6 +101,7 @@ class NoticeContent:
     headline_lines: tuple[str, ...]
     sub: str | None
     detail_lines: tuple[str, ...]
+    english_lines: tuple[str, ...] = ()
 
 
 def _ink_width(font: ImageFont.FreeTypeFont, text: str) -> int:
@@ -344,9 +351,17 @@ def _font_for_notice_group(
 
 def _notice_lines(store: StoreConfig, content: NoticeContent, photo: PhotoConfig) -> list[Line]:
     limit = CANVAS_W - 2 * (FRAME_INNER_INSET + HEADLINE_SIDE_MARGIN)
+    # 見出しが無い時は本文（和文→英文）だけの版。本文が主役になるので級数を上げる
+    # （2026-09-29 本人指示「英語の大きい文字いらない。日本語文章と英語で」）。
+    body_only = not content.headline_lines and content.sub is None
+    detail_ink_target = NOTICE_BODY_JP_INK_HEIGHT if body_only else NOTICE_DETAIL_INK_HEIGHT
+    detail_step = NOTICE_BODY_JP_LINE_STEP if body_only else NOTICE_DETAIL_LINE_STEP
+
     # 見出しが英字だけなら OPEN TODAY と同じ欧文ディスプレイ体・級数・行送りで組む
-    # （2026-09-29 本人指摘「大きい文字は英語」。和文書体の欧文だと店の顔が揃わない）。
-    latin_headline = all(text.isascii() for text in content.headline_lines)
+    # （和文書体の欧文だと店の顔が揃わない）。
+    latin_headline = bool(content.headline_lines) and all(
+        text.isascii() for text in content.headline_lines
+    )
     if latin_headline:
         headline_font = _font_for_notice_group(
             FONT_DISPLAY,
@@ -373,44 +388,57 @@ def _notice_lines(store: StoreConfig, content: NoticeContent, photo: PhotoConfig
     detail_font = _font_for_notice_group(
         FONT_DISPLAY_JP,
         content.detail_lines,
-        font_for_ink_height(FONT_DISPLAY_JP, "国", NOTICE_DETAIL_INK_HEIGHT),
+        font_for_ink_height(FONT_DISPLAY_JP, "国", detail_ink_target),
+        limit,
+    )
+    # 英文は和文と同じ書体の欧文で組む。欧文ディスプレイ体は字間が詰まり、
+    # 小さい級数の文章だと読みにくかった（2026-09-29 実物確認）。
+    english_font = _font_for_notice_group(
+        FONT_DISPLAY_JP,
+        content.english_lines,
+        font_for_cap_height(FONT_DISPLAY_JP, NOTICE_BODY_EN_CAP_HEIGHT),
         limit,
     )
 
-    headline_ink = _ink_height(headline_font, "H" if latin_headline else "国")
-    headline_baseline = max(
-        photo.headline_baseline,
-        TOP_SAFE_MARGIN + BRAND_CAP_HEIGHT + BRAND_GAP_ABOVE_HEADLINE + headline_ink,
-    )
-    headline_lines = [
-        Line(
-            "headline",
-            text,
-            headline_font,
-            headline_baseline + headline_step * index,
-            _ink_width(headline_font, text),
-            headline_ink,
-        )
-        for index, text in enumerate(content.headline_lines)
-    ]
-    last_headline_baseline = headline_lines[-1].baseline
+    # 1行目のインク高さぶん、店名ヘッダーの下へ下げてから組み始める。
+    if content.headline_lines:
+        first_ink = _ink_height(headline_font, "H" if latin_headline else "国")
+    elif content.sub is not None:
+        first_ink = _ink_height(sub_font, "H")
+    elif content.detail_lines:
+        first_ink = _ink_height(detail_font, "国")
+    else:
+        first_ink = _ink_height(english_font, "H")
+    top_baseline = TOP_SAFE_MARGIN + BRAND_CAP_HEIGHT + BRAND_GAP_ABOVE_HEADLINE + first_ink
+    cursor = max(photo.headline_baseline, top_baseline) if content.headline_lines else top_baseline
 
-    lines = list(headline_lines)
+    lines: list[Line] = []
+    if content.headline_lines:
+        lines.extend(
+            Line(
+                "headline",
+                text,
+                headline_font,
+                cursor + headline_step * index,
+                _ink_width(headline_font, text),
+                first_ink,
+            )
+            for index, text in enumerate(content.headline_lines)
+        )
+        cursor = lines[-1].baseline + NOTICE_GAP_HEADLINE_TO_SUB
+
     if content.sub is not None:
-        sub_baseline = last_headline_baseline + NOTICE_GAP_HEADLINE_TO_SUB
         lines.append(
             Line(
                 "sub",
                 content.sub,
                 sub_font,
-                sub_baseline,
+                cursor,
                 _ink_width(sub_font, content.sub),
                 _ink_height(sub_font, "H"),
             )
         )
-        detail_baseline = sub_baseline + NOTICE_GAP_SUB_TO_DETAIL
-    else:
-        detail_baseline = last_headline_baseline + NOTICE_GAP_HEADLINE_TO_SUB
+        cursor += NOTICE_GAP_SUB_TO_DETAIL
 
     detail_ink = _ink_height(detail_font, "国")
     lines.extend(
@@ -418,14 +446,28 @@ def _notice_lines(store: StoreConfig, content: NoticeContent, photo: PhotoConfig
             "detail",
             text,
             detail_font,
-            detail_baseline + NOTICE_DETAIL_LINE_STEP * index,
+            cursor + detail_step * index,
             _ink_width(detail_font, text),
             detail_ink,
         )
         for index, text in enumerate(content.detail_lines)
     )
+    if content.english_lines:
+        if content.detail_lines:
+            cursor = lines[-1].baseline + NOTICE_GAP_JP_TO_EN
+        english_cap = _ink_height(english_font, "H")
+        lines.extend(
+            Line(
+                "english",
+                text,
+                english_font,
+                cursor + NOTICE_BODY_EN_LINE_STEP * index,
+                _ink_width(english_font, text),
+                english_cap,
+            )
+            for index, text in enumerate(content.english_lines)
+        )
     return lines
-
 
 def render(store: StoreConfig, plan: DayPlan, photo: PhotoConfig) -> Image.Image:
     canvas = load_cover(photo.path, photo.crop_focus)
@@ -458,8 +500,7 @@ def render_notice(store: StoreConfig, content: NoticeContent, photo: PhotoConfig
 
     _apply_notice_scrim(canvas, plateau_end)
     _draw_frame(canvas, accent)
-    headline_line = next(line for line in lines if line.role == "headline")
-    _draw_brand_header(canvas, store, headline_line, x_center)
+    _draw_brand_header(canvas, store, lines[0], x_center)
 
     draw = ImageDraw.Draw(canvas)
     for line in lines:

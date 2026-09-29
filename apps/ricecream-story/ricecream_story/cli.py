@@ -129,9 +129,10 @@ def cmd_notice(args: argparse.Namespace) -> int:
     photo = find_photo(photos, args.photo)
     out_dir = Path(args.out_dir).expanduser() if args.out_dir else OUT_DIR
     content = NoticeContent(
-        headline_lines=tuple(args.headline),
+        headline_lines=tuple(args.headline or ()),
         sub=args.sub[0] if args.sub else None,
         detail_lines=tuple(args.detail or ()),
+        english_lines=tuple(args.english or ()),
     )
     result = render_notice_to_files(store, content, photo, out_dir, day)
     result["rendered"] = True
@@ -322,9 +323,10 @@ def build_parser() -> argparse.ArgumentParser:
     add_json(notice_parser)
     notice_parser.add_argument("--date", help="YYYY-MM-DD (default: today)")
     notice_parser.add_argument("--photo", required=True, help="photo id")
-    notice_parser.add_argument("--headline", action="append", required=True, help="headline line (1..3)")
+    notice_parser.add_argument("--headline", action="append", help="headline line (0..3)")
     notice_parser.add_argument("--sub", action="append", help="optional subtitle line")
-    notice_parser.add_argument("--detail", action="append", help="detail line (0..4)")
+    notice_parser.add_argument("--detail", action="append", help="Japanese detail line (0..4)")
+    notice_parser.add_argument("--english", action="append", help="English body line (0..4)")
     notice_parser.add_argument("--out-dir")
     notice_parser.set_defaults(func=cmd_notice)
 
@@ -344,8 +346,12 @@ def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
     if args.command == "notice":
-        if len(args.headline) > 3:
+        if len(args.headline or ()) > 3:
             parser.error("notice: --headline may be given at most 3 times")
+        if len(args.english or ()) > 4:
+            parser.error("notice: --english may be given at most 4 times")
+        if not (args.headline or args.detail or args.english):
+            parser.error("notice: give at least one of --headline, --detail, --english")
         if len(args.sub or ()) > 1:
             parser.error("notice: --sub may be given at most once")
         if len(args.detail or ()) > 4:
