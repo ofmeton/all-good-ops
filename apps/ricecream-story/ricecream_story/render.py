@@ -344,12 +344,25 @@ def _font_for_notice_group(
 
 def _notice_lines(store: StoreConfig, content: NoticeContent, photo: PhotoConfig) -> list[Line]:
     limit = CANVAS_W - 2 * (FRAME_INNER_INSET + HEADLINE_SIDE_MARGIN)
-    headline_font = _font_for_notice_group(
-        FONT_DISPLAY_JP,
-        content.headline_lines,
-        font_for_ink_height(FONT_DISPLAY_JP, "国", NOTICE_HEADLINE_INK_HEIGHT),
-        limit,
-    )
+    # 見出しが英字だけなら OPEN TODAY と同じ欧文ディスプレイ体・級数・行送りで組む
+    # （2026-09-29 本人指摘「大きい文字は英語」。和文書体の欧文だと店の顔が揃わない）。
+    latin_headline = all(text.isascii() for text in content.headline_lines)
+    if latin_headline:
+        headline_font = _font_for_notice_group(
+            FONT_DISPLAY,
+            content.headline_lines,
+            font_for_cap_height(FONT_DISPLAY, HEADLINE_CAP_HEIGHT),
+            limit,
+        )
+        headline_step = HEADLINE_LINE_STEP
+    else:
+        headline_font = _font_for_notice_group(
+            FONT_DISPLAY_JP,
+            content.headline_lines,
+            font_for_ink_height(FONT_DISPLAY_JP, "国", NOTICE_HEADLINE_INK_HEIGHT),
+            limit,
+        )
+        headline_step = NOTICE_HEADLINE_LINE_STEP
     sub_texts = (content.sub,) if content.sub is not None else ()
     sub_font = _font_for_notice_group(
         FONT_DISPLAY,
@@ -364,7 +377,7 @@ def _notice_lines(store: StoreConfig, content: NoticeContent, photo: PhotoConfig
         limit,
     )
 
-    headline_ink = _ink_height(headline_font, "国")
+    headline_ink = _ink_height(headline_font, "H" if latin_headline else "国")
     headline_baseline = max(
         photo.headline_baseline,
         TOP_SAFE_MARGIN + BRAND_CAP_HEIGHT + BRAND_GAP_ABOVE_HEADLINE + headline_ink,
@@ -374,7 +387,7 @@ def _notice_lines(store: StoreConfig, content: NoticeContent, photo: PhotoConfig
             "headline",
             text,
             headline_font,
-            headline_baseline + NOTICE_HEADLINE_LINE_STEP * index,
+            headline_baseline + headline_step * index,
             _ink_width(headline_font, text),
             headline_ink,
         )
@@ -462,7 +475,7 @@ def render_notice(store: StoreConfig, content: NoticeContent, photo: PhotoConfig
                 TEXT_COLOR,
             )
         else:
-            _assert_glyph_coverage(line.font, line.text, FONT_DISPLAY_JP.name)
+            _assert_glyph_coverage(line.font, line.text, Path(line.font.path).name)
             draw.text(
                 (x_center, line.baseline), line.text, font=line.font, fill=TEXT_COLOR, anchor="ms"
             )
