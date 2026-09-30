@@ -6,6 +6,7 @@ subprocess で叩いてパースするので、機械可読を人間向けログ
   plan          営業日判定・時間・ラベル・写真候補（画像は作らない = dry-run）
   render        OPEN 画像を1枚作る
   notice        告知画像を1枚作る
+  hours-change  営業時間変更のお知らせ画像を日付と時刻だけで作る（文面は承認済みの型）
   doctor        環境と config の健康診断
   contact-sheet 生成分と sample を並べた目視回帰用の1枚
 """
@@ -35,6 +36,7 @@ from .config import (
     validate_hours,
 )
 from .photos import CANVAS_H, CANVAS_W
+from .hours_notice import build_hours_notice
 from .render import NoticeContent, render, render_notice_to_files, render_to_files
 from .schedule import hour_presets_for, resolve
 
@@ -142,6 +144,33 @@ def cmd_notice(args: argparse.Namespace) -> int:
         _emit(result)
     else:
         _log(f"wrote {result['png']}")
+    return 0
+
+
+def cmd_hours_change(args: argparse.Namespace) -> int:
+    store = load_store()
+    photos = load_photos()
+    day = datetime.strptime(args.date, "%Y-%m-%d").date()
+    photo = find_photo(photos, args.photo)
+    out_dir = Path(args.out_dir).expanduser() if args.out_dir else OUT_DIR
+    notice = build_hours_notice(store, day, args.open, args.close)
+    content = NoticeContent(
+        headline_lines=(), sub=None, detail_lines=notice.japanese, english_lines=notice.english
+    )
+    result = render_notice_to_files(store, content, photo, out_dir, day)
+    result["rendered"] = True
+    result["pillow"] = Image.__version__
+    result["kind"] = notice.kind
+    result["approved_wording"] = notice.approved
+    result["japanese"] = list(notice.japanese)
+    result["english"] = list(notice.english)
+
+    if args.json:
+        _emit(result)
+    else:
+        _log(f"wrote {result['png']} ({notice.kind})")
+        if not notice.approved:
+            _log("note: this wording pattern has not been approved yet; show it before use")
     return 0
 
 
@@ -329,6 +358,17 @@ def build_parser() -> argparse.ArgumentParser:
     notice_parser.add_argument("--english", action="append", help="English body line (0..4)")
     notice_parser.add_argument("--out-dir")
     notice_parser.set_defaults(func=cmd_notice)
+
+    hours_parser = sub.add_parser(
+        "hours-change", help="render an opening-hours change notice from date and times"
+    )
+    add_json(hours_parser)
+    hours_parser.add_argument("--date", required=True, help="YYYY-MM-DD (the changed day)")
+    hours_parser.add_argument("--open", help="new opening time HH:MM (default: usual)")
+    hours_parser.add_argument("--close", help="new closing time HH:MM (default: usual)")
+    hours_parser.add_argument("--photo", default="vanilla-cone-door", help="photo id")
+    hours_parser.add_argument("--out-dir")
+    hours_parser.set_defaults(func=cmd_hours_change)
 
     doctor_parser = sub.add_parser("doctor", help="check environment and config")
     add_json(doctor_parser)
