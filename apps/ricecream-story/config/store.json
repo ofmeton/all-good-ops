@@ -9,7 +9,9 @@
     "5": "13:00-20:30",
     "6": "13:00-20:00"
   },
-  "date_overrides": {},
+  "date_overrides": {
+    "2026-10-02": {"hours": "15:00-20:30", "note": "開店を15時に変更（本人指示 2026-09-30）"}
+  },
   "closed_dates": [],
   "hour_presets": ["13:00-20:30", "13:00-18:00"],
   "headline_text": "OPEN TODAY",
