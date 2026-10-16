@@ -1,0 +1,24 @@
+{
+  "bufferYen": 30000,
+  "dmmRateYen": 2200,
+  "daikuDailyYen": 12000,
+  "dailySpendYen": 1000,
+  "purchaseAmounts": [10000, 30000, 50000, 80000, 100000],
+  "staleDays": 7,
+  "calendars": { "primary": "riku@idoco.jp", "dmm": "kudo-riku@kcgrp.jp" },
+  "dmmRules": {
+    "logSummary": "dmm_log",
+    "planSummary": "dmm_plan",
+    "taPattern": "【[^】]*TA[^】]*】",
+    "taHours": 0.16666666666666666,
+    "regularPattern": "meet一元化PJ定例",
+    "regularHours": 0.5,
+    "seminarPattern": "【[^】]*(ゼミ|期)[^】]*】"
+  },
+  "daikuPattern": "ジュンヤさん",
+  "daikuExcludePattern": "休み|？|\\?",
+  "recurringNames": { "dmm": "DMM", "daiku": "ジュンヤさん_大工", "ricecream": "RICE CREAM バイト代" },
+  "mainCard": "三井住友",
+  "cardDebitPatterns": { "三井住友カード (VpassID)": "ミツイスミトモ", "ポケットカード": "ポケツトカ-ド" },
+  "secretsEnvFile": "~/.openclaw/secrets/ricecream-attendance.env"
+}
