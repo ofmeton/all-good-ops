@@ -14,13 +14,14 @@
     "load:assets": "node scripts/load-assets.mjs",
     "load:balances": "node scripts/load-balances.mjs",
     "load:freee": "node scripts/load-freee.mjs",
+    "load:ricecream": "node --env-file-if-exists=.env.local scripts/load-ricecream-forecast.mjs",
     "seed:recurring": "node scripts/seed-recurring.mjs",
     "export:unknowns": "node scripts/export-unknowns.mjs",
     "apply:rules": "node scripts/apply-rules.mjs",
     "apply:overrides": "node scripts/apply-overrides.mjs",
     "optimizer:export": "node scripts/optimizer-export.mjs",
     "optimizer:propose": "node scripts/optimizer-propose.mjs",
-    "refresh": "npm run normalize && npm run load && npm run apply:rules && npm run apply:overrides && npm run load:assets && npm run load:balances"
+    "refresh": "npm run normalize && npm run load && npm run apply:rules && npm run apply:overrides && npm run load:assets && npm run load:balances && npm run load:ricecream"
   },
   "dependencies": {
     "better-sqlite3": "^11.8.1",
