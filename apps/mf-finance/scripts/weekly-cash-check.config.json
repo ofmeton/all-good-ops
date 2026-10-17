@@ -26,5 +26,6 @@
     "categories": ["趣味・娯楽", "交際費", "衣服・美容"],
     "includePattern": "フリマ|メルカリ",
     "excludePattern": "NETFLIX|ネットフリックス"
-  }
+  },
+  "dmmTargets": { "2026-10": 104.25 }
 }

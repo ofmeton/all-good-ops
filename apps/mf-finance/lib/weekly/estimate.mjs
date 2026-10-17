@@ -179,3 +179,21 @@ export function man(n) {
   const v = Math.round(n / 1000) / 10;
   return `${v < 0 ? "−" : ""}${Math.abs(v).toLocaleString("ja-JP")}万円`;
 }
+
+// 今月の DMM 稼働の進捗（毎晩の報告用）。実績は dmm_log、見込みは実績＋kcgrp の確定分＋これからの dmm_plan。
+// 終わった dmm_plan のうち dmm_log と時間が重ならないものは「予定していたのに記録が無い」として別に返す。
+export function dmmProgress({ primaryEvents, kcgrpEvents, now, month, rules }) {
+  const h = countDmmHours({ primaryEvents, kcgrpEvents, now, month, rules });
+  const nowMs = Date.parse(now);
+  const timed = primaryEvents.filter((ev) => ev.start?.includes("T") && monthKey(ev.start) === month);
+  const logs = timed.filter((ev) => ev.summary === rules.logSummary);
+  const overlaps = (a, b) => Date.parse(a.start) < Date.parse(b.end) && Date.parse(b.start) < Date.parse(a.end);
+  const missed = timed.filter(
+    (ev) => ev.summary === rules.planSummary && Date.parse(ev.end) <= nowMs && !logs.some((l) => overlaps(ev, l)),
+  );
+  return {
+    ...h,
+    missed: missed.map((ev) => ({ start: ev.start, hours: hoursOf(ev) })),
+    projectedHours: h.logHours + h.confirmedHours + h.planHours,
+  };
+}

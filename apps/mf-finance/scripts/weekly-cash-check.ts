@@ -33,8 +33,10 @@ import {
   yen,
 } from "../lib/weekly/estimate.mjs";
 import * as mf from "./weekly-cash-check/mf";
+import { type Ev, listEvents as listEventsIn } from "./weekly-cash-check/calendar";
 
 const appDir = join(dirname(fileURLToPath(import.meta.url)), "..");
+const listEvents = (calendarId: string, from: string, to: string): Ev[] => listEventsIn(calendarId, from, to, appDir);
 const dataDir = join(appDir, "data");
 const dbPath = join(dataDir, "mf-finance.db");
 const rawDir = join(appDir, "../../raw/finance/moneyforward");
@@ -163,24 +165,7 @@ function backupDb(db: Database.Database, label: string) {
   return db.backup(dest).then(() => dest);
 }
 
-// ---- 2. カレンダー ----------------------------------------------------------
-type Ev = { summary: string; start: string; end: string; selfStatus?: string };
-
-function listEvents(calendarId: string, from: string, to: string): Ev[] {
-  const params = { calendarId, timeMin: from, timeMax: to, singleEvents: true, maxResults: 250, orderBy: "startTime" };
-  const out = run("gws", ["calendar", "events", "list", "--params", JSON.stringify(params), "--page-all"]);
-  return out
-    .split("\n")
-    .filter((l) => l.trim().startsWith("{"))
-    .flatMap((l) => JSON.parse(l).items ?? [])
-    .filter((e: any) => e.status !== "cancelled")
-    .map((e: any) => ({
-      summary: e.summary ?? "",
-      start: e.start?.dateTime ?? e.start?.date ?? "",
-      end: e.end?.dateTime ?? e.end?.date ?? "",
-      selfStatus: (e.attendees ?? []).find((a: any) => a.self)?.responseStatus,
-    }));
-}
+// ---- 2. カレンダー（scripts/weekly-cash-check/calendar.ts）----------------
 
 // ---- 3. 入金見込みの書き込み ------------------------------------------------
 // このジョブが書いた値だけを上書きする（owned に記録）。人が入れた値（請求書の確定額など）は触らず、報告に回す。

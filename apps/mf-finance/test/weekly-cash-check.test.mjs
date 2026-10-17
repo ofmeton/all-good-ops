@@ -7,6 +7,7 @@ import {
   countDaikuDays,
   countDmmHours,
   dailySeries,
+  dmmProgress,
   hoursNeeded,
   payDate,
   projectCardCharges,
@@ -116,4 +117,20 @@ test("dailySeries と troughs と capacity: 今日の手計算の形を再現す
   assert.equal(h.feasible, true);
   const tooEarly = hoursNeeded({ series: s, buffer: 30000, rate: 2200, debitDate: "2026-10-26", dmmPayDate: "2026-11-30", amount: 50000 });
   assert.equal(tooEarly.feasible, false);
+});
+
+test("dmmProgress: 終わった dmm_plan で dmm_log と重ならないものだけを「記録が無い」に数える", () => {
+  const primaryEvents = [
+    ev("dmm_log", "2026-10-05T10:00:00", "2026-10-05T13:00:00"),
+    ev("dmm_plan", "2026-10-05T10:00:00", "2026-10-05T12:00:00"), // 実績と重なる
+    ev("dmm_plan", "2026-10-06T10:00:00", "2026-10-06T12:00:00"), // 記録が無い
+    ev("dmm_plan", "2026-10-20T10:00:00", "2026-10-20T14:00:00"), // これから
+  ];
+  const kcgrpEvents = [ev("【6期ゼミ】", "2026-10-21T19:00:00", "2026-10-21T20:30:00", "accepted")];
+  const p = dmmProgress({ primaryEvents, kcgrpEvents, now: "2026-10-10T22:00:00+09:00", month: "2026-10", rules: RULES });
+  assert.equal(p.logHours, 3);
+  assert.equal(p.planHours, 4);
+  assert.equal(p.confirmedHours, 1.5);
+  assert.equal(p.projectedHours, 8.5);
+  assert.deepEqual(p.missed.map((m) => m.hours), [2]);
 });
