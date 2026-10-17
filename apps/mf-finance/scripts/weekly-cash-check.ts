@@ -359,6 +359,28 @@ async function main() {
   lines.push(
     `dmm_plan（今月あと ${cur.planHours}h）を全部こなすと: 今月カード ${capCurPlan != null ? yen(capCurPlan) : "—"}／来月カード ${capNextPlan != null ? yen(capNextPlan) : "—"}`,
   );
+  // 買い物・遊び（config.funSpend）の今月分。上限が未設定なら先月の同じ日までと比べるだけ
+  const fun = cfg.funSpend;
+  const funSum = (from: string, to: string) => {
+    const inc = new RegExp(fun.includePattern);
+    const exc = new RegExp(fun.excludePattern);
+    const rows = db
+      .prepare("SELECT description d, category_major c, -amount a FROM transactions WHERE included = 1 AND is_transfer = 0 AND is_internal_move = 0 AND amount < 0 AND date BETWEEN ? AND ?")
+      .all(from, to) as { d: string | null; c: string | null; a: number }[];
+    return rows.filter((r) => (fun.categories.includes(r.c) || inc.test(r.d ?? "")) && !exc.test(r.d ?? "")).reduce((s, r) => s + r.a, 0);
+  };
+  const [fy, fm] = today.split("-").map(Number);
+  const [py, pm] = fm === 1 ? [fy - 1, 12] : [fy, fm - 1];
+  const prevKey = `${py}-${String(pm).padStart(2, "0")}`;
+  const prevDay = Math.min(Number(today.slice(8, 10)), new Date(Date.UTC(py, pm, 0)).getUTCDate());
+  const funNow = funSum(`${thisMonth}-01`, today);
+  const funPrev = funSum(`${prevKey}-01`, `${prevKey}-${String(prevDay).padStart(2, "0")}`);
+  const funCap: number | null = fun.capYen;
+  lines.push(
+    funCap == null
+      ? `*今月の買い物・遊び*: ${yen(funNow)}（先月の同じ日まで ${yen(funPrev)}）`
+      : `*今月の買い物・遊び*: ${yen(funNow)} / 上限 ${yen(funCap)}（${funNow > funCap ? `${yen(funNow - funCap)} 超えた` : `残り ${yen(funCap - funNow)}`}、先月の同じ日まで ${yen(funPrev)}）`,
+  );
   lines.push("");
   lines.push("*残高が一番少ない日*");
   for (const t of T) lines.push(`・${Number(t.month.slice(5))}月: ${md(t.date)} ${man(t.balance)}`);

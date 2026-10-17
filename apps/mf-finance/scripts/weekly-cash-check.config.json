@@ -20,5 +20,11 @@
   "recurringNames": { "dmm": "DMM", "daiku": "ジュンヤさん_大工", "ricecream": "RICE CREAM バイト代" },
   "mainCard": "三井住友",
   "cardDebitPatterns": { "三井住友カード (VpassID)": "ミツイスミトモ", "ポケットカード": "ポケツトカ-ド" },
-  "secretsEnvFile": "~/.openclaw/secrets/ricecream-attendance.env"
+  "secretsEnvFile": "~/.openclaw/secrets/ricecream-attendance.env",
+  "funSpend": {
+    "capYen": null,
+    "categories": ["趣味・娯楽", "交際費", "衣服・美容"],
+    "includePattern": "フリマ|メルカリ",
+    "excludePattern": "NETFLIX|ネットフリックス"
+  }
 }
