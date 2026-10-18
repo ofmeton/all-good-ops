@@ -27,5 +27,5 @@
     "includePattern": "フリマ|メルカリ",
     "excludePattern": "NETFLIX|ネットフリックス"
   },
-  "dmmTargets": { "2026-10": 104.25 }
+  "dmmGoalYen": 0
 }

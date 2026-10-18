@@ -374,6 +374,27 @@ async function main() {
     lines.push("*引き落とし不足に注意*");
     for (const l of shortLines) lines.push(`・${l}`);
   }
+  // 今月の DMM 目標（毎週計算し直す。毎晩の DMM 進捗 scripts/dmm-daily-progress.ts はこの値を読む）。
+  // 今月分の DMM が入る日以降の残高が「残す額＋dmmGoalYen」を下回らないために、確定分のほかに何時間要るかで決める。
+  const r2 = (x: number) => Math.round(x * 100) / 100;
+  const goalYen: number = cfg.dmmGoalYen ?? 0;
+  const baseHours = cur.logHours + cur.confirmedHours;
+  const extraHours = hoursNeeded({ series, buffer: cfg.bufferYen, rate: cfg.dmmRateYen, debitDate: dmmPay, dmmPayDate: dmmPay, amount: goalYen }).hours ?? 0;
+  const dmmTarget = {
+    month: thisMonth,
+    computedAt: nowJst,
+    hours: r2(baseHours + extraHours),
+    yen: Math.round((baseHours + extraHours) * cfg.dmmRateYen),
+    baseHours: r2(baseHours),
+    extraHours,
+    payDate: dmmPay,
+    keepYen: cfg.bufferYen + goalYen,
+  };
+  lines.push("");
+  lines.push("*今月の DMM 目標（毎週計算し直す）*");
+  lines.push(`・目標稼働 ${dmmTarget.hours}h／目標金額 ${yen(dmmTarget.yen)}（${md(dmmPay)}入金）`);
+  lines.push(`・内訳: 実績と確定分 ${dmmTarget.baseHours}h＋追加 ${extraHours}h（dmm_plan は今月あと ${cur.planHours}h 入っている）`);
+  lines.push(`・決め方: ${md(dmmPay)}以降の残高を ${man(dmmTarget.keepYen)}以上に保つ（残す額 ${man(cfg.bufferYen)}${goalYen ? `＋余裕 ${man(goalYen)}` : ""}）`);
   if (nextDebit) {
     lines.push("");
     lines.push(`*来月カードで買う場合（${md(nextDebit)}引落）に、今月中に必要な DMM 追加時間*`);
@@ -413,6 +434,7 @@ async function main() {
     });
     if (fact.status !== 0) console.error(`vault への記録に失敗: ${(fact.stderr || fact.stdout).trim()}`);
   }
+  if (!DRY) writeFileSync(join(dataDir, "dmm-target.json"), `${JSON.stringify(dmmTarget, null, 2)}\n`);
   if (!DRY) writeFileSync(statePath, `${JSON.stringify({ lastRun: nowJst, cash: cash ?? state.cash ?? null, owned }, null, 2)}\n`);
   db.close();
 }

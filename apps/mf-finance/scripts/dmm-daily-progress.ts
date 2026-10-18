@@ -1,10 +1,10 @@
 // 毎晩 22:00 の DMM 稼働の進捗（mini のルーティン dmm-daily-progress から起動）。
-// カレンダーの dmm_log を数え、今月の目標（config.dmmTargets）との差を Slack #milla-oc へ送る。
+// カレンダーの dmm_log を数え、今月の目標（金曜の週次チェックが計算した data/dmm-target.json）との差を Slack #milla-oc へ送る。
 //
 // 実行: ./scripts/dmm-daily-progress.sh [options]
 //   --no-notify   Slack に送らず、本文を標準出力に出す
 //   --now=ISO     現在時刻を差し替える（試験用）
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { dirname, join } from "node:path";
 import { spawnSync } from "node:child_process";
@@ -35,15 +35,18 @@ const to = `${nextMonth}-01T00:00:00+09:00`;
 const primary = listEvents(cfg.calendars.primary, from, to, appDir);
 const kcgrp = listEvents(cfg.calendars.dmm, from, to, appDir);
 const p = dmmProgress({ primaryEvents: primary, kcgrpEvents: kcgrp, now: nowJst, month, rules: cfg.dmmRules });
-const target: number | undefined = cfg.dmmTargets?.[month];
+// 目標は金曜の週次チェックが計算して data/dmm-target.json に書いたもの。月が違えば使わない。
+const targetPath = join(appDir, "data/dmm-target.json");
+const saved = existsSync(targetPath) ? JSON.parse(readFileSync(targetPath, "utf8")) : null;
+const target: number | undefined = saved?.month === month ? saved.hours : undefined;
 
 const lines: string[] = [];
 lines.push(`*DMM 稼働の進捗（${md(today)} ${nowJst.slice(11, 16)}）*`);
 if (target == null) {
   lines.push(`・今月の実績（dmm_log）: ${r1(p.logHours)}h`);
-  lines.push(`・今月の目標が未設定（weekly-cash-check.config.json の dmmTargets に "${month}" を入れると差が出る）`);
+  lines.push("・今月の目標はまだ計算されていない（金曜朝の週次の資金チェックで計算される）");
 } else {
-  lines.push(`・実績（dmm_log）: ${r1(p.logHours)}h / 目標 ${target}h（${Math.round((p.logHours / target) * 100)}%）`);
+  lines.push(`・実績（dmm_log）: ${r1(p.logHours)}h / 目標 ${target}h（${Math.round((p.logHours / target) * 100)}%・目標金額 ${saved.yen.toLocaleString("ja-JP")}円、${md(saved.computedAt)}の週次で計算）`);
   const gap = p.projectedHours - target;
   lines.push(
     `・予定どおり進めば ${r1(p.projectedHours)}h → 目標に ${gap >= 0 ? `${r1(gap)}h 届く余裕あり` : `${r1(-gap)}h 足りない`}` +
