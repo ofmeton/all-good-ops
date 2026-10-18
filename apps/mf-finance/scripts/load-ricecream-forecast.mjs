@@ -1,8 +1,10 @@
-// scripts/load-ricecream-forecast.mjs — 勤怠アプリ(ricecream-attendance)の公開済みシフトから
+// scripts/load-ricecream-forecast.mjs — 勤怠アプリ(ricecream-attendance)の実績と公開済みシフトから
 // 給与見込みを計算し、recurring_overrides へ「RICE CREAM バイト代」の実額として投入する。
 //
-// 計算は勤怠側 src/lib/payroll/shiftForecast.ts と同じ規則で行う（日単位で拘束時間を合算 →
-// 店舗ルールの推奨休憩を控除 → その日に有効な時給・交通費を適用 → 交通費は出勤日ごとに1回）。
+// 計算は勤怠側のホーム「給与見込み」と同じ規則で行う:
+//   今日(JST)より前の日 = 有効な勤怠の実績（入力済みの休憩。休憩が無い日は法定最低）
+//   今日以降の日       = 公開済みシフト（同日の枠は合算）から法定最低の休憩を引く
+//   その日に有効な時給・交通費を適用し、交通費は勤務日ごとに1回。
 // 勤怠側のロジックを変えたらこちらも合わせること。
 //
 // 必要な環境変数（無ければ何もせず終了し、refresh チェーンは壊さない）:
@@ -59,11 +61,23 @@ function minutesOfDay(value) {
   return hour * 60 + minute;
 }
 
-// 勤怠側 breakSuggestion.ts の suggestedBreakMinutes と同じ。
-function suggestBreakMinutes(boundMinutes) {
-  if (boundMinutes >= 480) return 60;
-  if (boundMinutes > 360) return 45;
-  return 0;
+// 勤怠側 breakSuggestion.ts の legalMinimumBreakMinutes と同じ（労働時間ベースの法定休憩）。
+// 引数は休憩込みの拘束分。労働を6h／8hちょうどに収められる幅では、その分だけ休憩を取れば足りる。
+function legalMinimumBreakMinutes(boundMinutes) {
+  if (boundMinutes <= 360) return 0;
+  if (boundMinutes <= 405) return boundMinutes - 360;
+  if (boundMinutes <= 525) return 45;
+  if (boundMinutes <= 540) return boundMinutes - 480;
+  return 60;
+}
+
+function jstDateKey(date) {
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Tokyo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(date);
 }
 
 // 勤怠側 calculatePayroll.ts の isEffectiveOn と同じ（重複は事故なので落とす）。
@@ -105,50 +119,99 @@ async function resolveStaffId() {
   return rows[0].id;
 }
 
-// 対象月の公開済みシフトから見込み総額を出す。
-async function forecastMonth(staffId, year, month, wageHistory, transportHistory) {
+// 対象月の見込み総額を出す。today より前は実績、today 以降は公開済みシフト。
+async function forecastMonth(staffId, year, month, today, wageHistory, transportHistory) {
   const from = `${year}-${pad(month)}-01`;
   const next = addMonths(year, month, 1);
   const to = `${next.year}-${pad(next.month)}-01`;
+  const range = `(work_date.gte.${from},work_date.lt.${to})`;
 
-  const shifts = await rest("shifts", {
-    select: "shift_date,start_time,end_time",
-    staff_id: `eq.${staffId}`,
-    status: "eq.published",
-    and: `(shift_date.gte.${from},shift_date.lt.${to})`,
-  });
+  const [shifts, sessions, breaks] = await Promise.all([
+    rest("shifts", {
+      select: "shift_date,start_time,end_time",
+      staff_id: `eq.${staffId}`,
+      status: "eq.published",
+      and: `(shift_date.gte.${from},shift_date.lt.${to})`,
+    }),
+    rest("work_sessions", {
+      select: "work_date,clock_in,clock_out",
+      staff_id: `eq.${staffId}`,
+      is_invalidated: "eq.false",
+      and: range,
+    }),
+    rest("daily_breaks", {
+      select: "work_date,break_minutes",
+      staff_id: `eq.${staffId}`,
+      and: range,
+    }),
+  ]);
 
-  const boundByDate = new Map();
+  // 実績: 今日より前の、退勤済みの区間だけ。
+  const actualBound = new Map();
+  for (const s of sessions) {
+    if (s.work_date >= today || !s.clock_out) continue;
+    const minutes = Math.round((Date.parse(s.clock_out) - Date.parse(s.clock_in)) / 60_000);
+    if (minutes <= 0) continue;
+    actualBound.set(s.work_date, (actualBound.get(s.work_date) ?? 0) + minutes);
+  }
+  const breakByDate = new Map(breaks.map((b) => [b.work_date, Number(b.break_minutes)]));
+
+  // 予定: 今日以降の公開済みシフト。
+  const plannedBound = new Map();
+  const missingDates = new Set();
   let skipped = 0;
   for (const s of shifts) {
+    if (s.shift_date < today) {
+      if (!actualBound.has(s.shift_date)) missingDates.add(s.shift_date);
+      continue;
+    }
     const bound = minutesOfDay(s.end_time) - minutesOfDay(s.start_time);
     if (bound <= 0) {
       skipped += 1;
       continue;
     }
-    boundByDate.set(s.shift_date, (boundByDate.get(s.shift_date) ?? 0) + bound);
+    plannedBound.set(s.shift_date, (plannedBound.get(s.shift_date) ?? 0) + bound);
   }
 
-  let workMinutesTotal = 0;
-  let hourlyPayTotal = 0;
-  let transportTotal = 0;
-  for (const [workDate, boundMinutes] of boundByDate) {
-    const wage = effectiveOn(wageHistory, workDate);
-    const transport = effectiveOn(transportHistory, workDate);
-    if (!wage) throw new Error(`時給が未設定です: ${workDate}`);
-    if (!transport) throw new Error(`交通費が未設定です: ${workDate}`);
-    const workMinutes = boundMinutes - suggestBreakMinutes(boundMinutes);
-    workMinutesTotal += workMinutes;
-    hourlyPayTotal += (workMinutes * Number(wage.hourly_wage)) / 60;
-    transportTotal += Number(transport.daily_transport_amount);
+  const days = [
+    ...[...actualBound].map(([workDate, bound]) => ({
+      workDate,
+      bound,
+      breakMinutes: Math.max(breakByDate.get(workDate) ?? 0, legalMinimumBreakMinutes(bound)),
+      actual: true,
+    })),
+    ...[...plannedBound].map(([workDate, bound]) => ({
+      workDate,
+      bound,
+      breakMinutes: legalMinimumBreakMinutes(bound),
+      actual: false,
+    })),
+  ];
+
+  const sum = { actualMinutes: 0, plannedMinutes: 0, hourlyPay: 0, transport: 0 };
+  for (const d of days) {
+    const wage = effectiveOn(wageHistory, d.workDate);
+    const transport = effectiveOn(transportHistory, d.workDate);
+    if (!wage) throw new Error(`時給が未設定です: ${d.workDate}`);
+    if (!transport) throw new Error(`交通費が未設定です: ${d.workDate}`);
+    const workMinutes = d.bound - d.breakMinutes;
+    if (d.actual) sum.actualMinutes += workMinutes;
+    else sum.plannedMinutes += workMinutes;
+    sum.hourlyPay += (workMinutes * Number(wage.hourly_wage)) / 60;
+    sum.transport += Number(transport.daily_transport_amount);
   }
 
   return {
-    workdays: boundByDate.size,
-    workMinutes: workMinutesTotal,
-    hourlyPay: hourlyPayTotal,
-    transport: transportTotal,
-    total: Math.round(hourlyPayTotal + transportTotal),
+    workdays: days.length,
+    actualDays: actualBound.size,
+    plannedDays: plannedBound.size,
+    workMinutes: sum.actualMinutes + sum.plannedMinutes,
+    actualMinutes: sum.actualMinutes,
+    plannedMinutes: sum.plannedMinutes,
+    hourlyPay: sum.hourlyPay,
+    transport: sum.transport,
+    total: Math.round(sum.hourlyPay + sum.transport),
+    missingDates: [...missingDates].sort(),
     skipped,
   };
 }
@@ -189,13 +252,10 @@ const upsert = db.prepare(
    ON CONFLICT(recurring_id, occurrence_date) DO UPDATE SET skip = 0, amount = excluded.amount`,
 );
 
-const now = new Date();
-const today = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+const today = jstDateKey(new Date());
+const [thisYear, thisMonth] = today.split("-").map(Number);
 // 締めは末日、支払いは翌月。当月分と翌月分を見て、支払日が未来のものだけ書き換える。
-const targets = [
-  { year: now.getFullYear(), month: now.getMonth() + 1 },
-  addMonths(now.getFullYear(), now.getMonth() + 1, 1),
-];
+const targets = [{ year: thisYear, month: thisMonth }, addMonths(thisYear, thisMonth, 1)];
 
 const written = [];
 for (const t of targets) {
@@ -204,7 +264,7 @@ for (const t of targets) {
   const payDate = `${pay.year}-${pad(pay.month)}-${pad(Math.min(item.day, daysInMonth(pay.year, pay.month)))}`;
   if (payDate < today) continue;
 
-  const f = await forecastMonth(staffId, t.year, t.month, wageHistory, transportHistory);
+  const f = await forecastMonth(staffId, t.year, t.month, today, wageHistory, transportHistory);
   if (f.total <= 0) continue;
 
   upsert.run({ recurring_id: item.id, occurrence_date: payDate, amount: f.total });
@@ -212,13 +272,16 @@ for (const t of targets) {
 }
 
 if (written.length === 0) {
-  console.log(`${RECURRING_NAME}: 公開済みシフトから見込める支払いはありません`);
+  console.log(`${RECURRING_NAME}: 実績・公開済みシフトから見込める支払いはありません`);
 } else {
+  const h = (minutes) => (minutes / 60).toFixed(1);
   for (const w of written) {
-    const hours = (w.workMinutes / 60).toFixed(1);
     console.log(
-      `${RECURRING_NAME}: ${w.month} 分 ${w.workdays}日 ${hours}時間 → ${w.payDate} に ¥${w.total.toLocaleString()}` +
+      `${RECURRING_NAME}: ${w.month} 分 ${w.workdays}日 ${h(w.workMinutes)}時間` +
+        `（実績 ${w.actualDays}日 ${h(w.actualMinutes)}h ＋ 予定 ${w.plannedDays}日 ${h(w.plannedMinutes)}h）` +
+        ` → ${w.payDate} に ¥${w.total.toLocaleString()}` +
         `（勤務 ¥${Math.round(w.hourlyPay).toLocaleString()} + 交通費 ¥${Math.round(w.transport).toLocaleString()}）` +
+        (w.missingDates.length > 0 ? ` ※シフトはあるが勤怠の記録がない日: ${w.missingDates.join(", ")}` : "") +
         (w.skipped > 0 ? ` ※日またぎ ${w.skipped} 枠は除外` : ""),
     );
   }
