@@ -2,8 +2,9 @@
 // 給与見込みを計算し、recurring_overrides へ「RICE CREAM バイト代」の実額として投入する。
 //
 // 計算は勤怠側のホーム「給与見込み」と同じ規則で行う:
-//   今日(JST)より前の日 = 有効な勤怠の実績（入力済みの休憩。休憩が無い日は法定最低）
+//   今日(JST)より前の日 = 有効な勤怠の実績（保存済みの休憩。DB が法定最低以上を保証）
 //   今日以降の日       = 公開済みシフト（同日の枠は合算）から法定最低の休憩を引く
+//                        （最低分は勤怠側 DB の RPC kintai.legal_min_breaks に聞く）
 //   その日に有効な時給・交通費を適用し、交通費は勤務日ごとに1回。
 // 勤怠側のロジックを変えたらこちらも合わせること。
 //
@@ -61,16 +62,6 @@ function minutesOfDay(value) {
   return hour * 60 + minute;
 }
 
-// 勤怠側 breakSuggestion.ts の legalMinimumBreakMinutes と同じ（労働時間ベースの法定休憩）。
-// 引数は休憩込みの拘束分。労働を6h／8hちょうどに収められる幅では、その分だけ休憩を取れば足りる。
-function legalMinimumBreakMinutes(boundMinutes) {
-  if (boundMinutes <= 360) return 0;
-  if (boundMinutes <= 405) return boundMinutes - 360;
-  if (boundMinutes <= 525) return 45;
-  if (boundMinutes <= 540) return boundMinutes - 480;
-  return 60;
-}
-
 function jstDateKey(date) {
   return new Intl.DateTimeFormat("en-CA", {
     timeZone: "Asia/Tokyo",
@@ -103,6 +94,30 @@ async function rest(path, params) {
     throw new Error(`勤怠アプリの取得に失敗 (${path}): ${res.status} ${await res.text()}`);
   }
   return res.json();
+}
+
+// 法定休憩の最低分は勤怠側 DB の kintai.legal_min_break_minutes が唯一の定義。
+// ここでは式を持たず、RPC kintai.legal_min_breaks に拘束分の配列を渡して同じ順で受け取る。
+async function legalMinBreaks(bounds) {
+  if (bounds.length === 0) return [];
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/legal_min_breaks`, {
+    method: "POST",
+    headers: {
+      apikey: SERVICE_KEY,
+      Authorization: `Bearer ${SERVICE_KEY}`,
+      "Content-Profile": "kintai",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ p_bounds: bounds }),
+  });
+  if (!res.ok) {
+    throw new Error(`法定休憩の取得に失敗: ${res.status} ${await res.text()}`);
+  }
+  const mins = await res.json();
+  if (!Array.isArray(mins) || mins.length !== bounds.length || !mins.every(Number.isInteger)) {
+    throw new Error(`法定休憩の応答が不正です: ${JSON.stringify(mins)}`);
+  }
+  return mins;
 }
 
 async function resolveStaffId() {
@@ -173,17 +188,20 @@ async function forecastMonth(staffId, year, month, today, wageHistory, transport
     plannedBound.set(s.shift_date, (plannedBound.get(s.shift_date) ?? 0) + bound);
   }
 
+  // 実績の日は DB が法定最低以上の休憩行を保証しているので、保存値をそのまま使う。
+  const planned = [...plannedBound];
+  const plannedMins = await legalMinBreaks(planned.map(([, bound]) => bound));
   const days = [
     ...[...actualBound].map(([workDate, bound]) => ({
       workDate,
       bound,
-      breakMinutes: Math.max(breakByDate.get(workDate) ?? 0, legalMinimumBreakMinutes(bound)),
+      breakMinutes: breakByDate.get(workDate) ?? 0,
       actual: true,
     })),
-    ...[...plannedBound].map(([workDate, bound]) => ({
+    ...planned.map(([workDate, bound], i) => ({
       workDate,
       bound,
-      breakMinutes: legalMinimumBreakMinutes(bound),
+      breakMinutes: plannedMins[i],
       actual: false,
     })),
   ];
